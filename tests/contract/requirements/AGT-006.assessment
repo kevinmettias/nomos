@@ -29,7 +29,7 @@
 # or tool surface exists anywhere in the workspace.
 verdict: Partial
 site: crates/contracts/nomos-contracts/Cargo.toml#Every type here is copied into a KnowledgeWorkbench
-site: crates/contracts/nomos-contracts/src/identity.rs#KnowledgeReferenceId
+site: crates/contracts/nomos-contracts/src/digest128.rs#KnowledgeReferenceId
 site: tests/contract/tests/boundaries/graph.rs#Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace
 site: tests/contract/tests/boundaries/graph.rs#Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench
 gap: crates/host/nomos-api/src/lib.rs#speak MCP's JSON-RPC framing

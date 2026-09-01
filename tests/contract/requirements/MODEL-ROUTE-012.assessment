@@ -26,9 +26,9 @@
 # real increment at a time) carries no model-selection field at all -- the natural landing
 # spot for this clause, unoccupied.
 verdict: Partial
-site: crates/contracts/nomos-contracts/src/finding/applicability.rs#AgentRequired
+site: crates/contracts/nomos-contracts/src/reporting/finding/applicability.rs#AgentRequired
 site: crates/kernel/nomos-model/src/evidence/coverage.rs#Agent_Required
 site: crates/kernel/nomos-model/src/evidence/coverage.rs#Is_Complete
-site: crates/contracts/nomos-contracts/src/finding/evidence.rs#AgentJudged
+site: crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs#AgentJudged
 site: crates/contracts/nomos-contracts/src/workflow_step.rs#EvidenceClass
-gap: crates/orchestration/nomos-gate-orchestration/src/command.rs#GateCommand
+gap: crates/orchestration/nomos-gate-orchestration/src/gate_command.rs#GateCommand

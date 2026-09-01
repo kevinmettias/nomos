@@ -24,8 +24,8 @@
 # would reject an out-of-scope file. `StagedPlan::Assert_Not_Stale` checks staleness and
 # movement but nothing about test/doc presence or which tools produced an edit.
 verdict: Partial
-site: crates/rules/nomos-rules/src/dependency/violations.rs#Violations_In
-site: crates/substrate/nomos-workspace/src/workspace/error.rs#WorkspaceError
-site: crates/corrections/nomos-corrections/src/validated.rs#Commit
-gap: crates/corrections/nomos-corrections/src/plan.rs#New
-gap: crates/corrections/nomos-corrections/src/staged.rs#Assert_Not_Stale
+site: crates/rules/nomos-rules/src/checks/dependency/violations.rs#Violations_In
+site: crates/substrate/nomos-workspace/src/workspace.rs#WorkspaceError
+site: crates/corrections/nomos-corrections/src/validated_plan.rs#Commit
+gap: crates/corrections/nomos-corrections/src/correction_plan.rs#New
+gap: crates/corrections/nomos-corrections/src/staged_plan.rs#Assert_Not_Stale

@@ -22,7 +22,7 @@
 # a provider claiming semantic name resolution (tested).
 verdict: Partial
 site: crates/substrate/nomos-capability/src/registry.rs#Registry
-site: crates/substrate/nomos-capability/src/contract.rs#CapabilityContract
+site: crates/substrate/nomos-capability/src/capability_contract.rs#CapabilityContract
 site: crates/capabilities/nomos-cap-syntax/src/contract.rs#Capability_Contract
 site: crates/capabilities/nomos-cap-dependency/src/contract.rs#Capability_Contract
 gap: crates/corrections/nomos-corrections/src/edit.rs#Edit

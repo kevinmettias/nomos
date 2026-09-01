@@ -25,6 +25,6 @@
 # validated plan declare it now needs to touch more than it originally did.
 verdict: Partial
 site: crates/corrections/nomos-corrections/src/preview.rs#Preview
-site: crates/corrections/nomos-corrections/src/staged.rs#Assert_Not_Stale
-site: crates/corrections/nomos-corrections/src/committed.rs#Rollback
-gap: crates/corrections/nomos-corrections/src/plan.rs#New
+site: crates/corrections/nomos-corrections/src/staged_plan.rs#Assert_Not_Stale
+site: crates/corrections/nomos-corrections/src/committed_plan.rs#Rollback
+gap: crates/corrections/nomos-corrections/src/correction_plan.rs#New

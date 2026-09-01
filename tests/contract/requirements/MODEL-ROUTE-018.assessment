@@ -15,4 +15,4 @@
 # apply to.
 verdict: Partial
 site: crates/packages/nomos-model-package/src/selector_specificity.rs#SelectorSpecificity
-gap: crates/orchestration/nomos-gate-orchestration/src/rule_selector.rs#RuleSelector
+gap: crates/orchestration/nomos-gate-orchestration/src/policy/rule_selector.rs#RuleSelector

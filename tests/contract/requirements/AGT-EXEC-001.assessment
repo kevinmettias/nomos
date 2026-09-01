@@ -44,12 +44,12 @@
 # now; it remains type-level only for the ledger-claim half of an agent's run, and
 # unbuilt entirely for Propose/Approve/Publish.
 verdict: Partial
-site: crates/contracts/nomos-contracts/src/authority/class.rs#AuthorityClass
-site: crates/contracts/nomos-contracts/src/authority/class.rs#Requires_Explicit_Grant
+site: crates/contracts/nomos-contracts/src/authority.rs#AuthorityClass
+site: crates/contracts/nomos-contracts/src/authority/class.rs#Is_Explicit_Grant_Required
 site: crates/contracts/nomos-contracts/src/authority/mutation_class.rs#MutationClass
 site: crates/corrections/nomos-corrections/src/preview.rs#Mutation_Class
-site: crates/corrections/nomos-corrections/src/staged.rs#Mutation_Class
-site: crates/corrections/nomos-corrections/src/validated.rs#Mutation_Class
-site: crates/corrections/nomos-corrections/src/committed.rs#ROLLBACK_MUTATION_CLASS
+site: crates/corrections/nomos-corrections/src/staged_plan.rs#Mutation_Class
+site: crates/corrections/nomos-corrections/src/validated_plan.rs#Mutation_Class
+site: crates/corrections/nomos-corrections/src/committed_plan.rs#ROLLBACK_MUTATION_CLASS
 gap: crates/substrate/nomos-ledger/src/claim.rs#Claim
-gap: crates/substrate/nomos-ledger/src/verification/record.rs#VerificationRecord
+gap: crates/substrate/nomos-ledger/src/verification.rs#VerificationRecord

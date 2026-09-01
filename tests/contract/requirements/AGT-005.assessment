@@ -24,7 +24,7 @@
 # identifies one execution today but nothing persists a run's outcome across runs as a
 # queryable observation.
 verdict: Partial
-site: crates/contracts/nomos-contracts/src/finding.rs#Finding
-site: crates/contracts/nomos-contracts/src/finding/evidence.rs#EvidenceClass
-site: crates/host/nomos-api/src/response/run.rs#Handle_Gate_Run
-gap: crates/contracts/nomos-contracts/src/identity.rs#RunId
+site: crates/contracts/nomos-contracts/src/reporting/finding.rs#Finding
+site: crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs#EvidenceClass
+site: crates/host/nomos-api/src/response/gate_run_response.rs#Handle_Gate_Run
+gap: crates/contracts/nomos-contracts/src/digest128.rs#RunId

@@ -26,7 +26,7 @@
 # unsubstantiated claim about it to `AgentJudged` the way `work finish` already does for a
 # ledger item's own predicate.
 verdict: Partial
-site: crates/substrate/nomos-ledger/src/verification/record.rs#VerificationRecord
+site: crates/substrate/nomos-ledger/src/verification.rs#VerificationRecord
 site: crates/substrate/nomos-ledger/src/finish/running.rs#Ran_To_Completion
-site: crates/contracts/nomos-contracts/src/finding/evidence.rs#AgentJudged
-gap: crates/corrections/nomos-corrections/src/validated.rs#Commit
+site: crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs#AgentJudged
+gap: crates/corrections/nomos-corrections/src/validated_plan.rs#Commit

@@ -26,7 +26,7 @@
 verdict: Partial
 site: crates/substrate/nomos-ledger/src/item/ledger_item.rs#LedgerItem
 site: crates/substrate/nomos-scope-verification/src/territory.rs#Territory
-site: crates/orchestration/nomos-gate-orchestration/src/rule_selector.rs#RuleSelector
-site: crates/orchestration/nomos-gate-orchestration/src/scope_selector.rs#ScopeSelector
+site: crates/orchestration/nomos-gate-orchestration/src/policy/rule_selector.rs#RuleSelector
+site: crates/orchestration/nomos-gate-orchestration/src/policy/scope_selector.rs#ScopeSelector
 gap: crates/substrate/nomos-ledger/src/claim.rs#Claim
 gap: crates/contracts/nomos-contracts/src/workflow_step.rs#WorkflowStep

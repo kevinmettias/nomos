@@ -20,11 +20,11 @@
 # carries free-text `why`/`done_when` and carries neither either. Nothing anywhere returns
 # all seven elements together as one structured response.
 verdict: Partial
-site: crates/corrections/nomos-corrections/src/plan.rs#CorrectionPlan
+site: crates/corrections/nomos-corrections/src/correction_plan.rs#CorrectionPlan
 site: crates/corrections/nomos-corrections/src/change_set.rs#ChangeSet
-site: crates/contracts/nomos-contracts/src/finding.rs#Finding
-site: crates/contracts/nomos-contracts/src/finding/evidence.rs#EvidenceClass
+site: crates/contracts/nomos-contracts/src/reporting/finding.rs#Finding
+site: crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs#EvidenceClass
 site: crates/substrate/nomos-scope-verification/src/verification_predicate.rs#VerificationPredicate
-site: crates/substrate/nomos-ledger/src/verification/record.rs#VerificationRecord
-gap: crates/corrections/nomos-corrections/src/candidate/correction_candidate.rs#CorrectionCandidate
-gap: crates/substrate/nomos-ledger/src/item.rs#LedgerItem
+site: crates/substrate/nomos-ledger/src/verification.rs#VerificationRecord
+gap: crates/corrections/nomos-corrections/src/correction_id/correction_candidate.rs#CorrectionCandidate
+gap: crates/substrate/nomos-ledger/src/item/ledger_item.rs#LedgerItem

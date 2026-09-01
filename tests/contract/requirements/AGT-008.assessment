@@ -31,9 +31,9 @@
 # no direct pointer to a record id yet," routing that gap to OD-HOST-002's still-open
 # seam families.
 verdict: Partial
-site: crates/host/nomos-api/src/response/explain.rs#Handle_Gate_Explain
-site: crates/host/nomos-api/src/response/explain.rs#GateExplainResponse
-site: crates/orchestration/nomos-gate-orchestration/src/explain.rs#Contract_Of
-site: crates/contracts/nomos-contracts/src/finding.rs#Finding
-site: crates/contracts/nomos-contracts/src/enforcement/gate_category.rs#GateCategory
+site: crates/host/nomos-api/src/response/gate_explain_response.rs#Handle_Gate_Explain
+site: crates/host/nomos-api/src/response/gate_explain_response.rs#GateExplainResponse
+site: crates/orchestration/nomos-gate-orchestration/src/finding_query.rs#Contract_Of
+site: crates/contracts/nomos-contracts/src/reporting/finding.rs#Finding
+site: crates/contracts/nomos-contracts/src/reporting/enforcement/gate_category.rs#GateCategory
 gap: docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#carries no direct pointer to a

@@ -24,6 +24,6 @@
 # would carry "the identity and version of the consuming Nomos operation" if a request type
 # existed to hold it.
 verdict: Partial
-site: crates/contracts/nomos-contracts/src/identity.rs#KnowledgeReferenceId
-site: crates/contracts/nomos-contracts/src/identity.rs#OperationName
+site: crates/contracts/nomos-contracts/src/digest128.rs#KnowledgeReferenceId
+site: crates/contracts/nomos-contracts/src/digest128.rs#OperationName
 gap: docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#Alternatives Considered

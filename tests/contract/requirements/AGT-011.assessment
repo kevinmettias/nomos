@@ -22,6 +22,6 @@
 # into one field by construction. Source role itself is simply absent, not collapsed into
 # either -- there is no third dimension yet to keep separate.
 verdict: Partial
-site: crates/contracts/nomos-contracts/src/finding/evidence.rs#EvidenceClass
+site: crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs#EvidenceClass
 site: crates/kernel/nomos-model/src/confidence.rs#Confidence
-gap: crates/contracts/nomos-contracts/src/finding/evidence.rs#How a claim was come by
+gap: crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs#How a claim was come by

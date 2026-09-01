@@ -15,5 +15,5 @@
 # ModelExecutionProfile's own doc comment. The second sentence (override precedence) has
 # no resolver anywhere to carry it out.
 verdict: Partial
-site: crates/orchestration/nomos-gate-orchestration/src/command.rs#GateCommand
+site: crates/orchestration/nomos-gate-orchestration/src/gate_command.rs#GateCommand
 gap: crates/packages/nomos-model-package/src/model_execution_profile.rs#ModelExecutionProfile

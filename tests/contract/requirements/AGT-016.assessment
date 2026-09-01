@@ -27,7 +27,7 @@
 # knowledge for any of this machinery to fire on -- OD-CAPABILITY-004 says so explicitly:
 # "Today no run makes the request."
 verdict: Partial
-site: crates/contracts/nomos-contracts/src/finding/applicability.rs#Applicability
+site: crates/contracts/nomos-contracts/src/reporting/finding/applicability.rs#Applicability
 site: crates/substrate/nomos-capability/src/resolution/unmet.rs#Unmet
-site: crates/contracts/nomos-contracts/src/peer/availability.rs#PeerAvailability
+site: crates/contracts/nomos-contracts/src/peer.rs#PeerAvailability
 gap: docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#Today no run makes the request

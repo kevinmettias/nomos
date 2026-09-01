@@ -19,12 +19,14 @@
 # otherwise) into any of them; by each type's own doc comment, no caller constructs one yet.
 #
 # The second half -- normative policy changes proceeding through a governed RulePackage
-# lifecycle -- is a genuine, real gap: `PackageKind::RulePackage` is declared and, by its own
-# doc comment, "remain[s] genuinely unconsumed"; no code anywhere implements calibration,
-# review, versioning, publication, or rollout for one.
+# lifecycle -- is a genuine, real gap, narrower than it was: `nomos-rule-package` (`OD-
+# PACKAGE-008`) now gives `PackageKind::RulePackage` a manifest type and a JSON reader, so it
+# is no longer among the "genuinely unconsumed" kinds `PackageKind`'s own doc comment now
+# lists -- but nothing outside that one crate calls the reader, and no code anywhere
+# implements calibration, review, versioning, publication, or rollout for what it reads.
 verdict: Partial
-site: crates/contracts/nomos-contracts/src/finding.rs#Finding
-site: crates/orchestration/nomos-gate-orchestration/src/suppression/suppression_policy.rs#SuppressionPolicy
-site: crates/orchestration/nomos-gate-orchestration/src/adoption/adoption_policy.rs#AdoptionPolicy
-site: crates/orchestration/nomos-gate-orchestration/src/baseline.rs#BaselineDebt
-gap: crates/contracts/nomos-contracts/src/package.rs#RulePackage
+site: crates/contracts/nomos-contracts/src/reporting/finding.rs#Finding
+site: crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_policy.rs#SuppressionPolicy
+site: crates/orchestration/nomos-gate-orchestration/src/policy/rule_calibration/adoption_policy.rs#AdoptionPolicy
+site: crates/orchestration/nomos-gate-orchestration/src/policy/baseline_debt.rs#BaselineDebt
+gap: crates/contracts/nomos-contracts/src/package_kind.rs#RulePackage

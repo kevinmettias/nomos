@@ -18,4 +18,4 @@
 # RankingCriterion's own doc comment already draws for COR-011's second sentence: a
 # constraint on a future function, not an obligation this type itself owes.
 verdict: Met
-site: crates/corrections/nomos-corrections/src/committed.rs#Rollback_Boundary
+site: crates/corrections/nomos-corrections/src/committed_plan.rs#Rollback_Boundary

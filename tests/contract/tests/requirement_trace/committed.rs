@@ -200,8 +200,8 @@ fn Assert_No_Requirement_Assessed_Twice(assessments: &[crate::assessment::Assess
 
 /// The two source files `OD-CONTRACTS-002`'s territory named for `CHK-003`.
 const CHK_003_SITE_FILES: [&str; 2] = [
-    "crates/contracts/nomos-contracts/src/finding/applicability.rs",
-    "crates/contracts/nomos-contracts/src/finding/evidence.rs",
+    "crates/contracts/nomos-contracts/src/reporting/finding/applicability.rs",
+    "crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs",
 ];
 
 /// `CHK-003`'s verdict stops living in prose.

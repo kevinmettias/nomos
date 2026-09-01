@@ -16,5 +16,5 @@
 # through it -- ChangeSet::Touched remains the only read/write answer any real candidate
 # carries, at Artifact resolution, the weakest tier this type names.
 verdict: Partial
-site: crates/corrections/nomos-corrections/src/read_write_set/set.rs#ReadWriteSet
-gap: crates/corrections/nomos-corrections/src/candidate/correction_candidate.rs#CorrectionCandidate
+site: crates/corrections/nomos-corrections/src/read_write_resolution/read_write_set.rs#ReadWriteSet
+gap: crates/corrections/nomos-corrections/src/correction_id/correction_candidate.rs#CorrectionCandidate
