@@ -6,6 +6,59 @@
     "function": "upper-snake",
     "method": "upper-snake"
   },
+  "languages": {
+    "rust": {
+      "naming": {
+        "function": "upper-snake",
+        "method": "upper-snake"
+      }
+    }
+  },
+  "scripting": {
+    "tooling_language": "rust",
+    "script_extensions": [],
+    "forbidden_extensions": [
+      ".ps1",
+      ".psm1",
+      ".bat",
+      ".cmd",
+      ".sh"
+    ]
+  },
+  "words": {
+    "approved_abbreviations": [
+      "api",
+      "arc",
+      "bom",
+      "cfg",
+      "cli",
+      "db",
+      "ffi",
+      "html",
+      "id",
+      "json",
+      "kwb",
+      "mcp",
+      "msrv",
+      "od",
+      "repo",
+      "sql",
+      "ui",
+      "uri",
+      "url",
+      "uuid",
+      "yaml"
+    ]
+  },
+  "standard_flags": [
+    "--help"
+  ],
+  "projects": [
+    "nomos",
+    "kwb",
+    "xvpe"
+  ],
+  "conformance_workers": 1,
   "telemetry": {
     "none": "nomos is a synchronous CLI and library toolchain: every invocation runs one command against the workspace, reports its outcome as a Result and an exit code, and exits. There is no request-handling loop, background job, or persistent process for a logger, tracer, or metrics emitter to observe."
   }

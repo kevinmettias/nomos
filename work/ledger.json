@@ -40090,6 +40090,54 @@
         }
       ],
       "declined": null
+    },
+    {
+      "id": "P26-STANDARDS-TREE-POLICY",
+      "title": "Adopt more code-standards repository policy",
+      "why": "The code-standards docs/standards tree contains more rules than Nomos currently declares to the adopted checker, so the gate sees only the three policy knobs already copied into standards.json.",
+      "done_when": "standards.json declares the Nomos-specific standards-tree and repository policy needed by the next adopted code-standards checks, and the adopted checker can read the file without rejecting it.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "standards.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "--help"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "--help"
+        ],
+        "exit_code": 0,
+        "output_tail": "       check --list [pattern] [--json]\n       check --help\n\nRun `check --list` to see every check, or `check <check> --help` for one check's flags.\n\nBrowsing checks:\n  check --list                 every check, one per line\n  check --list <language>      only the checks that apply to a language (e.g. --list rust)\n  check --list <pattern>       otherwise, checks whose name contains <pattern> (e.g. --list telemetry)\n  check --list --json          the list as a JSON array, for tooling\n  check explain <check>        what a check judges: its languages, gaps, and standard\n  check precision [--json]     how often each check is right, and which are UNMEASURED\n\nAuthoring workflows (the gate files a UI reads and writes):\n  check workflow validate <path>   does this gate file load? (JSON diagnostics; exit 1 if not)\n  check workflow resolve <path>    the gate with its includes expanded, as JSON\n  check workflow list <language>   the checks a language offers, as a JSON array\n  check workflow phases [dir]      the shared-phase bundle for a filesystem-less editor, as JSON\n\nWhen you disagree with a finding:\n  check waive --reason <why> --owner <who> --fingerprint <id>\n                            write an owned, expiring exception into suppressions.json,\n                            reading the finding from `run-all <path> --format json`\n  check waive --help           the full shape, including --adopt for an existing tree\n\nWhen a result surprises you:\n  check doctor [path]          where this resolved its repository, config and corpus --\n                            run it BEFORE believing a clean result over an unexpected tree\n\nA check's canonical name drops the `check-` prefix (`naming`, not `check-naming`); the\nprefixed spelling is accepted as an alias. Flags come BEFORE the path and vary per check --\nsee `check <check> --help` (for example `check naming --help`) for a check's own flags.\n\nExit codes: 0 clean, 1 findings, 2 the check did not run (a usage error, or nothing analyzed).\n",
+        "verified_at": 1788224133,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "79f9e3650a7f6401ce7fe7be22658d8e7709ddc5"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
