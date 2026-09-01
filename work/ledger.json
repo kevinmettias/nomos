@@ -43181,6 +43181,141 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "OD-RULES-011-SCRIPTING-PROVIDER",
+      "title": "nomos-repo-scripting: the one provider of nomos.cap.scripting.policy",
+      "why": "OD-RULES-011's scripting-family instance needs a real provider before any rule can read it. This one reads standards.json's scripting.tooling_language and scripting.forbidden_extensions through nomos_platform::FileSystem, the same shape nomos-repo-standards and nomos-repo-limits already established for the naming and limits siblings.",
+      "done_when": "nomos-repo-scripting exists at band 25 with PROVIDER/Declared_Guarantee/Provider_Offer/Materialize_Workspace, reads this repository's real standards.json into a ScriptingPolicyPayload, treats a missing file or missing scripting block as declaring nothing, refuses a malformed file, is registered in Cargo.toml/README.md/both bands.rs, and cargo test -p nomos-repo-scripting passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository/nomos-repo-scripting",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-scripting"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-scripting"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 12 tests\ntest guarantee::tests::Test_The_Ceiling_Should_Satisfy_The_Declared_Guarantee ... ok\ntest guarantee::tests::Test_Provider_Offer_Should_Be_Accepted_Under_The_Capabilitys_Contract ... ok\ntest provider::tests::Test_A_Fact_Key_Should_Depend_On_The_Guarantee ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Declare_Nothing_For_A_Missing_File ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Read_A_Declared_Language_And_Forbidden_List ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Non_String_Forbidden_Extension ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Non_String_Tooling_Language ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Return_An_Empty_Policy_For_A_File_Declaring_No_Scripting_Block ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_Invalid_Json ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Treat_An_Empty_Language_As_Undeclared ... ok\ntest provider::tests::Test_Materialize_Workspace_Should_Materialize_This_Repositorys_Own_Declared_Policy ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Read_This_Repositorys_Own_Declared_Policy ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_repo_scripting-8ee5295a460c3a54.exe)\n   Doc-tests nomos_repo_scripting\n",
+        "verified_at": 1788300264,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b2cd36da050426536cfd4093459e827c45f005a0"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P26-RULES-GO-SUPPRESSION-JUSTIFIED",
+      "title": "Import the Go suppression-carries-a-reason family into a new go_text.rs",
+      "why": "Five Go-specific code-standards rule ids (a-discarded-error-is-explained, a-skipped-test-states-why, an-excluded-file-says-why, suppression-directives-carry-a-reason, workspace-markers-carry-a-reason) extend the same marker-comment-carries-a-reason shape rust_text.rs already generalizes for Rust, decidable from raw SourceFile text alone -- real breadth, and per nomos-75's distinction a shared-helper generalization, not a new capability, since nothing about whether these markers need a reason is repo-configurable.",
+      "done_when": "go_text.rs implements all five rules with focused tests covering each doc's stated exemptions (t.SkipNow's no-argument shape needs an adjacent comment instead of a call argument; workspace markers matched only as real comment syntax), wired into checks.rs/lib.rs, and cargo test -p nomos-rules passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/go_text.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Never claimed (refused: overlaps OD-RULES-011-SCRIPTING-PROVIDER's blanket tests/contract/surface territory). Re-adding with the specific nomos-rules.txt file instead of the whole directory."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-12",
+        "declined_at": 1788300202
+      }
+    },
+    {
+      "id": "P26-RULES-GO-SUPPRESSION-JUSTIFIED-2",
+      "title": "Import the Go suppression-carries-a-reason family into a new go_text.rs",
+      "why": "Five Go-specific code-standards rule ids (a-discarded-error-is-explained, a-skipped-test-states-why, an-excluded-file-says-why, suppression-directives-carry-a-reason, workspace-markers-carry-a-reason) extend the same marker-comment-carries-a-reason shape rust_text.rs already generalizes for Rust, decidable from raw SourceFile text alone -- real breadth, and per nomos-75's distinction a shared-helper generalization, not a new capability, since nothing about whether these markers need a reason is repo-configurable.",
+      "done_when": "go_text.rs implements all five rules with focused tests covering each doc's stated exemptions (t.SkipNow's no-argument shape needs an adjacent comment instead of a call argument; workspace markers matched only as real comment syntax), wired into checks.rs/lib.rs, and cargo test -p nomos-rules passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/go_text.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -113,6 +113,7 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // crates/languages/. `OD-RULES-011`.
     ("nomos-repo-standards", 25),
     ("nomos-repo-limits", 25),
+    ("nomos-repo-scripting", 25),
     // The Rust installable-unit manifest format: PackageId, PackageKind and PKG-007's
     // four version domains, given a reader that refuses what it cannot resolve. Wraps
     // nomos-package's generic core with RustEdition resolution. Above the two language

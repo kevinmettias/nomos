@@ -43,6 +43,7 @@ pub(super) const BANDS: &[(&str, u32)] = &[
     ("nomos-lang-rust-deny", 25),
     ("nomos-repo-standards", 25),
     ("nomos-repo-limits", 25),
+    ("nomos-repo-scripting", 25),
     ("nomos-lang-rust-package", 26),
     ("nomos-lang-go-package", 26),
     ("nomos-model-package", 26),
