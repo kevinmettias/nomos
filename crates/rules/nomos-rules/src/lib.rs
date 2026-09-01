@@ -43,7 +43,7 @@
 //!
 //! # What is here
 //!
-//! Thirty-two rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
+//! Thirty-five rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
 //! rule in this tree with three recorded historical instances to test a judgment against —
 //! `P10-FIRST-CHECK` shipped with exactly this one and no more, because a single check
 //! that is honest end to end is worth more than three that are nearly wired.
@@ -185,6 +185,18 @@
 //! are the twenty-ninth through thirty-second rules, importing Rust text-local standards whose
 //! evidence is visible in one source file without a new provider: panic primitive spelling, path
 //! attribute values and explicit shared `RefCell` ownership escapes.
+//!
+//! [`Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter`] is the thirty-third rule,
+//! the unexported half of [`Check_Exported_Go_Functions_Use_Upper_Snake_Case`]'s same
+//! `Upper_Snake_Case` convention: Go decides visibility by a name's first letter rather than a
+//! keyword, so the convention's unexported form lowercases only that letter and keeps the rest
+//! of the shape the exported check already judges.
+//!
+//! [`Check_Go_File_Size_Review_Trigger`] and [`Check_Go_File_Size_Hard_Trigger`] are the
+//! thirty-fourth and thirty-fifth rules, importing Go's own lower pair of the file-size
+//! triggers [`Check_File_Size_Review_Trigger`] and [`Check_File_Size_Justification_Trigger`]
+//! already judge generically — 500 and 1000 lines rather than 500 and 1500 — under their own
+//! code-standards rule ids and scoped to `.go` sources.
 
 #![forbid(unsafe_code)]
 
@@ -211,10 +223,12 @@ pub use checks::{
     Check_Boolean_Predicates, Check_Data_Names_Stay_Lower_Snake, Check_File_Name_Matches_Declared_Type,
     Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Go_Type_Names_Use_Camel_Case,
     Check_Naming_Convention, Check_One_Public_Type_Per_File, Check_Project_Owned_Function_Names_Use_Upper_Snake_Case,
-    Check_Single_Letter_Names, Check_Test_Names_Describe_Behavior, BOOLEAN_PREDICATES, DATA_NAMES_STAY_LOWER_SNAKE,
+    Check_Single_Letter_Names, Check_Test_Names_Describe_Behavior, Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter,
+    BOOLEAN_PREDICATES, DATA_NAMES_STAY_LOWER_SNAKE,
     EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE, NAMING_CONVENTION,
     ONE_PUBLIC_TYPE_PER_FILE, PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE, SINGLE_LETTER_NAMES,
     TEST_NAME_DESCRIBES_BEHAVIOR, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
+    UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,
     Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
     UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
     Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE,
@@ -224,8 +238,10 @@ pub use checks::{
     SHARED_INTERIOR_MUTABILITY_SAYS_WHY, UNWRAP_EXPECT_DISCIPLINE,
     Check_A_Script_Declares_Its_Purpose, Check_Scripts_Use_A_Portable_Shebang, A_SCRIPT_DECLARES_ITS_PURPOSE,
     SCRIPTS_USE_A_PORTABLE_SHEBANG,
-    Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_No_Mod_Rs_Files,
-    FILE_SIZE_JUSTIFICATION_TRIGGER, FILE_SIZE_REVIEW_TRIGGER, NO_MOD_RS_FILES,
+    Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_Go_File_Size_Hard_Trigger,
+    Check_Go_File_Size_Review_Trigger, Check_No_Mod_Rs_Files,
+    FILE_SIZE_JUSTIFICATION_TRIGGER, FILE_SIZE_REVIEW_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
+    NO_MOD_RS_FILES, ONE_THOUSAND_LINE_HARD_TRIGGER,
 };
 pub use declared_universe::DeclaredUniverse;
 pub use reading::Reading;

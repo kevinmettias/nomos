@@ -4,7 +4,9 @@
 //! candidates for splitting, and files above roughly 1500 lines must carry an explicit
 //! justification. Counting lines is text-local, so these rules take only [`SourceFile`]s.
 //! `no-mod-rs-files` is also text-independent: the path alone decides whether a source file
-//! uses the old Rust module layout.
+//! uses the old Rust module layout. Go carries its own, lower pair of the same two
+//! triggers — 500 lines for review and 1000 lines (not 1500) for the hard trigger — under
+//! their own rule ids, scoped to `.go` sources.
 
 use crate::SourceFile;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
@@ -15,9 +17,15 @@ pub const FILE_SIZE_REVIEW_TRIGGER: &str = "500-lines";
 pub const FILE_SIZE_JUSTIFICATION_TRIGGER: &str = "1500-lines";
 /// The code-standards Rust module-layout rule id.
 pub const NO_MOD_RS_FILES: &str = "no-mod-rs-files";
+/// The code-standards Go review-trigger rule id.
+pub const FIVE_HUNDRED_LINE_REVIEW_TRIGGER: &str = "five-hundred-line-review-trigger";
+/// The code-standards Go hard-trigger rule id.
+pub const ONE_THOUSAND_LINE_HARD_TRIGGER: &str = "one-thousand-line-hard-trigger";
 
 const REVIEW_TRIGGER_LINES: usize = 500;
 const JUSTIFICATION_TRIGGER_LINES: usize = 1500;
+const GO_REVIEW_TRIGGER_LINES: usize = 500;
+const GO_HARD_TRIGGER_LINES: usize = 1000;
 
 /// Reports files whose line count exceeds the review trigger.
 #[must_use]
@@ -28,6 +36,7 @@ pub fn Check_File_Size_Review_Trigger(sources: &[SourceFile]) -> Vec<Finding>
         FILE_SIZE_REVIEW_TRIGGER,
         REVIEW_TRIGGER_LINES,
         "exceeds the ~500 line review trigger for splitting",
+        |_| return true,
     );
 }
 
@@ -40,6 +49,33 @@ pub fn Check_File_Size_Justification_Trigger(sources: &[SourceFile]) -> Vec<Find
         FILE_SIZE_JUSTIFICATION_TRIGGER,
         JUSTIFICATION_TRIGGER_LINES,
         "exceeds the ~1500 line trigger and needs an explicit splitting justification",
+        |_| return true,
+    );
+}
+
+/// Reports Go files whose line count exceeds Go's own, lower review trigger.
+#[must_use]
+pub fn Check_Go_File_Size_Review_Trigger(sources: &[SourceFile]) -> Vec<Finding>
+{
+    return Findings_For_Threshold(
+        sources,
+        FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
+        GO_REVIEW_TRIGGER_LINES,
+        "exceeds Go's ~500 line review trigger for splitting",
+        |source| return Is_Go_File(&source.path),
+    );
+}
+
+/// Reports Go files whose line count exceeds Go's own, lower hard trigger.
+#[must_use]
+pub fn Check_Go_File_Size_Hard_Trigger(sources: &[SourceFile]) -> Vec<Finding>
+{
+    return Findings_For_Threshold(
+        sources,
+        ONE_THOUSAND_LINE_HARD_TRIGGER,
+        GO_HARD_TRIGGER_LINES,
+        "exceeds Go's ~1000 line trigger and needs decomposition or a documented locality justification",
+        |source| return Is_Go_File(&source.path),
     );
 }
 
@@ -65,12 +101,23 @@ pub fn Check_No_Mod_Rs_Files(sources: &[SourceFile]) -> Vec<Finding>
     return findings;
 }
 
-fn Findings_For_Threshold(sources: &[SourceFile], rule: &str, threshold: usize, because: &str) -> Vec<Finding>
+fn Findings_For_Threshold(
+    sources: &[SourceFile],
+    rule: &str,
+    threshold: usize,
+    because: &str,
+    accepts_source: impl Fn(&SourceFile) -> bool,
+) -> Vec<Finding>
 {
     let mut findings = Vec::new();
 
     for source in sources
     {
+        if !accepts_source(source)
+        {
+            continue;
+        }
+
         let line_count = Line_Count(source);
         if line_count > threshold
         {
@@ -91,6 +138,13 @@ fn Is_Disallowed_Mod_Rs(path: &str) -> bool
 {
     let normalized = path.replace('\\', "/");
     return normalized.ends_with("/mod.rs") && normalized.starts_with("src/");
+}
+
+fn Is_Go_File(path: &str) -> bool
+{
+    return std::path::Path::new(path)
+        .extension()
+        .is_some_and(|extension| return extension.eq_ignore_ascii_case("go"));
 }
 
 fn Finding_For_Source_With_Count(source: &SourceFile, rule: &str, line_count: usize, because: &str) -> Finding
@@ -170,6 +224,48 @@ mod tests
         let source = Source("src/large.rs", Lines(1500));
 
         let findings = Check_File_Size_Justification_Trigger(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Go_File_Size_Review_Trigger_Should_Report_A_Go_File_Over_500_Lines()
+    {
+        let source = Source("index.go", Lines(501));
+
+        let findings = Check_Go_File_Size_Review_Trigger(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(FIVE_HUNDRED_LINE_REVIEW_TRIGGER));
+    }
+
+    #[test]
+    fn Test_Check_Go_File_Size_Review_Trigger_Should_Ignore_Non_Go_Files()
+    {
+        let source = Source("src/large.rs", Lines(501));
+
+        let findings = Check_Go_File_Size_Review_Trigger(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Go_File_Size_Hard_Trigger_Should_Report_A_Go_File_Over_1000_Lines()
+    {
+        let source = Source("index.go", Lines(1001));
+
+        let findings = Check_Go_File_Size_Hard_Trigger(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(ONE_THOUSAND_LINE_HARD_TRIGGER));
+    }
+
+    #[test]
+    fn Test_Check_Go_File_Size_Hard_Trigger_Should_Accept_A_Go_File_At_1000_Lines()
+    {
+        let source = Source("index.go", Lines(1000));
+
+        let findings = Check_Go_File_Size_Hard_Trigger(&[source]);
 
         assert!(findings.is_empty(), "{findings:?}");
     }

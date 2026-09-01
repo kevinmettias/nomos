@@ -1,5 +1,5 @@
-//! The thirty-two rules this crate implements, one module each — `naming` holds ten,
-//! `rust_text` holds four, `structure` holds three, `formatting` holds three, and `dependency` holds two,
+//! The thirty-five rules this crate implements, one module each — `naming` holds eleven,
+//! `rust_text` holds four, `structure` holds five, `formatting` holds three, and `dependency` holds two,
 //! while `script_discipline` holds two,
 //! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`], since both
 //! judge the same declared architecture and observed `nomos.cap.dependency.edges` fact,
@@ -53,10 +53,12 @@ pub use naming::{
     Check_Boolean_Predicates, Check_Data_Names_Stay_Lower_Snake, Check_File_Name_Matches_Declared_Type,
     Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Go_Type_Names_Use_Camel_Case,
     Check_Naming_Convention, Check_One_Public_Type_Per_File, Check_Project_Owned_Function_Names_Use_Upper_Snake_Case,
-    Check_Single_Letter_Names, Check_Test_Names_Describe_Behavior, BOOLEAN_PREDICATES, DATA_NAMES_STAY_LOWER_SNAKE,
+    Check_Single_Letter_Names, Check_Test_Names_Describe_Behavior, Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter,
+    BOOLEAN_PREDICATES, DATA_NAMES_STAY_LOWER_SNAKE,
     EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE, NAMING_CONVENTION,
     ONE_PUBLIC_TYPE_PER_FILE, PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE, SINGLE_LETTER_NAMES,
     TEST_NAME_DESCRIBES_BEHAVIOR, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
+    UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,
 };
 pub use policy::{Check_Dependency_Policy, DEPENDENCY_POLICY};
 pub use reachability::{
@@ -75,8 +77,10 @@ pub use script_discipline::{
     SCRIPTS_USE_A_PORTABLE_SHEBANG,
 };
 pub use structure::{
-    Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_No_Mod_Rs_Files,
-    FILE_SIZE_JUSTIFICATION_TRIGGER, FILE_SIZE_REVIEW_TRIGGER, NO_MOD_RS_FILES,
+    Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_Go_File_Size_Hard_Trigger,
+    Check_Go_File_Size_Review_Trigger, Check_No_Mod_Rs_Files,
+    FILE_SIZE_JUSTIFICATION_TRIGGER, FILE_SIZE_REVIEW_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
+    NO_MOD_RS_FILES, ONE_THOUSAND_LINE_HARD_TRIGGER,
 };
 
 /// Requires and judges one payload per source, the identical "read the fact, judge the

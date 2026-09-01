@@ -56,7 +56,10 @@ pub use file_names::{
     Check_File_Name_Matches_Declared_Type, Check_One_Public_Type_Per_File, FILE_NAME_MATCHES_DECLARED_TYPE,
     ONE_PUBLIC_TYPE_PER_FILE,
 };
-pub use go_function_names::{Check_Exported_Go_Functions_Use_Upper_Snake_Case, EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE};
+pub use go_function_names::{
+    Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter,
+    EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,
+};
 pub use go_type_names::{Check_Go_Type_Names_Use_Camel_Case, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE};
 pub use single_letter_names::{Check_Single_Letter_Names, SINGLE_LETTER_NAMES};
 pub use test_names::{Check_Test_Names_Describe_Behavior, TEST_NAME_DESCRIBES_BEHAVIOR};
@@ -364,6 +367,27 @@ mod tests
         let found = findings.first().expect("asserted len 1 above");
         assert_eq!(found.rule, nomos_contracts::RuleId::New(EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE));
         assert_eq!(found.subject_name, "RunWithBackend");
+    }
+
+    #[test]
+    fn Test_Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter_Should_Read_And_Judge_A_Real_Fact()
+    {
+        let source = Source_File(Path("main.go"), Text("func rowbreaches() {}"));
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\nitem\t0\tFunction\tPrivate\trowbreaches\t.\t+fn/0\n",
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        let found = findings.first().expect("asserted len 1 above");
+        assert_eq!(found.rule, nomos_contracts::RuleId::New(UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER));
+        assert_eq!(found.subject_name, "rowbreaches");
     }
 
     fn Guarantee_At_Floor() -> Guarantee

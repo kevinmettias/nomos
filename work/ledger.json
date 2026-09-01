@@ -40829,6 +40829,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P26-RULES-MORE-CODE-STANDARDS-7",
+      "title": "Import Go's unexported-function convention and its own file-size trigger pair",
+      "why": "code-standards' unexported-functions-lowercase-only-the-first-letter is the unexported half of the already-implemented exported-functions-use-upper-snake-case, and five-hundred-line-review-trigger/one-thousand-line-hard-trigger are Go's own lower file-size thresholds under distinct rule ids; both are decidable from the syntax-items fact and SourceFile text nomos-rules already reads, with no new provider.",
+      "done_when": "nomos-rules implements Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter, Check_Go_File_Size_Review_Trigger and Check_Go_File_Size_Hard_Trigger with focused tests, cargo test -p nomos-rules passes, and tests/contract/surface/nomos-rules.txt is blessed to match.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules",
+          "tests/contract/surface",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: constant `DEPRECATION` is never used\n  --> crates\\rules\\nomos-rules\\src\\checks\\formatting.rs:27:11\n   |\n27 | pub const DEPRECATION: &str = \"deprecation\";\n   |           ^^^^^^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: function `Check_Deprecation_Carries_A_Reason` is never used\n  --> crates\\rules\\nomos-rules\\src\\checks\\formatting.rs:77:8\n   |\n77 | pub fn Check_Deprecation_Carries_A_Reason(sources: &[SourceFile]) -> Vec<Finding>\n   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Deprecation_Findings_In` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\formatting.rs:169:4\n    |\n169 | fn Deprecation_Findings_In(source: &SourceFile) -> Vec<Finding>\n    |    ^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Rust_Deprecated_Without_Reason` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\formatting.rs:319:4\n    |\n319 | fn Rust_Deprecated_Without_Reason(line: &str) -> bool\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Go_Deprecated_Without_Reason` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\formatting.rs:348:4\n    |\n348 | fn Go_Deprecated_Without_Reason(comment: &str) -> bool\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: `nomos-rules` (lib) generated 5 warnings\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-97cc66c3275b20dd.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-b3b18456b6a9bf06.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788293895,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c2bf8988ab8ac8895d5ad781c15f7508b982c8e4"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
