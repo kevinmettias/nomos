@@ -43464,6 +43464,141 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P26-RULES-SECURITY-TEXT-PATTERNS",
+      "title": "Import hardcoded-secret, secret-in-url and disabled-TLS-verification text patterns",
+      "why": "Three language-agnostic code-standards security rules (a-credential-is-not-hardcoded-in-source, a-secret-does-not-travel-in-a-url, certificate-verification-is-not-disabled) are decidable from raw SourceFile text alone against a fixed, narrow pattern set the standards' own docs bound explicitly (provider-format credential prefixes, named URL query params, literal true/NONE verification-disable values) -- real breadth, shared-helper generalization since none of the three has a repo-configurable dimension.",
+      "done_when": "security_text.rs implements all three rules with focused tests covering each doc's stated exemptions (documented example/test keys like AKIAIOSFODNN7EXAMPLE and sk_test_, test/fixture file paths, TLS check ignoring a non-literal value and honoring an adjacent explanatory comment), wired into checks.rs/lib.rs, and cargo test -p nomos-rules passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/security_text.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 300 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-b51d5a5e8c91c326.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-8140139dc036714d.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788301538,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3259c707b4a0b304b35f405f6ad8eb2db4b2f5ba"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P26-RULES-PLACEMENT-ONEOFFS",
+      "title": "Import a-package-is-named-after-its-directory and no-wildcard-imports",
+      "why": "Two genuine one-offs from the same survey wave as the Go suppression and secret/TLS-pattern families: a Go package-placement rule and a cross-language wildcard-import rule, neither sharing a shape with the other or with anything else this crate ships, decidable from SourceFile text alone.",
+      "done_when": "Check_A_Package_Is_Named_After_Its_Directory and Check_No_Wildcard_Imports exist in a new placement.rs with focused tests covering each doc's stated exemptions (package main, an external Go test package, and Rust's use-super-star-inside-a-test-module idiom), wired into checks.rs/lib.rs, tests/contract/surface/nomos-rules.txt re-blessed, and cargo test -p nomos-rules passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/placement.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "territory overlapped P26-RULES-SECURITY-TEXT-PATTERNS (checks.rs/lib.rs/surface), held by claude-nomos-12; re-adding narrower, file-only, deferring wiring to a follow-up"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-75",
+        "declined_at": 1788301143
+      }
+    },
+    {
+      "id": "P26-RULES-PLACEMENT-ONEOFFS-2",
+      "title": "Import a-package-is-named-after-its-directory and no-wildcard-imports",
+      "why": "Two genuine one-offs from the same survey wave as the Go suppression and secret/TLS-pattern families: a Go package-placement rule and a cross-language wildcard-import rule, neither sharing a shape with the other or with anything else this crate ships, decidable from SourceFile text alone. Scoped to the new placement.rs module only -- the checks.rs/lib.rs export and surface re-bless are a follow-up item, since P26-RULES-SECURITY-TEXT-PATTERNS currently holds those two files.",
+      "done_when": "Check_A_Package_Is_Named_After_Its_Directory and Check_No_Wildcard_Imports exist in placement.rs with focused tests covering each doc's stated exemptions.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/placement.rs",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "predicate would have been vacuous (true) since placement.rs cannot compile or run its own tests until mod placement; is added to checks.rs, which P26-RULES-SECURITY-TEXT-PATTERNS currently holds; waiting to land content and wiring together in one verifiable item instead of splitting past the point a predicate can mean anything"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "true"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-75",
+        "declined_at": 1788301171
+      }
     }
   ]
 }

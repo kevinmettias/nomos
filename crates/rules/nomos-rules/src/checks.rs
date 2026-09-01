@@ -1,10 +1,10 @@
-//! The forty-six rules this crate implements, one module each — `naming` holds thirteen,
+//! The forty-nine rules this crate implements, one module each — `naming` holds thirteen,
 //! `rust_text` holds six, `go_text` holds five, `structure` holds five, `formatting` holds
-//! four, and `dependency` holds two, while `script_discipline` holds three,
-//! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`], since both
-//! judge the same declared architecture and observed `nomos.cap.dependency.edges` fact,
-//! while naming holds the general function convention and the test-name behavior
-//! convention.
+//! four, `security_text` holds three, and `dependency` holds two, while `script_discipline`
+//! holds three, [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`],
+//! since both judge the same declared architecture and observed
+//! `nomos.cap.dependency.edges` fact, while naming holds the general function convention
+//! and the test-name behavior convention.
 //! `lib.rs`'s own module doc walks why each one exists and in what order it was built;
 //! this file only gathers them so the crate root is not itself the ninth thing that
 //! grows one module per rule forever.
@@ -28,6 +28,7 @@ mod reachability;
 mod role_surface_pair;
 mod rust_text;
 mod script_discipline;
+mod security_text;
 mod structure;
 #[cfg(test)]
 mod test_support;
@@ -93,6 +94,11 @@ pub use rust_text::{
 pub use script_discipline::{
     Check_A_Script_Declares_Its_Purpose, Check_Declared_Tooling_Language_For_Scripts, Check_Scripts_Use_A_Portable_Shebang,
     A_SCRIPT_DECLARES_ITS_PURPOSE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, SCRIPTS_USE_A_PORTABLE_SHEBANG,
+};
+pub use security_text::{
+    Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Secret_Does_Not_Travel_In_A_Url,
+    Check_Certificate_Verification_Is_Not_Disabled, A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE,
+    A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, CERTIFICATE_VERIFICATION_IS_NOT_DISABLED,
 };
 pub use structure::{
     Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_Go_File_Size_Hard_Trigger,

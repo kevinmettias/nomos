@@ -240,6 +240,18 @@
 //! at all — this rule never existed before this capability did, so there is no earlier
 //! hardcoded default to fall back to, and code-standards' own `check-script-discipline`
 //! states the reason directly: an undeclared language is an opt-out, not a default-in.
+//!
+//! [`Check_A_Credential_Is_Not_Hardcoded_In_Source`], [`Check_A_Secret_Does_Not_Travel_In_A_Url`]
+//! and [`Check_Certificate_Verification_Is_Not_Disabled`] are the forty-seventh through
+//! forty-ninth rules, a new `security_text` module rather than a capability or a
+//! `language:`-scoped file: each is decidable from raw text against a fixed, narrow
+//! pattern set code-standards' own doc bounds explicitly (a provider-format credential
+//! prefix, a named URL query parameter, a literal verification-disabling value), and none
+//! has a repository-configurable dimension for `OD-RULES-011` to route through a
+//! capability. Deliberately narrower than an entropy-based secret scanner or a runtime
+//! value tracker — code-standards names both as a dedicated tool's job, not this rule's —
+//! and all three treat a test, fixture, or example source the same way
+//! `Is_Test_Or_Fixture_Source` already reads code-standards' own stated exemption.
 
 #![forbid(unsafe_code)]
 
@@ -292,6 +304,9 @@ pub use checks::{
     SUPPRESSION_DIRECTIVES_CARRY_A_REASON, WORKSPACE_MARKERS_CARRY_A_REASON,
     Check_A_Script_Declares_Its_Purpose, Check_Declared_Tooling_Language_For_Scripts, Check_Scripts_Use_A_Portable_Shebang,
     A_SCRIPT_DECLARES_ITS_PURPOSE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, SCRIPTS_USE_A_PORTABLE_SHEBANG,
+    Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Secret_Does_Not_Travel_In_A_Url,
+    Check_Certificate_Verification_Is_Not_Disabled, A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE,
+    A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, CERTIFICATE_VERIFICATION_IS_NOT_DISABLED,
     Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_Go_File_Size_Hard_Trigger,
     Check_Go_File_Size_Review_Trigger, Check_No_Mod_Rs_Files,
     FILE_SIZE_JUSTIFICATION_TRIGGER, FILE_SIZE_REVIEW_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,

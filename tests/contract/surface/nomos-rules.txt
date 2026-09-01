@@ -3,11 +3,14 @@ pub const fn nomos_rules::FunctionArityPolicy::For_Extension(mut self, extension
 pub const fn nomos_rules::FunctionArityPolicy::New(rule: &'static str, max_value_parameters: u32) -> Self
 pub const fn nomos_rules::FunctionArityPolicy::With_Gate(mut self, gate: GateCategory) -> Self
 pub const nomos_rules::AN_EXCLUDED_FILE_SAYS_WHY: &str
+pub const nomos_rules::A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE: &str
 pub const nomos_rules::A_DISCARDED_ERROR_IS_EXPLAINED: &str
 pub const nomos_rules::A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE: &str
 pub const nomos_rules::A_SCRIPT_DECLARES_ITS_PURPOSE: &str
+pub const nomos_rules::A_SECRET_DOES_NOT_TRAVEL_IN_A_URL: &str
 pub const nomos_rules::A_SKIPPED_TEST_STATES_WHY: &str
 pub const nomos_rules::BOOLEAN_PREDICATES: &str
+pub const nomos_rules::CERTIFICATE_VERIFICATION_IS_NOT_DISABLED: &str
 pub const nomos_rules::COMPLETENESS_MIRROR: &str
 pub const nomos_rules::CONSTANTS_SPLIT_BY_EXPORT: &str
 pub const nomos_rules::CONTRACT_RECORD: &str
@@ -74,12 +77,15 @@ pub enum variant nomos_rules::ReceiverAllowance::OneForQualifiedFunctions
 pub enum variant nomos_rules::RuleRegistryError::AlreadyOffered(RuleId)
 pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
+pub fn nomos_rules::Check_A_Credential_Is_Not_Hardcoded_In_Source(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Discarded_Error_Is_Explained(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Script_Declares_Its_Purpose(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Secret_Does_Not_Travel_In_A_Url(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Skipped_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_An_Excluded_File_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Boolean_Predicates( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Certificate_Verification_Is_Not_Disabled(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Completeness_Mirrors( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Cross_Language_Correspondence(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Data_Names_Stay_Lower_Snake( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
