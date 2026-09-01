@@ -252,6 +252,19 @@
 //! value tracker — code-standards names both as a dedicated tool's job, not this rule's —
 //! and all three treat a test, fixture, or example source the same way
 //! `Is_Test_Or_Fixture_Source` already reads code-standards' own stated exemption.
+//!
+//! [`Check_A_Package_Is_Named_After_Its_Directory`] and [`Check_No_Wildcard_Imports`] are
+//! the fiftieth and fifty-first rules, a new `placement` module for two genuine one-offs
+//! that share no shape with each other or with anything else this crate ships: a Go
+//! package's declared name must match its directory (hyphens and underscores in the
+//! directory ignored), and an import in Rust or Go must name what it brings in rather than
+//! reach for it wholesale. Both are text-local; neither has a repository-configurable
+//! dimension. [`Check_No_Wildcard_Imports`] exempts `use super::*;` once it follows the
+//! file's own first `#[cfg(test)]` attribute — the idiom a test module reaching for the
+//! subject it exercises — and a Go external test package dot-importing its own subject,
+//! but not a curated-prelude wildcard: neither this crate's syntax payload nor a
+//! hand-rolled parser can tell a prelude apart from any other wildcard, so that exemption
+//! is left unattempted rather than guessed at.
 
 #![forbid(unsafe_code)]
 
@@ -307,6 +320,8 @@ pub use checks::{
     Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Secret_Does_Not_Travel_In_A_Url,
     Check_Certificate_Verification_Is_Not_Disabled, A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE,
     A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, CERTIFICATE_VERIFICATION_IS_NOT_DISABLED,
+    Check_A_Package_Is_Named_After_Its_Directory, Check_No_Wildcard_Imports, A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
+    NO_WILDCARD_IMPORTS,
     Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_Go_File_Size_Hard_Trigger,
     Check_Go_File_Size_Review_Trigger, Check_No_Mod_Rs_Files,
     FILE_SIZE_JUSTIFICATION_TRIGGER, FILE_SIZE_REVIEW_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,

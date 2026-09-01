@@ -5,6 +5,7 @@ pub const fn nomos_rules::FunctionArityPolicy::With_Gate(mut self, gate: GateCat
 pub const nomos_rules::AN_EXCLUDED_FILE_SAYS_WHY: &str
 pub const nomos_rules::A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE: &str
 pub const nomos_rules::A_DISCARDED_ERROR_IS_EXPLAINED: &str
+pub const nomos_rules::A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY: &str
 pub const nomos_rules::A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE: &str
 pub const nomos_rules::A_SCRIPT_DECLARES_ITS_PURPOSE: &str
 pub const nomos_rules::A_SECRET_DOES_NOT_TRAVEL_IN_A_URL: &str
@@ -44,6 +45,7 @@ pub const nomos_rules::NAMING_CONVENTION: &str
 pub const nomos_rules::NO_DECORATIVE_SECTION_DIVIDERS: &str
 pub const nomos_rules::NO_MOD_RS_FILES: &str
 pub const nomos_rules::NO_TRAILING_WHITESPACE: &str
+pub const nomos_rules::NO_WILDCARD_IMPORTS: &str
 pub const nomos_rules::ONE_PUBLIC_TYPE_PER_FILE: &str
 pub const nomos_rules::ONE_THOUSAND_LINE_HARD_TRIGGER: &str
 pub const nomos_rules::PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED: &str
@@ -79,6 +81,7 @@ pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
 pub fn nomos_rules::Check_A_Credential_Is_Not_Hardcoded_In_Source(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Discarded_Error_Is_Explained(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Package_Is_Named_After_Its_Directory(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Script_Declares_Its_Purpose(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Secret_Does_Not_Travel_In_A_Url(sources: &[SourceFile]) -> Vec<Finding>
@@ -112,6 +115,7 @@ pub fn nomos_rules::Check_Naming_Convention( sources: &[SourceFile], facts: &mut
 pub fn nomos_rules::Check_No_Decorative_Section_Dividers(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Mod_Rs_Files(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Trailing_Whitespace(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_No_Wildcard_Imports(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_One_Public_Type_Per_File( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Panics_Are_Justified_Documented_And_Validated(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Parameter_Count( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>

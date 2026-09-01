@@ -1,7 +1,8 @@
-//! The forty-nine rules this crate implements, one module each — `naming` holds thirteen,
+//! The fifty-one rules this crate implements, one module each — `naming` holds thirteen,
 //! `rust_text` holds six, `go_text` holds five, `structure` holds five, `formatting` holds
-//! four, `security_text` holds three, and `dependency` holds two, while `script_discipline`
-//! holds three, [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`],
+//! four, `security_text` holds three, `placement` holds two, and `dependency` holds two,
+//! while `script_discipline` holds three,
+//! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`],
 //! since both judge the same declared architecture and observed
 //! `nomos.cap.dependency.edges` fact, while naming holds the general function convention
 //! and the test-name behavior convention.
@@ -23,6 +24,7 @@ mod go_text;
 mod lint;
 mod mirror;
 mod naming;
+mod placement;
 mod policy;
 mod reachability;
 mod role_surface_pair;
@@ -73,6 +75,10 @@ pub use naming::{
     ONE_PUBLIC_TYPE_PER_FILE, PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE, SINGLE_LETTER_NAMES,
     TEST_NAME_DESCRIBES_BEHAVIOR, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
     UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,
+};
+pub use placement::{
+    Check_A_Package_Is_Named_After_Its_Directory, Check_No_Wildcard_Imports, A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
+    NO_WILDCARD_IMPORTS,
 };
 pub use policy::{
     Check_Dependency_Policy, DEPENDENCY_POLICY, DEPENDENCY_POLICY_CONTRACT_RECORD,
