@@ -43,7 +43,7 @@
 //!
 //! # What is here
 //!
-//! Forty rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
+//! Forty-five rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
 //! rule in this tree with three recorded historical instances to test a judgment against —
 //! `P10-FIRST-CHECK` shipped with exactly this one and no more, because a single check
 //! that is honest end to end is worth more than three that are nearly wired.
@@ -221,6 +221,16 @@
 //! [`Check_Shared_Interior_Mutability_Says_Why`] already generalize through
 //! `rust_text::Previous_Comment_Block_Has` — a real third and fourth consumer of that
 //! primitive, not a new one invented for them.
+//!
+//! [`Check_A_Discarded_Error_Is_Explained`], [`Check_A_Skipped_Test_States_Why`],
+//! [`Check_An_Excluded_File_Says_Why`], [`Check_Suppression_Directives_Carry_A_Reason`]
+//! and [`Check_Workspace_Markers_Carry_A_Reason`] are the forty-first through forty-fifth
+//! rules, the Go form of the same "a marker needs an adjacent or attached reason" shape —
+//! a new `go_text` module rather than a capability, since nothing about whether these Go
+//! markers need a reason is a value a repository would configure. `Check_A_Skipped_Test_
+//! States_Why` judges two distinct shapes under one rule id: `t.Skip`/`t.Skipf` need a
+//! non-empty call argument, and `t.SkipNow` — which the `testing` package gives no
+//! argument to carry one in — needs an adjacent comment instead.
 
 #![forbid(unsafe_code)]
 
@@ -267,6 +277,10 @@ pub use checks::{
     A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, EVERY_ALLOW_CARRIES_A_JUSTIFICATION,
     PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED, SHARED_INTERIOR_MUTABILITY_SAYS_WHY, UNSAFE_JUSTIFICATION,
     UNWRAP_EXPECT_DISCIPLINE,
+    Check_A_Discarded_Error_Is_Explained, Check_A_Skipped_Test_States_Why, Check_An_Excluded_File_Says_Why,
+    Check_Suppression_Directives_Carry_A_Reason, Check_Workspace_Markers_Carry_A_Reason,
+    A_DISCARDED_ERROR_IS_EXPLAINED, A_SKIPPED_TEST_STATES_WHY, AN_EXCLUDED_FILE_SAYS_WHY,
+    SUPPRESSION_DIRECTIVES_CARRY_A_REASON, WORKSPACE_MARKERS_CARRY_A_REASON,
     Check_A_Script_Declares_Its_Purpose, Check_Scripts_Use_A_Portable_Shebang, A_SCRIPT_DECLARES_ITS_PURPOSE,
     SCRIPTS_USE_A_PORTABLE_SHEBANG,
     Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_Go_File_Size_Hard_Trigger,

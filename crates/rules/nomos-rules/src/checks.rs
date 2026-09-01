@@ -1,6 +1,6 @@
-//! The forty rules this crate implements, one module each — `naming` holds thirteen,
-//! `rust_text` holds six, `structure` holds five, `formatting` holds four, and `dependency` holds two,
-//! while `script_discipline` holds two,
+//! The forty-five rules this crate implements, one module each — `naming` holds thirteen,
+//! `rust_text` holds six, `go_text` holds five, `structure` holds five, `formatting` holds
+//! four, and `dependency` holds two, while `script_discipline` holds two,
 //! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`], since both
 //! judge the same declared architecture and observed `nomos.cap.dependency.edges` fact,
 //! while naming holds the general function convention and the test-name behavior
@@ -19,6 +19,7 @@ mod crosslang;
 mod dependency;
 mod formatting;
 mod function_shape;
+mod go_text;
 mod lint;
 mod mirror;
 mod naming;
@@ -50,6 +51,12 @@ pub use formatting::{
 pub use function_shape::{
     Check_Function_Arity_Policy, Check_Go_Helpers_Package_Five_Inputs, Check_Parameter_Count, FunctionArityPolicy,
     FunctionAritySource, ReceiverAllowance, GO_HELPERS_PACKAGE_FIVE_INPUTS, PARAMETER_COUNT,
+};
+pub use go_text::{
+    Check_A_Discarded_Error_Is_Explained, Check_A_Skipped_Test_States_Why, Check_An_Excluded_File_Says_Why,
+    Check_Suppression_Directives_Carry_A_Reason, Check_Workspace_Markers_Carry_A_Reason,
+    A_DISCARDED_ERROR_IS_EXPLAINED, A_SKIPPED_TEST_STATES_WHY, AN_EXCLUDED_FILE_SAYS_WHY,
+    SUPPRESSION_DIRECTIVES_CARRY_A_REASON, WORKSPACE_MARKERS_CARRY_A_REASON,
 };
 pub use lint::{Check_Lint_Diagnostics, LINT_CONTRACT_RECORD, LINT_CONTRACT_RECORD_VERSION, LINT_DIAGNOSTICS};
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};

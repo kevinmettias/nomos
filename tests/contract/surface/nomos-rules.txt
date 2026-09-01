@@ -2,8 +2,11 @@ pub const fn nomos_rules::FunctionArityPolicy::Allow_One_Receiver_For_Qualified_
 pub const fn nomos_rules::FunctionArityPolicy::For_Extension(mut self, extension: &'static str) -> Self
 pub const fn nomos_rules::FunctionArityPolicy::New(rule: &'static str, max_value_parameters: u32) -> Self
 pub const fn nomos_rules::FunctionArityPolicy::With_Gate(mut self, gate: GateCategory) -> Self
+pub const nomos_rules::AN_EXCLUDED_FILE_SAYS_WHY: &str
+pub const nomos_rules::A_DISCARDED_ERROR_IS_EXPLAINED: &str
 pub const nomos_rules::A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE: &str
 pub const nomos_rules::A_SCRIPT_DECLARES_ITS_PURPOSE: &str
+pub const nomos_rules::A_SKIPPED_TEST_STATES_WHY: &str
 pub const nomos_rules::BOOLEAN_PREDICATES: &str
 pub const nomos_rules::COMPLETENESS_MIRROR: &str
 pub const nomos_rules::CONSTANTS_SPLIT_BY_EXPORT: &str
@@ -45,6 +48,7 @@ pub const nomos_rules::PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str
 pub const nomos_rules::SCRIPTS_USE_A_PORTABLE_SHEBANG: &str
 pub const nomos_rules::SHARED_INTERIOR_MUTABILITY_SAYS_WHY: &str
 pub const nomos_rules::SINGLE_LETTER_NAMES: &str
+pub const nomos_rules::SUPPRESSION_DIRECTIVES_CARRY_A_REASON: &str
 pub const nomos_rules::TEST_NAME_DESCRIBES_BEHAVIOR: &str
 pub const nomos_rules::TODO_FORMAT: &str
 pub const nomos_rules::TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE: &str
@@ -54,6 +58,7 @@ pub const nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD: &str
 pub const nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::UNSAFE_JUSTIFICATION: &str
 pub const nomos_rules::UNWRAP_EXPECT_DISCIPLINE: &str
+pub const nomos_rules::WORKSPACE_MARKERS_CARRY_A_REASON: &str
 pub enum nomos_rules::FunctionAritySource
 pub enum nomos_rules::Reading
 pub enum nomos_rules::ReceiverAllowance
@@ -68,8 +73,11 @@ pub enum variant nomos_rules::ReceiverAllowance::OneForQualifiedFunctions
 pub enum variant nomos_rules::RuleRegistryError::AlreadyOffered(RuleId)
 pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
+pub fn nomos_rules::Check_A_Discarded_Error_Is_Explained(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Script_Declares_Its_Purpose(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Skipped_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_An_Excluded_File_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Boolean_Predicates( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Completeness_Mirrors( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Cross_Language_Correspondence(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
@@ -103,12 +111,14 @@ pub fn nomos_rules::Check_Project_Owned_Function_Names_Use_Upper_Snake_Case( sou
 pub fn nomos_rules::Check_Scripts_Use_A_Portable_Shebang(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Single_Letter_Names( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Suppression_Directives_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Test_Names_Describe_Behavior( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Todo_Format(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Unread_Reaches_A_Finding(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Unwrap_Expect_Discipline(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Workspace_Markers_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::RuleRegistry::New() -> Self
 pub fn nomos_rules::RuleRegistry::Offer(&mut self, offer: RuleOffer) -> Result<(), RuleRegistryError>
 pub fn nomos_rules::RuleRegistry::Offered(&self, rule: &RuleId) -> Option<&RuleOffer>
