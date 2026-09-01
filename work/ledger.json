@@ -42751,10 +42751,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-boolpred-rename-3",
+        "acquired_at": 1788299066,
+        "lease_expires_at": 1788306266
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -42838,14 +42842,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Territory needs tests/contract/src/gates.rs, where the real defect (Named_Outright's imprecise substring match) lives; re-added as -4."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-external-review-reconciliation",
-        "acquired_at": 1788299026,
-        "lease_expires_at": 1788306226
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -42857,6 +42861,113 @@
           "completeness_universes",
           "--test",
           "corpus_gates"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-external-review-reconciliation",
+          "reason": "absence_response.rs cannot be made consistent by a GATES row alone: declared.rs's Files_Naming_A_Corpus only walks tests/ (never finds a src/ file, so any row for one is rejected as vanished), while derived.rs's Corpus_Gates() scans src/ too and flags it via Named_Outright's plain substring match against a string-literal fixture value ('NOMOS_V14_CORPUS is not set', not a real env read). The two checks' scopes cannot both be satisfied by editing the table; the real defect is Named_Outright matching a substring of a longer string literal instead of an exact quoted variable name. Re-adding with tests/contract/src/gates.rs in territory to fix the scanner instead.",
+          "abandoned_at": 1788299325
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-external-review-reconciliation",
+        "declined_at": 1788299325
+      }
+    },
+    {
+      "id": "OD-RULES-011-PARAMETER-COUNT-LIMIT",
+      "title": "Resolve FunctionArityPolicy's max_value_parameters from nomos.cap.limits.policy",
+      "why": "Check_Parameter_Count and Check_Go_Helpers_Package_Five_Inputs still hardcode MAX_VALUE_PARAMETERS while structure.rs's four file-size triggers already resolve their thresholds from nomos.cap.limits.policy via Resolve_Limit; standards.json's limits.parameter-count-max key already exists unread by anything. Completes the threshold family's own second consumer.",
+      "done_when": "Check_Parameter_Count and Check_Go_Helpers_Package_Five_Inputs resolve their max-value-parameter ceiling from a nomos.cap.limits.policy row keyed parameter-count-max when standards.json declares one, falling back to the prior hardcoded default otherwise, and cargo test -p nomos-rules passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/function_shape.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 264 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-ee89c438be92be88.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-af255d5622a42965.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788299414,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "deb879d1f3b02a50d2f6b76839ff6b0395053ff3"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-LEDGER-STALE-COMPLETENESS-CORPUS-GATES-4",
+      "title": "completeness_universes and corpus_gates are red from tables never updated as their sources grew",
+      "why": "Same as -3, plus one more root cause found while fixing it: Corpus_Gates()'s Named_Outright matches a corpus variable as a bare substring of a function body, so absence_response.rs's fixture string 'NOMOS_V14_CORPUS is not set' (test data, not an env read) is misclassified as a real gate. declared.rs's Files_Naming_A_Corpus (tests/ only) and derived.rs's Corpus_Gates() (src/ and tests/) therefore disagree about this file in a way no GATES row can resolve: declared.rs rejects any row it cannot find under tests/, and derived.rs demands one for whatever it scans. Fixing the substring match to require an exact quoted variable name removes the false positive at its source.",
+      "done_when": "UNIVERSES classifies all scanned universes (or UNMIRRORED_TOTAL is raised with a stated reason), kind.rs's doc comment names its real mirror test, GATES matches what the source actually gates, and Named_Outright no longer matches a variable name embedded in a longer string literal; cargo test --no-fail-fast -p nomos-contract-tests --test completeness_universes --test corpus_gates -p nomos-contract-tests --lib exits 0.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/completeness_universes",
+          "tests/contract/tests/corpus_gates",
+          "tests/contract/tests/corpus_gates.rs",
+          "crates/kernel/nomos-store/src/document/kind.rs",
+          "tests/contract/src/gates.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-external-review-reconciliation",
+        "acquired_at": 1788299325,
+        "lease_expires_at": 1788306525
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes",
+          "--test",
+          "corpus_gates",
+          "--lib"
         ],
         "timeout_seconds": 600
       },

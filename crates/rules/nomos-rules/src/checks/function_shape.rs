@@ -13,9 +13,21 @@
 //! shape code-standards already has in practice across `parameter-count` and
 //! `go-helpers-package-five-inputs`, and it leaves a repository room to adopt the same
 //! judgment with a different threshold or language surface.
+//!
+//! # The ceiling is now a repository's own, resolved rather than compiled in
+//!
+//! `OD-RULES-011` named this threshold family as its own future instance of the naming
+//! decision `checks::naming::Resolve_Case` already generalizes, and `checks::structure::
+//! Resolve_Limit` already builds a second instance for the file-size triggers. This is a
+//! third: [`Resolve_Limit`] asks `nomos.cap.limits.policy` for the value-parameter ceiling
+//! a repository declares, falling back to [`MAX_VALUE_PARAMETERS`] when it declares none —
+//! the identical `Require`-then-fall-back-on-any-`Err` shape, duplicated locally rather than
+//! shared across `structure.rs`, matching this crate's own per-file convention (`Is_Go_File`
+//! already has three independent copies) until a real need for one shared copy shows up.
 
 use crate::SourceFile;
-use nomos_analysis::FactReader;
+use nomos_analysis::{FactReader, InputDigest};
+use nomos_cap_limits_policy::Scope;
 use nomos_cap_syntax::{FUNCTION, Function_Arity, PayloadItem, SyntaxPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
@@ -23,6 +35,12 @@ use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleI
 pub const PARAMETER_COUNT: &str = "parameter-count";
 /// The Go-specific code-standards parameter-count rule id.
 pub const GO_HELPERS_PACKAGE_FIVE_INPUTS: &str = "go-helpers-package-five-inputs";
+
+/// `standards.json`'s row key for the value-parameter ceiling, shared by the generic and
+/// the Go rule since Go's own value equals the default and so needs no override row.
+const PARAMETER_COUNT_MAX_KEY: &str = "parameter-count-max";
+
+const GO: &str = "go";
 
 const MAX_VALUE_PARAMETERS: u32 = 4;
 
@@ -102,34 +120,96 @@ impl FunctionArityPolicy
     }
 }
 
-/// Reports functions that definitely exceed the four-value-parameter cap.
+/// Reports functions that definitely exceed the value-parameter cap — a repository's own
+/// declared `nomos.cap.limits.policy` when it declares `parameter-count-max`, the prior
+/// hardcoded default otherwise.
 #[must_use]
 pub fn Check_Parameter_Count(
     sources: &[SourceFile],
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
+    let max = Resolve_Limit(facts, None, PARAMETER_COUNT_MAX_KEY, MAX_VALUE_PARAMETERS);
     return Check_Function_Arity_Policy(
         sources,
         facts,
-        FunctionArityPolicy::New(PARAMETER_COUNT, MAX_VALUE_PARAMETERS).Allow_One_Receiver_For_Qualified_Functions(),
+        FunctionArityPolicy::New(PARAMETER_COUNT, max).Allow_One_Receiver_For_Qualified_Functions(),
     );
 }
 
-/// Reports Go functions and methods that definitely exceed the four-value-parameter cap.
+/// Reports Go functions and methods that definitely exceed the value-parameter cap — a
+/// repository's own declared `nomos.cap.limits.policy` when it declares `go`'s own
+/// `parameter-count-max`, the repository-wide value or the prior hardcoded default
+/// otherwise.
 #[must_use]
 pub fn Check_Go_Helpers_Package_Five_Inputs(
     sources: &[SourceFile],
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
+    let max = Resolve_Limit(facts, Some(GO), PARAMETER_COUNT_MAX_KEY, MAX_VALUE_PARAMETERS);
     return Check_Function_Arity_Policy(
         sources,
         facts,
-        FunctionArityPolicy::New(GO_HELPERS_PACKAGE_FIVE_INPUTS, MAX_VALUE_PARAMETERS)
+        FunctionArityPolicy::New(GO_HELPERS_PACKAGE_FIVE_INPUTS, max)
             .For_Extension("go")
             .Allow_One_Receiver_For_Qualified_Functions(),
     );
+}
+
+/// This crate's own floor for `nomos.cap.limits.policy` — stated at the capability's own
+/// ceiling since there is only one real provider today and no weaker answer this crate
+/// could honestly still act on. Mirrors `checks::naming::Naming_Policy_Requirement` and
+/// `checks::structure::Limits_Policy_Requirement` exactly, for the identical capability.
+fn Limits_Policy_Requirement() -> nomos_capability::Requirement
+{
+    return nomos_capability::Requirement::New(
+        nomos_cap_limits_policy::Capability(),
+        nomos_cap_limits_policy::CONTRACT_VERSION,
+        nomos_cap_limits_policy::Ceiling(),
+    );
+}
+
+/// Resolves the numeric ceiling `key` must take: a repository's own declared `nomos.cap.
+/// limits.policy`, most-specific key first (`language`'s own override, then the
+/// repository-wide default), falling back to `default` when neither is declared.
+///
+/// `OD-CAPABILITY-004` and `OD-RULES-011` settle how an absent read is treated here,
+/// mirroring `checks::structure::Resolve_Limit` exactly: this capability is optional,
+/// every caller already has a complete answer without it, so `facts.Require` failing for
+/// any reason is exactly "no override" — never a `Finding`, never this capability's own
+/// `Applicability` surfacing anywhere.
+fn Resolve_Limit(facts: &mut dyn FactReader, language: Option<&str>, key: &str, default: u32) -> u32
+{
+    let subject = nomos_model::Subject_Of_Path("");
+    let Ok(fact) =
+        facts.Require(&nomos_cap_limits_policy::Capability(), &subject, InputDigest::Of(&[]), &Limits_Policy_Requirement())
+    else
+    {
+        return default;
+    };
+
+    let Ok(payload) = nomos_cap_limits_policy::Parse_Payload(&fact.payload.bytes)
+    else
+    {
+        return default;
+    };
+
+    if let Some(language) = language
+    {
+        let scope = Scope::Language(language.to_owned());
+        if let Some(row) = payload.rows.iter().find(|row| return row.scope == scope && row.key == key)
+        {
+            return row.value;
+        }
+    }
+
+    if let Some(row) = payload.rows.iter().find(|row| return row.scope == Scope::Repository && row.key == key)
+    {
+        return row.value;
+    }
+
+    return default;
 }
 
 /// Reports functions that violate a caller-supplied arity policy.
@@ -378,6 +458,89 @@ mod tests
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "Build");
+    }
+
+    #[test]
+    fn Test_Resolve_Limit_Should_Fall_Back_To_The_Default_When_No_Fact_Is_Materialized()
+    {
+        let store = MemoryFactStore::New();
+        let registry = nomos_capability::Registry::New();
+        let mut facts = Reader::On(&store, &registry, Test_Context());
+
+        let resolved = Resolve_Limit(&mut facts, None, PARAMETER_COUNT_MAX_KEY, MAX_VALUE_PARAMETERS);
+
+        assert_eq!(resolved, MAX_VALUE_PARAMETERS);
+    }
+
+    #[test]
+    fn Test_Resolve_Limit_Should_Prefer_The_Repository_Wide_Row_Over_The_Default()
+    {
+        let TestOffering { mut store, registry, offer } = Limits_Offering();
+        Materialize_Limits_Fact(
+            &mut store,
+            &offer,
+            vec![nomos_cap_limits_policy::PolicyRow {
+                scope: Scope::Repository,
+                key: PARAMETER_COUNT_MAX_KEY.to_owned(),
+                value: 6,
+            }],
+        );
+        let mut facts = Reader::On(&store, &registry, Test_Context());
+
+        let resolved = Resolve_Limit(&mut facts, None, PARAMETER_COUNT_MAX_KEY, MAX_VALUE_PARAMETERS);
+
+        assert_eq!(resolved, 6);
+    }
+
+    #[test]
+    fn Test_Resolve_Limit_Should_Prefer_The_Language_Row_Over_The_Repository_Wide_Row()
+    {
+        let TestOffering { mut store, registry, offer } = Limits_Offering();
+        Materialize_Limits_Fact(
+            &mut store,
+            &offer,
+            vec![
+                nomos_cap_limits_policy::PolicyRow {
+                    scope: Scope::Repository,
+                    key: PARAMETER_COUNT_MAX_KEY.to_owned(),
+                    value: 4,
+                },
+                nomos_cap_limits_policy::PolicyRow {
+                    scope: Scope::Language(GO.to_owned()),
+                    key: PARAMETER_COUNT_MAX_KEY.to_owned(),
+                    value: 6,
+                },
+            ],
+        );
+        let mut facts = Reader::On(&store, &registry, Test_Context());
+
+        let resolved = Resolve_Limit(&mut facts, Some(GO), PARAMETER_COUNT_MAX_KEY, MAX_VALUE_PARAMETERS);
+
+        assert_eq!(resolved, 6);
+    }
+
+    fn Limits_Offering() -> TestOffering
+    {
+        return test_support::Offering(
+            nomos_cap_limits_policy::Capability_Contract(),
+            nomos_cap_limits_policy::Capability(),
+            nomos_cap_limits_policy::CONTRACT_VERSION,
+            "nomos.test.function-shape.limits.provides",
+            nomos_cap_limits_policy::Ceiling(),
+        );
+    }
+
+    fn Materialize_Limits_Fact(store: &mut MemoryFactStore, offer: &ProviderOffer, rows: Vec<nomos_cap_limits_policy::PolicyRow>)
+    {
+        let payload = nomos_cap_limits_policy::LimitsPolicyPayload { rows };
+        test_support::Materialize(
+            store,
+            nomos_model::Subject_Of_Path(""),
+            offer,
+            InputDigest::Of(&[]),
+            nomos_cap_limits_policy::Payload_Schema(),
+            nomos_cap_limits_policy::Encode_Payload(&payload),
+        );
     }
 
     fn Payload_From_Text(text: &str) -> SyntaxPayload
