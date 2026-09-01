@@ -245,6 +245,12 @@
     "kwb",
     "xvpe"
   ],
+  "dependency_budget": {
+    "max_fan_in": 225,
+    "max_fan_out": 20,
+    "max_area_of_effect": 37,
+    "max_build_depth": 7
+  },
   "tiers": [
     {
       "tier": "band-0",
