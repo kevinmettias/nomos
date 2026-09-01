@@ -1,5 +1,5 @@
-//! The thirty-five rules this crate implements, one module each — `naming` holds eleven,
-//! `rust_text` holds four, `structure` holds five, `formatting` holds three, and `dependency` holds two,
+//! The thirty-eight rules this crate implements, one module each — `naming` holds thirteen,
+//! `rust_text` holds four, `structure` holds five, `formatting` holds four, and `dependency` holds two,
 //! while `script_discipline` holds two,
 //! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`], since both
 //! judge the same declared architecture and observed `nomos.cap.dependency.edges` fact,
@@ -41,8 +41,8 @@ pub use dependency::{
     DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
 };
 pub use formatting::{
-    Check_No_Decorative_Section_Dividers, Check_No_Trailing_Whitespace, Check_Todo_Format,
-    NO_DECORATIVE_SECTION_DIVIDERS, NO_TRAILING_WHITESPACE, TODO_FORMAT,
+    Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Trailing_Whitespace,
+    Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS, NO_TRAILING_WHITESPACE, TODO_FORMAT,
 };
 pub use function_shape::{
     Check_Go_Helpers_Package_Five_Inputs, Check_Parameter_Count, GO_HELPERS_PACKAGE_FIVE_INPUTS, PARAMETER_COUNT,
@@ -51,11 +51,13 @@ pub use lint::{Check_Lint_Diagnostics, LINT_DIAGNOSTICS};
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
 pub use naming::{
     Check_Boolean_Predicates, Check_Data_Names_Stay_Lower_Snake, Check_File_Name_Matches_Declared_Type,
-    Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Go_Type_Names_Use_Camel_Case,
-    Check_Naming_Convention, Check_One_Public_Type_Per_File, Check_Project_Owned_Function_Names_Use_Upper_Snake_Case,
+    Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Go_Constants_Split_By_Export, Check_Go_Type_Names_Use_Camel_Case,
+    Check_Go_Variables_Use_Lower_Snake_Case, Check_Naming_Convention, Check_One_Public_Type_Per_File,
+    Check_Project_Owned_Function_Names_Use_Upper_Snake_Case,
     Check_Single_Letter_Names, Check_Test_Names_Describe_Behavior, Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter,
-    BOOLEAN_PREDICATES, DATA_NAMES_STAY_LOWER_SNAKE,
-    EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE, NAMING_CONVENTION,
+    BOOLEAN_PREDICATES, CONSTANTS_SPLIT_BY_EXPORT, DATA_NAMES_STAY_LOWER_SNAKE,
+    EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE, GO_VARIABLES_USE_LOWER_SNAKE_CASE,
+    NAMING_CONVENTION,
     ONE_PUBLIC_TYPE_PER_FILE, PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE, SINGLE_LETTER_NAMES,
     TEST_NAME_DESCRIBES_BEHAVIOR, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
     UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,

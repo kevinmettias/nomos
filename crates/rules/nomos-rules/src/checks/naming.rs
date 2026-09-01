@@ -39,6 +39,7 @@
 mod boolean_predicates;
 mod data_names;
 mod file_names;
+mod go_data_names;
 mod go_function_names;
 mod go_type_names;
 pub(super) mod reading;
@@ -55,6 +56,10 @@ pub use data_names::{Check_Data_Names_Stay_Lower_Snake, DATA_NAMES_STAY_LOWER_SN
 pub use file_names::{
     Check_File_Name_Matches_Declared_Type, Check_One_Public_Type_Per_File, FILE_NAME_MATCHES_DECLARED_TYPE,
     ONE_PUBLIC_TYPE_PER_FILE,
+};
+pub use go_data_names::{
+    Check_Go_Constants_Split_By_Export, Check_Go_Variables_Use_Lower_Snake_Case, CONSTANTS_SPLIT_BY_EXPORT,
+    GO_VARIABLES_USE_LOWER_SNAKE_CASE,
 };
 pub use go_function_names::{
     Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter,
@@ -388,6 +393,48 @@ mod tests
         let found = findings.first().expect("asserted len 1 above");
         assert_eq!(found.rule, nomos_contracts::RuleId::New(UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER));
         assert_eq!(found.subject_name, "rowbreaches");
+    }
+
+    #[test]
+    fn Test_Check_Go_Constants_Split_By_Export_Should_Read_And_Judge_A_Real_Fact()
+    {
+        let source = Source_File(Path("kinds.go"), Text("const KindRule = \"rule\""));
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\nitem\t0\tConstant\tPublic\tKindRule\t.\t.\n",
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Go_Constants_Split_By_Export(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        let found = findings.first().expect("asserted len 1 above");
+        assert_eq!(found.rule, nomos_contracts::RuleId::New(CONSTANTS_SPLIT_BY_EXPORT));
+        assert_eq!(found.subject_name, "KindRule");
+    }
+
+    #[test]
+    fn Test_Check_Go_Variables_Use_Lower_Snake_Case_Should_Read_And_Judge_A_Real_Fact()
+    {
+        let source = Source_File(Path("state.go"), Text("var entityID int"));
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\nitem\t0\tVariable\tPrivate\tentityID\t.\t.\n",
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Go_Variables_Use_Lower_Snake_Case(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        let found = findings.first().expect("asserted len 1 above");
+        assert_eq!(found.rule, nomos_contracts::RuleId::New(GO_VARIABLES_USE_LOWER_SNAKE_CASE));
+        assert_eq!(found.subject_name, "entityID");
     }
 
     fn Guarantee_At_Floor() -> Guarantee

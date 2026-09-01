@@ -197,6 +197,21 @@
 //! triggers [`Check_File_Size_Review_Trigger`] and [`Check_File_Size_Justification_Trigger`]
 //! already judge generically — 500 and 1000 lines rather than 500 and 1500 — under their own
 //! code-standards rule ids and scoped to `.go` sources.
+//!
+//! [`Check_Deprecation_Carries_A_Reason`] is the thirty-sixth rule, importing the two
+//! text-decidable forms of code-standards' `deprecation` rule: a Rust `#[deprecated]` (or
+//! one whose arguments close on the same line and name no `note`) and a Go `// Deprecated:`
+//! with nothing after the colon. A multi-line Rust attribute is left unjudged rather than
+//! guessed at.
+//!
+//! [`Check_Go_Constants_Split_By_Export`] and [`Check_Go_Variables_Use_Lower_Snake_Case`]
+//! are the thirty-seventh and thirty-eighth rules, importing code-standards' remaining Go
+//! data-name conventions from the syntax payload's `Constant` and `Variable` items: a
+//! constant's case splits by export status the same way [`Check_Go_Type_Names_Use_Camel_Case`]
+//! already splits Go type case, and a top-level `var` is judged against `lower_snake_case`
+//! without that split — locals, parameters and struct fields are outside what either check
+//! can see, the latter already covered by [`Check_Data_Names_Stay_Lower_Snake`] regardless
+//! of language.
 
 #![forbid(unsafe_code)]
 
@@ -214,18 +229,20 @@ pub use checks::{
     Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION,
     Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
     DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
-    Check_No_Decorative_Section_Dividers, Check_No_Trailing_Whitespace, Check_Todo_Format,
-    NO_DECORATIVE_SECTION_DIVIDERS, NO_TRAILING_WHITESPACE, TODO_FORMAT,
+    Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Trailing_Whitespace,
+    Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS, NO_TRAILING_WHITESPACE, TODO_FORMAT,
     Check_Go_Helpers_Package_Five_Inputs, Check_Parameter_Count, GO_HELPERS_PACKAGE_FIVE_INPUTS, PARAMETER_COUNT,
     Check_Lint_Diagnostics, LINT_DIAGNOSTICS,
     Check_Dependency_Policy, DEPENDENCY_POLICY,
     Check_Cross_Language_Correspondence, CROSS_LANGUAGE_CORRESPONDENCE,
     Check_Boolean_Predicates, Check_Data_Names_Stay_Lower_Snake, Check_File_Name_Matches_Declared_Type,
-    Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Go_Type_Names_Use_Camel_Case,
+    Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Go_Constants_Split_By_Export, Check_Go_Type_Names_Use_Camel_Case,
+    Check_Go_Variables_Use_Lower_Snake_Case,
     Check_Naming_Convention, Check_One_Public_Type_Per_File, Check_Project_Owned_Function_Names_Use_Upper_Snake_Case,
     Check_Single_Letter_Names, Check_Test_Names_Describe_Behavior, Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter,
-    BOOLEAN_PREDICATES, DATA_NAMES_STAY_LOWER_SNAKE,
-    EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE, NAMING_CONVENTION,
+    BOOLEAN_PREDICATES, CONSTANTS_SPLIT_BY_EXPORT, DATA_NAMES_STAY_LOWER_SNAKE,
+    EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE, GO_VARIABLES_USE_LOWER_SNAKE_CASE,
+    NAMING_CONVENTION,
     ONE_PUBLIC_TYPE_PER_FILE, PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE, SINGLE_LETTER_NAMES,
     TEST_NAME_DESCRIBES_BEHAVIOR, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
     UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,

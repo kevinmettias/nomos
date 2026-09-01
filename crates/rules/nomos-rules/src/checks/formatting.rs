@@ -6,6 +6,13 @@
 //! syntax-backed rules in this crate, the deciding evidence is exactly the text the caller
 //! already handed to the rule; routing it through a capability would invent a provider
 //! question where none exists.
+//!
+//! [`Check_Deprecation_Carries_A_Reason`] imports code-standards' `deprecation` rule for
+//! its two text-decidable forms: a bare Rust `#[deprecated]` (or one whose arguments close
+//! on the same line and say nothing under `note`), and a Go `// Deprecated:` marker with
+//! nothing after the colon. A multi-line `#[deprecated(...)]` is left unjudged rather than
+//! guessed at, the same conservative stance [`Check_No_Decorative_Section_Dividers`] takes
+//! toward prose that merely quotes a divider.
 
 use crate::SourceFile;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
@@ -16,6 +23,8 @@ pub const NO_TRAILING_WHITESPACE: &str = "no-trailing-whitespace";
 pub const TODO_FORMAT: &str = "todo-format-is-todo-name-description-ticket";
 /// This rule's own identifier, matching the code-standards rule id.
 pub const NO_DECORATIVE_SECTION_DIVIDERS: &str = "no-decorative-section-dividers";
+/// This rule's own identifier, matching the code-standards rule id.
+pub const DEPRECATION: &str = "deprecation";
 
 /// Reports every line in `sources` whose content ends in a space or tab.
 #[must_use]
@@ -56,6 +65,22 @@ pub fn Check_No_Decorative_Section_Dividers(sources: &[SourceFile]) -> Vec<Findi
     for source in sources
     {
         findings.extend(Divider_Findings_In(source));
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+/// Reports a `#[deprecated]`/`#[deprecated(...)]` attribute with no `note`, or a Go
+/// `// Deprecated:` marker with nothing after the colon.
+#[must_use]
+pub fn Check_Deprecation_Carries_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        findings.extend(Deprecation_Findings_In(source));
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
@@ -129,6 +154,45 @@ fn Divider_Findings_In(source: &SourceFile) -> Vec<Finding>
                 line_number,
                 "is a decorative section divider",
             ));
+        }
+
+        match line_number.checked_add(1)
+        {
+            Some(next) => line_number = next,
+            None => break,
+        }
+    }
+
+    return findings;
+}
+
+fn Deprecation_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+    let mut line_number = 1usize;
+
+    for line in source.text.split_inclusive('\n')
+    {
+        if Rust_Deprecated_Without_Reason(line)
+        {
+            findings.push(Finding_For_Line(
+                source,
+                DEPRECATION,
+                line_number,
+                "marks `#[deprecated]` with no `note` for the caller",
+            ));
+        }
+        else if let Some(comment) = Comment_Text_Of(line)
+        {
+            if Go_Deprecated_Without_Reason(comment)
+            {
+                findings.push(Finding_For_Line(
+                    source,
+                    DEPRECATION,
+                    line_number,
+                    "marks `// Deprecated:` with nothing after the colon",
+                ));
+            }
         }
 
         match line_number.checked_add(1)
@@ -247,6 +311,49 @@ fn Is_Short_Label(label: &str) -> bool
     return words > 0 && words <= 4 && label.chars().all(|character| {
         return character.is_ascii_alphanumeric() || character.is_ascii_whitespace() || character == '_' || character == '-';
     });
+}
+
+/// A bare `#[deprecated]`, or `#[deprecated(...)]` whose parenthesized arguments close on
+/// this same line and do not mention `note`. An attribute whose arguments do not close on
+/// this line is not decidable from one line alone and is left unjudged rather than guessed.
+fn Rust_Deprecated_Without_Reason(line: &str) -> bool
+{
+    let after = line.trim_start().strip_prefix("#[deprecated");
+    let Some(after) = after
+    else
+    {
+        return false;
+    };
+
+    if after.starts_with(']')
+    {
+        return true;
+    }
+
+    let Some(arguments) = after.strip_prefix('(')
+    else
+    {
+        return false;
+    };
+    let Some((arguments, _rest)) = arguments.split_once(")]")
+    else
+    {
+        return false;
+    };
+
+    return !arguments.contains("note");
+}
+
+/// A Go `Deprecated:` doc-comment marker with nothing but whitespace after the colon.
+fn Go_Deprecated_Without_Reason(comment: &str) -> bool
+{
+    let Some(after) = comment.strip_prefix("Deprecated:")
+    else
+    {
+        return false;
+    };
+
+    return after.trim().is_empty();
 }
 
 fn Finding_For_Line(source: &SourceFile, rule: &str, line_number: usize, because: &str) -> Finding
@@ -388,6 +495,77 @@ mod tests
         let source = Source("src/lib.rs", "// The old code used // ===== Setup ===== as a divider.\n");
 
         let findings = Check_No_Decorative_Section_Dividers(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Deprecation_Carries_A_Reason_Should_Report_A_Bare_Rust_Marker()
+    {
+        let source = Source("src/lib.rs", "#[deprecated]\npub fn Old() {}\n");
+
+        let findings = Check_Deprecation_Carries_A_Reason(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(DEPRECATION));
+    }
+
+    #[test]
+    fn Test_Check_Deprecation_Carries_A_Reason_Should_Report_Since_With_No_Note()
+    {
+        let source = Source("src/lib.rs", "#[deprecated(since = \"2.1\")]\n");
+
+        let findings = Check_Deprecation_Carries_A_Reason(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Deprecation_Carries_A_Reason_Should_Accept_A_Note()
+    {
+        let source = Source("src/lib.rs", "#[deprecated(since = \"2.1\", note = \"use New instead\")]\n");
+
+        let findings = Check_Deprecation_Carries_A_Reason(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Deprecation_Carries_A_Reason_Should_Ignore_A_Multiline_Attribute()
+    {
+        let source = Source("src/lib.rs", "#[deprecated(\n    note = \"use New instead\"\n)]\n");
+
+        let findings = Check_Deprecation_Carries_A_Reason(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Deprecation_Carries_A_Reason_Should_Report_A_Bare_Go_Marker()
+    {
+        let source = Source("main.go", "// Deprecated:\nfunc Old() {}\n");
+
+        let findings = Check_Deprecation_Carries_A_Reason(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Deprecation_Carries_A_Reason_Should_Accept_A_Go_Marker_With_A_Reason()
+    {
+        let source = Source("main.go", "// Deprecated: use New instead.\n");
+
+        let findings = Check_Deprecation_Carries_A_Reason(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Deprecation_Carries_A_Reason_Should_Ignore_A_String_Containing_The_Marker()
+    {
+        let source = Source("src/lib.rs", "let label = \"Deprecated: nothing\";\n");
+
+        let findings = Check_Deprecation_Carries_A_Reason(&[source]);
 
         assert!(findings.is_empty(), "{findings:?}");
     }
