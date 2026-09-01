@@ -86,7 +86,7 @@ The classification, and why each variant sits where it does:
 | `LedgerUnusable` | Dispatch | The store *is* the coordination mechanism; being unable to reach it says nothing about the plan. |
 
 `Is_Readiness` and `Is_Dispatch` are the predicate forms of `Layer`, the shape
-`Applicability::Requires_Agent` already used beside its own classification (`OD-CONTRACTS-002`):
+`Applicability::Is_Agent_Required` already used beside its own classification (`OD-CONTRACTS-002`):
 a caller that needs one side of a two-way question is not made to match on the enum itself.
 
 `nomos-cli`'s `Refusal_Label` (`crates/host/nomos-cli/src/work/report.rs`) now matches on

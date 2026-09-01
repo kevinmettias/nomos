@@ -80,6 +80,6 @@ fn Test_The_Buckets_Should_Not_Overlap_Through_The_Public_Api()
 
     assert_eq!(coverage.Debt().count(), 1);
     assert_eq!(coverage.Agent_Required().count(), 1);
-    assert!(coverage.Debt().all(|gap| !gap.reason.Requires_Agent()));
+    assert!(coverage.Debt().all(|gap| !gap.reason.Is_Agent_Required()));
     assert!(coverage.Agent_Required().all(|gap| !gap.reason.Is_Coverage_Debt()));
 }

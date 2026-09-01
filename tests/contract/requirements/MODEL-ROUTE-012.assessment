@@ -10,7 +10,7 @@
 #
 # First: genuinely grounded. `Applicability::AgentRequired` is a real, tested seventh state
 # ("the rule binds this subject and no mechanical provider can judge it; reaching a judgment
-# needs a model") that is deliberately neither `Was_Evaluated` nor `Is_Coverage_Debt`, wired
+# needs a model") that is deliberately neither `Is_Evaluated` nor `Is_Coverage_Debt`, wired
 # all the way through `Coverage::Agent_Required`/`Coverage::Is_Complete` into the CLI's real
 # coverage tally -- exactly the mechanism by which a run stays honestly reportable when a
 # check needing a model has no model behind it. OD-CONTRACTS-002 is explicit, though, that

@@ -51,7 +51,7 @@ impl Coverage
     /// overstated a capability gap or said nothing.
     pub fn Agent_Required(&self) -> impl Iterator<Item = &CoverageGap>
     {
-        return self.gaps.iter().filter(|gap| gap.reason.Requires_Agent());
+        return self.gaps.iter().filter(|gap| gap.reason.Is_Agent_Required());
     }
 
     /// Whether every in-scope subject was examined.
@@ -191,7 +191,7 @@ mod tests
 
         assert_eq!(coverage.Debt().count(), 1);
         assert_eq!(coverage.Agent_Required().count(), 1);
-        assert!(coverage.Debt().all(|gap| !gap.reason.Requires_Agent()));
+        assert!(coverage.Debt().all(|gap| !gap.reason.Is_Agent_Required()));
         assert!(coverage
             .Agent_Required()
             .all(|gap| !gap.reason.Is_Coverage_Debt()));

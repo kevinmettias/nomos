@@ -36,7 +36,7 @@ It is not sound for a caller that named a provider because that provider *is* th
 the strongest reader for a subject that matters, the one implementation whose output is
 admissible downstream. That caller is served a different provider, told so in a field
 (`Applicability::SupportedWithFallback`), and nothing makes it look: the field satisfies
-`Was_Evaluated`, so the run reports a judgment made by somebody other than the one required,
+`Is_Evaluated`, so the run reports a judgment made by somebody other than the one required,
 and reports it as evaluated, which is true and is not what was asked. `OD-CAPABILITY-003`
 made this worse rather than better — per-subject fallback means a capability can be answered
 by two providers under two addresses within one run, and a caller that required one of them

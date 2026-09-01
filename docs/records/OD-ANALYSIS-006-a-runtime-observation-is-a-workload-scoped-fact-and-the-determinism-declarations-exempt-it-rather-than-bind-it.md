@@ -223,7 +223,7 @@ cannot get [the] fact for a subject reports `MissingCapability` or `ProviderUnav
 as a syntax rule does." A rule needing `RuntimeObserved` evidence with no runtime provider
 installed reports `Applicability::MissingCapability`; one where a runtime provider is installed
 but could not run for this subject reports `Applicability::ProviderUnavailable`. Neither reads
-as a pass, by the type's own design — `Applicability::Was_Evaluated` is false for both.
+as a pass, by the type's own design — `Applicability::Is_Evaluated` is false for both.
 
 **A runtime producer ran, but the observed workload never took a given subject's path** is the
 finer-grained case, and it is the one the WHY's own examples turn on: an allocation site the

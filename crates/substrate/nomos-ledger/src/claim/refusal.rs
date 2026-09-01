@@ -279,7 +279,7 @@ impl Refusal
     /// Whether the plan itself says this work is not ready, independent of who is asking.
     ///
     /// The narrower of the two questions [`Self::Layer`] answers, spelled as a predicate for
-    /// a caller that only needs one side of it — the shape `Applicability::Requires_Agent`
+    /// a caller that only needs one side of it — the shape `Applicability::Is_Agent_Required`
     /// (`OD-CONTRACTS-002`) already used for exactly this: a predicate beside the
     /// classification it is derived from, not a second decision.
     #[must_use]

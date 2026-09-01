@@ -94,7 +94,7 @@ impl Finding
     #[must_use]
     pub const fn Can_Fail_A_Build(&self) -> bool
     {
-        return self.gate.Can_Fail_A_Build() && self.applicability.Was_Evaluated();
+        return self.gate.Can_Fail_A_Build() && self.applicability.Is_Evaluated();
     }
 
     /// Whether this finding rests on a mechanism rather than on somebody's word.

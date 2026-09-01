@@ -103,7 +103,7 @@ dispatched `TaskEnvelope` (`applicable_rules: vec![finding.rule.clone()]`); what
 yet do is carry that same finding's identity back out the other side.
 
 **`Applicability` has no pass/fail slot to invent one for.** Read in full: "There is no
-`is_pass`. `Applicability::Was_Evaluated` is the closest thing, and it is not a pass — it says
+`is_pass`. `Applicability::Is_Evaluated` is the closest thing, and it is not a pass — it says
 only that a judgment was reached, not what it was." A model's verdict — agrees, disagrees,
 partially agrees — is narrative content for `summary`, never a new `Applicability` variant. The
 correct post-judgment value is `Applicability::Supported`: the rule bound the subject and a

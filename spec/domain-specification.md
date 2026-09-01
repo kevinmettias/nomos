@@ -36,7 +36,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md@authored | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md | authored | 26 | 8 | sha256:d3ae25e96ff37b5a8bee583bbfff827ddd125845ee968619d863300a96185557 |
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md@authored | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md | authored | 30 | 7 | sha256:2d1cc618a04047fd179e4d5f24fd112d9fafc6d05fe7710be734b52d3d2dc8e9 |
 | docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md@authored | docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md | authored | 23 | 7 | sha256:f8ced57db03fbaac9fbbb8a550e6e9561a4d5e651d59adb613370d47e46725be |
-| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md | authored | 38 | 8 | sha256:d44936bdfee31770dd5c295dfd8b5c31ee3fd0f843aa2f0878024e7e7e977227 |
+| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md | authored | 38 | 8 | sha256:2bd79506c974018e6fbd0be693dfd6a4e5545e674125e589330629657b1d0e44 |
 | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md | authored | 12 | 5 | sha256:7b868459b4901509f831d98949e39dd926a2a649fc7ab419ad983c06f799c1a1 |
 | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md | authored | 22 | 8 | sha256:2a1f9cc14ba7229566dea2754dfbafa91116a43aa78032e04f419cbd3c313272 |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 16 | 6 | sha256:784d01d21571e04ba5141f437c4f20cfb0810d9d6f3791492ac78372f45903b3 |
@@ -45,7 +45,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
 | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md@authored | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md | authored | 36 | 11 | sha256:54e8c8e7d8328ce45e97b3e117eaf7ed7a547d61a8518b2d638de18b1f2768fc |
-| docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md@authored | docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md | authored | 22 | 10 | sha256:baac7713f8077db7fc36aeeebe1f7cbe8e1a59d1a743943e26e42df668b0b3cb |
+| docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md@authored | docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md | authored | 22 | 10 | sha256:ea609aca6a9c76589527e8a307b6ff3840ea67e64a89515c949b7ce4a3d37ed3 |
 | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md@authored | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md | authored | 36 | 8 | sha256:6921af0ffee38a77a00c90bb6ebeebcd97e7db786652bdfdb80f9f854577cdfd |
 | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md@authored | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md | authored | 16 | 6 | sha256:28d369d79f6b9bc16f144ce71796ae80ccae724f627a779891daec3b61fa5b35 |
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md@authored | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md | authored | 19 | 6 | sha256:4d04815ed763e5dcf94dac93b3ea02bfc1095a5ca15731b5d342e314f8a33fc8 |
@@ -53,11 +53,11 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md@authored | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md | authored | 22 | 6 | sha256:4f25aba8fc4a56b6b6f806ef0450d492c8688b573f77879698b2617c291179ce |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
-| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ae576ae44e0cc42f6fd2a44efd4c144eb6e6563fe999ad97a9d074e9037c1d2a |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ea548df7de6d318f3946ffc3c153f837e4289c5b25045352897d0221c1c1d3f7 |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:243cd01d0c3a76110de1cec5697fa03f185768f31467662081557f8ccca82386 |
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:a4d8c71e62610f704811e42757155af8725a195a9b7f6d47a5af13197be33516 |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
-| docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
+| docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:15b5d49cfd110c5912afc3312550bed3193d467d2b5f619a78b9b8d9ed1efe01 |
 | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md | authored | 15 | 6 | sha256:ab9189d05ec02e249414c7a358c58dc965d46acbb87964ef26bd2fea4379fe87 |
 | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md@authored | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md | authored | 16 | 6 | sha256:eeea4b8c691ee0ca6bf5a71335c2d8c5b5335b8cdf217d2ac7fdc9a1f578ee88 |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md | authored | 21 | 8 | sha256:8ad58a92216388e350cbfdf042e5ab75299e97e9e6accef05f6bae9e325fc72a |
@@ -66,7 +66,7 @@ profile: domain-specification
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md | authored | 32 | 8 | sha256:332c3b7ae159ba13d0b1d176726607b8369f9b5af249de17d98d9507254ce7bb |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md | authored | 26 | 8 | sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a |
-| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md@authored | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md | authored | 20 | 6 | sha256:ea763ec0abaa47ca8f8f8c56f0831097b8c0467b7146738054c39b61c9dc8f2f |
+| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md@authored | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md | authored | 20 | 6 | sha256:7df87ca12c60f9dd7d6ae9fcaf59727dc8f7784a93c1ea13c4424fb80603050c |
 | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 32 | 9 | sha256:5505d057d0aa2bc7662cbfca82c015dd8ef4366f3a6e50d52516638489c4333a |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md | authored | 23 | 7 | sha256:1f668a9c3b8b790d0935f12b8f3350130ac9c388e0f9c0671ef5d57379f74b47 |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md | authored | 19 | 6 | sha256:0c2b9021270c0e484742945479352a8b2d9d573056158e27d377c6f56433545d |
@@ -83,7 +83,7 @@ profile: domain-specification
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 21 | 8 | sha256:fde76ddb443213fdd5c253144550e72aa60a127201be1c067156bd52c9a071dd |
-| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 34 | 12 | sha256:ee64f184602e1bd210eeca6144c88552d97cebce829ccdedea3db6487fc6e36d |
+| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 34 | 12 | sha256:3f9a8dc63ea44ae7b2ced612ba58b62590e3240954555ba9ce43331f6157366b |
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md | authored | 20 | 7 | sha256:0c813c23245ff0e95b51d6914c67d7ab36ae6d18b05e2bd82bd69892016f969e |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md | authored | 25 | 7 | sha256:6b6d9f41076761c1a5af15719547c1b28ab365e7b4e46ba305c59bc4de3a71b5 |
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md | authored | 19 | 6 | sha256:630c8ef1cff23ab5ed96b9c51d8bafd63a584c5d5bec5f75119ef2564a8369b9 |
@@ -114,7 +114,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md@authored | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md | authored | 54 | 14 | sha256:ad891bc0cda6f4b7b3140ff61ea51b5d03a65419fe9ab4d3fbf8279a77e6239d |
 | docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md@authored | docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md | authored | 27 | 12 | sha256:3ebb2bcba88f6c72bbc391ea21070ee09c26d62ed613c9445085c22688fcb962 |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md@authored | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md | authored | 46 | 15 | sha256:cc8a2ef491d5cdcf621e5737c5ac59e42f9e0491c536276f6e8f32f4a7f2f38d |
-| docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md@authored | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md | authored | 29 | 8 | sha256:b9fc15303e4b06b9d65008a1a854ce62942151af4b55cdd10c832ce057563cf5 |
+| docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md@authored | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md | authored | 29 | 8 | sha256:9e909d1fed72c0982d9536dd083e4d5d490520c52bc98a51c0fd50d121680f79 |
 | docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md@authored | docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md | authored | 24 | 11 | sha256:62bf063f758eb9add016cf3720f2a90cf662d3a26d740a08e474837ca3d46dea |
 | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md@authored | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md | authored | 42 | 11 | sha256:d34cb4980991f1dea453392a7c9146606771d68470cbb42fa3be7af96b5872c7 |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md | authored | 39 | 12 | sha256:eb130f220e8857ef4f36ac411db06e950f6210ff703608149af6925e7fc60640 |
@@ -159,7 +159,7 @@ profile: domain-specification
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 18 | 6 | sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c |
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 19 | 6 | sha256:7f6c05ffa09f693ecfe8e7c14699257a1fe01da3a07c0614b09f227fd5be986b |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 35 | 9 | sha256:08ba049790ebab78a959ded3cff62e8e04ff89f3e3502a36dd39cdff8d560569 |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 41 | 10 | sha256:9ccf6e284cc32aa9f6c12405d202d3fb7d7e2c1994a45e40b8111f45c8863b08 |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 23 | 6 | sha256:841b1c5bb58bd645f7b84a43c5f4433923df78193de6b7e6e3ffecc92de628c9 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
@@ -1435,7 +1435,8 @@ profile: domain-specification
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#17 | authored | 2 | Amendment: The First Named Trigger Fired, And Was Addressed Narrowly |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#22 | authored | 2 | Amendment: A Third Round Of The Same Review, Re-Checked Against Real Growth Since The Last Amendment |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#28 | authored | 2 | Amendment: The Fourth Trigger's Named Event Finally Occurred, And Its Own Wording Already Says What It Means |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34 | authored | 2 | Status |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34 | authored | 2 | Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#40 | authored | 2 | Status |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1 | authored | 1 | A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#4 | authored | 2 | What Was Measured |
@@ -7938,7 +7939,7 @@ absence.
 
 ### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#26
 
-*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What A Runtime-Informed Claim Means When No Observation Exists · hash: sha256:b8278eae48e14d2cf1afd889787e981f456467af8bc480aa842d196d908847c9*
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What A Runtime-Informed Claim Means When No Observation Exists · hash: sha256:81cd8683eb5b38c75e0f436a7de3c3164d97c48873c41359d97567e18d4719a6*
 
 **No runtime producer for the subject at all** is a capability question, answered the way
 `OD-ANALYSIS-004` already states for a missing `SemanticallyResolved` producer: "a rule that
@@ -7946,7 +7947,7 @@ cannot get [the] fact for a subject reports `MissingCapability` or `ProviderUnav
 as a syntax rule does." A rule needing `RuntimeObserved` evidence with no runtime provider
 installed reports `Applicability::MissingCapability`; one where a runtime provider is installed
 but could not run for this subject reports `Applicability::ProviderUnavailable`. Neither reads
-as a pass, by the type's own design — `Applicability::Was_Evaluated` is false for both.
+as a pass, by the type's own design — `Applicability::Is_Evaluated` is false for both.
 
 ### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#27
 
@@ -9784,14 +9785,14 @@ caller spends.
 
 ### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#4
 
-*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / Question · hash: sha256:e7fb9cb8ff1af7c4871cedacb4b0fd2711c8368da7b923fdf56f02c51b2a8a1e*
+*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / Question · hash: sha256:9e2c4262dd62313f9520e66854b3be7e6cc1336c9d964055b79a115ce8f73c79*
 
 That reasoning is sound for a caller that named a provider because it would rather have it.
 It is not sound for a caller that named a provider because that provider *is* the policy —
 the strongest reader for a subject that matters, the one implementation whose output is
 admissible downstream. That caller is served a different provider, told so in a field
 (`Applicability::SupportedWithFallback`), and nothing makes it look: the field satisfies
-`Was_Evaluated`, so the run reports a judgment made by somebody other than the one required,
+`Is_Evaluated`, so the run reports a judgment made by somebody other than the one required,
 and reports it as evaluated, which is true and is not what was asked. `OD-CAPABILITY-003`
 made this worse rather than better — per-subject fallback means a capability can be answered
 by two providers under two addresses within one run, and a caller that required one of them
@@ -12247,12 +12248,12 @@ already solved a special case of it (`Examined`'s own history).
 
 ### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#12
 
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:7df422de639b10856394e9202f562acbea1126f9cc1666f8d6dca4197faec353*
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:8670f791a99d89b1bf3e5337ad738a5799cbf7fb542dfc08d248fa424d127edd*
 
 **The roll-up verdict is `Claim`, read off `Applicability`'s own predicates.**
 `Claim::Complete` when no finding's applicability answers `Is_Coverage_Debt` or
-`Requires_Agent`; `Claim::Incomplete` otherwise. It is computed by asking `Applicability` the
-question directly (`finding.applicability.Is_Coverage_Debt() || …Requires_Agent()`), not by
+`Is_Agent_Required`; `Claim::Incomplete` otherwise. It is computed by asking `Applicability` the
+question directly (`finding.applicability.Is_Coverage_Debt() || …Is_Agent_Required()`), not by
 re-deriving the same classification from `Coverage`'s counters — one classification, asked
 once, so a change to what counts as debt cannot drift between the verdict and the breakdown
 that explains it. `NotApplicable` and `ConfigurationDisabled` do not flip the verdict, for the
@@ -13253,11 +13254,11 @@ unable to look.
 
 ### docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#12
 
-*revision: authored · kind: prose · heading: A subject that needs a model is agent-required, rather than a missing provider or nothing at all / The Decision · hash: sha256:60a7a08316314e7895bd43a477dd232cccbeab7da16c987d02ae486ec6e570ad*
+*revision: authored · kind: prose · heading: A subject that needs a model is agent-required, rather than a missing provider or nothing at all / The Decision · hash: sha256:5f777aca9c5fcfef4c52de3e577b31fc3831ef8fbe854f007cfd04a07fce691b*
 
 `Applicability::AgentRequired` — the rule binds the subject, no mechanical provider can
-judge it, and reaching a judgment needs a model. It is neither `Was_Evaluated` nor
-`Is_Coverage_Debt`, and `Applicability::Requires_Agent` is the one place that decides so.
+judge it, and reaching a judgment needs a model. It is neither `Is_Evaluated` nor
+`Is_Coverage_Debt`, and `Applicability::Is_Agent_Required` is the one place that decides so.
 
 ### docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#13
 
@@ -15263,10 +15264,10 @@ yet do is carry that same finding's identity back out the other side.
 
 ### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#11
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:3b0846ecd7829e0d9bd420883ab87af39ff218285656f40eb62c3476dc831cd9*
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:2defd3211d7f5b8608c4f60a35573b3de9e363f22ad4e97676e76c280e6b736e*
 
 **`Applicability` has no pass/fail slot to invent one for.** Read in full: "There is no
-`is_pass`. `Applicability::Was_Evaluated` is the closest thing, and it is not a pass — it says
+`is_pass`. `Applicability::Is_Evaluated` is the closest thing, and it is not a pass — it says
 only that a judgment was reached, not what it was." A model's verdict — agrees, disagrees,
 partially agrees — is narrative content for `summary`, never a new `Applicability` variant. The
 correct post-judgment value is `Applicability::Supported`: the rule bound the subject and a
@@ -20245,14 +20246,14 @@ unsupported-analysis policy, waivers, approvals, and blocking behavior" — the 
 
 ### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#9
 
-*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / Current Position · hash: sha256:74834b4161de0f812428c87274c4335ee216913ac963769d868eb937398791aa*
+*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / Current Position · hash: sha256:5c7ad29c01f5b893cd07651c032643a1ae049f84a17defc6e61f930df2cb32d5*
 
 Verified directly against the real code, not assumed: `GatePlan`
 (`crates/orchestration/nomos-gate-orchestration/src/outcome.rs`) is "what a gate would
 evaluate, without evaluating it" — report-only, the one real variant `nomos-gate-
 orchestration` has. `Finding::Can_Fail_A_Build`
 (`crates/contracts/nomos-contracts/src/finding.rs`) is `self.gate.Can_Fail_A_Build() &&
-self.applicability.Was_Evaluated()` — two conditions, with no suppression hook between them
+self.applicability.Is_Evaluated()` — two conditions, with no suppression hook between them
 and no third condition a baseline or waiver could occupy. `nomos-corrections` previews,
 stages, validates, commits and rolls back a `Workspace` edit; it has no concept of tracking
 or exempting a finding over time, so there is nothing there for a baseline to hang off
@@ -29833,10 +29834,10 @@ The classification, and why each variant sits where it does:
 
 ### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#13
 
-*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Changed · hash: sha256:14ff7809607749b8c3f22a6b917aa724db362ac573b973e2e5f487eeb8e972e5*
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Changed · hash: sha256:ed9e79182589f8810ee1f476c772a45a83acd7d9fcfd61d0c0af0a1e601e21f1*
 
 `Is_Readiness` and `Is_Dispatch` are the predicate forms of `Layer`, the shape
-`Applicability::Requires_Agent` already used beside its own classification (`OD-CONTRACTS-002`):
+`Applicability::Is_Agent_Required` already used beside its own classification (`OD-CONTRACTS-002`):
 a caller that needs one side of a two-way question is not made to match on the enum itself.
 
 ### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#14
@@ -42142,21 +42143,108 @@ marginal cost.
 
 ### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34
 
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger · hash: sha256:a8ef6fb1951d3f63744c3210cc57e5dd4fcbf61dbc834cb09cd4be3359348f57*
+
+## Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#35
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger · hash: sha256:ab61dbc9c55b69857dc0e0fbd3b9ac91a72f9c9799cb51e216e426e1baed7788*
+
+A fifth round of the same external review repeated its P0 case for the general planner again,
+against this record's own citation, `nomos-check-orchestration::run::Run`'s hand-written
+`Materialize_X`/`Check_Y` list, now read at a HEAD (`521cd4fa`) where that list has had four
+amendments' worth of real growth to strain it. Rather than re-arguing what four prior rounds
+already settled, this amendment checks the remaining triggers against the largest single burst
+of rule growth this record has yet measured.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#36
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger · hash: sha256:8bca88477dc0374c705b6f8e8398ff9b688fd034cf885ca252eb04e5b1f2fac8*
+
+**The rule population grew from eight to thirty-nine, and the growth landed almost entirely
+outside anything `Run` reads.** Counted directly against the tree at this amendment's last
+checkpoint (`e4e262cf`) and again at `521cd4fa`: `nomos-rules` held exactly eight `Check_*`
+functions at the fourth amendment; it holds thirty-nine now — a fifth-round increase this
+record has not previously seen in one span. But `run_context.rs` (the file `run.rs` was split
+into since the last amendment; same mechanism, new name) still wires exactly eight of them into
+its `Wants`-gated match arms: `Check_Completeness_Mirrors`, `Check_Naming_Convention`,
+`Check_Dependency_Direction`, `Check_Every_Member_Declares_A_Band`, `Check_Lint_Diagnostics`,
+`Check_Dependency_Policy`, `Check_Unread_Reaches_A_Finding`, `Check_Cross_Language_
+Correspondence`. The other thirty-one — `Check_No_Trailing_Whitespace`, `Check_Todo_Format`,
+`Check_Boolean_Predicates`, the Go naming/constant/variable family, the deprecation-marker and
+file-size-trigger rules, and every other rule imported since — have, verified by a direct
+workspace-wide search, zero references outside `nomos-rules` itself. None is called by `Run`,
+none states a `Materialize_X` step, none cites a capability contract. Each is the identical
+"additive and unwired" shape this record's own text already established for the fifth rule,
+`Check_Declared_Role_Matches_Surface`, now multiplied roughly thirtyfold rather than resolved.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#37
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger · hash: sha256:a41f68cbe4a74dc730b060d0c255fea5c347ed12514a46fc43141d69ce064c22*
+
+**The one rule that did get wired reconverges again, using the mechanism already built.**
+`Check_Every_Member_Declares_A_Band` (`cf76f0de`, `DEPENDENCY_COMPLETENESS`) is `OD-RULES-003`'s
+own declared-architecture-vs-observed-fact design applied a second time, reading the identical
+`nomos.cap.dependency` fact and `BANDS` table `Check_Dependency_Direction` already reads, gated
+by `Is_Rule_Selected(selected, DEPENDENCY_DIRECTION) || Is_Rule_Selected(selected,
+DEPENDENCY_COMPLETENESS)` — the same single `selected: &[RuleId]` axis `OD-GATE-017` built,
+OR'd, not a second one. Its own commit states plainly: "No new capability, no new provider, no
+new contract citation." Trigger 2 (participation varying by a second axis) and trigger 3 (a
+materialization step measured wasting real work) remain exactly as unfired as the third and
+fourth amendments found them.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#38
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger · hash: sha256:44d45f6a2eef3545f94835a7540e5d915106c24977a1553f1a7e5e980cbc2f8e*
+
+**A sixth capability crate landed, and its own commit says it changes nothing yet.**
+`nomos-cap-naming-policy` (`521cd4fa`) is a new, structurally distinct capability contract — not
+a second offer against an existing one — which would ordinarily bear on trigger 4's diverging-
+vs-converging count. But its own commit message forecloses that reading before this record has
+to weigh it: "No provider and no rule reads it yet; both are this decision's own next
+increments." A capability contract with no rule and no provider is not a rule's required-
+capability shape at all, converging or diverging — it is scaffolding one commit ahead of the
+question this record tracks, the same status this record already gave the crate at its prior,
+uncommitted state. Trigger 4 remains fired only through `Check_Cross_Language_Correspondence`,
+as the fourth amendment found, and unextended by this one.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#39
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger · hash: sha256:c7cf79385105952d7055bf36164dc630fde3e0d44c126e63a94f248e7be49659*
+
+**This is the strongest disconfirming round yet, and for a reason the review's own model does
+not have room for.** The review's scaling argument assumes rule growth costs the hand-written
+list something — a new `Materialize_X` step, a new selection axis, a new capability crate wired
+in — proportional to rule count. This round's real growth mode is one the argument does not
+anticipate: bulk import of rule functions that cost the list nothing at all, because they are
+not wired into it. Thirty-one of thirty-nine rules now sit in that state. The list `Run` and
+`gate-orchestration`'s `RuleRegistry` maintain has not grown by thirty-one entries; it has grown
+by one, reconverging, absorbed by mechanism already built. A population multiplying nearly
+fivefold while the hand-written surface it is measured against grows by one is not evidence the
+hand-written approach is straining — it is a fifth consecutive data point that it is not.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#40
+
 *revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#35
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#41
 
-*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:1001994bd4c6f07c797d1f726a4b663c8024823a094dcef18c408742a9b00884*
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:c5b050a8feec4f560113f766b66a51b6e94c9eea240a726c641c6ec4be6905da*
 
 Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`, not by
 building the `RunPlanner` this record declines. The fourth trigger has now also fired, for the
 first time, via `Check_Cross_Language_Correspondence` — and its own stated reasoning, checked
 against that real instance, argues against the planner rather than for it. The second and third
-triggers remain unfired. Revisit if a materialization step is measured wasting real work,
-participation varies by a second axis, or a *diverging* rule population resumes growing the
-hand-written list past a point future evidence shows it stops absorbing cleanly.
+triggers remain unfired through a fifth round, this one checked against the largest rule-count
+burst this record has yet measured, whose growth landed almost entirely in a bucket — unwired,
+zero-cost rule functions — the review's own scaling argument has no room for. Revisit if a
+materialization step is measured wasting real work, participation varies by a second axis, an
+unwired rule is wired into `Run` in a way that fires trigger 2 or reconverges/diverges under
+trigger 4, or a *diverging* rule population resumes growing the hand-written list past a point
+future evidence shows it stops absorbing cleanly.
 
 ### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1
 

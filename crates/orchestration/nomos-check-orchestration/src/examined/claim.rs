@@ -17,7 +17,7 @@ pub enum Claim
     /// them: a decision is not a gap.
     Complete,
     /// At least one subject fell into `Applicability::Is_Coverage_Debt` or
-    /// `Applicability::Requires_Agent`. The run did not reach a judgment about it, and
+    /// `Applicability::Is_Agent_Required`. The run did not reach a judgment about it, and
     /// that is a different claim from reaching one and finding it clean.
     Incomplete,
 }
@@ -41,7 +41,7 @@ impl core::fmt::Display for Claim
 pub fn Claim_Of(findings: &[Finding]) -> Claim
 {
     let unjudged = findings.iter().any(|finding| {
-        return finding.applicability.Is_Coverage_Debt() || finding.applicability.Requires_Agent();
+        return finding.applicability.Is_Coverage_Debt() || finding.applicability.Is_Agent_Required();
     });
 
     return if unjudged { Claim::Incomplete } else { Claim::Complete };

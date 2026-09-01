@@ -7079,22 +7079,6 @@
       "expires": "2026-11-27"
     },
     {
-      "check": "check-boolean-predicate",
-      "path": "crates/contracts/nomos-contracts/src/reporting/finding/applicability.rs",
-      "fingerprint": "e29f1706b69e2669",
-      "reason": "Was_Evaluated/Requires_Agent are pub API on nomos-contracts::Applicability referenced by call sites in crates/substrate (outside this item's territory) and quoted verbatim in multiple docs/records/ governing records plus spec/domain-specification.md; a correct rename needs the nomos-spec-change re-render workflow and cross-territory coordination, out of scope for this bounded regression item -- flagged for a dedicated follow-up",
-      "owner": "@claude-p22-campaign",
-      "expires": "2026-11-27"
-    },
-    {
-      "check": "check-boolean-predicate",
-      "path": "crates/contracts/nomos-contracts/src/reporting/finding/applicability.rs",
-      "fingerprint": "9bfbab3786dd99d7",
-      "reason": "Was_Evaluated/Requires_Agent are pub API on nomos-contracts::Applicability referenced by call sites in crates/substrate (outside this item's territory) and quoted verbatim in multiple docs/records/ governing records plus spec/domain-specification.md; a correct rename needs the nomos-spec-change re-render workflow and cross-territory coordination, out of scope for this bounded regression item -- flagged for a dedicated follow-up",
-      "owner": "@claude-p22-campaign",
-      "expires": "2026-11-27"
-    },
-    {
       "check": "check-abbreviations",
       "path": "crates/substrate/nomos-analysis/src/fact/error.rs",
       "fingerprint": "b0dc6ceaf1d78f23",

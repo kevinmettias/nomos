@@ -70,7 +70,7 @@ fn Test_An_Undeclared_Capability_Should_Be_Coverage_Debt_And_Not_Not_Applicable(
         "the registry decided a rule does not bind a subject, which is not its call"
     );
     assert!(resolution.Applicability().Is_Coverage_Debt());
-    assert!(!resolution.Applicability().Was_Evaluated());
+    assert!(!resolution.Applicability().Is_Evaluated());
 }
 
 /// Exhaustive over the diagnosis vocabulary, so a variant added later cannot quietly
@@ -137,7 +137,7 @@ fn Test_A_Provider_That_Meets_The_Requirement_Should_Satisfy_It()
     let resolution = registry.Resolve(&Needing(FactVariant::Syntactic));
 
     assert_eq!(resolution.Applicability(), Applicability::Supported);
-    assert!(resolution.Applicability().Was_Evaluated());
+    assert!(resolution.Applicability().Is_Evaluated());
     assert_eq!(
         resolution.Offer().map(|offer| offer.provider.clone()),
         Some(ProviderId::New("syn"))
@@ -186,7 +186,7 @@ fn Test_An_Unhonoured_Preference_Should_Read_As_Fallback()
     assert_eq!(honoured.Applicability(), Applicability::Supported);
     assert_eq!(unhonoured.Applicability(), Applicability::SupportedWithFallback);
     assert!(
-        unhonoured.Applicability().Was_Evaluated(),
+        unhonoured.Applicability().Is_Evaluated(),
         "a fallback still produced an answer"
     );
     assert_eq!(

@@ -62,8 +62,8 @@ unable to look.
 ## The Decision
 
 `Applicability::AgentRequired` — the rule binds the subject, no mechanical provider can
-judge it, and reaching a judgment needs a model. It is neither `Was_Evaluated` nor
-`Is_Coverage_Debt`, and `Applicability::Requires_Agent` is the one place that decides so.
+judge it, and reaching a judgment needs a model. It is neither `Is_Evaluated` nor
+`Is_Coverage_Debt`, and `Applicability::Is_Agent_Required` is the one place that decides so.
 
 `Coverage::Agent_Required` gives the gaps back, alongside `Coverage::Debt`. The three
 buckets are disjoint: no state answers two of the predicates, and a test asserts it over the

@@ -77,8 +77,8 @@ already solved a special case of it (`Examined`'s own history).
 
 **The roll-up verdict is `Claim`, read off `Applicability`'s own predicates.**
 `Claim::Complete` when no finding's applicability answers `Is_Coverage_Debt` or
-`Requires_Agent`; `Claim::Incomplete` otherwise. It is computed by asking `Applicability` the
-question directly (`finding.applicability.Is_Coverage_Debt() || …Requires_Agent()`), not by
+`Is_Agent_Required`; `Claim::Incomplete` otherwise. It is computed by asking `Applicability` the
+question directly (`finding.applicability.Is_Coverage_Debt() || …Is_Agent_Required()`), not by
 re-deriving the same classification from `Coverage`'s counters — one classification, asked
 once, so a change to what counts as debt cannot drift between the verdict and the breakdown
 that explains it. `NotApplicable` and `ConfigurationDisabled` do not flip the verdict, for the

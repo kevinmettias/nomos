@@ -27,7 +27,7 @@ const AGENT_REQUIRED_LABEL: &str = "AgentRequired";
 /// analysis to be incomplete is exactly the kind of change a consumer must not
 /// silently absorb into an existing arm.
 ///
-/// There is no `is_pass`. [`Applicability::Was_Evaluated`] is the closest thing, and
+/// There is no `is_pass`. [`Applicability::Is_Evaluated`] is the closest thing, and
 /// it is not a pass — it says only that a judgment was reached, not what it was.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum Applicability
@@ -106,7 +106,7 @@ impl Applicability
     /// nothing about whether the subject conformed. A caller that treats this as a
     /// pass has reintroduced the defect this type exists to prevent.
     #[must_use]
-    pub const fn Was_Evaluated(self) -> bool
+    pub const fn Is_Evaluated(self) -> bool
     {
         return matches!(
             self,
@@ -139,7 +139,7 @@ impl Applicability
     /// method rather than a set each caller rebuilds. A consumer that wants the three
     /// answers apart asks the three predicates; none of them overlaps another.
     #[must_use]
-    pub const fn Requires_Agent(self) -> bool
+    pub const fn Is_Agent_Required(self) -> bool
     {
         return matches!(self, Self::AgentRequired);
     }
@@ -206,7 +206,7 @@ mod tests
         {
             assert!(state.Is_Coverage_Debt(), "{state} should be coverage debt");
             assert!(
-                !state.Was_Evaluated(),
+                !state.Is_Evaluated(),
                 "{state} must never read as evaluated"
             );
         }
@@ -238,19 +238,19 @@ mod tests
     /// done, so reading as evaluated would be a lie and reading as debt would send the
     /// reader to install a provider that does not exist.
     #[test]
-    fn Test_Requires_Agent_Should_Be_True_Only_For_Agent_Required()
+    fn Test_Is_Agent_Required_Should_Be_True_Only_For_Agent_Required()
     {
         let state = Applicability::AgentRequired;
 
-        assert!(state.Requires_Agent());
-        assert!(!state.Was_Evaluated(), "a model has not run yet");
+        assert!(state.Is_Agent_Required());
+        assert!(!state.Is_Evaluated(), "a model has not run yet");
         assert!(!state.Is_Coverage_Debt(), "the work is available, not missing");
 
         for other in ALL
         {
             if other != Applicability::AgentRequired
             {
-                assert!(!other.Requires_Agent(), "{other} should not require a model");
+                assert!(!other.Is_Agent_Required(), "{other} should not require a model");
             }
         }
     }
@@ -262,9 +262,9 @@ mod tests
     {
         for state in ALL
         {
-            let answers = usize::from(state.Was_Evaluated())
+            let answers = usize::from(state.Is_Evaluated())
                 + usize::from(state.Is_Coverage_Debt())
-                + usize::from(state.Requires_Agent());
+                + usize::from(state.Is_Agent_Required());
 
             assert!(answers <= 1, "{state} answers {answers} predicates");
         }
@@ -284,20 +284,20 @@ mod tests
         {
             assert_eq!(
                 state.Display_Label() == DisplayLabel::AgentRequired,
-                state.Requires_Agent(),
+                state.Is_Agent_Required(),
                 "{state} disagrees with its display label about needing a model"
             );
         }
     }
 
     #[test]
-    fn Test_Was_Evaluated_Should_Be_True_For_Exactly_The_Three_Judged_States()
+    fn Test_Is_Evaluated_Should_Be_True_For_Exactly_The_Three_Judged_States()
     {
-        assert!(Applicability::Supported.Was_Evaluated());
-        assert!(Applicability::SupportedWithFallback.Was_Evaluated());
-        assert!(Applicability::PartiallySupported.Was_Evaluated());
-        assert!(!Applicability::NotApplicable.Was_Evaluated());
-        assert!(!Applicability::ConfigurationDisabled.Was_Evaluated());
+        assert!(Applicability::Supported.Is_Evaluated());
+        assert!(Applicability::SupportedWithFallback.Is_Evaluated());
+        assert!(Applicability::PartiallySupported.Is_Evaluated());
+        assert!(!Applicability::NotApplicable.Is_Evaluated());
+        assert!(!Applicability::ConfigurationDisabled.Is_Evaluated());
     }
 
     /// A label is a wire value and a stable identity, not decoration. Renaming one is a

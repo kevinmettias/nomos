@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:e30a88564f7e5757bad190bb9540b78078275a7a9d3866037c48ed21d2e5cb44",
-  "inputs_digest": "sha256:29cf0d8eb0d6cb9bfedddb76fc75fa6b2a2f9e412f2fbf937955965e4049220f",
+  "content_digest": "sha256:c60a21208cebf93fb2149a580e20adaf227b3c060180530f9c73461933796e86",
+  "inputs_digest": "sha256:0667dcf6c1c40fd8e90227ec9fdd15b2cf081672e49cf2bf67b47a011fd43c94",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1489
+      1490
     ],
     [
       "Source blocks",
-      5196
+      5202
     ]
   ],
   "inputs": [
@@ -153,7 +153,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored",
-      "hash": "sha256:d44936bdfee31770dd5c295dfd8b5c31ee3fd0f843aa2f0878024e7e7e977227"
+      "hash": "sha256:2bd79506c974018e6fbd0be693dfd6a4e5545e674125e589330629657b1d0e44"
     },
     {
       "content": "documents",
@@ -198,7 +198,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md@authored",
-      "hash": "sha256:baac7713f8077db7fc36aeeebe1f7cbe8e1a59d1a743943e26e42df668b0b3cb"
+      "hash": "sha256:ea609aca6a9c76589527e8a307b6ff3840ea67e64a89515c949b7ce4a3d37ed3"
     },
     {
       "content": "documents",
@@ -238,7 +238,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored",
-      "hash": "sha256:ae576ae44e0cc42f6fd2a44efd4c144eb6e6563fe999ad97a9d074e9037c1d2a"
+      "hash": "sha256:ea548df7de6d318f3946ffc3c153f837e4289c5b25045352897d0221c1c1d3f7"
     },
     {
       "content": "documents",
@@ -258,7 +258,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored",
-      "hash": "sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2"
+      "hash": "sha256:15b5d49cfd110c5912afc3312550bed3193d467d2b5f619a78b9b8d9ed1efe01"
     },
     {
       "content": "documents",
@@ -303,7 +303,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md@authored",
-      "hash": "sha256:ea763ec0abaa47ca8f8f8c56f0831097b8c0467b7146738054c39b61c9dc8f2f"
+      "hash": "sha256:7df87ca12c60f9dd7d6ae9fcaf59727dc8f7784a93c1ea13c4424fb80603050c"
     },
     {
       "content": "documents",
@@ -388,7 +388,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored",
-      "hash": "sha256:ee64f184602e1bd210eeca6144c88552d97cebce829ccdedea3db6487fc6e36d"
+      "hash": "sha256:3f9a8dc63ea44ae7b2ced612ba58b62590e3240954555ba9ce43331f6157366b"
     },
     {
       "content": "documents",
@@ -543,7 +543,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md@authored",
-      "hash": "sha256:b9fc15303e4b06b9d65008a1a854ce62942151af4b55cdd10c832ce057563cf5"
+      "hash": "sha256:9e909d1fed72c0982d9536dd083e4d5d490520c52bc98a51c0fd50d121680f79"
     },
     {
       "content": "documents",
@@ -768,7 +768,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored",
-      "hash": "sha256:08ba049790ebab78a959ded3cff62e8e04ff89f3e3502a36dd39cdff8d560569"
+      "hash": "sha256:9ccf6e284cc32aa9f6c12405d202d3fb7d7e2c1994a45e40b8111f45c8863b08"
     },
     {
       "content": "documents",
@@ -7123,7 +7123,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34",
-      "hash": "sha256:02f8ef40949084af76b3c431f29362d0dfba5dc69196b70f9d0c93688d9cb278"
+      "hash": "sha256:b04356ec54945c4f5b52fe97eade03f9f2844a129877f7ddecc183d6ee33d9a9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#40",
+      "hash": "sha256:4632f724d91c39da053b00cd6b3849ec25c3269e96491e2574373a7ba7969d14"
     },
     {
       "content": "headings",
@@ -11773,7 +11778,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#26",
-      "hash": "sha256:b8278eae48e14d2cf1afd889787e981f456467af8bc480aa842d196d908847c9"
+      "hash": "sha256:81cd8683eb5b38c75e0f436a7de3c3164d97c48873c41359d97567e18d4719a6"
     },
     {
       "content": "blocks",
@@ -12798,7 +12803,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#4",
-      "hash": "sha256:e7fb9cb8ff1af7c4871cedacb4b0fd2711c8368da7b923fdf56f02c51b2a8a1e"
+      "hash": "sha256:9e2c4262dd62313f9520e66854b3be7e6cc1336c9d964055b79a115ce8f73c79"
     },
     {
       "content": "blocks",
@@ -14028,7 +14033,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#12",
-      "hash": "sha256:7df422de639b10856394e9202f562acbea1126f9cc1666f8d6dca4197faec353"
+      "hash": "sha256:8670f791a99d89b1bf3e5337ad738a5799cbf7fb542dfc08d248fa424d127edd"
     },
     {
       "content": "blocks",
@@ -14578,7 +14583,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#12",
-      "hash": "sha256:60a7a08316314e7895bd43a477dd232cccbeab7da16c987d02ae486ec6e570ad"
+      "hash": "sha256:5f777aca9c5fcfef4c52de3e577b31fc3831ef8fbe854f007cfd04a07fce691b"
     },
     {
       "content": "blocks",
@@ -15638,7 +15643,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#11",
-      "hash": "sha256:3b0846ecd7829e0d9bd420883ab87af39ff218285656f40eb62c3476dc831cd9"
+      "hash": "sha256:2defd3211d7f5b8608c4f60a35573b3de9e363f22ad4e97676e76c280e6b736e"
     },
     {
       "content": "blocks",
@@ -18358,7 +18363,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#9",
-      "hash": "sha256:74834b4161de0f812428c87274c4335ee216913ac963769d868eb937398791aa"
+      "hash": "sha256:5c7ad29c01f5b893cd07651c032643a1ae049f84a17defc6e61f930df2cb32d5"
     },
     {
       "content": "blocks",
@@ -23803,7 +23808,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#13",
-      "hash": "sha256:14ff7809607749b8c3f22a6b917aa724db362ac573b973e2e5f487eeb8e972e5"
+      "hash": "sha256:ed9e79182589f8810ee1f476c772a45a83acd7d9fcfd61d0c0af0a1e601e21f1"
     },
     {
       "content": "blocks",
@@ -30278,12 +30283,42 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:a8ef6fb1951d3f63744c3210cc57e5dd4fcbf61dbc834cb09cd4be3359348f57"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#35",
-      "hash": "sha256:1001994bd4c6f07c797d1f726a4b663c8024823a094dcef18c408742a9b00884"
+      "hash": "sha256:ab61dbc9c55b69857dc0e0fbd3b9ac91a72f9c9799cb51e216e426e1baed7788"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#36",
+      "hash": "sha256:8bca88477dc0374c705b6f8e8398ff9b688fd034cf885ca252eb04e5b1f2fac8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#37",
+      "hash": "sha256:a41f68cbe4a74dc730b060d0c255fea5c347ed12514a46fc43141d69ce064c22"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#38",
+      "hash": "sha256:44d45f6a2eef3545f94835a7540e5d915106c24977a1553f1a7e5e980cbc2f8e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#39",
+      "hash": "sha256:c7cf79385105952d7055bf36164dc630fde3e0d44c126e63a94f248e7be49659"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#40",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#41",
+      "hash": "sha256:c5b050a8feec4f560113f766b66a51b6e94c9eea240a726c641c6ec4be6905da"
     },
     {
       "content": "blocks",

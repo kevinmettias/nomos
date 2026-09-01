@@ -80,7 +80,7 @@ Verified directly against the real code, not assumed: `GatePlan`
 evaluate, without evaluating it" — report-only, the one real variant `nomos-gate-
 orchestration` has. `Finding::Can_Fail_A_Build`
 (`crates/contracts/nomos-contracts/src/finding.rs`) is `self.gate.Can_Fail_A_Build() &&
-self.applicability.Was_Evaluated()` — two conditions, with no suppression hook between them
+self.applicability.Is_Evaluated()` — two conditions, with no suppression hook between them
 and no third condition a baseline or waiver could occupy. `nomos-corrections` previews,
 stages, validates, commits and rolls back a `Workspace` edit; it has no concept of tracking
 or exempting a finding over time, so there is nothing there for a baseline to hang off

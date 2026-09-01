@@ -1,8 +1,8 @@
 pub const fn nomos_contracts::Applicability::Display_Label(self) -> DisplayLabel
+pub const fn nomos_contracts::Applicability::Is_Agent_Required(self) -> bool
 pub const fn nomos_contracts::Applicability::Is_Coverage_Debt(self) -> bool
+pub const fn nomos_contracts::Applicability::Is_Evaluated(self) -> bool
 pub const fn nomos_contracts::Applicability::Label(self) -> &'static str
-pub const fn nomos_contracts::Applicability::Requires_Agent(self) -> bool
-pub const fn nomos_contracts::Applicability::Was_Evaluated(self) -> bool
 pub const fn nomos_contracts::Assurance::Label(self) -> &'static str
 pub const fn nomos_contracts::Assurance::Satisfies_Requirement(self) -> bool
 pub const fn nomos_contracts::AuthorityClass::Is_Explicit_Grant_Required(self) -> bool
