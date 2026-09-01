@@ -1,0 +1,35 @@
+pub const fn nomos_cap_naming_policy::Case::Label(self) -> &'static str
+pub const fn nomos_cap_naming_policy::Ceiling() -> Guarantee
+pub const nomos_cap_naming_policy::CAPABILITY: &str
+pub const nomos_cap_naming_policy::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_naming_policy::SCHEMA: &str
+pub enum nomos_cap_naming_policy::Case
+pub enum nomos_cap_naming_policy::Scope
+pub enum variant nomos_cap_naming_policy::Case::Any
+pub enum variant nomos_cap_naming_policy::Case::LowerCamel
+pub enum variant nomos_cap_naming_policy::Case::LowerKebab
+pub enum variant nomos_cap_naming_policy::Case::LowerSnake
+pub enum variant nomos_cap_naming_policy::Case::MixedSnake
+pub enum variant nomos_cap_naming_policy::Case::ScreamingSnake
+pub enum variant nomos_cap_naming_policy::Case::UnderscoreCamel
+pub enum variant nomos_cap_naming_policy::Case::UpperCamel
+pub enum variant nomos_cap_naming_policy::Case::UpperSnake
+pub enum variant nomos_cap_naming_policy::Scope::Language(String)
+pub enum variant nomos_cap_naming_policy::Scope::Repository
+pub fn nomos_cap_naming_policy::Capability() -> CapabilityId
+pub fn nomos_cap_naming_policy::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_naming_policy::Case::Conforms(self, name: &str) -> bool
+pub fn nomos_cap_naming_policy::Case::From_Label(label: &str) -> Option<Self>
+pub fn nomos_cap_naming_policy::Encode_Payload(payload: &NamingPolicyPayload) -> Vec<u8>
+pub fn nomos_cap_naming_policy::Parse_Payload(bytes: &[u8]) -> Result<NamingPolicyPayload, Refusal>
+pub fn nomos_cap_naming_policy::Payload_Schema() -> SchemaId
+pub fn nomos_cap_naming_policy::Scope::From_Label(label: &str) -> Self
+pub fn nomos_cap_naming_policy::Scope::Label(&self) -> &str
+pub struct field nomos_cap_naming_policy::NamingPolicyPayload::rows: Vec<PolicyRow>
+pub struct field nomos_cap_naming_policy::PolicyRow::case: Case
+pub struct field nomos_cap_naming_policy::PolicyRow::scope: Scope
+pub struct field nomos_cap_naming_policy::PolicyRow::symbol: String
+pub struct field nomos_cap_naming_policy::Refusal::reason: String
+pub struct nomos_cap_naming_policy::NamingPolicyPayload
+pub struct nomos_cap_naming_policy::PolicyRow
+pub struct nomos_cap_naming_policy::Refusal

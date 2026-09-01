@@ -60,6 +60,11 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // reason nomos-cap-dependency states above. OD-RULES-010's second real ToolProvider
     // capability.
     ("nomos-cap-dependency-policy", 23),
+    // The nomos.cap.naming.policy contract, below both its provider (a future
+    // crates/repository/ crate reading standards.json) and the rule that reads it
+    // (nomos-rules) for the identical reason nomos-cap-dependency states above.
+    // `OD-RULES-011`'s first capability.
+    ("nomos-cap-naming-policy", 23),
     // The language-agnostic manifest core PKG-007's four version domains name, minus
     // any typed version-domain abstraction or provider allowlist a specific language
     // would supply. Below the language providers deliberately: it names none of them,

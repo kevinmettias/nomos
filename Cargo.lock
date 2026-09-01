@@ -381,6 +381,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-cap-naming-policy"
+version = "0.1.0"
+dependencies = [
+ "nomos-capability",
+ "nomos-contracts",
+]
+
+[[package]]
 name = "nomos-cap-syntax"
 version = "0.1.0"
 dependencies = [

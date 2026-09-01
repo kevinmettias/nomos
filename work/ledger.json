@@ -41044,6 +41044,159 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "OD-RULES-011-NAMING-CONTRACT",
+      "title": "nomos-cap-naming-policy: the nomos.cap.naming.policy capability contract",
+      "why": "OD-RULES-011 decided a rule's configurable parameters are read as a capability fact; this is that decision's first contract, carrying code-standards' own eight-style closed Case vocabulary and case_validation.go's exact shapes rather than reinventing them.",
+      "done_when": "nomos-cap-naming-policy exists at band 23 with the capability identity, ceiling, Case enum matching code-standards' eight styles plus Any, and a canonical payload encoding with round-trip tests, and cargo test -p nomos-cap-naming-policy passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-naming-policy",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory omitted crates/rules/nomos-rules/src/checks/dependency/bands.rs; there is no work edit, so superseded by OD-RULES-011-NAMING-CONTRACT-2 with correct territory."
+        }
+      },
+      "depends_on": [
+        "OD-RULES-011-RECORD"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-naming-policy"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-nomos-12",
+          "reason": "Territory omitted crates/rules/nomos-rules/src/checks/dependency/bands.rs, the third hand-maintained band-table copy alongside README.md and tests/contract/tests/boundaries/bands.rs; re-adding with correct territory rather than widening mid-claim.",
+          "abandoned_at": 1788295568
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-12",
+        "declined_at": 1788295580
+      }
+    },
+    {
+      "id": "OD-RULES-011-NAMING-CONTRACT-2",
+      "title": "nomos-cap-naming-policy: the nomos.cap.naming.policy capability contract",
+      "why": "OD-RULES-011 decided a rule's configurable parameters are read as a capability fact; this is that decision's first contract, carrying code-standards' own eight-style closed Case vocabulary and case_validation.go's exact shapes rather than reinventing them.",
+      "done_when": "nomos-cap-naming-policy exists at band 23 with the capability identity, ceiling, Case enum matching code-standards' eight styles plus Any, and a canonical payload encoding with round-trip tests, and cargo test -p nomos-cap-naming-policy passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-naming-policy",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/surface"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [
+        "OD-RULES-011-RECORD"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-naming-policy"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-naming-policy"
+        ],
+        "exit_code": 0,
+        "output_tail": "ok\ntest case::tests::Test_Label_Should_Round_Trip_Through_From_Label_For_Every_Variant ... ok\ntest payload::tests::Test_A_Line_Not_Prefixed_Row_Should_Be_Refused ... ok\ntest payload::scope::tests::Test_Label_Should_Round_Trip_Through_From_Label_For_A_Language ... ok\ntest payload::tests::Test_Encode_Payload_Should_Produce_Stable_Diffable_Bytes ... ok\ntest payload::tests::Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding ... ok\ntest payload::scope::tests::Test_Label_Should_Round_Trip_Through_From_Label_For_Repository ... ok\ntest payload::tests::Test_A_Malformed_Row_Line_Should_Be_Refused ... ok\ntest payload::tests::Test_An_Empty_Byte_String_Should_Decode_To_A_Policy_That_Declares_Nothing ... ok\ntest payload::tests::Test_An_Unrecognized_Case_Should_Be_Refused ... ok\ntest case::tests::Test_Upper_Snake_Should_Reject_A_Digit_Led_First_Segment ... ok\ntest case::tests::Test_Upper_Snake_Should_Accept_A_Digit_Led_Segment_After_The_First ... ok\n\ntest result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 6 tests\ntest Test_Capability_Contract_Should_Assemble_Its_Declared_Identity_And_Ceiling ... ok\ntest Test_Payload_Schema_Should_Match_The_Declared_Schema_Constant ... ok\ntest Test_One_Capability_Should_Admit_One_Contract ... ok\ntest Test_The_Ceiling_Should_Admit_A_Weaker_Offer ... ok\ntest Test_The_Contract_Should_Stand_With_No_Provider_At_All ... ok\ntest Test_The_Ceiling_Should_Refuse_A_Claim_Of_Semantic_Resolution ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_naming_policy-3ed727668a08edee.exe)\n     Running tests\\contract.rs (target\\debug\\deps\\contract-2d78541ed031c8d3.exe)\n   Doc-tests nomos_cap_naming_policy\n",
+        "verified_at": 1788296145,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c6bf4dd9440c1662f16ec22b0ce8c72b043063c9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-GATE-019-REGISTRY-COHERENCE",
+      "title": "nomos-gate-orchestration::Registered offers all eight rules nomos-check-orchestration::Run executes",
+      "why": "composition.rs's own module doc asserts 'the four are exactly what Run calls' as an invariant this function exists to keep true; Run has wired DEPENDENCY_COMPLETENESS, LINT_DIAGNOSTICS, DEPENDENCY_POLICY and CROSS_LANGUAGE_CORRESPONDENCE since P13-CONTROLFLOW-REACHABILITY-WIRE and later imports, so the assertion is now false. Gate's own stated invariant is that a plan smaller than the run it describes is worse than no plan, because it falsely reports what nomos check actually enforces.",
+      "done_when": "Registered() offers exactly the eight RuleIds nomos-check-orchestration::run_context::Rule_Findings executes (adding DEPENDENCY_COMPLETENESS via the existing DEPENDENCY_CONTRACT_RECORD, and new file-local CONTRACT_RECORD/CONTRACT_RECORD_VERSION constants for LINT_DIAGNOSTICS and DEPENDENCY_POLICY citing OD-RULES-010, and for CROSS_LANGUAGE_CORRESPONDENCE citing OD-CAPABILITY-010, following the DEPENDENCY_CONTRACT_RECORD/UNREAD_REACHES_FINDING_CONTRACT_RECORD precedent); tests/contract/tests/rule_contract_citation.rs's CITATIONS table gains the three new record-bearing constants with its row-count control raised to match; composition.rs's own tests and module doc are updated off 'four' to the true count; and cargo test -p nomos-rules -p nomos-gate-orchestration -p tests-contract passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/lint.rs",
+          "crates/rules/nomos-rules/src/checks/policy.rs",
+          "crates/rules/nomos-rules/src/checks/crosslang.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs",
+          "tests/contract/tests/rule_contract_citation.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "tests-contract"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
