@@ -43084,14 +43084,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75",
-        "acquired_at": 1788299927,
-        "lease_expires_at": 1788307127
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -43101,7 +43097,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-scripting-policy"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest payload::tests::Test_A_Line_With_No_Tag_Should_Be_Refused ... ok\ntest payload::tests::Test_A_Line_With_An_Empty_Value_Should_Be_Refused ... ok\ntest payload::tests::Test_A_Payload_With_No_Language_Line_Should_Decode_To_An_Unconfigured_Language ... ok\ntest payload::tests::Test_A_Second_Language_Line_Should_Be_Refused ... ok\ntest payload::tests::Test_An_Unrecognized_Tag_Should_Be_Refused ... ok\ntest payload::tests::Test_Encode_Payload_Should_Produce_Stable_Diffable_Bytes ... ok\ntest payload::tests::Test_An_Empty_Byte_String_Should_Decode_To_A_Policy_That_Declares_Nothing ... ok\ntest payload::tests::Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 6 tests\ntest Test_Capability_Contract_Should_Assemble_Its_Declared_Identity_And_Ceiling ... ok\ntest Test_Payload_Schema_Should_Match_The_Declared_Schema_Constant ... ok\ntest Test_The_Ceiling_Should_Refuse_A_Claim_Of_Semantic_Resolution ... ok\ntest Test_The_Ceiling_Should_Admit_A_Weaker_Offer ... ok\ntest Test_The_Contract_Should_Stand_With_No_Provider_At_All ... ok\ntest Test_One_Capability_Should_Admit_One_Contract ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_scripting_policy-33af46cb761c87c7.exe)\n     Running tests\\contract.rs (target\\debug\\deps\\contract-140c64d31ccfaf7d.exe)\n   Doc-tests nomos_cap_scripting_policy\n",
+        "verified_at": 1788300078,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "41f6b31baf733cf597b217e305459525d794bc99"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

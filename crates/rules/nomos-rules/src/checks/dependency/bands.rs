@@ -32,6 +32,7 @@ pub(super) const BANDS: &[(&str, u32)] = &[
     ("nomos-cap-dependency-policy", 23),
     ("nomos-cap-naming-policy", 23),
     ("nomos-cap-limits-policy", 23),
+    ("nomos-cap-scripting-policy", 23),
     ("nomos-package", 24),
     ("nomos-lang-rust", 25),
     ("nomos-lang-rust-scan", 25),

@@ -121,6 +121,13 @@ members = [
     # a constant.
     "crates/capabilities/nomos-cap-limits-policy",
 
+    # Band 23 — the nomos.cap.scripting.policy contract, alongside its seven siblings
+    # above, for the same reason: nomos-rules' declared-tooling-language-for-scripts rule
+    # is a real second party to it from the day it was written. A third OD-RULES-011
+    # instance: a repository's own declared tooling language and forbidden script
+    # extensions, read as data rather than compiled as a constant.
+    "crates/capabilities/nomos-cap-scripting-policy",
+
     # Band 2 — package manifests. The Rust installable-unit manifest format: PackageId,
     # PackageKind and PKG-007's four version domains, given a real reader that refuses
     # what it cannot resolve. Wraps nomos-package's generic core with RustEdition
@@ -275,6 +282,7 @@ nomos-cap-lint = { path = "crates/capabilities/nomos-cap-lint" }
 nomos-cap-dependency-policy = { path = "crates/capabilities/nomos-cap-dependency-policy" }
 nomos-cap-naming-policy = { path = "crates/capabilities/nomos-cap-naming-policy" }
 nomos-cap-limits-policy = { path = "crates/capabilities/nomos-cap-limits-policy" }
+nomos-cap-scripting-policy = { path = "crates/capabilities/nomos-cap-scripting-policy" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-lang-go = { path = "crates/languages/nomos-lang-go" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
