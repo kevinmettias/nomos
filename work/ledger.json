@@ -42607,14 +42607,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-external-review-reconciliation",
-        "acquired_at": 1788299722,
-        "lease_expires_at": 1788306922
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -42627,7 +42623,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "requirement_trace"
+        ],
+        "exit_code": 0,
+        "output_tail": "ld_Exist_And_Be_Registered ... ok\ntest committed::Test_Every_Partial_Should_Name_A_Gap ... ok\ntest committed::Test_Every_Gap_Should_Resolve ... ok\ntest committed::Test_Every_Assessment_Should_Name_A_Site_That_Exists ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\nwarning: constant `DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS` is never used\n  --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:28:11\n   |\n28 | pub const DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS: &str = \"declared-tooling-language-for-scripts\";\n   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: function `Check_Declared_Tooling_Language_For_Scripts` is never used\n  --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:90:8\n   |\n90 | pub fn Check_Declared_Tooling_Language_For_Scripts(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>\n   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Scripting_Policy_Requirement` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:125:4\n    |\n125 | fn Scripting_Policy_Requirement() -> nomos_capability::Requirement\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Resolve_Scripting_Policy` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:138:4\n    |\n138 | fn Resolve_Scripting_Policy(facts: &mut dyn FactReader) -> Option<ScriptingPolicyPayload>\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Is_Forbidden_Extension` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:148:4\n    |\n148 | fn Is_Forbidden_Extension(path: &str, forbidden_extensions: &[String]) -> bool\n    |    ^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: `nomos-rules` (lib) generated 5 warnings\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6e28cd48fdbc43e4.exe)\n",
+        "verified_at": 1788300605,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6cf09979077496252a39987297beeec4afc1c932"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -43299,10 +43318,68 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": " ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: constant `DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS` is never used\n  --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:28:11\n   |\n28 | pub const DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS: &str = \"declared-tooling-language-for-scripts\";\n   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: function `Check_Declared_Tooling_Language_For_Scripts` is never used\n  --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:90:8\n   |\n90 | pub fn Check_Declared_Tooling_Language_For_Scripts(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>\n   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Scripting_Policy_Requirement` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:125:4\n    |\n125 | fn Scripting_Policy_Requirement() -> nomos_capability::Requirement\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Resolve_Scripting_Policy` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:138:4\n    |\n138 | fn Resolve_Scripting_Policy(facts: &mut dyn FactReader) -> Option<ScriptingPolicyPayload>\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Is_Forbidden_Extension` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:148:4\n    |\n148 | fn Is_Forbidden_Extension(path: &str, forbidden_extensions: &[String]) -> bool\n    |    ^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: `nomos-rules` (lib) generated 5 warnings\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-b51d5a5e8c91c326.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-8140139dc036714d.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788300590,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6cf09979077496252a39987297beeec4afc1c932"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-SCRIPTING-RULE",
+      "title": "Add Check_Declared_Tooling_Language_For_Scripts to script_discipline.rs",
+      "why": "nomos.cap.scripting.policy and its provider nomos-repo-scripting are done; this lands the rule itself, ported from check-script-discipline's Is_Forbidden. Scoped to script_discipline.rs and this crate's own Cargo.toml only -- the checks.rs/lib.rs export and surface re-bless are a follow-up item, since P26-RULES-GO-SUPPRESSION-JUSTIFIED-2 currently holds those two files for go_text.rs.",
+      "done_when": "Check_Declared_Tooling_Language_For_Scripts exists in script_discipline.rs with focused tests (opted-out repository produces no findings, a forbidden extension is flagged, a non-forbidden extension is accepted), and cargo test -p nomos-rules passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75",
+        "acquired_at": 1788300439,
+        "lease_expires_at": 1788307639
+      },
       "verification": {
         "argv": [
           "cargo",
