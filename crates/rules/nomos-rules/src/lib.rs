@@ -231,6 +231,15 @@
 //! States_Why` judges two distinct shapes under one rule id: `t.Skip`/`t.Skipf` need a
 //! non-empty call argument, and `t.SkipNow` — which the `testing` package gives no
 //! argument to carry one in — needs an adjacent comment instead.
+//!
+//! [`Check_Declared_Tooling_Language_For_Scripts`] is the forty-sixth rule, and a third
+//! `OD-RULES-011` instance after naming and numeric limits: whether a file's extension is
+//! one a repository has declared its tooling does not use, read from `nomos.cap.
+//! scripting.policy` rather than compiled in. Unlike its two siblings, an unconfigured
+//! repository (or one that has not declared a tooling language) resolves to no findings
+//! at all — this rule never existed before this capability did, so there is no earlier
+//! hardcoded default to fall back to, and code-standards' own `check-script-discipline`
+//! states the reason directly: an undeclared language is an opt-out, not a default-in.
 
 #![forbid(unsafe_code)]
 
@@ -281,8 +290,8 @@ pub use checks::{
     Check_Suppression_Directives_Carry_A_Reason, Check_Workspace_Markers_Carry_A_Reason,
     A_DISCARDED_ERROR_IS_EXPLAINED, A_SKIPPED_TEST_STATES_WHY, AN_EXCLUDED_FILE_SAYS_WHY,
     SUPPRESSION_DIRECTIVES_CARRY_A_REASON, WORKSPACE_MARKERS_CARRY_A_REASON,
-    Check_A_Script_Declares_Its_Purpose, Check_Scripts_Use_A_Portable_Shebang, A_SCRIPT_DECLARES_ITS_PURPOSE,
-    SCRIPTS_USE_A_PORTABLE_SHEBANG,
+    Check_A_Script_Declares_Its_Purpose, Check_Declared_Tooling_Language_For_Scripts, Check_Scripts_Use_A_Portable_Shebang,
+    A_SCRIPT_DECLARES_ITS_PURPOSE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, SCRIPTS_USE_A_PORTABLE_SHEBANG,
     Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_Go_File_Size_Hard_Trigger,
     Check_Go_File_Size_Review_Trigger, Check_No_Mod_Rs_Files,
     FILE_SIZE_JUSTIFICATION_TRIGGER, FILE_SIZE_REVIEW_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,

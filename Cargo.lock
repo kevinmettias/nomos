@@ -781,6 +781,7 @@ dependencies = [
  "nomos-cap-limits-policy",
  "nomos-cap-lint",
  "nomos-cap-naming-policy",
+ "nomos-cap-scripting-policy",
  "nomos-cap-syntax",
  "nomos-capability",
  "nomos-contracts",

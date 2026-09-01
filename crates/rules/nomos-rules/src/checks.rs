@@ -1,6 +1,6 @@
-//! The forty-five rules this crate implements, one module each — `naming` holds thirteen,
+//! The forty-six rules this crate implements, one module each — `naming` holds thirteen,
 //! `rust_text` holds six, `go_text` holds five, `structure` holds five, `formatting` holds
-//! four, and `dependency` holds two, while `script_discipline` holds two,
+//! four, and `dependency` holds two, while `script_discipline` holds three,
 //! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`], since both
 //! judge the same declared architecture and observed `nomos.cap.dependency.edges` fact,
 //! while naming holds the general function convention and the test-name behavior
@@ -91,8 +91,8 @@ pub use rust_text::{
     UNWRAP_EXPECT_DISCIPLINE,
 };
 pub use script_discipline::{
-    Check_A_Script_Declares_Its_Purpose, Check_Scripts_Use_A_Portable_Shebang, A_SCRIPT_DECLARES_ITS_PURPOSE,
-    SCRIPTS_USE_A_PORTABLE_SHEBANG,
+    Check_A_Script_Declares_Its_Purpose, Check_Declared_Tooling_Language_For_Scripts, Check_Scripts_Use_A_Portable_Shebang,
+    A_SCRIPT_DECLARES_ITS_PURPOSE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, SCRIPTS_USE_A_PORTABLE_SHEBANG,
 };
 pub use structure::{
     Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_Go_File_Size_Hard_Trigger,
