@@ -42017,6 +42017,43 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "OD-RULES-011-V2",
+      "title": "OD-RULES-011 v2: how a rule reacts to an absent optional capability",
+      "why": "Designing the casing-rule refactor onto nomos.cap.naming.policy surfaced a real gap in OD-RULES-011 v1: it never said how a rule should react when the capability is unconfigured or unwired. OD-CAPABILITY-004 already decided the general question (an absent optional capability must never be reported through Applicability); v2 cites it rather than re-deciding it, so the six-rule refactor has a settled read-side contract to implement against.",
+      "done_when": "OD-RULES-011 is at version 2, its markdown round-trips through the store, and both diagram-set and domain-specification projections are re-rendered and fresh against the record set this commit publishes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-12",
+        "acquired_at": 1788297173,
+        "lease_expires_at": 1788304373
+      },
+      "verification": {
+        "argv": [
+          "./nomos.exe",
+          "spec",
+          "markdown",
+          "--id",
+          "OD-RULES-011"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

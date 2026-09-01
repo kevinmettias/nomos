@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:f831ab7d4f9f30b4f5a730b6233f59c767aab3079e54265d0fff19186c80f014",
-  "inputs_digest": "sha256:b838dc52a8c39199915dcc737629d8a6f0dfd3327d732be8b62a078f99ca2158",
+  "content_digest": "sha256:5584dbefeccb1e0e0241a2c50aa39055906210c046e2e9ca5c13989cf87b93ed",
+  "inputs_digest": "sha256:6e5f084df4a5b2b75b77709bc8169544930dbc12951605551b885fd930dac96a",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1489
+      1490
     ],
     [
       "Source blocks",
-      5194
+      5200
     ]
   ],
   "inputs": [
@@ -768,7 +768,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored",
-      "hash": "sha256:08ba049790ebab78a959ded3cff62e8e04ff89f3e3502a36dd39cdff8d560569"
+      "hash": "sha256:9ccf6e284cc32aa9f6c12405d202d3fb7d7e2c1994a45e40b8111f45c8863b08"
     },
     {
       "content": "documents",
@@ -7123,7 +7123,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34",
-      "hash": "sha256:02f8ef40949084af76b3c431f29362d0dfba5dc69196b70f9d0c93688d9cb278"
+      "hash": "sha256:b04356ec54945c4f5b52fe97eade03f9f2844a129877f7ddecc183d6ee33d9a9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#40",
+      "hash": "sha256:4632f724d91c39da053b00cd6b3849ec25c3269e96491e2574373a7ba7969d14"
     },
     {
       "content": "headings",
@@ -30278,12 +30283,42 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:a8ef6fb1951d3f63744c3210cc57e5dd4fcbf61dbc834cb09cd4be3359348f57"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#35",
-      "hash": "sha256:1001994bd4c6f07c797d1f726a4b663c8024823a094dcef18c408742a9b00884"
+      "hash": "sha256:ab61dbc9c55b69857dc0e0fbd3b9ac91a72f9c9799cb51e216e426e1baed7788"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#36",
+      "hash": "sha256:8bca88477dc0374c705b6f8e8398ff9b688fd034cf885ca252eb04e5b1f2fac8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#37",
+      "hash": "sha256:a41f68cbe4a74dc730b060d0c255fea5c347ed12514a46fc43141d69ce064c22"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#38",
+      "hash": "sha256:44d45f6a2eef3545f94835a7540e5d915106c24977a1553f1a7e5e980cbc2f8e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#39",
+      "hash": "sha256:c7cf79385105952d7055bf36164dc630fde3e0d44c126e63a94f248e7be49659"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#40",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#41",
+      "hash": "sha256:c5b050a8feec4f560113f766b66a51b6e94c9eea240a726c641c6ec4be6905da"
     },
     {
       "content": "blocks",

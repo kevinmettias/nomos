@@ -3,7 +3,7 @@ id: OD-RULES-009
 type: decision
 title: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it
 status: accepted
-version: 4
+version: 5
 authority: canonical-normative-record
 tags:
   - rules
@@ -287,12 +287,75 @@ disconfirmation this record has recorded yet: not absence of evidence, but a rea
 whose own shape demonstrates the hand-written approach absorbing a reconverging rule at zero
 marginal cost.
 
+## Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger
+
+A fifth round of the same external review repeated its P0 case for the general planner again,
+against this record's own citation, `nomos-check-orchestration::run::Run`'s hand-written
+`Materialize_X`/`Check_Y` list, now read at a HEAD (`521cd4fa`) where that list has had four
+amendments' worth of real growth to strain it. Rather than re-arguing what four prior rounds
+already settled, this amendment checks the remaining triggers against the largest single burst
+of rule growth this record has yet measured.
+
+**The rule population grew from eight to thirty-nine, and the growth landed almost entirely
+outside anything `Run` reads.** Counted directly against the tree at this amendment's last
+checkpoint (`e4e262cf`) and again at `521cd4fa`: `nomos-rules` held exactly eight `Check_*`
+functions at the fourth amendment; it holds thirty-nine now — a fifth-round increase this
+record has not previously seen in one span. But `run_context.rs` (the file `run.rs` was split
+into since the last amendment; same mechanism, new name) still wires exactly eight of them into
+its `Wants`-gated match arms: `Check_Completeness_Mirrors`, `Check_Naming_Convention`,
+`Check_Dependency_Direction`, `Check_Every_Member_Declares_A_Band`, `Check_Lint_Diagnostics`,
+`Check_Dependency_Policy`, `Check_Unread_Reaches_A_Finding`, `Check_Cross_Language_
+Correspondence`. The other thirty-one — `Check_No_Trailing_Whitespace`, `Check_Todo_Format`,
+`Check_Boolean_Predicates`, the Go naming/constant/variable family, the deprecation-marker and
+file-size-trigger rules, and every other rule imported since — have, verified by a direct
+workspace-wide search, zero references outside `nomos-rules` itself. None is called by `Run`,
+none states a `Materialize_X` step, none cites a capability contract. Each is the identical
+"additive and unwired" shape this record's own text already established for the fifth rule,
+`Check_Declared_Role_Matches_Surface`, now multiplied roughly thirtyfold rather than resolved.
+
+**The one rule that did get wired reconverges again, using the mechanism already built.**
+`Check_Every_Member_Declares_A_Band` (`cf76f0de`, `DEPENDENCY_COMPLETENESS`) is `OD-RULES-003`'s
+own declared-architecture-vs-observed-fact design applied a second time, reading the identical
+`nomos.cap.dependency` fact and `BANDS` table `Check_Dependency_Direction` already reads, gated
+by `Is_Rule_Selected(selected, DEPENDENCY_DIRECTION) || Is_Rule_Selected(selected,
+DEPENDENCY_COMPLETENESS)` — the same single `selected: &[RuleId]` axis `OD-GATE-017` built,
+OR'd, not a second one. Its own commit states plainly: "No new capability, no new provider, no
+new contract citation." Trigger 2 (participation varying by a second axis) and trigger 3 (a
+materialization step measured wasting real work) remain exactly as unfired as the third and
+fourth amendments found them.
+
+**A sixth capability crate landed, and its own commit says it changes nothing yet.**
+`nomos-cap-naming-policy` (`521cd4fa`) is a new, structurally distinct capability contract — not
+a second offer against an existing one — which would ordinarily bear on trigger 4's diverging-
+vs-converging count. But its own commit message forecloses that reading before this record has
+to weigh it: "No provider and no rule reads it yet; both are this decision's own next
+increments." A capability contract with no rule and no provider is not a rule's required-
+capability shape at all, converging or diverging — it is scaffolding one commit ahead of the
+question this record tracks, the same status this record already gave the crate at its prior,
+uncommitted state. Trigger 4 remains fired only through `Check_Cross_Language_Correspondence`,
+as the fourth amendment found, and unextended by this one.
+
+**This is the strongest disconfirming round yet, and for a reason the review's own model does
+not have room for.** The review's scaling argument assumes rule growth costs the hand-written
+list something — a new `Materialize_X` step, a new selection axis, a new capability crate wired
+in — proportional to rule count. This round's real growth mode is one the argument does not
+anticipate: bulk import of rule functions that cost the list nothing at all, because they are
+not wired into it. Thirty-one of thirty-nine rules now sit in that state. The list `Run` and
+`gate-orchestration`'s `RuleRegistry` maintain has not grown by thirty-one entries; it has grown
+by one, reconverging, absorbed by mechanism already built. A population multiplying nearly
+fivefold while the hand-written surface it is measured against grows by one is not evidence the
+hand-written approach is straining — it is a fifth consecutive data point that it is not.
+
 ## Status
 
 Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`, not by
 building the `RunPlanner` this record declines. The fourth trigger has now also fired, for the
 first time, via `Check_Cross_Language_Correspondence` — and its own stated reasoning, checked
 against that real instance, argues against the planner rather than for it. The second and third
-triggers remain unfired. Revisit if a materialization step is measured wasting real work,
-participation varies by a second axis, or a *diverging* rule population resumes growing the
-hand-written list past a point future evidence shows it stops absorbing cleanly.
+triggers remain unfired through a fifth round, this one checked against the largest rule-count
+burst this record has yet measured, whose growth landed almost entirely in a bucket — unwired,
+zero-cost rule functions — the review's own scaling argument has no room for. Revisit if a
+materialization step is measured wasting real work, participation varies by a second axis, an
+unwired rule is wired into `Run` in a way that fires trigger 2 or reconverges/diverges under
+trigger 4, or a *diverging* rule population resumes growing the hand-written list past a point
+future evidence shows it stops absorbing cleanly.
