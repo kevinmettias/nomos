@@ -178,7 +178,9 @@
 //!
 //! [`Check_Go_Helpers_Package_Five_Inputs`] is the twenty-eighth rule, importing the
 //! Go-specific parameter-count rule id through the same syntax arity facts as
-//! [`Check_Parameter_Count`].
+//! [`Check_Parameter_Count`]. Both are now presets over [`Check_Function_Arity_Policy`],
+//! because rule id, file selection, threshold, receiver allowance and gate category are
+//! policy dimensions rather than separate rule engines.
 //!
 //! [`Check_Unwrap_Expect_Discipline`], [`Check_Panics_Are_Justified_Documented_And_Validated`],
 //! [`Check_A_Rust_Path_Stays_Within_Its_Own_Subtree`] and [`Check_Shared_Interior_Mutability_Says_Why`]
@@ -231,7 +233,8 @@ pub use checks::{
     DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
     Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Trailing_Whitespace,
     Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS, NO_TRAILING_WHITESPACE, TODO_FORMAT,
-    Check_Go_Helpers_Package_Five_Inputs, Check_Parameter_Count, GO_HELPERS_PACKAGE_FIVE_INPUTS, PARAMETER_COUNT,
+    Check_Function_Arity_Policy, Check_Go_Helpers_Package_Five_Inputs, Check_Parameter_Count, FunctionArityPolicy,
+    FunctionAritySource, ReceiverAllowance, GO_HELPERS_PACKAGE_FIVE_INPUTS, PARAMETER_COUNT,
     Check_Lint_Diagnostics, LINT_DIAGNOSTICS,
     Check_Dependency_Policy, DEPENDENCY_POLICY,
     Check_Cross_Language_Correspondence, CROSS_LANGUAGE_CORRESPONDENCE,

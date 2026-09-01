@@ -6,6 +6,13 @@
 //! parameter cap: top-level/module functions with arity greater than four, and qualified
 //! functions/methods with arity greater than five. The latter threshold allows one possible
 //! receiver without producing a false positive.
+//!
+//! The public rule functions below are presets, not the rule engine itself. The engine is
+//! [`Check_Function_Arity_Policy`], whose dimensions are deliberately data: rule id, source
+//! selection, value-parameter ceiling, receiver allowance and gate category. That is the
+//! shape code-standards already has in practice across `parameter-count` and
+//! `go-helpers-package-five-inputs`, and it leaves a repository room to adopt the same
+//! judgment with a different threshold or language surface.
 
 use crate::SourceFile;
 use nomos_analysis::FactReader;
@@ -19,6 +26,82 @@ pub const GO_HELPERS_PACKAGE_FIVE_INPUTS: &str = "go-helpers-package-five-inputs
 
 const MAX_VALUE_PARAMETERS: u32 = 4;
 
+/// Which source files a function-arity policy applies to.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum FunctionAritySource
+{
+    /// Every source handed to the rule.
+    All,
+    /// Only files with this extension, case-insensitively and without the leading dot.
+    Extension(&'static str),
+}
+
+/// Whether the policy may treat one input on a qualified function as a receiver.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ReceiverAllowance
+{
+    /// Qualified and unqualified functions are judged against the same ceiling.
+    None,
+    /// A qualified function may have one extra input, because it may be a receiver.
+    OneForQualifiedFunctions,
+}
+
+/// A configurable function-arity rule.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct FunctionArityPolicy
+{
+    /// The rule id reported on findings.
+    pub rule: &'static str,
+    /// Which files this policy judges.
+    pub source: FunctionAritySource,
+    /// Maximum value parameters allowed before a finding is reported.
+    pub max_value_parameters: u32,
+    /// Whether qualified functions get one possible receiver input.
+    pub receiver_allowance: ReceiverAllowance,
+    /// The gate category reported for supported findings.
+    pub gate: GateCategory,
+}
+
+impl FunctionArityPolicy
+{
+    /// Builds a policy for every source with no receiver allowance.
+    #[must_use]
+    pub const fn New(rule: &'static str, max_value_parameters: u32) -> Self
+    {
+        return Self {
+            rule,
+            source: FunctionAritySource::All,
+            max_value_parameters,
+            receiver_allowance: ReceiverAllowance::None,
+            gate: GateCategory::Blocking,
+        };
+    }
+
+    /// Narrows this policy to a file extension.
+    #[must_use]
+    pub const fn For_Extension(mut self, extension: &'static str) -> Self
+    {
+        self.source = FunctionAritySource::Extension(extension);
+        return self;
+    }
+
+    /// Allows one possible receiver for qualified functions.
+    #[must_use]
+    pub const fn Allow_One_Receiver_For_Qualified_Functions(mut self) -> Self
+    {
+        self.receiver_allowance = ReceiverAllowance::OneForQualifiedFunctions;
+        return self;
+    }
+
+    /// Changes the gate category reported by supported findings.
+    #[must_use]
+    pub const fn With_Gate(mut self, gate: GateCategory) -> Self
+    {
+        self.gate = gate;
+        return self;
+    }
+}
+
 /// Reports functions that definitely exceed the four-value-parameter cap.
 #[must_use]
 pub fn Check_Parameter_Count(
@@ -26,7 +109,11 @@ pub fn Check_Parameter_Count(
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    return Check_Parameter_Count_With(sources, facts, PARAMETER_COUNT, |_| return true);
+    return Check_Function_Arity_Policy(
+        sources,
+        facts,
+        FunctionArityPolicy::New(PARAMETER_COUNT, MAX_VALUE_PARAMETERS).Allow_One_Receiver_For_Qualified_Functions(),
+    );
 }
 
 /// Reports Go functions and methods that definitely exceed the four-value-parameter cap.
@@ -36,34 +123,36 @@ pub fn Check_Go_Helpers_Package_Five_Inputs(
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    return Check_Parameter_Count_With(
+    return Check_Function_Arity_Policy(
         sources,
         facts,
-        GO_HELPERS_PACKAGE_FIVE_INPUTS,
-        |source| return Is_Go_File(&source.path),
+        FunctionArityPolicy::New(GO_HELPERS_PACKAGE_FIVE_INPUTS, MAX_VALUE_PARAMETERS)
+            .For_Extension("go")
+            .Allow_One_Receiver_For_Qualified_Functions(),
     );
 }
 
-fn Check_Parameter_Count_With(
+/// Reports functions that violate a caller-supplied arity policy.
+#[must_use]
+pub fn Check_Function_Arity_Policy(
     sources: &[SourceFile],
     facts: &mut dyn FactReader,
-    rule: &'static str,
-    accepts_source: impl Fn(&SourceFile) -> bool,
+    policy: FunctionArityPolicy,
 ) -> Vec<Finding>
 {
     let mut findings = Vec::new();
 
     for source in sources
     {
-        if !accepts_source(source)
+        if !Policy_Accepts_Source(policy, source)
         {
             continue;
         }
 
         match crate::checks::naming::reading::Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Violations_In(rule, &payload, &source.path)),
-            Err(finding) => findings.push(Unread_As_Rule(finding, rule)),
+            Ok(payload) => findings.extend(Violations_In(policy, &payload, &source.path)),
+            Err(finding) => findings.push(Unread_As_Rule(finding, policy.rule)),
         }
     }
 
@@ -71,51 +160,64 @@ fn Check_Parameter_Count_With(
     return findings;
 }
 
-fn Violations_In(rule: &'static str, payload: &SyntaxPayload, path: &str) -> Vec<Finding>
+fn Violations_In(policy: FunctionArityPolicy, payload: &SyntaxPayload, path: &str) -> Vec<Finding>
 {
     return payload
         .items
         .iter()
         .filter(|item| return item.kind == FUNCTION)
         .filter_map(|item| return Function_Arity(&item.shape).map(|arity| return (item, arity)))
-        .filter(|(item, arity)| return Definitely_Too_Many_Value_Parameters(item, *arity))
-        .map(|(item, arity)| return Violation_Finding(rule, path, item, arity))
+        .filter(|(item, arity)| return Definitely_Too_Many_Value_Parameters(policy, item, *arity))
+        .map(|(item, arity)| return Violation_Finding(policy, path, item, arity))
         .collect();
 }
 
-fn Is_Go_File(path: &str) -> bool
+fn Policy_Accepts_Source(policy: FunctionArityPolicy, source: &SourceFile) -> bool
 {
-    return std::path::Path::new(path)
-        .extension()
-        .is_some_and(|extension| return extension.eq_ignore_ascii_case("go"));
-}
-
-fn Definitely_Too_Many_Value_Parameters(item: &PayloadItem, arity: u32) -> bool
-{
-    if item.qualified_name.contains("::")
+    return match policy.source
     {
-        return arity > MAX_VALUE_PARAMETERS.saturating_add(1);
-    }
-
-    return arity > MAX_VALUE_PARAMETERS;
+        FunctionAritySource::All => true,
+        FunctionAritySource::Extension(expected) => Source_Has_Extension(source, expected),
+    };
 }
 
-fn Violation_Finding(rule: &'static str, path: &str, item: &PayloadItem, arity: u32) -> Finding
+fn Source_Has_Extension(source: &SourceFile, expected: &str) -> bool
+{
+    return std::path::Path::new(&source.path)
+        .extension()
+        .is_some_and(|extension| return extension.eq_ignore_ascii_case(expected));
+}
+
+fn Definitely_Too_Many_Value_Parameters(policy: FunctionArityPolicy, item: &PayloadItem, arity: u32) -> bool
+{
+    let allowed = match policy.receiver_allowance
+    {
+        ReceiverAllowance::OneForQualifiedFunctions if item.qualified_name.contains("::") =>
+        {
+            policy.max_value_parameters.saturating_add(1)
+        }
+        ReceiverAllowance::None | ReceiverAllowance::OneForQualifiedFunctions => policy.max_value_parameters,
+    };
+
+    return arity > allowed;
+}
+
+fn Violation_Finding(policy: FunctionArityPolicy, path: &str, item: &PayloadItem, arity: u32) -> Finding
 {
     use nomos_model::Content_Digest;
 
     let qualified = format!("{path}::{}", item.qualified_name);
 
     return Finding {
-        rule: RuleId::New(rule),
+        rule: RuleId::New(policy.rule),
         subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
         subject_name: item.qualified_name.clone(),
         applicability: Applicability::Supported,
         evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
+        gate: policy.gate,
         summary: format!(
-            "`{}` has arity {arity}, which definitely exceeds the four value parameter cap",
-            item.qualified_name
+            "`{}` has arity {arity}, which exceeds the configured value parameter cap of {}",
+            item.qualified_name, policy.max_value_parameters
         ),
         locations: vec![path.to_owned()],
     };
@@ -144,7 +246,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tBuild\t.\t+fn/5\n");
 
-        let findings = Violations_In(PARAMETER_COUNT, &payload, "src/lib.rs");
+        let findings = Violations_In(Parameter_Count_Policy(), &payload, "src/lib.rs");
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(PARAMETER_COUNT));
@@ -155,7 +257,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tBuild\t.\t+fn/4\n");
 
-        let findings = Violations_In(PARAMETER_COUNT, &payload, "src/lib.rs");
+        let findings = Violations_In(Parameter_Count_Policy(), &payload, "src/lib.rs");
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -165,7 +267,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tBuilder::Build\t.\t+fn/5\n");
 
-        let findings = Violations_In(PARAMETER_COUNT, &payload, "src/lib.rs");
+        let findings = Violations_In(Parameter_Count_Policy(), &payload, "src/lib.rs");
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -175,9 +277,54 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tBuilder::Build\t.\t+fn/6\n");
 
-        let findings = Violations_In(PARAMETER_COUNT, &payload, "src/lib.rs");
+        let findings = Violations_In(Parameter_Count_Policy(), &payload, "src/lib.rs");
 
         assert_eq!(findings.len(), 1, "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Violations_In_Should_Use_The_Configured_Rule_Id_Threshold_And_Gate()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tBuild\t.\t+fn/3\n");
+        let policy = FunctionArityPolicy::New("custom-three-parameter-cap", 2)
+            .With_Gate(GateCategory::Advisory);
+
+        let findings = Violations_In(policy, &payload, "src/lib.rs");
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        let found = findings.first().expect("asserted len 1 above");
+        assert_eq!(found.rule, RuleId::New("custom-three-parameter-cap"));
+        assert_eq!(found.gate, GateCategory::Advisory);
+        assert!(found.summary.contains("cap of 2"), "{}", found.summary);
+    }
+
+    #[test]
+    fn Test_Check_Function_Arity_Policy_Should_Filter_By_Configured_Source_Extension()
+    {
+        let source = Source("src/lib.rs", "pub fn Build(a: A, b: B, c: C) {}");
+        let TestOffering { store, registry, .. } = Offering();
+        let policy = FunctionArityPolicy::New("custom-go-only-cap", 2).For_Extension("go");
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Function_Arity_Policy(&[source], &mut reader, policy);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Violations_In_Should_Apply_Receiver_Allowance_Only_When_Configured()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tBuilder::Build\t.\t+fn/5\n");
+
+        let strict = Violations_In(FunctionArityPolicy::New("strict-cap", 4), &payload, "src/lib.rs");
+        let receiver_aware = Violations_In(
+            FunctionArityPolicy::New("receiver-aware-cap", 4).Allow_One_Receiver_For_Qualified_Functions(),
+            &payload,
+            "src/lib.rs",
+        );
+
+        assert_eq!(strict.len(), 1, "{strict:?}");
+        assert!(receiver_aware.is_empty(), "{receiver_aware:?}");
     }
 
     #[test]
@@ -263,5 +410,10 @@ mod tests
             "nomos.test.parameter-count.parses",
             Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
         );
+    }
+
+    fn Parameter_Count_Policy() -> FunctionArityPolicy
+    {
+        return FunctionArityPolicy::New(PARAMETER_COUNT, MAX_VALUE_PARAMETERS).Allow_One_Receiver_For_Qualified_Functions();
     }
 }

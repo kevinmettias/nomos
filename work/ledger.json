@@ -41315,14 +41315,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Predicate cargo test --no-fail-fast -p nomos-spec-store -p nomos-contract-tests cannot pass for a reason unconnected to this record edit: at this HEAD (521cd4fa), nomos-contract-tests' completeness_universes, corpus_gates, determinism_declarations and requirement_trace suites are all red from pre-existing stale entries (paths like nomos-gate-orchestration/src/rule_selector.rs and nomos-contracts/src/finding.rs no longer exist after prior restructuring) unrelated to OD-RULES-009. Re-added as -2 with a predicate scoped to what a record-content edit actually needs verified: nomos-spec-store's own round-trip and registration tests."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-external-review-reconciliation",
-        "acquired_at": 1788296314,
-        "lease_expires_at": 1788303514
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -41336,9 +41336,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-external-review-reconciliation",
+          "reason": "Predicate depends on nomos-contract-tests, which is red at this HEAD for reasons unconnected to this record edit (see decline reason).",
+          "abandoned_at": 1788296998
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-external-review-reconciliation",
+        "declined_at": 1788296998
+      }
     },
     {
       "id": "OD-RULES-011-NAMING-PROVIDER",
@@ -41705,6 +41714,305 @@
           "exit_code": 0
         },
         "revision": "1d6dedb01287541bd8b366d25bc0197a25f3b551"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P26-RULES-GENERALIZE-FUNCTION-SHAPE-2",
+      "title": "Commit the function-arity-policy code P26-RULES-GENERALIZE-FUNCTION-SHAPE left uncommitted",
+      "why": "P26-RULES-GENERALIZE-FUNCTION-SHAPE is marked done, verified by cargo test -p nomos-rules at revision 4b6c8b17, but Check_Function_Arity_Policy/FunctionArityPolicy/FunctionAritySource/ReceiverAllowance and their checks.rs pub-use were never committed -- they have sat as uncommitted working-tree state through several unrelated commits since (through at least c6bf4dd9, 521cd4fa, e3660dfd, 1d6dedb0), the same failure mode P26-RULES-MORE-CODE-STANDARDS-6 already fixed once for a different rule. A ledger item marked done whose code is not in git history is not actually done for anyone who clones or checks out the tree.",
+      "done_when": "crates/rules/nomos-rules/src/checks/function_shape.rs and checks.rs's pub-use of it are committed, matching what P26-RULES-GENERALIZE-FUNCTION-SHAPE's own verification already exercised, and cargo test -p nomos-rules still passes against the committed tree.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/function_shape.rs",
+          "crates/rules/nomos-rules/src/checks.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Never claimed -- territory omitted crates/rules/nomos-rules/src/lib.rs, which mirrors checks.rs's pub-use of the new FunctionArityPolicy items and whose module doc explains the Check_Parameter_Count/Check_Go_Helpers_Package_Five_Inputs generalization. Superseded by -3 with corrected territory."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-gate-registry-coherence",
+        "declined_at": 1788297124
+      }
+    },
+    {
+      "id": "OD-GATE-019-REGISTRY-COHERENCE-B-2",
+      "title": "nomos-gate-orchestration::Registered offers LINT_DIAGNOSTICS, DEPENDENCY_POLICY and CROSS_LANGUAGE_CORRESPONDENCE, which Run already executes",
+      "why": "composition.rs's own module doc asserted 'the four are exactly what Run calls' (now five, after OD-GATE-019-REGISTRY-COHERENCE-A-3), still false: Run has wired these three since P26-RULES-MORE-CODE-STANDARDS-3 and OD-CAPABILITY-010. None cites a versioned record from nomos-rules today -- lint.rs and policy.rs each name OD-RULES-010 only in prose, crosslang.rs names OD-CAPABILITY-010 only in prose -- so RuleOffer has nothing to cite yet, unlike DEPENDENCY_DIRECTION/UNREAD_REACHES_FINDING. Gate's stated invariant is that a plan smaller than the run it describes is worse than no plan.",
+      "done_when": "lint.rs gains LINT_CONTRACT_RECORD/LINT_CONTRACT_RECORD_VERSION citing OD-RULES-010 (v2), policy.rs gains DEPENDENCY_POLICY_CONTRACT_RECORD/DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION citing OD-RULES-010 (v2), and crosslang.rs gains CROSS_LANGUAGE_CONTRACT_RECORD/CROSS_LANGUAGE_CONTRACT_RECORD_VERSION citing OD-CAPABILITY-010 (v1), each re-exported through checks.rs the way DEPENDENCY_CONTRACT_RECORD already is; tests/contract/tests/rule_contract_citation.rs's CITATIONS table gains all three with its row-count control raised from 3 to 6; tests/contract/surface/nomos-rules.txt is re-blessed for the six new public constants; nomos-gate-orchestration::composition::Registered offers all three rules through those constants, its own test and nomos-cli's gate/tests.rs both raised from five to eight and naming all eight rule ids (nomos-cli's rendered 'rules: 8'); and cargo test -p nomos-rules -p nomos-gate-orchestration -p nomos-cli -p tests-contract --lib --bins passes (tests-contract has no --bins/--lib distinction issue since it carries no unrelated full-tree scan).",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/lint.rs",
+          "crates/rules/nomos-rules/src/checks/policy.rs",
+          "crates/rules/nomos-rules/src/checks/crosslang.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs",
+          "tests/contract/tests/rule_contract_citation.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Predicate named a nonexistent package (tests-contract instead of nomos-contract-tests). Superseded by -B-3."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "tests-contract",
+          "--lib",
+          "--bins"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-gate-registry-coherence",
+          "reason": "Predicate names package tests-contract, which does not exist -- the real package name is nomos-contract-tests (tests/contract/Cargo.toml). Never run, caught before any implementation. Re-filing as -B-3 with the corrected package name.",
+          "abandoned_at": 1788296956
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-gate-registry-coherence",
+        "declined_at": 1788296956
+      }
+    },
+    {
+      "id": "OD-GATE-019-REGISTRY-COHERENCE-B-3",
+      "title": "nomos-gate-orchestration::Registered offers LINT_DIAGNOSTICS, DEPENDENCY_POLICY and CROSS_LANGUAGE_CORRESPONDENCE, which Run already executes",
+      "why": "composition.rs's own module doc asserted 'the four are exactly what Run calls' (now five, after OD-GATE-019-REGISTRY-COHERENCE-A-3), still false: Run has wired these three since P26-RULES-MORE-CODE-STANDARDS-3 and OD-CAPABILITY-010. None cites a versioned record from nomos-rules today -- lint.rs and policy.rs each name OD-RULES-010 only in prose, crosslang.rs names OD-CAPABILITY-010 only in prose -- so RuleOffer has nothing to cite yet, unlike DEPENDENCY_DIRECTION/UNREAD_REACHES_FINDING. Gate's stated invariant is that a plan smaller than the run it describes is worse than no plan.",
+      "done_when": "lint.rs gains LINT_CONTRACT_RECORD/LINT_CONTRACT_RECORD_VERSION citing OD-RULES-010 (v2), policy.rs gains DEPENDENCY_POLICY_CONTRACT_RECORD/DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION citing OD-RULES-010 (v2), and crosslang.rs gains CROSS_LANGUAGE_CONTRACT_RECORD/CROSS_LANGUAGE_CONTRACT_RECORD_VERSION citing OD-CAPABILITY-010 (v1), each re-exported through checks.rs the way DEPENDENCY_CONTRACT_RECORD already is; tests/contract/tests/rule_contract_citation.rs's CITATIONS table gains all three with its row-count control raised from 3 to 6; tests/contract/surface/nomos-rules.txt is re-blessed for the six new public constants; nomos-gate-orchestration::composition::Registered offers all three rules through those constants, its own test and nomos-cli's gate/tests.rs both raised from five to eight and naming all eight rule ids (nomos-cli's rendered 'rules: 8'); and cargo test -p nomos-rules -p nomos-gate-orchestration -p nomos-cli -p nomos-contract-tests --lib --bins passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/lint.rs",
+          "crates/rules/nomos-rules/src/checks/policy.rs",
+          "crates/rules/nomos-rules/src/checks/crosslang.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs",
+          "tests/contract/tests/rule_contract_citation.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--bins"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-gate-registry-coherence",
+          "reason": "Discovered mid-claim: tests/contract/tests/public_surface's whole-workspace snapshot check is currently red for two reasons outside this item's territory -- nomos-cap-limits-policy (a live peer claim, no snapshot yet) and nomos-rules' own uncommitted FunctionArityPolicy surface widening (P26-RULES-GENERALIZE-FUNCTION-SHAPE-2, filed but not yet done). Re-blessing nomos-rules' surface right now would bake the neighboring uncommitted arity-policy surface into my commit. Pausing to let -FUNCTION-SHAPE-2 land first, then re-filing B on a clean base.",
+          "abandoned_at": 1788297112
+        }
+      ],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-009-FIFTH-ROUND-RECHECK-2",
+      "title": "OD-RULES-009: a fifth round of the same external review rechecked against current HEAD",
+      "why": "A fifth round of the recurring external architecture review repeated the P0 RunPlanner-now argument against the current tree; this workspace's established practice is to ground-truth each round against real code and the record's own named triggers rather than accept it on read. Re-added after OD-RULES-009-FIFTH-ROUND-RECHECK was declined for an unrelated broken predicate.",
+      "done_when": "OD-RULES-009 gains a fifth amendment section checking its three remaining named triggers against everything that landed since the fourth amendment (e4e262cf), citing the specific commits and code; the record's Status/Decision continue to decline building the planner unless a trigger is shown to have actually fired.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "sed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling typenum v1.20.1\n   Compiling cfg-if v1.0.4\n   Compiling once_cell v1.21.4\n   Compiling hashbrown v0.17.1\n   Compiling equivalent v1.0.2\n   Compiling itoa v1.0.18\n   Compiling cpufeatures v0.2.17\n   Compiling ryu v1.0.23\n   Compiling unsafe-libyaml v0.2.11\n   Compiling smallvec v1.15.2\n   Compiling fallible-iterator v0.3.0\n   Compiling memchr v2.8.3\n   Compiling fallible-streaming-iterator v0.1.9\n   Compiling bitflags v2.13.1\n   Compiling nomos-spec-store v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\f474ff63-341e-4e27-85b3-9d2d43aa2985\\scratchpad\\render\\crates\\spec\\nomos-spec-store)\n   Compiling zerocopy v0.8.56\n   Compiling serde_core v1.0.229\n   Compiling zmij v1.0.23\n   Compiling libsqlite3-sys v0.30.1\n   Compiling indexmap v2.14.0\n   Compiling generic-array v0.14.7\n   Compiling block-buffer v0.10.4\n   Compiling crypto-common v0.1.7\n   Compiling digest v0.10.7\n   Compiling sha2 v0.10.9\n   Compiling serde v1.0.229\n   Compiling serde_json v1.0.151\n   Compiling serde_yaml_ng v0.10.0\n   Compiling ahash v0.8.12\n   Compiling nomos-spec-model v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\f474ff63-341e-4e27-85b3-9d2d43aa2985\\scratchpad\\render\\crates\\spec\\nomos-spec-model)\n   Compiling hashbrown v0.14.5\n   Compiling hashlink v0.9.1\n   Compiling rusqlite v0.32.1\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.47s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788297077,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-LEDGER-STALE-REQUIREMENT-TRACE-CONTRACT-TESTS",
+      "title": "Four nomos-contract-tests suites are red at HEAD from stale post-restructuring citations, unconnected to any one item",
+      "why": "Verified directly (not assumed) in an isolated worktree at HEAD 521cd4fa, with no uncommitted changes present: cargo test -p nomos-contract-tests fails completeness_universes (mirrors/derivation/claims), corpus_gates (declared/derived), determinism_declarations, and requirement_trace (committed::Test_Every_Assessment_Should_Name_A_Site_That_Exists, committed::Test_Every_Gap_Should_Resolve). requirement_trace alone names 60+ entries citing files that no longer exist (e.g. nomos-gate-orchestration/src/rule_selector.rs, nomos-contracts/src/finding.rs) or symbols that no longer occur where cited (e.g. FactKey, VerificationRecord, AuthorityClass) -- residue from prior file-splitting/renaming campaigns whose commits never updated these self-referential assertions. This was found incidentally while verifying an unrelated OD-RULES-009 record edit; it was not this session's task to fix.",
+      "done_when": "Every assessment/gap entry across completeness_universes, corpus_gates, determinism_declarations and requirement_trace either cites a real, current site, or is re-authored against what its subject became; cargo test --no-fail-fast -p nomos-contract-tests exits 0.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/completeness_universes",
+          "tests/contract/tests/corpus_gates",
+          "tests/contract/tests/determinism_declarations.rs",
+          "tests/contract/tests/requirement_trace"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P26-RULES-GENERALIZE-FUNCTION-SHAPE-3",
+      "title": "Commit the function-arity-policy code P26-RULES-GENERALIZE-FUNCTION-SHAPE left uncommitted",
+      "why": "P26-RULES-GENERALIZE-FUNCTION-SHAPE is marked done, verified by cargo test -p nomos-rules at revision 4b6c8b17, but Check_Function_Arity_Policy/FunctionArityPolicy/FunctionAritySource/ReceiverAllowance and their checks.rs/lib.rs pub-use were never committed -- they have sat as uncommitted working-tree state through several unrelated commits since (through at least c6bf4dd9, 521cd4fa, e3660dfd, 1d6dedb0), the same failure mode P26-RULES-MORE-CODE-STANDARDS-6 already fixed once for a different rule. A ledger item marked done whose code is not in git history is not actually done for anyone who clones or checks out the tree, and it currently blocks nomos-rules' own public-surface snapshot from being re-blessed cleanly for unrelated reasons.",
+      "done_when": "crates/rules/nomos-rules/src/checks/function_shape.rs, checks.rs's pub-use of it, and lib.rs's mirrored pub-use and module doc are committed, matching what P26-RULES-GENERALIZE-FUNCTION-SHAPE's own verification already exercised, and cargo test -p nomos-rules still passes against the committed tree.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/function_shape.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 256 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-97cc66c3275b20dd.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-b3b18456b6a9bf06.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788297148,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "afd04a662ee859149e030cd8e832a512c7c57661"
       },
       "abandoned": [],
       "displaced": [],

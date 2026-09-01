@@ -45,7 +45,8 @@ pub use formatting::{
     Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS, NO_TRAILING_WHITESPACE, TODO_FORMAT,
 };
 pub use function_shape::{
-    Check_Go_Helpers_Package_Five_Inputs, Check_Parameter_Count, GO_HELPERS_PACKAGE_FIVE_INPUTS, PARAMETER_COUNT,
+    Check_Function_Arity_Policy, Check_Go_Helpers_Package_Five_Inputs, Check_Parameter_Count, FunctionArityPolicy,
+    FunctionAritySource, ReceiverAllowance, GO_HELPERS_PACKAGE_FIVE_INPUTS, PARAMETER_COUNT,
 };
 pub use lint::{Check_Lint_Diagnostics, LINT_DIAGNOSTICS};
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
