@@ -44135,6 +44135,297 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "OD-RULES-011-WORDS-PROVIDER-2",
+      "title": "nomos-repo-words: the one provider of nomos.cap.words.policy",
+      "why": "OD-RULES-011's fourth capability instance needs a real provider before any rule can read it. This one reads standards.json's words.approved_abbreviations through nomos_platform::FileSystem, the same shape nomos-repo-standards/nomos-repo-limits/nomos-repo-scripting already established, including a declared determinism Strategy from day one (OD-LEDGER-DETERMINISM-STRATEGY-GAP-2 landed while this was blocked, so the new provider is built with the pattern rather than needing its own follow-up correction).",
+      "done_when": "nomos-repo-words exists at band 25 with PROVIDER/Declared_Guarantee/Provider_Offer/Materialize_Workspace and a WordsPolicyFactProduction Strategy, reads this repository's real standards.json into a WordsPolicyPayload, treats a missing file or missing words block as declaring nothing, refuses a malformed file, is registered in Cargo.toml/README.md/both bands.rs and the determinism declaration/production/domain/harness test files, and cargo test -p nomos-repo-words passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository/nomos-repo-words",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface",
+          "tests/integration/tests/determinism",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "re-adding with a narrower surface-file path instead of the whole directory"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-words"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "nomos-75",
+          "reason": "narrowing tests/contract/surface to the specific file so a peer's disjoint bless isn't mechanically blocked",
+          "abandoned_at": 1788305997
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-75",
+        "declined_at": 1788306017
+      }
+    },
+    {
+      "id": "P26-RULES-ERROR-TEXT",
+      "title": "Import the error-message text hygiene family into a new error_text.rs",
+      "why": "Three code-standards Rust error-handling rules decidable from raw text: lowercase-first-letter and no-trailing-punctuation (one Go tool, check-error-message, judging a #[error(\"...\")] attribute's message content) and eager-vs-lazy-context (check-context-laziness, judging a same-line .With_Context(...) call whose argument allocates). Real breadth -- nothing already converted touches Display-message wording or Result-context allocation timing. Scoped narrower than the Go tool in one respect: the Go tool also judges write!/writeln! literals inside a hand-written impl Display block via real parsing, which this crate's text-only convention cannot soundly bound without brace-depth block tracking this crate has consistently declined to build (the same choice already made for concurrency_text's file-level test exemption) -- left unattempted rather than guessed at, matching the deprecation rule's own same-line-only precedent.",
+      "done_when": "error_text.rs implements Check_Error_Message_Starts_Lowercase, Check_Error_Message_Has_No_Trailing_Punctuation and Check_Eager_Vs_Lazy_Context (scoped to #[error(\"...\")] attribute sites and same-line .With_Context(...) calls respectively), each honoring its own literal marker exemption (error-message: allow / context-laziness: allow), with focused tests covering the acronym exemption (HTTP/TOML-shaped first words), the {}-placeholder exemption, the With_Context_Lazy non-match, and the closed allocating-constructor vocabulary, and cargo test -p nomos-rules passes. Deliberately does NOT touch checks.rs/lib.rs/the surface snapshot -- a concurrent peer session holds those for the abbreviations family; wiring is a follow-up item once that lands.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/error_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "predicate would have been vacuous since error_text.rs cannot compile or run its own tests until mod error_text; is added to checks.rs -- re-adding combining content and wiring into one verifiable item, matching P26-RULES-PLACEMENT-ONEOFFS-3's own recovery from the same mistake"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "--lib",
+          "checks::error_text"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-nomos-12",
+          "reason": "predicate would have been vacuous -- error_text.rs cannot compile or run its own tests until mod error_text; is added to checks.rs; re-adding combining content and wiring into one verifiable item",
+          "abandoned_at": 1788305858
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-12",
+        "declined_at": 1788305866
+      }
+    },
+    {
+      "id": "P26-RULES-ERROR-TEXT-2",
+      "title": "Import the error-message text hygiene family into a new error_text.rs",
+      "why": "Three code-standards Rust error-handling rules decidable from raw text: lowercase-first-letter and no-trailing-punctuation (one Go tool, check-error-message, judging a #[error(\"...\")] attribute's message content) and eager-vs-lazy-context (check-context-laziness, judging a same-line .With_Context(...) call whose argument allocates). Real breadth -- nothing already converted touches Display-message wording or Result-context allocation timing. Scoped narrower than the Go tool in one respect: the Go tool also judges write!/writeln! literals inside a hand-written impl Display block via real parsing, which this crate's text-only convention cannot soundly bound without brace-depth block tracking this crate has consistently declined to build (the same choice already made for concurrency_text's file-level test exemption) -- left unattempted rather than guessed at, matching the deprecation rule's own same-line-only precedent.",
+      "done_when": "error_text.rs implements Check_Error_Message_Starts_Lowercase, Check_Error_Message_Has_No_Trailing_Punctuation and Check_Eager_Vs_Lazy_Context (scoped to #[error(\"...\")] attribute sites and same-line .With_Context(...) calls respectively), each honoring its own literal marker exemption (error-message: allow / context-laziness: allow), wired into checks.rs/lib.rs, with focused tests covering the acronym exemption (HTTP/TOML-shaped first words), the {}-placeholder exemption, the With_Context_Lazy non-match, and the closed allocating-constructor vocabulary, tests/contract/surface/nomos-rules.txt re-blessed, and cargo test -p nomos-rules passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/error_text.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-12",
+        "acquired_at": 1788306038,
+        "lease_expires_at": 1788313238
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-014-TEXT-RULE-LANGUAGE-APPLICABILITY",
+      "title": "How a text-only rule states a language restriction without naming a provider",
+      "why": "Nine rule modules decide their own applicability by sniffing file extensions -- go_text.rs (Is_Go_Source), naming/go_data_names.rs, naming/go_function_names.rs, naming/go_type_names.rs, rust_text.rs, concurrency_text.rs, placement.rs, structure.rs and function_shape.rs all match on .go or .rs or call extension(). nomos-rules deliberately names no language crate: its Cargo.toml argues at length that a rule states a capability floor and the registry chooses who answers it, and OD-CAPABILITY-009 kept SourceFile::preferred_syntax_provider opaque for the same reason -- the three call sites that read it pass it straight to Syntax_Requirement_For and never compare it to a provider identity. So a text-only rule that must apply to Go alone has no non-regressing way to ask the question today: sniffing the extension is a second answer to a convention the composition root owns, and comparing preferred_syntax_provider against nomos_lang_go::PROVIDER would put a band-30 rule back in the business of knowing which languages exist. An external review flagged the sniffing on 2026-09-01; it did not notice that the obvious fix is the thing OD-CAPABILITY-009 rejected. The count is what makes this worth deciding rather than tolerating: it was one module and is now nine.",
+      "done_when": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md is written and registered under crates/spec/nomos-spec-store/records/, and decides which mechanism carries a text-only rule language restriction -- a carried SourceFile field distinct from preferred_syntax_provider, a capability fact in the OD-RULES-011 family, an orchestration-side partition of the source list, or the extension check standing as correct -- and says explicitly what becomes of each of the nine modules named above, including whether any of them should keep sniffing.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "./nomos.exe",
+          "spec",
+          "markdown",
+          "--id",
+          "OD-RULES-014"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-HOST-007-REPO-TOOLING-THROUGH-THE-API-HOST",
+      "title": "Whether a repo-tooling verb may be projected through the band-90 API host",
+      "why": "README lines 34-36 mark four rows [repo tooling] -- nomos-ledger, nomos-work-orchestration, nomos-spec-orchestration and nomos-surface-provenance -- and say they exist to run this repository, not to answer a question an end-user repository would ask Nomos. nomos-api sits at band 90 and now projects work (List, Show, Validate, Audit) and spec (Profiles and further verbs) beside gate. Its own module doc gives a coherent reason: it exists as a second real caller, proving Run_Gate, nomos_work_orchestration::Run and nomos_spec_orchestration are genuinely callable without nomos-cli, which is a real architecture test and was the stated point of the crate. So this is not obviously a defect. But nothing in the workspace records which of those two readings governs, and the two disagree about what nomos-api is: a seam prover may freely reach repo tooling, whereas the product API named in ARC-ROADMAP-001 CLI/API/MCP projections may not without dissolving the distinction README just drew. An external review read the crate the second way on 2026-09-01 and called it product surface leaking repository infrastructure. The question is cheap to answer now and expensive once a transport exists and the projected verbs have external callers.",
+      "done_when": "docs/records/OD-HOST-007-whether-a-repo-tooling-verb-may-be-projected-through-the-band-90-api-host.md is written and registered under crates/spec/nomos-spec-store/records/, deciding whether nomos-api is a seam prover that may reach [repo tooling] orchestration, a product API that may not, or both under a named split; and if a split is chosen, naming where the boundary lives and what if anything moves out of nomos-api.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-007-whether-a-repo-tooling-verb-may-be-projected-through-the-band-90-api-host.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "./nomos.exe",
+          "spec",
+          "markdown",
+          "--id",
+          "OD-HOST-007"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-WORDS-PROVIDER-3",
+      "title": "nomos-repo-words: the one provider of nomos.cap.words.policy",
+      "why": "OD-RULES-011's fourth capability instance needs a real provider before any rule can read it. This one reads standards.json's words.approved_abbreviations through nomos_platform::FileSystem, the same shape nomos-repo-standards/nomos-repo-limits/nomos-repo-scripting already established, including a declared determinism Strategy from day one (OD-LEDGER-DETERMINISM-STRATEGY-GAP-2 landed while this was blocked, so the new provider is built with the pattern rather than needing its own follow-up correction).",
+      "done_when": "nomos-repo-words exists at band 25 with PROVIDER/Declared_Guarantee/Provider_Offer/Materialize_Workspace and a WordsPolicyFactProduction Strategy, reads this repository's real standards.json into a WordsPolicyPayload, treats a missing file or missing words block as declaring nothing, refuses a malformed file, is registered in Cargo.toml/README.md/both bands.rs and the determinism declaration/production/domain/harness test files, and cargo test -p nomos-repo-words passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository/nomos-repo-words",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-repo-words.txt",
+          "tests/integration/tests/determinism",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75",
+        "acquired_at": 1788306017,
+        "lease_expires_at": 1788313217
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-words"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P26-PLATFORM-VACATE-THROUGH-THE-PORT",
+      "title": "Route the spec-commit rename vacate through nomos-platform rather than raw std::fs",
+      "why": "nomos-spec-orchestration::run::commit calls std::fs::remove_file directly to unlink the old path a record rename vacated, and both its module doc and VacateOutcome say so on purpose. The stated reason is not architectural: it is that nomos_platform::FileSystem declares three operations (read, atomically replace, exists) and \"extending nomos-platform is out of this crate territory\". That is a territory constraint on whoever wrote it, not a finding that the port should stay small -- so the half-abstraction persists because no item ever reserved both crates at once, which is exactly the kind of gap the ledger can close by reserving them together. The consequence is real and already written down in the code: a failed unlink leaves two files declaring one record (VacateOutcome::Failed), on a path the platform seam otherwise exists to make testable and swappable. An external review flagged it on 2026-09-01 as an abstraction leak; it did not notice the doc already concedes the point and names the reason.",
+      "done_when": "The rename-vacate step no longer calls std::fs directly: nomos_platform::FileSystem carries a removal operation, nomos-platform-std implements it, nomos-spec-orchestration::run::commit routes through it, and the module doc plus VacateOutcome doc that currently justify the raw call are corrected rather than left contradicting the code. The addition must be shaped so no FileSystem implementor outside nomos-platform-std has to change -- a defaulted method or an extension trait -- because the four cfg(test) FakeFileSystem doubles in nomos-repo-limits, nomos-repo-scripting, nomos-repo-standards and nomos-repo-words are outside this territory and partly held; if a required method is chosen instead, this item is re-added with those crates reserved. tests/contract/surface/nomos-platform.txt and nomos-platform-std.txt are re-blessed.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform/src/file_system.rs",
+          "crates/platform/nomos-platform-std/src/std_file_system.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/run/commit.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/spec_outcome/commit_answer/vacate_outcome.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/lib.rs",
+          "tests/contract/surface/nomos-platform.txt",
+          "tests/contract/surface/nomos-platform-std.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-spec-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
