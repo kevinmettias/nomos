@@ -42607,10 +42607,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-external-review-reconciliation",
+        "acquired_at": 1788299722,
+        "lease_expires_at": 1788306922
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -43009,6 +43013,154 @@
           "exit_code": 0
         },
         "revision": "deb879d1f3b02a50d2f6b76839ff6b0395053ff3"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-SCRIPTING",
+      "title": "nomos-cap-scripting-policy: the nomos.cap.scripting.policy capability contract",
+      "why": "standards.json's scripting block (tooling_language, forbidden_extensions) is declared and schema-validated but nothing in nomos-rules reads it -- the same 'repository already states this as data and every rule ignores it' gap OD-RULES-011 found for naming and limits. code-standards' own declared-tooling-language-for-scripts.md names the rule this powers: a script whose extension is in the repository's declared forbidden_extensions is flagged, but only when the repository has opted in by declaring a tooling_language -- an undeclared language leaves the rule silent rather than guessing, per check-script-discipline's own spec.go.",
+      "done_when": "nomos-cap-scripting-policy exists at crates/capabilities/nomos-cap-scripting-policy with a contract (nomos.cap.scripting.policy), a payload carrying an optional declared tooling language and a forbidden-extensions list, and its own tests, and cargo test -p nomos-cap-scripting-policy passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-scripting-policy",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "widening territory upfront to include workspace registration files, avoiding the two-step split from the limits item"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-scripting-policy"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "nomos-75",
+          "reason": "widening territory upfront",
+          "abandoned_at": 1788299912
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-75",
+        "declined_at": 1788299917
+      }
+    },
+    {
+      "id": "OD-RULES-011-SCRIPTING-2",
+      "title": "nomos-cap-scripting-policy: the nomos.cap.scripting.policy capability contract",
+      "why": "standards.json's scripting block (tooling_language, forbidden_extensions) is declared and schema-validated but nothing in nomos-rules reads it -- the same 'repository already states this as data and every rule ignores it' gap OD-RULES-011 found for naming and limits. code-standards' own declared-tooling-language-for-scripts.md names the rule this powers: a script whose extension is in the repository's declared forbidden_extensions is flagged, but only when the repository has opted in by declaring a tooling_language -- an undeclared language leaves the rule silent rather than guessing, per check-script-discipline's own spec.go.",
+      "done_when": "nomos-cap-scripting-policy exists at crates/capabilities/nomos-cap-scripting-policy with a contract (nomos.cap.scripting.policy), a payload carrying an optional declared tooling language and a forbidden-extensions list, its own tests, registered in Cargo.toml/README.md/both bands.rs at band 23, and cargo test -p nomos-cap-scripting-policy passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-scripting-policy",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75",
+        "acquired_at": 1788299927,
+        "lease_expires_at": 1788307127
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-scripting-policy"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-012-WIRE-CLEAN-TEXT-RULES",
+      "title": "Compose ten already-clean text-only rules into nomos-check-orchestration::Run",
+      "why": "nomos-rules implements far more rules than nomos-check-orchestration::Run executes -- an original review of this gap flagged the population drift as the more urgent repair, but the drift itself (implemented-but-never-composed rules) is real and growing. Thirteen text-only rules (no FactReader, taking only sources) were candidates; checked against a real gate run --root . over this tree first, three (no-decorative-section-dividers, unwrap-expect-discipline, panics-are-justified-documented-and-validated) currently produce 71 real Blocking findings across this repository and wiring them in now would turn every session's Rules step red. The other ten are already clean.",
+      "done_when": "nomos-check-orchestration::run_context::RULE_COUNT rises from 8 to 18, composing NO_TRAILING_WHITESPACE, TODO_FORMAT, DEPRECATION, A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, SHARED_INTERIOR_MUTABILITY_SAYS_WHY, EVERY_ALLOW_CARRIES_A_JUSTIFICATION, UNSAFE_JUSTIFICATION, SCRIPTS_USE_A_PORTABLE_SHEBANG, A_SCRIPT_DECLARES_ITS_PURPOSE and NO_MOD_RS_FILES; a real gate run --root . over this repository (nomos-cli's Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree) still passes with the ten newly composed; and cargo test -p nomos-check-orchestration -p nomos-cli --lib --bins passes. Deliberately out of scope: composing the three rules this tree currently violates (a separate, larger repository-wide cleanup, not a wiring task), and updating nomos-gate-orchestration::Registered to report these ten -- the same check::Run-wiring-precedes-Gate-registration split OD-GATE-019-REGISTRY-COHERENCE followed (P13-DEPENDENCY-WIRE-1 composed DEPENDENCY_DIRECTION into Run; P13-GATE-REGISTRY-THIRD-RULE registered it with Gate later, as a separate item).",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins"
+        ],
+        "exit_code": 0,
+        "output_tail": "Node ... ok\ntest spec::reporting::tests::Test_Absent_Or_Should_Report_The_Absence_Over_A_Store_Missing_Its_Corpus ... ok\ntest spec::verb::render::tests::Test_Render_Profile_Should_Report_An_Unknown_Profile ... ok\ntest spec::verb::freshness::tests::Test_Freshness_Of_Should_Report_An_Unknown_Profile ... ok\ntest spec::verb::markdown::tests::Test_Render_Markdown_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest spec::verb::editing::tests::Test_Report_Edit_Error_Should_Map_Each_Error_Kind_To_Its_Own_Exit_Code ... ok\ntest vacuity::tests::Test_Spec_Should_Refuse_Ok_Over_A_Record_The_Store_Never_Had ... ok\ntest spec::verb::table::tests::Test_Unselected_Rows_Should_Note_The_Document_And_Yield_No_Rows ... ok\ntest request::run_coverage::Test_Run_Should_Refuse_A_Submission_Missing_Its_Required_Fields ... ok\ntest spec::verb::editing::tests::Test_Preview_Edit_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest spec::verb::table::tests::Test_Read_Table_Should_Report_Absent_For_A_Document_The_Store_Never_Had ... ok\ntest spec::verb::editing::tests::Test_Commit_Edit_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest spec::verb::table::tests::Test_No_Such_Document_Should_Report_Absent_Over_A_Store_Missing_Its_Corpus ... ok\ntest spec::verb::table::tests::Test_Nothing_Selected_Should_Prefer_Absent_Only_When_The_Document_Itself_Had_No_Lines ... ok\ntest gate::tests::Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report ... ok\ntest gate::tests::Test_Relative_Path_Should_Underlie_A_Real_Explains_Search_Over_A_Clean_Tree ... ok\n\ntest result: ok. 235 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.42s\n\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.22s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-215caff811c3916d.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-c475ef24d3839d1c.exe)\n",
+        "verified_at": 1788300066,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "41f6b31baf733cf597b217e305459525d794bc99"
       },
       "abandoned": [],
       "displaced": [],

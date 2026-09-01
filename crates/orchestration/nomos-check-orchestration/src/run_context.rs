@@ -6,11 +6,17 @@ use nomos_capability::Registry;
 use nomos_contracts::{Finding, RuleId};
 use nomos_platform::ProcessLauncher;
 use nomos_rules::{
-    Check_Completeness_Mirrors, Check_Cross_Language_Correspondence, Check_Dependency_Direction,
-    Check_Dependency_Policy, Check_Every_Member_Declares_A_Band, Check_Lint_Diagnostics, Check_Naming_Convention,
-    Check_Unread_Reaches_A_Finding, SourceFile, COMPLETENESS_MIRROR, CROSS_LANGUAGE_CORRESPONDENCE,
-    DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, LINT_DIAGNOSTICS, NAMING_CONVENTION,
-    UNREAD_REACHES_FINDING,
+    Check_A_Rust_Path_Stays_Within_Its_Own_Subtree, Check_A_Script_Declares_Its_Purpose, Check_Completeness_Mirrors,
+    Check_Cross_Language_Correspondence, Check_Dependency_Direction, Check_Dependency_Policy,
+    Check_Deprecation_Carries_A_Reason, Check_Every_Allow_Carries_A_Justification, Check_Every_Member_Declares_A_Band,
+    Check_Lint_Diagnostics, Check_Naming_Convention, Check_No_Mod_Rs_Files, Check_No_Trailing_Whitespace,
+    Check_Scripts_Use_A_Portable_Shebang, Check_Shared_Interior_Mutability_Says_Why, Check_Todo_Format,
+    Check_Unread_Reaches_A_Finding, Check_Unsafe_Justification, SourceFile,
+    A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, A_SCRIPT_DECLARES_ITS_PURPOSE, COMPLETENESS_MIRROR,
+    CROSS_LANGUAGE_CORRESPONDENCE, DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, DEPRECATION,
+    EVERY_ALLOW_CARRIES_A_JUSTIFICATION, LINT_DIAGNOSTICS, NAMING_CONVENTION, NO_MOD_RS_FILES, NO_TRAILING_WHITESPACE,
+    SCRIPTS_USE_A_PORTABLE_SHEBANG, SHARED_INTERIOR_MUTABILITY_SAYS_WHY, TODO_FORMAT, UNREAD_REACHES_FINDING,
+    UNSAFE_JUSTIFICATION,
 };
 use nomos_workspace::BuildVariant;
 use std::path::Path;
@@ -24,7 +30,7 @@ use crate::CheckOutcome;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 8;
+const RULE_COUNT: usize = 18;
 
 /// [`Run`]'s build variant, its subprocess root, and the launcher those subprocesses run
 /// through -- grouped into one value so [`Run`] stays within this crate's own
@@ -313,9 +319,21 @@ struct JudgeEnvironment<'a>
 }
 
 /// Every finding the completeness, naming-convention, dependency-direction,
-/// dependency-completeness, lint-diagnostics, dependency-policy, unread-reaches-finding and
-/// cross-language-correspondence rules `selected` asks for produce over `sources` and
-/// `capabilities`' own source lists.
+/// dependency-completeness, lint-diagnostics, dependency-policy, unread-reaches-finding,
+/// cross-language-correspondence and ten text-only rules `selected` asks for produce over
+/// `sources` and `capabilities`' own source lists.
+///
+/// The ten text-only rules (no-trailing-whitespace through no-mod-rs-files below) take only
+/// `sources`, the same shape [`Check_Naming_Convention`] and every fact-reading rule above
+/// it does not: a rule implemented in `nomos-rules` but never composed here reports as
+/// unenforced when it is not, so wiring one in is this crate's own territory, the same
+/// "composed into nomos-check-orchestration::Run" section every one of these rules' own
+/// module docs already names. Three siblings this crate also implements --
+/// `no-decorative-section-dividers`, `unwrap-expect-discipline` and `panics-are-justified-
+/// documented-and-validated` -- are deliberately absent: this repository's own tree
+/// currently violates all three (71 findings, checked by running the ten below through a
+/// real `gate run --root .` first), and wiring a rule this tree fails is a different, larger
+/// change than composing one it already satisfies.
 fn Rule_Findings(
     sources: &[SourceFile],
     capabilities: &CapabilityMaterialization,
@@ -323,9 +341,9 @@ fn Rule_Findings(
     selected: &[RuleId],
 ) -> Vec<Finding>
 {
-    // Boxed as `dyn Fn` because the eight closures below close over different captures
+    // Boxed as `dyn Fn` because the closures below close over different captures
     // (`sources`, `capabilities.dependency_sources`, `capabilities.lint_sources`, ...) and so
-    // are eight distinct anonymous types -- an array needs one common element type, and `dyn
+    // are distinct anonymous types -- an array needs one common element type, and `dyn
     // Fn` is that common type where `impl Fn` cannot be.
     let rules: [(&str, &dyn Fn(&mut Reader<'_, '_>) -> Vec<Finding>); RULE_COUNT] = [
         (COMPLETENESS_MIRROR, &|reader| return Check_Completeness_Mirrors(sources, reader)),
@@ -336,6 +354,16 @@ fn Rule_Findings(
         (DEPENDENCY_POLICY, &|reader| return Check_Dependency_Policy(&capabilities.policy_sources, reader)),
         (UNREAD_REACHES_FINDING, &|reader| return Check_Unread_Reaches_A_Finding(sources, reader)),
         (CROSS_LANGUAGE_CORRESPONDENCE, &|reader| return Check_Cross_Language_Correspondence(sources, reader)),
+        (NO_TRAILING_WHITESPACE, &|_reader| return Check_No_Trailing_Whitespace(sources)),
+        (TODO_FORMAT, &|_reader| return Check_Todo_Format(sources)),
+        (DEPRECATION, &|_reader| return Check_Deprecation_Carries_A_Reason(sources)),
+        (A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, &|_reader| return Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources)),
+        (SHARED_INTERIOR_MUTABILITY_SAYS_WHY, &|_reader| return Check_Shared_Interior_Mutability_Says_Why(sources)),
+        (EVERY_ALLOW_CARRIES_A_JUSTIFICATION, &|_reader| return Check_Every_Allow_Carries_A_Justification(sources)),
+        (UNSAFE_JUSTIFICATION, &|_reader| return Check_Unsafe_Justification(sources)),
+        (SCRIPTS_USE_A_PORTABLE_SHEBANG, &|_reader| return Check_Scripts_Use_A_Portable_Shebang(sources)),
+        (A_SCRIPT_DECLARES_ITS_PURPOSE, &|_reader| return Check_A_Script_Declares_Its_Purpose(sources)),
+        (NO_MOD_RS_FILES, &|_reader| return Check_No_Mod_Rs_Files(sources)),
     ];
 
     return Findings_For_Selected_Rules(rules, reader, selected);
