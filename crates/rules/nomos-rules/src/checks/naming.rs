@@ -36,8 +36,13 @@
 //! composes the two: the rule's own identifier and [`Check_Naming_Convention`] itself, plus
 //! the end-to-end tests that exercise both together through a real reader.
 
+mod boolean_predicates;
 mod data_names;
-mod reading;
+mod file_names;
+mod go_function_names;
+mod go_type_names;
+pub(super) mod reading;
+mod single_letter_names;
 mod test_names;
 mod violations;
 
@@ -45,7 +50,15 @@ use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
 
+pub use boolean_predicates::{Check_Boolean_Predicates, BOOLEAN_PREDICATES};
 pub use data_names::{Check_Data_Names_Stay_Lower_Snake, DATA_NAMES_STAY_LOWER_SNAKE};
+pub use file_names::{
+    Check_File_Name_Matches_Declared_Type, Check_One_Public_Type_Per_File, FILE_NAME_MATCHES_DECLARED_TYPE,
+    ONE_PUBLIC_TYPE_PER_FILE,
+};
+pub use go_function_names::{Check_Exported_Go_Functions_Use_Upper_Snake_Case, EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE};
+pub use go_type_names::{Check_Go_Type_Names_Use_Camel_Case, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE};
+pub use single_letter_names::{Check_Single_Letter_Names, SINGLE_LETTER_NAMES};
 pub use test_names::{Check_Test_Names_Describe_Behavior, TEST_NAME_DESCRIBES_BEHAVIOR};
 
 /// This rule's own identifier.
@@ -231,6 +244,126 @@ mod tests
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "BadModule");
+    }
+
+    #[test]
+    fn Test_Check_File_Name_Matches_Declared_Type_Should_Read_And_Judge_A_Real_Fact()
+    {
+        let source = Source_File(Path("src/orders.rs"), Text("pub struct OrderBook;"));
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\nitem\t0\tStruct\tPublic\tOrderBook\t.\t.\n",
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_File_Name_Matches_Declared_Type(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "OrderBook");
+    }
+
+    #[test]
+    fn Test_Check_One_Public_Type_Per_File_Should_Read_And_Judge_A_Real_Fact()
+    {
+        let source = Source_File(Path("src/order.rs"), Text("pub struct Order; pub enum OrderKind {}"));
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\n\
+             item\t0\tStruct\tPublic\tOrder\t.\t.\n\
+             item\t1\tEnum\tPublic\tOrderKind\t.\t.\n",
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_One_Public_Type_Per_File(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 2, "{findings:?}");
+        assert!(findings.iter().all(|finding| return finding.rule == nomos_contracts::RuleId::New(ONE_PUBLIC_TYPE_PER_FILE)));
+    }
+
+    #[test]
+    fn Test_Check_Single_Letter_Names_Should_Read_And_Judge_A_Real_Fact()
+    {
+        let source = Source_File(Path("src/point.rs"), Text("pub struct Point { x: f64 }"));
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\nitem\t0\tStruct\tPublic\tPoint\t.\t+fields\\nx\\tf64\n",
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Single_Letter_Names(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "x");
+    }
+
+    #[test]
+    fn Test_Check_Boolean_Predicates_Should_Read_And_Judge_A_Real_Fact()
+    {
+        let source = Source_File(Path("src/flag.rs"), Text("pub struct Flag { ready: bool }"));
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\nitem\t0\tStruct\tPublic\tFlag\t.\t+fields\\nready\\tbool\n",
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Boolean_Predicates(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "ready");
+    }
+
+    #[test]
+    fn Test_Check_Go_Type_Names_Use_Camel_Case_Should_Read_And_Judge_A_Real_Fact()
+    {
+        let source = Source_File(Path("types.go"), Text("type order_book struct{}"));
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\nitem\t0\tStruct\tPrivate\torder_book\t.\t.\n",
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Go_Type_Names_Use_Camel_Case(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        let found = findings.first().expect("asserted len 1 above");
+        assert_eq!(found.rule, nomos_contracts::RuleId::New(TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE));
+        assert_eq!(found.subject_name, "order_book");
+    }
+
+    #[test]
+    fn Test_Check_Exported_Go_Functions_Use_Upper_Snake_Case_Should_Read_And_Judge_A_Real_Fact()
+    {
+        let source = Source_File(Path("main.go"), Text("func RunWithBackend() {}"));
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\nitem\t0\tFunction\tPublic\tRunWithBackend\t.\t+fn/0\n",
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Exported_Go_Functions_Use_Upper_Snake_Case(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        let found = findings.first().expect("asserted len 1 above");
+        assert_eq!(found.rule, nomos_contracts::RuleId::New(EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE));
+        assert_eq!(found.subject_name, "RunWithBackend");
     }
 
     fn Guarantee_At_Floor() -> Guarantee

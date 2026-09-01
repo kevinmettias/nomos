@@ -14,6 +14,8 @@ use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleI
 pub const NO_TRAILING_WHITESPACE: &str = "no-trailing-whitespace";
 /// This rule's own identifier, matching the code-standards rule id.
 pub const TODO_FORMAT: &str = "todo-format-is-todo-name-description-ticket";
+/// This rule's own identifier, matching the code-standards rule id.
+pub const NO_DECORATIVE_SECTION_DIVIDERS: &str = "no-decorative-section-dividers";
 
 /// Reports every line in `sources` whose content ends in a space or tab.
 #[must_use]
@@ -39,6 +41,21 @@ pub fn Check_Todo_Format(sources: &[SourceFile]) -> Vec<Finding>
     for source in sources
     {
         findings.extend(Todo_Findings_In(source));
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+/// Reports standalone decorative comment dividers such as `// ===== Setup =====`.
+#[must_use]
+pub fn Check_No_Decorative_Section_Dividers(sources: &[SourceFile]) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        findings.extend(Divider_Findings_In(source));
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
@@ -85,6 +102,33 @@ fn Todo_Findings_In(source: &SourceFile) -> Vec<Finding>
                     "contains a TODO without `TODO(owner): description (#ticket)` format",
                 ));
             }
+        }
+
+        match line_number.checked_add(1)
+        {
+            Some(next) => line_number = next,
+            None => break,
+        }
+    }
+
+    return findings;
+}
+
+fn Divider_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+    let mut line_number = 1usize;
+
+    for line in source.text.split_inclusive('\n')
+    {
+        if Is_Decorative_Divider(line)
+        {
+            findings.push(Finding_For_Line(
+                source,
+                NO_DECORATIVE_SECTION_DIVIDERS,
+                line_number,
+                "is a decorative section divider",
+            ));
         }
 
         match line_number.checked_add(1)
@@ -164,6 +208,45 @@ fn Has_Ticket_Suffix(description: &str) -> bool
     };
 
     return !before_ticket.trim().is_empty() && !number.is_empty() && number.chars().all(|character| return character.is_ascii_digit());
+}
+
+fn Is_Decorative_Divider(line: &str) -> bool
+{
+    let Some(comment) = Comment_Text_Of(line)
+    else
+    {
+        return false;
+    };
+
+    let content = comment.trim().trim_end_matches(['\r', '\n']).trim();
+    if Divider_Punctuation_Count(content) < 6
+    {
+        return false;
+    }
+
+    let label = content.trim_matches(Is_Divider_Punctuation).trim();
+    return label.is_empty() || Is_Short_Label(label);
+}
+
+fn Divider_Punctuation_Count(content: &str) -> usize
+{
+    return content
+        .chars()
+        .filter(|character| return Is_Divider_Punctuation(*character))
+        .count();
+}
+
+fn Is_Divider_Punctuation(character: char) -> bool
+{
+    return matches!(character, '=' | '-' | '_' | '*' | '/');
+}
+
+fn Is_Short_Label(label: &str) -> bool
+{
+    let words = label.split_whitespace().count();
+    return words > 0 && words <= 4 && label.chars().all(|character| {
+        return character.is_ascii_alphanumeric() || character.is_ascii_whitespace() || character == '_' || character == '-';
+    });
 }
 
 fn Finding_For_Line(source: &SourceFile, rule: &str, line_number: usize, because: &str) -> Finding
@@ -276,6 +359,37 @@ mod tests
         let findings = Check_Todo_Format(&[source]);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_No_Decorative_Section_Dividers_Should_Report_A_Bare_Divider()
+    {
+        let source = Source("src/lib.rs", "// ====================\n");
+
+        let findings = Check_No_Decorative_Section_Dividers(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(NO_DECORATIVE_SECTION_DIVIDERS));
+    }
+
+    #[test]
+    fn Test_Check_No_Decorative_Section_Dividers_Should_Report_A_Labelled_Divider()
+    {
+        let source = Source("src/lib.rs", "// ===== Internal Helpers =====\n");
+
+        let findings = Check_No_Decorative_Section_Dividers(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_No_Decorative_Section_Dividers_Should_Ignore_Prose_That_Quotes_A_Divider()
+    {
+        let source = Source("src/lib.rs", "// The old code used // ===== Setup ===== as a divider.\n");
+
+        let findings = Check_No_Decorative_Section_Dividers(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
     }
 
     fn Source(path: &str, text: &str) -> SourceFile

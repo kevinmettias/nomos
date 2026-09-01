@@ -1,18 +1,41 @@
+pub const nomos_rules::A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE: &str
+pub const nomos_rules::A_SCRIPT_DECLARES_ITS_PURPOSE: &str
+pub const nomos_rules::BOOLEAN_PREDICATES: &str
 pub const nomos_rules::COMPLETENESS_MIRROR: &str
 pub const nomos_rules::CONTRACT_RECORD: &str
 pub const nomos_rules::CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE: &str
+pub const nomos_rules::DATA_NAMES_STAY_LOWER_SNAKE: &str
 pub const nomos_rules::DECLARED_ROLE_MATCHES_SURFACE: &str
 pub const nomos_rules::DEPENDENCY_COMPLETENESS: &str
 pub const nomos_rules::DEPENDENCY_CONTRACT_RECORD: &str
 pub const nomos_rules::DEPENDENCY_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::DEPENDENCY_DIRECTION: &str
 pub const nomos_rules::DEPENDENCY_POLICY: &str
+pub const nomos_rules::EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE: &str
+pub const nomos_rules::FILE_NAME_MATCHES_DECLARED_TYPE: &str
+pub const nomos_rules::FILE_SIZE_JUSTIFICATION_TRIGGER: &str
+pub const nomos_rules::FILE_SIZE_REVIEW_TRIGGER: &str
+pub const nomos_rules::GO_HELPERS_PACKAGE_FIVE_INPUTS: &str
 pub const nomos_rules::LINT_DIAGNOSTICS: &str
 pub const nomos_rules::NAMING_CONVENTION: &str
+pub const nomos_rules::NO_DECORATIVE_SECTION_DIVIDERS: &str
+pub const nomos_rules::NO_MOD_RS_FILES: &str
+pub const nomos_rules::NO_TRAILING_WHITESPACE: &str
+pub const nomos_rules::ONE_PUBLIC_TYPE_PER_FILE: &str
+pub const nomos_rules::PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED: &str
+pub const nomos_rules::PARAMETER_COUNT: &str
+pub const nomos_rules::PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str
+pub const nomos_rules::SCRIPTS_USE_A_PORTABLE_SHEBANG: &str
+pub const nomos_rules::SHARED_INTERIOR_MUTABILITY_SAYS_WHY: &str
+pub const nomos_rules::SINGLE_LETTER_NAMES: &str
+pub const nomos_rules::TEST_NAME_DESCRIBES_BEHAVIOR: &str
+pub const nomos_rules::TODO_FORMAT: &str
+pub const nomos_rules::TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE: &str
 pub const nomos_rules::UNREAD_REACHES_FINDING: &str
 pub const nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD: &str
 pub const nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::UNWRAP_EXPECT_DISCIPLINE: &str
 pub enum nomos_rules::Reading
 pub enum nomos_rules::RuleRegistryError
 pub enum nomos_rules::UniverseKind
@@ -21,15 +44,38 @@ pub enum variant nomos_rules::Reading::Unobserved { because: String, }
 pub enum variant nomos_rules::RuleRegistryError::AlreadyOffered(RuleId)
 pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
+pub fn nomos_rules::Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Script_Declares_Its_Purpose(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Boolean_Predicates( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Completeness_Mirrors( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Cross_Language_Correspondence(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Data_Names_Stay_Lower_Snake( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Declared_Role_Matches_Surface(subjects: &[RoleSurfacePair]) -> Vec<Finding>
 pub fn nomos_rules::Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Dependency_Policy(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Every_Member_Declares_A_Band(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Exported_Go_Functions_Use_Upper_Snake_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_File_Name_Matches_Declared_Type( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_File_Size_Justification_Trigger(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_File_Size_Review_Trigger(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Go_Helpers_Package_Five_Inputs( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Go_Type_Names_Use_Camel_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Lint_Diagnostics(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Naming_Convention( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_No_Decorative_Section_Dividers(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_No_Mod_Rs_Files(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_No_Trailing_Whitespace(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_One_Public_Type_Per_File( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Panics_Are_Justified_Documented_And_Validated(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Parameter_Count( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Project_Owned_Function_Names_Use_Upper_Snake_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Scripts_Use_A_Portable_Shebang(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Single_Letter_Names( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Test_Names_Describe_Behavior( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Todo_Format(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Unread_Reaches_A_Finding(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Unwrap_Expect_Discipline(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::RuleRegistry::New() -> Self
 pub fn nomos_rules::RuleRegistry::Offer(&mut self, offer: RuleOffer) -> Result<(), RuleRegistryError>
 pub fn nomos_rules::RuleRegistry::Offered(&self, rule: &RuleId) -> Option<&RuleOffer>

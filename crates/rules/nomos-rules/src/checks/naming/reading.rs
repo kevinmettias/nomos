@@ -17,7 +17,7 @@ use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleI
 /// nothing — the same principle [`crate::Check_Completeness_Mirrors`] holds for the same
 /// reason, restated here because this rule keeps its own, simpler index rather than
 /// sharing the mirror rule's.
-pub(super) fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<SyntaxPayload, Finding>
+pub(in crate::checks) fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<SyntaxPayload, Finding>
 {
     let fact = Require_Fact(source, facts)?;
     Check_Schema(source, fact)?;
