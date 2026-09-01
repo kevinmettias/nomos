@@ -5,15 +5,25 @@
 //! `unexported-functions-lowercase-only-the-first-letter` are Go-specific and split the
 //! same convention by visibility, because Go decides visibility by a name's first letter
 //! rather than a keyword: an unexported name lowercases only that first letter and keeps
-//! the rest of the shape intact. [`Is_Upper_Snake_Case`] is this crate's own, pre-existing
-//! reading of that shape — every character uppercase, digit, or `_` — so the unexported
-//! check mirrors it exactly with only the first character's case flipped
-//! (`RUN_WITH_BACKEND` becomes `rUN_WITH_BACKEND`, not `run_with_backend` or
-//! `rUN_with_BACKEND`). The syntax payload carries function names and Go visibility, so
-//! both checks can judge that exact surface for `.go` sources.
+//! the rest of the shape intact (`Run_With_Backend` becomes `run_With_Backend`).
+//!
+//! # `OD-RULES-011` fixed a real drift here
+//!
+//! This crate's own prior reading of "`Upper_Snake_Case`" for the exported half was every
+//! character uppercase, digit, or `_` — `screaming-snake` in code-standards' own closed
+//! vocabulary, not `upper-snake` (`Compute_Total`, `^[A-Z][A-Za-z0-9]*(_[A-Z0-9]
+//! [A-Za-z0-9]*)*$`), which is what the rule id actually names and what `Check_Naming_
+//! Convention`'s own `Pascal_Snake_Case` already implements correctly. The unexported half
+//! mirrored that same wrong shape rather than [`nomos_cap_naming_policy::Case::MixedSnake`]
+//! (`compute_Total`), the style code-standards' own vocabulary names for exactly "the
+//! first word lower, the rest cased normally." Both are corrected to their real defaults
+//! here, the same way every casing rule in this crate now resolves its case from a
+//! repository's own `nomos.cap.naming.policy` rather than a hand-rolled predicate.
 
+use crate::checks::naming::Resolve_Case;
 use crate::SourceFile;
 use nomos_analysis::FactReader;
+use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{FUNCTION, PayloadItem, SyntaxPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
@@ -22,13 +32,16 @@ pub const EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE: &str = "exported-functions-us
 /// The code-standards identifier for the unexported half of the same convention.
 pub const UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER: &str = "unexported-functions-lowercase-only-the-first-letter";
 
-/// Judges exported Go function and method names against `Upper_Snake_Case`.
+/// Judges exported Go function and method names against `Upper_Snake_Case` — a
+/// repository's own `nomos.cap.naming.policy` when it declares `function.exported` for
+/// `go`, this rule's own corrected default otherwise.
 #[must_use]
 pub fn Check_Exported_Go_Functions_Use_Upper_Snake_Case(
     sources: &[SourceFile],
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
+    let case = Resolve_Case(facts, Some("go"), "function.exported", Case::UpperSnake);
     let mut findings = Vec::new();
 
     for source in sources
@@ -40,7 +53,7 @@ pub fn Check_Exported_Go_Functions_Use_Upper_Snake_Case(
 
         match super::reading::Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Violations_In(&payload, &source.path)),
+            Ok(payload) => findings.extend(Violations_In(&payload, &source.path, case)),
             Err(finding) => findings.push(Unread_As_This_Rule(finding)),
         }
     }
@@ -50,13 +63,15 @@ pub fn Check_Exported_Go_Functions_Use_Upper_Snake_Case(
 }
 
 /// Judges unexported Go function and method names against the same convention with only
-/// its first letter lowercased.
+/// its first word lowercased — a repository's own `nomos.cap.naming.policy` when it
+/// declares `function.unexported` for `go`, this rule's own corrected default otherwise.
 #[must_use]
 pub fn Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(
     sources: &[SourceFile],
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
+    let case = Resolve_Case(facts, Some("go"), "function.unexported", Case::MixedSnake);
     let mut findings = Vec::new();
 
     for source in sources
@@ -68,7 +83,7 @@ pub fn Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(
 
         match super::reading::Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Unexported_Violations_In(&payload, &source.path)),
+            Ok(payload) => findings.extend(Unexported_Violations_In(&payload, &source.path, case)),
             Err(finding) => findings.push(Unread_As_Unexported_Rule(finding)),
         }
     }
@@ -77,24 +92,24 @@ pub fn Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(
     return findings;
 }
 
-fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
+fn Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> Vec<Finding>
 {
     return payload
         .items
         .iter()
         .filter(|item| return Is_Exported_Go_Function(item))
-        .filter(|item| return !Is_Upper_Snake_Case(item.Own_Name()))
+        .filter(|item| return !case.Conforms(item.Own_Name()))
         .map(|item| return Violation_Finding(path, item))
         .collect();
 }
 
-fn Unexported_Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
+fn Unexported_Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> Vec<Finding>
 {
     return payload
         .items
         .iter()
         .filter(|item| return Is_Unexported_Go_Function(item))
-        .filter(|item| return !Is_Lowercase_First_Letter_Convention(item.Own_Name()))
+        .filter(|item| return !case.Conforms(item.Own_Name()))
         .map(|item| return Unexported_Violation_Finding(path, item))
         .collect();
 }
@@ -114,50 +129,6 @@ fn Is_Exported_Go_Function(item: &PayloadItem) -> bool
 fn Is_Unexported_Go_Function(item: &PayloadItem) -> bool
 {
     return item.kind == FUNCTION && !item.Is_Public();
-}
-
-fn Is_Upper_Snake_Case(name: &str) -> bool
-{
-    if name.is_empty() || name.starts_with('_') || name.ends_with('_') || name.contains("__")
-    {
-        return false;
-    }
-
-    return name
-        .chars()
-        .all(|character| return character.is_ascii_uppercase() || character.is_ascii_digit() || character == '_');
-}
-
-/// An unexported name conforms when only its first letter has been lowercased from what
-/// would otherwise be `Upper_Snake_Case`: the first character is a lowercase letter, and
-/// everything after it still obeys `Upper_Snake_Case`'s own shape.
-fn Is_Lowercase_First_Letter_Convention(name: &str) -> bool
-{
-    let Some(first) = name.chars().next()
-    else
-    {
-        return false;
-    };
-
-    if !first.is_ascii_lowercase()
-    {
-        return false;
-    }
-
-    let rest = &name[first.len_utf8()..];
-    if rest.is_empty()
-    {
-        return true;
-    }
-
-    if rest.ends_with('_') || rest.contains("__")
-    {
-        return false;
-    }
-
-    return rest
-        .chars()
-        .all(|character| return character.is_ascii_uppercase() || character.is_ascii_digit() || character == '_');
 }
 
 fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
@@ -224,20 +195,20 @@ mod tests
     #[test]
     fn Test_Violations_In_Should_Report_Exported_Go_Functions_That_Are_Not_Upper_Snake()
     {
-        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tRunWithBackend\t.\t+fn/0\n");
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\trun_With_Backend\t.\t+fn/0\n");
 
-        let findings = Violations_In(&payload, "main.go");
+        let findings = Violations_In(&payload, "main.go", Case::UpperSnake);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
-        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "RunWithBackend");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "run_With_Backend");
     }
 
     #[test]
     fn Test_Violations_In_Should_Accept_Exported_Go_Functions_In_Upper_Snake()
     {
-        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tRUN_WITH_BACKEND\t.\t+fn/0\n");
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tRun_With_Backend\t.\t+fn/0\n");
 
-        let findings = Violations_In(&payload, "main.go");
+        let findings = Violations_In(&payload, "main.go", Case::UpperSnake);
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -247,27 +218,28 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPrivate\trunWithBackend\t.\t+fn/0\n");
 
-        let findings = Violations_In(&payload, "main.go");
+        let findings = Violations_In(&payload, "main.go", Case::UpperSnake);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// The doc's own worked example: only the first word lowercases.
+    #[test]
+    fn Test_Unexported_Violations_In_Should_Accept_Only_The_First_Word_Lowercased()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPrivate\trow_Breaches\t.\t+fn/0\n");
+
+        let findings = Unexported_Violations_In(&payload, "index.go", Case::MixedSnake);
 
         assert!(findings.is_empty(), "{findings:?}");
     }
 
     #[test]
-    fn Test_Unexported_Violations_In_Should_Accept_Only_The_First_Letter_Lowercased()
+    fn Test_Unexported_Violations_In_Should_Report_A_Recased_Name_With_No_Word_Boundary()
     {
-        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPrivate\trUN_WITH_BACKEND\t.\t+fn/0\n");
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPrivate\trowBreaches\t.\t+fn/0\n");
 
-        let findings = Unexported_Violations_In(&payload, "index.go");
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Unexported_Violations_In_Should_Report_A_Fully_Lowercased_Name()
-    {
-        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPrivate\trowbreaches\t.\t+fn/0\n");
-
-        let findings = Unexported_Violations_In(&payload, "index.go");
+        let findings = Unexported_Violations_In(&payload, "index.go", Case::MixedSnake);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(
@@ -277,11 +249,11 @@ mod tests
     }
 
     #[test]
-    fn Test_Unexported_Violations_In_Should_Report_A_Lowercase_Letter_After_The_First()
+    fn Test_Unexported_Violations_In_Should_Report_A_First_Word_That_Is_Not_Fully_Lowercased()
     {
-        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPrivate\trUN_With_BACKEND\t.\t+fn/0\n");
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPrivate\tRow_Breaches\t.\t+fn/0\n");
 
-        let findings = Unexported_Violations_In(&payload, "index.go");
+        let findings = Unexported_Violations_In(&payload, "index.go", Case::MixedSnake);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -291,7 +263,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tRow_Breaches\t.\t+fn/0\n");
 
-        let findings = Unexported_Violations_In(&payload, "index.go");
+        let findings = Unexported_Violations_In(&payload, "index.go", Case::MixedSnake);
 
         assert!(findings.is_empty(), "{findings:?}");
     }

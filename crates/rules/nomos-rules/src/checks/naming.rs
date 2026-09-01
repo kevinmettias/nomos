@@ -35,6 +35,15 @@
 //! already-decoded payload against the naming convention. This file keeps only what
 //! composes the two: the rule's own identifier and [`Check_Naming_Convention`] itself, plus
 //! the end-to-end tests that exercise both together through a real reader.
+//!
+//! # The convention is now a repository's own, resolved rather than compiled in
+//!
+//! `OD-RULES-011` generalizes this rule's `Pascal_Snake_Case` default, and every other
+//! casing rule this crate ships, onto one shared read: [`Resolve_Case`] asks `nomos.cap.
+//! naming.policy` for the case a symbol key must take, falling back to each rule's own
+//! prior hardcoded default when a repository declares none. The convention above is that
+//! default, still real and still what an unconfigured repository gets, not what every
+//! repository is now fixed to.
 
 mod boolean_predicates;
 mod data_names;
@@ -48,7 +57,8 @@ mod test_names;
 mod violations;
 
 use crate::SourceFile;
-use nomos_analysis::FactReader;
+use nomos_analysis::{FactReader, InputDigest};
+use nomos_cap_naming_policy::{Case, Scope};
 use nomos_contracts::Finding;
 
 pub use boolean_predicates::{Check_Boolean_Predicates, BOOLEAN_PREDICATES};
@@ -74,6 +84,59 @@ pub const NAMING_CONVENTION: &str = "function-naming-convention";
 /// The code-standards identifier for this workspace's function naming convention.
 pub const PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str = "project-owned-function-names-use-upper-snake-case";
 
+/// This crate's own floor for `nomos.cap.naming.policy` — stated at the capability's own
+/// ceiling since there is only one real provider today and no weaker answer this crate
+/// could honestly still act on.
+fn Naming_Policy_Requirement() -> nomos_capability::Requirement
+{
+    return nomos_capability::Requirement::New(
+        nomos_cap_naming_policy::Capability(),
+        nomos_cap_naming_policy::CONTRACT_VERSION,
+        nomos_cap_naming_policy::Ceiling(),
+    );
+}
+
+/// Resolves the case `symbol` must take: a repository's own declared `nomos.cap.naming.
+/// policy`, most-specific key first (`language`'s own override, then the repository-wide
+/// default), falling back to `default` when neither is declared.
+///
+/// `OD-CAPABILITY-004` and `OD-RULES-011` settle how an absent read is treated here: this
+/// capability is optional, every caller already has a complete answer without it, so
+/// `facts.Require` failing for any reason is exactly "no override" — never a `Finding`,
+/// never this capability's own `Applicability` surfacing anywhere.
+pub(super) fn Resolve_Case(facts: &mut dyn FactReader, language: Option<&str>, symbol: &str, default: Case) -> Case
+{
+    let subject = nomos_model::Subject_Of_Path("");
+    let Ok(fact) =
+        facts.Require(&nomos_cap_naming_policy::Capability(), &subject, InputDigest::Of(&[]), &Naming_Policy_Requirement())
+    else
+    {
+        return default;
+    };
+
+    let Ok(payload) = nomos_cap_naming_policy::Parse_Payload(&fact.payload.bytes)
+    else
+    {
+        return default;
+    };
+
+    if let Some(language) = language
+    {
+        let scope = Scope::Language(language.to_owned());
+        if let Some(row) = payload.rows.iter().find(|row| return row.scope == scope && row.symbol == symbol)
+        {
+            return row.case;
+        }
+    }
+
+    if let Some(row) = payload.rows.iter().find(|row| return row.scope == Scope::Repository && row.symbol == symbol)
+    {
+        return row.case;
+    }
+
+    return default;
+}
+
 /// Judges every function `sources` declares against the workspace's naming convention.
 ///
 /// One fact per file, the same shape [`crate::Check_Completeness_Mirrors`] reads — this
@@ -89,6 +152,7 @@ pub fn Check_Naming_Convention(
     use reading::Payload_Of;
     use violations::Violations_In;
 
+    let case = Resolve_Case(facts, None, "function", Case::UpperSnake);
     let mut findings = Vec::new();
 
     for source in sources
@@ -97,7 +161,7 @@ pub fn Check_Naming_Convention(
         {
             Ok(payload) =>
             {
-                let violations = Violations_In(&payload, &source.path);
+                let violations = Violations_In(&payload, &source.path, case);
                 findings.extend(violations);
             }
             Err(finding) => findings.push(finding),
@@ -356,13 +420,13 @@ mod tests
     #[test]
     fn Test_Check_Exported_Go_Functions_Use_Upper_Snake_Case_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("main.go"), Text("func RunWithBackend() {}"));
+        let source = Source_File(Path("main.go"), Text("func run_With_Backend() {}"));
         let TestOffering { mut store, registry, offer } = Offering();
         Materialize_Syntax_Fact(
             &mut store,
             &source,
             &offer,
-            "unexpanded\t0\nitem\t0\tFunction\tPublic\tRunWithBackend\t.\t+fn/0\n",
+            "unexpanded\t0\nitem\t0\tFunction\tPublic\trun_With_Backend\t.\t+fn/0\n",
         );
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
@@ -371,19 +435,19 @@ mod tests
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
         assert_eq!(found.rule, nomos_contracts::RuleId::New(EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE));
-        assert_eq!(found.subject_name, "RunWithBackend");
+        assert_eq!(found.subject_name, "run_With_Backend");
     }
 
     #[test]
     fn Test_Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("main.go"), Text("func rowbreaches() {}"));
+        let source = Source_File(Path("main.go"), Text("func rowBreaches() {}"));
         let TestOffering { mut store, registry, offer } = Offering();
         Materialize_Syntax_Fact(
             &mut store,
             &source,
             &offer,
-            "unexpanded\t0\nitem\t0\tFunction\tPrivate\trowbreaches\t.\t+fn/0\n",
+            "unexpanded\t0\nitem\t0\tFunction\tPrivate\trowBreaches\t.\t+fn/0\n",
         );
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
@@ -392,7 +456,7 @@ mod tests
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
         assert_eq!(found.rule, nomos_contracts::RuleId::New(UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER));
-        assert_eq!(found.subject_name, "rowbreaches");
+        assert_eq!(found.subject_name, "rowBreaches");
     }
 
     #[test]

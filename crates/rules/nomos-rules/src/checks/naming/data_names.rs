@@ -5,8 +5,10 @@
 //! module declarations and named struct fields, so this rule judges that precise subset and
 //! leaves the rest for a richer provider.
 
+use crate::checks::naming::Resolve_Case;
 use crate::SourceFile;
 use nomos_analysis::FactReader;
+use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{PayloadItem, Struct_Fields, SyntaxPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
@@ -16,20 +18,24 @@ pub const DATA_NAMES_STAY_LOWER_SNAKE: &str = "data-names-stay-lower-snake";
 const MODULE: &str = "Module";
 const STRUCT: &str = "Struct";
 
-/// Judges module declarations and named struct fields against lower snake case.
+/// Judges module declarations and named struct fields against lower snake case — a
+/// repository's own `nomos.cap.naming.policy` when it declares `module`/`field`, this
+/// rule's own prior default otherwise.
 #[must_use]
 pub fn Check_Data_Names_Stay_Lower_Snake(
     sources: &[SourceFile],
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
+    let module_case = Resolve_Case(facts, None, "module", Case::LowerSnake);
+    let field_case = Resolve_Case(facts, None, "field", Case::LowerSnake);
     let mut findings = Vec::new();
 
     for source in sources
     {
         match super::reading::Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Violations_In(&payload, &source.path)),
+            Ok(payload) => findings.extend(Violations_In(&payload, &source.path, module_case, field_case)),
             Err(finding) => findings.push(Unread_As_This_Rule(finding)),
         }
     }
@@ -38,27 +44,27 @@ pub fn Check_Data_Names_Stay_Lower_Snake(
     return findings;
 }
 
-fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
+fn Violations_In(payload: &SyntaxPayload, path: &str, module_case: Case, field_case: Case) -> Vec<Finding>
 {
     let mut findings = Vec::new();
 
     for item in &payload.items
     {
-        if item.kind == MODULE && !Is_Lower_Snake_Case(item.Own_Name())
+        if item.kind == MODULE && !module_case.Conforms(item.Own_Name())
         {
             findings.push(Violation_Finding(path, item, item.Own_Name()));
         }
 
         if item.kind == STRUCT
         {
-            findings.extend(Field_Violations_In(path, item));
+            findings.extend(Field_Violations_In(path, item, field_case));
         }
     }
 
     return findings;
 }
 
-fn Field_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
+fn Field_Violations_In(path: &str, item: &PayloadItem, field_case: Case) -> Vec<Finding>
 {
     let Some(fields) = Struct_Fields(&item.shape)
     else
@@ -68,21 +74,9 @@ fn Field_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
 
     return fields
         .iter()
-        .filter(|(name, _type_name)| return !Is_Lower_Snake_Case(name))
+        .filter(|(name, _type_name)| return !field_case.Conforms(name))
         .map(|(name, _type_name)| return Violation_Finding(path, item, name))
         .collect();
-}
-
-fn Is_Lower_Snake_Case(name: &str) -> bool
-{
-    if name.is_empty() || name.starts_with('_') || name.ends_with('_') || name.contains("__")
-    {
-        return false;
-    }
-
-    return name
-        .chars()
-        .all(|character| return character.is_ascii_lowercase() || character.is_ascii_digit() || character == '_');
 }
 
 fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
@@ -122,7 +116,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tModule\tPrivate\tBadModule\t.\t.\n");
 
-        let findings = Violations_In(&payload, "src/lib.rs");
+        let findings = Violations_In(&payload, "src/lib.rs", Case::LowerSnake, Case::LowerSnake);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "BadModule");
@@ -136,7 +130,7 @@ mod tests
              item\t0\tStruct\tPublic\tConfig\t.\t+fields\\nBadField\\tString\\nworker_count\\tusize\n",
         );
 
-        let findings = Violations_In(&payload, "src/lib.rs");
+        let findings = Violations_In(&payload, "src/lib.rs", Case::LowerSnake, Case::LowerSnake);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "BadField");
@@ -151,7 +145,7 @@ mod tests
              item\t1\tStruct\tPublic\tConfig\t.\t+fields\\nworker_count\\tusize\n",
         );
 
-        let findings = Violations_In(&payload, "src/lib.rs");
+        let findings = Violations_In(&payload, "src/lib.rs", Case::LowerSnake, Case::LowerSnake);
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -161,7 +155,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tStruct\tPublic\tConfig\t.\t.\n");
 
-        let findings = Violations_In(&payload, "src/lib.rs");
+        let findings = Violations_In(&payload, "src/lib.rs", Case::LowerSnake, Case::LowerSnake);
 
         assert!(findings.is_empty(), "{findings:?}");
     }

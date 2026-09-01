@@ -1,9 +1,10 @@
-//! Judging an already-decoded syntax payload against the `Pascal_Snake_Case` convention.
+//! Judging an already-decoded syntax payload against a resolved naming [`Case`].
 //!
 //! A pure function of an already-decoded payload, so the naming judgment itself is
 //! testable against hand-written fixture text the way [`crate::facts::Check_Names_In`]
 //! is — no registry, no store, no reader.
 
+use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload, FUNCTION, IMPLEMENTATION, TRAIT};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
@@ -11,9 +12,9 @@ use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleI
 /// language rather than by this workspace's naming choice.
 const MAIN: &str = "main";
 
-/// Every function `payload` declares that does not conform, as findings.
+/// Every function `payload` declares that does not conform to `case`, as findings.
 #[must_use]
-pub(super) fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
+pub(super) fn Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> Vec<Finding>
 {
     let mut findings = Vec::new();
 
@@ -25,7 +26,7 @@ pub(super) fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
             continue;
         }
 
-        if !Is_Pascal_Snake_Case(item.Own_Name())
+        if !Conforms(case, item.Own_Name())
         {
             let violation = Violation_Finding(path, item);
             findings.push(violation);
@@ -53,36 +54,17 @@ fn Is_Trait_Method(payload: &SyntaxPayload, ordinal: usize) -> bool
     return owner.kind == IMPLEMENTATION && owner.shape.Value() == Some(TRAIT);
 }
 
-/// Whether `name` is `Pascal_Snake_Case`: every `_`-separated segment starts with an
-/// uppercase ASCII letter, or is entirely ASCII digits (`Test_CHK_003_...` is real in this
-/// workspace and its numeric segment is not a casing violation).
+/// Whether `name` conforms to `case`.
 ///
 /// A single leading underscore is stripped first — Rust's own convention for "intentionally
-/// unused," orthogonal to this workspace's casing choice and not something `README.md`'s
-/// Conventions section speaks to.
+/// unused," orthogonal to whichever case a repository configures and not something
+/// `README.md`'s Conventions section speaks to.
 #[must_use]
-fn Is_Pascal_Snake_Case(name: &str) -> bool
+fn Conforms(case: Case, name: &str) -> bool
 {
     let name = name.strip_prefix('_').unwrap_or(name);
 
-    if name.is_empty()
-    {
-        return false;
-    }
-
-    return name.split('_').all(|segment| {
-        if segment.is_empty()
-        {
-            return false;
-        }
-
-        if segment.chars().all(|character| return character.is_ascii_digit())
-        {
-            return true;
-        }
-
-        return segment.chars().next().is_some_and(|first| return first.is_ascii_uppercase());
-    });
+    return case.Conforms(name);
 }
 
 /// A finding for one function whose name does not conform.
@@ -117,61 +99,32 @@ mod tests
 
     mod casing
     {
-        use super::Is_Pascal_Snake_Case;
+        use super::Conforms;
+        use nomos_cap_naming_policy::Case;
 
-        #[test]
-        fn Test_A_Single_Word_Starting_Uppercase_Should_Conform()
-        {
-            assert!(Is_Pascal_Snake_Case("New"));
-        }
-
-        #[test]
-        fn Test_Two_Segments_Both_Uppercase_Should_Conform()
-        {
-            assert!(Is_Pascal_Snake_Case("As_Str"));
-        }
-
-        #[test]
-        fn Test_A_Numeric_Segment_Should_Conform()
-        {
-            assert!(Is_Pascal_Snake_Case("Test_CHK_003_Something_Should_Hold"));
-        }
-
-        #[test]
-        fn Test_Ordinary_Lower_Snake_Case_Should_Not_Conform()
-        {
-            assert!(!Is_Pascal_Snake_Case("as_str"));
-        }
-
-        #[test]
-        fn Test_A_Lowercase_Second_Segment_Should_Not_Conform()
-        {
-            assert!(!Is_Pascal_Snake_Case("Foo_bar"));
-        }
-
+        /// Exhaustive `Case::UpperSnake` behavior — every segment shape, digits, empty
+        /// names — is `nomos-cap-naming-policy`'s own test coverage now; this module keeps
+        /// only what is local to this crate's own composition: the leading-underscore
+        /// strip layered on top of whichever case is resolved.
         #[test]
         fn Test_A_Single_Leading_Underscore_Should_Be_Stripped_Before_Judging()
         {
-            assert!(Is_Pascal_Snake_Case("_Unused"));
-            assert!(!Is_Pascal_Snake_Case("_unused"));
+            assert!(Conforms(Case::UpperSnake, "_Unused"));
+            assert!(!Conforms(Case::UpperSnake, "_unused"));
         }
 
         #[test]
-        fn Test_A_Double_Underscore_Should_Not_Conform()
+        fn Test_Conforms_Should_Delegate_To_Whichever_Case_Is_Resolved()
         {
-            assert!(!Is_Pascal_Snake_Case("Foo__Bar"));
-        }
-
-        #[test]
-        fn Test_An_Empty_Name_Should_Not_Conform()
-        {
-            assert!(!Is_Pascal_Snake_Case(""));
+            assert!(Conforms(Case::LowerSnake, "as_str"));
+            assert!(!Conforms(Case::UpperSnake, "as_str"));
         }
     }
 
     mod scanning
     {
         use super::{GateCategory, SyntaxPayload, Violations_In};
+        use nomos_cap_naming_policy::Case;
 
         #[test]
         fn Test_A_Conforming_Function_Should_Produce_No_Finding()
@@ -180,7 +133,7 @@ mod tests
             {
                 let payload = Payload_From_Text(&format!("unexpanded\t0\nitem\t0\tFunction\tPublic\t{name}\t.\t+fn/0\n"));
 
-                let findings = Violations_In(&payload, "src/lib.rs");
+                let findings = Violations_In(&payload, "src/lib.rs", Case::UpperSnake);
 
                 assert!(findings.is_empty(), "{name}: {findings:?}");
             }
@@ -202,7 +155,7 @@ mod tests
                  item\t0\tFunction\tPublic\tbad_name\t.\t+fn/0\n",
             );
 
-            let findings = Violations_In(&payload, "src/lib.rs");
+            let findings = Violations_In(&payload, "src/lib.rs", Case::UpperSnake);
 
             assert_eq!(findings.len(), 1, "{findings:?}");
             let found = findings.first().expect("asserted len 1 above");
@@ -217,7 +170,7 @@ mod tests
             {
                 let payload = Payload_From_Text(&format!("unexpanded\t0\nitem\t0\tFunction\t{visibility}\t{qualified_name}\t.\t+fn/0\n"));
 
-                let findings = Violations_In(&payload, "src/main.rs");
+                let findings = Violations_In(&payload, "src/main.rs", Case::UpperSnake);
 
                 assert!(findings.is_empty(), "{qualified_name}: {findings:?}");
             }
@@ -244,7 +197,7 @@ mod tests
                     "unexpanded\t0\nitem\t0\tImplementation\tNotApplicable\t{trait_name}\t.\t+trait\nitem\t1\tFunction\tPublic\t{trait_name}::{method}\t.\t+fn/1\n"
                 ));
 
-                let findings = Violations_In(&payload, "src/lib.rs");
+                let findings = Violations_In(&payload, "src/lib.rs", Case::UpperSnake);
 
                 assert!(findings.is_empty(), "{trait_name}::{method}: a trait method's fixed name was judged: {findings:?}");
             }
@@ -267,7 +220,7 @@ mod tests
                  item\t1\tFunction\tPublic\tTable::bad_name\t.\t+fn/1\n",
             );
 
-            let findings = Violations_In(&payload, "src/lib.rs");
+            let findings = Violations_In(&payload, "src/lib.rs", Case::UpperSnake);
 
             assert_eq!(findings.len(), 1, "an inherent method's own name was exempted: {findings:?}");
         }
@@ -277,7 +230,7 @@ mod tests
         {
             let payload = Payload_From_Text("unexpanded\t0\n");
 
-            assert!(Violations_In(&payload, "src/lib.rs").is_empty());
+            assert!(Violations_In(&payload, "src/lib.rs", Case::UpperSnake).is_empty());
         }
 
         fn Payload_From_Text(text: &str) -> SyntaxPayload

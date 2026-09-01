@@ -4,8 +4,10 @@
 //! syntax payload already carries Go type declarations, their visibility, and their names,
 //! so this check is exact for source files recognized as Go by path.
 
+use crate::checks::naming::Resolve_Case;
 use crate::SourceFile;
 use nomos_analysis::FactReader;
+use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
@@ -17,13 +19,17 @@ const STRUCT: &str = "Struct";
 const TYPE_ALIAS: &str = "TypeAlias";
 const TYPE_DEFINITION: &str = "TypeDefinition";
 
-/// Judges Go type declarations and aliases against exported/unexported camel case.
+/// Judges Go type declarations and aliases against exported/unexported camel case — a
+/// repository's own `nomos.cap.naming.policy` when it declares `type.exported`/`type.
+/// unexported` for `go`, this rule's own prior default otherwise.
 #[must_use]
 pub fn Check_Go_Type_Names_Use_Camel_Case(
     sources: &[SourceFile],
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
+    let exported_case = Resolve_Case(facts, Some("go"), "type.exported", Case::UpperCamel);
+    let unexported_case = Resolve_Case(facts, Some("go"), "type.unexported", Case::LowerCamel);
     let mut findings = Vec::new();
 
     for source in sources
@@ -35,7 +41,7 @@ pub fn Check_Go_Type_Names_Use_Camel_Case(
 
         match super::reading::Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Violations_In(&payload, &source.path)),
+            Ok(payload) => findings.extend(Violations_In(&payload, &source.path, exported_case, unexported_case)),
             Err(finding) => findings.push(Unread_As_This_Rule(finding)),
         }
     }
@@ -44,13 +50,13 @@ pub fn Check_Go_Type_Names_Use_Camel_Case(
     return findings;
 }
 
-fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
+fn Violations_In(payload: &SyntaxPayload, path: &str, exported_case: Case, unexported_case: Case) -> Vec<Finding>
 {
     return payload
         .items
         .iter()
         .filter(|item| return Is_Go_Type_Like(item))
-        .filter(|item| return !Has_Go_Type_Case(item))
+        .filter(|item| return !Has_Go_Type_Case(item, exported_case, unexported_case))
         .map(|item| return Violation_Finding(path, item))
         .collect();
 }
@@ -67,43 +73,16 @@ fn Is_Go_Type_Like(item: &PayloadItem) -> bool
     return matches!(item.kind.as_str(), INTERFACE | STRUCT | TYPE_ALIAS | TYPE_DEFINITION);
 }
 
-fn Has_Go_Type_Case(item: &PayloadItem) -> bool
+fn Has_Go_Type_Case(item: &PayloadItem, exported_case: Case, unexported_case: Case) -> bool
 {
     let name = item.Own_Name();
 
     if item.Is_Public()
     {
-        return Is_Upper_Camel_Case(name);
+        return exported_case.Conforms(name);
     }
 
-    return Is_Lower_Camel_Case(name);
-}
-
-fn Is_Upper_Camel_Case(name: &str) -> bool
-{
-    let Some(first) = name.chars().next()
-    else
-    {
-        return false;
-    };
-
-    return first.is_ascii_uppercase() && Is_Camel_Tail(name);
-}
-
-fn Is_Lower_Camel_Case(name: &str) -> bool
-{
-    let Some(first) = name.chars().next()
-    else
-    {
-        return false;
-    };
-
-    return first.is_ascii_lowercase() && Is_Camel_Tail(name);
-}
-
-fn Is_Camel_Tail(name: &str) -> bool
-{
-    return !name.contains('_') && name.chars().all(|character| return character.is_ascii_alphanumeric());
+    return unexported_case.Conforms(name);
 }
 
 fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
@@ -152,7 +131,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tStruct\tPublic\torder_book\t.\t.\n");
 
-        let findings = Violations_In(&payload, "orders.go");
+        let findings = Violations_In(&payload, "orders.go", Case::UpperCamel, Case::LowerCamel);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "order_book");
@@ -163,7 +142,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tInterface\tPrivate\treader_handle\t.\t.\n");
 
-        let findings = Violations_In(&payload, "reader.go");
+        let findings = Violations_In(&payload, "reader.go", Case::UpperCamel, Case::LowerCamel);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "reader_handle");
@@ -178,7 +157,7 @@ mod tests
              item\t1\tTypeDefinition\tPrivate\torderState\t.\t.\n",
         );
 
-        let findings = Violations_In(&payload, "orders.go");
+        let findings = Violations_In(&payload, "orders.go", Case::UpperCamel, Case::LowerCamel);
 
         assert!(findings.is_empty(), "{findings:?}");
     }
