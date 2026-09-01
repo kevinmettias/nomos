@@ -45,7 +45,7 @@ impl Kind
 
     /// Every kind a document can be.
     ///
-    /// Mirrored by `Test_Every_Kind_Should_Be_Matched_Exhaustively`, an exhaustive
+    /// Mirrored by `Test_All_Should_Enumerate_Every_Kind_Exhaustively`, an exhaustive
     /// match over every variant with no wildcard arm, in this file. It fails to compile,
     /// not merely to pass, if a variant is added here without being added there.
     #[must_use]

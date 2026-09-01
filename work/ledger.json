@@ -42948,14 +42948,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-external-review-reconciliation",
-        "acquired_at": 1788299325,
-        "lease_expires_at": 1788306525
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -42971,7 +42967,33 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes",
+          "--test",
+          "corpus_gates",
+          "--lib"
+        ],
+        "exit_code": 0,
+        "output_tail": "ok\ntest reading::source_files::tests::Test_A_Semicolon_In_A_Comment_Should_Not_End_An_Item ... ok\ntest workspace::tests::Test_Package_Ids_Should_Parse_In_Every_Format_Cargo_Emits ... ok\ntest reading::source_files::tests::Test_A_Braced_Test_Item_Should_Still_Lose_Its_Whole_Body ... ok\ntest reading::source_files::tests::Test_A_Braceless_Test_Declaration_Should_Blank_Itself ... ok\n\ntest result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 6 tests\ntest hole_size::Test_Some_Universes_Should_Actually_Be_Mirrored ... ok\ntest hole_size::Test_The_Number_Of_Unmirrored_Universes_Should_Be_Declared ... ok\ntest hole_size::Test_The_Three_Instances_Should_Have_Failed_This_Check ... ok\ntest mirrors::Test_Every_Named_Mirror_Should_Exist_In_The_Source ... ok\ntest claims::Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror ... ok\ntest derivation::Test_The_Declared_Table_Should_Match_What_Is_Derived ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.83s\n\n\nrunning 6 tests\ntest declared::Test_The_Declared_Total_Should_Be_The_Sum_Of_The_Table ... ok\ntest report::Test_A_Run_Should_Report_What_It_Did_Not_Check ... ok\ntest derived::Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables ... ok\ntest declared::Test_Every_Declared_File_Should_Match_What_It_Declares ... ok\ntest declared::Test_Every_File_That_Reaches_A_Corpus_Should_Be_Declared ... ok\ntest derived::Test_Every_Declared_Gate_Count_Should_Be_The_One_In_The_Source ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-ad6c7a2ce325f7f2.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-4d9400c073a67813.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-85ae117863b04e82.exe)\n",
+        "verified_at": 1788299433,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "deb879d1f3b02a50d2f6b76839ff6b0395053ff3"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

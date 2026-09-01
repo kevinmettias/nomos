@@ -213,6 +213,23 @@ const GATES: &[Gate] = &[
         gated: 4,
         tests: 4,
     },
+    Gate {
+        // Both tests strip NOMOS_V14_CORPUS deliberately and assert the no-corpus behaviour
+        // directly, so neither does nothing in its absence -- the scanner finds the variable
+        // name because Run_Without_Corpus names it to remove it, not because a test skips.
+        path: "crates/host/nomos-cli/tests/spec_model_seam.rs",
+        variables: &[V14],
+        gated: 0,
+        tests: 2,
+    },
+    Gate {
+        // Same shape as spec_model_seam.rs, one file over: Run_Without_Corpus strips the
+        // variable to test the absence path, and does nothing silently in neither test.
+        path: "crates/host/nomos-cli/tests/spec_orchestration_seam.rs",
+        variables: &[V14],
+        gated: 0,
+        tests: 1,
+    },
 ];
 
 /// How many assertions this suite does not make when no corpus is configured.
@@ -236,4 +253,9 @@ const GATED_TOTAL: usize = 68;
 /// denominator was measuring file boundaries as much as it was measuring gated code.
 /// [`GATED_TOTAL`] is unchanged through every one of those splits, which is the check that
 /// they moved tests rather than silence.
-const TESTS_IN_GATED_FILES: usize = 81;
+///
+/// Rose to 84 as two files the scanner had always reached went undeclared until now:
+/// `spec_model_seam.rs` and `spec_orchestration_seam.rs` both name the variable only to strip
+/// it (`Run_Without_Corpus`'s `env_remove`), so neither gates a test. [`GATED_TOTAL`] is
+/// unchanged — three tests added to the denominator, none of them silent.
+const TESTS_IN_GATED_FILES: usize = 84;

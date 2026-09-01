@@ -152,6 +152,12 @@ fn Gates_In(file: &str, text: &str) -> Vec<CorpusGate>
 
 /// The functions that name a corpus variable in their own body, which is where the second
 /// pass starts from.
+///
+/// Matched as an exact quoted literal (`"NOMOS_V14_CORPUS"`), not a bare substring: every real
+/// read passes the variable to `std::env::var`/`var_os` this way, and requiring the closing
+/// quote immediately after the name is what tells that call apart from a variable name sitting
+/// inside a longer string — a diagnostic message or a test fixture — that reads no environment
+/// at all.
 fn Named_Outright(functions: &[Function]) -> BTreeMap<String, BTreeSet<String>>
 {
     let mut reach: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
@@ -160,7 +166,8 @@ fn Named_Outright(functions: &[Function]) -> BTreeMap<String, BTreeSet<String>>
     {
         for variable in CORPUS_VARIABLES
         {
-            if function.body.contains(variable)
+            let quoted = format!("\"{variable}\"");
+            if function.body.contains(&quoted)
             {
                 reach
                     .entry(function.name.clone())
@@ -365,5 +372,24 @@ fn Test_Plain()
         {
             assert!(Gates_In("example.rs", source).is_empty());
         }
+    }
+
+    /// A variable name sitting inside a longer string — a fixture value, not a call argument —
+    /// reads no environment. `NOMOS_V14_CORPUS` is a substring of the diagnostic text here
+    /// exactly as it would be of a real one, and the only thing distinguishing it from
+    /// `std::env::var_os("NOMOS_V14_CORPUS")` is the missing closing quote right after the name.
+    #[test]
+    fn Test_A_Variable_Name_Inside_A_Longer_String_Should_Not_Gate()
+    {
+        let source = r#"
+#[test]
+fn Test_From_Should_Copy_Every_Field()
+{
+    let cause = "NOMOS_V14_CORPUS is not set".to_owned();
+    assert_eq!(cause, "NOMOS_V14_CORPUS is not set");
+}
+"#;
+
+        assert!(Gates_In("example.rs", source).is_empty());
     }
 }

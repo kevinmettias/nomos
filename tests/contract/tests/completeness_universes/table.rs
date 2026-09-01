@@ -67,7 +67,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-store/src/store/governing.rs",
+        path: "crates/spec/nomos-spec-store/src/store/seed_report.rs",
         name: "GOVERNING_RECORD_IDS",
         kind: UniverseKind::Constant,
         standing: Standing::Mirrored {
@@ -88,7 +88,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
     // a unit test over a synthetic rule, while the real reconciliation sat uncited in
     // `preservation_holds.rs`. The row was wrong about which test, never about the standing.
     Universe {
-        path: "crates/spec/nomos-spec-validate/src/run.rs",
+        path: "crates/spec/nomos-spec-validate/src/validation_run.rs",
         name: "DECLARED_RULES",
         kind: UniverseKind::Constant,
         standing: Standing::Mirrored {
@@ -98,10 +98,10 @@ pub(crate) const UNIVERSES: &[Universe] = &[
     // ---- declared holes ----
     Universe {
         path: "crates/kernel/nomos-store/src/document/kind.rs",
-        name: "DocumentKind::All",
+        name: "Kind::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Mirrored {
-            by: "Test_Every_DocumentKind_Should_Be_Matched_Exhaustively",
+            by: "Test_All_Should_Enumerate_Every_Kind_Exhaustively",
         },
     },
     // `OD-GATE-004`: this was a private census array (`Every_Exit_Code`) in
@@ -141,7 +141,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-ingest/src/siblings.rs",
+        path: "crates/spec/nomos-spec-ingest/src/siblings/sibling.rs",
         name: "Sibling::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Mirrored {
@@ -181,7 +181,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-store/src/schema.rs",
+        path: "crates/spec/nomos-spec-store/src/migration.rs",
         name: "MIGRATIONS",
         kind: UniverseKind::Constant,
         standing: Standing::Mirrored {
@@ -198,7 +198,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
     },
     Universe {
         path: "crates/substrate/nomos-workspace/src/change/source.rs",
-        name: "ChangeSource::All",
+        name: "Source::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Mirrored {
             by: "Test_Every_ChangeSource_Should_Be_Matched_Exhaustively",
