@@ -80,6 +80,12 @@ members = [
     # `OD-RULES-011`.
     "crates/repository/nomos-repo-standards",
 
+    # Band 25 — nomos.cap.limits.policy's one provider, alongside nomos-repo-standards for
+    # the same reason: it reads standards.json's limits and languages.*.limits blocks, a
+    # repository-wide configuration file, not one language's source or manifest format.
+    # `OD-RULES-011`'s threshold-family instance.
+    "crates/repository/nomos-repo-limits",
+
     # Band 23 — the nomos.cap.dependency.edges contract, alongside nomos-cap-syntax. Not
     # left beside its provider the way nomos.cap.module.index is: nomos-rules is a real
     # second party to it from the day it was written. `OD-CAPABILITY-002`.
@@ -277,6 +283,7 @@ nomos-lang-rust-clippy = { path = "crates/languages/nomos-lang-rust-clippy" }
 nomos-lang-rust-deny = { path = "crates/languages/nomos-lang-rust-deny" }
 nomos-lang-go-modules = { path = "crates/languages/nomos-lang-go-modules" }
 nomos-repo-standards = { path = "crates/repository/nomos-repo-standards" }
+nomos-repo-limits = { path = "crates/repository/nomos-repo-limits" }
 nomos-package = { path = "crates/packages/nomos-package" }
 nomos-lang-rust-package = { path = "crates/packages/nomos-lang-rust-package" }
 nomos-model-package = { path = "crates/packages/nomos-model-package" }

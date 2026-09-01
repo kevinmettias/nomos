@@ -42375,14 +42375,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75",
-        "acquired_at": 1788297475,
-        "lease_expires_at": 1788304675
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -42392,7 +42388,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-limits"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 11 tests\ntest guarantee::tests::Test_Provider_Offer_Should_Be_Accepted_Under_The_Capabilitys_Contract ... ok\ntest guarantee::tests::Test_The_Ceiling_Should_Satisfy_The_Declared_Guarantee ... ok\ntest provider::tests::Test_A_Fact_Key_Should_Depend_On_The_Guarantee ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Declare_Nothing_For_A_Missing_File ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Read_A_Repository_Wide_And_A_Language_Row ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_Invalid_Json ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Non_Numeric_Value ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Return_An_Empty_Policy_For_A_File_Declaring_Neither_Block ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Negative_Value ... ok\ntest provider::tests::Test_Materialize_Workspace_Should_Materialize_This_Repositorys_Own_Declared_Thresholds ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Read_This_Repositorys_Own_Declared_Thresholds ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_repo_limits-8187a8f23cddaf7b.exe)\n   Doc-tests nomos_repo_limits\n",
+        "verified_at": 1788298287,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3cbf259b93408285c7822b711fa2ff3095733ac9"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

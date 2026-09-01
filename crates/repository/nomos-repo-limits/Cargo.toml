@@ -1,0 +1,23 @@
+[package]
+name = "nomos-repo-limits"
+version = "0.1.0"
+description = "Band 25. The nomos.cap.limits.policy capability's one provider: reads standards.json's limits and languages.*.limits blocks through nomos_platform::FileSystem. OD-RULES-011."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-analysis = { workspace = true }
+nomos-cap-limits-policy = { workspace = true }
+nomos-platform = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+nomos-platform-std = { workspace = true }
+
+[lints]
+workspace = true
