@@ -373,6 +373,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-cap-limits-policy"
+version = "0.1.0"
+dependencies = [
+ "nomos-capability",
+ "nomos-contracts",
+]
+
+[[package]]
 name = "nomos-cap-lint"
 version = "0.1.0"
 dependencies = [
