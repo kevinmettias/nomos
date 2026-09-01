@@ -103,6 +103,138 @@
           "kind": "array"
         }
       ]
+    },
+    {
+      "glob": "packages/*.json",
+      "require": [
+        {
+          "path": "schema_version",
+          "kind": "number"
+        },
+        {
+          "path": "package_id",
+          "kind": "string"
+        },
+        {
+          "path": "package_kind",
+          "kind": "string"
+        },
+        {
+          "path": "package_version",
+          "kind": "object"
+        },
+        {
+          "path": "protocol_range",
+          "kind": "object"
+        },
+        {
+          "path": "language_versions",
+          "kind": "array"
+        },
+        {
+          "path": "providers",
+          "kind": "array"
+        }
+      ]
+    },
+    {
+      "glob": "crates/spec/nomos-spec-project/profiles/*.json",
+      "require": [
+        {
+          "path": "id",
+          "kind": "string"
+        },
+        {
+          "path": "title",
+          "kind": "string"
+        },
+        {
+          "path": "format",
+          "kind": "string"
+        },
+        {
+          "path": "output",
+          "kind": "string"
+        },
+        {
+          "path": "sections",
+          "kind": "array"
+        }
+      ]
+    },
+    {
+      "glob": "diagrams/*.nomos-projection.json",
+      "require": [
+        {
+          "path": "profile",
+          "kind": "string"
+        },
+        {
+          "path": "profile_digest",
+          "kind": "string"
+        },
+        {
+          "path": "format",
+          "kind": "string"
+        },
+        {
+          "path": "output",
+          "kind": "string"
+        },
+        {
+          "path": "content_digest",
+          "kind": "string"
+        },
+        {
+          "path": "inputs_digest",
+          "kind": "string"
+        },
+        {
+          "path": "sections",
+          "kind": "array"
+        },
+        {
+          "path": "inputs",
+          "kind": "array"
+        }
+      ]
+    },
+    {
+      "glob": "spec/*.nomos-projection.json",
+      "require": [
+        {
+          "path": "profile",
+          "kind": "string"
+        },
+        {
+          "path": "profile_digest",
+          "kind": "string"
+        },
+        {
+          "path": "format",
+          "kind": "string"
+        },
+        {
+          "path": "output",
+          "kind": "string"
+        },
+        {
+          "path": "content_digest",
+          "kind": "string"
+        },
+        {
+          "path": "inputs_digest",
+          "kind": "string"
+        },
+        {
+          "path": "sections",
+          "kind": "array"
+        },
+        {
+          "path": "inputs",
+          "kind": "array"
+        }
+      ]
     }
   ],
   "standard_flags": [

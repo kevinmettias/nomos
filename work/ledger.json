@@ -40299,6 +40299,118 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P26-TOML-DATA-POLICY",
+      "title": "Adopt TOML data policy checks",
+      "why": "The code-standards data-contract rule can pin load-bearing data-file shape; Nomos has root TOML policy files whose required top-level fields are relied on by Cargo, rustup, rustfmt and clippy.",
+      "done_when": "standards.json declares minimal data-format contracts for Cargo.toml, rust-toolchain.toml, rustfmt.toml and clippy.toml, and check-data-contract judges those files with no findings.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "standards.json",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "False premise: check-data-contract reports TOML files as not analyzed, so TOML shape contracts need upstream TOML projection before this repository can adopt them."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "data-contract",
+          "--json",
+          "Cargo.toml",
+          "rust-toolchain.toml",
+          "rustfmt.toml",
+          "clippy.toml"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "codex",
+          "reason": "check-data-contract does not currently project TOML files: Cargo.toml, rust-toolchain.toml, rustfmt.toml and clippy.toml are reported as not analyzed, so the item's done_when cannot be satisfied in Nomos by standards.json config alone.",
+          "abandoned_at": 1788237720
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "codex",
+        "declined_at": 1788237727
+      }
+    },
+    {
+      "id": "P26-JSON-ARTIFACT-DATA-POLICY",
+      "title": "Adopt JSON artifact data policy",
+      "why": "The code-standards data-contract check can judge Nomos JSON package manifests, render profiles, and projection stamps, but standards.json only declares contracts for the top-level policy files and ledger.",
+      "done_when": "Language package manifests, spec project profile JSON, and Nomos projection sidecars declare required structural fields in standards.json, and check.exe data-contract passes for those surfaces.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "standards.json",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "data-contract",
+          "--json",
+          "packages\\nomos.lang.rust.json",
+          "packages\\nomos.lang.go.json",
+          "crates\\spec\\nomos-spec-project\\profiles\\domain-specification.json",
+          "crates\\spec\\nomos-spec-project\\profiles\\diagram-set.json",
+          "spec\\domain-specification.md.nomos-projection.json",
+          "diagrams\\relations.mmd.nomos-projection.json"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "data-contract",
+          "--json",
+          "packages\\nomos.lang.rust.json",
+          "packages\\nomos.lang.go.json",
+          "crates\\spec\\nomos-spec-project\\profiles\\domain-specification.json",
+          "crates\\spec\\nomos-spec-project\\profiles\\diagram-set.json",
+          "spec\\domain-specification.md.nomos-projection.json",
+          "diagrams\\relations.mmd.nomos-projection.json"
+        ],
+        "exit_code": 0,
+        "output_tail": "[]\ncheck-data-contract: 6 file(s) judged.\n",
+        "verified_at": 1788237890,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3262547a4603197262e2659d4aed8fcbaee421db"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
