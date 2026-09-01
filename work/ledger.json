@@ -40138,6 +40138,111 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P26-JSON-DATA-POLICY",
+      "title": "Adopt JSON data policy checks",
+      "why": "The code-standards JSON data-contract and key-naming checks are opt-in; Nomos has root policy and ledger JSON files whose shape and key convention are relied on but not declared to those checks.",
+      "done_when": "standards.json declares lower-snake JSON key conventions and minimal data-format contracts for standards.json, suppressions.json and work/ledger.json; check-json-key-naming and check-data-contract both judge those files with no findings.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "standards.json",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P26-JSON-DATA-POLICY-2: ledger JSON state uses externally tagged enum variant keys, so key naming should not claim the whole ledger file."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "data-contract",
+          "--json",
+          "standards.json",
+          "suppressions.json",
+          "work\\ledger.json"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "codex",
+          "reason": "Superseded: work/ledger.json contains externally tagged ItemState variant keys such as Declined, so lower-snake JSON key naming is not the right contract for that file; keep ledger coverage to data-contract and apply json-key-naming to root policy JSON files.",
+          "abandoned_at": 1788224489
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "codex",
+        "declined_at": 1788224495
+      }
+    },
+    {
+      "id": "P26-JSON-DATA-POLICY-2",
+      "title": "Adopt JSON data policy checks",
+      "why": "The code-standards JSON data-contract and key-naming checks are opt-in; Nomos has root policy JSON files and a ledger shape whose conventions are relied on but not declared to those checks.",
+      "done_when": "standards.json declares lower-snake JSON key conventions for standards.json and suppressions.json, and minimal data-format contracts for standards.json, suppressions.json and work/ledger.json; check-json-key-naming and check-data-contract report no findings over their declared scopes.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "standards.json",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "data-contract",
+          "--json",
+          "standards.json",
+          "suppressions.json",
+          "work\\ledger.json"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "data-contract",
+          "--json",
+          "standards.json",
+          "suppressions.json",
+          "work\\ledger.json"
+        ],
+        "exit_code": 0,
+        "output_tail": "[]\ncheck-data-contract: 3 file(s) judged.\n",
+        "verified_at": 1788224519,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5b195c875fa662d2a72af15896936514e777aadf"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -50,6 +50,61 @@
       "yaml"
     ]
   },
+  "json_key_naming": [
+    {
+      "glob": "standards.json",
+      "convention": "lower-snake"
+    },
+    {
+      "glob": "suppressions.json",
+      "convention": "lower-snake"
+    }
+  ],
+  "data_format_contracts": [
+    {
+      "glob": "standards.json",
+      "require": [
+        {
+          "path": "suppression",
+          "kind": "object"
+        },
+        {
+          "path": "naming",
+          "kind": "object"
+        },
+        {
+          "path": "telemetry",
+          "kind": "object"
+        }
+      ]
+    },
+    {
+      "glob": "suppressions.json",
+      "require": [
+        {
+          "path": "schema",
+          "kind": "number"
+        },
+        {
+          "path": "waivers",
+          "kind": "array"
+        }
+      ]
+    },
+    {
+      "glob": "work/ledger.json",
+      "require": [
+        {
+          "path": "schema_version",
+          "kind": "number"
+        },
+        {
+          "path": "items",
+          "kind": "array"
+        }
+      ]
+    }
+  ],
   "standard_flags": [
     "--help"
   ],
