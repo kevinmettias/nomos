@@ -48320,6 +48320,82 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P28-RULES-FLAKY-TESTS",
+      "title": "Sleep-based-synchronization and retry-until-green rules in a new flakiness_text.rs",
+      "why": "code-standards' check-flaky-tests (shared package rules/general/testing/shared/flakiness, judge.go/site.go) enforces two rule docs, sleep-based-synchronization.md and zero-flake-policy.md, neither yet ported. Read rust_flakiness.go and go_flakiness.go directly: Rust matches a fixed sleep-call vocabulary (thread::sleep, tokio::time::sleep, async_std::task::sleep, spin_sleep::sleep) inside test functions via tree-sitter, plus a fixed retry-attribute vocabulary (retry, flaky_test, flaky, retry_test) immediately preceding a decorated fn; Go matches only time.Sleep inside Test-prefixed functions in _test.go files and explicitly does not implement retry detection for Go (no attribute syntax to settle it on, stated as a deliberate limit in go_flakiness.go's own doc). zero-flake-policy's other prohibition, silent disabling with no reason, is already covered by a different tool's already-ported rules (a-skipped-test-states-why, a-disabled-test-states-why) so only the retry-until-green half is new here. Neither vocabulary is repository-configurable (fixed lists in code-standards itself, no standards.json block), so per OD-RULES-011's own test this is a leaf module, not a nomos.cap.*.policy capability. Text-scanning without the real tools' tree-sitter/go-ast precision: test-scope is approximated the way this crate's other *_text.rs rules already document doing (Is_Test_Or_Example_Source for file-level test/example paths, widened here to also start scanning from a file's first #[cfg(test)] or #[test] marker onward, since most Rust unit tests live inline in an otherwise-production file and file-path-only scoping would miss the exact case check-flaky-tests' own doc measured against a real corpus).",
+      "done_when": "crates/rules/nomos-rules/src/checks/flakiness_text.rs implements Check_Sleep_Is_Not_Synchronization (rule id sleep-based-synchronization; Go+Rust, fixed sleep-call vocabulary, marker escape hatch 'flakiness: allow' same-line, own-file self-exemption) and Check_A_Test_Does_Not_Retry_Until_Green (rule id zero-flake-policy; Rust only, fixed retry-attribute vocabulary immediately preceding a fn, same marker escape hatch) with unit tests covering each judgment, its marker exemption, its test-scope boundary (a sleep in production code is not flagged), and its own-file self-exemption. checks.rs declares mod flakiness_text and re-exports both functions and both rule-id constants. The nomos-rules public surface snapshot is reblessed. cargo test -p nomos-rules is green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/flakiness_text.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-6f-1788365769",
+        "acquired_at": 1788365769,
+        "lease_expires_at": 1788376569
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-GATE-TESTS-ROOT-IS-CWD-RELATIVE",
+      "title": "gate/tests.rs's two real-run tests judge the wrong tree under cargo test, because their root is a bare relative dot",
+      "why": "Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree and Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report (crates/host/nomos-cli/src/gate/tests.rs) both build their GateCommand with root: PathBuf::from(\".\"), a path relative to the test process's own working directory. `cargo test` sets that to the crate's own manifest directory (crates/host/nomos-cli), not the workspace root, so both tests silently walk only that one crate's own tree rather than the workspace `nomos check --root .` and the real gate step (`cargo run ... -- gate run --root .`, invoked from the workspace root) actually judge.\n\nThis surfaced now (2026-09-02) because the workspace self-check just reached zero real blocking findings for the first time (OD-RULES-017/018): with nothing genuinely wrong workspace-wide, the gap became visible as a spurious failure -- crates/host/nomos-cli/tests/platform_std_seam.rs has two test names containing \"std\", which is approved in the real, root-correct standards.json but invisible to nomos.cap.words.policy resolution when root resolves to the crate directory instead (no standards.json exists there, so the capability comes back unavailable and the additions don't apply).\n\nThis crate already has the fix in two other files, both unit- and integration-test: crates/host/nomos-cli/tests/check_command.rs's private Repository_Root() (env!(\"CARGO_MANIFEST_DIR\") joined with \"../../..\", an absolute path immune to cwd) and crates/host/nomos-cli/src/agent/tests.rs's own copy of the identical helper. gate/tests.rs has neither and is the one module in this crate still using a bare relative \".\".\n\nBoth failing tests' own doc comments claim to \"exercise the same command CI actually runs\" and \"must agree with itself end to end\" -- a claim that is false as currently written, since CI's `cargo run` (cwd = workspace root, matching a person's own invocation) and this file's `cargo test` (cwd = crate root) resolve \".\" to different trees. The doc comments are not wrong about intent, only about whether the code delivers it.",
+      "done_when": "gate/tests.rs gains its own Repository_Root() helper, matching check_command.rs's and agent/tests.rs's existing pattern exactly (env!(\"CARGO_MANIFEST_DIR\") three parents up). Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree and Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report build their GateCommand with that root instead of PathBuf::from(\".\"); every other test in the file that uses \".\" either tests argument parsing only or scopes to a location that does not exist regardless of root, so it is untouched. cargo test -p nomos-cli --bin nomos is green, including both previously-failing tests, run from both the crate directory and the workspace root (confirming the fix is genuinely cwd-independent, not accidentally still relying on where the test happened to run from).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-89",
+        "acquired_at": 1788365781,
+        "lease_expires_at": 1788369381
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--bin",
+          "nomos"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
