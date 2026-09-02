@@ -45276,6 +45276,58 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P27-RULES-NO-SINGLE-LINE-FUNCTION-BODIES",
+      "title": "No-single-line-function-bodies rule in formatting.rs (Rust)",
+      "why": "code-standards backlog survey: style/formatting/brace-placement/no-single-line-function-bodies.md has no nomos-rules counterpart; direct sibling of the file's own no-trailing-whitespace text-shape rule",
+      "done_when": "formatting.rs gains Check_No_Single_Line_Function_Bodies, flagging a Rust fn whose signature/brace/body/closing-brace collapse onto one line (including an empty {}), with unit tests, compiling and passing standalone",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/formatting.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 300
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: constant `NO_SINGLE_LINE_FUNCTION_BODIES` is never used\n  --> crates\\rules\\nomos-rules\\src\\checks\\formatting.rs:36:11\n   |\n36 | pub const NO_SINGLE_LINE_FUNCTION_BODIES: &str = \"no-single-line-function-bodies\";\n   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: function `Check_No_Single_Line_Function_Bodies` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\formatting.rs:103:8\n    |\n103 | pub fn Check_No_Single_Line_Function_Bodies(sources: &[SourceFile]) -> Vec<Finding>\n    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Single_Line_Body_Findings_In` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\formatting.rs:237:4\n    |\n237 | fn Single_Line_Body_Findings_In(source: &SourceFile) -> Vec<Finding>\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Has_Single_Line_Function_Body` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\formatting.rs:268:4\n    |\n268 | fn Has_Single_Line_Function_Body(line: &str) -> bool\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: `nomos-rules` (lib) generated 4 warnings\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-27d32a4363304d08.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-cd1a275ce0c17f78.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788312160,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e4eeae5148d76c9c528a17b92b57cf01728e645b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

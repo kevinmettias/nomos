@@ -13,8 +13,15 @@
 //! nothing after the colon. A multi-line `#[deprecated(...)]` is left unjudged rather than
 //! guessed at, the same conservative stance [`Check_No_Decorative_Section_Dividers`] takes
 //! toward prose that merely quotes a divider.
+//!
+//! [`Check_No_Single_Line_Function_Bodies`] imports code-standards'
+//! `no-single-line-function-bodies`: a Rust function whose signature, opening brace, body
+//! and closing brace collapse onto one line, including an empty `{}` trailing the
+//! signature. Scoped to Rust only for now — code-standards names a distinct C# strategy for
+//! the same rule id, and Go's own body-collapsing shape is left unattempted rather than
+//! guessed at.
 
-use crate::SourceFile;
+use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 /// This rule's own identifier, matching the code-standards rule id.
@@ -25,6 +32,8 @@ pub const TODO_FORMAT: &str = "todo-format-is-todo-name-description-ticket";
 pub const NO_DECORATIVE_SECTION_DIVIDERS: &str = "no-decorative-section-dividers";
 /// This rule's own identifier, matching the code-standards rule id.
 pub const DEPRECATION: &str = "deprecation";
+/// This rule's own identifier, matching the code-standards rule id.
+pub const NO_SINGLE_LINE_FUNCTION_BODIES: &str = "no-single-line-function-bodies";
 
 /// Reports every line in `sources` whose content ends in a space or tab.
 #[must_use]
@@ -81,6 +90,26 @@ pub fn Check_Deprecation_Carries_A_Reason(sources: &[SourceFile]) -> Vec<Finding
     for source in sources
     {
         findings.extend(Deprecation_Findings_In(source));
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+/// Reports a Rust function whose signature, opening brace, body and closing brace all
+/// collapse onto one line — including an empty `{}` trailing the signature, which carries
+/// no body at all.
+#[must_use]
+pub fn Check_No_Single_Line_Function_Bodies(sources: &[SourceFile]) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        if source.Is_Written_In(RUST_LANGUAGE)
+        {
+            findings.extend(Single_Line_Body_Findings_In(source));
+        }
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
@@ -203,6 +232,46 @@ fn Deprecation_Findings_In(source: &SourceFile) -> Vec<Finding>
     }
 
     return findings;
+}
+
+fn Single_Line_Body_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+    let mut line_number = 1usize;
+
+    for line in source.text.split_inclusive('\n')
+    {
+        if Has_Single_Line_Function_Body(line)
+        {
+            findings.push(Finding_For_Line(
+                source,
+                NO_SINGLE_LINE_FUNCTION_BODIES,
+                line_number,
+                "collapses a function's signature, body and closing brace onto one line",
+            ));
+        }
+
+        match line_number.checked_add(1)
+        {
+            Some(next) => line_number = next,
+            None => break,
+        }
+    }
+
+    return findings;
+}
+
+/// A `fn ` keyword followed, later on the same line, by a `{` and then a `}` — the shape a
+/// properly multi-line (Allman-braced) function never has, since its own opening brace
+/// starts a new line with nothing after it. Matches an empty `{}` too: the standard names
+/// that collapse as a violation in its own right, not only a non-empty collapsed body.
+fn Has_Single_Line_Function_Body(line: &str) -> bool
+{
+    let Some(fn_index) = line.find("fn ") else { return false };
+    let after_fn = &line[fn_index..];
+    let Some(open_brace) = after_fn.find('{') else { return false };
+    let after_open = after_fn.get(open_brace.saturating_add(1)..).unwrap_or("");
+    return after_open.contains('}');
 }
 
 fn Has_Trailing_Whitespace(line: &str) -> bool
@@ -570,8 +639,64 @@ mod tests
         assert!(findings.is_empty(), "{findings:?}");
     }
 
+    #[test]
+    fn Test_Check_No_Single_Line_Function_Bodies_Should_Report_A_Collapsed_Body()
+    {
+        let source = Source("src/lib.rs", "pub fn Add(a: i32, b: i32) -> i32 { return a + b; }\n");
+
+        let findings = Check_No_Single_Line_Function_Bodies(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(NO_SINGLE_LINE_FUNCTION_BODIES));
+    }
+
+    #[test]
+    fn Test_Check_No_Single_Line_Function_Bodies_Should_Report_A_Collapsed_Empty_Body()
+    {
+        let source = Source("src/lib.rs", "pub fn Noop() {}\n");
+
+        let findings = Check_No_Single_Line_Function_Bodies(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_No_Single_Line_Function_Bodies_Should_Accept_An_Allman_Body()
+    {
+        let source = Source("src/lib.rs", "pub fn Add(a: i32, b: i32) -> i32\n{\n    return a + b;\n}\n");
+
+        let findings = Check_No_Single_Line_Function_Bodies(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_No_Single_Line_Function_Bodies_Should_Accept_A_Trait_Method_Declaration()
+    {
+        let source = Source("src/lib.rs", "trait Shape\n{\n    fn Area(&self) -> f64;\n}\n");
+
+        let findings = Check_No_Single_Line_Function_Bodies(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_No_Single_Line_Function_Bodies_Should_Ignore_A_Collapsed_Closure_Inside_A_Multiline_Body()
+    {
+        let source = Source(
+            "src/lib.rs",
+            "pub fn Sum(values: &[i32]) -> i32\n{\n    return values.iter().fold(0, |acc, x| { acc + x });\n}\n",
+        );
+
+        let findings = Check_No_Single_Line_Function_Bodies(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
     fn Source(path: &str, text: &str) -> SourceFile
     {
-        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        source.language = crate::Recognized_Language_In_Tests(path);
+        return source;
     }
 }
