@@ -46410,14 +46410,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-e5-0902",
-        "acquired_at": 1788318161,
-        "lease_expires_at": 1788325361
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -46426,6 +46422,112 @@
           "nomos-rules"
         ],
         "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 399 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788318828,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a13f688fed37e7445acbac318e4ed3251de01d5f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-RED-AT-HEAD-CENSUS",
+      "title": "The workspace self-check is red at HEAD with 89 findings, and it blocks every predicate naming nomos-cli",
+      "why": "Measured 2026-09-01 at 879428ca: cargo test -p nomos-cli --test check_command fails Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build with 89 findings across 61 distinct files, and every one of those files is committed content -- none is dirty in the shared working tree, so this is HEAD's own state and not a peer's in-flight edit. It blocks more than its own crate: work finish runs the gate lint step and then the item's predicate, so any item whose predicate names -p nomos-cli cannot finish while this is red, whatever it changed. It refused OD-LEDGER-AMENDS-PATH-ECHOED-VERBATIM-2, whose own five files carry no finding. The census by rule, since the shape matters more than the total: file-name-matches-declared-type is 53 of the 78 Blocking findings, parameter-count 7, scripts-use-a-portable-shebang 3, every-allow-carries-a-justification 3, a-script-declares-its-purpose 3, todo-format 2, data-names-stay-lower-snake 2, unsafe-justification 1, relaxed-not-used-when-ordering-matters 1. The dominant rule is mostly right: only 4 of its 53 are tests/corpus fixtures it should exempt, and the other 49 are real workspace files whose declared type does not match their stem. Three smaller groups look like rules misapplying rather than code drifting, and each is cheap to check: scripts-use-a-portable-shebang and a-script-declares-its-purpose both fire on Rust lib.rs files that are not scripts; data-names-stay-lower-snake fires on the raw identifiers r#ref and r#type, whose names are already lower snake; and relaxed-not-used-when-ordering-matters fires inside discovery/tests.rs, which Is_Test_Or_Example_Source misses because it matches the /tests/ infix and the _tests.rs suffix but not a module file simply named tests.rs, which is this workspace's own convention everywhere.",
+      "done_when": "The four tests/corpus fixture findings under file-name-matches-declared-type no longer report, exempted in the rule rather than by renaming a fixture whose name is part of what it fixes. The remaining causes are each either an item on this board or a recorded decline, so no cause is left tracked only by this item's prose. cargo test -p nomos-rules is green.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/file_names.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-ANALYSIS-009-STORE-WORKSPACE-REUSE-MERGE",
+      "title": "Merge the abandoned worktree-agent-a1153a787f5641523 branch: Run accepts a caller-supplied workspace and fact store",
+      "why": "A stale, never-merged worktree branch built 2026-08-26 (bb2974d0): Run/Ingested accept a caller-supplied workspace: &mut Option<Workspace> and store: &mut MemoryFactStore instead of constructing both internally, per a direct user override of OD-ANALYSIS-009's own decline. The branch's target file (run.rs) was renamed to run_context.rs and restructured (RunContext bundling variant/root/launcher/filesystem) by P26-CHECK-FILESYSTEM-PLUMBING-2 since the branch diverged, so this is a hand-port of the same logical change onto the current shape, not a patch apply: workspace and store become two more RunContext fields (matching that struct's own stated reason for existing -- staying under this crate's parameter-count cap), which ripples to all 24 existing RunContext {...} construction sites across run_context.rs, tests.rs, run_seam.rs, nomos-cli's check.rs and correct.rs, and nomos-gate-orchestration's gate_environment.rs, each passing &mut None and a fresh MemoryFactStore::New() to reproduce their current unchanged behavior exactly.",
+      "done_when": "RunContext carries workspace and store fields, Run reuses a caller-supplied Some(Workspace) via Ingested_Workspace's Option::get_or_insert_with, all 24 existing call sites compile and behave unchanged (fresh values every time), the ported test proves IncrementalResult(S) == CleanRecomputation(S) across two calls sharing one real workspace/store, OD-ANALYSIS-009 is amended to v2 recording the override, nomos-check-orchestration's public-surface snapshot is reblessed, spec/domain-specification.md and diagrams/relations.mmd are re-rendered fresh, and cargo test -p nomos-check-orchestration -p nomos-cli --bin nomos -p nomos-gate-orchestration passes",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/tests/run_seam.rs",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/correct.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "docs/records/OD-ANALYSIS-009-a-second-call-reconstructs-a-workspace-and-fact-store-instead-of-constructing-one-fresh-per-invocation.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-p27",
+        "acquired_at": 1788318312,
+        "lease_expires_at": 1788325512
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "--bin",
+          "nomos",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 900
       },
       "verified": null,
       "abandoned": [],
