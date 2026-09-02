@@ -282,7 +282,7 @@
 //!
 //! [`Check_Error_Message_Starts_Lowercase`], [`Check_Error_Message_Has_No_Trailing_Punctuation`]
 //! and [`Check_Eager_Vs_Lazy_Context`] are the fifty-fifth through fifty-seventh rules, a new
-//! `error_text` module: the first two judge a `#[error("...")]` message's text (an ordinary
+//! `error_text` module: the first two judge a `#[error("message")]` attribute's own message text (an ordinary
 //! capitalized first word, or a trailing `.`/`!`/`?`, both of which fight a chain walker's own
 //! framing and separators), and the third judges whether a same-line `.With_Context(...)`
 //! call's argument was built through one of a closed, standards-named set of allocating

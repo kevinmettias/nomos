@@ -90,7 +90,7 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, additions: &[String]) -> V
     {
         if let Some((word, reason)) = First_Abbreviation(item.Own_Name(), additions)
         {
-            findings.push(Violation_Finding(path, item, item.Own_Name(), &word, reason));
+            findings.push(Violation_Finding(path, item, item.Own_Name(), (&word, reason)));
         }
 
         if item.kind == STRUCT
@@ -110,7 +110,7 @@ fn Field_Violations_In(path: &str, item: &PayloadItem, additions: &[String]) -> 
         .iter()
         .filter_map(|(name, _type_name)| {
             let (word, reason) = First_Abbreviation(name, additions)?;
-            return Some(Violation_Finding(path, item, name, &word, reason));
+            return Some(Violation_Finding(path, item, name, (&word, reason)));
         })
         .collect();
 }
@@ -261,10 +261,11 @@ fn Resolve_Approved_Additions(facts: &mut dyn FactReader) -> Vec<String>
     return payload.approved_additions;
 }
 
-fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, word: &str, reason: &str) -> Finding
+fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, abbreviation: (&str, &str)) -> Finding
 {
     use nomos_model::Content_Digest;
 
+    let (word, reason) = abbreviation;
     let qualified = format!("{path}::{}::{name}", item.qualified_name);
 
     return Finding {

@@ -45480,6 +45480,100 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P26-RULES-TEXT-SCANNERS-SELF-MATCH",
+      "title": "This crate's own text-scanning rules flag their own doc-comment prose and test-fixture string literals",
+      "why": "Discovered while verifying P26-CHECK-FILESYSTEM-PLUMBING-3: nomos-cli's Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build fails against a real gate run --root . over this repository right now, unrelated to that item's own change. cargo run -p nomos-cli --bin nomos -- check --root crates/rules/nomos-rules shows rust_text.rs, security_text.rs, concurrency_text.rs and error_text.rs each flagging themselves: unsafe-justification/every-allow-carries-a-justification/shared-interior-mutability-says-why/a-rust-path-stays-within-its-own-subtree against rust_text.rs's own fixtures, a-credential-is-not-hardcoded-in-source/a-secret-does-not-travel-in-a-url/certificate-verification-is-not-disabled against security_text.rs's, atomic-ordering-choices-are-justified/seqcst-justified-explicitly against concurrency_text.rs's, and lowercase-first-letter/no-trailing-punctuation/eager-vs-lazy-context against error_text.rs's own doc comments and test fixtures. Every code-standards Go tool this crate ports never had to solve this: the checker (Go) and the checked language (Rust) always differ, so a Go tool's own Rust-shaped test fixtures never look like a subject to itself. nomos-rules is Rust checking Rust and ships its own test fixtures as literal Rust-like text, a structural mismatch none of the source tools' designs anticipated. This is not caused by, and does not block, P26-CHECK-FILESYSTEM-PLUMBING-3 (confirmed: the finding predates it, touches none of that item's files, and reproduces identically against dev before that item's commit) -- but the real CI gate (.github/workflows/gate.yml's Test step runs cargo test --workspace on Linux, which includes this exact test) is red on dev right now and nobody has been told, the precise failure mode OD-GATE-006 exists to name.",
+      "done_when": "cargo run -p nomos-cli --bin nomos -- gate run --root . reports zero blocking findings inside crates/rules/nomos-rules/src/checks/{rust_text,security_text,concurrency_text,error_text}.rs, and cargo test -p nomos-cli --test check_command passes Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build with no --skip. The fix must not weaken any rule's real detection over the rest of the workspace, and should state clearly whether it is a shared, principled mechanism (e.g. real per-#[cfg(test)]-block exemption, the finer-grained tracking this crate has so far declined to build) or a narrower, explicitly-justified one -- not a blanket exemption for this crate's own path, which would just move the blind spot rather than close it.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks/security_text.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+          "crates/rules/nomos-rules/src/checks/error_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-p27",
+        "acquired_at": 1788312996,
+        "lease_expires_at": 1788320196
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "check_command"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P26-RULES-TEXT-SCANNERS-SELF-MATCH-2",
+      "title": "Two more pre-existing causes keeping the real CI gate red alongside the self-match fix",
+      "why": "While verifying P26-RULES-TEXT-SCANNERS-SELF-MATCH's own done_when (the full cargo test -p nomos-cli --test check_command with no --skip), found two more pre-existing, unrelated blocking findings: lib.rs:285's own doc-comment prose quotes '#[error(\"...\")]' as a worked example, and the ellipsis between the quotes reads as an error message ending in '.', tripping the file's own no-trailing-punctuation rule against itself (a third instance of the exact self-match class, just landing in a file outside that item's 4-file territory). Separately, naming/abbreviations.rs's own Violation_Finding function (authored earlier today) has arity 5, exceeding this workspace's own parameter-count cap of 4 -- unrelated to self-matching, a plain pre-existing violation in my own prior work. Neither belongs in the other item's territory, so this is a second small item rather than widening a live claim.",
+      "done_when": "lib.rs's doc comment no longer trips no-trailing-punctuation against itself (reworded, not suppressed), Violation_Finding in naming/abbreviations.rs has 4 or fewer parameters with identical behavior, and cargo run -p nomos-cli --bin nomos -- check --root crates/rules/nomos-rules reports zero findings for both",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 300
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 368 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-27d32a4363304d08.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-cd1a275ce0c17f78.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788314098,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "9bde1f29cdbfad8b2fceaa2f5807cca8569ac302"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
