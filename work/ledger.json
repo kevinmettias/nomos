@@ -44667,6 +44667,134 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "OD-RULES-015-WIRE-ERROR-TEXT-RULES",
+      "title": "Compose the error-message text hygiene family into nomos-check-orchestration::Run",
+      "why": "Continuing the population-coherence repair (OD-RULES-012, OD-RULES-013): error_text.rs's three text-only rules (lowercase-first-letter, no-trailing-punctuation, eager-vs-lazy-context) are implemented and exported but never composed into Run. Checked against a real gate run --root . over this tree first; all three are clean. Check_Abbreviations (naming/abbreviations.rs) was also a candidate but is not yet re-exported through checks.rs/lib.rs -- OD-RULES-011-WORDS-RULE-2 wired naming.rs's own internal pub use but the crate-root re-export is still missing, so it is not reachable from this crate yet; left for whoever finishes that chain.",
+      "done_when": "nomos-check-orchestration::run_context::RULE_COUNT rises from 43 to 46, composing lowercase-first-letter, no-trailing-punctuation and eager-vs-lazy-context; a real gate run --root . over this repository (nomos-cli's Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree) still passes with all three newly composed; and cargo test -p nomos-check-orchestration -p nomos-cli --lib --bins -- --skip Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings passes (that one test is skipped because it currently fails workspace-wide for an unrelated, pre-existing reason: crates/repository/nomos-repo-words has not yet declared its dependency band, a live peer claim -- OD-RULES-011-WORDS-PROVIDER-3 -- not this item's territory).",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins",
+          "--",
+          "--skip",
+          "Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins",
+          "--",
+          "--skip",
+          "Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings"
+        ],
+        "exit_code": 0,
+        "output_tail": "arning: function `Insert_Case_Boundaries` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:203:4\n    |\n203 | fn Insert_Case_Boundaries(name: &str) -> String\n    |    ^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Is_New_Word_Start` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:221:4\n    |\n221 | fn Is_New_Word_Start(previous: char, current: char) -> bool\n    |    ^^^^^^^^^^^^^^^^^\n\nwarning: function `Is_All_Digits` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:226:4\n    |\n226 | fn Is_All_Digits(field: &str) -> bool\n    |    ^^^^^^^^^^^^^\n\nwarning: function `Words_Policy_Requirement` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:236:4\n    |\n236 | fn Words_Policy_Requirement() -> nomos_capability::Requirement\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Resolve_Approved_Additions` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:249:4\n    |\n249 | fn Resolve_Approved_Additions(facts: &mut dyn FactReader) -> Vec<String>\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Violation_Finding` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:264:4\n    |\n264 | fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, word: &str, reason: &str) -> Finding\n    |    ^^^^^^^^^^^^^^^^^\n\nwarning: function `Unread_As_This_Rule` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:282:4\n    |\n282 | fn Unread_As_This_Rule(mut finding: Finding) -> Finding\n    |    ^^^^^^^^^^^^^^^^^^^\n\nwarning: `nomos-rules` (lib) generated 24 warnings (run `cargo fix --lib -p nomos-rules` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-ebbe83e61afdc5c9.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-5102d53990fa098d.exe)\n",
+        "verified_at": 1788308446,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6ed9416ad2759cd27ed31e8e43e7f53e54a21c57"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-014-CARRY-THE-LANGUAGE-2",
+      "title": "Carry a language on SourceFile and delete the eleven private extension classifiers",
+      "why": "OD-RULES-014 as amended decided the mechanism and its Status says the implementing change needs its own item. This is it, re-added from OD-RULES-014-CARRY-THE-LANGUAGE with the territory the amendment requires: the carried type lives in nomos-cap-syntax at band 23, not nomos-contracts at band 0, so this item reserves the former and not the latter. Eleven classifiers compute the same three-line extension test privately -- Is_Rust_Source in rust_text.rs, concurrency_text.rs and error_text.rs; Is_Go_Source in go_text.rs; Is_Rust_File and Is_Go_File in placement.rs; Is_Go_File in structure.rs, naming/go_data_names.rs, naming/go_function_names.rs and naming/go_type_names.rs; and Source_Has_Extension in function_shape.rs.",
+      "done_when": "nomos-cap-syntax exposes the opaque carried language type; nomos-lang-rust, nomos-lang-rust-scan and nomos-lang-go each declare a LANGUAGE constant beside PROVIDER, the two Rust crates declaring the same value; nomos_rules::SourceFile carries the field and nomos-check-orchestration populates it beside preferred_syntax_provider before any rule runs; all eleven classifiers are deleted and their call sites compare the carried field, with Source_Has_Extension taking the expected language rather than an extension; nomos-rules/Cargo.toml gains no language-crate dependency; and every affected surface snapshot is re-blessed.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-syntax/src/lib.rs",
+          "crates/capabilities/nomos-cap-syntax/src/language.rs",
+          "crates/languages/nomos-lang-rust/src/lib.rs",
+          "crates/languages/nomos-lang-rust/src/guarantee.rs",
+          "crates/languages/nomos-lang-rust-scan/src/lib.rs",
+          "crates/languages/nomos-lang-rust-scan/src/guarantee.rs",
+          "crates/languages/nomos-lang-go/src/lib.rs",
+          "crates/languages/nomos-lang-go/src/guarantee.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+          "crates/rules/nomos-rules/src/checks/error_text.rs",
+          "crates/rules/nomos-rules/src/checks/go_text.rs",
+          "crates/rules/nomos-rules/src/checks/placement.rs",
+          "crates/rules/nomos-rules/src/checks/structure.rs",
+          "crates/rules/nomos-rules/src/checks/function_shape.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go_data_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go_function_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go_type_names.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "tests/contract/surface/nomos-cap-syntax.txt",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-lang-rust.txt",
+          "tests/contract/surface/nomos-lang-rust-scan.txt",
+          "tests/contract/surface/nomos-lang-go.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

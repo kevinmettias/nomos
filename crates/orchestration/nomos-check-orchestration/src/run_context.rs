@@ -12,15 +12,15 @@ use nomos_rules::{
     Check_An_Excluded_File_Says_Why, Check_Atomic_Ordering_Choices_Are_Justified,
     Check_Certificate_Verification_Is_Not_Disabled, Check_Completeness_Mirrors, Check_Cross_Language_Correspondence,
     Check_Data_Names_Stay_Lower_Snake, Check_Declared_Tooling_Language_For_Scripts, Check_Dependency_Direction,
-    Check_Dependency_Policy, Check_Deprecation_Carries_A_Reason, Check_Every_Allow_Carries_A_Justification,
-    Check_Every_Member_Declares_A_Band, Check_Exported_Go_Functions_Use_Upper_Snake_Case,
-    Check_File_Name_Matches_Declared_Type, Check_File_Size_Justification_Trigger,
-    Check_Go_Constants_Split_By_Export, Check_Go_File_Size_Hard_Trigger, Check_Go_File_Size_Review_Trigger,
-    Check_Go_Helpers_Package_Five_Inputs, Check_Go_Type_Names_Use_Camel_Case, Check_Go_Variables_Use_Lower_Snake_Case,
-    Check_Lint_Diagnostics, Check_Naming_Convention, Check_No_Mod_Rs_Files, Check_No_Trailing_Whitespace,
-    Check_Parameter_Count,
-    Check_Relaxed_Not_Used_When_Ordering_Matters, Check_Scripts_Use_A_Portable_Shebang,
-    Check_Seqcst_Justified_Explicitly, Check_Shared_Interior_Mutability_Says_Why,
+    Check_Dependency_Policy, Check_Deprecation_Carries_A_Reason, Check_Eager_Vs_Lazy_Context,
+    Check_Error_Message_Has_No_Trailing_Punctuation, Check_Error_Message_Starts_Lowercase,
+    Check_Every_Allow_Carries_A_Justification, Check_Every_Member_Declares_A_Band,
+    Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_File_Name_Matches_Declared_Type,
+    Check_File_Size_Justification_Trigger, Check_Go_Constants_Split_By_Export, Check_Go_File_Size_Hard_Trigger,
+    Check_Go_File_Size_Review_Trigger, Check_Go_Helpers_Package_Five_Inputs, Check_Go_Type_Names_Use_Camel_Case,
+    Check_Go_Variables_Use_Lower_Snake_Case, Check_Lint_Diagnostics, Check_Naming_Convention, Check_No_Mod_Rs_Files,
+    Check_No_Trailing_Whitespace, Check_Parameter_Count, Check_Relaxed_Not_Used_When_Ordering_Matters,
+    Check_Scripts_Use_A_Portable_Shebang, Check_Seqcst_Justified_Explicitly, Check_Shared_Interior_Mutability_Says_Why,
     Check_Suppression_Directives_Carry_A_Reason, Check_Todo_Format,
     Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter, Check_Unread_Reaches_A_Finding,
     Check_Unsafe_Justification, Check_Workspace_Markers_Carry_A_Reason, SourceFile,
@@ -29,11 +29,11 @@ use nomos_rules::{
     A_SKIPPED_TEST_STATES_WHY, AN_EXCLUDED_FILE_SAYS_WHY, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED,
     CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, COMPLETENESS_MIRROR, CONSTANTS_SPLIT_BY_EXPORT,
     CROSS_LANGUAGE_CORRESPONDENCE, DATA_NAMES_STAY_LOWER_SNAKE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS,
-    DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, DEPRECATION,
+    DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, DEPRECATION, EAGER_VS_LAZY_CONTEXT,
     EVERY_ALLOW_CARRIES_A_JUSTIFICATION, EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE,
     FILE_SIZE_JUSTIFICATION_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
-    GO_HELPERS_PACKAGE_FIVE_INPUTS, GO_VARIABLES_USE_LOWER_SNAKE_CASE, LINT_DIAGNOSTICS, NAMING_CONVENTION,
-    NO_MOD_RS_FILES, NO_TRAILING_WHITESPACE,
+    GO_HELPERS_PACKAGE_FIVE_INPUTS, GO_VARIABLES_USE_LOWER_SNAKE_CASE, LINT_DIAGNOSTICS, LOWERCASE_FIRST_LETTER,
+    NAMING_CONVENTION, NO_MOD_RS_FILES, NO_TRAILING_PUNCTUATION, NO_TRAILING_WHITESPACE,
     ONE_THOUSAND_LINE_HARD_TRIGGER, PARAMETER_COUNT,
     RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, SCRIPTS_USE_A_PORTABLE_SHEBANG, SEQCST_JUSTIFIED_EXPLICITLY,
     SHARED_INTERIOR_MUTABILITY_SAYS_WHY, SUPPRESSION_DIRECTIVES_CARRY_A_REASON,
@@ -52,7 +52,7 @@ use crate::CheckOutcome;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 43;
+const RULE_COUNT: usize = 46;
 
 /// [`Run`]'s build variant, its subprocess root, and the launcher those subprocesses run
 /// through -- grouped into one value so [`Run`] stays within this crate's own
@@ -411,6 +411,9 @@ fn Rule_Findings(
         (FILE_SIZE_JUSTIFICATION_TRIGGER, &|reader| return Check_File_Size_Justification_Trigger(sources, reader)),
         (ONE_THOUSAND_LINE_HARD_TRIGGER, &|reader| return Check_Go_File_Size_Hard_Trigger(sources, reader)),
         (FIVE_HUNDRED_LINE_REVIEW_TRIGGER, &|reader| return Check_Go_File_Size_Review_Trigger(sources, reader)),
+        (LOWERCASE_FIRST_LETTER, &|_reader| return Check_Error_Message_Starts_Lowercase(sources)),
+        (NO_TRAILING_PUNCTUATION, &|_reader| return Check_Error_Message_Has_No_Trailing_Punctuation(sources)),
+        (EAGER_VS_LAZY_CONTEXT, &|_reader| return Check_Eager_Vs_Lazy_Context(sources)),
     ];
 
     return Findings_For_Selected_Rules(rules, reader, selected);
