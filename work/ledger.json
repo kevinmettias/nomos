@@ -48931,6 +48931,103 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-SINGLE-LINE-FUNCTION-BODY-COMPAT",
+      "title": "The one real no-single-line-function-bodies finding: tests/corpus/analysis/gamma/broken.rs",
+      "why": "P27-RULES-NO-SINGLE-LINE-FUNCTION-BODIES-STRING-AWARE composed no-single-line-function-bodies into Run and left its one genuine finding open, tests/corpus/analysis/gamma/broken.rs:5, pub fn Never_Seen() {} on one physical line. The file's own doc comment names its purpose as testing a byte order mark in the middle of a file -- the collapsed function is unrelated filler content the corpus needs to look like a plausible module, not itself part of what the BOM test checks, so reformatting it to Allman style should not disturb that test.",
+      "done_when": "tests/corpus/analysis/gamma/broken.rs's pub fn Never_Seen() {} is reformatted to Allman brace style (signature, then { on its own line, then }), with the byte order mark and every other line's content unchanged. cargo test -p nomos-contract-tests (or whichever test reads this corpus fixture) is still green -- confirm which one names this file before assuming, and run it. nomos gate run --root . --rule no-single-line-function-bodies reports 0 findings.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/corpus/analysis/gamma/broken.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Predicate named nomos-contract-tests, guessed without checking; the real verification is nomos-integration-tests. Re-scoped as P27-SELFCHECK-SINGLE-LINE-FUNCTION-BODY-COMPAT-2 with the correct predicate."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-session-e6f4d433",
+          "reason": "Predicate guessed the wrong crate (nomos-contract-tests). The file is actually asserted by nomos-integration-tests (tests/integration/tests/analysis_slice/{spending,providers,lessons}.rs reference gamma/broken.rs directly, per tests/corpus/analysis/README.md). Re-adding with the correct predicate before implementing.",
+          "abandoned_at": 1788369776
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-session-e6f4d433",
+        "declined_at": 1788369776
+      }
+    },
+    {
+      "id": "P27-SELFCHECK-SINGLE-LINE-FUNCTION-BODY-COMPAT-2",
+      "title": "The one real no-single-line-function-bodies finding: tests/corpus/analysis/gamma/broken.rs",
+      "why": "P27-RULES-NO-SINGLE-LINE-FUNCTION-BODIES-STRING-AWARE composed no-single-line-function-bodies into Run and left its one genuine finding open, tests/corpus/analysis/gamma/broken.rs:5, pub fn Never_Seen() {} on one physical line. tests/corpus/analysis/README.md states this file is deliberately unparseable (a U+FEFF byte order mark mid-file) and 'nothing here belongs to a cargo package... the workspace never tries to build them' -- the function is filler content the corpus needs to look plausible, not itself part of what the BOM refusal test checks, so reformatting it to Allman style should not disturb that. The asserting tests are tests/integration/tests/analysis_slice/{spending,providers,lessons}.rs (crate nomos-integration-tests, package name confirmed via its Cargo.toml), not nomos-contract-tests as an earlier, declined version of this item guessed.",
+      "done_when": "tests/corpus/analysis/gamma/broken.rs's pub fn Never_Seen() {} is reformatted to Allman brace style (signature, then { on its own line, then }), with the byte order mark and every other line's content unchanged. cargo test -p nomos-integration-tests is green, including the analysis_slice tests that name gamma/broken.rs. nomos gate run --root . --rule no-single-line-function-bodies reports 0 findings.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/corpus/analysis/gamma/broken.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "egy ... ok\ntest domains::Test_The_Scripting_Policy_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Goals_Policy_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Limits_Policy_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Scanner_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Go_Dependency_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Naming_Policy_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Snapshot_Serialization_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Go_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Parser_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Reachability_Offer_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Rollup_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Projection_Output_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Dependency_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Dependency_Policy_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Lint_Provider_Should_Meet_Its_Declared_Strategy ... ok\n\ntest result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.51s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-e7eabc5a0d247783.exe)\n     Running tests\\analysis_slice\\main.rs (target\\debug\\deps\\analysis_slice-bce52a61a8e62988.exe)\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-e86c45a934ede32f.exe)\n   Doc-tests nomos_integration_tests\n",
+        "verified_at": 1788369922,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d9180670e2a063e8e813c0f5aa7fb55320eb8a00"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
