@@ -18,7 +18,7 @@
 
 use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest};
-use nomos_cap_syntax::{PayloadItem, Struct_Fields, SyntaxPayload};
+use nomos_cap_syntax::{IMPLEMENTATION, PayloadItem, Struct_Fields, SyntaxPayload, TRAIT};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
 /// This rule's own identifier, matching the code-standards rule id.
@@ -85,9 +85,16 @@ pub fn Check_Abbreviations(sources: &[SourceFile], facts: &mut dyn FactReader) -
 fn Violations_In(payload: &SyntaxPayload, path: &str, additions: &[String]) -> Vec<Finding>
 {
     let mut findings = Vec::new();
+    let mut enclosing_trait_impl: Option<String> = None;
 
     for item in &payload.items
     {
+        enclosing_trait_impl = Enclosing_Trait_Impl(item, enclosing_trait_impl);
+        if enclosing_trait_impl.as_ref().is_some_and(|block| return Is_Member_Of(item, block))
+        {
+            continue;
+        }
+
         if let Some((word, reason)) = First_Abbreviation(item.Own_Name(), additions)
         {
             findings.push(Violation_Finding(path, item, item.Own_Name(), (&word, reason)));
@@ -100,6 +107,40 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, additions: &[String]) -> V
     }
 
     return findings;
+}
+
+/// The qualified name of the trait-serving `impl` block whose members `item` and everything
+/// after it may belong to, carried forward from `previous` when `item` is not itself an
+/// `impl` block.
+///
+/// An `impl` block resets the carry unconditionally, including an inherent one: two blocks
+/// for the same type are indistinguishable by name, so `impl Display for Table` followed by
+/// `impl Table` has to stop exempting at the second block or the inherent block's own
+/// methods would inherit the first's exemption.
+fn Enclosing_Trait_Impl(item: &PayloadItem, previous: Option<String>) -> Option<String>
+{
+    if item.kind != IMPLEMENTATION
+    {
+        return previous;
+    }
+
+    if item.shape.Value() == Some(TRAIT)
+    {
+        return Some(item.qualified_name.clone());
+    }
+
+    return None;
+}
+
+/// Whether `item` is declared inside the `impl` block at `block`.
+///
+/// Nesting is the only signal there is: the provider qualifies a member by the scope it
+/// pushed for the block, so `impl Display for Table`'s `fmt` arrives as `Table::fmt`. A
+/// later sibling at the same level (`Other`) does not carry the prefix and so falls out of
+/// the exemption without anything having to pop it.
+fn Is_Member_Of(item: &PayloadItem, block: &str) -> bool
+{
+    return item.qualified_name.starts_with(&format!("{block}::"));
 }
 
 fn Field_Violations_In(path: &str, item: &PayloadItem, additions: &[String]) -> Vec<Finding>
@@ -415,6 +456,88 @@ mod tests
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "msg");
+    }
+
+    /// The carve-out code-standards' own `check-generic-parameter-name` states and this rule
+    /// was missing: a declaration whose name was not the author's is not the author's to
+    /// answer for. `fmt` is `core::fmt::Display`'s required method name, and it was 104 of
+    /// the 148 findings this rule reported against this workspace before this exemption.
+    #[test]
+    fn Test_Violations_In_Should_Not_Judge_A_Name_A_Trait_Fixed()
+    {
+        let payload = Payload_From_Text(
+            "unexpanded\t0\nitem\t0\tImplementation\tNotApplicable\tTable\t.\t+trait\n\
+             item\t1\tFunction\tPrivate\tTable::fmt\t.\t+fn/2\n",
+        );
+
+        let findings = Violations_In(&payload, "src/lib.rs", &[]);
+
+        assert!(findings.is_empty(), "a trait fixes what its implementers may call things: {findings:?}");
+    }
+
+    /// The other half, and the reason the exemption reads the block's shape rather than
+    /// merely noticing that a name is nested: an inherent `impl` chose its own method names,
+    /// so the identical qualified name is still judged there.
+    #[test]
+    fn Test_Violations_In_Should_Judge_An_Inherent_Impls_Own_Member()
+    {
+        let payload = Payload_From_Text(
+            "unexpanded\t0\nitem\t0\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
+             item\t1\tFunction\tPrivate\tTable::fmt\t.\t+fn/2\n",
+        );
+
+        let findings = Violations_In(&payload, "src/lib.rs", &[]);
+
+        assert_eq!(findings.len(), 1, "an inherent impl picked this name itself: {findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "fmt");
+    }
+
+    /// Two blocks for one type are indistinguishable by qualified name, so the exemption has
+    /// to end at the next `impl` rather than at the next differently-named item.
+    #[test]
+    fn Test_Violations_In_Should_Stop_Exempting_At_The_Next_Impl_Block()
+    {
+        let payload = Payload_From_Text(
+            "unexpanded\t0\nitem\t0\tImplementation\tNotApplicable\tTable\t.\t+trait\n\
+             item\t1\tFunction\tPrivate\tTable::fmt\t.\t+fn/2\n\
+             item\t2\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
+             item\t3\tFunction\tPrivate\tTable::ctx\t.\t+fn/1\n",
+        );
+
+        let findings = Violations_In(&payload, "src/lib.rs", &[]);
+
+        assert_eq!(findings.len(), 1, "only the inherent block's own member is judged: {findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "ctx");
+    }
+
+    /// A later sibling at the same level does not carry the block's prefix, so it falls out
+    /// of the exemption with nothing having to pop it.
+    #[test]
+    fn Test_Violations_In_Should_Still_Judge_A_Sibling_After_A_Trait_Impl()
+    {
+        let payload = Payload_From_Text(
+            "unexpanded\t0\nitem\t0\tImplementation\tNotApplicable\tTable\t.\t+trait\n\
+             item\t1\tFunction\tPrivate\tTable::fmt\t.\t+fn/2\n\
+             item\t2\tFunction\tPrivate\tCtx\t.\t+fn/0\n",
+        );
+
+        let findings = Violations_In(&payload, "src/lib.rs", &[]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "Ctx");
+    }
+
+    /// The `impl` block itself still answers for its own name -- the type it names was the
+    /// author's choice even when the trait's member names were not.
+    #[test]
+    fn Test_Violations_In_Should_Still_Judge_The_Trait_Impl_Blocks_Own_Name()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tImplementation\tNotApplicable\tCtx\t.\t+trait\n");
+
+        let findings = Violations_In(&payload, "src/lib.rs", &[]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "Ctx");
     }
 
     #[test]
