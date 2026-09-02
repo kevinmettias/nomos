@@ -45049,6 +45049,180 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P26-CHECK-FILESYSTEM-PLUMBING",
+      "title": "Thread a FileSystem port through Run/Run_Gate, and wire naming-policy materialization as its first consumer",
+      "why": "OD-RULES-011's four capability families (naming/limits/scripting/words) are library-complete but nomos-check-orchestration::RunContext has no FileSystem port at all -- only ProcessLauncher -- so no rule package's own facts.Require for its policy capability ever succeeds in a real run; every one silently falls back to its hardcoded default (OD-CAPABILITY-004's optional-capability design working exactly as designed, just against a fact nobody ever offers). nomos_repo_standards::Materialize_Workspace (and the limits/scripting/words siblings) all need a FileSystem to read standards.json. This is one shared prerequisite for all four, not four independent ones -- confirmed with a peer session already mid-scope on limits/scripting/words, who is deliberately waiting on this rather than risk an incompatible RunContext shape. Landing naming's own Declare+Materialize wiring in the same item proves the new port has a real consumer rather than shipping an unread field.",
+      "done_when": "RunContext and GateEnvironment both carry a Fs: FileSystem generic and a filesystem field, threaded through Run/RunEnvironment/MaterializationEnvironment/Materialize_Capabilities in nomos-check-orchestration and through Judged_Sources/Run_Gate/Explain_Gate in nomos-gate-orchestration, with nomos-cli::check.rs/gate.rs and nomos-api's two gate response call sites supplying nomos_platform_std::StdFileSystem and every test call site (nomos-check-orchestration's tests.rs/run_seam.rs, nomos-gate-orchestration's tests.rs/check_orchestration_seam.rs) updated to pass one. A new Declare_Naming_Policy_Capability offers nomos_repo_standards against nomos_cap_naming_policy in composition.rs, and a new Materialize_Naming_Policy call (gated on any of NAMING_CONVENTION/DATA_NAMES_STAY_LOWER_SNAKE/EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE/UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER/TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE being selected) writes the fact into the store before those rules run, with a new integration test proving a real standards.json naming override actually changes a real Run's findings (not just that the plumbing compiles). Both crates' public surface snapshots re-blessed, and cargo test -p nomos-check-orchestration -p nomos-gate-orchestration -p nomos-cli -p nomos-api passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/tests/run_seam.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/tests/check_orchestration_seam.rs",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-api/src/response/gate_run_response.rs",
+          "crates/host/nomos-api/src/response/gate_explain_response.rs",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "territory list omitted crates/orchestration/nomos-check-orchestration/src/tests.rs, which also constructs RunContext directly (14 call sites) -- re-adding with it included"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-12",
+        "declined_at": 1788311173
+      }
+    },
+    {
+      "id": "P26-CHECK-FILESYSTEM-PLUMBING-2",
+      "title": "Thread a FileSystem port through Run/Run_Gate, and wire naming-policy materialization as its first consumer",
+      "why": "OD-RULES-011's four capability families (naming/limits/scripting/words) are library-complete but nomos-check-orchestration::RunContext has no FileSystem port at all -- only ProcessLauncher -- so no rule package's own facts.Require for its policy capability ever succeeds in a real run; every one silently falls back to its hardcoded default (OD-CAPABILITY-004's optional-capability design working exactly as designed, just against a fact nobody ever offers). nomos_repo_standards::Materialize_Workspace (and the limits/scripting/words siblings) all need a FileSystem to read standards.json. This is one shared prerequisite for all four, not four independent ones -- confirmed with a peer session already mid-scope on limits/scripting/words, who is deliberately waiting on this rather than risk an incompatible RunContext shape. Landing naming's own Declare+Materialize wiring in the same item proves the new port has a real consumer rather than shipping an unread field.",
+      "done_when": "RunContext and GateEnvironment both carry a Fs: FileSystem generic and a filesystem field, threaded through Run/RunEnvironment/MaterializationEnvironment/Materialize_Capabilities in nomos-check-orchestration and through Judged_Sources/Run_Gate/Explain_Gate in nomos-gate-orchestration, with nomos-cli::check.rs/gate.rs and nomos-api's two gate response call sites supplying nomos_platform_std::StdFileSystem and every test call site (nomos-check-orchestration's src/tests.rs/tests/run_seam.rs, nomos-gate-orchestration's src/tests.rs/tests/check_orchestration_seam.rs) updated to pass one. A new Declare_Naming_Policy_Capability offers nomos_repo_standards against nomos_cap_naming_policy in composition.rs, and a new Materialize_Naming_Policy call (gated on any of NAMING_CONVENTION/DATA_NAMES_STAY_LOWER_SNAKE/EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE/UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER/TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE being selected) writes the fact into the store before those rules run, with a new integration test proving a real standards.json naming override actually changes a real Run's findings (not just that the plumbing compiles). Both crates' public surface snapshots re-blessed, and cargo test -p nomos-check-orchestration -p nomos-gate-orchestration -p nomos-cli -p nomos-api passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/tests/run_seam.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/tests/check_orchestration_seam.rs",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-api/src/response/gate_run_response.rs",
+          "crates/host/nomos-api/src/response/gate_explain_response.rs",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-12",
+        "acquired_at": 1788311200,
+        "lease_expires_at": 1788318400
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-RULES-INLINE-ALWAYS-AND-DISABLED-TEST",
+      "title": "Two more marker-comment rules in rust_text.rs: inline(always) and #[ignore] justification",
+      "why": "code-standards backlog survey found style/concurrency/languages/rust/inline-attribute-discipline/inline-always-requires-justification.md and testing/reliability/test-health/check-disabled-tests/a-disabled-test-states-why.md (Rust half) with no nomos-rules counterpart; both are the same Previous_Comment_Block_Has marker-comment shape already used by 6 rules in this file, no new capability or mod needed",
+      "done_when": "rust_text.rs gains Check_Inline_Always_Justification (flags #[inline(always)] with no adjacent comment) and Check_A_Disabled_Test_States_Why (flags a bare #[ignore] with neither an inline = \"reason\" value nor an adjacent comment), each with unit tests, compiling and passing standalone without touching checks.rs or lib.rs yet",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/rust_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 300
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "tes_Why` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\rust_text.rs:163:8\n    |\n163 | pub fn Check_A_Disabled_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>\n    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Inline_Always_Findings_In` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\rust_text.rs:321:4\n    |\n321 | fn Inline_Always_Findings_In(source: &SourceFile) -> Vec<Finding>\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Disabled_Test_Findings_In` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\rust_text.rs:343:4\n    |\n343 | fn Disabled_Test_Findings_In(source: &SourceFile) -> Vec<Finding>\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Has_Inline_Always_Attribute` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\rust_text.rs:572:4\n    |\n572 | fn Has_Inline_Always_Attribute(code: &str) -> bool\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Has_Local_Inline_Always_Justification` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\rust_text.rs:577:4\n    |\n577 | fn Has_Local_Inline_Always_Justification(lines: &[&str], index: usize) -> bool\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Has_Bare_Ignore_Attribute` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\rust_text.rs:591:4\n    |\n591 | fn Has_Bare_Ignore_Attribute(code: &str) -> bool\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Has_Local_Ignore_Justification` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\rust_text.rs:598:4\n    |\n598 | fn Has_Local_Ignore_Justification(lines: &[&str], index: usize) -> bool\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: `nomos-rules` (lib) generated 10 warnings\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-27d32a4363304d08.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-cd1a275ce0c17f78.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788311729,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "35a65255a10752f1a910f1f28bec955a73d948ba"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

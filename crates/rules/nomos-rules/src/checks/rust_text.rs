@@ -2,12 +2,13 @@
 //!
 //! These checks deliberately stay conservative and text-local. They import standards whose
 //! deciding evidence is visible in one Rust source file: panic primitive spelling, path
-//! attributes, shared `Rc`/`Arc` plus `RefCell` ownership escapes, and — the two rules this
-//! file adds beyond its original four — `#[allow(...)]` and `unsafe` constructs that carry
-//! no adjacent explanatory comment. Both new rules reuse [`Previous_Comment_Block_Has`],
-//! the same "walk the contiguous comment block immediately above this line" primitive
-//! [`Panic_Findings_In`] and [`Shared_Interior_Mutability_Findings_In`] already share —
-//! a real second and third consumer, not a new abstraction invented for them.
+//! attributes, shared `Rc`/`Arc` plus `RefCell` ownership escapes, and four rules built on
+//! the same "an attribute or construct carries no adjacent explanatory comment" shape —
+//! `#[allow(...)]`, `unsafe` constructs, `#[inline(always)]`, and a bare `#[ignore]` with no
+//! `= "reason"` value. All four reuse [`Previous_Comment_Block_Has`], the same "walk the
+//! contiguous comment block immediately above this line" primitive [`Panic_Findings_In`] and
+//! [`Shared_Interior_Mutability_Findings_In`] already share — real repeat consumers, not a
+//! new abstraction invented for them.
 
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
@@ -25,6 +26,10 @@ pub const SHARED_INTERIOR_MUTABILITY_SAYS_WHY: &str = "shared-interior-mutabilit
 pub const EVERY_ALLOW_CARRIES_A_JUSTIFICATION: &str = "every-allow-carries-a-justification";
 /// The code-standards `unsafe` justification rule id.
 pub const UNSAFE_JUSTIFICATION: &str = "unsafe-justification";
+/// The code-standards `#[inline(always)]` justification rule id.
+pub const INLINE_ALWAYS_JUSTIFICATION: &str = "inline-always-requires-justification";
+/// The code-standards disabled-test justification rule id.
+pub const A_DISABLED_TEST_STATES_WHY: &str = "a-disabled-test-states-why";
 
 /// Reports `unwrap()` and placeholder `expect(...)` outside test and example Rust sources.
 #[must_use]
@@ -127,6 +132,43 @@ pub fn Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Finding>
         if source.Is_Written_In(RUST_LANGUAGE)
         {
             findings.extend(Unsafe_Findings_In(source));
+        }
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+/// Reports `#[inline(always)]` attributes with no adjacent explanatory comment.
+#[must_use]
+pub fn Check_Inline_Always_Justification(sources: &[SourceFile]) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        if source.Is_Written_In(RUST_LANGUAGE)
+        {
+            findings.extend(Inline_Always_Findings_In(source));
+        }
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+/// Reports a bare `#[ignore]` on a Rust test with neither an inline `= "reason"` value nor
+/// an adjacent comment explaining why the test does not run.
+#[must_use]
+pub fn Check_A_Disabled_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        if source.Is_Written_In(RUST_LANGUAGE)
+        {
+            findings.extend(Disabled_Test_Findings_In(source));
         }
     }
 
@@ -269,6 +311,50 @@ fn Unsafe_Findings_In(source: &SourceFile) -> Vec<Finding>
                 UNSAFE_JUSTIFICATION,
                 Line_Number(index),
                 "uses `unsafe` without an adjacent `// SAFETY:` comment",
+            ));
+        }
+    }
+
+    return findings;
+}
+
+fn Inline_Always_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let lines = Lines_Of(source);
+    let mut findings = Vec::new();
+
+    for (index, line) in lines.iter().enumerate()
+    {
+        let code = Code_Prefix(line);
+        if Has_Inline_Always_Attribute(code) && !Has_Local_Inline_Always_Justification(&lines, index)
+        {
+            findings.push(Finding_For_Line(
+                source,
+                INLINE_ALWAYS_JUSTIFICATION,
+                Line_Number(index),
+                "carries #[inline(always)] with no adjacent comment explaining why",
+            ));
+        }
+    }
+
+    return findings;
+}
+
+fn Disabled_Test_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let lines = Lines_Of(source);
+    let mut findings = Vec::new();
+
+    for (index, line) in lines.iter().enumerate()
+    {
+        let code = Code_Prefix(line);
+        if Has_Bare_Ignore_Attribute(code) && !Has_Local_Ignore_Justification(&lines, index)
+        {
+            findings.push(Finding_For_Line(
+                source,
+                A_DISABLED_TEST_STATES_WHY,
+                Line_Number(index),
+                "disables a test with a bare #[ignore] and no reason",
             ));
         }
     }
@@ -481,6 +567,42 @@ fn Has_Local_Allow_Justification(lines: &[&str], index: usize) -> bool
 fn Comment_Is_Non_Empty(line: &str) -> bool
 {
     return Comment_Text_Of(line).is_some_and(|comment| return !comment.trim().is_empty());
+}
+
+fn Has_Inline_Always_Attribute(code: &str) -> bool
+{
+    return code.contains("#[inline(always)]");
+}
+
+fn Has_Local_Inline_Always_Justification(lines: &[&str], index: usize) -> bool
+{
+    if lines.get(index).is_some_and(|line| return Comment_Is_Non_Empty(line))
+    {
+        return true;
+    }
+
+    return Previous_Comment_Block_Has(lines, index, Comment_Is_Non_Empty);
+}
+
+/// A bare `#[ignore]` (or `#[ignore, ...]`) with no `= "reason"` value — the shape
+/// `a-disabled-test-states-why` names as the one that needs a local comment instead.
+/// `#[ignore = "..."]` already carries its own reason in the attribute itself and is never
+/// flagged.
+fn Has_Bare_Ignore_Attribute(code: &str) -> bool
+{
+    let Some(start) = code.find("#[ignore") else { return false };
+    let after = code[start.saturating_add("#[ignore".len())..].trim_start();
+    return after.starts_with(']') || after.starts_with(',');
+}
+
+fn Has_Local_Ignore_Justification(lines: &[&str], index: usize) -> bool
+{
+    if lines.get(index).is_some_and(|line| return Comment_Is_Non_Empty(line))
+    {
+        return true;
+    }
+
+    return Previous_Comment_Block_Has(lines, index, Comment_Is_Non_Empty);
 }
 
 /// Matches `unsafe {`, `unsafe fn`, `unsafe impl` and `unsafe trait` specifically — not a
@@ -799,6 +921,67 @@ mod tests
         let findings = Check_Unsafe_Justification(&[source]);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Inline_Always_Justification_Should_Report_An_Unexplained_Inline_Always()
+    {
+        let source = Source("src/lib.rs", "#[inline(always)]\npub fn Sample_Texel() -> Color { todo!() }\n");
+
+        let findings = Check_Inline_Always_Justification(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(INLINE_ALWAYS_JUSTIFICATION));
+    }
+
+    #[test]
+    fn Test_Check_Inline_Always_Justification_Should_Accept_An_Explained_Inline_Always()
+    {
+        let source = Source(
+            "src/lib.rs",
+            "// hot path, measured 8% improvement in benches/hot_path.rs\n#[inline(always)]\npub fn Sample_Texel() -> Color { todo!() }\n",
+        );
+
+        let findings = Check_Inline_Always_Justification(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_A_Disabled_Test_States_Why_Should_Report_A_Bare_Ignore()
+    {
+        let source = Source("tests/lib.rs", "#[test]\n#[ignore]\nfn Test_Something() {}\n");
+
+        let findings = Check_A_Disabled_Test_States_Why(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(A_DISABLED_TEST_STATES_WHY));
+    }
+
+    #[test]
+    fn Test_Check_A_Disabled_Test_States_Why_Should_Accept_An_Ignore_With_A_Reason_Value()
+    {
+        let source = Source(
+            "tests/lib.rs",
+            "#[test]\n#[ignore = \"needs a GPU adapter; no headless runner has one\"]\nfn Test_Something() {}\n",
+        );
+
+        let findings = Check_A_Disabled_Test_States_Why(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_A_Disabled_Test_States_Why_Should_Accept_A_Preceding_Comment()
+    {
+        let source = Source(
+            "tests/lib.rs",
+            "#[test]\n// flaky under -race, see #88\n#[ignore]\nfn Test_Something() {}\n",
+        );
+
+        let findings = Check_A_Disabled_Test_States_Why(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
     }
 
     fn Source(path: &str, text: &str) -> SourceFile
