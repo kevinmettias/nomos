@@ -1,0 +1,22 @@
+[package]
+name = "nomos-workflow-orchestration"
+version = "0.1.0"
+description = "Band 40. The workflow tier's first real execution increment: runs an ordered sequence of WorkflowStep declarations, each paired with a real dispatch to one of this workspace's two real AgentExecutor crates, refusing whichever step first declares itself incoherent before that step's body ever dispatches. OD-WORKFLOW-005."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-agent-contracts = { workspace = true }
+nomos-agent-executor-claude-code = { workspace = true }
+nomos-contracts = { workspace = true }
+nomos-model-backend-ollama = { workspace = true }
+nomos-platform = { workspace = true }
+
+[dev-dependencies]
+nomos-ledger = { workspace = true }
+nomos-model-package = { workspace = true }
+
+[lints]
+workspace = true

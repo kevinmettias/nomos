@@ -47018,14 +47018,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-p27",
-        "acquired_at": 1788319707,
-        "lease_expires_at": 1788326907
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -47036,7 +47032,28 @@
         ],
         "timeout_seconds": 900
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-workflow-orchestration",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest tests::Test_An_Empty_Plan_Completes_Vacuously ... ok\ntest tests::Test_An_Incoherent_Step_Is_Refused_Before_Dispatch ... ok\ntest tests::Test_A_Failure_Prevents_A_Later_Step_From_Running ... ok\ntest tests::Test_A_Failed_Dispatch_Stops_The_Run ... ok\ntest tests::Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions ... ok\ntest tests::Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes ... ok\ntest tests::Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes ... ok\ntest tests::Test_A_Two_Step_Sequence_Completes_In_Order ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workflow_orchestration-678c9675d7eae1f5.exe)\n   Doc-tests nomos_workflow_orchestration\n",
+        "verified_at": 1788319948,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c8e5debee13f419eb28ce8de32fe2abec2d304b8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

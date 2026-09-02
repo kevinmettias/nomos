@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:c4f7f582f8af9e70785e1d5508a39304181cc551c91b918947b082cacc20c182",
-  "inputs_digest": "sha256:9c46cfc1ce98f30c66e02c35523dcc3821604e1b30f81a84632b1c92b983e231",
+  "content_digest": "sha256:4e8927159f881e634a808af4ad27074cf0d1324291e193062d22321ce95eed33",
+  "inputs_digest": "sha256:7b55d230151a4ec116f8e18bbe1fa2dec35f54cde14aa52d20f6526ca2b7e2f7",
   "sections": [
     [
       "Documents",
-      180
+      181
     ],
     [
       "Sections",
-      1508
+      1516
     ],
     [
       "Source blocks",
-      5281
+      5302
     ]
   ],
   "inputs": [
@@ -908,7 +908,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored",
-      "hash": "sha256:dff87d25df3893a5d66de9f794fdbcf4cd4e3048fe31c0ac06083cd448925062"
+      "hash": "sha256:47936683a1dbd0100ff750e1a221706c5b7051604dde5d774c375f1d0313774b"
     },
     {
       "content": "documents",
@@ -919,6 +919,11 @@
       "content": "documents",
       "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md@authored",
       "hash": "sha256:5f24f0f0ce8ef0275150de96e69cd897a7273861b87ec2f80769fb30cb24155d"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md@authored",
+      "hash": "sha256:fe9ace67698a2866da278f9d5fa4d1de3a38f32fd6dd432358c996b3662c2ce3"
     },
     {
       "content": "headings",
@@ -8393,7 +8398,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#19",
-      "hash": "sha256:a11d34723bcb613778d828a75176007dcb92a564b1104dd71ee8a520e9865bb7"
+      "hash": "sha256:65f8a124c961c33aa829abc32a98b5ec7f6a8a30e58940c6bda18d736f2c666b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#21",
+      "hash": "sha256:a7d65c47d2de3d60a4b711e8cbfa64ddb2714dfd3227f42d861994f8cf4da6ce"
     },
     {
       "content": "headings",
@@ -8459,6 +8469,41 @@
       "content": "headings",
       "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#13",
       "hash": "sha256:1ca3dbce64cd8f895a7aff2fb950f482aac031c96088ea008ed59f28ec664763"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#1",
+      "hash": "sha256:599d86b492f503108d0e9c0d7cf50d7b4d1f77cd4ca4b653cef6d771243d69f6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#2",
+      "hash": "sha256:f63e136b3b5315ddfed30a912252014bd65bdfe4b4bb680e4e2663ca6458a38b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#5",
+      "hash": "sha256:bb4bd917421b1a9a7c5fbfec6247b7e1051f75723279509dc22e612ee31541d3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#8",
+      "hash": "sha256:64a06000814edeea98795325ad3958766aa9c8e788879215d09e8a4b4da9a692"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#13",
+      "hash": "sha256:c1a977084e2fd12c13bb9af5b5485d94e83529df27b9f089b28a3626a9eed048"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#16",
+      "hash": "sha256:0c4a4fd741136d4a10df2bef6878ce15d96abb9e03b28d61c0e90e6811c983e8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#18",
+      "hash": "sha256:c2519453b4d9492c5cb881de50ce556036adc5ede14abf60623fa60a4a39f913"
     },
     {
       "content": "blocks",
@@ -34713,12 +34758,22 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#19",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:609c2883d3fc1ca4a949b7353799ea4da608a690baecdecd293ec7fdb2270ba7"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#20",
-      "hash": "sha256:d3578c04e1b7c5d58eec6e37fb2b14f1e89ea17bf7d643518612a5fb0ad5677a"
+      "hash": "sha256:a0c415bc1a406205be05a53147e336ac64a2e68b119e8283a90c4a656934f70a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#21",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#22",
+      "hash": "sha256:9e6f2bae69b23a01f0db6a0e2d9664ba65d5b199624f8a077e1a04ca9bed45e1"
     },
     {
       "content": "blocks",
@@ -34864,6 +34919,101 @@
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#14",
       "hash": "sha256:f4001ed28bf30c1bb9e04e36083daed237393465a15e0a1f45991b13d0c44b38"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#1",
+      "hash": "sha256:0b50577088f37b69b79afff1d65ec87a417ae291affd8784614bc02ec298dffe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#3",
+      "hash": "sha256:1fc02f4f5145d7e9e6e0774a3c3b5c8e3118c2872e5dd38a9a2c97376951c0a8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#4",
+      "hash": "sha256:a459c6b9ffe51f01d8b2224f5b69f78745fa6b786cb68e19c4213ac6723ff880"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#6",
+      "hash": "sha256:3d1221662b46f78448ce3e2e006d3a68446d5b7dba1fe3483084af81dc170538"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#7",
+      "hash": "sha256:0a7b073194ea19f2985c36d89ab3b86dfaad4f5447b46649fdb5ab7a3a21c6b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#9",
+      "hash": "sha256:d93c7639dface3ac4c95f1be1d6f19cf6e2e89f4b555ec3ae6fee3e30329aeec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#10",
+      "hash": "sha256:6f78d2c0a61276b4b8dc504fab131e6ac7ff47fff57a3fc9862803f4174b893d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#11",
+      "hash": "sha256:4806b02e592839172ddc9864a9826b244505b192ccd82fd6f157eedf287bff80"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#12",
+      "hash": "sha256:e3ce8ed596a8556282e9c2f212547a0b05e4ad7fca2dcbd85b59a1766152b28f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#13",
+      "hash": "sha256:ee495983dc1e2fa8108e79dc273c9f5f555bd92c85451c73a66ef8865bbb7ee5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#14",
+      "hash": "sha256:84125306e44adef9df49519086456962b4e4e2f13a4823a076b24a34b8bca4ab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#15",
+      "hash": "sha256:05aea94ace2b23ac5e739c5b5e1fd2ccd1c3b49df3ca11719df9b27f2689beb9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#16",
+      "hash": "sha256:1a5404ee0df3025616b1e4703f8b71d3f7beca77990c0b0df1d2b9ecfd224306"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#17",
+      "hash": "sha256:d910752d8aeed1279da396364c743e2003fb1344a61eab8acf0f10889183be52"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#18",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#19",
+      "hash": "sha256:98788158d5272879fd0759e35ffcad33951d07059fac624efc6da74b38a39896"
     }
   ]
 }

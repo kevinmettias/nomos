@@ -245,6 +245,12 @@ members = [
     # from choosing a platform or rendering the answer. `OD-HOST-002`.
     "crates/orchestration/nomos-spec-orchestration",
 
+    # Band 40 — orchestration. The workflow tier's first real execution increment:
+    # running an ordered sequence of `WorkflowStep` declarations, each dispatched to
+    # one of this workspace's two real backends, apart from choosing a platform or
+    # rendering the answer. `OD-WORKFLOW-005`.
+    "crates/orchestration/nomos-workflow-orchestration",
+
     # Band 40 — orchestration. The seam for the first-class Gate object
     # `ARC-ROADMAP-001` names, starting with `Plan`: a real rule registry, reported
     # back whole, apart from selecting scope, choosing a platform or rendering the
@@ -348,6 +354,7 @@ nomos-model-backend-ollama = { path = "crates/agent/nomos-model-backend-ollama" 
 nomos-work-orchestration = { path = "crates/orchestration/nomos-work-orchestration" }
 nomos-check-orchestration = { path = "crates/orchestration/nomos-check-orchestration" }
 nomos-spec-orchestration = { path = "crates/orchestration/nomos-spec-orchestration" }
+nomos-workflow-orchestration = { path = "crates/orchestration/nomos-workflow-orchestration" }
 nomos-gate-orchestration = { path = "crates/orchestration/nomos-gate-orchestration" }
 nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }

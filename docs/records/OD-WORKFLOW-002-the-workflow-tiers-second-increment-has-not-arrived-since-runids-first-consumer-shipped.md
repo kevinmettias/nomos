@@ -3,7 +3,7 @@ id: OD-WORKFLOW-002
 type: decision
 title: The workflow tier's second increment has not arrived since RunId's first consumer shipped
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - workflow
@@ -20,6 +20,8 @@ relations:
   - target: OD-WORKFLOW-003
     type: relates-to
   - target: OD-WORKFLOW-004
+    type: relates-to
+  - target: OD-WORKFLOW-005
     type: relates-to
 ---
 
@@ -168,6 +170,18 @@ as satisfied only when a real executor also constructs a real `WorkResult`, not 
 one exists. Conditions 1 and 2, and every other finding in this record, are unchanged --
 `OD-WORKFLOW-004` re-verified both directly and found neither has moved.
 
+## Amendment (OD-WORKFLOW-005)
+
+None of the three conditions above has fired -- `OD-WORKFLOW-005` re-checked all three
+directly against the tree that shipped `nomos-agent-executor-ollama` and found condition 3
+still satisfied only at the letter, conditions 1 and 2 unchanged. A real execution increment
+exists in this workspace anyway: `nomos-workflow-orchestration`, built under the user's own
+direct, session-specific instruction to this workspace's workflow tier rather than under any
+condition this record names. This record's own three conditions are not superseded and are
+not retired -- they remain the honest triggers for the increment *after* this one, the same
+distinction `OD-WORKFLOW-005` itself draws between a narrow, explicit override and a general
+retirement of the caution this record's survey discipline still holds.
+
 ## Status
 
 Accepted. Re-surveys the workflow tier against the live tree and the v14 corpus a second
@@ -176,5 +190,7 @@ increment has arrived -- naming the three conditions that would produce one rath
 inventing a shape to have something to build. Amended by `OD-WORKFLOW-003` to narrow this
 record's "does not build `WorkflowStep`" clause to the execution-engine question it was
 actually answering. Amended again by `OD-WORKFLOW-004` to narrow condition 3's wording after
-`nomos-agent-executor`'s arrival satisfied its letter without satisfying its substance; the
-rest of this record's survey stands.
+`nomos-agent-executor`'s arrival satisfied its letter without satisfying its substance.
+Amended a third time by `OD-WORKFLOW-005` to record that a real execution increment was built
+under the user's own override before any of the three conditions fired; the rest of this
+record's survey stands.

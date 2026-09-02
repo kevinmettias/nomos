@@ -187,9 +187,10 @@ profile: domain-specification
 | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md@authored | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md | authored | 21 | 8 | sha256:20584da07fdc54fcdca104e7137bc67b265954ba3734fc8b2d17a9036b2806b1 |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md | authored | 29 | 11 | sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685 |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 24 | 8 | sha256:397fcafaea1e57df681cd4fe9f235f3994dfe990cfab99487fc72a91f797ec84 |
-| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md | authored | 20 | 9 | sha256:dff87d25df3893a5d66de9f794fdbcf4cd4e3048fe31c0ac06083cd448925062 |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md | authored | 22 | 10 | sha256:47936683a1dbd0100ff750e1a221706c5b7051604dde5d774c375f1d0313774b |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md@authored | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md | authored | 15 | 6 | sha256:e067ed756ffd159cb17a6fdc76092fd0f3ff664bcc77349204ce572497711c6e |
 | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md@authored | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md | authored | 14 | 7 | sha256:5f24f0f0ce8ef0275150de96e69cd897a7273861b87ec2f80769fb30cb24155d |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md@authored | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md | authored | 19 | 7 | sha256:fe9ace67698a2866da278f9d5fa4d1de3a38f32fd6dd432358c996b3662c2ce3 |
 
 ## Sections
 
@@ -1689,7 +1690,8 @@ profile: domain-specification
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#11 | authored | 2 | What Would Decide The Next Increment |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#15 | authored | 2 | Amendment (OD-WORKFLOW-003) |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#17 | authored | 2 | Amendment (OD-WORKFLOW-004) |
-| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#19 | authored | 2 | Status |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#19 | authored | 2 | Amendment (OD-WORKFLOW-005) |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#21 | authored | 2 | Status |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#1 | authored | 1 | WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#2 | authored | 2 | Question |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#6 | authored | 2 | What Was Measured |
@@ -1703,6 +1705,13 @@ profile: domain-specification
 | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#9 | authored | 2 | What This Does Not Do |
 | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#11 | authored | 2 | Amendment to OD-WORKFLOW-002 |
 | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#13 | authored | 2 | Status |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#1 | authored | 1 | The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#2 | authored | 2 | Question |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#8 | authored | 2 | The Decision |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#13 | authored | 2 | What This Does Not Build |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#16 | authored | 2 | Amendment to OD-WORKFLOW-002 |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#18 | authored | 2 | Status |
 
 ## Source blocks
 
@@ -49918,13 +49927,33 @@ one exists. Conditions 1 and 2, and every other finding in this record, are unch
 
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#19
 
+*revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment (OD-WORKFLOW-005) · hash: sha256:609c2883d3fc1ca4a949b7353799ea4da608a690baecdecd293ec7fdb2270ba7*
+
+## Amendment (OD-WORKFLOW-005)
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#20
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment (OD-WORKFLOW-005) · hash: sha256:a0c415bc1a406205be05a53147e336ac64a2e68b119e8283a90c4a656934f70a*
+
+None of the three conditions above has fired -- `OD-WORKFLOW-005` re-checked all three
+directly against the tree that shipped `nomos-agent-executor-ollama` and found condition 3
+still satisfied only at the letter, conditions 1 and 2 unchanged. A real execution increment
+exists in this workspace anyway: `nomos-workflow-orchestration`, built under the user's own
+direct, session-specific instruction to this workspace's workflow tier rather than under any
+condition this record names. This record's own three conditions are not superseded and are
+not retired -- they remain the honest triggers for the increment *after* this one, the same
+distinction `OD-WORKFLOW-005` itself draws between a narrow, explicit override and a general
+retirement of the caution this record's survey discipline still holds.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#21
+
 *revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#20
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#22
 
-*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:d3578c04e1b7c5d58eec6e37fb2b14f1e89ea17bf7d643518612a5fb0ad5677a*
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:9e6f2bae69b23a01f0db6a0e2d9664ba65d5b199624f8a077e1a04ca9bed45e1*
 
 Accepted. Re-surveys the workflow tier against the live tree and the v14 corpus a second
 time, after `OD-WORKFLOW-001`'s first increment shipped, and finds no genuine second
@@ -49932,8 +49961,10 @@ increment has arrived -- naming the three conditions that would produce one rath
 inventing a shape to have something to build. Amended by `OD-WORKFLOW-003` to narrow this
 record's "does not build `WorkflowStep`" clause to the execution-engine question it was
 actually answering. Amended again by `OD-WORKFLOW-004` to narrow condition 3's wording after
-`nomos-agent-executor`'s arrival satisfied its letter without satisfying its substance; the
-rest of this record's survey stands.
+`nomos-agent-executor`'s arrival satisfied its letter without satisfying its substance.
+Amended a third time by `OD-WORKFLOW-005` to record that a real execution increment was built
+under the user's own override before any of the three conditions fired; the rest of this
+record's survey stands.
 
 ### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#1
 
@@ -50260,3 +50291,229 @@ Accepted. Re-checks `OD-WORKFLOW-002`'s third named condition against the live t
 `nomos-agent-executor`'s arrival, finds it fired only at the letter and not the substance of
 its own wording, and sharpens the condition's text with the evidence this audit found rather
 than either declaring victory or leaving a now-misleading condition unchanged.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#1
+
+*revision: authored · kind: heading · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger · hash: sha256:0b50577088f37b69b79afff1d65ec87a417ae291affd8784614bc02ec298dffe*
+
+# The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#2
+
+*revision: authored · kind: heading · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#3
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Question · hash: sha256:1fc02f4f5145d7e9e6e0774a3c3b5c8e3118c2872e5dd38a9a2c97376951c0a8*
+
+`OD-WORKFLOW-002` (v3, amended twice) named three conditions that would decide the workflow
+tier's next real increment, and re-checked them twice more since: `OD-WORKFLOW-003` narrowed
+its `WorkflowStep` clause to the engine question it was actually answering, and
+`OD-WORKFLOW-004` found the third condition satisfied only at the letter of its wording, not
+its substance — a real `AgentExecutor` exists but constructs no real `WorkResult`. Re-checked
+directly once more for this record: `nomos-agent-executor-ollama` now exists as a second real
+`AgentExecutor` (this workspace's own `git log` shows `b5566ae`, "Merge track-b-agent-model:
+second AgentExecutor backend (Ollama)"), but it constructs no `WorkResult` either — grepped
+across `crates` for every real `WorkResult` construction site, the only two remain
+`nomos-agent-contracts`' own `#[cfg(test)]` module, exactly where `OD-WORKFLOW-004` already
+found them. **None of the three conditions has fired.** `nomos_gate_orchestration::Run_Gate`
+still has exactly the same two real callers `OD-WORKFLOW-002` found; a word-boundary grep for
+`phase`/`Phase` across `crates/orchestration/nomos-gate-orchestration/src` and
+`crates/orchestration/nomos-check-orchestration/src` still returns nothing.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#4
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Question · hash: sha256:a459c6b9ffe51f01d8b2224f5b69f78745fa6b786cb68e19c4213ac6723ff880*
+
+This record exists anyway, because the user who owns this repository directed this session
+directly to build the workflow tier's first real execution increment now, in full, explicit
+awareness that no condition has organically fired — the same shape this workspace has already
+recorded for other subsystems. `OD-PACKAGE-010` was "built only after the user overrode it
+once, explicitly and narrowly," before `OD-ROADMAP-001` later generalized that override across
+the `AgentExecutor`/`ModelBackend`/`RulePackage`/corrections cluster. `OD-ROADMAP-001` does not
+name the workflow tier or this record's own cluster — grepped directly, no record under
+`docs/records/` cites `OD-ROADMAP-001` as authority for anything workflow-tier-shaped — so this
+record does not claim that generalized retirement already covers this decision. It follows
+the same *pattern* `OD-PACKAGE-010` walked before `OD-ROADMAP-001` existed: a narrow, explicit,
+one-session override, recorded honestly as exactly that, not inflated into a claim that a
+wider retirement already licensed it.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#5
+
+*revision: authored · kind: heading · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#6
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What Was Measured · hash: sha256:3d1221662b46f78448ce3e2e006d3a68446d5b7dba1fe3483084af81dc170538*
+
+Read directly from the live tree rather than assumed from any prior record's own summary of
+it:
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#7
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What Was Measured · hash: sha256:0a7b073194ea19f2985c36d89ab3b86dfaad4f5447b46649fdb5ab7a3a21c6b3*
+
+- `crates/contracts/nomos-contracts/src/workflow_step.rs` and its four sibling files
+  (`cacheability.rs`, `cancellation_behavior.rs`, `compensation.rs`, `retry_policy.rs`,
+  `timeout.rs`) declare `WorkflowStep` exactly as `OD-WORKFLOW-003` admitted it: `WF-008`'s
+  eleven properties plus `WF-012`'s first, static-coherence clause only (`Is_Coherent`).
+  Grepped across the whole workspace for `Is_Coherent`: the only call sites are
+  `workflow_step.rs`'s own `#[cfg(test)]` module. Nothing outside this crate's own tests has
+  ever called it — the identical "vocabulary with zero real consumers" state `RunId` was in
+  before `OD-WORKFLOW-001` gave it one through `Gate`.
+- Two real `AgentExecutor` crates exist, `nomos-agent-executor-claude-code` (band 37,
+  `OD-EXECUTOR-001`) and `nomos-agent-executor-ollama` (band 37, `OD-EXECUTOR-004`), each
+  exposing `pub fn Execute<P: ProcessLauncher>(task: &TaskEnvelope, launcher: &P) ->
+  Result<AgentExecutionOutcome, AgentExecutionError>`. Read in full: the two crates share no
+  trait and no common `AgentExecutionOutcome`/`AgentExecutionError` type — both module docs
+  say so explicitly, and `OD-EXECUTOR-001`'s and `OD-EXECUTOR-004`'s own text each decline a
+  shared dispatch trait "ahead of a real need."
+- `crates/host/nomos-cli/src/agent.rs` is this workspace's one real precedent for combining
+  the two: `Backend` is "a plain match over two already-independent free functions, each
+  crate's own... There is no such trait," and `Dispatch` is "the entire dispatch, not a
+  stand-in for one." This is the only place in the workspace today that calls both
+  `nomos_agent_executor_claude_code::Execute` and `nomos_agent_executor_ollama::Execute` from
+  one caller.
+- `nomos-check-orchestration::Run` (band 40) was read in full
+  (`crates/orchestration/nomos-check-orchestration/src/run.rs`). Its real signature —
+  `Run<P: ProcessLauncher>(sources: &[SourceFile], variant: BuildVariant, root: &Path,
+  launcher: &P, selected: &[RuleId]) -> CheckOutcome` — takes source already walked by a
+  composition root, a build variant read through `env!` at the calling binary, and a rule
+  selection; a caller wanting to use it as a workflow step body would itself need to become a
+  second composition root capable of a directory walk, which is a materially heavier shape
+  than a bare `AgentExecutor` dispatch for a first increment to carry honestly.
+- A live, separate, unmerged ledger claim (`P14-EXECUTOR-005-BACKEND-FLAG-TRIGGER-RECHECK`,
+  held by another session as of this writing) is independently re-checking whether
+  `OD-EXECUTOR-004`'s own "no shared trait" restraint should be revisited. This record does
+  not depend on, preempt, or assume any outcome of that question — the mechanism this record
+  names below reads both `AgentExecutor` crates through the same plain-match shape
+  `nomos-cli::agent::Backend` already uses today, regardless of what a future shared trait
+  might look like.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#8
+
+*revision: authored · kind: heading · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#9
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / The Decision · hash: sha256:d93c7639dface3ac4c95f1be1d6f19cf6e2e89f4b555ec3ae6fee3e30329aeec*
+
+**Under the user's direct, session-specific instruction to build the workflow tier's first
+real execution increment now, the mechanism is: a new crate, `nomos-workflow-orchestration`
+(band 40, `crates/orchestration/nomos-workflow-orchestration`, a peer of
+`nomos-work-orchestration`/`nomos-check-orchestration`/`nomos-spec-orchestration` — none of
+the four may name another), that runs an ordered sequence of `WorkflowStep` declarations, each
+paired with a real dispatch to one of this workspace's two real `AgentExecutor` crates,
+refusing whichever step first declares itself incoherent before that step's body ever runs.**
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#10
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / The Decision · hash: sha256:6f78d2c0a61276b4b8dc504fab131e6ac7ff47fff57a3fc9862803f4174b893d*
+
+Concretely:
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#11
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / The Decision · hash: sha256:4806b02e592839172ddc9864a9826b244505b192ccd82fd6f157eedf287bff80*
+
+- `Body`, an enum naming `ClaudeCode(TaskEnvelope)` and `Ollama(TaskEnvelope)` directly —
+  `nomos-cli::agent::Backend`'s own shape, reused rather than reinvented, not a trait generic
+  over either crate.
+- `WorkflowStepPlan { declaration: WorkflowStep, body: Body }` — `WorkflowStep` declares no
+  dispatch mechanism of its own (`OD-WORKFLOW-003`), so pairing one with a concrete `Body` is
+  this crate's own decision, not something the contract states.
+- `Run(plan: &[WorkflowStepPlan], launcher: &impl ProcessLauncher) -> WorkflowOutcome` —
+  iterates `plan` in order; before dispatching a step, calls
+  `step.declaration.Is_Coherent()` and, if false, stops and reports `Refused` without ever
+  calling `step.body`; otherwise dispatches through the real executor `Body` names and
+  continues on success, or stops and reports `Failed` on the first dispatch error. An empty
+  `plan` completes vacuously. This gives `WorkflowStep::Is_Coherent` its first real consumer
+  anywhere in this workspace, the same "vocabulary, then its first real consumer" shape
+  `OD-WORKFLOW-001` already walked for `RunId` through `Gate`.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#12
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / The Decision · hash: sha256:e3ce8ed596a8556282e9c2f212547a0b05e4ad7fca2dcbd85b59a1766152b28f*
+
+This is real sequencing and a real enforcement of the one static rule `WorkflowStep` carries
+today — more than "give the vocabulary a token consumer," and deliberately not more than
+that. It is scoped by explicit subtraction, named in full in "What This Does Not Build" below.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#13
+
+*revision: authored · kind: heading · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What This Does Not Build · hash: sha256:ee495983dc1e2fa8108e79dc273c9f5f555bd92c85451c73a66ef8865bbb7ee5*
+
+## What This Does Not Build
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#14
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What This Does Not Build · hash: sha256:84125306e44adef9df49519086456962b4e4e2f13a4823a076b24a34b8bca4ab*
+
+No immutable published artifacts (`WF-009`). No branch/merge semantics or bounded parallelism
+(`WF-010`) — `Run` is one ordered sequence, nothing more. No independently versioned workflow
+definitions with pinned historical replay (`WF-011`). No `WF-012` retry or compensation
+*runtime* — `RetryPolicy`, `Timeout`, `Cacheability`, `CancellationBehavior`, and
+`Compensation` are read by `Is_Coherent` and carried on each step's declaration; none of their
+runtime behavior (an actual retry, an actual cache hit, an actual cancellation, an actual
+compensating run) is implemented. No `nomos-check-orchestration::Run` step body — named above
+as a real, heavier next step, not built here. No shared `AgentExecutor` trait — `Body` names
+both crates directly, the same restraint `OD-EXECUTOR-001`/`OD-EXECUTOR-004` already hold, and
+this record does not reach into the separate, live `OD-EXECUTOR-004` shared-trait question
+another session is independently re-checking. No CLI verb (`nomos workflow ...`) — this
+crate's own scripted tests are its real exercise; a command surface is a separate, later
+increment with its own argv design, not required to prove this mechanism for real. No
+`WorkResult` construction — `OD-WORKFLOW-004`'s own gap stays exactly as open as that record
+left it; a step's real `AgentExecutionOutcome` is carried in `StepOutcome`, never assembled
+into a `WorkResult`, because neither `AgentExecutor` produces the material a honest assembly
+would need any more than either did before this record.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#15
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What This Does Not Build · hash: sha256:05aea94ace2b23ac5e739c5b5e1fd2ccd1c3b49df3ca11719df9b27f2689beb9*
+
+It does not reopen `OD-WORKFLOW-001` through `004`, `OD-EXECUTOR-001`, or `OD-EXECUTOR-004`.
+It does not claim `OD-ROADMAP-001` already covers this decision — checked directly above, it
+does not name the workflow tier, and this record does not amend `OD-ROADMAP-001` to add it.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#16
+
+*revision: authored · kind: heading · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment to OD-WORKFLOW-002 · hash: sha256:1a5404ee0df3025616b1e4703f8b71d3f7beca77990c0b0df1d2b9ecfd224306*
+
+## Amendment to OD-WORKFLOW-002
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#17
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment to OD-WORKFLOW-002 · hash: sha256:d910752d8aeed1279da396364c743e2003fb1344a61eab8acf0f10889183be52*
+
+`OD-WORKFLOW-002`'s own text describes a tier that "stands exactly where `OD-WORKFLOW-001`
+left it" until one of its three named conditions fires. This record does not claim any of the
+three has fired — the survey above re-confirms none has. `OD-WORKFLOW-002` is amended in place
+(version bumped, a relation added, an amendment section appended, the same shape
+`OD-WORKFLOW-003` and `OD-WORKFLOW-004` each already used) to record that a real execution
+increment now exists in this workspace anyway, built under the user's own direct,
+session-specific override rather than under any of the three conditions `OD-WORKFLOW-002`
+itself named. The three conditions, and everything else that record found, are otherwise
+unchanged: they remain the honest triggers for the *next* increment past this one.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#18
+
+*revision: authored · kind: heading · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#19
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Status · hash: sha256:98788158d5272879fd0759e35ffcad33951d07059fac624efc6da74b38a39896*
+
+Accepted. Names the workflow tier's first real execution mechanism and records, in the same
+voice this workspace already uses for `OD-PACKAGE-010`'s and `OD-ROADMAP-001`'s overrides,
+that it was built ahead of any of `OD-WORKFLOW-002`'s three named conditions firing, under the
+user's own direct instruction to this session. Does not claim `OD-ROADMAP-001`'s generalized
+retirement already covered this decision, and does not itself generalize past the workflow
+tier.
