@@ -48720,6 +48720,142 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P30-RULES-TUPLE-VARIANT",
+      "title": "named-fields-over-positional-variant-payloads: a multi-field tuple enum variant",
+      "why": "code-standards' check-tuple-variant (rules/general/style/checks/data-and-values/data-shape/check-tuple-variant, main.go + shared rules/general/style/shared/variantshape/{variant.go,analyzer.go} + language-kernels/programming/rust/rustlang/rust_variant_shape.go) flags a Rust enum variant whose payload is positional (tuple-form) with two or more members: Point(f32, f32) compiles with x and y swapped, so the compiler cannot police the order the way it would a named struct-form variant. Verified against the real Go implementation, not the doc prose: is_Variant_Unambiguous exempts only single-member payloads (Some(T), Ok(T), newtypes) and fires on EVERY payload of two or more members regardless of whether the member types repeat -- has_Repeated_Type only changes the finding's MESSAGE text, never the verdict, which is narrower and more accurate than named-fields-over-positional-variant-payloads.md's own prose ('two or more fields of the SAME TYPE'), a doc-vs-implementation drift this port follows the implementation on, per this crate's established practice. Three code-standards rule-doc ids all cite this one tool for this one judgment (named-fields-over-positional-variant-payloads, multi-field-variants-use-struct-form, and a third at a different doc path, multi-field-enum-variants-use-struct-form, that the second doc explicitly points to as its real authority) -- real upstream doc drift, not three judgments; this port uses one canonical id, the fullest MUST-severity prose actually filed in check-tuple-variant's own doc directory. rust_variant_shape.go's own doc comment records a real corpus lesson worth porting faithfully: a first cut assumed an enum's opening brace sits on the same line as  and silently found zero across a 4,515-file corpus, because the real corpus writes Allman-style braces (enum header on one line,  on the next); the fix tracks whole-file brace depth and only commits an enum open once a  actually arrives, on that line or any later one. This crate has never ported a whole-file brace-depth state machine before (existing *_text.rs rules deliberately avoid it), but the real algorithm here is small and bounded (one depth counter, one pending-header string, ported from a ~60-line Go source read in full) and the same naive per-line strings.Count('{')/('}') the real tool itself uses (also naive about strings/comments mid-line, a stated and accepted limitation, not a gap this port needs to close beyond it). The escape hatch (// tuple-variant: allow <reason>, reason required) IS portable here, unlike naming-clarity's marker in the sibling item: this rule reads raw source text directly and carries its own real line numbers from the scan itself, never routing through nomos_cap_syntax::PayloadItem's line-less payload.",
+      "done_when": "A new crates/rules/nomos-rules/src/checks/enum_shape.rs implements Check_Named_Fields_Over_Positional_Variant_Payloads (rule id named-fields-over-positional-variant-payloads): a whole-file brace-depth scan (ported from rust_variant_shape.go's rustVariantScan) that tracks which enum body a line sits in, matches a tuple-variant-shaped line (name, then a single-line parenthesized payload with no nested unbalanced paren, then an optional trailing comma) at the enum's own depth, splits the payload into members at depth zero across <([/>)] pairs, and reports every variant whose member count is 2 or more, with a message naming the enum::variant and stating whether a member type repeats. Marker escape hatch '// tuple-variant: allow <reason>' (same-line trailing or immediately-above, non-empty reason required) using the same Has_Marker_Reason/Is_Skippable_Above shape concurrency_text.rs already established, duplicated per this crate's per-file convention. Rust-only, no repository-configurable dimension, so a leaf module rather than a capability. Own-implementation-file self-exemption, matching every other *_text.rs-shaped rule in this crate. Unit tests cover: a two-member tuple variant flagged, a single-member (newtype) variant exempt, a struct-form variant exempt (never matches the tuple-variant line shape), a K&R-brace enum, an Allman-brace enum (brace on the line after the header -- the corpus lesson itself, as its own named test), a nested generic payload split correctly at depth zero (HashMap<K, V>, u32 is a pair not a phantom triple), a repeated-type message vs a distinct-type message, and the marker exemption. checks.rs and lib.rs both declare/re-export Check_Named_Fields_Over_Positional_Variant_Payloads and NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS (both re-export layers). The nomos-rules public surface snapshot is reblessed. cargo test -p nomos-rules is green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/enum_shape.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "authored with backticked spans in --why that bash silently deleted via command substitution; re-authoring as P30-RULES-TUPLE-VARIANT-2 with the same content spelled without backticks"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-6f-authoring",
+        "declined_at": 1788367836
+      }
+    },
+    {
+      "id": "P27-RULES-NO-WILDCARD-IMPORTS-EXEMPTION",
+      "title": "no-wildcard-imports' use-super-star exemption cannot see across a split tests.rs file, and reports 49 false positives",
+      "why": "Composing no-wildcard-imports into a real gate run (surveyed in an isolated worktree, not yet composed for real) reports 49 blocking findings, all the identical shape: 'use super::*;' as literally the first import line of a standalone tests.rs (or nested tests/*.rs) file. Check_No_Wildcard_Imports' own Rust_Wildcard_Findings_In exempts use-super-star only when the SAME file's own text also contains a textual '#[cfg(test)]' line before it (placement.rs's Is_Rust_Wildcard_Use_Line/exempt_test_idiom). That holds for an inline #[cfg(test)] mod tests { use super::*; ... } block, but this workspace's prevailing convention (confirmed: crates/agent/nomos-agent-executor-claude-code/src/lib.rs:241-242 is #[cfg(test)]\\nmod tests; with the real content in a SEPARATE src/tests.rs starting 'use super::*;') puts the #[cfg(test)] gate in the PARENT file and the wildcard import in a CHILD file that never contains that literal text -- the rule's own textual, single-file marker cannot see across that boundary. Verified all 49 findings' paths against this crate's own super::Is_Test_Or_Example_Source (already the shared, established test/example-file-shape recognizer flakiness_text.rs and others already use): every one matches (a bare tests.rs, a *//tests.rs suffix, or nesting under a tests/ directory). This is a rule bug, not 49 real problems -- rewriting use super::* into explicit imports across 49 idiomatic test-module files would be pure churn with no clarity gained, the opposite of what the rule exists for.",
+      "done_when": "Rust_Wildcard_Findings_In's exempt_test_idiom also treats use-super-star as exempt when super::Is_Test_Or_Example_Source(source) is true, independent of whether this same file's own text contains '#[cfg(test)]' -- the existing same-file #[cfg(test)]-positional path stays, for an inline test module inside an otherwise-production file, which Is_Test_Or_Example_Source does not recognize. A new test covers a standalone tests.rs-shaped SourceFile whose 'use super::*;' is its first line with no #[cfg(test)] anywhere in its own text, asserting no finding -- the exact shape all 49 real findings share. cargo test -p nomos-rules is green. run_context.rs composes no-wildcard-imports into Run (RULE_COUNT +1) now that it is safe to (0 findings against this tree), extending the doc comment's now-four-rule deliberately-absent list back down to three. cargo test -p nomos-check-orchestration is green. nomos gate run --root . --rule no-wildcard-imports reports 0 findings.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/placement.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-session-e6f4d433",
+        "acquired_at": 1788367847,
+        "lease_expires_at": 1788375047
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P30-RULES-TUPLE-VARIANT-2",
+      "title": "named-fields-over-positional-variant-payloads: a multi-field tuple enum variant",
+      "why": "code-standards' check-tuple-variant (rules/general/style/checks/data-and-values/data-shape/check-tuple-variant, main.go + shared rules/general/style/shared/variantshape/{variant.go,analyzer.go} + language-kernels/programming/rust/rustlang/rust_variant_shape.go) flags a Rust enum variant whose payload is positional (tuple-form) with two or more members: Point(f32, f32) compiles with x and y swapped, so the compiler cannot police the order the way it would a named struct-form variant. Verified against the real Go implementation, not the doc prose: is_Variant_Unambiguous exempts only single-member payloads (Some(T), Ok(T), newtypes) and fires on every payload of two or more members regardless of whether the member types repeat -- has_Repeated_Type only changes the finding message text, never the verdict, which is narrower and more accurate than named-fields-over-positional-variant-payloads.md's own prose (two or more fields of the same type), a doc-vs-implementation drift this port follows the implementation on, per this crate's established practice. Three code-standards rule-doc ids all cite this one tool for this one judgment (named-fields-over-positional-variant-payloads, multi-field-variants-use-struct-form, and a third at a different doc path, multi-field-enum-variants-use-struct-form, that the second doc explicitly points to as its real authority) -- real upstream doc drift, not three judgments; this port uses one canonical id, the fullest MUST-severity prose actually filed in check-tuple-variant's own doc directory. rust_variant_shape.go's own doc comment records a real corpus lesson worth porting faithfully: a first cut assumed an enum's opening brace sits on the same line as its enum-name header and silently found zero across a 4,515-file corpus, because the real corpus writes Allman-style braces (enum header on one line, the opening brace on the next line); the fix tracks whole-file brace depth and only commits an enum open once the opening brace actually arrives, on that line or any later one. This crate has never ported a whole-file brace-depth state machine before (existing text-scanning rules deliberately avoid it), but the real algorithm here is small and bounded (one depth counter, one pending-header string, ported from a sixty-line Go source read in full) and uses the same naive per-line open-brace and close-brace character counting the real tool itself uses (also naive about strings and comments mid-line, a stated and accepted limitation, not a gap this port needs to close beyond it). The escape hatch (a tuple-variant allow marker with a required reason) IS portable here, unlike naming-clarity's marker in the sibling item: this rule reads raw source text directly and carries its own real line numbers from the scan itself, never routing through nomos_cap_syntax's line-less payload item type.",
+      "done_when": "A new crates/rules/nomos-rules/src/checks/enum_shape.rs implements Check_Named_Fields_Over_Positional_Variant_Payloads (rule id named-fields-over-positional-variant-payloads): a whole-file brace-depth scan (ported from rust_variant_shape.go's rustVariantScan) that tracks which enum body a line sits in, matches a tuple-variant-shaped line (name, then a single-line parenthesized payload with no nested unbalanced paren, then an optional trailing comma) at the enum's own depth, splits the payload into members at depth zero across angle/paren/bracket pairs, and reports every variant whose member count is two or more, with a message naming the enum and variant and stating whether a member type repeats. Marker escape hatch (a tuple-variant allow marker, same-line trailing or immediately above, non-empty reason required) using the same Has_Marker_Reason/Is_Skippable_Above shape concurrency_text.rs already established, duplicated per this crate's per-file convention. Rust-only, no repository-configurable dimension, so a leaf module rather than a capability. Own-implementation-file self-exemption, matching every other text-scanning rule in this crate. Unit tests cover: a two-member tuple variant flagged, a single-member newtype variant exempt, a struct-form variant exempt (never matches the tuple-variant line shape), a K-and-R-brace enum, an Allman-brace enum (brace on the line after the header -- the corpus lesson itself, as its own named test), a nested generic payload split correctly at depth zero (a two-type-parameter map plus one more member is a pair not a phantom triple), a repeated-type message versus a distinct-type message, and the marker exemption. checks.rs and lib.rs both declare and re-export Check_Named_Fields_Over_Positional_Variant_Payloads and NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS, both re-export layers. The nomos-rules public surface snapshot is reblessed. cargo test -p nomos-rules is green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/enum_shape.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 464 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788368049,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c3d71aadfd5efadc725b8d89de15a241f593cfa7"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
