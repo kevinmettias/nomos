@@ -166,6 +166,25 @@ fn Test_An_Unknown_Flag_Should_Refuse()
     assert!(error.contains("usage"), "{error}");
 }
 
+/// This repository's own root, three levels above `crates/host/nomos-cli` -- the same
+/// derivation `check_command.rs`'s and `agent/tests.rs`'s own copies of this helper use.
+///
+/// Not `PathBuf::from(".")`. `cargo test` sets a test binary's working directory to its
+/// own crate's manifest directory, not the workspace root, so a bare relative "." resolves
+/// to `crates/host/nomos-cli` here -- a real, smaller tree that happens to compile and walk
+/// without error, which is what makes the mistake quiet. `env!("CARGO_MANIFEST_DIR")` is
+/// fixed at compile time and immune to the difference.
+fn Repository_Root() -> PathBuf
+{
+    let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    return manifest
+        .parent()
+        .and_then(Path::parent)
+        .and_then(Path::parent)
+        .map(PathBuf::from)
+        .expect("this crate sits three levels below the workspace root");
+}
+
 /// Runs `invocation` over this workspace's own tree and captures stdout/stderr as owned
 /// strings -- the "real command over the real tree" setup
 /// `Test_Render_Plan_Should_Report_All_Four_Shipped_Rules` and
@@ -219,7 +238,7 @@ fn Test_Render_Plan_Should_Report_All_Eight_Shipped_Rules()
 #[test]
 fn Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree()
 {
-    let command = GateCommand { root: PathBuf::from("."), ..Default::default() };
+    let command = GateCommand { root: Repository_Root(), ..Default::default() };
     let (code, rendered, stderr) = Run_Over_This_Tree(Invocation::Run(command));
 
     assert_eq!(
@@ -241,7 +260,7 @@ fn Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_
 #[test]
 fn Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report()
 {
-    let command = GateCommand { root: PathBuf::from("."), ..Default::default() };
+    let command = GateCommand { root: Repository_Root(), ..Default::default() };
     let (code, rendered, stderr) = Run_Over_This_Tree(Invocation::Run(command));
 
     assert_eq!(code, ExitCode::Ok, "{rendered}");
