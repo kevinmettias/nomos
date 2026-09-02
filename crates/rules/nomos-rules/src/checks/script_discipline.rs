@@ -35,13 +35,13 @@ pub fn Check_Scripts_Use_A_Portable_Shebang(sources: &[SourceFile]) -> Vec<Findi
 
     for source in sources
     {
-        let Some(first_line) = First_Line(source)
+        let Some(interpreter) = Shebang_Interpreter(source)
         else
         {
             continue;
         };
 
-        if first_line.starts_with("#!") && !first_line.starts_with("#!/usr/bin/env ")
+        if !interpreter.starts_with("/usr/bin/env ")
         {
             findings.push(Finding_For_Source(
                 source,
@@ -158,9 +158,30 @@ fn First_Line(source: &SourceFile) -> Option<&str>
     return source.text.lines().next();
 }
 
+/// The interpreter a source's first line names, if that line is a shebang at all.
+///
+/// A shebang names its interpreter by absolute path, so `#!` is followed -- after the
+/// optional space some conventions write -- by `/`. The two bytes alone do not distinguish
+/// a script from a file whose language spells something else the same way: Rust's inner
+/// attributes begin `#![`, so every crate root opening with `#![forbid(unsafe_code)]` read
+/// as a script here, and was then reported for a hardcoded interpreter it does not have and
+/// a purpose comment a Rust file has no place to put. Requiring the path keeps the rules
+/// language-agnostic, which is the reason they judge a first line rather than an extension.
+fn Shebang_Interpreter(source: &SourceFile) -> Option<&str>
+{
+    let path = First_Line(source)?.strip_prefix("#!")?.trim_start_matches([' ', '\t']);
+
+    if !path.starts_with('/')
+    {
+        return None;
+    }
+
+    return Some(path);
+}
+
 fn Is_Shebang_Script(source: &SourceFile) -> bool
 {
-    return First_Line(source).is_some_and(|line| return line.starts_with("#!"));
+    return Shebang_Interpreter(source).is_some();
 }
 
 fn Has_Purpose_Comment(source: &SourceFile) -> bool
@@ -217,6 +238,43 @@ mod tests
         let findings = Check_Scripts_Use_A_Portable_Shebang(&[source]);
 
         assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// A Rust crate root opening on an inner attribute. `#![forbid(unsafe_code)]` begins
+    /// with the same two bytes a shebang does, and this is the shape that made three of
+    /// this workspace own crate roots report as scripts with a hardcoded interpreter.
+    #[test]
+    fn Test_Check_Scripts_Use_A_Portable_Shebang_Should_Ignore_A_Rust_Inner_Attribute()
+    {
+        let source = Source("src/lib.rs", "#![forbid(unsafe_code)]\n\npub fn Check() {}\n");
+
+        let findings = Check_Scripts_Use_A_Portable_Shebang(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// The same inner attribute under the other rule: neither may read it as a script,
+    /// because a Rust file has nowhere to put the purpose comment this one asks for.
+    #[test]
+    fn Test_Check_A_Script_Declares_Its_Purpose_Should_Ignore_A_Rust_Inner_Attribute()
+    {
+        let source = Source("src/lib.rs", "#![forbid(unsafe_code)]\n\npub fn Check() {}\n");
+
+        let findings = Check_A_Script_Declares_Its_Purpose(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// A space between the two bytes and the path is a shebang some conventions write, and
+    /// it stays one: the discriminator is the absolute path, not the absence of a space.
+    #[test]
+    fn Test_Check_Scripts_Use_A_Portable_Shebang_Should_Still_Report_A_Spaced_Hardcoded_Shebang()
+    {
+        let source = Source("scripts/check.sh", "#! /bin/bash\n# check -- run checks\n");
+
+        let findings = Check_Scripts_Use_A_Portable_Shebang(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
     }
 
     #[test]

@@ -46711,7 +46711,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -46724,7 +46724,27 @@
         ],
         "timeout_seconds": 2400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 415 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788322628,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4e36dc9d9ae93e8e3667461a589dd893fd331a43"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -47206,20 +47226,58 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-e5-0902",
-        "acquired_at": 1788322338,
-        "lease_expires_at": 1788329538
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
           "test",
           "-p",
           "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-nomos-e5-0902",
+          "reason": "Implemented and green on its own predicate, then reverted unlanded after measuring the real composed run rather than an approximation. Check_Abbreviations reports 327 findings against this workspace once actually composed, not the 44 a grep-based approximation predicted -- a sevenfold underestimate, because the real rule reads every syntax item the payload carries rather than the top-level declarations a regex can see. 144 of the 327 are the single name PathBuf, reached through use bindings, and that is the same defect 8ac2a830 just fixed for trait members wearing different clothes: a name the author did not choose and cannot change. ItemKind::Use is a distinct kind in the payload, so the fix is small, but it is a different item from this one. A further 111 are Std-prefixed names that are this workspace's own deliberate vocabulary and belong in standards.json's words.approved_abbreviations -- a repository-policy decision rather than a defect. Re-add this once OD-RULES-ABBREVIATIONS-JUDGES-IMPORTED-NAMES lands and the vocabulary question is answered; the composition itself is mechanical and was proven working.",
+          "abandoned_at": 1788322556
+        }
+      ],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-ABBREVIATIONS-JUDGES-IMPORTED-NAMES",
+      "title": "Check_Abbreviations judges use-binding names that belong to other crates",
+      "why": "Measured by actually composing the rule into Run rather than approximating it: 327 findings against this workspace, and 144 of them are the single name PathBuf. That is std::path::PathBuf, reached because a use binding is recorded as a payload item and buf is vowel-free. The author neither chose the name nor can change it, which is exactly the defect 8ac2a830 fixed for trait-impl members and exactly the carve-out code-standards' own check-generic-parameter-name states. A use binding is a reference to a declaration made elsewhere, and wherever that declaration lives is where its name should be judged. This blocks OD-RULES-011-COMPOSE-WORDS, abandoned for this reason.",
+      "done_when": "Check_Abbreviations does not report an item whose kind is the payload's Use binding, distinguished by the ItemKind::Use the Rust provider already records as a distinct kind; a unit test covers a use-bound abbreviated name being skipped while a real declaration of the same name is still judged; and cargo test -p nomos-rules is green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-e5-0902",
+        "acquired_at": 1788322569,
+        "lease_expires_at": 1788329769
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
         ],
         "timeout_seconds": 600
       },

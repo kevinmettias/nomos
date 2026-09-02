@@ -50,7 +50,7 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, module_case: Case, field_c
 
     for item in &payload.items
     {
-        if item.kind == MODULE && !module_case.Conforms(item.Own_Name())
+        if item.kind == MODULE && !module_case.Conforms(Unescaped(item.Own_Name()))
         {
             findings.push(Violation_Finding(path, item, item.Own_Name()));
         }
@@ -74,9 +74,28 @@ fn Field_Violations_In(path: &str, item: &PayloadItem, field_case: Case) -> Vec<
 
     return fields
         .iter()
-        .filter(|(name, _type_name)| return !field_case.Conforms(name))
+        .filter(|(name, _type_name)| return !field_case.Conforms(Unescaped(name)))
         .map(|(name, _type_name)| return Violation_Finding(path, item, name))
         .collect();
+}
+
+/// The name a raw identifier escapes.
+///
+/// `r#` is Rust's escape for spelling a keyword as an identifier, not part of the name it
+/// escapes: `mod r#ref;` declares a module called `ref`, and `r#type: String` a field called
+/// `type`. Both are already lower snake, and both were reported as not being so, because the
+/// `#` in the escape is not a lower-snake character. The escape is stripped before the case
+/// is judged and not before the finding is written, so a name that really does violate the
+/// rule is still quoted back in the spelling its source carries.
+///
+/// `checks::facade` already strips the same prefix at two of its own call sites, inline. A
+/// third site is the point at which this stops being a coincidence, so it is named here
+/// rather than copied a third time unremarked -- but it is left in place, because folding
+/// three inline `strip_prefix`es into shared plumbing is the deduplication `OD-RULES-014`
+/// measured before it moved anything, and this item is not that measurement.
+fn Unescaped(name: &str) -> &str
+{
+    return name.strip_prefix("r#").unwrap_or(name);
 }
 
 fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
@@ -148,6 +167,32 @@ mod tests
         let findings = Violations_In(&payload, "src/lib.rs", Case::LowerSnake, Case::LowerSnake);
 
         assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// `mod r#ref;` declares a module called `ref`, which is lower snake. The `r#` is
+    /// Rust escaping a keyword, and judging it as part of the name reported two module
+    /// declarations in this workspace that nothing could be renamed to satisfy.
+    #[test]
+    fn Test_Violations_In_Should_Accept_A_Module_Named_By_A_Raw_Identifier()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tModule\tPrivate\tr#ref\t.\t.\n");
+
+        let findings = Violations_In(&payload, "src/lib.rs", Case::LowerSnake, Case::LowerSnake);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// The escape is stripped to judge the case and not to write the finding, so a raw
+    /// identifier that really is not lower snake is still reported, in its own spelling.
+    #[test]
+    fn Test_Violations_In_Should_Still_Report_A_Raw_Identifier_That_Is_Not_Lower_Snake()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tModule\tPrivate\tr#BadRef\t.\t.\n");
+
+        let findings = Violations_In(&payload, "src/lib.rs", Case::LowerSnake, Case::LowerSnake);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "r#BadRef");
     }
 
     #[test]
