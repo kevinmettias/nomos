@@ -54,10 +54,10 @@ pub fn Check_No_Trailing_Whitespace(sources: &[SourceFile]) -> Vec<Finding>
 /// description and ticket.
 ///
 /// The marker itself and the exact shape are the rule id's own words. This prose does not
-/// spell the marker, because the rule reads any comment that contains it anywhere and
-/// accepts only a comment that opens with it -- so a sentence merely mentioning the marker
-/// is reported and cannot be edited into conformance without ceasing to be that sentence.
-/// Its own documentation was reported for exactly this until the wording changed.
+/// spell the marker, because detection and acceptance agree on what counts as one: the
+/// marker must open the comment. A comment that merely mentions it in passing is not a
+/// marker and is not judged, so a comment that does open with it and is missing owner,
+/// description or ticket always has a conforming edit.
 #[must_use]
 pub fn Check_Todo_Format(sources: &[SourceFile]) -> Vec<Finding>
 {
@@ -154,7 +154,7 @@ fn Todo_Findings_In(source: &SourceFile) -> Vec<Finding>
     {
         if let Some(comment) = Comment_Text_Of(line)
         {
-            if Contains_Todo(comment) && !Has_Valid_Todo_Format(comment)
+            if Starts_With_Todo(comment) && !Has_Valid_Todo_Format(comment)
             {
                 findings.push(Finding_For_Line(
                     source,
@@ -292,7 +292,12 @@ fn Comment_Text_Of(line: &str) -> Option<&str>
 {
     let trimmed = line.trim_start();
 
-    for marker in ["//", "/*", "*"]
+    if let Some(after_slashes) = trimmed.strip_prefix("//")
+    {
+        return Some(after_slashes.trim_start_matches('/').trim_start());
+    }
+
+    for marker in ["/*", "*"]
     {
         if let Some(comment) = trimmed.strip_prefix(marker)
         {
@@ -303,9 +308,11 @@ fn Comment_Text_Of(line: &str) -> Option<&str>
     return None;
 }
 
-fn Contains_Todo(comment: &str) -> bool
+/// A marker opens the comment; a mention elsewhere in the comment's prose is not one, and is
+/// left unjudged rather than reported with no route to a conforming edit.
+fn Starts_With_Todo(comment: &str) -> bool
 {
-    return comment.contains("TODO");
+    return comment.starts_with("TODO");
 }
 
 fn Has_Valid_Todo_Format(comment: &str) -> bool
@@ -542,6 +549,16 @@ mod tests
         let findings = Check_Todo_Format(&[source]);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Todo_Format_Should_Ignore_A_Todo_Mentioned_Mid_Comment()
+    {
+        let source = Source("src/lib.rs", "// see TODO(kevin): fix later (#142) above\n");
+
+        let findings = Check_Todo_Format(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
     }
 
     #[test]
