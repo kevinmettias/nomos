@@ -15,7 +15,7 @@ use crate::productions::{
     Correction_Production, Dependency_Policy_Production, Dependency_Production, Go_Dependency_Production,
     Go_Production, Limits_Policy_Production, Lint_Production, Naming_Policy_Production, Parsed_Production,
     Reachability_Production, Reuse_Production, Rolled_Production, Scanned_Production, Scripting_Policy_Production,
-    Snapshot_Production,
+    Snapshot_Production, Words_Policy_Production,
 };
 use crate::spec_productions::{Alternating, Bundle_Bytes, Projection_Bytes};
 use nomos_lang_rust::SyntaxFactProduction;
@@ -165,6 +165,20 @@ fn Test_The_Scripting_Policy_Provider_Should_Meet_Its_Declared_Strategy()
     Assert_Meets_Declared_Strategy::<ScriptingPolicyFactProduction>(
         "scripting-policy-fact-production",
         &Scripting_Policy_Production,
+        "",
+    );
+}
+
+#[test]
+fn Test_The_Words_Policy_Provider_Should_Meet_Its_Declared_Strategy()
+{
+    use nomos_repo_words::WordsPolicyFactProduction;
+
+    // No golden, the identical reason `ScriptingPolicyFactProduction` has none above:
+    // `WordsPolicyFactProduction` declares `CrossRun`.
+    Assert_Meets_Declared_Strategy::<WordsPolicyFactProduction>(
+        "words-policy-fact-production",
+        &Words_Policy_Production,
         "",
     );
 }

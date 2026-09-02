@@ -1,0 +1,14 @@
+pub const fn nomos_repo_words::Declared_Guarantee() -> Guarantee
+pub const nomos_repo_words::PROVIDER: &str
+pub fn nomos_repo_words::Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<WordsPolicyPayload, WordsPolicyError>
+pub fn nomos_repo_words::Provider_Offer() -> ProviderOffer
+pub fn nomos_repo_words::WordsPolicyError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub impl nomos_repo_words::WordsPolicyError implements core::fmt::Display
+pub struct field nomos_repo_words::WordsPolicyError::reason: String
+pub struct nomos_repo_words::WordsPolicyError
+
+# re-exports of items declared outside this crate
+pub use determinism::WordsPolicyFactProduction
+pub use provider::FactContext
+pub use provider::Materialize_Workspace
+pub use provider::PolicyFact

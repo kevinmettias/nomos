@@ -543,6 +543,7 @@ dependencies = [
  "nomos-repo-limits",
  "nomos-repo-scripting",
  "nomos-repo-standards",
+ "nomos-repo-words",
  "nomos-spec-bundle",
  "nomos-spec-model",
  "nomos-spec-project",
@@ -764,6 +765,20 @@ version = "0.1.0"
 dependencies = [
  "nomos-analysis",
  "nomos-cap-naming-policy",
+ "nomos-capability",
+ "nomos-contracts",
+ "nomos-model",
+ "nomos-platform",
+ "nomos-platform-std",
+ "serde_json",
+]
+
+[[package]]
+name = "nomos-repo-words"
+version = "0.1.0"
+dependencies = [
+ "nomos-analysis",
+ "nomos-cap-words-policy",
  "nomos-capability",
  "nomos-contracts",
  "nomos-model",

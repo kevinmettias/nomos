@@ -93,6 +93,12 @@ members = [
     # third instance.
     "crates/repository/nomos-repo-scripting",
 
+    # Band 25 — nomos.cap.words.policy's one provider, alongside nomos-repo-standards,
+    # nomos-repo-limits and nomos-repo-scripting for the same reason: it reads
+    # standards.json's words.approved_abbreviations, a repository-wide configuration file,
+    # not one language's source or manifest format. `OD-RULES-011`'s fourth instance.
+    "crates/repository/nomos-repo-words",
+
     # Band 23 — the nomos.cap.dependency.edges contract, alongside nomos-cap-syntax. Not
     # left beside its provider the way nomos.cap.module.index is: nomos-rules is a real
     # second party to it from the day it was written. `OD-CAPABILITY-002`.
@@ -309,6 +315,7 @@ nomos-lang-go-modules = { path = "crates/languages/nomos-lang-go-modules" }
 nomos-repo-standards = { path = "crates/repository/nomos-repo-standards" }
 nomos-repo-limits = { path = "crates/repository/nomos-repo-limits" }
 nomos-repo-scripting = { path = "crates/repository/nomos-repo-scripting" }
+nomos-repo-words = { path = "crates/repository/nomos-repo-words" }
 nomos-package = { path = "crates/packages/nomos-package" }
 nomos-lang-rust-package = { path = "crates/packages/nomos-lang-rust-package" }
 nomos-model-package = { path = "crates/packages/nomos-model-package" }

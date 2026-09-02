@@ -762,6 +762,46 @@ fn Rendered_Scripting_Policy_Fact(fact: &nomos_repo_scripting::PolicyFact) -> Ve
     return rendered;
 }
 
+/// `nomos-repo-words`'s one fact over this repository's own real `standards.json`.
+///
+/// The identical reasoning [`Limits_Policy_Production`] gives, one crate over: this
+/// provider's whole reason for existing is that it reads this repository's own declared
+/// vocabulary additions, not bytes a caller already holds.
+pub(crate) fn Words_Policy_Production() -> Vec<u8>
+{
+    let context = Words_Policy_Context();
+    let fact = Discovered_Words_Policy_Fact(context);
+
+    return Rendered_Words_Policy_Fact(&fact);
+}
+
+fn Words_Policy_Context() -> nomos_repo_words::FactContext
+{
+    return nomos_repo_words::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
+        generation: GenerationId::INITIAL,
+    };
+}
+
+/// This repository's own real workspace, materialized through the door this provider
+/// actually reads `standards.json` through.
+fn Discovered_Words_Policy_Fact(context: nomos_repo_words::FactContext) -> nomos_repo_words::PolicyFact
+{
+    return nomos_repo_words::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
+        .expect("this repository's own standards.json is real and well-formed");
+}
+
+fn Rendered_Words_Policy_Fact(fact: &nomos_repo_words::PolicyFact) -> Vec<u8>
+{
+    let mut rendered = Vec::new();
+    rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
+    rendered.extend_from_slice(&fact.fact.payload.bytes);
+
+    return rendered;
+}
+
 /// The fixture `nomos-lang-go`'s production is measured over.
 ///
 /// A second, Go-specific fixture rather than the shared `FIXTURE` above — that one is Rust
