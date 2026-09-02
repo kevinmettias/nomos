@@ -47827,7 +47827,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory reserves only docs/records/OD-RULES-017 and not crates/spec/nomos-spec-store/records/OD-RULES-017, the registration file that makes a record governing (nomos-spec-change skill: 'Reserve both in your item's territory before you start. Reserve those two and no more.'). As authored this item cannot produce a governing record within its own territory. Re-scoped as P27-SELFCHECK-ABBREVIATION-DECISION-2 with both paths reserved."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -47843,9 +47847,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-session-e6f4d433",
+          "reason": "Territory gap discovered before any code was written: registration file for a governing record was not reserved. Abandoning to decline and re-add correctly-scoped.",
+          "abandoned_at": 1788335782
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-session-e6f4d433",
+        "declined_at": 1788335782
+      }
     },
     {
       "id": "P27-RULES-EXECUTED-SCRIPTS-NOUNSET-WIRE",
@@ -47905,6 +47918,59 @@
           "exit_code": 0
         },
         "revision": "c0c71f1148bd5d96da53da52cc64e031fad44362"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-ABBREVIATION-DECISION-2",
+      "title": "Check_Abbreviations still blocks 30 findings that quote a term they are about, and the exemption to narrow it is not obvious",
+      "why": "P27-SELFCHECK-ABBREVIATION-DECISION declined: its territory reserved docs/records/OD-RULES-017 but not the crates/spec/nomos-spec-store/records/OD-RULES-017 registration file a governing record also needs (nomos-spec-change skill step 6). Same 30 findings, same why as the declined item: none of the 30 finding sites is reserved here either, since which of them a resulting decision can even reach is itself part of the open question -- execution at those sites is meant to happen through separate, freshly-scoped follow-up items once the decision names which sites qualify.",
+      "done_when": "A decision is recorded at docs/records/OD-RULES-017 and registered at crates/spec/nomos-spec-store/records/OD-RULES-017, following OD-RULES-015/016's shape, covering as many of the six shapes P27-SELFCHECK-ABBREVIATION-DECISION's why identified as the decision actually reaches -- not required to resolve all six at once; narrowing for some and explicitly declining others, reasoned, satisfies this. spec freshness --into . --require diagram-set --require domain-specification exits 0 from a worktree holding exactly the registered record set this commit publishes (both diagram-set and domain-specification re-rendered). Whatever the record does not resolve is named explicitly as still open with a reason, or pointed at a named follow-up item, not left silently unequal to the rest.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-017",
+          "crates/spec/nomos-spec-store/records/OD-RULES-017"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 15 tests\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.70s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788337309,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d87aab8e8428bb18feb6366dd7dc3b23113bd830"
       },
       "abandoned": [],
       "displaced": [],

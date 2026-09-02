@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:43ccd18c71e8ae207a7a7c14789b0ce96a2e1fb67c73d93c59504f81ed10123f",
-  "inputs_digest": "sha256:12631bf35661f523383225fa487dfe94a4edf5ba37b692b7135d0cba79f8f9ee",
+  "content_digest": "sha256:f5ad2d9b2d30a742f62aa4df299e7ff43bc3729668b0f4c46f751b788f8e41b1",
+  "inputs_digest": "sha256:675da210a7c4421c4b8c17c3d73f81260b6a2f0ebcb21737ee147a3ea2ecb9af",
   "sections": [
     [
       "Documents",
-      183
+      184
     ],
     [
       "Sections",
-      1528
+      1534
     ],
     [
       "Source blocks",
-      5345
+      5366
     ]
   ],
   "inputs": [
@@ -799,6 +799,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md@authored",
       "hash": "sha256:04c3221540c1dfff84ceb66e9b1cd588331b0e7df89080dc0d714bc2df75102b"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md@authored",
+      "hash": "sha256:ecd850bb6c29efe9ac6e25ef920c7e6492a59d5e6fe177709d05c01a8bbef25f"
     },
     {
       "content": "documents",
@@ -7364,6 +7369,36 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#18",
       "hash": "sha256:6a128e67e6f7e2bb4e59d22671e2f1024982fb174918c9bd14de19fdb1a508ab"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#1",
+      "hash": "sha256:56b06e89b5d97c2d2c49cbb05eb58b7b6a76359bedc58ad8df244af1e042819a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#2",
+      "hash": "sha256:96b38ae44beb94240f0047dd911a864c88646e3b3c2745bdcd198a34dba0d5d8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#6",
+      "hash": "sha256:d7123b17a4e29a0552b447bc52c63f78e626382b2d357303e54a0c90e629da2b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#11",
+      "hash": "sha256:45fd4462461583d8373bf483a079982d228fb1fc4e097876e9df8373858170e0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#15",
+      "hash": "sha256:524d6b92f3fee4ede9340c83584e109e691498eb58f168016e03b312c875f2a7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#19",
+      "hash": "sha256:ad9d06707cbe3abf5221196f241387b7c237368e64deb0dd24eabee8224852e3"
     },
     {
       "content": "headings",
@@ -31334,6 +31369,111 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#20",
       "hash": "sha256:0de9625ece26ad2fc16e6f4776b70bc7d829c989419ca1d7548263e4452588f7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#1",
+      "hash": "sha256:6a417cbfe31bbddd8b7b9fd732f7a7ed3b61341678cc09806518725d2c2266d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#3",
+      "hash": "sha256:18c9858159a32ea8f15387a31c607a51d63200fddb4d719999c7e3adbfb69d28"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#4",
+      "hash": "sha256:5c1b33f9d1bd2f4402156fc36dd570b048164eba5ef1ad176c00a3252e4287cb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#5",
+      "hash": "sha256:4520c96731334c866a5e4c957d64d86c8f431b6d35d984f4ec9fd4d4baee728d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#7",
+      "hash": "sha256:d11c2756f47f5d9ae67d8799807f05a79da81693963505455d516b855c52f2bb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#8",
+      "hash": "sha256:dadbeebfa7f9597040069bbe16d2a1ec5143b60cb3058a59cc5d18b46bc24dce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#9",
+      "hash": "sha256:82b8968e4bb677b280722bc6f49e970b8c9962735ab9513226739ad966b37cd9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#10",
+      "hash": "sha256:14176b0105832401b7bc6f40501643ce0485b16c40d7fe483fe0d7e5daec0aba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#11",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#12",
+      "hash": "sha256:75acbd16526e268c914de0f960a01d4f8f14a02b0cf4120a01f94214d29d893b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#13",
+      "hash": "sha256:89784a41144312d303a391e4e675eef705d7b82c41a7f8cf3b8a961167851877"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#14",
+      "hash": "sha256:a2232530c5c10c707024e323e2ba5f3701535402fb361c4a68dd57de5f2a5ef1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#15",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#16",
+      "hash": "sha256:91479c0889d0c299421ec840218abbd6e0368ec8e7afc6e169995203096a86ec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#17",
+      "hash": "sha256:1c94264b4f235e91f584af494f1c1b369d97cc4cc18c0d35a805dca8b45f0f41"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#18",
+      "hash": "sha256:949dd4f308c3254f1d7471ce16bede7769923f94343ae5df67b74e17cf2243ab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#19",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#20",
+      "hash": "sha256:b9c690d25a58a9ed2149858f4d284d7a9c49b721760b097fb3729752d38a7781"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#21",
+      "hash": "sha256:be36e2df654665544296d9719973448080dae50e616218d6f3a967f16b70019a"
     },
     {
       "content": "blocks",

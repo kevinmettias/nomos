@@ -166,6 +166,7 @@ profile: domain-specification
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md@authored | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md | authored | 38 | 10 | sha256:740a2ca81a0ba769b2370b32a0b5af4aeb3647f2c9a141f1ebaf058f08f9f6c1 |
 | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md@authored | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md | authored | 23 | 6 | sha256:4b0bd63773267478c66835f887728ff0cedb4892a98e85291ed631e1665b53c8 |
 | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md@authored | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md | authored | 20 | 6 | sha256:04c3221540c1dfff84ceb66e9b1cd588331b0e7df89080dc0d714bc2df75102b |
+| docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md@authored | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md | authored | 21 | 6 | sha256:ecd850bb6c29efe9ac6e25ef920c7e6492a59d5e6fe177709d05c01a8bbef25f |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1484,6 +1485,12 @@ profile: domain-specification
 | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#10 | authored | 2 | The Decision |
 | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#14 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#18 | authored | 2 | Status |
+| docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#1 | authored | 1 | A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere |
+| docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#11 | authored | 2 | The Decision |
+| docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#15 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#19 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -43878,6 +43885,223 @@ Revisit if a file accumulates a matching type as cover — a module named for on
 while a dozen unrelated ones shelter behind it. That would be the rule's exemption being used
 to avoid a decomposition rather than to describe one, and the answer then is to compose
 `one-public-type-per-file`, which is the rule that was always about how many.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#1
+
+*revision: authored · kind: heading · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere · hash: sha256:6a417cbfe31bbddd8b7b9fd732f7a7ed3b61341678cc09806518725d2c2266d3*
+
+# A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#2
+
+*revision: authored · kind: heading · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#3
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / Question · hash: sha256:18c9858159a32ea8f15387a31c607a51d63200fddb4d719999c7e3adbfb69d28*
+
+Composing `Check_Abbreviations` into a real run left 30 blocking findings, all in code this
+workspace itself wrote, none of them a name-nobody-chose in the sense the rule's two existing
+exemptions (a trait-fixed method name, a use-binding naming another crate's declaration)
+already cover — every one is a freely-authored identifier that happens to contain a banned or
+vowelless word because that word is what the code is about. Six shapes, by inspection:
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#4
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / Question · hash: sha256:5c1b33f9d1bd2f4402156fc36dd570b048164eba5ef1ad176c00a3252e4287cb*
+
+- `CHK_003_SITE_FILES`/`Chk_003_Entry`/`Test_CHK_003_...` (3, `tests/contract/tests/
+  requirement_trace/committed.rs`): quote `CHK-003`, a requirement id this repository already
+  minted and cited by `docs/records/OD-CONTRACTS-002` and a committed `.assessment` file.
+- `Check_Eager_Vs_Lazy_Context`/`EAGER_VS_LAZY_CONTEXT` and five derived test names (7,
+  `error_text.rs`): quote `eager-vs-lazy-context`, code-standards' own rule id, ported
+  verbatim — every rule id constant in this crate carries the doc comment "matching the
+  code-standards rule id" for exactly this reason.
+- `Check_No_Mod_Rs_Files`/`NO_MOD_RS_FILES`/`Is_Disallowed_Mod_Rs` and two derived test names
+  (5, `structure.rs`): quote `no-mod-rs-files`, code-standards' own rule id, and the literal
+  `mod.rs` filename the rule judges.
+- `SENSITIVE_URL_PARAMS` and three derived test names (4, `security_text.rs`): `param`/
+  `params` is banned, and spelling it out costs nothing — these are ordinary identifiers, not
+  quotes of anything fixed.
+- `Rc`/`RefCell` (`rust_text.rs`), `cmp::Ordering` (`concurrency_text.rs`), an env shebang
+  (`script_discipline.rs`), `Lf`/`Utf8` (`nomos-spec-project/tests/projections/
+  determinism.rs`), `duration_ms` (`agent_execution_outcome.rs`), `Nth`
+  (`nomos-spec-store/src/submission/tests.rs`), and a `Nomos_Platform_Stds_Launcher` typo
+  (`nomos-lang-rust-deny/tests/integration_seams.rs`) — 7, one file each: each names a Rust
+  standard type/module, a POSIX convention, a line-ending term, an established `_ms`
+  millisecond-suffix convention, an ordinary English ordinal, or misspells an already-approved
+  word.
+- `Has_Misplaced_Inner_Doc`/`Line_Is_Misplaced_Inner_Doc` (`nomos-lang-rust/tests/corpus/
+  claims.rs`), `Test_Adr_Doc_001_...` (`nomos-spec-store/tests/governing_records_are_present/
+  supersession.rs`), `Test_..._Docs_Own_Unmarked_Example` (`concurrency_text.rs`) — 4: `doc`/
+  `docs` is banned, and each site names Rust's own "doc comment" term of art.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#5
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / Question · hash: sha256:4520c96731334c866a5e4c957d64d86c8f431b6d35d984f4ec9fd4d4baee728d*
+
+Whether the workspace's own `standards.json` — the channel `nomos.cap.words.policy` already
+built for exactly this, holding `arc`/`std`/`repo` and 21 others beyond the ported list — may
+answer some of these, and whether a banned word may ever be added through it, is the question
+a mechanical extension of `OD-RULES-015`/`016`'s precedent does not answer, because none of
+these thirty is a structurally-nested name the way a trait member or a use-binding is.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#6
+
+*revision: authored · kind: heading · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#7
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / What Was Measured · hash: sha256:d11c2756f47f5d9ae67d8799807f05a79da81693963505455d516b855c52f2bb*
+
+**None of the thirty is banned *and* missing.** Cross-referencing all thirty flagged words
+against `DEFAULT_BANNED_WORDS` in `abbreviations.rs` splits them cleanly: `chk`, `vs`, `rs`,
+`rc`, `cmp`, `lf`, `ms`, `nth` are absent from it — code-standards simply never listed them,
+the same gap `std`/`repo`/`arc` already found and this repository's own `standards.json`
+already closed for those three. `param`/`params`, `env`, `doc`/`docs` are on it by name.
+`stds` is neither: it is not a word this rule's vocabulary judges at all, because it is a
+misspelling of `std`, which is already approved.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#8
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / What Was Measured · hash: sha256:dadbeebfa7f9597040069bbe16d2a1ec5143b60cb3058a59cc5d18b46bc24dce*
+
+**`standards.json` already overrides a banned word once.** `repo` is in `DEFAULT_BANNED_WORDS`
+and also in `standards.json`'s own `words.approved_abbreviations` — this repository is called
+`nomos` and reasons about repositories constantly, and the override already stands, tested,
+and has not turned any of this workspace's other abbreviation findings into a `repo`-shaped
+false negative. So the channel *can* carry an override; the open question was never mechanical
+capability, it was whether these particular words are worth the same trade.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#9
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / What Was Measured · hash: sha256:82b8968e4bb677b280722bc6f49e970b8c9962735ab9513226739ad966b37cd9*
+
+**A missing word costs nothing to add.** `arc`, `utf`, `ascii`, `min`, `max` are already
+approved for the identical reason `rc`, `cmp`, `lf`, `ms` are missing: each names a Rust
+standard type/module, a protocol acronym, or an established numeric-suffix convention, narrow
+enough that a future vague use of the same two-or-three letters is not a realistic risk this
+rule exists to catch.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#10
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / What Was Measured · hash: sha256:14176b0105832401b7bc6f40501643ce0485b16c40d7fe483fe0d7e5daec0aba*
+
+**A banned word costs its ban everywhere it is added, not just at the cited site.** Unlike a
+missing word, `param`/`env`/`doc` were excluded on purpose — presumably because each is also a
+common, lazy shorthand for an ordinary English word ("parameter", "environment", "document")
+the standard wants spelled out. Adding one to `standards.json` does not scope the exemption to
+the finding that prompted it; it silences the ban for every future name in this workspace.
+`param`/`params` costs nothing to spell out here, so the ban is not actually in tension with
+these four sites and a rename settles it outright. `env` and `doc`/`docs` are different: the
+sites that use them are not abbreviating "environment" or "document" at all — one quotes the
+literal POSIX `env` command, the others Rust's own "doc comment" term of art — and spelling
+either out (`Environment_Shebang`, `Documentation_Own_Unmarked_Example`) would misdescribe what
+the code is about rather than merely lengthen it. Whether that is worth trading the ban's
+protection for is a judgment this record declines to make on five isolated sites' evidence.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#11
+
+*revision: authored · kind: heading · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#12
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / The Decision · hash: sha256:75acbd16526e268c914de0f960a01d4f8f14a02b0cf4120a01f94214d29d893b*
+
+**A word absent from `DEFAULT_BANNED_WORDS` — missing from the ported vocabulary rather than
+excluded from it — is added to `standards.json`'s `words.approved_abbreviations` when it names
+a fixed external identifier (a code-standards rule id, or a requirement id this repository has
+already minted and cited elsewhere) or an established, narrow technical term (a Rust standard
+library type, module or protocol acronym, a numeric-suffix convention already established for
+a sibling word).** `chk`, `vs`, `rs`, `rc`, `cmp`, `lf`, `ms`, `nth` qualify. Adding them is
+this record's whole point but not this item's own act — this item's territory reserves only
+the record, not `standards.json` — so a follow-up item, reserving that file, carries it out.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#13
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / The Decision · hash: sha256:89784a41144312d303a391e4e675eef705d7b82c41a7f8cf3b8a961167851877*
+
+**A word `DEFAULT_BANNED_WORDS` names is not added through that channel merely because one
+site's use is legitimate**, because the channel has no way to scope an addition to a site — it
+silences the ban everywhere. Where the banned word can be spelled out with no loss of meaning,
+the identifier is renamed instead: `SENSITIVE_URL_PARAMS` and its three derived test names are
+`param`/`params`-shaped and cost nothing to spell out as `SENSITIVE_URL_PARAMETERS`/
+`Parameter`, and `Nomos_Platform_Stds_Launcher` is a plain misspelling of the already-approved
+`std`, corrected to `Std`. Both renames are named here for the same follow-up item.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#14
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / The Decision · hash: sha256:a2232530c5c10c707024e323e2ba5f3701535402fb361c4a68dd57de5f2a5ef1*
+
+**`env` and `doc`/`docs` are left open.** Both are banned, and at their five sites neither
+abbreviates the English word the ban exists to catch — but both are common enough words that
+approving them for this workspace risks quietly disabling the ban's real catches elsewhere,
+and this record has evidence from five isolated sites, not a survey of that risk. A future
+record narrowing the channel itself — an addition scoped to a site or a file rather than the
+whole workspace — would resolve these without that cost; building it is not this record's job.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#15
+
+*revision: authored · kind: heading · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#16
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / What This Record Does Not Do · hash: sha256:91479c0889d0c299421ec840218abbd6e0368ec8e7afc6e169995203096a86ec*
+
+It does not touch `standards.json`, any of the thirty finding sites, or `Check_Abbreviations`
+itself. This item's own territory reserves only the record; a follow-up item, correctly scoped
+to the files this decision names, carries out the eight additions and the two renames.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#17
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / What This Record Does Not Do · hash: sha256:1c94264b4f235e91f584af494f1c1b369d97cc4cc18c0d35a805dca8b45f0f41*
+
+It does not build a site-scoped or file-scoped override channel for `env`/`doc`/`docs`. It
+declines to decide those five on the evidence at hand, which is not the same as deciding they
+must stay reported forever — a future record with a real proposal for scoping is free to
+revisit them.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#18
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / What This Record Does Not Do · hash: sha256:949dd4f308c3254f1d7471ce16bede7769923f94343ae5df67b74e17cf2243ab*
+
+It does not touch `DEFAULT_BANNED_WORDS` or `DEFAULT_APPROVED_WORDS` in `abbreviations.rs`.
+Both are code-standards' own list, ported verbatim, and not this repository's to edit —
+`standards.json` is the only channel this record uses or recommends.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#19
+
+*revision: authored · kind: heading · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#20
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / Status · hash: sha256:b9c690d25a58a9ed2149858f4d284d7a9c49b721760b097fb3729752d38a7781*
+
+Accepted. The reasoning splits all thirty findings across missing-vs-banned and, within
+banned, spellable-vs-not: twenty are named for a follow-up item as `standards.json` additions
+(`chk`, `vs`, `rs`, `rc`, `cmp`, `lf`, `ms`, `nth`, covering the `CHK_003`, `Vs`, `Rs` and
+scattered-technical-term shapes save `env` and the `Stds` typo), five as renames (`param`/
+`params`, `Stds`), and five (`env`, `doc`/`docs`) stay open, explicitly, with the reason
+recorded above rather than left silently unequal to the other twenty-five.
+
+### docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#21
+
+*revision: authored · kind: prose · heading: A word missing from the ported vocabulary may be added for this repository; a word it bans stays banned everywhere / Status · hash: sha256:be36e2df654665544296d9719973448080dae50e616218d6f3a967f16b70019a*
+
+Revisit if a future addition through `standards.json` turns out to mask a real abbreviation
+this rule should have caught — that would be the missing-word trade this record makes turning
+out to cost more than the `repo` precedent suggested, and the answer then is to remove the
+addition and rename the sites that prompted it instead.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
