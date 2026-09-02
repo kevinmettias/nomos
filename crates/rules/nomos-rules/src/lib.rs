@@ -294,6 +294,15 @@
 //! attribute form alone being syntactically unambiguous on the line that carries it. No
 //! repository-configurable dimension in any of the three, so a shared module rather than a
 //! capability.
+//!
+//! [`Check_Abbreviations`] is the fifty-eighth rule, and a fourth `OD-RULES-011` instance
+//! after naming, numeric limits and scripting policy: a declared name's own words judged
+//! against a fixed, faithfully-ported default vocabulary (code-standards' own `kernel/
+//! config/words/lists.go` and `defaults.go`) extended by a repository's own `nomos.cap.
+//! words.policy` declaration. Cross-language and reads no `source.language` restriction —
+//! the judgment is over declared syntax-item names, a shape [`nomos_cap_syntax::PayloadItem`]
+//! carries identically whichever language produced it, not a convention one language alone
+//! states.
 
 #![forbid(unsafe_code)]
 
@@ -326,12 +335,12 @@ pub use checks::{
     DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION,
     Check_Cross_Language_Correspondence, CROSS_LANGUAGE_CONTRACT_RECORD, CROSS_LANGUAGE_CONTRACT_RECORD_VERSION,
     CROSS_LANGUAGE_CORRESPONDENCE,
-    Check_Boolean_Predicates, Check_Data_Names_Stay_Lower_Snake, Check_File_Name_Matches_Declared_Type,
+    Check_Abbreviations, Check_Boolean_Predicates, Check_Data_Names_Stay_Lower_Snake, Check_File_Name_Matches_Declared_Type,
     Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Go_Constants_Split_By_Export, Check_Go_Type_Names_Use_Camel_Case,
     Check_Go_Variables_Use_Lower_Snake_Case,
     Check_Naming_Convention, Check_One_Public_Type_Per_File, Check_Project_Owned_Function_Names_Use_Upper_Snake_Case,
     Check_Single_Letter_Names, Check_Test_Names_Describe_Behavior, Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter,
-    BOOLEAN_PREDICATES, CONSTANTS_SPLIT_BY_EXPORT, DATA_NAMES_STAY_LOWER_SNAKE,
+    ABBREVIATIONS, BOOLEAN_PREDICATES, CONSTANTS_SPLIT_BY_EXPORT, DATA_NAMES_STAY_LOWER_SNAKE,
     EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE, GO_VARIABLES_USE_LOWER_SNAKE_CASE,
     NAMING_CONVENTION,
     ONE_PUBLIC_TYPE_PER_FILE, PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE, SINGLE_LETTER_NAMES,
