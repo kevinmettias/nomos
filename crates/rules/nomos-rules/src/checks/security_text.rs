@@ -47,7 +47,7 @@ const DOCUMENTED_EXAMPLE_CREDENTIALS: &[&str] = &["AKIAIOSFODNN7EXAMPLE"];
 
 /// URL query-parameter names the standard names as carrying a secret when woven into a
 /// path or query string.
-const SENSITIVE_URL_PARAMS: &[&str] = &["api_key", "access_token", "token", "password", "sig", "signature"];
+const SENSITIVE_URL_PARAMETERS: &[&str] = &["api_key", "access_token", "token", "password", "sig", "signature"];
 
 /// Reports a string literal whose text is a provider-minted credential: an AWS access key,
 /// a GitHub/Slack/Google/Stripe/npm token, or a PEM private-key block. Does not attempt
@@ -193,7 +193,7 @@ fn Is_Test_Or_Fixture_Source(source: &SourceFile) -> bool
 /// This file's own path. Every rule in this file exempts its own implementing file, the
 /// same self-exemption `rust_text.rs`'s syntax-shaped rules carry: its own
 /// test fixtures and each rule's own detection-pattern constants (`CREDENTIAL_PREFIXES`,
-/// the PEM-block markers, `SENSITIVE_URL_PARAMS`, the disabled-verification literals)
+/// the PEM-block markers, `SENSITIVE_URL_PARAMETERS`, the disabled-verification literals)
 /// necessarily spell out the exact values each rule looks for. Unlike `rust_text.rs`'s
 /// syntax-shaped rules, these three are content-shaped -- the violation *is* a string's
 /// text, so a general string-literal-stripping fix would defeat every one of these rules
@@ -250,7 +250,7 @@ fn Credential_Match_In(line: &str) -> Option<String>
 /// sensitive parameter and `=`, the exact join a real query string produces.
 fn Has_Secret_In_Url(line: &str) -> bool
 {
-    for parameter in SENSITIVE_URL_PARAMS
+    for parameter in SENSITIVE_URL_PARAMETERS
     {
         for separator in ['?', '&']
         {
@@ -395,7 +395,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Check_A_Secret_Does_Not_Travel_In_A_Url_Should_Report_An_Api_Key_Query_Param()
+    fn Test_Check_A_Secret_Does_Not_Travel_In_A_Url_Should_Report_An_Api_Key_Query_Parameter()
     {
         let source = Source("src/client.rs", "let url = format!(\"https://api.example.com/data?api_key={key}\");\n");
         let findings = Check_A_Secret_Does_Not_Travel_In_A_Url(&[source]);
@@ -403,7 +403,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Check_A_Secret_Does_Not_Travel_In_A_Url_Should_Report_A_Second_Position_Token_Param()
+    fn Test_Check_A_Secret_Does_Not_Travel_In_A_Url_Should_Report_A_Second_Position_Token_Parameter()
     {
         let source = Source("src/client.rs", "let url = format!(\"https://api.example.com/data?page=2&token={t}\");\n");
         let findings = Check_A_Secret_Does_Not_Travel_In_A_Url(&[source]);
@@ -411,7 +411,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Check_A_Secret_Does_Not_Travel_In_A_Url_Should_Ignore_A_Non_Secret_Param()
+    fn Test_Check_A_Secret_Does_Not_Travel_In_A_Url_Should_Ignore_A_Non_Secret_Parameter()
     {
         let source = Source("src/client.rs", "let url = format!(\"https://api.example.com/data?page={n}&limit=20\");\n");
         let findings = Check_A_Secret_Does_Not_Travel_In_A_Url(&[source]);

@@ -47975,6 +47975,96 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "OD-RULES-017-WORDS-ADDITIONS",
+      "title": "Add OD-RULES-017's eight missing words to standards.json's approved_abbreviations",
+      "why": "OD-RULES-017 decided that chk, vs, rs, rc, cmp, lf, ms, nth are absent from Check_Abbreviations' ported DEFAULT_BANNED_WORDS -- missing from the vocabulary rather than excluded from it -- and each names a fixed external identifier or an established narrow technical term, the same class standards.json already approves std/repo/arc for. Adding them resolves 20 of the 30 findings the decision reasoned through (CHK_003 x3, Vs x7, Rs x5, and the Rc/cmp::Ordering/Lf/duration_ms/Nth scattered five).",
+      "done_when": "standards.json's words.approved_abbreviations gains exactly chk, vs, rs, rc, cmp, lf, ms, nth, kept alphabetically sorted alongside the existing 23. crates/repository/nomos-repo-words/src/fact_context.rs's Test_Materialize_Workspace_Should_Materialize_This_Repositorys_Own_Declared_Additions gains an assertion that at least one of the new words (e.g. vs) round-trips through the real fact, the same way it already asserts kwb does. nomos gate run --root . --rule abbreviations no longer reports the 20 named findings. cargo test -p nomos-repo-words is green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "standards.json",
+          "crates/repository/nomos-repo-words/src/fact_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-words"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-017-SAFE-RENAMES",
+      "title": "Rename the two OD-RULES-017 identified as banned-but-costless or misspelled",
+      "why": "OD-RULES-017 decided that SENSITIVE_URL_PARAMS (and its three derived test names) is param/params-shaped and spells out with no semantic cost, and that Nomos_Platform_Stds_Launcher is a plain misspelling of the already-approved std. Neither needs a vocabulary change, only a rename, resolving 5 of the 30 findings the decision reasoned through.",
+      "done_when": "crates/rules/nomos-rules/src/checks/security_text.rs's SENSITIVE_URL_PARAMS is renamed to SENSITIVE_URL_PARAMETERS (declaration, its two usages, and its three derived test names all spell Parameter/Parameters). crates/languages/nomos-lang-rust-deny/tests/integration_seams.rs's Test_Discover_Workspace_Should_Run_A_Real_Process_Through_Nomos_Platform_Stds_Launcher is renamed to ..._Std_Launcher. nomos gate run --root . --rule abbreviations no longer reports these 5 findings. cargo test -p nomos-rules -p nomos-lang-rust-deny is green.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/security_text.rs",
+          "crates/languages/nomos-lang-rust-deny/tests/integration_seams.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-lang-rust-deny"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-lang-rust-deny"
+        ],
+        "exit_code": 0,
+        "output_tail": "iverse ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 429 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_deny-5822386e8201387e.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-bf5a8c15306692b6.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_lang_rust_deny\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788337515,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "bf2e0b68d6c84950c55c5a5276fca70e9132b94d"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

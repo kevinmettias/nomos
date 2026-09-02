@@ -218,7 +218,7 @@ impl Drop for ScratchDirectory
 /// manifest before resolving anything, rather than duplicating `fact_context::tests`'s own
 /// real, whole-repository invocation.
 #[test]
-fn Test_Discover_Workspace_Should_Run_A_Real_Process_Through_Nomos_Platform_Stds_Launcher()
+fn Test_Discover_Workspace_Should_Run_A_Real_Process_Through_Nomos_Platform_Std_Launcher()
 {
     use nomos_platform_std::StdProcessLauncher;
 
