@@ -46132,6 +46132,191 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "OD-LEDGER-AMENDS-PATH-ECHOED-VERBATIM",
+      "title": "work add --amends stores and echoes the authored slug, so an item can carry a record path that names no file",
+      "why": "Observed on 2026-09-01 adding OD-HOST-007-MCP-PROJECTION-REOPENS-REPO-TOOLING. Two --amends arguments named the right record identifiers with wrong slugs; both were accepted at exit 0, echoed back verbatim in the confirmation line, and stored verbatim in the item's territory, and neither file exists. The reservation itself was correct and this item does not claim otherwise: Territory::Intersect folds a record filename onto the identifier it carries per OD-LEDGER-016, so both real records were reserved and no second writer was let in. Probed directly to be sure -- the same wrong slug passed to --territory is refused at exit 4 naming docs/records/od-ledger-036 and the real published filename. What is wrong is narrower and still real. The item ends up carrying a path an author cannot open, cannot copy into a render worktree, and cannot use to find the file it says the item edits, while the success line asserts that path as the file it reserved. The remedy is already sitting one refusal away: AddRefusal::RecordPublished resolves an identifier to its real published filename and prints it, so the machinery to tell an author the correct spelling exists and only --amends does not reach for it.",
+      "done_when": "work add --amends refuses a docs/records path whose identifier is published under a different filename, naming the real filename the way AddRefusal::RecordPublished already does, so the author is told the correct spelling rather than having a dead path recorded for them. A unit test covers the wrong-slug case and asserts the refusal names the published file. cargo test -p nomos-ledger -p nomos-cli is green.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/store/reservation.rs",
+          "crates/substrate/nomos-ledger/src/store/add_refusal.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by OD-LEDGER-AMENDS-PATH-ECHOED-VERBATIM-2, which reserves the exhaustive match, the doc that enumerates the refusals, and the test file that proves the sibling ones."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-nomos-a8",
+          "reason": "Territory grepped after claiming rather than before writing it, and it is short. The fix adds an AddRefusal variant, and Code_For_Refusal in crates/host/nomos-cli/src/work/report.rs is an exhaustive const match with no wildcard arm, so it stops compiling without an arm for the new variant. file_ledger.rs's Add doc enumerates the refusals Add can return and would go stale. The natural home for the proof is crates/substrate/nomos-ledger/tests/exclusion_holds/records.rs, where every sibling refusal including AmendmentNotPublished is already proven end to end. Re-added as -2 reserving all five.",
+          "abandoned_at": 1788317013
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-a8",
+        "declined_at": 1788317013
+      }
+    },
+    {
+      "id": "OD-LEDGER-AMENDS-PATH-ECHOED-VERBATIM-2",
+      "title": "work add --amends stores and echoes the authored slug, so an item can carry a record path that names no file",
+      "why": "Observed on 2026-09-01 adding OD-HOST-007-MCP-PROJECTION-REOPENS-REPO-TOOLING. Two --amends arguments named the right record identifiers with wrong slugs; both were accepted at exit 0, echoed back verbatim in the confirmation line, and stored verbatim in the item's territory, and neither file exists. The reservation itself was correct and this item does not claim otherwise: Territory::Intersect folds a record filename onto the identifier it carries per OD-LEDGER-016, so both real records were reserved and no second writer was let in. Probed directly to be sure -- the same wrong slug passed to --territory is refused at exit 4 naming docs/records/od-ledger-036 and the real published filename. What is wrong is narrower and still real. The item ends up carrying a path an author cannot open, cannot copy into a render worktree, and cannot use to find the file it says the item edits, while the success line asserts that path as the file it reserved. The remedy is already sitting one refusal away: AddRefusal::RecordPublished resolves an identifier to its real published filename and prints it, so the machinery to tell an author the correct spelling exists and only --amends does not reach for it. Both spellings the folding admits must keep working: the bare docs/records/OD-LEDGER-036 form as well as the full filename, so the refusal fires on a path that claims to be a filename and is the wrong one, not on a path that never claimed to be.",
+      "done_when": "A new AddRefusal variant refuses a docs/records path that ends .md whose identifier is published under a different filename, naming the real filename the way AddRefusal::RecordPublished already does. The bare docs/records/IDENTIFIER spelling is still accepted. Code_For_Refusal maps it to ValidationError beside AmendmentNotPublished, with the reasoning stated: nothing is contended, the declaration is the caller's to correct. file_ledger.rs's Add doc enumerates it alongside the refusals already listed. A test in tests/exclusion_holds/records.rs asserts the refusal and that its text names the published file, beside the sibling refusals already proven there. cargo test -p nomos-ledger -p nomos-cli is green.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/store/reservation.rs",
+          "crates/substrate/nomos-ledger/src/store/add_refusal.rs",
+          "crates/substrate/nomos-ledger/src/file_ledger.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/records.rs",
+          "crates/host/nomos-cli/src/work/report.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-a8",
+        "acquired_at": 1788317035,
+        "lease_expires_at": 1788324235
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-GOALS-PROVIDER",
+      "title": "nomos-repo-goals: the one provider of nomos.cap.goals.policy",
+      "why": "OD-RULES-011-GOALS landed the contract and said a provider was its own next increment. Without one the capability is a shape nobody answers, and the rule that reads it has nothing to read. This is the fifth crate under crates/repository/, alongside nomos-repo-standards, nomos-repo-limits, nomos-repo-scripting and nomos-repo-words, for the identical reason all four sit there: it reads standards.json, one file declared once for the whole repository, rather than one language's source or manifest format.",
+      "done_when": "crates/repository/nomos-repo-goals exists at band 25 reading standards.json's declared goals, subsystems and per-goal ceiling through a caller-supplied nomos_platform::FileSystem into a GoalsPolicyPayload, offering against nomos.cap.goals.policy at the contract's own ceiling, materializing the one whole-workspace fact that ceiling allows, and declaring a determinism Strategy registered in tests/integration/tests/determinism alongside its four siblings; the crate is a member at band 25 in all four places a band is written; its surface snapshot is blessed; and cargo test -p nomos-repo-goals is green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository/nomos-repo-goals",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-repo-goals.txt",
+          "tests/integration/Cargo.toml",
+          "tests/integration/tests/determinism"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-goals"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-goals"
+        ],
+        "exit_code": 0,
+        "output_tail": "er_Offer_Should_Be_Accepted_Under_The_Capabilitys_Contract ... ok\ntest provider::tests::Test_A_Fact_Key_Should_Depend_On_The_Guarantee ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Declare_Nothing_For_A_Missing_File ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Declare_Nothing_For_A_File_Naming_None_Of_The_Three_Keys ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Name_Which_Goals_List_Was_Malformed ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Preserve_Declaration_Order ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Read_A_Ceiling_At_Or_Below_Zero_As_Unbounded ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Read_Goals_A_Ceiling_And_The_Subsystem_Mapping ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Non_Array_Goals_Declaration ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Non_Array_Subsystems_Declaration ... ok\ntest provider::tests::Test_Materialize_Workspace_Should_Materialize_This_Repositorys_Own_Declared_Policy ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Non_Integer_Ceiling ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Non_String_Goal ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_One_Subsystem_Declared_Twice ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Read_This_Repository_As_Having_Declared_No_Goals ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Skip_A_Subsystem_With_No_Name ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_Invalid_Json ... ok\n\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_repo_goals-a5a9942f11f1205c.exe)\n   Doc-tests nomos_repo_goals\n",
+        "verified_at": 1788318039,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6d01ef376716860f7ec4d8376da659a6321f92f5"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "PROBE-BARE-ID",
+      "title": "t",
+      "why": "w",
+      "done_when": "d",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-036"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Not work. An end-to-end probe of OD-LEDGER-AMENDS-PATH-ECHOED-VERBATIM-2's own rule, checking through the real CLI that the bare docs/records/OD-LEDGER-036 spelling is still accepted after the new AmendmentMisspelled refusal landed. It was, which is the half of the rule that had to keep working; the wrong-slug half refused at exit 1 with the published filename in the message. Declined the moment it was read, since it reserved a published record while open. The probe should have run against a scratch NOMOS_WORK_DIR rather than the shared board."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "true"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-a8",
+        "declined_at": 1788317303
+      }
     }
   ]
 }

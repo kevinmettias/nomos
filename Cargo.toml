@@ -99,6 +99,14 @@ members = [
     # not one language's source or manifest format. `OD-RULES-011`'s fourth instance.
     "crates/repository/nomos-repo-words",
 
+    # Band 25 — nomos.cap.goals.policy's one provider, alongside its four siblings above
+    # for the same reason: it reads standards.json's goals, max_subsystems_per_goal and
+    # subsystems keys, a repository-wide configuration file, not one language's source or
+    # manifest format. `OD-RULES-011`'s fifth instance, and the strongest case for the
+    # placement: a goal is a statement about the system, and a system does not have one set
+    # of purposes per language.
+    "crates/repository/nomos-repo-goals",
+
     # Band 23 — the nomos.cap.dependency.edges contract, alongside nomos-cap-syntax. Not
     # left beside its provider the way nomos.cap.module.index is: nomos-rules is a real
     # second party to it from the day it was written. `OD-CAPABILITY-002`.
@@ -315,6 +323,7 @@ nomos-cap-limits-policy = { path = "crates/capabilities/nomos-cap-limits-policy"
 nomos-cap-scripting-policy = { path = "crates/capabilities/nomos-cap-scripting-policy" }
 nomos-cap-words-policy = { path = "crates/capabilities/nomos-cap-words-policy" }
 nomos-cap-goals-policy = { path = "crates/capabilities/nomos-cap-goals-policy" }
+nomos-repo-goals = { path = "crates/repository/nomos-repo-goals" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-lang-go = { path = "crates/languages/nomos-lang-go" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }

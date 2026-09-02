@@ -802,6 +802,49 @@ fn Rendered_Words_Policy_Fact(fact: &nomos_repo_words::PolicyFact) -> Vec<u8>
     return rendered;
 }
 
+/// `nomos-repo-goals`'s one fact over this repository's own real `standards.json`.
+///
+/// The identical reasoning [`Words_Policy_Production`] gives, one crate over -- with one
+/// thing worth saying out loud, since it would otherwise read as a hole: this repository
+/// declares no goals at all, so the payload half of what is rendered here is empty. That is
+/// still a real measurement. The key half moves if anything about the fact's identity moves,
+/// and an empty payload rendered identically twice is exactly the claim
+/// `GoalsPolicyFactProduction` makes for an unconfigured repository.
+pub(crate) fn Goals_Policy_Production() -> Vec<u8>
+{
+    let context = Goals_Policy_Context();
+    let fact = Discovered_Goals_Policy_Fact(context);
+
+    return Rendered_Goals_Policy_Fact(&fact);
+}
+
+fn Goals_Policy_Context() -> nomos_repo_goals::FactContext
+{
+    return nomos_repo_goals::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
+        generation: GenerationId::INITIAL,
+    };
+}
+
+/// This repository's own real workspace, materialized through the door this provider
+/// actually reads `standards.json` through.
+fn Discovered_Goals_Policy_Fact(context: nomos_repo_goals::FactContext) -> nomos_repo_goals::PolicyFact
+{
+    return nomos_repo_goals::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
+        .expect("this repository's own standards.json is real and well-formed");
+}
+
+fn Rendered_Goals_Policy_Fact(fact: &nomos_repo_goals::PolicyFact) -> Vec<u8>
+{
+    let mut rendered = Vec::new();
+    rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
+    rendered.extend_from_slice(&fact.fact.payload.bytes);
+
+    return rendered;
+}
+
 /// The fixture `nomos-lang-go`'s production is measured over.
 ///
 /// A second, Go-specific fixture rather than the shared `FIXTURE` above — that one is Rust

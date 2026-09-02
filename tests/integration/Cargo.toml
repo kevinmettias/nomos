@@ -29,6 +29,7 @@ nomos-platform-std = { workspace = true }
 nomos-repo-limits = { workspace = true }
 nomos-repo-standards = { workspace = true }
 nomos-repo-scripting = { workspace = true }
+nomos-repo-goals = { workspace = true }
 nomos-repo-words = { workspace = true }
 # The two spec domains this harness holds to their declarations. The spec system sits
 # beside the kernel rather than above it, and this crate is the one place both sides are
