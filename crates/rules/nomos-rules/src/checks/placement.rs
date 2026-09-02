@@ -61,13 +61,22 @@ pub fn Check_A_Package_Is_Named_After_Its_Directory(sources: &[SourceFile]) -> V
     return findings;
 }
 
-/// Reports a wildcard import in Rust (`use path::*;`) or Go (`import . "path"`), exempting
-/// `use super::*;` once it appears after the file's own first `#[cfg(test)]` attribute (the
-/// idiom a test module reaching for the subject it exercises) and a Go external test
-/// package (`package foo_test`) dot-importing its own subject (`foo`). Neither this
-/// crate's syntax payload nor a hand-rolled parser can tell a curated prelude from any
-/// other wildcard, so that exemption is not attempted here — this rule only reports what
-/// it can already tell apart.
+/// Reports a wildcard import in Rust (`use path::*;`) or Go (`import . "path"`). Two Rust
+/// idioms are exempt, both a test file reaching for shared test infrastructure rather than
+/// naming every item it needs one by one: `use super::*;` once it appears after the file's
+/// own first `#[cfg(test)]` attribute (the inline `#[cfg(test)] mod tests { use super::*;
+/// ... }` shape), and *any* wildcard import when the whole file is
+/// [`super::Is_Test_Or_Example_Source`]'s shape. The second covers what the first cannot
+/// see: a `mod tests;` split into its own `tests.rs` carries the `#[cfg(test)]` gate in its
+/// *parent* file, invisible to a check reading this file's text alone, and a directory-per-
+/// test-binary integration suite (`tests/<suite>/main.rs` declaring sibling modules) reaches
+/// for a shared fixture module by name (`use crate::board::*;`) rather than `super`, since
+/// there is no parent module to reach through. Every wildcard import this workspace's own
+/// test/example sources carry today is one of these two shapes; a Go external test package
+/// (`package foo_test`) dot-importing its own subject (`foo`) is exempt the same way for the
+/// same reason. Neither this crate's syntax payload nor a hand-rolled parser can tell a
+/// curated prelude from any other wildcard in *non*-test code, so that exemption is not
+/// attempted there — this rule only reports what it can already tell apart.
 #[must_use]
 pub fn Check_No_Wildcard_Imports(sources: &[SourceFile]) -> Vec<Finding>
 {
@@ -93,6 +102,7 @@ fn Rust_Wildcard_Findings_In(source: &SourceFile) -> Vec<Finding>
 {
     let lines: Vec<&str> = source.text.lines().collect();
     let first_test_cfg_line = lines.iter().position(|line| return line.contains("#[cfg(test)]"));
+    let whole_file_is_a_test_module = super::Is_Test_Or_Example_Source(source);
 
     let mut findings = Vec::new();
     for (index, line) in lines.iter().enumerate()
@@ -102,7 +112,8 @@ fn Rust_Wildcard_Findings_In(source: &SourceFile) -> Vec<Finding>
             continue;
         }
 
-        let exempt_test_idiom = Is_Use_Super_Star(line) && first_test_cfg_line.is_some_and(|cfg_line| return index > cfg_line);
+        let exempt_test_idiom = whole_file_is_a_test_module
+            || (Is_Use_Super_Star(line) && first_test_cfg_line.is_some_and(|cfg_line| return index > cfg_line));
         if exempt_test_idiom
         {
             continue;
@@ -294,6 +305,34 @@ mod tests
             "src/lib.rs",
             "pub fn Compute() {}\n\n#[cfg(test)]\nmod tests\n{\n    use super::*;\n}\n",
         );
+
+        let findings = Check_No_Wildcard_Imports(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// `#[cfg(test)] mod tests;` split into its own `tests.rs` carries the gate in its
+    /// *parent* file -- this file's own text never contains `#[cfg(test)]` at all, the shape
+    /// most of this workspace's real findings shared before this exemption existed.
+    #[test]
+    fn Test_Check_No_Wildcard_Imports_Should_Exempt_Use_Super_Star_In_A_Standalone_Tests_File()
+    {
+        let source = Source("src/module/tests.rs", "use super::*;\n\n#[test]\nfn Test_Compute() {}\n");
+
+        let findings = Check_No_Wildcard_Imports(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// A directory-per-test-binary integration suite (`tests/<suite>/main.rs` declaring
+    /// sibling modules) has no parent module to reach through, so a test file wildcard-
+    /// imports a shared fixture module by name instead -- `crates/substrate/nomos-ledger/
+    /// tests/exclusion_holds/*.rs`'s own `use crate::board::*;` is exactly this shape, and
+    /// the remaining real findings once `use super::*;` alone was exempted.
+    #[test]
+    fn Test_Check_No_Wildcard_Imports_Should_Exempt_A_Named_Wildcard_In_A_Test_File()
+    {
+        let source = Source("tests/suite/claiming.rs", "use crate::board::*;\n\n#[test]\nfn Test_Claim() {}\n");
 
         let findings = Check_No_Wildcard_Imports(&[source]);
 

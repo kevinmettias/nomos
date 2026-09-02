@@ -19,7 +19,7 @@ use nomos_rules::{
     Check_File_Size_Justification_Trigger, Check_Go_Constants_Split_By_Export, Check_Go_File_Size_Hard_Trigger,
     Check_Go_File_Size_Review_Trigger, Check_Go_Helpers_Package_Five_Inputs, Check_Go_Type_Names_Use_Camel_Case,
     Check_Abbreviations, Check_Go_Variables_Use_Lower_Snake_Case, Check_Goals_And_Parts_Line_Up, Check_Lint_Diagnostics,
-    Check_Naming_Convention, Check_No_Mod_Rs_Files,
+    Check_Naming_Convention, Check_No_Mod_Rs_Files, Check_No_Wildcard_Imports,
     Check_No_Trailing_Whitespace, Check_Parameter_Count, Check_Relaxed_Not_Used_When_Ordering_Matters,
     Check_Scripts_Use_A_Portable_Shebang, Check_Seqcst_Justified_Explicitly, Check_Shared_Interior_Mutability_Says_Why,
     Check_Sleep_Is_Not_Synchronization, Check_Suppression_Directives_Carry_A_Reason, Check_Todo_Format,
@@ -36,7 +36,7 @@ use nomos_rules::{
     FILE_SIZE_JUSTIFICATION_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
     GO_HELPERS_PACKAGE_FIVE_INPUTS, GO_VARIABLES_USE_LOWER_SNAKE_CASE, INLINE_ALWAYS_JUSTIFICATION, LINT_DIAGNOSTICS,
     LOWERCASE_FIRST_LETTER,
-    NAMING_CONVENTION, NO_MOD_RS_FILES, NO_TRAILING_PUNCTUATION, NO_TRAILING_WHITESPACE,
+    NAMING_CONVENTION, NO_MOD_RS_FILES, NO_TRAILING_PUNCTUATION, NO_TRAILING_WHITESPACE, NO_WILDCARD_IMPORTS,
     ONE_THOUSAND_LINE_HARD_TRIGGER, PARAMETER_COUNT,
     RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, SCRIPTS_USE_A_PORTABLE_SHEBANG, SEQCST_JUSTIFIED_EXPLICITLY,
     SHARED_INTERIOR_MUTABILITY_SAYS_WHY, SLEEP_BASED_SYNCHRONIZATION, SUPPRESSION_DIRECTIVES_CARRY_A_REASON,
@@ -57,7 +57,7 @@ use crate::CheckOutcome;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 53;
+const RULE_COUNT: usize = 54;
 
 /// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
 /// through, the filesystem a repository-declared policy capability (`nomos.cap.naming.
@@ -487,15 +487,18 @@ struct JudgeEnvironment<'a>
 /// it does not: a rule implemented in `nomos-rules` but never composed here reports as
 /// unenforced when it is not, so wiring one in is this crate's own territory, the same
 /// "composed into nomos-check-orchestration::Run" section every one of these rules' own
-/// module docs already names. Five siblings this crate also implements --
+/// module docs already names. Four siblings this crate also implements --
 /// `no-decorative-section-dividers`, `unwrap-expect-discipline`, `panics-are-justified-
-/// documented-and-validated`, `no-wildcard-imports` and `no-single-line-function-bodies` --
-/// are deliberately absent: this repository's own tree currently violates all five (71, 49
-/// and 286 findings respectively, checked by running each alone through a real
-/// `gate run --root .` first), and wiring a rule this tree fails is a different, larger
-/// change than composing one it already satisfies. `a-disabled-test-states-why` and
-/// `inline-always-requires-justification`, checked the same way, found nothing to violate
-/// and are composed below with their two already-wired siblings.
+/// documented-and-validated` and `no-single-line-function-bodies` -- are deliberately
+/// absent: this repository's own tree currently violates all four (71, 286 findings for the
+/// last two respectively, checked by running each alone through a real `gate run --root .`
+/// first), and wiring a rule this tree fails is a different, larger change than composing
+/// one it already satisfies. `a-disabled-test-states-why`, `inline-always-requires-
+/// justification` and `no-wildcard-imports`, checked the same way, found nothing to violate
+/// -- the 49 findings `no-wildcard-imports` first measured were a rule bug (its
+/// `use super::*;` exemption could not see across a `tests.rs` split from its `#[cfg(test)]`
+/// parent, `P27-RULES-NO-WILDCARD-IMPORTS-EXEMPTION`), not real violations -- and all three
+/// are composed below with their two already-wired siblings.
 fn Rule_Findings(
     sources: &[SourceFile],
     capabilities: &CapabilityMaterialization,
@@ -563,6 +566,7 @@ fn Rule_Findings(
         (ABBREVIATIONS, &|reader| return Check_Abbreviations(sources, reader)),
         (A_DISABLED_TEST_STATES_WHY, &|_reader| return Check_A_Disabled_Test_States_Why(sources)),
         (INLINE_ALWAYS_JUSTIFICATION, &|_reader| return Check_Inline_Always_Justification(sources)),
+        (NO_WILDCARD_IMPORTS, &|_reader| return Check_No_Wildcard_Imports(sources)),
     ];
 
     return Findings_For_Selected_Rules(rules, reader, selected);
