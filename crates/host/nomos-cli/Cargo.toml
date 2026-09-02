@@ -78,6 +78,10 @@ nomos-model-backend-ollama = { workspace = true }
 # TaskEnvelope.effort's type, since OD-CONTRACTS-004 -- `agent.rs` names a value of it
 # directly rather than depending on nomos-agent-contracts alone to re-export one.
 nomos-model-package = { workspace = true }
+# CorrectionCandidate, CorrectionPlan and the preview/stage/validate/commit lifecycle --
+# `correct.rs`'s own first real caller outside this crate's unit tests. `nomos-cli` is band
+# 90 and `nomos-corrections` is band 35, so this is a legal downward edge.
+nomos-corrections = { workspace = true }
 
 [dev-dependencies]
 # `check::sources::Read_Entry` and `gate::sources::Read_Entry` hardcode the `"go"`

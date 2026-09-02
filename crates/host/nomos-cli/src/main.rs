@@ -20,6 +20,7 @@
 mod agent;
 mod arguments;
 mod check;
+mod correct;
 mod gate;
 mod request;
 mod spec;
@@ -55,6 +56,7 @@ fn main() -> std::process::ExitCode
         Some((vacuity::Group::Request, rest)) => Run_Request_Group(rest),
         Some((vacuity::Group::Gate, rest)) => Run_Gate_Group(rest),
         Some((vacuity::Group::Agent, rest)) => Run_Agent_Group(rest),
+        Some((vacuity::Group::Correct, rest)) => Run_Correct_Group(rest),
         None => Usage(),
     };
 
@@ -155,6 +157,21 @@ fn Run_Agent_Group(rest: &[String]) -> i32
     return agent::Run(&command, &mut stdout, &mut stderr).Value();
 }
 
+/// The correct group: the corrections product vertical's first real Finding-to-Commit
+/// path, over a tree.
+fn Run_Correct_Group(rest: &[String]) -> i32
+{
+    let mut stdout = std::io::stdout();
+    let mut stderr = std::io::stderr();
+    let Ok(command) = correct::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    else
+    {
+        return correct::ExitCode::Usage.Value();
+    };
+
+    return correct::Run(&command, &mut stdout, &mut stderr).Value();
+}
+
 /// What the binary answers when it was not told which group it is being asked for.
 fn Usage() -> i32
 {
@@ -165,7 +182,8 @@ fn Usage() -> i32
          check   run the rules over a tree and report what they find\n  \
          request submit a feature request, design spec or feature result\n  \
          gate    compose this gate's rule registry and report what it holds\n  \
-         agent   dispatch a task to the first real AgentExecutor"
+         agent   dispatch a task to the first real AgentExecutor\n  \
+         correct build and commit a real correction for one real finding"
     );
 
     return work::ExitCode::Usage.Value();

@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5e9d9c340a5d6d76ffd48ef95d0603d066f6fe3b035fe047521c2c050512916d",
-  "inputs_digest": "sha256:19710e2c5dc62ffa89b31ed913d878aa9deb03ab951d0077a59423fb0fecb380",
+  "content_digest": "sha256:b695b6a96915c0a5014bdb9581751ce8dea31462935a5e937120cd692f2aaf6b",
+  "inputs_digest": "sha256:14bdcb80db6da3a6df674fd5201ce5f00384e94f64eed48a03494f1679ca5310",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1506
+      1507
     ],
     [
       "Source blocks",
-      5268
+      5275
     ]
   ],
   "inputs": [
@@ -273,7 +273,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored",
-      "hash": "sha256:8ad58a92216388e350cbfdf042e5ab75299e97e9e6accef05f6bae9e325fc72a"
+      "hash": "sha256:a91dd75d56e4bce49e2a0d37621e02d0ee2ba9fa0fcaab509dbe114813bad215"
     },
     {
       "content": "documents",
@@ -2858,7 +2858,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#20",
-      "hash": "sha256:3467b939373f782cbf218cad2441886684a0592c1f65f2c66c3434f10b403ead"
+      "hash": "sha256:8ee38992398a4245e170c0303b523f8a92c6ebd905785065171e55a5faa5b506"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#27",
+      "hash": "sha256:c9a9cb1f5eb7d0a5114347195ba74dce3f26c494f24ed818b28ee0b5d7f280c7"
     },
     {
       "content": "headings",
@@ -14963,7 +14968,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#10",
-      "hash": "sha256:fc98b3d81b9fb5308cfd2be13f8fa2c5f4545981b2446341b2905fc175fe2687"
+      "hash": "sha256:5986adf1bb78c83769de7feaf2c8f046f4aee0999a4191e651c581a54d6910c6"
     },
     {
       "content": "blocks",
@@ -14983,7 +14988,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#14",
-      "hash": "sha256:0880a0daf0eb2a7027cf2a2a51d80c6d80a0d3d2d5a3e0abea74681707060ffa"
+      "hash": "sha256:74ce9d9f79c4d6c14234249315c0de5d631537e5869bb0ecf51a72c3c1df16e9"
     },
     {
       "content": "blocks",
@@ -14993,7 +14998,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#16",
-      "hash": "sha256:a98767461f14f4d6b2870d4a4e0b3743cbce9374dd5ff8dcbf2c43fe51698396"
+      "hash": "sha256:cafd5d93fcb096345bf9b6940e9ce8171b1ec1475402444457b1b4884a85ec5c"
     },
     {
       "content": "blocks",
@@ -15013,12 +15018,47 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#20",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:a16f6b650074582038b70f94419bf0482545cde4217159906a286ae598e320f7"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#21",
-      "hash": "sha256:77f5c88a51a0a838db659a7b12d6263076b40ed12c1c58a3f56742fff3db2cea"
+      "hash": "sha256:7a9c1d019eb2f264a88c1aa8c09bd3c3291338de86f0b82e26d3c7fabb5aec02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#22",
+      "hash": "sha256:41b5cb84652063d4220c21801a366cf728361eb76a10ecad7e7d0dde8de09528"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#23",
+      "hash": "sha256:037fd6a254c0500dad6c4936991e6940e126ce95ade0a5591cf7b6ea4a4c2877"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#24",
+      "hash": "sha256:8a413ccee40700a036a6728ce71cca9651f2d9d12ea28eefa537fd36364136a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#25",
+      "hash": "sha256:8cbfe88cb97c939cd93f8630d57115fa4c368e5d92557ac00fff63979ef9e429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#26",
+      "hash": "sha256:2ad49f5d747dd61d8146be693adcb704a47765b48245f691c430d3d5ea65925a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#27",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#28",
+      "hash": "sha256:fed03362796f23cf4c8bb90bf1724c82ac130ed59441df448ba3bfdb788d680e"
     },
     {
       "content": "blocks",

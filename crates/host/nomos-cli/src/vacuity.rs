@@ -52,14 +52,15 @@ pub(crate) enum Group
     Request,
     Gate,
     Agent,
+    Correct,
 }
 
 #[cfg(test)]
 impl Group
 {
     /// Every group, for a test to walk without hand-maintaining a second list.
-    pub(crate) const ALL: [Self; 6] =
-        [Self::Work, Self::Spec, Self::Check, Self::Request, Self::Gate, Self::Agent];
+    pub(crate) const ALL: [Self; 7] =
+        [Self::Work, Self::Spec, Self::Check, Self::Request, Self::Gate, Self::Agent, Self::Correct];
 }
 
 /// Every group's on-argv spelling, paired with the [`Group`] `Stance_Of` reads.
@@ -69,13 +70,14 @@ impl Group
 /// can route to it at all. That is what makes this module the entry point every group's
 /// dispatch actually passes through, and not merely a place a stance happens to be written
 /// down beside the code it describes.
-pub(crate) const NAMES: [(&str, Group); 6] = [
+pub(crate) const NAMES: [(&str, Group); 7] = [
     ("work", Group::Work),
     ("spec", Group::Spec),
     ("check", Group::Check),
     ("request", Group::Request),
     ("gate", Group::Gate),
     ("agent", Group::Agent),
+    ("correct", Group::Correct),
 ];
 
 /// The group named on argv, if [`NAMES`] spells it.
@@ -145,6 +147,9 @@ pub(crate) fn Stance_Of(group: Group) -> Stance
             because: "execute always names exactly one goal the caller typed; there is no \
                       caller-chosen subject set for it to have walked and found empty the \
                       way a checked-out tree or a queried record can be",
+        },
+        Group::Correct => Stance::Guarded {
+            decided_in: "correct::sources::Walked / nomos_check_orchestration::Run",
         },
     };
 }
@@ -282,5 +287,27 @@ mod tests
 
         assert_ne!(code.Value(), 0, "an empty tree must not report the same code as a clean run");
         assert_eq!(code, crate::gate::ExitCode::Vacuous);
+    }
+
+    /// `correct phantom-mirrors` walks a caller-chosen tree exactly as `check` and
+    /// `gate run` do, so an empty one must not report `Ok` there either.
+    #[test]
+    fn Test_Correct_Should_Refuse_Ok_Over_An_Empty_Tree()
+    {
+        assert!(matches!(Stance_Of(Group::Correct), Stance::Guarded { .. }));
+
+        let empty = std::env::temp_dir().join("nomos-cli-vacuity-guard-empty-correct-tree");
+        let _ignored = std::fs::remove_dir_all(&empty);
+        std::fs::create_dir_all(&empty).expect("creates an empty directory");
+
+        let command = crate::correct::CorrectCommand { root: empty.clone(), commit: false };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let code = crate::correct::Run(&command, &mut stdout, &mut stderr);
+
+        let _ignored = std::fs::remove_dir_all(&empty);
+
+        assert_ne!(code.Value(), 0, "an empty tree must not report the same code as a clean run");
+        assert_eq!(code, crate::correct::ExitCode::Vacuous);
     }
 }

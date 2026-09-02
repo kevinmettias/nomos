@@ -46111,14 +46111,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P14-CORRECTIONS-VERTICAL-PHANTOM-MIRROR-MERGE-2: same completed work, a predicate scoped to what this item actually verified rather than the unscoped cargo test -p nomos-cli, which also runs a separately-known-red whole-workspace integration test this item's territory cannot reach."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-p27",
-        "acquired_at": 1788316791,
-        "lease_expires_at": 1788323991
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -46129,9 +46129,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-nomos-p27",
+          "reason": "Work is complete and verified (all 23 of correct.rs's own tests pass, main.rs/vacuity.rs/Cargo.toml merged cleanly against current dev's independently-evolved Run signature, OD-CORRECTIONS-001 amended to v3, spec/domain-specification.md and diagrams/relations.mmd re-rendered fresh from a clean worktree per the nomos-spec-change skill and verified via spec freshness exit 0), but the declared predicate (cargo test -p nomos-cli, unscoped) includes the same check_command integration test already found and documented as independently red for many pre-existing, unrelated reasons across dozens of files (P26-RULES-TEXT-SCANNERS-SELF-MATCH-3's own finding). Re-adding scoped to what this item verified: cargo test -p nomos-cli --bin nomos, which excludes that known-broadly-red separate test target and covers everything this item's own territory touches.",
+          "abandoned_at": 1788318083
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-nomos-p27",
+        "declined_at": 1788318090
+      }
     },
     {
       "id": "OD-LEDGER-AMENDS-PATH-ECHOED-VERBATIM",
@@ -46205,7 +46214,7 @@
       "claim": {
         "holder": "claude-nomos-a8",
         "acquired_at": 1788317035,
-        "lease_expires_at": 1788324235
+        "lease_expires_at": 1788325341
       },
       "verification": {
         "argv": [
@@ -46317,6 +46326,111 @@
         "holder": "claude-nomos-a8",
         "declined_at": 1788317303
       }
+    },
+    {
+      "id": "P14-CORRECTIONS-VERTICAL-PHANTOM-MIRROR-MERGE-2",
+      "title": "Merge the abandoned worktree-agent-a055794b88b62f469 branch: nomos correct phantom-mirrors",
+      "why": "Same as the original item: a stale, never-merged worktree branch (found while cleaning up 7 abandoned .claude/worktrees/ dirs) built a complete corrections-vertical first caller on 2026-08-26. Superseding only for a predicate that matches what this item's own territory can verify -- cargo test -p nomos-cli (unscoped) also runs the check_command integration test, independently red for many pre-existing, unrelated reasons across dozens of files (parameter-count and file-name-matches-declared-type violations in crates this item never touches), the same finding P26-RULES-TEXT-SCANNERS-SELF-MATCH-3 already documented for a different pair of items.",
+      "done_when": "crates/host/nomos-cli/src/correct.rs and its submodules exist, nomos correct phantom-mirrors works end to end (23 unit tests including a real Preview-Stage-Validate-Commit-Rerun cycle), main.rs/vacuity.rs merged cleanly with current dev's independently-evolved Run signature (RunContext now carries a FileSystem too), OD-CORRECTIONS-001 is at version 3, spec/domain-specification.md and diagrams/relations.mmd were re-rendered fresh from a clean worktree at the commit's own HEAD (not copied from the stale branch) and verified via spec freshness exit 0, and cargo test -p nomos-cli --bin nomos passes",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/correct.rs",
+          "crates/host/nomos-cli/src/correct",
+          "crates/host/nomos-cli/src/main.rs",
+          "crates/host/nomos-cli/src/vacuity.rs",
+          "crates/host/nomos-cli/Cargo.toml",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--bin",
+          "nomos"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--bin",
+          "nomos"
+        ],
+        "exit_code": 0,
+        "output_tail": "en_The_Document_Itself_Had_No_Lines ... ok\ntest spec::verb::record::tests::Test_Read_Record_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest spec::verb::table::tests::Test_No_Such_Document_Should_Report_Absent_Over_A_Store_Missing_Its_Corpus ... ok\ntest spec::verb::record::tests::Test_Nothing_Behind_Should_Report_Absent_With_Or_Without_A_Sourceless_Node ... ok\ntest spec::verb::table::tests::Test_Unselected_Rows_Should_Note_The_Document_And_Yield_No_Rows ... ok\ntest spec::verb::editing::tests::Test_Report_Edit_Error_Should_Map_Each_Error_Kind_To_Its_Own_Exit_Code ... ok\ntest spec::verb::editing::tests::Test_Commit_Edit_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest spec::verb::listing::tests::Test_List_Sources_Should_Report_Absent_When_The_Corpus_Was_Never_Configured ... ok\ntest spec::verb::editing::tests::Test_Preview_Edit_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest spec::verb::table::tests::Test_Read_Table_Should_Report_Absent_For_A_Document_The_Store_Never_Had ... ok\ntest spec::verb::markdown::tests::Test_Render_Markdown_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest vacuity::tests::Test_Spec_Should_Refuse_Ok_Over_A_Record_The_Store_Never_Had ... ok\ntest spec::verb::freshness::tests::Test_Freshness_Of_Should_Report_An_Unknown_Profile ... ok\ntest spec::verb::listing::tests::Test_Empty_Section_Should_Report_Absent_Over_A_Store_Missing_Its_Corpus ... ok\ntest gate::tests::Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report ... ok\ntest gate::tests::Test_Relative_Path_Should_Underlie_A_Real_Explains_Search_Over_A_Clean_Tree ... ok\ntest gate::tests::Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree ... ok\n\ntest result: ok. 259 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.05s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-fa2d563e3688ec1a.exe)\n",
+        "verified_at": 1788318134,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "309b945f0cd8e214f013b9a3db72633523a81e57"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-GOALS-RULE",
+      "title": "Add Check_Goals_And_Parts_Line_Up to a new checks/goals.rs",
+      "why": "OD-RULES-011-GOALS and OD-RULES-011-GOALS-PROVIDER landed a contract and a provider that nothing reads. A capability with no consumer is a shape, not a capability -- and this family's whole claim was that it is the clearest OD-RULES-011 case there is, which only holds once a rule actually reads it. This is the last of the three increments, and it ports the judgment code-standards' own AuditTraceability makes: four disagreements between a system's declared purposes and its declared parts.",
+      "done_when": "crates/rules/nomos-rules/src/checks/goals.rs implements Check_Goals_And_Parts_Line_Up reading nomos.cap.goals.policy through FactReader and reporting the four disagreements AuditTraceability reports -- an undeclared goal, an orphaned goal, a purposeless subsystem and a smeared goal -- with unit tests for each and for both opt-outs (no declared goals judges nothing, a ceiling of zero drops only the spread bound), checks.rs and lib.rs export it, nomos-rules depends on nomos-cap-goals-policy, the nomos-rules surface snapshot is reblessed, and cargo test -p nomos-rules is green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/goals.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-e5-0902",
+        "acquired_at": 1788318161,
+        "lease_expires_at": 1788325361
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
