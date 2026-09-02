@@ -1,0 +1,18 @@
+pub const fn nomos_cap_goals_policy::Ceiling() -> Guarantee
+pub const nomos_cap_goals_policy::CAPABILITY: &str
+pub const nomos_cap_goals_policy::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_goals_policy::SCHEMA: &str
+pub fn nomos_cap_goals_policy::Capability() -> CapabilityId
+pub fn nomos_cap_goals_policy::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_goals_policy::Encode_Payload(payload: &GoalsPolicyPayload) -> Vec<u8>
+pub fn nomos_cap_goals_policy::Parse_Payload(bytes: &[u8]) -> Result<GoalsPolicyPayload, Refusal>
+pub fn nomos_cap_goals_policy::Payload_Schema() -> SchemaId
+pub struct field nomos_cap_goals_policy::GoalsPolicyPayload::goals: Vec<String>
+pub struct field nomos_cap_goals_policy::GoalsPolicyPayload::max_subsystems_per_goal: u32
+pub struct field nomos_cap_goals_policy::GoalsPolicyPayload::subsystems: Vec<SubsystemDeclaration>
+pub struct field nomos_cap_goals_policy::Refusal::reason: String
+pub struct field nomos_cap_goals_policy::SubsystemDeclaration::goals: Vec<String>
+pub struct field nomos_cap_goals_policy::SubsystemDeclaration::name: String
+pub struct nomos_cap_goals_policy::GoalsPolicyPayload
+pub struct nomos_cap_goals_policy::Refusal
+pub struct nomos_cap_goals_policy::SubsystemDeclaration

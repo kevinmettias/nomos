@@ -45998,7 +45998,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Declined on a disproved premise, not superseded by a respelling of the same claim. What is true of the observation that produced it is narrower and is re-filed as OD-LEDGER-AMENDS-PATH-ECHOED-VERBATIM: the reservation is correct, and only the stored and echoed path misleads."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -46014,9 +46018,18 @@
         "timeout_seconds": 2400
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-nomos-a8",
+          "reason": "Premise disproved before building. Probed directly: work add --territory docs/records/OD-LEDGER-036-completely-wrong-slug-that-names-no-file.md is refused at exit 4 naming docs/records/od-ledger-036 and the real published file. Territory::Intersect folds a record filename onto the identifier it carries -- OD-LEDGER-016's own decision, which reservation.rs's doc comment states outright -- so a wrong slug reserves the right record and no second writer was ever let in. The item's central claim, that the amended record stays open, is false.",
+          "abandoned_at": 1788316926
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-nomos-a8",
+        "declined_at": 1788316926
+      }
     },
     {
       "id": "OD-RULES-011-GOALS",
@@ -46037,14 +46050,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-e5-0902",
-        "acquired_at": 1788316686,
-        "lease_expires_at": 1788323886
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -46054,7 +46063,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-goals-policy"
+        ],
+        "exit_code": 0,
+        "output_tail": "t_Is_Not_A_Number_Should_Be_Refused ... ok\ntest payload::tests::Test_A_Serves_Line_For_An_Undeclared_Subsystem_Should_Be_Refused ... ok\ntest payload::tests::Test_A_Line_With_An_Empty_Field_Should_Be_Refused ... ok\ntest payload::tests::Test_Encode_Payload_Should_Produce_Stable_Diffable_Bytes ... ok\ntest payload::tests::Test_A_Subsystem_Declared_Twice_Should_Be_Refused ... ok\ntest payload::tests::Test_An_Empty_Byte_String_Should_Decode_To_A_Policy_That_Declares_Nothing ... ok\ntest payload::tests::Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding ... ok\ntest payload::tests::Test_An_Unrecognized_Tag_Should_Be_Refused ... ok\ntest payload::tests::Test_An_Unset_Ceiling_Should_Decode_As_Unbounded ... ok\ntest payload::tests::Test_A_Serves_Line_With_Two_Fields_Should_Be_Refused ... ok\ntest payload::tests::Test_A_Second_Ceiling_Line_Should_Be_Refused ... ok\ntest payload::tests::Test_A_Subsystem_Serving_Nothing_Should_Survive_The_Round_Trip ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 6 tests\ntest Test_Capability_Contract_Should_Assemble_Its_Declared_Identity_And_Ceiling ... ok\ntest Test_The_Ceiling_Should_Refuse_A_Claim_Of_Semantic_Resolution ... ok\ntest Test_One_Capability_Should_Admit_One_Contract ... ok\ntest Test_The_Ceiling_Should_Admit_A_Weaker_Offer ... ok\ntest Test_Payload_Schema_Should_Match_The_Declared_Schema_Constant ... ok\ntest Test_The_Contract_Should_Stand_With_No_Provider_At_All ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.55s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_goals_policy-45c1f31f9812e693.exe)\n     Running tests\\contract.rs (target\\debug\\deps\\contract-9c49a4792c9cd9cf.exe)\n   Doc-tests nomos_cap_goals_policy\n",
+        "verified_at": 1788316886,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ef1d14516b2f387b6afc1f8f311b82060eb53f4b"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

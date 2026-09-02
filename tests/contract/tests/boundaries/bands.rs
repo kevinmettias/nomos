@@ -68,6 +68,7 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     ("nomos-cap-limits-policy", 23),
     ("nomos-cap-scripting-policy", 23),
     ("nomos-cap-words-policy", 23),
+    ("nomos-cap-goals-policy", 23),
     // The language-agnostic manifest core PKG-007's four version domains name, minus
     // any typed version-domain abstraction or provider allowlist a specific language
     // would supply. Below the language providers deliberately: it names none of them,
