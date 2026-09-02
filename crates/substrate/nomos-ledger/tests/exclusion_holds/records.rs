@@ -242,6 +242,75 @@ fn Test_A_Declared_Amendment_Of_An_Unpublished_Record_Should_Be_Refused()
     );
 }
 
+/// A declared amendment that names the right record by the wrong filename is refused, and
+/// the refusal carries the right one.
+///
+/// The reservation this guards is correct without it, which is the whole difficulty:
+/// `OD-LEDGER-016`'s fold makes every slug for one identifier the same subject, so the
+/// mistyped declaration excludes exactly the writers the correct one would have and nothing
+/// else has any reason to object. What survives the refusal's absence is an item carrying a
+/// path that opens nothing, asserted by its own success line as the file it reserved. Both
+/// halves are checked here: that it refuses, and that its text hands back the spelling,
+/// since a refusal that only said "wrong" would leave the author doing the lookup that
+/// produced the mistake.
+#[test]
+fn Test_A_Declared_Amendment_Spelling_The_Wrong_Filename_Should_Be_Refused_With_The_Right_One()
+{
+    let (_directory, mut ledger) = Board_At("add-record-amend-misspelled", Vec::new());
+    let published = "docs/records/OD-LEDGER-006-a-reason-does-not-survive.md";
+
+    let item = Reserving_Record("T-1", "docs/records/OD-LEDGER-006");
+    let refused = ledger.Add(
+        &item,
+        "agent-a",
+        &Published(&[published]),
+        &Amending(&["docs/records/OD-LEDGER-006-a-slug-nobody-published.md"]),
+    );
+
+    let Err(AddRefusal::AmendmentMisspelled { identifier, declared, file }) = refused
+    else
+    {
+        panic!("a misspelled amendment must be refused as such: {refused:?}");
+    };
+    assert_eq!(identifier, "docs/records/od-ledger-006");
+    assert_eq!(declared, "docs/records/OD-LEDGER-006-a-slug-nobody-published.md");
+    assert_eq!(file, published);
+
+    let described = AddRefusal::AmendmentMisspelled { identifier, declared, file }.Describe();
+    assert!(
+        described.contains(published),
+        "the refusal must hand back the spelling, not only withhold it: {described}"
+    );
+    assert!(
+        ledger.Load().expect("readable").items.is_empty(),
+        "the refusal was reported and the item landed anyway"
+    );
+}
+
+/// The bare identifier spelling stays accepted, because it never claimed a filename.
+///
+/// The other half of the rule above, and the reason that one judges the `.md` suffix rather
+/// than judging every declaration against the published filename. `Refuse_A_Spent_Record`'s
+/// own doc states that a declaration may be spelled either way, so a check that refused the
+/// bare form would withdraw a spelling this crate documents while fixing a different
+/// mistake.
+#[test]
+fn Test_A_Declared_Amendment_Spelled_As_A_Bare_Identifier_Should_Still_Be_Accepted()
+{
+    let (_directory, mut ledger) = Board_At("add-record-amend-bare", Vec::new());
+
+    let item = Reserving_Record("T-1", "docs/records/OD-LEDGER-006");
+    let added = ledger.Add(
+        &item,
+        "agent-a",
+        &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &Amending(&["docs/records/OD-LEDGER-006"]),
+    );
+
+    assert!(added.is_ok(), "the bare spelling is one of the two the fold admits: {added:?}");
+    assert_eq!(ledger.Load().expect("readable").items.len(), 1, "the item must land");
+}
+
 /// A record identifier another open item reserves is refused, and that item is named.
 ///
 /// Five collisions bought this. Three open items reserved `OD-LEDGER-020` and two reserved
@@ -326,7 +395,7 @@ fn Closed_States() -> [ItemState; 2]
 #[test]
 fn Test_A_Closed_Items_Record_Reservation_Should_Not_Reserve_Anything()
 {
-    let directory = Temp_Dir("add-record-closed");
+    let directory = Temporary_Directory("add-record-closed");
     let mut ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     // The board holds one closed item reserving a record, and the next author allocates it.

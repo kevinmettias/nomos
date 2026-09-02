@@ -164,7 +164,7 @@ fn Test_An_Item_Taken_Over_Twice_Should_Name_Both_Predecessors()
 #[test]
 fn Test_An_Item_Claimed_With_No_Claim_Recorded_Should_Not_Be_Taken_Over()
 {
-    let directory = Temp_Dir("takeover-refuses-a-hole");
+    let directory = Temporary_Directory("takeover-refuses-a-hole");
     let mut ledger = Ledger_At(directory.As_Path(), &AT_NOW);
     let path = Write_A_Claimed_Item_With_No_Claim(directory.As_Path());
     let before = std::fs::read(&path).expect("readable");

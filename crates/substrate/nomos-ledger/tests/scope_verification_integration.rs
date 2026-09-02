@@ -51,7 +51,7 @@ const WORKFLOW: &str = "name: gate\n\
                         \x20     - name: Test\n\
                         \x20       run: cargo test --workspace\n";
 
-fn Temp_Dir(name: &str) -> PathBuf
+fn Temporary_Directory(name: &str) -> PathBuf
 {
     let mut path = std::env::temp_dir();
     path.push(format!("nomos-ledger-scope-verification-{name}-{}", std::process::id()));
@@ -128,7 +128,7 @@ impl ProcessLauncher for &AlwaysZero
 #[test]
 fn Test_A_Territory_And_A_Predicate_Cross_The_Boundary_On_The_Happy_Path()
 {
-    let directory = Temp_Dir("happy-path");
+    let directory = Temporary_Directory("happy-path");
     Write_Workflow(&directory);
     let clock = FixedClock(NOW);
     let mut ledger = Ledger_At(&directory, &clock);
@@ -166,7 +166,7 @@ fn Test_A_Territory_And_A_Predicate_Cross_The_Boundary_On_The_Happy_Path()
 #[test]
 fn Test_An_Unrunnable_Predicate_Refuses_Rather_Than_Reaching_The_Launcher()
 {
-    let directory = Temp_Dir("unrunnable");
+    let directory = Temporary_Directory("unrunnable");
     Write_Workflow(&directory);
     let clock = FixedClock(NOW);
     let mut ledger = Ledger_At(&directory, &clock);
@@ -209,7 +209,7 @@ fn Test_An_Unrunnable_Predicate_Refuses_Rather_Than_Reaching_The_Launcher()
 #[test]
 fn Test_An_Unknown_Intersection_Refuses_A_Claim_Rather_Than_Granting_It()
 {
-    let directory = Temp_Dir("unknown-intersection");
+    let directory = Temporary_Directory("unknown-intersection");
     let clock = FixedClock(NOW);
     let mut ledger = Ledger_At(&directory, &clock);
     let holder = Item_Reserving("SEAM-3A", Territory::Of_Files(["src/shared.rs"]), None);

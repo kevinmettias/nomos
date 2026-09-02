@@ -260,7 +260,7 @@ pub(crate) fn Interleaved(
 /// A board for the interleaving tests, saved once before either writer starts.
 pub(crate) fn Contended(name: &str, items: Vec<LedgerItem>) -> Scratch
 {
-    let directory = Temp_Dir(name);
+    let directory = Temporary_Directory(name);
     Ledger_At(directory.As_Path(), &AT_NOW)
         .Save(&Document(items))
         .expect("a fresh ledger is valid");

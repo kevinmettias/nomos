@@ -126,7 +126,7 @@ impl Scratch
     }
 }
 
-pub(crate) fn Temp_Dir(name: &str) -> Scratch
+pub(crate) fn Temporary_Directory(name: &str) -> Scratch
 {
     let mut path = std::env::temp_dir();
     path.push(format!("nomos-ledger-{name}-{}", std::process::id()));
@@ -408,7 +408,7 @@ pub(crate) fn Board_At(
     items: Vec<LedgerItem>,
 ) -> (Scratch, FileLedger<StdFileSystem, &'static FixedClock, FileLock>)
 {
-    let directory = Temp_Dir(name);
+    let directory = Temporary_Directory(name);
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
     ledger.Save(&Document(items)).expect("a fresh ledger is valid");
 
@@ -431,7 +431,7 @@ pub(crate) fn Board_Written_By_Hand(
     items: Vec<LedgerItem>,
 ) -> (Scratch, FileLedger<StdFileSystem, &'static FixedClock, FileLock>)
 {
-    let directory = Temp_Dir(name);
+    let directory = Temporary_Directory(name);
     let text = serde_json::to_string_pretty(&Document(items)).expect("a document serializes");
     std::fs::write(directory.As_Path().join("ledger.json"), text).expect("test needs to write the ledger");
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);

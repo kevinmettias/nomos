@@ -236,7 +236,7 @@ mod tests
 {
     use super::*;
 
-    const DOC: &str = "# Title\n\nOne.\n";
+    const DOCUMENT_TEXT: &str = "# Title\n\nOne.\n";
 
     /// How many blocks [`Recorded`] declares — a heading and a prose paragraph.
     const RECORDED_BLOCK_COUNT: u32 = 2;
@@ -350,7 +350,7 @@ mod tests
 
     fn Documents() -> BTreeMap<String, String>
     {
-        return BTreeMap::from([("a.md".to_owned(), DOC.to_owned())]);
+        return BTreeMap::from([("a.md".to_owned(), DOCUMENT_TEXT.to_owned())]);
     }
 
     fn Recorded() -> String

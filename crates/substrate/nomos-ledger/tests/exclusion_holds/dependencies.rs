@@ -7,7 +7,7 @@ use crate::board::*;
 #[test]
 fn Test_Claiming_An_Item_With_An_Unfinished_Dependency_Should_Be_Refused()
 {
-    let directory = Temp_Dir("claim-dependency");
+    let directory = Temporary_Directory("claim-dependency");
     let mut ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     let mut dependent = Item("T-2", &["src/b.rs"]);
@@ -29,7 +29,7 @@ fn Test_Claiming_An_Item_With_An_Unfinished_Dependency_Should_Be_Refused()
 /// exercises.
 fn Declined_Dependency_Board() -> (Scratch, FileLedger<StdFileSystem, &'static FixedClock, FileLock>)
 {
-    let directory = Temp_Dir("claim-dependency-declined");
+    let directory = Temporary_Directory("claim-dependency-declined");
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     let mut dependent = Item("T-2", &["src/b.rs"]);
@@ -78,7 +78,7 @@ fn Test_Claiming_An_Item_With_A_Declined_Dependency_Should_Be_Refused_Non_Retrya
 #[test]
 fn Test_A_Finished_Dependency_Should_Not_Block_A_Claim()
 {
-    let directory = Temp_Dir("claim-dependency-met");
+    let directory = Temporary_Directory("claim-dependency-met");
     let mut ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     let finished = Finished("T-1", &["src/a.rs"]);

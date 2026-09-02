@@ -91,7 +91,7 @@ impl Scratch
     }
 }
 
-fn Temp_Dir(name: &str) -> Scratch
+fn Temporary_Directory(name: &str) -> Scratch
 {
     let mut path = std::env::temp_dir();
     path.push(format!("nomos-record-lock-{name}-{}", std::process::id()));
@@ -106,7 +106,7 @@ pub(crate) type Board = FileLedger<StdFileSystem, &'static FixedClock, FileLock>
 /// A doctored board on disk, and the ledger open over it.
 pub(crate) fn Saved(name: &str, document: &LedgerDocument) -> (Scratch, Board)
 {
-    let directory = Temp_Dir(name);
+    let directory = Temporary_Directory(name);
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     ledger.Save(document).expect("the doctored board is still a valid ledger");

@@ -49,7 +49,7 @@ fn Polled_Until_Settled(
         started: Instant::now(),
     };
     let mut progress = Progress {
-        len: Combined_Length(streams),
+        length: Combined_Length(streams),
         at: context.started,
     };
 
@@ -106,7 +106,7 @@ struct PollContext<'a>
 #[derive(Clone, Copy)]
 struct Progress
 {
-    len: usize,
+    length: usize,
     at: Instant,
 }
 
@@ -130,10 +130,10 @@ fn Progressed_Since_Last_Poll(
 /// resetting the idle clock; otherwise leaves it exactly as it was.
 fn Advanced_Progress(progress: Progress, current_len: usize) -> Progress
 {
-    if current_len > progress.len
+    if current_len > progress.length
     {
         return Progress {
-            len: current_len,
+            length: current_len,
             at: Instant::now(),
         };
     }

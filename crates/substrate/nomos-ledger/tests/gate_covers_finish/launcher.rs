@@ -85,7 +85,7 @@ impl ProcessLauncher for &Scripted
     }
 }
 
-fn Temp_Dir(name: &str) -> PathBuf
+fn Temporary_Directory(name: &str) -> PathBuf
 {
     let mut path = std::env::temp_dir();
     path.push(format!("nomos-gate-{name}-{}", std::process::id()));
@@ -98,7 +98,7 @@ fn Temp_Dir(name: &str) -> PathBuf
 /// item on the real ledger carries.
 fn Tree(name: &str, workflow: Option<&str>) -> PathBuf
 {
-    let directory = Temp_Dir(name);
+    let directory = Temporary_Directory(name);
     if let Some(text) = workflow
     {
         Write_The_Workflow(&directory, text);

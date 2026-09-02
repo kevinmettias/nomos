@@ -3,7 +3,7 @@
 use nomos_spec_model::Segment;
 use nomos_spec_store::{Disposition, Latest_Version, SpecificationStore, StoreError, Table};
 
-fn Temp_Db(name: &str) -> std::path::PathBuf
+fn Temporary_Database(name: &str) -> std::path::PathBuf
 {
     let mut path = std::env::temp_dir();
     path.push(format!("nomos-spec-{name}-{}.db", std::process::id()));
@@ -89,7 +89,7 @@ fn Tables_In_The_Schema(store: &SpecificationStore) -> Vec<String>
 #[test]
 fn Test_Reopening_Should_Not_Re_Run_Migrations()
 {
-    let path = Temp_Db("reopen");
+    let path = Temporary_Database("reopen");
 
     let mut first = SpecificationStore::Open(&path).expect("opens");
     let uid = first.Put_Source_Document("a.md", "v14.36", DOCUMENT).expect("writes");
@@ -108,7 +108,7 @@ fn Test_Reopening_Should_Not_Re_Run_Migrations()
 #[test]
 fn Test_A_Future_Schema_Version_Should_Be_Refused()
 {
-    let path = Temp_Db("future");
+    let path = Temporary_Database("future");
     {
         let store = SpecificationStore::Open(&path).expect("opens");
         store

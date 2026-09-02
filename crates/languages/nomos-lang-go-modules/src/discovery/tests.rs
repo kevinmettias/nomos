@@ -10,12 +10,12 @@ static COUNTER: AtomicU64 = AtomicU64::new(0);
 
 /// A fresh, uniquely-named directory under the system temp directory, so concurrently
 /// running tests in this same process never collide.
-struct TempWorkspace
+struct TemporaryWorkspace
 {
     root: PathBuf,
 }
 
-impl TempWorkspace
+impl TemporaryWorkspace
 {
     fn New() -> Self
     {
@@ -40,7 +40,7 @@ impl TempWorkspace
     }
 }
 
-impl Drop for TempWorkspace
+impl Drop for TemporaryWorkspace
 {
     fn drop(&mut self)
     {
@@ -60,7 +60,7 @@ fn Payload_Of<'a>(discovered: &'a [DiscoveredModule], package: &str) -> &'a Depe
 #[test]
 fn Test_Discover_Workspace_Should_Treat_A_Single_Module_With_No_Go_Work_As_Its_Own_Whole_Workspace()
 {
-    let workspace = TempWorkspace::New();
+    let workspace = TemporaryWorkspace::New();
     workspace.Write(
         "go.mod",
         "module example.com/solo\n\ngo 1.21\n\nrequire github.com/external/thing v1.0.0\n",
@@ -80,7 +80,7 @@ fn Test_Discover_Workspace_Should_Treat_A_Single_Module_With_No_Go_Work_As_Its_O
 #[test]
 fn Test_A_Workspace_Member_Requiring_Another_Should_Carry_The_Edge()
 {
-    let workspace = TempWorkspace::New();
+    let workspace = TemporaryWorkspace::New();
     workspace.Write("go.work", "go 1.21\n\nuse (\n\t./a\n\t./b\n)\n");
     workspace.Write(
         "a/go.mod",
@@ -109,7 +109,7 @@ fn Test_A_Workspace_Member_Requiring_Another_Should_Carry_The_Edge()
 #[test]
 fn Test_An_Indirect_Requirement_Of_A_Member_Should_Still_Be_An_Edge()
 {
-    let workspace = TempWorkspace::New();
+    let workspace = TemporaryWorkspace::New();
     workspace.Write("go.work", "use ./a\nuse ./b\n");
     workspace.Write(
         "a/go.mod",
@@ -126,7 +126,7 @@ fn Test_An_Indirect_Requirement_Of_A_Member_Should_Still_Be_An_Edge()
 #[test]
 fn Test_Manifest_Relative_Root_Should_Be_Repository_Relative_And_Forward_Sloshed()
 {
-    let workspace = TempWorkspace::New();
+    let workspace = TemporaryWorkspace::New();
     workspace.Write("go.work", "use (\n\t./nested/a\n)\n");
     workspace.Write("nested/a/go.mod", "module example.com/a\n");
 
@@ -142,7 +142,7 @@ fn Test_Manifest_Relative_Root_Should_Be_Repository_Relative_And_Forward_Sloshed
 #[test]
 fn Test_Edges_Should_Be_In_Canonical_Order()
 {
-    let workspace = TempWorkspace::New();
+    let workspace = TemporaryWorkspace::New();
     workspace.Write("go.work", "use (\n\t./a\n\t./b\n\t./c\n)\n");
     workspace.Write(
         "a/go.mod",
@@ -162,7 +162,7 @@ fn Test_Edges_Should_Be_In_Canonical_Order()
 #[test]
 fn Test_A_Missing_Go_Mod_Should_Be_Refused()
 {
-    let workspace = TempWorkspace::New();
+    let workspace = TemporaryWorkspace::New();
     std::fs::create_dir_all(&workspace.root).expect("the empty root itself exists");
 
     let error = Discover_Workspace(&workspace.root).expect_err("no go.mod anywhere under root");
@@ -182,7 +182,7 @@ fn Test_A_Go_Mod_With_No_Module_Line_Should_Be_Refused()
 {
     for (content, expected_fragment) in Go_Mod_With_No_Module_Line_Cases()
     {
-        let workspace = TempWorkspace::New();
+        let workspace = TemporaryWorkspace::New();
         workspace.Write("go.mod", content);
 
         let error = Discover_Workspace(&workspace.root).expect_err("a go.mod with no module line");
@@ -202,7 +202,7 @@ fn Test_A_Go_Work_With_No_Use_Directive_Should_Be_Refused()
 {
     for (content, expected_fragment) in Go_Work_With_No_Use_Directive_Cases()
     {
-        let workspace = TempWorkspace::New();
+        let workspace = TemporaryWorkspace::New();
         workspace.Write("go.work", content);
 
         let error = Discover_Workspace(&workspace.root).expect_err("a go.work naming no member");

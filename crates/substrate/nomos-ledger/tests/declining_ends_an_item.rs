@@ -91,7 +91,7 @@ fn Document(items: Vec<LedgerItem>) -> LedgerDocument
     };
 }
 
-fn Temp_Dir(name: &str) -> PathBuf
+fn Temporary_Directory(name: &str) -> PathBuf
 {
     let mut path = std::env::temp_dir();
     path.push(format!("nomos-decline-{name}-{}", std::process::id()));
@@ -115,7 +115,7 @@ fn Board_At(
     items: Vec<LedgerItem>,
 ) -> (PathBuf, FileLedger<StdFileSystem, &'static FixedClock, FileLock>)
 {
-    let directory = Temp_Dir(name);
+    let directory = Temporary_Directory(name);
     let ledger = Ledger_At(&directory, &AT_NOW);
     ledger.Save(&Document(items)).expect("a fresh ledger is valid");
 
