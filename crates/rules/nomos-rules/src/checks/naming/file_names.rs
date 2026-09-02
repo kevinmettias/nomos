@@ -10,6 +10,16 @@
 //! form counts top-level public type-like declarations. The C# internal/file-scoped split
 //! is outside this crate's current syntax inputs, but the Rust/Go/public-surface rule is
 //! exact over the payload.
+//!
+//! Both rules skip a test or example source, through the same
+//! [`crate::checks::Is_Test_Or_Example_Source`] every other file-path exemption in this
+//! crate reads. A fixture's filename is part of what the fixture fixes: `tests/corpus/
+//! analysis/alpha/one.rs` declares `Anchor` and is named `one.rs` because the analysis
+//! tests that read it care about ordering, not about naming, and renaming it to
+//! `anchor.rs` would change what those tests measure in order to satisfy a rule they are
+//! not subject to. `Comparable_Stem`'s `lib`/`main`/`mod` skip is the same kind of
+//! judgment one level down — a name that carries no claim about a type — and this is the
+//! same answer for a whole file whose name carries no such claim either.
 
 use crate::SourceFile;
 use nomos_analysis::FactReader;
@@ -41,6 +51,11 @@ pub fn Check_File_Name_Matches_Declared_Type(
 
     for source in sources
     {
+        if crate::checks::Is_Test_Or_Example_Source(source)
+        {
+            continue;
+        }
+
         match super::reading::Payload_Of(source, facts)
         {
             Ok(payload) => findings.extend(Violations_In(&payload, &source.path)),
@@ -63,6 +78,11 @@ pub fn Check_One_Public_Type_Per_File(
 
     for source in sources
     {
+        if crate::checks::Is_Test_Or_Example_Source(source)
+        {
+            continue;
+        }
+
         match super::reading::Payload_Of(source, facts)
         {
             Ok(payload) => findings.extend(One_Public_Type_Violations_In(&payload, &source.path)),
@@ -224,6 +244,49 @@ fn Unread_As_One_Public_Type_Rule(mut finding: Finding) -> Finding
 mod tests
 {
     use super::*;
+
+    /// A fixture whose filename is part of what it fixes is not judged by either rule.
+    ///
+    /// Reached through the public entry point rather than through `Violations_In`, because
+    /// the exemption is a source filter and `Violations_In` never sees the path it skipped:
+    /// a test calling the inner function would pass with the filter deleted, which is the
+    /// one thing this must not do. `tests/corpus/analysis/alpha/one.rs` is the real path
+    /// this was written for — it declares `Anchor` and the analysis suites that read it
+    /// depend on the name `one`.
+    #[test]
+    fn Test_Check_File_Name_Matches_Declared_Type_Should_Not_Judge_A_Test_Or_Example_Source()
+    {
+        use crate::checks::test_support::{self, Test_Context, TestOffering};
+        use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
+        use nomos_model::Content_Digest;
+
+        const PARSER: &str = "nomos.test.file.names.parses";
+        let path = "tests/corpus/analysis/alpha/one.rs";
+        let source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), "pub struct Anchor;
+");
+        let TestOffering { mut store, registry, offer } = test_support::Offering(
+            nomos_cap_syntax::Capability_Contract(),
+            nomos_cap_syntax::Capability(),
+            nomos_cap_syntax::CONTRACT_VERSION,
+            PARSER,
+            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
+        );
+        test_support::Materialize(
+            &mut store,
+            source.subject,
+            &offer,
+            nomos_analysis::InputDigest::Of(&[source.text.as_bytes()]),
+            nomos_cap_syntax::Payload_Schema(),
+            "unexpanded	0
+item	0	Struct	Public	Anchor	.	.
+".as_bytes().to_vec(),
+        );
+        let mut reader = nomos_analysis::Reader::On(&store, &registry, Test_Context());
+
+        let findings = Check_File_Name_Matches_Declared_Type(&[source], &mut reader);
+
+        assert!(findings.is_empty(), "a corpus fixture must not be judged on its stem: {findings:?}");
+    }
 
     #[test]
     fn Test_Violations_In_Should_Report_A_Public_Type_Whose_File_Stem_Does_Not_Match()

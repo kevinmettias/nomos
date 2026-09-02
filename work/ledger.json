@@ -46462,14 +46462,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-a8",
-        "acquired_at": 1788318992,
-        "lease_expires_at": 1788326192
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -46479,7 +46475,27 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 400 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.25s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788319447,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "809fb928c43a12d761ffe72b4d78ae3a53a267e1"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -46622,6 +46638,331 @@
         },
         "revision": "41c5aa4397170a8621015a6c3bb8147362346a9d"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-EXEMPTION-GAP-ACROSS-RULES",
+      "title": "Four rules judge test sources their siblings exempt, and the shared exemption misses a plain tests.rs module",
+      "why": "Measured 2026-09-01 from the self-check census at 41c5aa43, after the corpus-fixture exemption landed in file_names.rs. Five of the remaining Blocking findings are a rule judging a file every other rule in this crate would have skipped. parameter-count reports crates/languages/nomos-lang-rust-cargo/tests/invalidation.rs, crates/rules/nomos-rules/tests/integration_seams.rs and crates/rules/nomos-rules/src/checks/test_support.rs; every-allow-carries-a-justification reports crates/languages/nomos-lang-rust/tests/guarantee.rs. All four paths are under a tests/ segment that Is_Test_Or_Example_Source already matches, so those rules are simply not reading it. The fifth is different and is the shared helper's own gap: relaxed-not-used-when-ordering-matters reports crates/languages/nomos-lang-go-modules/src/discovery/tests.rs, which Is_Test_Or_Example_Source misses because it matches the /tests/ infix and the _test.rs and _tests.rs suffixes but not a module file simply named tests.rs -- which is this workspace's own convention in every crate that has a test module. That gap was visible while P26-RULES-TEST-OR-EXAMPLE-DUPLICATION-2 was reducing the two copies to one and was deliberately left alone there, because widening the predicate inside a deduplication would have been a different decision wearing its clothes. Now that there is one definition it is a one-line change in one place instead of two.",
+      "done_when": "Is_Test_Or_Example_Source in checks.rs also matches a module file whose whole name is tests.rs, with a unit test for it beside the existing prefix/infix/suffix cases. Check_Parameter_Count in function_shape.rs and the allow-justification rule in rust_text.rs each read it, the same way the rules in concurrency_text.rs and file_names.rs already do. The five findings named above no longer report, and no finding outside a test or example source stops reporting. cargo test -p nomos-rules is green.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/checks/function_shape.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-RULES-JUDGING-NON-SCRIPTS",
+      "title": "Two script rules judge Rust lib.rs files and data-names judges the r# of a raw identifier",
+      "why": "Measured 2026-09-01 from the self-check census at 41c5aa43. Eight Blocking findings come from three rules reporting on things they were not written to judge. scripts-use-a-portable-shebang and a-script-declares-its-purpose both report crates/kernel/nomos-store/src/lib.rs, crates/spec/nomos-spec-project/src/lib.rs and crates/substrate/nomos-analysis/src/lib.rs -- Rust library roots, not scripts, and neither has a shebang to make portable or a purpose line to place after one. Whatever the rules are matching on in a lib.rs, it is not a script. data-names-stay-lower-snake reports r#ref in crates/kernel/nomos-model/src/evidence.rs and r#type in crates/spec/nomos-spec-bundle/src/row/relation.rs; both names are ref and type, already lower snake, and the rule is judging the r# raw-identifier prefix as though it were part of the name. Neither group is code drift and neither is fixed by editing the flagged files: renaming a lib.rs or spelling a raw identifier differently to satisfy a misreading would encode the misreading. Grouped as one item because the remedy is the same act in both cases, deciding what the rule may look at.",
+      "done_when": "The three lib.rs files no longer report under either script rule, and r#ref and r#type no longer report under data-names-stay-lower-snake, with a unit test per rule covering the shape that was misread. No file that really is a script and no data name that really is not lower snake stops reporting. cargo test -p nomos-rules is green.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+          "crates/rules/nomos-rules/src/checks/naming/data_names.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-COMPOSE-LIMITS-AND-SCRIPTING",
+      "title": "Compose nomos.cap.limits.policy and nomos.cap.scripting.policy into Run",
+      "why": "Five OD-RULES-011 families have a contract and a provider; composition.rs declares only naming's. Six rules already composed into Rule_Findings read the other two capabilities and get nothing back. Scripting is the live defect: Check_Declared_Tooling_Language_For_Scripts resolves an absent fact to no findings at all, so standards.json's declared tooling_language of rust and its five forbidden extensions are enforced by nothing today. Limits is a correctness gap that is inert on this tree and should be described as such rather than oversold -- measured before starting, every hardcoded fallback already equals what standards.json declares (500 review, 1500 hard, 1000 Go hard, 4 parameters), so wiring it changes no finding here and only starts mattering for a repository that declares something different or when this one does.",
+      "done_when": "composition.rs declares both capability contracts and offers nomos-repo-limits and nomos-repo-scripting; facts/policy_materialization.rs gains Materialize_Limits_Policy and Materialize_Scripting_Policy alongside Materialize_Naming_Policy and facts.rs exports them; run_context.rs materializes each only when a selected rule feeds on it, the same gating Materialize_Naming_Policy_Section already uses; nomos-check-orchestration depends on the four crates; tests.rs proves a real declared limit and a real declared forbidden extension reach a finding through Run rather than the hardcoded default; the surface snapshot is reblessed; and cargo test -p nomos-check-orchestration is green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-e5-0902",
+        "acquired_at": 1788319354,
+        "lease_expires_at": 1788326554
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-FILENAME-FAMILY-LAYOUT",
+      "title": "file-name-matches-declared-type disagrees with the OD-RULES-011 family layout ten times over",
+      "why": "Measured 2026-09-01 and confirmed independently by a second session. Ten of the 48 remaining file-name-matches-declared-type findings are one repeated layout, not ten independent misnamings: five crates/capabilities/nomos-cap-<X>-policy/src/payload.rs each declaring <X>PolicyPayload, three of them also declaring Refusal, and five crates/repository/nomos-repo-<X>/src/reading.rs each declaring <X>PolicyError. Every OD-RULES-011 family lands this way, so the rule and the family layout disagree as a matter of design, and each new family adds two more findings. An early reading held that splitting these types into per-type files would break the one-public-type-per-module property the surface snapshot depends on; that reading was retracted after checking. The real constraint is that a type's public functions, inherent and trait impls alike, must stay in the module the pub use route names -- moving a type together with its impls is safe, and these payload types are derive-only structs with no inherent impls. Check_One_Public_Type_Per_File is in this rule set and would want the split. So the argument for the layout is the five families' coherence, which is a real argument but a much weaker one than a mechanical constraint, and it is the argument this item has to weigh.",
+      "done_when": "Either the ten files carry one public type each and the findings are gone, or the layout is exempted in the rule with its reason recorded, or the disagreement is declined with a reason naming which of the two authorities gives way. Whichever is chosen holds for the next family without a further decision. cargo test -p nomos-rules is green and tests/contract/surface snapshots are unchanged or reblessed with the change that moved them.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-goals-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-limits-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-naming-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-scripting-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-words-policy/src/payload.rs",
+          "crates/repository/nomos-repo-goals/src/reading.rs",
+          "crates/repository/nomos-repo-limits/src/reading.rs",
+          "crates/repository/nomos-repo-scripting/src/reading.rs",
+          "crates/repository/nomos-repo-standards/src/reading.rs",
+          "crates/repository/nomos-repo-words/src/reading.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-REAL-CODE-FINDINGS",
+      "title": "Six Blocking findings are real: two TODOs, two unjustified allows, one unsafe, one parameter count",
+      "why": "Measured 2026-09-01 from the self-check census at 41c5aa43, and separated from the two rule-correction items beside it because these are the findings where the rule is right and the code is what should change. todo-format-is-todo-name-description-ticket reports crates/rules/nomos-rules/src/checks/formatting.rs line 53 and crates/rules/nomos-rules/src/lib.rs line 130, both TODOs without the owner, description and ticket the rule's own name states. every-allow-carries-a-justification reports crates/languages/nomos-lang-rust/src/syntax/documentation.rs lines 67 and 75, two attributes with no adjacent comment saying why. unsafe-justification reports crates/languages/nomos-lang-rust-scan/src/item_kind.rs line 64, an unsafe block with no adjacent SAFETY comment. parameter-count reports crates/rules/nomos-rules/src/checks/structure.rs, which is production code rather than a test source and so is not covered by the exemption item beside this one. Each is small and each is argued at the site rather than by a policy decision, which is why they are one item rather than four.",
+      "done_when": "Each of the six findings is either fixed at its site or waived individually with its own stated reason, and none is fixed by weakening the rule that found it. cargo test -p nomos-rules and cargo test -p nomos-lang-rust -p nomos-lang-rust-scan are green.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/formatting.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/languages/nomos-lang-rust/src/syntax/documentation.rs",
+          "crates/languages/nomos-lang-rust-scan/src/item_kind.rs",
+          "crates/rules/nomos-rules/src/checks/structure.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-WORKFLOW-005-ENGINE-MERGE",
+      "title": "Merge the abandoned workflow-engine-continued branch: nomos-workflow-orchestration's first real execution increment",
+      "why": "A stale, never-merged worktree branch (found while cleaning up 7 abandoned .claude/worktrees/ dirs) built a complete first increment 2026-08-26: a new band-40 nomos-workflow-orchestration crate running an ordered sequence of WorkflowStep declarations, each dispatched to one of this workspace's two real AgentExecutor crates, under a new decision record (OD-WORKFLOW-005, still a free identifier in dev) built under the user's standing override rather than a fired trigger, amending OD-WORKFLOW-002 (v3->v4, byte-identical since the branch's merge-base) to record it. The branch's own two render commits are stale against 6+ days of dev history and will be ignored; this item re-renders fresh from a clean worktree at its own commit's HEAD, holding exactly the two records this commit publishes, per OD-GATE-005.",
+      "done_when": "crates/orchestration/nomos-workflow-orchestration exists at band 40 (Cargo.toml, README.md, bands.rs x2, public-surface snapshot), OD-WORKFLOW-005 is registered and governing, OD-WORKFLOW-002 is amended to v4, spec/domain-specification.md and diagrams/relations.mmd are re-rendered fresh (not copied from the stale branch) and verified via spec freshness exit 0, and cargo test -p nomos-workflow-orchestration --no-fail-fast passes with cargo clippy --workspace --all-targets introducing no new warning",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workflow-orchestration",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-workflow-orchestration.txt",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "crates/spec/nomos-spec-store/records/OD-WORKFLOW-005.record",
+          "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md",
+          "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-p27",
+        "acquired_at": 1788319382,
+        "lease_expires_at": 1788326582
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-workflow-orchestration",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-FILENAME-DRIFT-PACKAGES",
+      "title": "file-name-matches-declared-type: 24 files in crates/packages declare a type their stem does not name",
+      "why": "Measured 2026-09-01 from the self-check census at 41c5aa43. Of the 48 remaining file-name-matches-declared-type findings, ten are the OD-RULES-011 family layout and are a separate decision; of the rest, 24 of the 27 sit in crates/packages alone, which is why this is one item about that directory rather than a workspace-wide rename pass. The shape there is consistent: a file named after the concept while the type carries a qualifier, as in AuthorizedCandidateFitAdjustment in candidate_fit_adjustment.rs, CandidateOutcome in validation_diagnostic.rs, and BundleSerialization in determinism.rs one directory over. That is ordinary naming drift and the rule is right about it, but each rename moves a public type and so may move a surface snapshot, which is the part that makes it work rather than a sed. Split from the three findings outside crates/packages so a holder can take the concentrated part without reserving files in four unrelated crates.",
+      "done_when": "No file under crates/packages reports file-name-matches-declared-type. Each rename moves the type and its impls together, so no type's public functions end up in a module the pub use route does not name. tests/contract/surface snapshots are reblessed in the same commit as the renames that moved them, and cargo test -p nomos-contract-tests is green.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-lang-go-package/src/manifest.rs",
+          "crates/packages/nomos-lang-rust-package/src/language_version.rs",
+          "crates/packages/nomos-lang-rust-package/src/manifest.rs",
+          "crates/packages/nomos-model-package/src/budget_estimate.rs",
+          "crates/packages/nomos-model-package/src/candidate_fit_adjustment.rs",
+          "crates/packages/nomos-model-package/src/correction_executor_authority_mismatch.rs",
+          "crates/packages/nomos-model-package/src/effort_mapping.rs",
+          "crates/packages/nomos-model-package/src/fallback_transition_trace.rs",
+          "crates/packages/nomos-model-package/src/manifest.rs",
+          "crates/packages/nomos-model-package/src/output_determinism_expectation.rs",
+          "crates/packages/nomos-model-package/src/reader.rs",
+          "crates/packages/nomos-model-package/src/routing_replay_disposition.rs",
+          "crates/packages/nomos-model-package/src/runtime_candidate_disqualification.rs",
+          "crates/packages/nomos-model-package/src/selector_validation_failure.rs",
+          "crates/packages/nomos-model-package/src/shadowed_profile.rs",
+          "crates/packages/nomos-model-package/src/telemetry_guarantee.rs",
+          "crates/packages/nomos-model-package/src/telemetry_junction.rs",
+          "crates/packages/nomos-model-package/src/validation_diagnostic.rs",
+          "crates/packages/nomos-package/src/manifest.rs",
+          "crates/packages/nomos-package/src/reader.rs",
+          "crates/packages/nomos-package/src/version.rs",
+          "crates/packages/nomos-rule-package/src/correction_and_suppression.rs",
+          "crates/packages/nomos-rule-package/src/manifest.rs",
+          "crates/packages/nomos-rule-package/src/reader.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-FILENAME-DRIFT-ELSEWHERE",
+      "title": "file-name-matches-declared-type: four files outside crates/packages declare a type their stem does not name",
+      "why": "Measured 2026-09-01 from the self-check census at 41c5aa43, and split from the crates/packages item beside it because 24 of the 27 drift findings sit in that one directory and these four do not: crates/rules/nomos-rules/src/checks/function_shape.rs, crates/spec/nomos-spec-bundle/src/determinism.rs, crates/spec/nomos-spec-project/src/determinism.rs and crates/substrate/nomos-analysis/src/fact/store.rs. The two determinism.rs files are the same shape one directory apart, BundleSerialization in one and its sibling in the other, so they are one judgment rather than two. Keeping them out of the packages item lets a holder take the concentrated 24 without reserving files in four unrelated crates, which is the reservation that would serialize the board. This item deliberately overlaps P27-SELFCHECK-EXEMPTION-GAP-ACROSS-RULES on function_shape.rs: both change that file and neither should be held while the other is, which is territory doing its job rather than a defect in the split.",
+      "done_when": "None of the four files reports file-name-matches-declared-type. Each rename moves the type together with its impls, so no type's public functions end up in a module the pub use route does not name. tests/contract/surface snapshots are reblessed in the same commit as the renames that moved them, and cargo test -p nomos-contract-tests is green.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/function_shape.rs",
+          "crates/spec/nomos-spec-bundle/src/determinism.rs",
+          "crates/spec/nomos-spec-project/src/determinism.rs",
+          "crates/substrate/nomos-analysis/src/fact/store.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
