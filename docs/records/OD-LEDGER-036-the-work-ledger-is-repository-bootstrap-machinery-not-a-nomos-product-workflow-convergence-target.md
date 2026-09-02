@@ -3,7 +3,7 @@ id: OD-LEDGER-036
 type: decision
 title: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - work-ledger
@@ -131,5 +131,16 @@ public commitment. That is the point to re-examine this record's answer, not bef
 
 Accepted. Settles `ARC-ECOSYSTEM-001`'s open disjunction for the work ledger specifically —
 bootstrap machinery, not a generic coordination primitive with a real exercised second
-subject, and not a Nomos product feature converging toward `Workflow`/`TaskEnvelope`. Revisit
-if `nomos-api` becomes a real external product surface rather than a seam-exercise caller.
+subject, and not a Nomos product feature converging toward `Workflow`/`TaskEnvelope`. Amended to
+version 2 by `OD-HOST-007-MCP-PROJECTION-REOPENS-REPO-TOOLING-2`, which answers the trigger
+this record named rather than leaving it standing.
+
+The trigger is discharged, and this record's own answer survives it. `OD-HOST-007` reads the
+trigger as firing on the day a transport lands, not on a later judgment that the surface has
+become popular enough — but it fires against the transport crate, not against `nomos-api`,
+because external consumption is a property of whatever wires a wire protocol and `nomos-api`
+wires none. So the ledger verbs' exposure through `nomos-api` stays exactly what this record
+found it to be, and the public-commitment question moves one crate up, where `OD-HOST-007`
+bounds an MCP surface to the three Gate verbs and excludes all eleven ledger verbs
+structurally. Revisit this record only if a transport increment makes the case that a
+repo-tooling verb belongs in that registry after all.

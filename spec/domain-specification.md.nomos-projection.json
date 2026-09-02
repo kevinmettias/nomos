@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:3e32153ace8caeea2ba68e14e9f64dfcace139dd0dc4d127caab27197eafe89f",
-  "inputs_digest": "sha256:51c4911e8087439c67026a6374addcc35316bf54b7a631231ccf553591caf678",
+  "content_digest": "sha256:5e9d9c340a5d6d76ffd48ef95d0603d066f6fe3b035fe047521c2c050512916d",
+  "inputs_digest": "sha256:19710e2c5dc62ffa89b31ed913d878aa9deb03ab951d0077a59423fb0fecb380",
   "sections": [
     [
       "Documents",
-      179
+      180
     ],
     [
       "Sections",
-      1500
+      1506
     ],
     [
       "Source blocks",
-      5243
+      5268
     ]
   ],
   "inputs": [
@@ -433,7 +433,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md@authored",
-      "hash": "sha256:0b57d5901842a1631bb060efc073a695a1adb398a0a938a3f0ec937a14e90a37"
+      "hash": "sha256:c4b59b0c06e3e68eee7656804c4cf4fe6685ba8cf63bc66976ccc67c481f2120"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md@authored",
+      "hash": "sha256:f31a5228612e1a5f28b29052e9a7bc6c7f86770511cf7472c39a55a8c1826145"
     },
     {
       "content": "documents",
@@ -613,7 +618,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored",
-      "hash": "sha256:e44db6eb38b3d1a6229b905ffba42be08984541c3407ce66bff74af1b229992a"
+      "hash": "sha256:3595ed422199d4058d69fa987aa9a1b826a27df82f6e0daa776f250e98ff51a0"
     },
     {
       "content": "documents",
@@ -4149,6 +4154,36 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#17",
       "hash": "sha256:fdbeb0d898682f9dfbbed5dc242f5a3c58d38a4af2f637a3d1862036722f27f6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#1",
+      "hash": "sha256:12209654438f829208de5b2d9b47e264dc4e5d5df921543890aad7eb74da40a5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#2",
+      "hash": "sha256:1fe993a9e383bf83e1a1fce3539a2e3805bf8a86fc5c205599a389b4eb8bdaa7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#6",
+      "hash": "sha256:3d0d7b9af3b7c68a5665a80abbb4e6e2be05e4eae53cb65994555b43cae4e3e3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#11",
+      "hash": "sha256:3dafaabd30fbcc160bddec7f0967ab1c3e58e08f98faddd4d73bc30252065e89"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#16",
+      "hash": "sha256:ebdcf93b45f4065d0b2e441e2556a11b364c1653f292ce18b38c82480671b315"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#21",
+      "hash": "sha256:76a8820567c891c124a1325618fc4f0662959f9d1ae3269cee5738fca6d4748a"
     },
     {
       "content": "headings",
@@ -19473,7 +19508,127 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#18",
-      "hash": "sha256:d2420d583dfacd7c091eeb75b3e114a10c4ab67ef09abf28fedbde7740a446a0"
+      "hash": "sha256:e125f27553371b43fb59b03db0654886b3ea4aa18079ae45d25588e352834100"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#19",
+      "hash": "sha256:9ff95f9f1179cdbf986c2c3a5afb4b50e0dcbd9973f5f8014b436d6bae13e33c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#1",
+      "hash": "sha256:ae48db33cff441989401dda00ccc9de5c511457fb9510d032f7bb3b3498ab274"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#3",
+      "hash": "sha256:eaea69c4a4268c1c9405b55a03432796c1beadc525269e8766c5f5517598e6c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#4",
+      "hash": "sha256:645e78212e9f842d8166307acf40f9ca2cfc156ea0d83883fbcf2d3234f984dd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#5",
+      "hash": "sha256:3ac5824efe456baf5d05ea454e660cddbc2e1f5c3af3e3eb6522b46aa1b04e14"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#7",
+      "hash": "sha256:fbf37acac4ebb948629ce90dbe440b4574ba6bb92df7d537ec6863eed0bf0bd3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#8",
+      "hash": "sha256:f7fb34b24ac92f67c3abae4bfc26565bd85e0a35101b4179f5688b1dc48464f3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#9",
+      "hash": "sha256:f65dfb6a863bc5a0cade5fcdd7b2dbca9f27addf23fddfbee6cbaf1339a0483a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#10",
+      "hash": "sha256:528bcd366fac4f90249aa28db2a3d822c58d399a924f399f66d5b7959bc6ffe3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#11",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#12",
+      "hash": "sha256:30e69feb17aa7c61b27fb5138250754e7cf0ef20022118f4ef23f12bcbb67d02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#13",
+      "hash": "sha256:c4d82f76da2e0a80695848c5be71ef3e6b388513987ac833ab39aa3cf602bf49"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#14",
+      "hash": "sha256:34b308b0fd5991843dae054f009017d2493737648f78d4d07c065da9cc66442b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#15",
+      "hash": "sha256:081826d7b3ae07ddbc10044be4a6438ab49d4c99e657c5e86d94e5b023e69b2f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#16",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#17",
+      "hash": "sha256:e3f280a1a3c263e0eb7be97fe88b53cbddf52966f0cf67a06467eddf990bbb8f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#18",
+      "hash": "sha256:a36a8facbd9fa5b3426eb00ce4fb2f0df1967badfbeeed3c22af68322c9917de"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#19",
+      "hash": "sha256:934fa3cdae0550d8af4f71c1c549830d0391f6ea6402aed82bc019766edc47e6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#20",
+      "hash": "sha256:217a0bd4430b7ff750a5bd0c5d73737b4d50a1cf69988208f9628a3cbe6acdc3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#21",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#22",
+      "hash": "sha256:8f64dee714028b8a5d9f1bcae8f84d33770ad392b0a0a6975f0478e024a9ab8a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#23",
+      "hash": "sha256:a0481c09af1cb899f2a38029f1b8a61b9a74a3c86d9aa3a32d939dd7c709f3a2"
     },
     {
       "content": "blocks",
@@ -25698,7 +25853,12 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#21",
-      "hash": "sha256:141a5e415cfa82795eb330c0234f67b275e44537b31a0d0fd48a787a1a286b4f"
+      "hash": "sha256:011bef343f2ce3d27124575aaa8652c49125f37ec14afb15810b3bf639351cce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#22",
+      "hash": "sha256:73765014e0db6bff29afde9ff7089e4e4dc7a8c44423587cdbf265e085fbc7b4"
     },
     {
       "content": "blocks",

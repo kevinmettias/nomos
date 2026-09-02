@@ -3,7 +3,7 @@ id: OD-HOST-006
 type: decision
 title: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - host
@@ -108,4 +108,16 @@ exercises it as one today.
 
 Accepted. Extends `OD-LEDGER-036`'s ownership-and-exposure reasoning to
 `nomos-spec-orchestration`'s exposure through `nomos-api`; the shared trigger has not fired for
-either half. Revisit both together if `nomos-api` becomes a real external product surface.
+either half. Amended to version 2 by
+`OD-HOST-007-MCP-PROJECTION-REOPENS-REPO-TOOLING-2`, together with `OD-LEDGER-036`, which is
+what "re-examining together" meant.
+
+The shared trigger is discharged for both halves at once, and neither half's reasoning
+changes. `OD-HOST-007` finds that the trigger fires on a transport rather than on a judgment
+about `nomos-api`'s popularity, and that it fires against the transport crate rather than
+against `nomos-api`, which wires no protocol. `Preview`/`Render`/`Commit` therefore stay the
+honest seam exercise this record found; what an external client may call is decided one crate
+above, where `OD-HOST-007` excludes all ten `Handle_Spec_*` handlers from an MCP tool registry
+structurally rather than by their happening to be absent. `Handle_Spec_Commit` is one of the
+two handlers that record names as carrying authority rather than information, which is why the
+exclusion is asserted by `tests/contract` and not merely intended.

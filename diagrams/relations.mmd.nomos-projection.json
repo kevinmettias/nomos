@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:49fb9aa73c955147a1f22cfb9cc82196fd3d7f8b2d571e86bed70745d9cce7a0",
-  "inputs_digest": "sha256:4534214e31aec4d324f3a06f39621f82fed85747a4c692c15b1c0b082fa5ae13",
+  "content_digest": "sha256:ef81a165045042f825ac5cad2294e82912b8c58296b7555f66d95cb93a156cad",
+  "inputs_digest": "sha256:c7e563db729ca83b41232c499661332dc327b29a81a038730957cbdfbe9b35c2",
   "sections": [
     [
       "Relations",
-      1266
+      1276
     ],
     [
       "Decisions",
-      171
+      172
     ]
   ],
   "inputs": [
@@ -218,6 +218,11 @@
     },
     {
       "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to OD-HOST-007",
+      "hash": "sha256:63f66add681f015d0fb6404d5c7a2cabf988730775ec729039bf999e9cb9a114"
+    },
+    {
+      "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to OD-LEDGER-001",
       "hash": "sha256:8ed0ae34289d169eacb61a39ca62426b9c88dd67d77ffd0538fc19847a1a7237"
     },
@@ -375,6 +380,11 @@
       "content": "relations",
       "identity": "ARC-ROADMAP-001 relates-to OD-GATE-017",
       "hash": "sha256:05feb5af5e60252236724c5c59e9eeb002b10af4deb4d3cf2bcbc36291a1b141"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-HOST-007",
+      "hash": "sha256:1fed7487c0bf57eb62ba7aa4bd5b595b5436a4c2817b5dc9cbc2f03d88c4014f"
     },
     {
       "content": "relations",
@@ -2973,6 +2983,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-HOST-001 relates-to OD-HOST-007",
+      "hash": "sha256:e72728060060019ca394d36d6e66c6901764b3b134a425e0d1ea77cba69924ba"
+    },
+    {
+      "content": "relations",
       "identity": "OD-HOST-001 relates-to OD-RULES-001",
       "hash": "sha256:4a1f0f9e500391b0fdc6c3f6e6a4981e540eff178ebc935b7f704092878a3fed"
     },
@@ -3118,8 +3133,38 @@
     },
     {
       "content": "relations",
+      "identity": "OD-HOST-006 relates-to OD-HOST-007",
+      "hash": "sha256:4ee67c29a968759edb1e07699c5398bcf25ce0f78768f57ae3687cfaa9bb82f9"
+    },
+    {
+      "content": "relations",
       "identity": "OD-HOST-006 relates-to OD-LEDGER-036",
       "hash": "sha256:445f9718c3290c20beb6d1fa7d30359ded35d6475c1cf9f54030e64bbcc7114d"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-007 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:b93551fcd4141f784b4219e81d06ff00ab31df35850bcea42a4677cb295ff33e"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-007 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:dd15628cc85e43bb89b99333cf4113ac175318e2b16e3200b8cb84b3a61b9d07"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-007 relates-to OD-HOST-001",
+      "hash": "sha256:15caab602b32a8b2f690f6cf6b4b0c9f1970aab36c2f9cd2e839674ffd3f5a2a"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-007 relates-to OD-HOST-006",
+      "hash": "sha256:3d840ddeb2a307f13398f4c8687cfa186e9712ea9a42572eb80b3008b5d9bb8f"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-007 relates-to OD-LEDGER-036",
+      "hash": "sha256:bb112c5ea6a0c7ce3e5b621fbff6c3e1e76643d8e97290e1981d715897c9f97f"
     },
     {
       "content": "relations",
@@ -4305,6 +4350,11 @@
       "content": "relations",
       "identity": "OD-LEDGER-036 relates-to OD-HOST-006",
       "hash": "sha256:2ae940772f1cf2f72f4e2303d243fe3e70e82466fbca8ae095cdc2066a2fc14b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-036 relates-to OD-HOST-007",
+      "hash": "sha256:bb786beeb92484e5a77f3aaf4b3a88d54f3e10bc03a1a81dda831efbe742ddbe"
     },
     {
       "content": "relations",
@@ -6720,6 +6770,11 @@
       "content": "nodes",
       "identity": "OD-HOST-006",
       "hash": "sha256:15f205182410c7a9d25d559b8a0cec009e5f4e104a0f07591c1a5d4a343d621c"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-HOST-007",
+      "hash": "sha256:39072a92b05e6a8201d87a26d79db894942273400890b184ca30afd9b7b17f12"
     },
     {
       "content": "nodes",

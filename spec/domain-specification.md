@@ -92,7 +92,8 @@ profile: domain-specification
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 15 | 5 | sha256:bcf1bfd865c60493754d4a765742627fd4c18504722d27a065b5201be2ac218f |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md | authored | 15 | 5 | sha256:0cb15b83d0fb7a58f4a2afda083ac512ba0ac344d15ca0556f3446736cbd7ea9 |
-| docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md@authored | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md | authored | 18 | 6 | sha256:0b57d5901842a1631bb060efc073a695a1adb398a0a938a3f0ec937a14e90a37 |
+| docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md@authored | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md | authored | 19 | 6 | sha256:c4b59b0c06e3e68eee7656804c4cf4fe6685ba8cf63bc66976ccc67c481f2120 |
+| docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md@authored | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md | authored | 23 | 6 | sha256:f31a5228612e1a5f28b29052e9a7bc6c7f86770511cf7472c39a55a8c1826145 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -128,7 +129,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md@authored | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md | authored | 17 | 5 | sha256:69ab019a45e8742af61dfa35899a6c68c9d29cc11a8c28c52356296a97a114ea |
 | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md@authored | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md | authored | 14 | 5 | sha256:cb61b6f602f2fc7836f03727ce282c5f46da3e5ef3c6f92108dc77cc862577fc |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md@authored | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md | authored | 17 | 5 | sha256:e28fcdcd8881a5405bfd5398964764cd59fa6d45e8340359ca94d9df98a0d732 |
-| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md | authored | 21 | 7 | sha256:e44db6eb38b3d1a6229b905ffba42be08984541c3407ce66bff74af1b229992a |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md | authored | 22 | 7 | sha256:3595ed422199d4058d69fa987aa9a1b826a27df82f6e0daa776f250e98ff51a0 |
 | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md@authored | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md | authored | 18 | 6 | sha256:ab5cb902ffef3564343e99f10236808102e5e0f1d3c8374831bc8e8ab0d579ad |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
@@ -841,6 +842,12 @@ profile: domain-specification
 | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#10 | authored | 2 | The Decision |
 | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#13 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#17 | authored | 2 | Status |
+| docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#1 | authored | 1 | An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api |
+| docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#11 | authored | 2 | The Decision |
+| docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#16 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#21 | authored | 2 | Status |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -22551,11 +22558,241 @@ exercises it as one today.
 
 ### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#18
 
-*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / Status · hash: sha256:d2420d583dfacd7c091eeb75b3e114a10c4ab67ef09abf28fedbde7740a446a0*
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / Status · hash: sha256:e125f27553371b43fb59b03db0654886b3ea4aa18079ae45d25588e352834100*
 
 Accepted. Extends `OD-LEDGER-036`'s ownership-and-exposure reasoning to
 `nomos-spec-orchestration`'s exposure through `nomos-api`; the shared trigger has not fired for
-either half. Revisit both together if `nomos-api` becomes a real external product surface.
+either half. Amended to version 2 by
+`OD-HOST-007-MCP-PROJECTION-REOPENS-REPO-TOOLING-2`, together with `OD-LEDGER-036`, which is
+what "re-examining together" meant.
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#19
+
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / Status · hash: sha256:9ff95f9f1179cdbf986c2c3a5afb4b50e0dcbd9973f5f8014b436d6bae13e33c*
+
+The shared trigger is discharged for both halves at once, and neither half's reasoning
+changes. `OD-HOST-007` finds that the trigger fires on a transport rather than on a judgment
+about `nomos-api`'s popularity, and that it fires against the transport crate rather than
+against `nomos-api`, which wires no protocol. `Preview`/`Render`/`Commit` therefore stay the
+honest seam exercise this record found; what an external client may call is decided one crate
+above, where `OD-HOST-007` excludes all ten `Handle_Spec_*` handlers from an MCP tool registry
+structurally rather than by their happening to be absent. `Handle_Spec_Commit` is one of the
+two handlers that record names as carrying authority rather than information, which is why the
+exclusion is asserted by `tests/contract` and not merely intended.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#1
+
+*revision: authored · kind: heading · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api · hash: sha256:ae48db33cff441989401dda00ccc9de5c511457fb9510d032f7bb3b3498ab274*
+
+# An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#2
+
+*revision: authored · kind: heading · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#3
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / Question · hash: sha256:eaea69c4a4268c1c9405b55a03432796c1beadc525269e8766c5f5517598e6c2*
+
+`AGT-006.assessment` is the only entry in the requirement registry that calls its own gap
+total: "`MCP tools` is a clean, total gap: `nomos-api`'s own module doc states outright it
+does not read argv, listen on a socket, or speak MCP's JSON-RPC framing, and no MCP transport
+or tool surface exists anywhere in the workspace." `ARC-ROADMAP-001` places `CLI / API / MCP
+projections` inside the near-term boundary and says of the requirement behind it that `IF-001`
+is "the CLI/API/MCP-parity item named below, not a proposal." `OD-ROADMAP-001` already
+licenses building ahead of a caller. So *whether* is settled and *what it may carry* is not.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#4
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / Question · hash: sha256:645e78212e9f842d8166307acf40f9ca2cfc156ea0d83883fbcf2d3234f984dd*
+
+What it may carry is currently answered by two records, on a ground a transport removes.
+`OD-LEDGER-036` settled that the work ledger is repository bootstrap machinery, and that
+`nomos-api`'s exposure of the full ledger verb set is honest because `nomos-api` is a seam
+exercise. `OD-HOST-006` extended the identical reasoning to `nomos-spec-orchestration`'s
+`Preview`/`Render`/`Commit`, and both name one shared trigger, stated once so the two halves
+could not drift apart: *if `nomos-api` becomes a real, externally-consumed product surface,
+its exposure stops being an internal coordination detail and starts being a public
+commitment.*
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#5
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / Question · hash: sha256:3ac5824efe456baf5d05ea454e660cddbc2e1f5c3af3e3eb6522b46aa1b04e14*
+
+An earlier item, `OD-HOST-007-REPO-TOOLING-THROUGH-THE-API-HOST`, asked this and was declined
+as already governed by exactly those two records. That decline is correct today and stops
+being correct the moment a transport exists. This record answers it before one does, which is
+the difference between a boundary and an apology for one.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#6
+
+*revision: authored · kind: heading · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#7
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / What Was Measured · hash: sha256:fbf37acac4ebb948629ce90dbe440b4574ba6bb92df7d537ec6863eed0bf0bd3*
+
+**Twenty-four handlers, and twenty-one of them are `[repo tooling]`.** Counted directly from
+`tests/contract/surface/nomos-api.txt`, which is blessed and therefore not a guess:
+`Handle_Gate_Plan`, `Handle_Gate_Run` and `Handle_Gate_Explain` are three; the other
+twenty-one are eleven `Handle_Work_*` and ten `Handle_Spec_*`. `README.md` marks
+`nomos-ledger`, `nomos-work-orchestration`, `nomos-spec-orchestration` and
+`nomos-surface-provenance` `[repo tooling]` — crates that "exist to develop or preserve this
+repository, not to answer a question an end-user repository would ask Nomos." A transport that
+projected `nomos-api` wholesale would publish seven repo-tooling verbs for every product verb.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#8
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / What Was Measured · hash: sha256:f7fb34b24ac92f67c3abae4bfc26565bd85e0a35101b4179f5688b1dc48464f3*
+
+**Two of the twenty-one carry authority, not merely information.** `Handle_Spec_Commit` writes
+this repository's own governing records through `nomos-spec-orchestration`'s commit door.
+`Handle_Work_Finish` records completion evidence on `work/ledger.json`, which `AGENTS.md`
+calls "global coordination state, shared with live sessions." An MCP client is an agent by
+construction; these are not read verbs an external caller would merely find uninteresting.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#9
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / What Was Measured · hash: sha256:f65dfb6a863bc5a0cade5fcdd7b2dbca9f27addf23fddfbee6cbaf1339a0483a*
+
+**`README.md` already draws the line this record needs, at the band table rather than in
+prose.** `nomos-api`'s own row ends: "apart from choosing a platform or wiring an actual
+transport over it." Wiring a transport is named as the thing `nomos-api` does not do — not as
+an omission awaiting this record, but as the crate's own stated boundary.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#10
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / What Was Measured · hash: sha256:528bcd366fac4f90249aa28db2a3d822c58d399a924f399f66d5b7959bc6ffe3*
+
+**Band 90 cannot hold the transport.** `nomos-cli` and `nomos-api` are both band 90, and a
+crate may depend only on a crate in a strictly lower band, which `tests/contract` asserts in
+both directions. A transport must depend on `nomos-api`, so it cannot be its sibling. Band 91
+is occupied by `nomos-surface-provenance` and band 100 by the two test crates.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#11
+
+*revision: authored · kind: heading · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#12
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / The Decision · hash: sha256:30e69feb17aa7c61b27fb5138250754e7cf0ef20022118f4ef23f12bcbb67d02*
+
+**The trigger fires, and it fires on the day a transport lands rather than on some later
+judgment that the surface has become popular enough.** MCP exists to be spoken by a client
+that is not this repository's own tooling; a server with no client yet is not a smaller
+version of the commitment, it is a server nobody has connected to. `OD-LEDGER-036` and
+`OD-HOST-006` asked for a concrete trigger rather than a standing suspicion, and this is the
+concrete event. Reading it any other way would make the trigger unfireable, because there is
+no measurement of "really externally consumed" that a repository can take of itself.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#13
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / The Decision · hash: sha256:c4d82f76da2e0a80695848c5be71ef3e6b388513987ac833ab39aa3cf602bf49*
+
+**But the trigger fires against the transport, not against `nomos-api`.** This is the whole of
+the answer, and it is why neither amended record needs its reasoning revised. External
+consumption is a property of the crate that wires a transport, and `nomos-api` wires none — by
+its own module doc and by `README.md`'s own row for it. `OD-LEDGER-036`'s and `OD-HOST-006`'s
+claims are about `nomos-api`, and they stay true of `nomos-api` after a transport crate exists
+above it. What moves is not their answer but the location of the question: the public
+commitment is made by whatever selects which handlers a client may call, and that is a crate
+they do not govern.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#14
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / The Decision · hash: sha256:34b308b0fd5991843dae054f009017d2493737648f78d4d07c065da9cc66442b*
+
+**An MCP surface projects the Gate verbs and does not project the repo-tooling verbs.**
+`Handle_Gate_Plan`, `Handle_Gate_Run` and `Handle_Gate_Explain` are what an end-user
+repository asks Nomos; the twenty-one others are how this repository is developed. The
+exclusion is structural rather than advisory: the transport crate declares its tool registry
+explicitly, and `tests/contract` asserts that the registry names no handler belonging to a
+`[repo tooling]` crate — the same shape
+`Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` already uses to keep a
+boundary from being crossed by accident instead of by decision. A registry that is merely
+short today, with nothing stopping a later increment from lengthening it, would be the
+absence-as-boundary `OD-CONNECTOR-001` refuses.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#15
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / The Decision · hash: sha256:081826d7b3ae07ddbc10044be4a6438ab49d4c99e657c5e86d94e5b023e69b2f*
+
+**The transport lives in its own crate above band 90, not inside `nomos-api` and not inside
+`nomos-cli`.** `OD-HOST-001` already decided that choosing a platform, running a verb and
+rendering its outcome are three crates rather than one; speaking a wire protocol is a fourth
+concern by the same argument, and the band rule forbids the sibling arrangement in any case.
+It does not carry `[repo tooling]`: unlike the four crates bearing that mark, it exists
+precisely to answer a question an end-user repository would ask.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#16
+
+*revision: authored · kind: heading · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#17
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / What This Record Does Not Do · hash: sha256:e3f280a1a3c263e0eb7be97fe88b53cbddf52966f0cf67a06467eddf990bbb8f*
+
+It does not build the transport, choose a JSON-RPC implementation, decide stdio versus socket,
+or name the crate. Those are the transport increment's own work, judged against this record
+the way a second executor was judged against `OD-EXECUTOR-001`.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#18
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / What This Record Does Not Do · hash: sha256:a36a8facbd9fa5b3426eb00ce4fb2f0df1967badfbeeed3c22af68322c9917de*
+
+It does not remove a verb from `nomos-api` or forbid it from growing more. `OD-LEDGER-036`
+and `OD-HOST-006` each state that non-prohibition for their own half, and this record's whole
+point is that the seam exercise is unaffected: the selection happens one crate up.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#19
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / What This Record Does Not Do · hash: sha256:934fa3cdae0550d8af4f71c1c549830d0391f6ea6402aed82bc019766edc47e6*
+
+It does not decide whether a repo-tooling verb could ever be projected to an external client
+under some later, different framing — an end-user repository running a ledger of its own, say.
+It decides that the first transport does not, and that a later one making the opposite case
+must make it explicitly rather than by widening a registry nobody is watching.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#20
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / What This Record Does Not Do · hash: sha256:217a0bd4430b7ff750a5bd0c5d73737b4d50a1cf69988208f9628a3cbe6acdc3*
+
+It does not revise `OD-LEDGER-036`'s or `OD-HOST-006`'s reasoning. Both are amended only to
+record what became of the trigger they named, which is what a named trigger is for.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#21
+
+*revision: authored · kind: heading · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#22
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / Status · hash: sha256:8f64dee714028b8a5d9f1bcae8f84d33770ad392b0a0a6975f0478e024a9ab8a*
+
+Accepted, and it discharges the trigger `OD-LEDGER-036` and `OD-HOST-006` share by answering
+it in advance rather than waiting to be surprised by it: the trigger fires on a transport, the
+transport is bounded to the three Gate verbs, and both records keep their reasoning intact
+because the commitment they worried about is made one crate above the one they govern.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#23
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / Status · hash: sha256:a0481c09af1cb899f2a38029f1b8a61b9a74a3c86d9aa3a32d939dd7c709f3a2*
+
+Open until the first transport exists. This record's exclusion is a rule with no artifact
+enforcing it yet, and a contract test asserting a registry that does not exist would be the
+vacuous-truth trap `OD-CONTRACTS-001`'s honesty vocabularies refuse. Revisit if a transport
+increment finds a Gate verb it cannot serve without a repo-tooling handler beneath it, which
+would be evidence that the three-verb boundary was drawn in the wrong place rather than a
+reason to widen the registry quietly.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 
@@ -33138,12 +33375,27 @@ public commitment. That is the point to re-examine this record's answer, not bef
 
 ### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#21
 
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:141a5e415cfa82795eb330c0234f67b275e44537b31a0d0fd48a787a1a286b4f*
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:011bef343f2ce3d27124575aaa8652c49125f37ec14afb15810b3bf639351cce*
 
 Accepted. Settles `ARC-ECOSYSTEM-001`'s open disjunction for the work ledger specifically —
 bootstrap machinery, not a generic coordination primitive with a real exercised second
-subject, and not a Nomos product feature converging toward `Workflow`/`TaskEnvelope`. Revisit
-if `nomos-api` becomes a real external product surface rather than a seam-exercise caller.
+subject, and not a Nomos product feature converging toward `Workflow`/`TaskEnvelope`. Amended to
+version 2 by `OD-HOST-007-MCP-PROJECTION-REOPENS-REPO-TOOLING-2`, which answers the trigger
+this record named rather than leaving it standing.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#22
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:73765014e0db6bff29afde9ff7089e4e4dc7a8c44423587cdbf265e085fbc7b4*
+
+The trigger is discharged, and this record's own answer survives it. `OD-HOST-007` reads the
+trigger as firing on the day a transport lands, not on a later judgment that the surface has
+become popular enough — but it fires against the transport crate, not against `nomos-api`,
+because external consumption is a property of whatever wires a wire protocol and `nomos-api`
+wires none. So the ledger verbs' exposure through `nomos-api` stays exactly what this record
+found it to be, and the public-commitment question moves one crate up, where `OD-HOST-007`
+bounds an MCP surface to the three Gate verbs and excludes all eleven ledger verbs
+structurally. Revisit this record only if a transport increment makes the case that a
+repo-tooling verb belongs in that registry after all.
 
 ### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#1
 
