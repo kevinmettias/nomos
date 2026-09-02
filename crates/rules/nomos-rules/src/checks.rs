@@ -1,7 +1,8 @@
-//! The sixty-four rules this crate implements, one module each — `naming` holds fourteen,
+//! The sixty-five rules this crate implements, one module each — `naming` holds fourteen,
 //! `rust_text` holds eight, `go_text` holds five, `structure` holds five, `formatting` holds
 //! five, `security_text` holds three, `concurrency_text` holds three, `error_text` holds
-//! three, `facade` holds three, `placement` holds two, and `dependency` holds two, while
+//! three, `facade` holds three, `placement` holds two, `dependency` holds two, and `goals`
+//! holds the one rule here whose subject is not source at all, while
 //! `script_discipline` holds three,
 //! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`],
 //! since both judge the same declared architecture and observed
@@ -23,6 +24,7 @@ mod dependency;
 mod error_text;
 mod facade;
 mod formatting;
+mod goals;
 mod function_shape;
 mod go_text;
 mod lint;
@@ -80,6 +82,7 @@ pub use go_text::{
     A_DISCARDED_ERROR_IS_EXPLAINED, A_SKIPPED_TEST_STATES_WHY, AN_EXCLUDED_FILE_SAYS_WHY,
     SUPPRESSION_DIRECTIVES_CARRY_A_REASON, WORKSPACE_MARKERS_CARRY_A_REASON,
 };
+pub use goals::{Check_Goals_And_Parts_Line_Up, GOALS_AND_PARTS_LINE_UP};
 pub use lint::{Check_Lint_Diagnostics, LINT_CONTRACT_RECORD, LINT_CONTRACT_RECORD_VERSION, LINT_DIAGNOSTICS};
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
 pub use naming::{

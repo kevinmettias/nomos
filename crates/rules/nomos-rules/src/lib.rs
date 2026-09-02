@@ -351,6 +351,34 @@
 //! workspace's own settled idiom for a one-type module. That last number is a genuine
 //! disagreement between two standards rather than a defect in either, and weighing it is
 //! its own decision rather than a side effect of porting the rules.
+//!
+//! [`Check_Goals_And_Parts_Line_Up`] is the sixty-fifth rule, and the only one here whose
+//! subject is not source. It takes no [`SourceFile`]s at all: code-standards'
+//! `check-goal-traceability` reads nothing but a repository's own declaration, because
+//! which parts are *for* what is intent, and intent is in no file's text. `OD-RULES-001`
+//! is satisfied exactly as the other rules satisfy it — the subject is handed in as an
+//! argument, here through [`nomos_analysis::FactReader`] rather than through a slice — and
+//! nothing in this crate types rules uniformly (`RuleOffer` carries a [`RuleId`] and a
+//! record citation, not a function pointer), so a rule whose subject is not source says so
+//! in its own signature rather than accepting a parameter it would never read.
+//!
+//! It is `OD-RULES-011`'s fifth family and its clearest case: every input to the judgment
+//! is a value a repository states — the goal set, the part-to-goal mapping, and the
+//! ceiling on how thinly one purpose may be spread — so no version of this rule could have
+//! compiled its parameters in and still meant anything. `nomos-cap-goals-policy` carries
+//! all three and `nomos-repo-goals` reads them out of `standards.json`.
+//!
+//! One rule document, four judgments — the exact opposite of `facade`'s split one
+//! paragraph above, where one code-standards tool carried three published rule documents.
+//! The unit of export is the rule either way. An undeclared goal, an orphaned goal, a
+//! purposeless part and a smeared goal are four kinds of finding under one id because
+//! `goals-and-parts-line-up.md` is one rule.
+//!
+//! Both of its opt-outs are the Go implementation's own: a repository declaring no goals
+//! is judged nothing, since a goal cannot be inferred from code and a system that has not
+//! written one down has not taken the discipline on; and a ceiling of zero drops only the
+//! spread bound while the two-way audit stands. This workspace declares neither, which
+//! makes it the first rule here whose honest answer against its own tree is silence.
 
 #![forbid(unsafe_code)]
 
@@ -377,6 +405,7 @@ pub use checks::{
     Check_A_Consumer_Imports_Through_The_Facade, Check_A_Facade_Publishes_A_Child_One_Way,
     Check_A_Renamed_Facade_Re_Export_Names_The_Contract, FACADE_ALIASES_NAME_THE_CONTRACT,
     FACADE_CHOOSES_FLATTENING_OR_NAMESPACE, FACADE_CONSUMERS_USE_THE_FACADE_PATH,
+    Check_Goals_And_Parts_Line_Up, GOALS_AND_PARTS_LINE_UP,
     Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Single_Line_Function_Bodies,
     Check_No_Trailing_Whitespace, Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS,
     NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_WHITESPACE, TODO_FORMAT,
