@@ -45794,10 +45794,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-nomos-a8",
+        "acquired_at": 1788316635,
+        "lease_expires_at": 1788323835
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -45992,6 +45996,92 @@
           "nomos-cli"
         ],
         "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-GOALS",
+      "title": "nomos-cap-goals-policy: the nomos.cap.goals.policy capability contract",
+      "why": "code-standards' check-goal-traceability reads nothing but a repository's own standards.json and holds the goals a system declares against the goals its declared subsystems claim to serve. Every input is a value a repository states and no two repositories would state alike -- the goal set, the subsystem-to-goal mapping, and the ceiling on how thinly one goal may be spread -- which is exactly the dimension OD-RULES-011 routes through a capability fact rather than a compiled constant. This is that decision's fifth family, after naming, limits, scripting and words, and the contract crate is its first increment.",
+      "done_when": "crates/capabilities/nomos-cap-goals-policy exists at band 23 with contract.rs declaring CAPABILITY/SCHEMA/CONTRACT_VERSION/Ceiling and payload.rs carrying the declared goal set, the per-goal ceiling and the subsystem-to-goals mapping in a tab-separated encoding that round-trips, the crate is a member at band 23 in all four places a band is written (root Cargo.toml, README.md's band table, nomos-rules' dependency/bands.rs and tests/contract's boundaries/bands.rs), its own tests/contract.rs runs the five contract_testing assertions every sibling capability runs, and cargo test -p nomos-cap-goals-policy is green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-goals-policy",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-cap-goals-policy.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-e5-0902",
+        "acquired_at": 1788316686,
+        "lease_expires_at": 1788323886
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-goals-policy"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-CORRECTIONS-VERTICAL-PHANTOM-MIRROR-MERGE",
+      "title": "Merge the abandoned worktree-agent-a055794b88b62f469 branch: nomos correct phantom-mirrors",
+      "why": "A stale, never-merged worktree branch (found while cleaning up 7 abandoned .claude/worktrees/ dirs, user asked to check for mergeable work) built a complete, real corrections-vertical first caller (nomos correct phantom-mirrors) on 2026-08-26 and amended OD-CORRECTIONS-001 to version 3 to record it -- the record is still at version 2 in dev (byte-identical to the branch's own merge-base, confirmed via diff), so the amendment applies with no conflict. main.rs/vacuity.rs/Cargo.toml have diverged since and need real merge, not a raw cherry-pick, and the branch's own spec/domain-specification.md + projection JSON are 7+ days stale and must be re-rendered fresh from dev's current record set rather than imported as-is.",
+      "done_when": "crates/host/nomos-cli/src/correct.rs and its submodules exist, nomos correct phantom-mirrors works against a real fixture end to end (Preview through Commit), main.rs/vacuity.rs merge cleanly with current dev's own independent changes, OD-CORRECTIONS-001 is at version 3 in dev, spec/domain-specification.md and diagrams/relations.mmd are re-rendered fresh (not copied from the old branch) and match the registered record set, and cargo test -p nomos-cli passes",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/correct.rs",
+          "crates/host/nomos-cli/src/correct",
+          "crates/host/nomos-cli/src/main.rs",
+          "crates/host/nomos-cli/src/vacuity.rs",
+          "crates/host/nomos-cli/Cargo.toml",
+          "Cargo.lock",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "diagrams/relations.mmd",
+          "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-p27",
+        "acquired_at": 1788316791,
+        "lease_expires_at": 1788323991
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
       },
       "verified": null,
       "abandoned": [],
