@@ -25,6 +25,19 @@ use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleI
 pub const ABBREVIATIONS: &str = "abbreviations";
 
 const STRUCT: &str = "Struct";
+
+/// The payload's `kind` for a `use` binding.
+///
+/// Named locally rather than imported for the same reason [`STRUCT`] is: `nomos-cap-syntax`
+/// publishes an *open* kind vocabulary and exports a constant only for the labels its own
+/// API needs, so a rule that cares about a third one states the literal it is matching.
+///
+/// A `use` binding is a reference to a declaration made somewhere else. Its name was chosen
+/// wherever that declaration lives, and that is where this rule judges it -- reporting it
+/// again at every import asks an author to rename something they do not own, and reports the
+/// same name once per file that imports it. It was 144 of this rule's 327 findings against
+/// this workspace, all of them `PathBuf`.
+const USE_BINDING: &str = "Use";
 const MINIMUM_JUDGED_WORD_LENGTH: usize = 2;
 const VOWELS: &str = "aeiouy";
 
@@ -91,6 +104,11 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, additions: &[String]) -> V
     {
         enclosing_trait_impl = Enclosing_Trait_Impl(item, enclosing_trait_impl);
         if enclosing_trait_impl.as_ref().is_some_and(|block| return Is_Member_Of(item, block))
+        {
+            continue;
+        }
+
+        if item.kind == USE_BINDING
         {
             continue;
         }
@@ -525,6 +543,36 @@ mod tests
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "Ctx");
+    }
+
+    /// The second name-nobody-chose exemption, found by composing the rule into a real run
+    /// and measuring: 144 of 327 findings against this workspace were `PathBuf`, reported
+    /// once per file importing it. `std::path::PathBuf` is not this repository's to rename.
+    #[test]
+    fn Test_Violations_In_Should_Not_Judge_A_Use_Binding()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tUse\tPrivate\tPathBuf\t.\t.\n");
+
+        let findings = Violations_In(&payload, "src/lib.rs", &[]);
+
+        assert!(findings.is_empty(), "an import names something declared elsewhere: {findings:?}");
+    }
+
+    /// And the half that keeps the exemption honest: the declaration itself is still judged,
+    /// so a name this repository really did choose is reported where it was chosen rather
+    /// than nowhere.
+    #[test]
+    fn Test_Violations_In_Should_Still_Judge_A_Real_Declaration_Of_The_Same_Name()
+    {
+        let payload = Payload_From_Text(
+            "unexpanded\t0\nitem\t0\tUse\tPrivate\tPathBuf\t.\t.\n\
+             item\t1\tStruct\tPublic\tPathBuf\t.\t+fields\n",
+        );
+
+        let findings = Violations_In(&payload, "src/lib.rs", &[]);
+
+        assert_eq!(findings.len(), 1, "the declaration answers for the name, the import does not: {findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "PathBuf");
     }
 
     /// The `impl` block itself still answers for its own name -- the type it names was the
