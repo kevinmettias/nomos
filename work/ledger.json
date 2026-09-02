@@ -48501,6 +48501,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P28-SELFCHECK-SLEEP-BASED-SYNCHRONIZATION",
+      "title": "3 real sleep-based-synchronization findings in nomos-platform-std, none of them flaky",
+      "why": "P28-RULES-FLAKY-TESTS-WIRE composed Check_Sleep_Is_Not_Synchronization into Run and it found 3 real, previously-invisible findings, all in crates/platform/nomos-platform-std/src/launcher/: drain.rs:181 and spawn.rs:107 are each an Awaited() test helper polling Drain::Is_Finished() with thread::sleep(10ms) inside a bounded 5s deadline; tests.rs:401 is a fixed 1.5s settling window in Bytes_Written_Before_And_After_Settling, verifying a killed process's marker file stops growing. None is a lazy synchronization substitute the rule exists to catch: wait.rs:68's own real Launcher polls a live child with the identical POLL_INTERVAL-sleep pattern in production code (correctly unflagged, since it carries no #[cfg(test)]/#[test] marker for the rule's file-scope to reach) -- drain.rs/spawn.rs's Awaited() helpers wait on the exact same kind of detached, channel-less, poll-only thread this crate's own module doc (drain.rs's Drain doc comment) explains is deliberate, not an oversight. tests.rs:401 has no event to synchronize on at all -- it is proving an absence (nothing wrote after the kill) over a fixed window, which polling cannot remove, only shrink.",
+      "done_when": "Each of the 3 sites carries a same-line 'flakiness: allow' marker (flakiness_text.rs's escape hatch requires no reason text, but each gets one anyway, matching this file's own adjacent atomic-ordering: allow precedent) explaining specifically why: drain.rs/spawn.rs cite the poll-only Drain design wait.rs's own production Launcher already uses; tests.rs cites that a settling window has no event to wait for. nomos gate run --root . --rule sleep-based-synchronization reports 0 blocking findings. cargo test -p nomos-platform-std is green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform-std/src/launcher/drain.rs",
+          "crates/platform/nomos-platform-std/src/launcher/spawn.rs",
+          "crates/platform/nomos-platform-std/src/launcher/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform-std"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform-std"
+        ],
+        "exit_code": 0,
+        "output_tail": "auncher::tests::Test_A_Failing_Program_Should_Report_Its_Exit_Code ... ok\ntest std_process_launcher::wait::tests::Test_Waited_For_Child_Should_Report_A_Clean_Exit ... ok\ntest std_process_launcher::tests::Test_A_Loud_Program_Should_Be_Judged_On_Its_Result_Not_Its_Volume ... ok\ntest std_process_launcher::tests::Test_A_Loud_Programs_Output_Should_Arrive_Whole ... ok\ntest std_process_launcher::kill::tests::Test_Killed_And_Reaped_Should_Stop_And_Reap_A_Running_Child ... ok\ntest std_process_launcher::tests::Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled ... ok\ntest std_process_launcher::tests::Test_A_Silent_Program_Should_Report_Stalled_Rather_Than_Timed_Out ... ok\ntest std_process_launcher::tests::Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out ... ok\ntest std_process_launcher::tests::Test_A_Kill_Should_Reach_The_Whole_Process_Tree_Not_Only_The_Direct_Child ... ok\ntest std_process_launcher::tests::Test_A_Grandchild_Holding_The_Pipe_Should_Not_Hold_The_Launcher ... ok\n\ntest result: ok. 33 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.04s\n\n\nrunning 4 tests\ntest Test_System_Clock_Should_Produce_Real_Timestamps_The_Real_Trait_Can_Order ... ok\ntest Test_File_Lock_Should_Exclude_A_Second_Holder_Through_The_Real_Trait ... ok\ntest Test_Std_File_System_Should_Round_Trip_A_Real_File_Through_The_Real_Trait ... ok\ntest Test_Std_Process_Launcher_Should_Report_A_Real_Exit_Through_The_Real_Trait ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.20s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_platform_std-9df357ef2edc3eb1.exe)\n     Running tests\\implements_the_platform_ports.rs (target\\debug\\deps\\implements_the_platform_ports-52354990f9f67fea.exe)\n   Doc-tests nomos_platform_std\n",
+        "verified_at": 1788366724,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "48f3dda252a12f19d68e58cc0cad5fa14f6ec697"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -398,7 +398,7 @@ fn Assert_Killed_Before_Completion(output: &ProcessOutput)
 fn Bytes_Written_Before_And_After_Settling(marker: &Path) -> (u64, u64)
 {
     let right_after_kill = Bytes_Written(marker);
-    std::thread::sleep(Duration::from_millis(1_500));
+    std::thread::sleep(Duration::from_millis(1_500)); // flakiness: allow: proves an absence, no event to wait on
     let settled = Bytes_Written(marker);
 
     return (right_after_kill, settled);

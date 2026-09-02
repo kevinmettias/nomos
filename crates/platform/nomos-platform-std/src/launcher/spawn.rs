@@ -104,7 +104,7 @@ mod tests
         while drain.is_some_and(|drain| return !drain.Is_Finished())
         {
             assert!(started.elapsed() < Duration::from_secs(5), "the drain never finished");
-            std::thread::sleep(Duration::from_millis(10));
+            std::thread::sleep(Duration::from_millis(10)); // flakiness: allow: same poll wait.rs's real Launcher uses
         }
     }
 }
