@@ -46213,8 +46213,8 @@
       "blocked": null,
       "claim": {
         "holder": "nomos-89",
-        "acquired_at": 1788331567,
-        "lease_expires_at": 1788338767
+        "acquired_at": 1788339822,
+        "lease_expires_at": 1788354222
       },
       "verification": {
         "argv": [
@@ -46234,6 +46234,11 @@
           "holder": "claude-nomos-a8",
           "acquired_at": 1788317035,
           "lease_expires_at": 1788325341
+        },
+        {
+          "holder": "nomos-89",
+          "acquired_at": 1788331567,
+          "lease_expires_at": 1788338767
         }
       ],
       "declined": null
