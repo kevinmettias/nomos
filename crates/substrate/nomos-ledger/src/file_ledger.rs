@@ -378,8 +378,10 @@ FileLedger<Files, TimeSource, Lock>
     /// [`AddRefusal::RecordPublished`] or [`AddRefusal::RecordReserved`] for a record
     /// identifier that is already spent or already spoken for,
     /// [`AddRefusal::AmendmentNotPublished`] for a declared amendment of a record that does
-    /// not exist, [`AddRefusal::WouldBeInvalid`] for an item that would break the board's
-    /// invariants, and [`AddRefusal::LedgerUnusable`] when the file itself cannot be used.
+    /// not exist, [`AddRefusal::AmendmentMisspelled`] for one of a record that does exist
+    /// under a different filename, [`AddRefusal::WouldBeInvalid`] for an item that would break
+    /// the board's invariants, and [`AddRefusal::LedgerUnusable`] when the file itself cannot
+    /// be used.
     pub fn Add(
         &mut self,
         item: &LedgerItem,

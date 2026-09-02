@@ -86,6 +86,34 @@ pub enum AddRefusal
         /// folds its own.
         identifier: String,
     },
+    /// The item declared an amendment of a published record, spelling its filename wrongly.
+    ///
+    /// Distinct from both its neighbours because it is the only one of the three where the
+    /// author had the right record and nothing is contended. [`Self::RecordPublished`] says
+    /// the identifier is taken by somebody else's act; [`Self::AmendmentNotPublished`] says it
+    /// is taken by nobody. This one says it is theirs to edit and they named the wrong file
+    /// for it.
+    ///
+    /// Refused rather than silently corrected, and rather than let through on the strength of
+    /// the reservation being right anyway. `OD-LEDGER-016`'s fold makes every slug for one
+    /// identifier the same subject, so the exclusion holds whatever was typed — which is
+    /// exactly why nothing else would ever tell the author. The item would then carry, and
+    /// `work show` would print, a path that opens nothing: not a file to copy into a render
+    /// worktree, not a file to edit, and not a file a reader can use to check what the item
+    /// says it amends.
+    ///
+    /// Only a path claiming to be a filename is judged. The bare `docs/records/OD-LEDGER-016`
+    /// spelling claims no slug and is the other spelling the fold admits, so it is accepted
+    /// here as it always was; refusing it would withdraw a spelling this crate documents.
+    AmendmentMisspelled
+    {
+        /// The identifier, in the folded form both spellings reach.
+        identifier: String,
+        /// The path the item declared, as it was authored.
+        declared: String,
+        /// The file this repository actually published that identifier as.
+        file: String,
+    },
     /// The item would leave the board violating its own invariants.
     ///
     /// The commonest of these is an item that reserves nothing, which `AGENTS.md` states as a
@@ -139,6 +167,14 @@ impl AddRefusal
             Self::AmendmentNotPublished { identifier } => format!(
                 "{identifier} is declared as an amendment and no record here carries it. An \
                  amendment edits a record that exists; reserve a new one with `--territory`"
+            ),
+            // Names the file rather than only saying the spelling is wrong, for the reason
+            // `Self::RecordPublished` does: an author who has the identifier right and the slug
+            // wrong needs the slug, and looking it up is the step that produced the mistake.
+            Self::AmendmentMisspelled { identifier, declared, file } => format!(
+                "{declared} names no file. {identifier} is published as {file}; amend it with \
+                 `--amends {file}`, or with `{identifier}` spelled bare. The reservation would \
+                 have been right either way — the recorded path would not"
             ),
             // The wording [`LedgerError::Invalid`] would have produced, because this arm
             // exists to carry that refusal out through a different channel and not to

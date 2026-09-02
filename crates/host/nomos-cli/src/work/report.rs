@@ -64,6 +64,12 @@ pub(super) const fn Code_For_Refusal(refusal: &AddRefusal) -> ExitCode
         {
             ExitCode::ValidationError
         }
+        // Beside its two neighbours above rather than with the record conflicts, and for the
+        // same reason they are: nothing is contended. The author is entitled to amend the
+        // record they named — they spelled its filename wrongly — so `Conflict` would send an
+        // agent looking for a holder that does not exist. The declaration is the caller's own
+        // to correct, and the refusal already carries the spelling to correct it with.
+        AddRefusal::AmendmentMisspelled { .. } => ExitCode::ValidationError,
         AddRefusal::LedgerUnusable { .. } => ExitCode::StoreError,
     };
 }

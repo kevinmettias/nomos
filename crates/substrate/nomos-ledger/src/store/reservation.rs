@@ -172,19 +172,81 @@ pub(super) fn Refuse_An_Unpublished_Amendment(
     {
         let mine = Territory::Of_Files([declared.clone()]);
 
-        if !matches!(mine.Intersect(published), Intersection::Overlaps(_))
+        let Some(file) = Published_Counterpart(&mine, published)
+        else
         {
             return Err(AddRefusal::AmendmentNotPublished {
                 identifier: Normalize_Path(declared),
             });
-        }
+        };
+
+        Refuse_A_Misspelled_Amendment(declared, &file)?;
     }
 
     return Ok(());
 }
 
+/// The published record file a declaration folds onto, or `None`.
+///
+/// Returns which file rather than a bool, because the two callers of the answer want
+/// different halves of it: one needs to know an amendment names something, and the other
+/// needs the filename to put in front of an author who spelled it wrongly.
+fn Published_Counterpart(mine: &Territory, published: &Territory) -> Option<String>
+{
+    return published
+        .paths
+        .iter()
+        .find(|file| {
+            let theirs = Territory::Of_Files([(*file).clone()]);
+            return matches!(mine.Intersect(&theirs), Intersection::Overlaps(_));
+        })
+        .cloned();
+}
+
+/// Refuses a declaration that claims to be a record's filename and is a different one.
+///
+/// The reservation this guards is already correct without it: `OD-LEDGER-016`'s fold makes
+/// every slug for one identifier the same subject, so a mistyped slug excludes exactly the
+/// writers the right one would have. That is why nothing else catches it, and why what the
+/// item keeps is a path opening nothing while its own success line names that path as the
+/// file it reserved.
+///
+/// Judged on the `.md` suffix rather than on whether the file exists on disk, because this
+/// crate does not read the filesystem to decide a territory and should not learn to for
+/// this: `published` is what the caller says the repository has published, and comparing
+/// against it keeps the answer a function of the arguments. The suffix is what separates the
+/// two spellings the fold admits — a bare `docs/records/OD-LEDGER-016` claims no filename
+/// and so cannot have got one wrong.
+///
+/// Compared through [`nomos_model::Normalize_Path`] and not through this crate's own
+/// [`Normalize_Path`], which is the only subtle line here. The latter folds a record
+/// filename onto its identifier, and that fold is precisely the difference being looked for:
+/// through it every slug for one identifier is one string, the suffix is gone with the slug,
+/// and this function can never see anything to refuse. The plain fold still settles
+/// separators and case, so `Docs\Records\OD-LEDGER-006-x.md` is not called a misspelling of
+/// `docs/records/od-ledger-006-x.md`.
+fn Refuse_A_Misspelled_Amendment(declared: &str, file: &str) -> Result<(), AddRefusal>
+{
+    let spelled = nomos_model::Normalize_Path(declared);
+
+    if !spelled.ends_with(RECORD_FILE_SUFFIX) || spelled == nomos_model::Normalize_Path(file)
+    {
+        return Ok(());
+    }
+
+    return Err(AddRefusal::AmendmentMisspelled {
+        identifier: Normalize_Path(file),
+        declared: declared.to_owned(),
+        file: file.to_owned(),
+    });
+}
+
 /// The folded record directory, with its separator, as [`Normalize_Path`] leaves it.
 const RECORD_DIRECTORY_PREFIX: &str = "docs/records/";
+
+/// What a declaration ends with when it claims to be a record's filename rather than its
+/// bare identifier.
+const RECORD_FILE_SUFFIX: &str = ".md";
 
 #[cfg(test)]
 mod tests
