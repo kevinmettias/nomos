@@ -213,6 +213,14 @@ fn Resolve_Limit(facts: &mut dyn FactReader, language: Option<&str>, key: &str, 
 }
 
 /// Reports functions that violate a caller-supplied arity policy.
+///
+/// A test or example source is not judged. An arity cap is a claim about code somebody has
+/// to call, and a test's parameters are its fixtures: the shapes that make a case say what
+/// it varies. This is [`crate::checks::Is_Test_Or_Example_Source`], the same exemption
+/// `concurrency_text` and `file_names` already read, applied here for the first time; it sits
+/// beside the policy's language filter rather than inside it because where a file sits and
+/// what it is written in are different questions, and `Policy_Accepts_Source` answers only
+/// the second.
 #[must_use]
 pub fn Check_Function_Arity_Policy(
     sources: &[SourceFile],
@@ -224,7 +232,7 @@ pub fn Check_Function_Arity_Policy(
 
     for source in sources
     {
-        if !Policy_Accepts_Source(policy, source)
+        if !Policy_Accepts_Source(policy, source) || crate::checks::Is_Test_Or_Example_Source(source)
         {
             continue;
         }
@@ -451,6 +459,27 @@ mod tests
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "Build");
+    }
+
+    /// The fact is materialized so the source really would report: without the exemption the
+    /// rule reads it, finds five parameters and returns a finding, so this fails if the filter
+    /// is deleted rather than passing on an unreadable source.
+    #[test]
+    fn Test_Check_Parameter_Count_Should_Not_Judge_A_Test_Source()
+    {
+        let source = Source("crates/rules/nomos-rules/tests/integration_seams.rs", "pub fn Build(a: A, b: B, c: C, d: D, e: E) {}");
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\nitem\t0\tFunction\tPublic\tBuild\t.\t+fn/5\n",
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Parameter_Count(&[source], &mut reader);
+
+        assert!(findings.is_empty(), "{findings:?}");
     }
 
     #[test]

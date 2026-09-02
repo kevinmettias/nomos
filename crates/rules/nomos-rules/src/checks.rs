@@ -181,7 +181,14 @@ pub(crate) fn Relay_Findings<Payload>(
 ///
 /// The prefixes match a workspace-relative path, the infixes a crate-relative one, and the
 /// suffixes the in-file convention; slashes are normalized first so a Windows path answers
-/// the same as a POSIX one. `security_text`'s own `Is_Test_Or_Fixture_Source` is
+/// the same as a POSIX one. A bare `tests.rs` and a bare `test_support.rs` are matched by
+/// their whole names rather than by a wider rule: `_tests.rs` will not catch the first,
+/// because this workspace names an inline test module's file plainly and a suffix wide enough
+/// to reach it would also reach `contests.rs`; and a `test_` filename prefix would catch the
+/// second at the cost of also catching `checks/naming/test_names.rs`, which implements the
+/// test-naming rules and is production code that merely talks about tests. Both names are
+/// declared `#[cfg(test)]` at every site in this workspace that declares them, which is the
+/// fact a path predicate cannot read and these two clauses stand in for. `security_text`'s own `Is_Test_Or_Fixture_Source` is
 /// deliberately not folded in: it admits `/testdata/`, `/fixtures/` and `_test.go` besides,
 /// and reads `examples` as an infix rather than a prefix, so it is a different predicate
 /// that resembles this one rather than a third copy of it.
@@ -193,7 +200,11 @@ pub(crate) fn Is_Test_Or_Example_Source(source: &SourceFile) -> bool
         || normalized.contains("/tests/")
         || normalized.contains("/test/")
         || normalized.ends_with("_test.rs")
-        || normalized.ends_with("_tests.rs");
+        || normalized.ends_with("_tests.rs")
+        || normalized.ends_with("/tests.rs")
+        || normalized == "tests.rs"
+        || normalized.ends_with("/test_support.rs")
+        || normalized == "test_support.rs";
 }
 
 #[cfg(test)]
@@ -211,9 +222,13 @@ mod tests
         return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
     }
 
-    /// One case per clause, plus the two shapes that must stay out: a production path that
-    /// merely contains the word, and a Windows-separated path, which is the reason the
-    /// predicate normalizes before it compares rather than after.
+    /// One case per clause, plus the shapes that must stay out: a production path that merely
+    /// contains the word, and `protests.rs`, which a plain `tests.rs` suffix would swallow and
+    /// the separator-anchored clause does not. A Windows-separated path appears twice, which
+    /// is the reason the predicate normalizes before it compares rather than after, and a bare
+    /// `tests.rs` covers the spelling that has no separator to anchor on at all.
+    /// `test_names.rs` is the case that keeps the `test_support.rs` clause an exact name: it
+    /// is a rule implementation, and the obvious `test_` prefix would exempt it.
     #[test]
     fn Test_Is_Test_Or_Example_Source_Should_Judge_Prefixes_Infixes_And_Suffixes()
     {
@@ -224,12 +239,19 @@ mod tests
             "crates/rules/nomos-rules/test/fixtures.rs",
             "crates/rules/nomos-rules/src/thing_test.rs",
             "crates/rules/nomos-rules/src/thing_tests.rs",
+            "crates/languages/nomos-lang-go-modules/src/discovery/tests.rs",
+            "crates/rules/nomos-rules/src/checks/test_support.rs",
+            "tests.rs",
+            "test_support.rs",
+            "crates\\rules\\nomos-rules\\src\\discovery\\tests.rs",
             "crates\\rules\\nomos-rules\\tests\\fixtures.rs",
         ];
         let outside = [
             "crates/rules/nomos-rules/src/checks.rs",
             "crates/latest/src/contests.rs",
             "crates/rules/src/testing.rs",
+            "crates/rules/nomos-rules/src/protests.rs",
+            "crates/rules/nomos-rules/src/checks/naming/test_names.rs",
         ];
 
         for path in inside

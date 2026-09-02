@@ -104,6 +104,15 @@ pub fn Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<
 }
 
 /// Reports `#[allow(...)]`/`#![allow(...)]` attributes with no adjacent explanatory comment.
+///
+/// A test or example source is not judged, the same exemption
+/// [`Check_Unwrap_Expect_Discipline`] above already reads. A test suppresses a lint to
+/// construct the shape it is testing -- a deliberately wrong call, an unused binding held to
+/// prove a drop -- and the justification the rule asks for is the test's own name. The
+/// exemption is deliberately not extended to the sibling rules in this file: `unsafe` and
+/// `#[inline(always)]` mean the same thing wherever they are written, and
+/// `a-disabled-test-states-why` would be deleted outright by it, since a disabled test is in
+/// a test source by construction.
 #[must_use]
 pub fn Check_Every_Allow_Carries_A_Justification(sources: &[SourceFile]) -> Vec<Finding>
 {
@@ -111,7 +120,9 @@ pub fn Check_Every_Allow_Carries_A_Justification(sources: &[SourceFile]) -> Vec<
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
+        if source.Is_Written_In(RUST_LANGUAGE)
+            && !super::Is_Test_Or_Example_Source(source)
+            && !Is_Own_Implementation_File(source)
         {
             findings.extend(Allow_Findings_In(source));
         }
@@ -885,6 +896,38 @@ mod tests
         let findings = Check_Every_Allow_Carries_A_Justification(&[source]);
 
         assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// The same unexplained allow the case above reports, moved into a test source. It is a
+    /// path exemption, so the content is deliberately identical: only where the file sits
+    /// differs.
+    #[test]
+    fn Test_Check_Every_Allow_Carries_A_Justification_Should_Not_Judge_A_Test_Source()
+    {
+        let source = Source(
+            "crates/languages/nomos-lang-rust/tests/guarantee.rs",
+            "#[allow(clippy::redundant_clone)]\nlet processed = input.clone();\n",
+        );
+
+        let findings = Check_Every_Allow_Carries_A_Justification(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// The sibling rules in this file deliberately do not carry the exemption, and this is
+    /// the case that keeps that deliberate. A disabled test lives in a test source by
+    /// construction, so exempting one here would delete the rule rather than narrow it.
+    #[test]
+    fn Test_Check_A_Disabled_Test_States_Why_Should_Still_Judge_A_Test_Source()
+    {
+        let source = Source(
+            "crates/languages/nomos-lang-rust/tests/guarantee.rs",
+            "#[ignore]\nfn Test_Something() {}\n",
+        );
+
+        let findings = Check_A_Disabled_Test_States_Why(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
     }
 
     #[test]
