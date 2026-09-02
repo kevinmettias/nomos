@@ -47754,14 +47754,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-53-33946",
-        "acquired_at": 1788333946,
-        "lease_expires_at": 1788341146
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -47771,7 +47767,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "|\n248 | fn Has_Nounset(lines: &[&str]) -> bool\n    |    ^^^^^^^^^^^\n\nwarning: function `Is_Sourced_Library` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:283:4\n    |\n283 | fn Is_Sourced_Library(source: &str) -> bool\n    |    ^^^^^^^^^^^^^^^^^^\n\nwarning: function `Is_Function_Header` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:328:4\n    |\n328 | fn Is_Function_Header(code: &str) -> bool\n    |    ^^^^^^^^^^^^^^^^^^\n\nwarning: function `Is_Declaration` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:362:4\n    |\n362 | fn Is_Declaration(code: &str) -> bool\n    |    ^^^^^^^^^^^^^^\n\nwarning: enum `QuoteState` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:411:6\n    |\n411 | enum QuoteState\n    |      ^^^^^^^^^^\n\nwarning: function `Quote_State_After` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:426:4\n    |\n426 | fn Quote_State_After(line: &str, opening: QuoteState) -> QuoteState\n    |    ^^^^^^^^^^^^^^^^^\n\nwarning: function `Begins_A_Word` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:486:4\n    |\n486 | fn Begins_A_Word(line: &str, index: usize) -> bool\n    |    ^^^^^^^^^^^^^\n\nwarning: function `Code_On` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:500:4\n    |\n500 | fn Code_On(line: &str) -> &str\n    |    ^^^^^^^\n\nwarning: function `Unquoted_Hash_Index` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\script_discipline.rs:512:4\n    |\n512 | fn Unquoted_Hash_Index(line: &str) -> Option<usize>\n    |    ^^^^^^^^^^^^^^^^^^^\n\nwarning: `nomos-rules` (lib) generated 11 warnings\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788334344,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "56074085869a39cf0b09680a8c9aa4357c244c39"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
