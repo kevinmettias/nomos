@@ -46208,14 +46208,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-89",
-        "acquired_at": 1788364894,
-        "lease_expires_at": 1788379294
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -46227,7 +46223,29 @@
         ],
         "timeout_seconds": 2400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "ls_the_truth-66a55e2a03158052.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-698560ab5f6a20a9.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-184b0b7fd8fa5d9c.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-12c5aac8dad46c06.exe)\n     Running tests\\platform_std_seam.rs (target\\debug\\deps\\platform_std_seam-d9d186bbccbfddd5.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-368883cdd32da5dd.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-a370e0c14c10bf63.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-e2ba95fa8947050e.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-13336dcd424a0918.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-d66f745ca1d3c2fe.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-5a8bf5b7f043883e.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-9c098c8816d2a05a.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-c47744cbc78e383c.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-747923e05a82adf6.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-586d423645de518f.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-7503d032cb85f7a5.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-2f8be4ca8cef4018.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-db94f2bceb9df25a.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-b6c01a4f38948f78.exe)\n     Running tests\\scope_verification_integration.rs (target\\debug\\deps\\scope_verification_integration-83d8efca96653ce8.exe)\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1788365950,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b4816ad6c30abf8dacf8bf4d1e01b2e6709e674d"
+      },
       "abandoned": [],
       "displaced": [
         {
