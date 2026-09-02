@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:0be2ed22068d0c4d342dee207ff3f4416b7d8efe3f7d2b2c8d17116358043753",
-  "inputs_digest": "sha256:b45a21648ac4c962c852d73282cdd1686c3c0742701fadf089bbd56aa4a9ccb8",
+  "content_digest": "sha256:3e32153ace8caeea2ba68e14e9f64dfcace139dd0dc4d127caab27197eafe89f",
+  "inputs_digest": "sha256:51c4911e8087439c67026a6374addcc35316bf54b7a631231ccf553591caf678",
   "sections": [
     [
       "Documents",
@@ -16,7 +16,7 @@
     ],
     [
       "Source blocks",
-      5240
+      5243
     ]
   ],
   "inputs": [
@@ -223,7 +223,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md@authored",
-      "hash": "sha256:4f25aba8fc4a56b6b6f806ef0450d492c8688b573f77879698b2617c291179ce"
+      "hash": "sha256:49347b91e13b7f953160008054dc9e028aef8b1893f14bafbc8e4121ee8b623c"
     },
     {
       "content": "documents",
@@ -308,7 +308,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored",
-      "hash": "sha256:5505d057d0aa2bc7662cbfca82c015dd8ef4366f3a6e50d52516638489c4333a"
+      "hash": "sha256:ca00e8c7e822e64b859ccc7162d52ac2108a9c94b9706595f78c21cd21f546ce"
     },
     {
       "content": "documents",
@@ -403,7 +403,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored",
-      "hash": "sha256:630c8ef1cff23ab5ed96b9c51d8bafd63a584c5d5bec5f75119ef2564a8369b9"
+      "hash": "sha256:c69ceac45b63a2a7fdbf575e0aae4e6917ff2f5e7d2ef0497149ca8d811344da"
     },
     {
       "content": "documents",
@@ -13593,7 +13593,12 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#22",
-      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+      "hash": "sha256:0f6aa74bbb1650f9270b72865e116243a7d44420908f83874db260dcde5f4100"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#23",
+      "hash": "sha256:0c2a046a27c7bbb80979b7b8a5162726062726107d1a5caf6c3e078cb970d2cb"
     },
     {
       "content": "blocks",
@@ -15903,7 +15908,12 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#32",
-      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+      "hash": "sha256:53571eb4c6a0a0d9944962148bcc35448e1224a5e643f60a46b3d8a977954eca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#33",
+      "hash": "sha256:042627274704c8a52853be054607d958166c7cea41625446d07d7359596adfc4"
     },
     {
       "content": "blocks",
@@ -18863,7 +18873,12 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#19",
-      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+      "hash": "sha256:94f62a4bb213bcfb0463bedc5b6f9c5fe5cd5280f2b779859566b03494fcf575"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#20",
+      "hash": "sha256:a47ae4363a00fc5a0c772bf13b1fb9d2b2f34a94bd375e0ba326520267fab735"
     },
     {
       "content": "blocks",

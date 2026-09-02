@@ -195,4 +195,21 @@ against this record's rule the way the first executor was measured against `OD-E
 
 ## Status
 
-Accepted.
+Accepted, and its own last named trigger has fired — differently than this record expected.
+The second backend crate exists: `crates/agent/nomos-model-backend-ollama`, dispatched from
+`nomos-cli`'s `agent` verb, bounded by exactly the rule above. But
+`P14-PACKAGE-013-OLLAMA-CLASSIFICATION` found that Ollama's real mechanism is
+`ModelBackendPackage`'s shape, not `AgentExecutorPackage`'s (`OD-PACKAGE-013`), so what this
+record measured is a *`ModelBackend`'s* boundary, reached by measuring the mechanism rather
+than inheriting `OD-EXECUTOR-001`'s — which is this record's own rule, applied to itself, and
+is why the misclassification was catchable at all. `OD-EXECUTOR-005` then read the
+shared-`AgentExecutor`-trait trigger as still unfired for the same reason, and its own version
+2 split `--backend` into `--executor`/`--model-backend` so a caller names which family it is
+choosing from.
+
+The rule's substance is unaffected by the reclassification: the flags to omit, the isolated
+working directory, the `OLLAMA_HOST` precondition as its own distinct failure, the wall-clock
+bound standing in for a dollar bound, and stdout-as-content are all properties of the
+mechanism, not of which package kind names it. Revisit if a second real `AgentExecutor` — not
+a `ModelBackend` — is ever dispatched alongside Claude Code's, or if Codex's authentication is
+repaired and it earns the separate record this one declines to write for it.

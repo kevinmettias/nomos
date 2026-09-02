@@ -50,7 +50,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md@authored | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md | authored | 16 | 6 | sha256:28d369d79f6b9bc16f144ce71796ae80ccae724f627a779891daec3b61fa5b35 |
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md@authored | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md | authored | 19 | 6 | sha256:4d04815ed763e5dcf94dac93b3ea02bfc1095a5ca15731b5d342e314f8a33fc8 |
 | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md@authored | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md | authored | 36 | 10 | sha256:ebe2fe7a455f06f27dc6a52e573aa98fa57e7b1eb29feb90173c84a3ff266dee |
-| docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md@authored | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md | authored | 22 | 6 | sha256:4f25aba8fc4a56b6b6f806ef0450d492c8688b573f77879698b2617c291179ce |
+| docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md@authored | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md | authored | 23 | 6 | sha256:49347b91e13b7f953160008054dc9e028aef8b1893f14bafbc8e4121ee8b623c |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ea548df7de6d318f3946ffc3c153f837e4289c5b25045352897d0221c1c1d3f7 |
@@ -67,7 +67,7 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md | authored | 32 | 8 | sha256:332c3b7ae159ba13d0b1d176726607b8369f9b5af249de17d98d9507254ce7bb |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md | authored | 26 | 8 | sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a |
 | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md@authored | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md | authored | 20 | 6 | sha256:7df87ca12c60f9dd7d6ae9fcaf59727dc8f7784a93c1ea13c4424fb80603050c |
-| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 32 | 9 | sha256:5505d057d0aa2bc7662cbfca82c015dd8ef4366f3a6e50d52516638489c4333a |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 33 | 9 | sha256:ca00e8c7e822e64b859ccc7162d52ac2108a9c94b9706595f78c21cd21f546ce |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md | authored | 23 | 7 | sha256:1f668a9c3b8b790d0935f12b8f3350130ac9c388e0f9c0671ef5d57379f74b47 |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md | authored | 19 | 6 | sha256:0c2b9021270c0e484742945479352a8b2d9d573056158e27d377c6f56433545d |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
@@ -86,7 +86,7 @@ profile: domain-specification
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 34 | 12 | sha256:3f9a8dc63ea44ae7b2ced612ba58b62590e3240954555ba9ce43331f6157366b |
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md | authored | 20 | 7 | sha256:0c813c23245ff0e95b51d6914c67d7ab36ae6d18b05e2bd82bd69892016f969e |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md | authored | 25 | 7 | sha256:6b6d9f41076761c1a5af15719547c1b28ab365e7b4e46ba305c59bc4de3a71b5 |
-| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md | authored | 19 | 6 | sha256:630c8ef1cff23ab5ed96b9c51d8bafd63a584c5d5bec5f75119ef2564a8369b9 |
+| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md | authored | 20 | 6 | sha256:c69ceac45b63a2a7fdbf575e0aae4e6917ff2f5e7d2ef0497149ca8d811344da |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 36 | 8 | sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -11386,9 +11386,26 @@ is composition, per `OD-HOST-004`, not a question this record reopens.
 
 ### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#22
 
-*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / Status · hash: sha256:0f6aa74bbb1650f9270b72865e116243a7d44420908f83874db260dcde5f4100*
 
-Accepted.
+Accepted, and closed. Every part of the decision is built and composed: `Struct_Shape` and
+`Struct_Fields` live in `nomos-cap-syntax` beside `Function_Shape`/`Function_Arity`
+(`P14-CAPABILITY-010-SYNTAX-STRUCT-FIELDS-1`), `nomos-lang-go` populates the same field
+vocabulary as the second real writer rather than leaving it one provider's opinion
+(`-FIELDS-2`), and `Check_Cross_Language_Correspondence` reads the `Corresponds to` doc
+comment and is composed into `nomos-check-orchestration`'s `Run`
+(`P14-CAPABILITY-010-CROSSLANG-RULE`). `P14-RULES-009-CROSSLANG-TRIGGER-CHECK` then read
+`OD-RULES-009`'s fourth named trigger against this rule and found it unfired.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#23
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / Status · hash: sha256:0c2a046a27c7bbb80979b7b8a5162726062726107d1a5caf6c3e078cb970d2cb*
+
+What this record declined stays declined and unclaimed by anything since: the other four
+families `OD-CAPABILITY-006` named still wait on producers this workspace does not have, and
+no record has yet made the case for a Rust-to-Go type mapping. Revisit if a second
+correspondence family becomes reachable at `Syntactic`, or if a rule needs to compare the two
+sides' field *types* rather than carry them for a person to read.
 
 ### docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1
 
@@ -15678,9 +15695,30 @@ against this record's rule the way the first executor was measured against `OD-E
 
 ### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#32
 
-*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Status · hash: sha256:53571eb4c6a0a0d9944962148bcc35448e1224a5e643f60a46b3d8a977954eca*
 
-Accepted.
+Accepted, and its own last named trigger has fired — differently than this record expected.
+The second backend crate exists: `crates/agent/nomos-model-backend-ollama`, dispatched from
+`nomos-cli`'s `agent` verb, bounded by exactly the rule above. But
+`P14-PACKAGE-013-OLLAMA-CLASSIFICATION` found that Ollama's real mechanism is
+`ModelBackendPackage`'s shape, not `AgentExecutorPackage`'s (`OD-PACKAGE-013`), so what this
+record measured is a *`ModelBackend`'s* boundary, reached by measuring the mechanism rather
+than inheriting `OD-EXECUTOR-001`'s — which is this record's own rule, applied to itself, and
+is why the misclassification was catchable at all. `OD-EXECUTOR-005` then read the
+shared-`AgentExecutor`-trait trigger as still unfired for the same reason, and its own version
+2 split `--backend` into `--executor`/`--model-backend` so a caller names which family it is
+choosing from.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#33
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Status · hash: sha256:042627274704c8a52853be054607d958166c7cea41625446d07d7359596adfc4*
+
+The rule's substance is unaffected by the reclassification: the flags to omit, the isolated
+working directory, the `OLLAMA_HOST` precondition as its own distinct failure, the wall-clock
+bound standing in for a dollar bound, and stdout-as-content are all properties of the
+mechanism, not of which package kind names it. Revisit if a second real `AgentExecutor` — not
+a `ModelBackend` — is ever dispatched alongside Claude Code's, or if Codex's authentication is
+repaired and it earns the separate record this one declines to write for it.
 
 ### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#1
 
@@ -21218,9 +21256,28 @@ re-argue.
 
 ### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#19
 
-*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Status · hash: sha256:94f62a4bb213bcfb0463bedc5b6f9c5fe5cd5280f2b779859566b03494fcf575*
 
-Accepted.
+Accepted, and the campaign it authorized has run to the end. The mechanism landed as
+described — a root `standards.json` setting only `suppression.max_horizon_days`, and a
+`suppressions.json` now carrying 2224 adopted waivers, the two pre-decided categories
+dominating it (`check-presumption` and `check-literals` together account for roughly two
+thirds). All nine phases closed: `clean-file` (`P14-CLEANFILE-PHASE-REMEDIATION`, then
+`P17-CLEANFILE-*` against its regressions), `decompose-file` (`P15-DECOMPOSEFILE-*`, one item
+per crate directory), everything else (`P16-EVERYTHINGELSE-*`, ending at
+`P16-EVERYTHINGELSE-FINALSWEEP`'s full 76-check sweep), and `placement` last, as this record
+ordered it (`P20-PLACEMENT-*`, with `P22-PLACEMENT-DUP-REGRESSION` closing the two
+duplication findings a later fix introduced).
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#20
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Status · hash: sha256:a47ae4363a00fc5a0c772bf13b1fb9d2b2f34a94bd375e0ba326520267fab735*
+
+One deferral this record made itself still stands, and stands for the reason it gave:
+`check-visibility-scope` is unmeasured against this repository because it requires the whole
+repository as its argument and this working tree still carries live, divergent worktrees under
+`.claude/worktrees/` and elsewhere. That condition has not changed, so a repository-root run's
+count is still not ground truth. Revisit when the shared tree does not carry them.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

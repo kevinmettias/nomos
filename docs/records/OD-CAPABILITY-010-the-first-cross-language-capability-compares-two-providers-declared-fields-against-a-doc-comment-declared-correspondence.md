@@ -160,4 +160,17 @@ is composition, per `OD-HOST-004`, not a question this record reopens.
 
 ## Status
 
-Accepted.
+Accepted, and closed. Every part of the decision is built and composed: `Struct_Shape` and
+`Struct_Fields` live in `nomos-cap-syntax` beside `Function_Shape`/`Function_Arity`
+(`P14-CAPABILITY-010-SYNTAX-STRUCT-FIELDS-1`), `nomos-lang-go` populates the same field
+vocabulary as the second real writer rather than leaving it one provider's opinion
+(`-FIELDS-2`), and `Check_Cross_Language_Correspondence` reads the `Corresponds to` doc
+comment and is composed into `nomos-check-orchestration`'s `Run`
+(`P14-CAPABILITY-010-CROSSLANG-RULE`). `P14-RULES-009-CROSSLANG-TRIGGER-CHECK` then read
+`OD-RULES-009`'s fourth named trigger against this rule and found it unfired.
+
+What this record declined stays declined and unclaimed by anything since: the other four
+families `OD-CAPABILITY-006` named still wait on producers this workspace does not have, and
+no record has yet made the case for a Rust-to-Go type mapping. Revisit if a second
+correspondence family becomes reachable at `Syntactic`, or if a rule needs to compare the two
+sides' field *types* rather than carry them for a person to read.

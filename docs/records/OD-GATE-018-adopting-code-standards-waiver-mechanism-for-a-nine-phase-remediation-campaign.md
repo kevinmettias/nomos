@@ -121,4 +121,19 @@ re-argue.
 
 ## Status
 
-Accepted.
+Accepted, and the campaign it authorized has run to the end. The mechanism landed as
+described — a root `standards.json` setting only `suppression.max_horizon_days`, and a
+`suppressions.json` now carrying 2224 adopted waivers, the two pre-decided categories
+dominating it (`check-presumption` and `check-literals` together account for roughly two
+thirds). All nine phases closed: `clean-file` (`P14-CLEANFILE-PHASE-REMEDIATION`, then
+`P17-CLEANFILE-*` against its regressions), `decompose-file` (`P15-DECOMPOSEFILE-*`, one item
+per crate directory), everything else (`P16-EVERYTHINGELSE-*`, ending at
+`P16-EVERYTHINGELSE-FINALSWEEP`'s full 76-check sweep), and `placement` last, as this record
+ordered it (`P20-PLACEMENT-*`, with `P22-PLACEMENT-DUP-REGRESSION` closing the two
+duplication findings a later fix introduced).
+
+One deferral this record made itself still stands, and stands for the reason it gave:
+`check-visibility-scope` is unmeasured against this repository because it requires the whole
+repository as its argument and this working tree still carries live, divergent worktrees under
+`.claude/worktrees/` and elsewhere. That condition has not changed, so a repository-root run's
+count is still not ground truth. Revisit when the shared tree does not carry them.

@@ -45668,14 +45668,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-a8",
-        "acquired_at": 1788315301,
-        "lease_expires_at": 1788322501
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -45686,6 +45682,67 @@
           "preservation_holds"
         ],
         "timeout_seconds": 1200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-validate",
+          "--test",
+          "preservation_holds"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 12 tests\ntest Test_Registered_Should_Build_One_Rule_Object_Per_Declared_Identifier ... ok\ntest Test_An_Omitted_Block_Should_Satisfy_Preserve_002 ... ok\ntest Test_An_Empty_Store_Should_Report_Vacuous_Rules ... ok\ntest Test_The_Registry_Should_Match_The_Manifest ... ok\ntest Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004 ... ok\ntest Test_Disposed_Blocks_Should_Satisfy_Preserve_002 ... ok\ntest Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006 ... ok\ntest Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004 ... ok\ntest Test_An_Undisposed_Block_Should_Violate_Preserve_002 ... ok\ntest Test_A_Traced_Statement_Should_Satisfy_Preserve_006 ... ok\ntest Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules ... ok\ntest Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.21s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-c1582b858346687e.exe)\n",
+        "verified_at": 1788315623,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "436707bd6091dbd5d08e30576e4eac66c5d55740"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-RULES-RUST-FACADE-SURFACE",
+      "title": "Import the Rust facade-surface family into a new facade.rs",
+      "why": "code-standards' check-facade-surface decides three published rule documents from Rust source text alone -- facade-chooses-flattening-or-namespace, facade-aliases-name-the-contract and facade-consumers-use-the-facade-path -- and none of the three has any repository-configurable dimension, so the OD-RULES-011 capability shape does not apply and a leaf rule module does. Measured against this workspace before starting: the duplicate-exposure rule reports zero, the bypass rule reports ten real imports reaching around a lib.rs facade, and the alias rule reports sixty-one, which is why this item lands the rules library-complete and leaves composition into Run to a later increment.",
+      "done_when": "crates/rules/nomos-rules/src/checks/facade.rs implements Check_A_Facade_Publishes_A_Child_One_Way, Check_A_Renamed_Facade_Re_Export_Names_The_Contract and Check_A_Consumer_Imports_Through_The_Facade with unit tests for each judgment and its exemptions, checks.rs declares and re-exports the module, lib.rs's numbered rule history gains the increment, the nomos-rules public-surface snapshot is reblessed, and cargo test -p nomos-rules is green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/facade.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-e5-0902",
+        "acquired_at": 1788315591,
+        "lease_expires_at": 1788322791
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
       },
       "verified": null,
       "abandoned": [],
