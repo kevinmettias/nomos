@@ -49244,6 +49244,61 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P33-RULES-SCALAR-RANGE",
+      "title": "A known validated range that contradicts the field type it decorates (Rust)",
+      "why": "code-standards' check-scalar-range (shared package rules/general/style/shared/scalarrange, Rust front end rust_scalar_range.go) judges a struct field whose validator crate range attribute (a hash-bracket validate range clause naming min and or max) contradicts the type storing it: a signed field whose stated minimum is zero or above should be unsigned, and a field whose stated min and max both fit inside a narrower fixed-width type than the one declared should use that narrower type. Verified against the real Go implementation directly (scalar_kind.go's Is_Admitting_Negatives_Its_Bound_Forbids and Is_Wider_Than_Its_Bound_Needs, Narrowest_That_Holds and can_Hold_Range's exact tie-breaking and bit-width arithmetic, rust_scalar_range.go's attribute-clause reading). Two distinct code-standards rule-doc ids name the two distinct predicates (a-known-range-picks-its-type, nonnegative-storage-is-unsigned); code-standards' own finding model carries no per-doc rule id at all (a tool's Enforces line is the only place multiple ids are named, same architectural gap already crossed for the tuple-variant and domain-type-alias ports), so this port is two separate functions, one per predicate, each independently checking its own condition -- a field violating both gets two separate findings rather than one merged one, the same choice already made for the atomic-ordering family's three functions reading one shared value. No repository-configurable dimension: the bound is always the author's own already-written attribute, never a default a repository would state differently, so a leaf module. Scoped to Rust only for this increment: Go's companion front end reads a different struct-tag string syntax (validate colon min equals N comma max equals N) that needs its own separate parsing, not a trivial extension of the attribute-clause reader this item builds, and is left as a natural follow-up rather than folded in here. Simplified relative to the real tree-sitter implementation in one respect, found to be safe rather than merely convenient: the real front end pairs an attribute with the field beneath it by sibling position inside a parsed field_declaration_list, which this port approximates as a linear scan (accumulate a validate range attribute across consecutive attribute lines, consumed by the next non-attribute non-blank line) with no struct-body boundary tracking at all, because the validator attribute vocabulary itself is specific enough that nothing else in real Rust source plausibly carries it -- a function parameter list formatted one argument per line has the identical name-colon-type-comma shape a struct field does, but nobody writes this specific attribute above a parameter, so the narrower scoping the real tool's parser buys is not needed here.",
+      "done_when": "A new crates/rules/nomos-rules/src/checks/scalar_range.rs implements Check_Nonnegative_Storage_Is_Unsigned (rule id nonnegative-storage-is-unsigned: a signed declared type whose attribute states a minimum of zero or above) and Check_A_Known_Range_Picks_Its_Type (rule id a-known-range-picks-its-type: both minimum and maximum stated, and a narrower one of the eight fixed-width remedy types u8 i8 u16 i16 u32 i32 u64 i64 can hold that exact range, unsigned preferred at equal width, narrower than the field's own declared width among a wider vocabulary that also includes usize isize u128 i128 f32 f64). Both read the same linear attribute-then-field scan: a validate range clause is read out of a hash-bracket attribute line via balanced-paren clause-body matching and comma-separated minimum and maximum extraction, paired with the very next non-attribute non-blank line if that line is a name-colon-type field declaration whose type is in the declared vocabulary; a float-typed field, an unparsed or inverted range, or an attribute naming no validator range clause never produce a bound at all. Unit tests cover: a signed field with a non-negative minimum flagged, an unsigned field with the same bound accepted, a field wider than its stated range needs flagged with the correct narrower remedy chosen including the unsigned-at-equal-width tie-break, a field exactly matching its narrowest type accepted, a float field never bounded regardless of its attribute, an attribute naming no validator range clause ignored, an inverted range (minimum greater than maximum) ignored, and two attributes preceding one field where only the second is the range clause still pairing correctly. checks.rs and lib.rs both declare and re-export both functions and both rule-id constants, both re-export layers. The nomos-rules public surface snapshot is reblessed. cargo test -p nomos-rules is green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/scalar_range.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 496 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788390108,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "339bb474e2fe3934c0562988349cd301249f43bc"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

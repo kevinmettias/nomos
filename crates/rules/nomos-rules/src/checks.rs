@@ -39,6 +39,7 @@ mod policy;
 mod reachability;
 mod role_surface_pair;
 mod rust_text;
+mod scalar_range;
 mod script_discipline;
 mod security_text;
 mod structure;
@@ -129,6 +130,9 @@ pub use rust_text::{
     A_DISABLED_TEST_STATES_WHY, A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, EVERY_ALLOW_CARRIES_A_JUSTIFICATION,
     INLINE_ALWAYS_JUSTIFICATION, PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED, SHARED_INTERIOR_MUTABILITY_SAYS_WHY,
     UNSAFE_JUSTIFICATION, UNWRAP_EXPECT_DISCIPLINE,
+};
+pub use scalar_range::{
+    Check_A_Known_Range_Picks_Its_Type, Check_Nonnegative_Storage_Is_Unsigned, A_KNOWN_RANGE_PICKS_ITS_TYPE, NONNEGATIVE_STORAGE_IS_UNSIGNED,
 };
 pub use script_discipline::{
     Check_A_Script_Declares_Its_Purpose, Check_Declared_Tooling_Language_For_Scripts, Check_Executed_Scripts_Set_Nounset,
