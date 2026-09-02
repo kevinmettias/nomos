@@ -49189,6 +49189,61 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P32-RULES-CONSTANT-SCOPE",
+      "title": "constants-are-the-exception-to-function-scope-use: a const buried inside a function",
+      "why": "code-standards' check-constant-scope (shared package rules/general/architecture/shared/constantscope, Rust front end rust_constant_scope.go, Go front end go_constant_scope.go) flags a named constant declared inside a function body: a binding's scope is a claim about a lifetime and a constant has none, so declaring one inside the single function that reads it today claims the value belongs to that function, which is almost always false -- the next caller copies the literal instead of reaching into another function body for it. Module-scope constants and Rust associated constants (inside an impl, never inside any function) are exempt; the exemption falls out for free from only tracking function-body nesting, since nothing here tracks impl blocks at all. Verified against the real Go implementation directly (constant.go, rust_constant_scope.go, go_constant_scope.go): a single doc id, no companion per-language docs, no repository-configurable dimension at all (the shared package's own doc comment states it needs no calibration). This crate's third whole-file brace-depth scan, and the first needing a stack rather than a single slot, since Rust functions genuinely nest (a named fn declared inside another fn's body) while the two prior scans (enum_shape.rs, domain_type_alias.rs) each tracked a construct that does not. One deliberate divergence from the literal Go behavior, found while reading rust_constant_scope.go's own unconditional whole-tree walk: because it finds every function item anywhere in the tree and independently walks each one's own body for consts, a constant declared inside a doubly-nested function is actually reported once per enclosing function level in the real tool, which reads as an accidental side effect of a naive tree walk rather than a considered design the doc argues for anywhere. This port tracks a real stack (needed regardless, to know whether a given line sits inside any function at all) but attributes each finding to only the innermost enclosing function, a documented narrowing rather than a literal replication of what looks like a tool quirk. Go needs no stack at all: Go has no nested named function declarations, so a single optional slot, gated to only start looking for a new function header at depth zero, exactly matches parsed.Decls' own top-level-only restriction.",
+      "done_when": "A new crates/rules/nomos-rules/src/checks/constant_scope.rs implements Check_Constants_Are_The_Exception_To_Function_Scope_Use (rule id constants-are-the-exception-to-function-scope-use): for Rust, a whole-file brace-depth scan with a stack of open function scopes (a pending header committed to a pushed frame once its opening brace arrives, popped once depth drops back to or below its own opening depth) flags every single-line const NAME : Type = expr; declaration found while the stack is non-empty, attributed to the innermost open frame's function name, excluding a const fn header (which is a function modifier, not a value declaration, distinguished by requiring the token right after const to be an identifier immediately followed by a colon); for Go, the identical shape with a single optional slot instead of a stack (Go has no nested named function declarations), gated to only recognize a new func Name(...) header at brace depth zero, flags every const declaration found while that slot is open, including the parenthesized const ( ... ) block form. Own-implementation-file self-exemption, matching every other text-scanning rule in this crate. Unit tests cover: a flagged Rust const inside a function, an exempted module-scope const, an exempted Rust associated const inside an impl with no enclosing function, a const fn header correctly not treated as a value declaration, a doubly-nested Rust function reporting its constant only once (the documented narrowing from the real tool's own multi-report quirk), a flagged Go const inside a function, an exempted Go package-scope const, and a Go parenthesized const block inside a function. checks.rs and lib.rs both declare and re-export Check_Constants_Are_The_Exception_To_Function_Scope_Use and CONSTANTS_ARE_THE_EXCEPTION_TO_FUNCTION_SCOPE_USE, both re-export layers. The nomos-rules public surface snapshot is reblessed. cargo test -p nomos-rules is green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/constant_scope.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 488 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788389322,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "662005d00f53c03b5630319d0236d7aa7349fecf"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

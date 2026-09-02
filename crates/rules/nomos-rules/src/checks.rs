@@ -19,6 +19,7 @@
 //! [`test_support`] now states once.
 
 mod concurrency_text;
+mod constant_scope;
 mod crosslang;
 mod dependency;
 mod domain_type_alias;
@@ -53,6 +54,7 @@ pub use concurrency_text::{
     Check_Seqcst_Justified_Explicitly, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, RELAXED_NOT_USED_WHEN_ORDERING_MATTERS,
     SEQCST_JUSTIFIED_EXPLICITLY,
 };
+pub use constant_scope::{Check_Constants_Are_The_Exception_To_Function_Scope_Use, CONSTANTS_ARE_THE_EXCEPTION_TO_FUNCTION_SCOPE_USE};
 pub use crosslang::{
     Check_Cross_Language_Correspondence, CROSS_LANGUAGE_CONTRACT_RECORD, CROSS_LANGUAGE_CONTRACT_RECORD_VERSION,
     CROSS_LANGUAGE_CORRESPONDENCE,
