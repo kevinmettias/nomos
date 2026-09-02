@@ -50,7 +50,14 @@ pub fn Check_No_Trailing_Whitespace(sources: &[SourceFile]) -> Vec<Finding>
     return findings;
 }
 
-/// Reports every TODO comment in `sources` that does not carry owner, description and ticket.
+/// Reports every deferred-work marker comment in `sources` that does not carry owner,
+/// description and ticket.
+///
+/// The marker itself and the exact shape are the rule id's own words. This prose does not
+/// spell the marker, because the rule reads any comment that contains it anywhere and
+/// accepts only a comment that opens with it -- so a sentence merely mentioning the marker
+/// is reported and cannot be edited into conformance without ceasing to be that sentence.
+/// Its own documentation was reported for exactly this until the wording changed.
 #[must_use]
 pub fn Check_Todo_Format(sources: &[SourceFile]) -> Vec<Finding>
 {

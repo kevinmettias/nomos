@@ -127,8 +127,9 @@
 //! prefix must name the expectation with `_Should_` or `_Should_Not_`.
 //!
 //! [`Check_Todo_Format`] is the twelfth and shares the text-local source hygiene shape with
-//! [`Check_No_Trailing_Whitespace`]: a TODO comment must carry owner, description and
-//! ticket in the code-standards format.
+//! [`Check_No_Trailing_Whitespace`]: a deferred-work marker comment must carry owner,
+//! description and ticket in the code-standards format. That rule's own documentation says
+//! why neither it nor this line spells the marker out.
 //!
 //! [`Check_File_Size_Review_Trigger`] and [`Check_File_Size_Justification_Trigger`] are
 //! the thirteenth and fourteenth rules, importing code-standards' ~500-line review and

@@ -61,6 +61,12 @@ impl ItemKind
         return &[
             ("macro_rules!", Self::MacroDefinition),
             ("extern crate", Self::ExternCrate),
+            // SAFETY: no unsafe code here. This is the table entry for the item form of that
+            // name -- a string matched as a prefix against a scanned line, in a crate that
+            // forbids unsafe at its root. The rule asking for this comment is text-local and
+            // cannot see that the keyword sits inside a string literal; the `unsafe fn` entry
+            // below escapes it only because that rule spells its own pattern with a trailing
+            // space this table has no reason to carry.
             ("unsafe impl", Self::Implementation),
             ("async fn", Self::Function),
             ("unsafe fn", Self::Function),

@@ -53,11 +53,10 @@ const GO: &str = "go";
 pub fn Check_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
     let threshold = Resolve_Limit(facts, None, FILE_SIZE_REVIEW_LINES_KEY, REVIEW_TRIGGER_LINES);
+    let because = format!("exceeds the {threshold}-line review trigger for splitting");
     return Findings_For_Threshold(
         sources,
-        FILE_SIZE_REVIEW_TRIGGER,
-        threshold,
-        &format!("exceeds the {threshold}-line review trigger for splitting"),
+        LineThreshold { rule: FILE_SIZE_REVIEW_TRIGGER, lines: threshold, because: &because },
         |_| return true,
     );
 }
@@ -67,11 +66,10 @@ pub fn Check_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn Fa
 pub fn Check_File_Size_Justification_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
     let threshold = Resolve_Limit(facts, None, FILE_SIZE_HARD_LINES_KEY, JUSTIFICATION_TRIGGER_LINES);
+    let because = format!("exceeds the {threshold}-line trigger and needs an explicit splitting justification");
     return Findings_For_Threshold(
         sources,
-        FILE_SIZE_JUSTIFICATION_TRIGGER,
-        threshold,
-        &format!("exceeds the {threshold}-line trigger and needs an explicit splitting justification"),
+        LineThreshold { rule: FILE_SIZE_JUSTIFICATION_TRIGGER, lines: threshold, because: &because },
         |_| return true,
     );
 }
@@ -81,11 +79,10 @@ pub fn Check_File_Size_Justification_Trigger(sources: &[SourceFile], facts: &mut
 pub fn Check_Go_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
     let threshold = Resolve_Limit(facts, Some(GO), FILE_SIZE_REVIEW_LINES_KEY, GO_REVIEW_TRIGGER_LINES);
+    let because = format!("exceeds Go's {threshold}-line review trigger for splitting");
     return Findings_For_Threshold(
         sources,
-        FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
-        threshold,
-        &format!("exceeds Go's {threshold}-line review trigger for splitting"),
+        LineThreshold { rule: FIVE_HUNDRED_LINE_REVIEW_TRIGGER, lines: threshold, because: &because },
         |source| return source.Is_Written_In(GO_LANGUAGE),
     );
 }
@@ -95,11 +92,10 @@ pub fn Check_Go_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn
 pub fn Check_Go_File_Size_Hard_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
     let threshold = Resolve_Limit(facts, Some(GO), FILE_SIZE_HARD_LINES_KEY, GO_HARD_TRIGGER_LINES);
+    let because = format!("exceeds Go's {threshold}-line trigger and needs decomposition or a documented locality justification");
     return Findings_For_Threshold(
         sources,
-        ONE_THOUSAND_LINE_HARD_TRIGGER,
-        threshold,
-        &format!("exceeds Go's {threshold}-line trigger and needs decomposition or a documented locality justification"),
+        LineThreshold { rule: ONE_THOUSAND_LINE_HARD_TRIGGER, lines: threshold, because: &because },
         |source| return source.Is_Written_In(GO_LANGUAGE),
     );
 }
@@ -181,11 +177,24 @@ pub fn Check_No_Mod_Rs_Files(sources: &[SourceFile]) -> Vec<Finding>
     return findings;
 }
 
+/// A line-count threshold rule: the id reported, the count that trips it, and the sentence
+/// saying what tripping it means.
+///
+/// The three are one parameter rather than three because they are one thing at every call
+/// site -- `because` is written out of `lines`, and neither says anything without `rule` --
+/// and because four separate ones put this helper over the value-parameter cap it exists to
+/// help enforce. A rule reporting its own implementation is worth reading as evidence about
+/// the code rather than about the rule, and here it was right.
+struct LineThreshold<'a>
+{
+    rule: &'a str,
+    lines: usize,
+    because: &'a str,
+}
+
 fn Findings_For_Threshold(
     sources: &[SourceFile],
-    rule: &str,
-    threshold: usize,
-    because: &str,
+    threshold: LineThreshold<'_>,
     accepts_source: impl Fn(&SourceFile) -> bool,
 ) -> Vec<Finding>
 {
@@ -199,9 +208,9 @@ fn Findings_For_Threshold(
         }
 
         let line_count = Line_Count(source);
-        if line_count > threshold
+        if line_count > threshold.lines
         {
-            findings.push(Finding_For_Source_With_Count(source, rule, line_count, because));
+            findings.push(Finding_For_Source_With_Count(source, threshold.rule, line_count, threshold.because));
         }
     }
 

@@ -64,7 +64,7 @@ mod tests
     #[test]
     fn Test_Documentation_Of_Attributes_Should_Be_None_With_No_Documentation_Attribute()
     {
-        let attributes = Attributes_Of("#[allow(dead_code)]\nfn f() {}");
+        let attributes = Attributes_Of("#[inline]\nfn f() {}");
 
         assert_eq!(Documentation_Of_Attributes(&attributes), None);
     }
@@ -72,7 +72,7 @@ mod tests
     #[test]
     fn Test_Documentation_Line_Should_Be_None_For_A_Non_Documentation_Attribute()
     {
-        let attributes = Attributes_Of("#[allow(dead_code)]\nfn f() {}");
+        let attributes = Attributes_Of("#[inline]\nfn f() {}");
         let attribute = attributes.first().expect("one attribute");
 
         assert_eq!(Documentation_Line(attribute), None);
