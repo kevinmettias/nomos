@@ -48638,14 +48638,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Its done_when committed to composing all four; two (no-wildcard-imports 49 findings, no-single-line-function-bodies 286 findings) turned out to redden the gate on composition, the same class of problem run_context.rs's own precedent already excludes 3 other rules for. Re-scoped as P27-RULES-TWO-MORE-UNCOMPOSED for the two that are genuinely clean; the two large ones are named in run_context.rs's own extended comment as deliberately still absent, same as their three siblings."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-session-e6f4d433",
-        "acquired_at": 1788367121,
-        "lease_expires_at": 1788374321
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -48656,6 +48656,67 @@
         "timeout_seconds": 600
       },
       "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-session-e6f4d433",
+          "reason": "Scope was wrong: no-wildcard-imports (49 findings) and no-single-line-function-bodies (286 findings) redden the gate on composition, the same class of problem run_context.rs's own comment already excludes 3 other rules for -- not a routine wire-in. Re-scoping to the two rules that are genuinely clean (0 findings each).",
+          "abandoned_at": 1788367350
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-session-e6f4d433",
+        "declined_at": 1788367350
+      }
+    },
+    {
+      "id": "P27-RULES-TWO-MORE-UNCOMPOSED",
+      "title": "Two more rules built and exported but never composed into Run: disabled-test, inline-always -- both clean",
+      "why": "P27-RULES-FOUR-MORE-UNCOMPOSED declined: two of its four target rules (no-wildcard-imports, no-single-line-function-bodies) redden the gate on composition (49 and 286 findings respectively), the same class of problem run_context.rs's own comment already excludes no-decorative-section-dividers/unwrap-expect-discipline/panics-are-justified-documented-and-validated for. The other two -- Check_A_Disabled_Test_States_Why (A_DISABLED_TEST_STATES_WHY) and Check_Inline_Always_Justification (INLINE_ALWAYS_JUSTIFICATION), both in rust_text.rs -- are genuinely clean: checked individually through a real gate run --root ., each reports 0 findings against this tree. Both are real, tested, take only sources: &[SourceFile], and already exported through checks.rs/lib.rs; neither has a RuleId::New(...) call outside its own #[cfg(test)] module today, so a real gate run currently reports zero findings for both rule ids regardless of what the tree contains.",
+      "done_when": "run_context.rs imports Check_A_Disabled_Test_States_Why, Check_Inline_Always_Justification, A_DISABLED_TEST_STATES_WHY and INLINE_ALWAYS_JUSTIFICATION from nomos_rules. RULE_COUNT becomes 53. Rule_Findings' rules array gains both as (RULE_ID, &|_reader| return Check_X(sources)) entries. The doc comment above Rule_Findings is corrected to name exactly which rules remain deliberately absent and why (five, not three: the original three plus no-wildcard-imports and no-single-line-function-bodies, each with its measured finding count). cargo test -p nomos-check-orchestration is green. nomos gate run --root . --rule a-disabled-test-states-why --rule inline-always-requires-justification reports 0 findings, confirming the composition is genuinely clean rather than silently reddening the gate.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "st_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings ... ok\ntest tests::Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact ... ok\ntest tests::Test_Materialize_Lint_Should_Return_Real_Workspace_Members ... ok\ntest tests::Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete ... ok\ntest tests::Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor ... ok\n\ntest result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.32s\n\n\nrunning 6 tests\ntest Test_Registered_Should_Declare_Every_Capability_Crates_Own_Real_Contract ... ok\ntest Test_Registered_Should_Offer_Every_Syntax_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Clippy_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_Every_Dependency_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Deny_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Reachability_Providers_Own_Real_Offer ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List ... ok\ntest Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule ... ok\ntest Test_Run_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.20s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-e529bd00b4497790.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-f99ed2ad0d9e2451.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-e65ee2616c31c246.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1788367384,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "058b95710ec8e49433c6866e4065a98b6d63397c"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

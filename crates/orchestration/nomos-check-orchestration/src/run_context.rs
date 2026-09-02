@@ -6,7 +6,7 @@ use nomos_capability::Registry;
 use nomos_contracts::{Finding, RuleId};
 use nomos_platform::{FileSystem, ProcessLauncher};
 use nomos_rules::{
-    Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Discarded_Error_Is_Explained,
+    Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Disabled_Test_States_Why, Check_A_Discarded_Error_Is_Explained,
     Check_A_Package_Is_Named_After_Its_Directory, Check_A_Rust_Path_Stays_Within_Its_Own_Subtree,
     Check_A_Script_Declares_Its_Purpose, Check_A_Secret_Does_Not_Travel_In_A_Url, Check_A_Skipped_Test_States_Why,
     Check_A_Test_Does_Not_Retry_Until_Green, Check_An_Excluded_File_Says_Why, Check_Atomic_Ordering_Choices_Are_Justified,
@@ -15,7 +15,7 @@ use nomos_rules::{
     Check_Dependency_Policy, Check_Deprecation_Carries_A_Reason, Check_Eager_Vs_Lazy_Context,
     Check_Error_Message_Has_No_Trailing_Punctuation, Check_Error_Message_Starts_Lowercase,
     Check_Every_Allow_Carries_A_Justification, Check_Every_Member_Declares_A_Band, Check_Executed_Scripts_Set_Nounset,
-    Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_File_Name_Matches_Declared_Type,
+    Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_File_Name_Matches_Declared_Type, Check_Inline_Always_Justification,
     Check_File_Size_Justification_Trigger, Check_Go_Constants_Split_By_Export, Check_Go_File_Size_Hard_Trigger,
     Check_Go_File_Size_Review_Trigger, Check_Go_Helpers_Package_Five_Inputs, Check_Go_Type_Names_Use_Camel_Case,
     Check_Abbreviations, Check_Go_Variables_Use_Lower_Snake_Case, Check_Goals_And_Parts_Line_Up, Check_Lint_Diagnostics,
@@ -25,7 +25,7 @@ use nomos_rules::{
     Check_Sleep_Is_Not_Synchronization, Check_Suppression_Directives_Carry_A_Reason, Check_Todo_Format,
     Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter, Check_Unread_Reaches_A_Finding,
     Check_Unsafe_Justification, Check_Workspace_Markers_Carry_A_Reason, SourceFile,
-    A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, A_DISCARDED_ERROR_IS_EXPLAINED, A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
+    A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, A_DISABLED_TEST_STATES_WHY, A_DISCARDED_ERROR_IS_EXPLAINED, A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
     A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, A_SCRIPT_DECLARES_ITS_PURPOSE, A_SECRET_DOES_NOT_TRAVEL_IN_A_URL,
     A_SKIPPED_TEST_STATES_WHY, AN_EXCLUDED_FILE_SAYS_WHY, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED,
     CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, COMPLETENESS_MIRROR, CONSTANTS_SPLIT_BY_EXPORT,
@@ -34,7 +34,8 @@ use nomos_rules::{
     ABBREVIATIONS, EXECUTED_SCRIPTS_SET_NOUNSET, GOALS_AND_PARTS_LINE_UP,
     EVERY_ALLOW_CARRIES_A_JUSTIFICATION, EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE,
     FILE_SIZE_JUSTIFICATION_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
-    GO_HELPERS_PACKAGE_FIVE_INPUTS, GO_VARIABLES_USE_LOWER_SNAKE_CASE, LINT_DIAGNOSTICS, LOWERCASE_FIRST_LETTER,
+    GO_HELPERS_PACKAGE_FIVE_INPUTS, GO_VARIABLES_USE_LOWER_SNAKE_CASE, INLINE_ALWAYS_JUSTIFICATION, LINT_DIAGNOSTICS,
+    LOWERCASE_FIRST_LETTER,
     NAMING_CONVENTION, NO_MOD_RS_FILES, NO_TRAILING_PUNCTUATION, NO_TRAILING_WHITESPACE,
     ONE_THOUSAND_LINE_HARD_TRIGGER, PARAMETER_COUNT,
     RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, SCRIPTS_USE_A_PORTABLE_SHEBANG, SEQCST_JUSTIFIED_EXPLICITLY,
@@ -56,7 +57,7 @@ use crate::CheckOutcome;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 51;
+const RULE_COUNT: usize = 53;
 
 /// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
 /// through, the filesystem a repository-declared policy capability (`nomos.cap.naming.
@@ -486,12 +487,15 @@ struct JudgeEnvironment<'a>
 /// it does not: a rule implemented in `nomos-rules` but never composed here reports as
 /// unenforced when it is not, so wiring one in is this crate's own territory, the same
 /// "composed into nomos-check-orchestration::Run" section every one of these rules' own
-/// module docs already names. Three siblings this crate also implements --
-/// `no-decorative-section-dividers`, `unwrap-expect-discipline` and `panics-are-justified-
-/// documented-and-validated` -- are deliberately absent: this repository's own tree
-/// currently violates all three (71 findings, checked by running the ten below through a
-/// real `gate run --root .` first), and wiring a rule this tree fails is a different, larger
-/// change than composing one it already satisfies.
+/// module docs already names. Five siblings this crate also implements --
+/// `no-decorative-section-dividers`, `unwrap-expect-discipline`, `panics-are-justified-
+/// documented-and-validated`, `no-wildcard-imports` and `no-single-line-function-bodies` --
+/// are deliberately absent: this repository's own tree currently violates all five (71, 49
+/// and 286 findings respectively, checked by running each alone through a real
+/// `gate run --root .` first), and wiring a rule this tree fails is a different, larger
+/// change than composing one it already satisfies. `a-disabled-test-states-why` and
+/// `inline-always-requires-justification`, checked the same way, found nothing to violate
+/// and are composed below with their two already-wired siblings.
 fn Rule_Findings(
     sources: &[SourceFile],
     capabilities: &CapabilityMaterialization,
@@ -557,6 +561,8 @@ fn Rule_Findings(
         // own declaration, which arrives through the reader.
         (GOALS_AND_PARTS_LINE_UP, &|reader| return Check_Goals_And_Parts_Line_Up(reader)),
         (ABBREVIATIONS, &|reader| return Check_Abbreviations(sources, reader)),
+        (A_DISABLED_TEST_STATES_WHY, &|_reader| return Check_A_Disabled_Test_States_Why(sources)),
+        (INLINE_ALWAYS_JUSTIFICATION, &|_reader| return Check_Inline_Always_Justification(sources)),
     ];
 
     return Findings_For_Selected_Rules(rules, reader, selected);
