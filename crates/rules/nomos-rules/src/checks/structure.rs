@@ -18,7 +18,7 @@
 //! settle that this capability is optional the same way naming's is. The thresholds named
 //! above are those defaults, still real and still what an unconfigured repository gets.
 
-use crate::SourceFile;
+use crate::{GO_LANGUAGE, SourceFile};
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_limits_policy::Scope;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
@@ -86,7 +86,7 @@ pub fn Check_Go_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn
         FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
         threshold,
         &format!("exceeds Go's {threshold}-line review trigger for splitting"),
-        |source| return Is_Go_File(&source.path),
+        |source| return source.Is_Written_In(GO_LANGUAGE),
     );
 }
 
@@ -100,7 +100,7 @@ pub fn Check_Go_File_Size_Hard_Trigger(sources: &[SourceFile], facts: &mut dyn F
         ONE_THOUSAND_LINE_HARD_TRIGGER,
         threshold,
         &format!("exceeds Go's {threshold}-line trigger and needs decomposition or a documented locality justification"),
-        |source| return Is_Go_File(&source.path),
+        |source| return source.Is_Written_In(GO_LANGUAGE),
     );
 }
 
@@ -218,13 +218,6 @@ fn Is_Disallowed_Mod_Rs(path: &str) -> bool
 {
     let normalized = path.replace('\\', "/");
     return normalized.ends_with("/mod.rs") && normalized.starts_with("src/");
-}
-
-fn Is_Go_File(path: &str) -> bool
-{
-    return std::path::Path::new(path)
-        .extension()
-        .is_some_and(|extension| return extension.eq_ignore_ascii_case("go"));
 }
 
 fn Finding_For_Source_With_Count(source: &SourceFile, rule: &str, line_count: usize, because: &str) -> Finding
@@ -496,6 +489,8 @@ mod tests
 
     fn Source(path: &str, text: String) -> SourceFile
     {
-        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        source.language = crate::Recognized_Language_In_Tests(path);
+        return source;
     }
 }

@@ -515,7 +515,9 @@ mod tests
 
     fn Source_File(path: Path<'_>, text: Text<'_>) -> SourceFile
     {
-        return SourceFile::New(path.0, SubjectId::From_Digest(Content_Digest(path.0.as_bytes())), text.0);
+        let mut source = SourceFile::New(path.0, SubjectId::From_Digest(Content_Digest(path.0.as_bytes())), text.0);
+        source.language = crate::Recognized_Language_In_Tests(path.0);
+        return source;
     }
 
     fn Offering() -> TestOffering

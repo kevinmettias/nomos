@@ -43,7 +43,7 @@ use nomos_rules::{
 use nomos_workspace::BuildVariant;
 use std::path::Path;
 
-use crate::composition::{Recognized_Syntax_Provider, Registered};
+use crate::composition::{Recognized_Language, Recognized_Syntax_Provider, Registered};
 use crate::facts::{
     DependencyMaterialization, Ingested_Workspace, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
     Materialize_Policy, Materialize_Reachability, Materialize_Syntax, PolicyMaterialization,
@@ -487,6 +487,7 @@ pub(crate) fn Recognized_Sources(sources: &[SourceFile]) -> Vec<SourceFile>
         .cloned()
         .map(|mut source| {
             source.preferred_syntax_provider = Recognized_Syntax_Provider(&source.path);
+            source.language = Recognized_Language(&source.path);
             return source;
         })
         .collect();

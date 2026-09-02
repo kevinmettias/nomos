@@ -29,6 +29,9 @@ pub fn nomos_cap_syntax::Capability_Contract() -> CapabilityContract
 pub fn nomos_cap_syntax::Escape(value: &str) -> String
 pub fn nomos_cap_syntax::Function_Arity(shape: &Observation) -> Option<u32>
 pub fn nomos_cap_syntax::Function_Shape(arity: usize) -> String
+pub fn nomos_cap_syntax::Language::As_Str(&self) -> &str
+pub fn nomos_cap_syntax::Language::New(value: impl Into<String>) -> Self
+pub fn nomos_cap_syntax::Language::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_cap_syntax::Observation::Encode(&self) -> String
 pub fn nomos_cap_syntax::Observation::Value(&self) -> Option<&str>
 pub fn nomos_cap_syntax::Observation::Was_Observed(&self) -> bool
@@ -43,6 +46,7 @@ pub fn nomos_cap_syntax::Render_Payload(payload: &SyntaxPayload) -> Vec<u8>
 pub fn nomos_cap_syntax::Struct_Fields(shape: &Observation) -> Option<Vec<(String, String)>>
 pub fn nomos_cap_syntax::Struct_Shape(fields: &[(String, String)]) -> Option<String>
 pub fn nomos_cap_syntax::SyntaxPayload::Enclosing(&self, ordinal: usize) -> Option<&PayloadItem>
+pub impl nomos_cap_syntax::Language implements core::fmt::Display
 pub struct field nomos_cap_syntax::PayloadItem::documentation: Observation
 pub struct field nomos_cap_syntax::PayloadItem::kind: String
 pub struct field nomos_cap_syntax::PayloadItem::ordinal: u32
@@ -53,6 +57,7 @@ pub struct field nomos_cap_syntax::PayloadRefusal::kind: PayloadRefusalKind
 pub struct field nomos_cap_syntax::PayloadRefusal::line: Option<usize>
 pub struct field nomos_cap_syntax::SyntaxPayload::items: Vec<PayloadItem>
 pub struct field nomos_cap_syntax::SyntaxPayload::unexpanded: u32
+pub struct nomos_cap_syntax::Language(String)
 pub struct nomos_cap_syntax::PayloadItem
 pub struct nomos_cap_syntax::PayloadRefusal
 pub struct nomos_cap_syntax::SyntaxPayload

@@ -1,5 +1,6 @@
 pub const fn nomos_lang_rust_scan::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_rust_scan::ItemKind::Label(self) -> &'static str
+pub const nomos_lang_rust_scan::LANGUAGE: &str
 pub const nomos_lang_rust_scan::PROVIDER: &str
 pub enum nomos_lang_rust_scan::ItemKind
 pub enum nomos_lang_rust_scan::Visibility

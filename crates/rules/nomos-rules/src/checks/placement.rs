@@ -6,7 +6,7 @@
 //! ships, so neither earned a capability or a shared helper — both are decidable from
 //! [`SourceFile`] text alone.
 
-use crate::SourceFile;
+use crate::{GO_LANGUAGE, RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 /// The code-standards Go package-placement rule id.
@@ -28,7 +28,7 @@ pub fn Check_A_Package_Is_Named_After_Its_Directory(sources: &[SourceFile]) -> V
 
     for source in sources
     {
-        if !Is_Go_File(&source.path)
+        if !source.Is_Written_In(GO_LANGUAGE)
         {
             continue;
         }
@@ -75,11 +75,11 @@ pub fn Check_No_Wildcard_Imports(sources: &[SourceFile]) -> Vec<Finding>
 
     for source in sources
     {
-        if Is_Rust_File(&source.path)
+        if source.Is_Written_In(RUST_LANGUAGE)
         {
             findings.extend(Rust_Wildcard_Findings_In(source));
         }
-        else if Is_Go_File(&source.path)
+        else if source.Is_Written_In(GO_LANGUAGE)
         {
             findings.extend(Go_Wildcard_Findings_In(source));
         }
@@ -166,20 +166,6 @@ fn Go_Dot_Import_Path(line: &str) -> Option<&str>
     let quoted = after_dot.strip_prefix('"')?;
 
     return quoted.split('"').next();
-}
-
-fn Is_Rust_File(path: &str) -> bool
-{
-    return std::path::Path::new(path)
-        .extension()
-        .is_some_and(|extension| return extension.eq_ignore_ascii_case("rs"));
-}
-
-fn Is_Go_File(path: &str) -> bool
-{
-    return std::path::Path::new(path)
-        .extension()
-        .is_some_and(|extension| return extension.eq_ignore_ascii_case("go"));
 }
 
 /// The identifier after `package` on the file's own first uncommented `package` line, or
@@ -366,6 +352,8 @@ mod tests
 
     fn Source(path: &str, text: &str) -> SourceFile
     {
-        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        source.language = crate::Recognized_Language_In_Tests(path);
+        return source;
     }
 }

@@ -10,7 +10,7 @@
 //! — so this rule judges that one visible slice against `lower_snake_case` without a split
 //! by export status, the same way the standard itself does not split it.
 
-use crate::SourceFile;
+use crate::{GO_LANGUAGE, SourceFile};
 use nomos_analysis::FactReader;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
@@ -32,7 +32,7 @@ pub fn Check_Go_Constants_Split_By_Export(sources: &[SourceFile], facts: &mut dy
 
     for source in sources
     {
-        if !Is_Go_File(&source.path)
+        if !source.Is_Written_In(GO_LANGUAGE)
         {
             continue;
         }
@@ -56,7 +56,7 @@ pub fn Check_Go_Variables_Use_Lower_Snake_Case(sources: &[SourceFile], facts: &m
 
     for source in sources
     {
-        if !Is_Go_File(&source.path)
+        if !source.Is_Written_In(GO_LANGUAGE)
         {
             continue;
         }
@@ -92,13 +92,6 @@ fn Variable_Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
         .filter(|item| return !Is_Lower_Snake_Case(item.Own_Name()))
         .map(|item| return Variable_Violation_Finding(path, item))
         .collect();
-}
-
-fn Is_Go_File(path: &str) -> bool
-{
-    return std::path::Path::new(path)
-        .extension()
-        .is_some_and(|extension| return extension.eq_ignore_ascii_case("go"));
 }
 
 fn Has_Constant_Case(item: &PayloadItem) -> bool
@@ -261,7 +254,8 @@ mod tests
         use nomos_capability::Registry;
         use nomos_model::Content_Digest;
 
-        let source = SourceFile::New("kinds.rs", SubjectId::From_Digest(Content_Digest(b"kinds.rs")), "pub const kind_rule: &str = \"rule\";");
+        let mut source = SourceFile::New("kinds.rs", SubjectId::From_Digest(Content_Digest(b"kinds.rs")), "pub const kind_rule: &str = \"rule\";");
+        source.language = crate::Recognized_Language_In_Tests("kinds.rs");
         let store = MemoryFactStore::New();
         let registry = Registry::New();
         let mut reader = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());

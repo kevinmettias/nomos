@@ -26,7 +26,7 @@
 //! the marker convention. This module follows the implementation, the same choice this crate
 //! already made once for a stale `enforced_by` claim on `inline-always-requires-justification`.
 
-use crate::SourceFile;
+use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 /// The code-standards non-`Relaxed`-non-`SeqCst` atomic-ordering rule id.
@@ -76,7 +76,7 @@ fn Findings_For(sources: &[SourceFile], rule: &str, matches_partition: fn(&str) 
 
     for source in sources
     {
-        if Is_Rust_Source(source) && !Is_Test_Or_Example_Source(source)
+        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Test_Or_Example_Source(source)
         {
             findings.extend(Ordering_Findings_In(source, rule, matches_partition));
         }
@@ -124,13 +124,6 @@ fn Ordering_Findings_In(source: &SourceFile, rule: &str, matches_partition: fn(&
     }
 
     return findings;
-}
-
-fn Is_Rust_Source(source: &SourceFile) -> bool
-{
-    return std::path::Path::new(&source.path)
-        .extension()
-        .is_some_and(|extension| return extension.eq_ignore_ascii_case("rs"));
 }
 
 fn Is_Test_Or_Example_Source(source: &SourceFile) -> bool
@@ -406,6 +399,8 @@ mod tests
 
     fn Source(path: &str, text: &str) -> SourceFile
     {
-        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        source.language = crate::Recognized_Language_In_Tests(path);
+        return source;
     }
 }

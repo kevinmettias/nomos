@@ -4,6 +4,7 @@ pub const fn nomos_lang_rust::rollup::Ceiling() -> Guarantee
 pub const fn nomos_lang_rust::rollup::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_rust::rollup::Outcome::Is_Answered(self) -> bool
 pub const fn nomos_lang_rust::rollup::Outcome::Label(self) -> &'static str
+pub const nomos_lang_rust::LANGUAGE: &str
 pub const nomos_lang_rust::PROVIDER: &str
 pub const nomos_lang_rust::RUST_EXTENSION: &str
 pub const nomos_lang_rust::rollup::APPROXIMATE: &str

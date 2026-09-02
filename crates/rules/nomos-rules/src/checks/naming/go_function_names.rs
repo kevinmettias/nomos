@@ -21,7 +21,7 @@
 //! repository's own `nomos.cap.naming.policy` rather than a hand-rolled predicate.
 
 use crate::checks::naming::Resolve_Case;
-use crate::SourceFile;
+use crate::{GO_LANGUAGE, SourceFile};
 use nomos_analysis::FactReader;
 use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{FUNCTION, PayloadItem, SyntaxPayload};
@@ -46,7 +46,7 @@ pub fn Check_Exported_Go_Functions_Use_Upper_Snake_Case(
 
     for source in sources
     {
-        if !Is_Go_File(&source.path)
+        if !source.Is_Written_In(GO_LANGUAGE)
         {
             continue;
         }
@@ -76,7 +76,7 @@ pub fn Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(
 
     for source in sources
     {
-        if !Is_Go_File(&source.path)
+        if !source.Is_Written_In(GO_LANGUAGE)
         {
             continue;
         }
@@ -112,13 +112,6 @@ fn Unexported_Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> 
         .filter(|item| return !case.Conforms(item.Own_Name()))
         .map(|item| return Unexported_Violation_Finding(path, item))
         .collect();
-}
-
-fn Is_Go_File(path: &str) -> bool
-{
-    return std::path::Path::new(path)
-        .extension()
-        .is_some_and(|extension| return extension.eq_ignore_ascii_case("go"));
 }
 
 fn Is_Exported_Go_Function(item: &PayloadItem) -> bool

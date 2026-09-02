@@ -25,7 +25,7 @@
 //! the same line" limit is the precedent): an attribute or call spanning multiple lines is
 //! left unjudged rather than guessed at.
 
-use crate::SourceFile;
+use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 /// The code-standards message-starts-lowercase rule id.
@@ -82,7 +82,7 @@ pub fn Check_Eager_Vs_Lazy_Context(sources: &[SourceFile]) -> Vec<Finding>
 
     for source in sources
     {
-        if Is_Rust_Source(source)
+        if source.Is_Written_In(RUST_LANGUAGE)
         {
             findings.extend(Context_Laziness_Findings_In(source));
         }
@@ -98,7 +98,7 @@ fn Error_Message_Findings(sources: &[SourceFile], rule: &str, judge: impl Fn(&st
 
     for source in sources
     {
-        if Is_Rust_Source(source)
+        if source.Is_Written_In(RUST_LANGUAGE)
         {
             findings.extend(Error_Attribute_Findings_In(source, rule, &judge));
         }
@@ -190,13 +190,6 @@ fn Finding_At(source: &SourceFile, rule: &str, line_number: usize, summary: &str
         summary: format!("{} line {line_number}: {summary}", source.path),
         locations: vec![format!("{}:{line_number}", source.path)],
     };
-}
-
-fn Is_Rust_Source(source: &SourceFile) -> bool
-{
-    return std::path::Path::new(&source.path)
-        .extension()
-        .is_some_and(|extension| return extension.eq_ignore_ascii_case("rs"));
 }
 
 fn Line_Number(index: usize) -> usize
@@ -435,6 +428,8 @@ mod tests
 
     fn Source(path: &str, text: &str) -> SourceFile
     {
-        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        source.language = crate::Recognized_Language_In_Tests(path);
+        return source;
     }
 }

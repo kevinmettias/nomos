@@ -17,6 +17,13 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity,
 /// which one it is looking at without consulting a table.
 pub const PROVIDER: &str = "nomos.lang.rust.syn";
 
+/// The language this provider reads, as `OD-RULES-014` has a rule name it.
+///
+/// Deliberately not derived from [`PROVIDER`]. A provider identity names the tool that
+/// reads a file and a language name does not: `nomos-lang-rust-scan` declares this same
+/// value beside its own, different, `PROVIDER`, because the two crates read one language.
+pub const LANGUAGE: &str = "rust";
+
 /// What this provider claims, on every axis.
 ///
 /// # Syntactic, and not by modesty

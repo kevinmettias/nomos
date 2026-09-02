@@ -5,7 +5,7 @@
 //! so this check is exact for source files recognized as Go by path.
 
 use crate::checks::naming::Resolve_Case;
-use crate::SourceFile;
+use crate::{GO_LANGUAGE, SourceFile};
 use nomos_analysis::FactReader;
 use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload};
@@ -34,7 +34,7 @@ pub fn Check_Go_Type_Names_Use_Camel_Case(
 
     for source in sources
     {
-        if !Is_Go_File(&source.path)
+        if !source.Is_Written_In(GO_LANGUAGE)
         {
             continue;
         }
@@ -59,13 +59,6 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, exported_case: Case, unexp
         .filter(|item| return !Has_Go_Type_Case(item, exported_case, unexported_case))
         .map(|item| return Violation_Finding(path, item))
         .collect();
-}
-
-fn Is_Go_File(path: &str) -> bool
-{
-    return std::path::Path::new(path)
-        .extension()
-        .is_some_and(|extension| return extension.eq_ignore_ascii_case("go"));
 }
 
 fn Is_Go_Type_Like(item: &PayloadItem) -> bool

@@ -1,5 +1,5 @@
 pub const fn nomos_rules::FunctionArityPolicy::Allow_One_Receiver_For_Qualified_Functions(mut self) -> Self
-pub const fn nomos_rules::FunctionArityPolicy::For_Extension(mut self, extension: &'static str) -> Self
+pub const fn nomos_rules::FunctionArityPolicy::For_Language(mut self, language: &'static str) -> Self
 pub const fn nomos_rules::FunctionArityPolicy::New(rule: &'static str, max_value_parameters: u32) -> Self
 pub const fn nomos_rules::FunctionArityPolicy::With_Gate(mut self, gate: GateCategory) -> Self
 pub const nomos_rules::AN_EXCLUDED_FILE_SAYS_WHY: &str
@@ -39,6 +39,7 @@ pub const nomos_rules::FILE_SIZE_JUSTIFICATION_TRIGGER: &str
 pub const nomos_rules::FILE_SIZE_REVIEW_TRIGGER: &str
 pub const nomos_rules::FIVE_HUNDRED_LINE_REVIEW_TRIGGER: &str
 pub const nomos_rules::GO_HELPERS_PACKAGE_FIVE_INPUTS: &str
+pub const nomos_rules::GO_LANGUAGE: &str
 pub const nomos_rules::GO_VARIABLES_USE_LOWER_SNAKE_CASE: &str
 pub const nomos_rules::LINT_CONTRACT_RECORD: &str
 pub const nomos_rules::LINT_CONTRACT_RECORD_VERSION: u32
@@ -56,6 +57,7 @@ pub const nomos_rules::PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED: &str
 pub const nomos_rules::PARAMETER_COUNT: &str
 pub const nomos_rules::PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str
 pub const nomos_rules::RELAXED_NOT_USED_WHEN_ORDERING_MATTERS: &str
+pub const nomos_rules::RUST_LANGUAGE: &str
 pub const nomos_rules::SCRIPTS_USE_A_PORTABLE_SHEBANG: &str
 pub const nomos_rules::SEQCST_JUSTIFIED_EXPLICITLY: &str
 pub const nomos_rules::SHARED_INTERIOR_MUTABILITY_SAYS_WHY: &str
@@ -77,7 +79,7 @@ pub enum nomos_rules::ReceiverAllowance
 pub enum nomos_rules::RuleRegistryError
 pub enum nomos_rules::UniverseKind
 pub enum variant nomos_rules::FunctionAritySource::All
-pub enum variant nomos_rules::FunctionAritySource::Extension(&'static str)
+pub enum variant nomos_rules::FunctionAritySource::Language(&'static str)
 pub enum variant nomos_rules::Reading::Observed(Vec<DeclaredUniverse>)
 pub enum variant nomos_rules::Reading::Unobserved { because: String, }
 pub enum variant nomos_rules::ReceiverAllowance::None
@@ -147,6 +149,7 @@ pub fn nomos_rules::RuleRegistry::New() -> Self
 pub fn nomos_rules::RuleRegistry::Offer(&mut self, offer: RuleOffer) -> Result<(), RuleRegistryError>
 pub fn nomos_rules::RuleRegistry::Offered(&self, rule: &RuleId) -> Option<&RuleOffer>
 pub fn nomos_rules::RuleRegistry::Offers(&self) -> impl Iterator<Item = &RuleOffer>
+pub fn nomos_rules::SourceFile::Is_Written_In(&self, language: &str) -> bool
 pub fn nomos_rules::SourceFile::New(path: impl Into<String>, subject: SubjectId, text: impl Into<String>) -> Self
 pub fn nomos_rules::Universes_In(path: &str, payload: &SyntaxPayload) -> Vec<DeclaredUniverse>
 pub struct field nomos_rules::DeclaredUniverse::claimed_mirror: Option<String>
@@ -165,6 +168,7 @@ pub struct field nomos_rules::RoleSurfacePair::declared_role: String
 pub struct field nomos_rules::RuleOffer::contract_record: String
 pub struct field nomos_rules::RuleOffer::contract_record_version: u32
 pub struct field nomos_rules::RuleOffer::rule: RuleId
+pub struct field nomos_rules::SourceFile::language: Option<Language>
 pub struct field nomos_rules::SourceFile::path: String
 pub struct field nomos_rules::SourceFile::preferred_syntax_provider: Option<ProviderId>
 pub struct field nomos_rules::SourceFile::subject: SubjectId

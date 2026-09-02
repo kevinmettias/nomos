@@ -11,7 +11,7 @@
 //! shared code, not shared configuration, the same distinction `OD-RULES-011`'s own
 //! naming/limits capabilities do not apply here.
 
-use crate::SourceFile;
+use crate::{GO_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 /// The code-standards discarded-error rule id.
@@ -34,7 +34,7 @@ pub fn Check_A_Discarded_Error_Is_Explained(sources: &[SourceFile]) -> Vec<Findi
     let mut findings = Vec::new();
     for source in sources
     {
-        if Is_Go_Source(source)
+        if source.Is_Written_In(GO_LANGUAGE)
         {
             findings.extend(Discarded_Error_Findings_In(source));
         }
@@ -51,7 +51,7 @@ pub fn Check_A_Skipped_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
     let mut findings = Vec::new();
     for source in sources
     {
-        if Is_Go_Source(source)
+        if source.Is_Written_In(GO_LANGUAGE)
         {
             findings.extend(Skip_Findings_In(source));
         }
@@ -67,7 +67,7 @@ pub fn Check_An_Excluded_File_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
     let mut findings = Vec::new();
     for source in sources
     {
-        if Is_Go_Source(source)
+        if source.Is_Written_In(GO_LANGUAGE)
         {
             findings.extend(Build_Ignore_Findings_In(source));
         }
@@ -83,7 +83,7 @@ pub fn Check_Suppression_Directives_Carry_A_Reason(sources: &[SourceFile]) -> Ve
     let mut findings = Vec::new();
     for source in sources
     {
-        if Is_Go_Source(source)
+        if source.Is_Written_In(GO_LANGUAGE)
         {
             findings.extend(Nolint_Findings_In(source));
         }
@@ -99,7 +99,7 @@ pub fn Check_Workspace_Markers_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Fin
     let mut findings = Vec::new();
     for source in sources
     {
-        if Is_Go_Source(source)
+        if source.Is_Written_In(GO_LANGUAGE)
         {
             findings.extend(Workspace_Marker_Findings_In(source));
         }
@@ -227,13 +227,6 @@ fn Workspace_Marker_Findings_In(source: &SourceFile) -> Vec<Finding>
     }
 
     return findings;
-}
-
-fn Is_Go_Source(source: &SourceFile) -> bool
-{
-    return std::path::Path::new(&source.path)
-        .extension()
-        .is_some_and(|extension| return extension.eq_ignore_ascii_case("go"));
 }
 
 fn Lines_Of(source: &SourceFile) -> Vec<&str>
@@ -530,6 +523,8 @@ mod tests
 
     fn Source(path: &str, text: &str) -> SourceFile
     {
-        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        source.language = crate::Recognized_Language_In_Tests(path);
+        return source;
     }
 }

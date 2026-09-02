@@ -74,7 +74,7 @@ pub mod rollup;
 mod syntax;
 
 pub use determinism::SyntaxFactProduction;
-pub use guarantee::{Declared_Guarantee, PROVIDER, Provider_Offer};
+pub use guarantee::{Declared_Guarantee, LANGUAGE, PROVIDER, Provider_Offer};
 pub use outcome::{Materialization, ParseFailure, Reading, Recognition, RUST_EXTENSION};
 pub use provider::{Encode_Payload, FactContext, Materialize_Syntax_Fact};
 pub use syntax::{Facts, Item, ItemKind, Read_Source, Visibility};

@@ -65,7 +65,7 @@ mod recognition;
 mod syntax;
 
 pub use determinism::SyntaxFactProduction;
-pub use guarantee::{Declared_Guarantee, PROVIDER, Provider_Offer};
+pub use guarantee::{Declared_Guarantee, LANGUAGE, PROVIDER, Provider_Offer};
 pub use materialization::Materialization;
 pub use parse_failure::ParseFailure;
 pub use provider::{Encode_Payload, FactContext, Materialize_Syntax_Fact};

@@ -25,7 +25,7 @@
 //! shared across `structure.rs`, matching this crate's own per-file convention (`Is_Go_File`
 //! already has three independent copies) until a real need for one shared copy shows up.
 
-use crate::SourceFile;
+use crate::{GO_LANGUAGE, SourceFile};
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_limits_policy::Scope;
 use nomos_cap_syntax::{FUNCTION, Function_Arity, PayloadItem, SyntaxPayload};
@@ -50,8 +50,8 @@ pub enum FunctionAritySource
 {
     /// Every source handed to the rule.
     All,
-    /// Only files with this extension, case-insensitively and without the leading dot.
-    Extension(&'static str),
+    /// Only files written in this language, as the composition root recognized it.
+    Language(&'static str),
 }
 
 /// Whether the policy may treat one input on a qualified function as a receiver.
@@ -95,11 +95,11 @@ impl FunctionArityPolicy
         };
     }
 
-    /// Narrows this policy to a file extension.
+    /// Narrows this policy to one language.
     #[must_use]
-    pub const fn For_Extension(mut self, extension: &'static str) -> Self
+    pub const fn For_Language(mut self, language: &'static str) -> Self
     {
-        self.source = FunctionAritySource::Extension(extension);
+        self.source = FunctionAritySource::Language(language);
         return self;
     }
 
@@ -152,7 +152,7 @@ pub fn Check_Go_Helpers_Package_Five_Inputs(
         sources,
         facts,
         FunctionArityPolicy::New(GO_HELPERS_PACKAGE_FIVE_INPUTS, max)
-            .For_Extension("go")
+            .For_Language(GO_LANGUAGE)
             .Allow_One_Receiver_For_Qualified_Functions(),
     );
 }
@@ -257,15 +257,8 @@ fn Policy_Accepts_Source(policy: FunctionArityPolicy, source: &SourceFile) -> bo
     return match policy.source
     {
         FunctionAritySource::All => true,
-        FunctionAritySource::Extension(expected) => Source_Has_Extension(source, expected),
+        FunctionAritySource::Language(expected) => source.Is_Written_In(expected),
     };
-}
-
-fn Source_Has_Extension(source: &SourceFile, expected: &str) -> bool
-{
-    return std::path::Path::new(&source.path)
-        .extension()
-        .is_some_and(|extension| return extension.eq_ignore_ascii_case(expected));
 }
 
 fn Definitely_Too_Many_Value_Parameters(policy: FunctionArityPolicy, item: &PayloadItem, arity: u32) -> bool
@@ -383,7 +376,7 @@ mod tests
     {
         let source = Source("src/lib.rs", "pub fn Build(a: A, b: B, c: C) {}");
         let TestOffering { store, registry, .. } = Offering();
-        let policy = FunctionArityPolicy::New("custom-go-only-cap", 2).For_Extension("go");
+        let policy = FunctionArityPolicy::New("custom-go-only-cap", 2).For_Language(GO_LANGUAGE);
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Function_Arity_Policy(&[source], &mut reader, policy);
@@ -557,11 +550,13 @@ mod tests
 
     fn Source(path: &str, text: &str) -> SourceFile
     {
-        return SourceFile::New(
+        let mut source = SourceFile::New(
             path,
             nomos_contracts::SubjectId::From_Digest(nomos_model::Content_Digest(path.as_bytes())),
             text,
         );
+        source.language = crate::Recognized_Language_In_Tests(path);
+        return source;
     }
 
     fn Offering() -> TestOffering

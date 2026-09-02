@@ -12,6 +12,13 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity,
 /// This implementation.
 pub const PROVIDER: &str = "nomos.lang.go.tree-sitter";
 
+/// The language this provider reads, as `OD-RULES-014` has a rule name it.
+///
+/// Deliberately not derived from [`PROVIDER`], which names the tool rather than the
+/// language — the two Rust providers declare one shared value beside two different
+/// identities for exactly that reason.
+pub const LANGUAGE: &str = "go";
+
 /// What this provider claims, on every axis.
 ///
 /// # Syntactic

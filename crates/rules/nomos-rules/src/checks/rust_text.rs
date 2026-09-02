@@ -9,7 +9,7 @@
 //! [`Panic_Findings_In`] and [`Shared_Interior_Mutability_Findings_In`] already share —
 //! a real second and third consumer, not a new abstraction invented for them.
 
-use crate::SourceFile;
+use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 use std::path::Component;
 
@@ -34,7 +34,7 @@ pub fn Check_Unwrap_Expect_Discipline(sources: &[SourceFile]) -> Vec<Finding>
 
     for source in sources
     {
-        if Is_Rust_Source(source) && !Is_Test_Or_Example_Source(source)
+        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Test_Or_Example_Source(source)
         {
             findings.extend(Unwrap_Expect_Findings_In(source));
         }
@@ -52,7 +52,7 @@ pub fn Check_Panics_Are_Justified_Documented_And_Validated(sources: &[SourceFile
 
     for source in sources
     {
-        if Is_Rust_Source(source)
+        if source.Is_Written_In(RUST_LANGUAGE)
         {
             findings.extend(Panic_Findings_In(source));
         }
@@ -70,7 +70,7 @@ pub fn Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources: &[SourceFile]) ->
 
     for source in sources
     {
-        if Is_Rust_Source(source)
+        if source.Is_Written_In(RUST_LANGUAGE)
         {
             findings.extend(Path_Attribute_Findings_In(source));
         }
@@ -88,7 +88,7 @@ pub fn Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<
 
     for source in sources
     {
-        if Is_Rust_Source(source)
+        if source.Is_Written_In(RUST_LANGUAGE)
         {
             findings.extend(Shared_Interior_Mutability_Findings_In(source));
         }
@@ -106,7 +106,7 @@ pub fn Check_Every_Allow_Carries_A_Justification(sources: &[SourceFile]) -> Vec<
 
     for source in sources
     {
-        if Is_Rust_Source(source)
+        if source.Is_Written_In(RUST_LANGUAGE)
         {
             findings.extend(Allow_Findings_In(source));
         }
@@ -124,7 +124,7 @@ pub fn Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Finding>
 
     for source in sources
     {
-        if Is_Rust_Source(source)
+        if source.Is_Written_In(RUST_LANGUAGE)
         {
             findings.extend(Unsafe_Findings_In(source));
         }
@@ -274,13 +274,6 @@ fn Unsafe_Findings_In(source: &SourceFile) -> Vec<Finding>
     }
 
     return findings;
-}
-
-fn Is_Rust_Source(source: &SourceFile) -> bool
-{
-    return std::path::Path::new(&source.path)
-        .extension()
-        .is_some_and(|extension| return extension.eq_ignore_ascii_case("rs"));
 }
 
 fn Is_Test_Or_Example_Source(source: &SourceFile) -> bool
@@ -810,6 +803,8 @@ mod tests
 
     fn Source(path: &str, text: &str) -> SourceFile
     {
-        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        source.language = crate::Recognized_Language_In_Tests(path);
+        return source;
     }
 }

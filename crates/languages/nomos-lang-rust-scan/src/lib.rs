@@ -47,7 +47,7 @@ mod scanned_file;
 mod visibility;
 
 pub use determinism::ScanFactProduction;
-pub use guarantee::{Declared_Guarantee, PROVIDER, Provider_Offer};
+pub use guarantee::{Declared_Guarantee, LANGUAGE, PROVIDER, Provider_Offer};
 pub use provider::{Encode_Payload, FactContext, Materialize_Syntax_Fact};
 pub use item_kind::ItemKind;
 pub use scan::{Scan_Source, ScannedItem};

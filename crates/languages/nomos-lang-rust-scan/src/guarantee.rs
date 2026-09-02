@@ -24,6 +24,13 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity,
 
 pub const PROVIDER: &str = "nomos.lang.rust.scan";
 
+/// The language this provider reads, as `OD-RULES-014` has a rule name it.
+///
+/// The same value `nomos-lang-rust` declares, and that is the point: one language, two
+/// providers of it, so a caller asking which language a file is cannot be answered with
+/// either provider identity.
+pub const LANGUAGE: &str = "rust";
+
 /// What a line-reader can promise.
 ///
 /// Three of the four axes differ from `nomos-lang-rust`'s, and each difference is a fact

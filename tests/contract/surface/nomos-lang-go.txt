@@ -1,6 +1,7 @@
 pub const fn nomos_lang_go::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_go::ItemKind::Label(self) -> &'static str
 pub const nomos_lang_go::GO_EXTENSION: &str
+pub const nomos_lang_go::LANGUAGE: &str
 pub const nomos_lang_go::PROVIDER: &str
 pub enum nomos_lang_go::ItemKind
 pub enum nomos_lang_go::Materialization

@@ -304,6 +304,7 @@ mod reading;
 mod registry;
 mod universe_kind;
 
+use nomos_cap_syntax::Language;
 use nomos_capability::Requirement;
 use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, ProviderId, SubjectId};
 
@@ -448,6 +449,20 @@ pub(crate) fn Syntax_Requirement_For(preferred: Option<ProviderId>) -> Requireme
     };
 }
 
+/// The language name Go-specific rules name, as `nomos-lang-go` declares it.
+///
+/// A rule naming one language is inherent to a language-specific norm; knowing the set of
+/// languages is not, and this crate names two literals rather than a set. The value has to
+/// agree with `nomos_lang_go::LANGUAGE`, which this crate cannot depend on to check --
+/// `run_context.rs` carries the test that fails loudly if the two ever drift.
+pub const GO_LANGUAGE: &str = "go";
+
+/// The language name Rust-specific rules name, as both Rust providers declare it.
+///
+/// Both `nomos_lang_rust::LANGUAGE` and `nomos_lang_rust_scan::LANGUAGE` carry this one
+/// value, which is why a rule asks about the language and never about a provider identity.
+pub const RUST_LANGUAGE: &str = "rust";
+
 /// One file of source, as the caller found it.
 ///
 /// `path` is repo-relative with forward slashes, and it is reporting only. Nothing in
@@ -496,6 +511,25 @@ pub struct SourceFile
     /// caller named none; [`Syntax_Requirement_For`] treats both the same way, falling
     /// through to the subject-agnostic floor.
     pub preferred_syntax_provider: Option<ProviderId>,
+    /// Which language this file is written in, if any registered provider recognizes it.
+    ///
+    /// Carried rather than derived, for the identical reason [`SourceFile::subject`] and
+    /// [`SourceFile::preferred_syntax_provider`] are. A rule whose norm is about one
+    /// language used to answer this privately by looking at the extension, and eleven
+    /// copies of that three-line test had accumulated across nine modules before
+    /// `OD-RULES-014` measured them; the composition root already recognizes `path`
+    /// against every provider it registers, so it sets this once and every rule reads one
+    /// answer.
+    ///
+    /// Distinct from `preferred_syntax_provider` and not derivable from it: that field
+    /// names the tool that would read the file, and `nomos.cap.syntax.items` has two
+    /// registered offers for Rust alone, so a provider identity answers a narrower
+    /// question than "which language is this".
+    ///
+    /// `None` means no registered provider recognized the path, or the caller named none.
+    /// A rule restricted to a language treats that as "not my subject", the same as a
+    /// different language.
+    pub language: Option<Language>,
 }
 
 impl SourceFile
@@ -512,8 +546,42 @@ impl SourceFile
             subject,
             text: text.into(),
             preferred_syntax_provider: None,
+            language: None,
         };
     }
+
+    /// Whether this file is written in `language`.
+    ///
+    /// The one comparison a language-restricted rule makes. It takes the name rather than
+    /// a [`Language`] so a rule states its own literal without allocating one per file,
+    /// and it answers `false` for an unrecognized file rather than guessing.
+    #[must_use]
+    pub fn Is_Written_In(&self, language: &str) -> bool
+    {
+        return self
+            .language
+            .as_ref()
+            .is_some_and(|carried| return carried.As_Str() == language);
+    }
+}
+
+/// Recognizes a path's language the way the composition root does, for tests only.
+///
+/// Every `mod tests` in this crate that builds a [`SourceFile`] needs its `language` set,
+/// because in production the root sets it and no rule derives it. This is the one stand-in
+/// for that step: eleven private copies of an extension test is what `OD-RULES-014` removed
+/// from the rules, and eight copies in their tests would be the same defect wearing a
+/// `#[cfg(test)]`.
+#[cfg(test)]
+#[must_use]
+pub(crate) fn Recognized_Language_In_Tests(path: &str) -> Option<Language>
+{
+    return match std::path::Path::new(path).extension()?.to_str()?
+    {
+        "rs" => Some(Language::New(RUST_LANGUAGE)),
+        "go" => Some(Language::New(GO_LANGUAGE)),
+        _ => None,
+    };
 }
 
 #[cfg(test)]
