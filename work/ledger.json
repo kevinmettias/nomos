@@ -47305,7 +47305,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded: OD-RULES-011-COMPOSE-WORDS-2 already landed this exact composition (commit 85477f14, declaring sdk/std/str approved and composing Check_Abbreviations into Run). Confirmed live: Check_Abbreviations is registered at run_context.rs:555 and nomos_cap_words_policy::Capability_Contract is declared in composition.rs:225. Nothing left for this item to do."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -47327,7 +47331,10 @@
         }
       ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-nomos-53-0902",
+        "declined_at": 1788333359
+      }
     },
     {
       "id": "OD-RULES-ABBREVIATIONS-JUDGES-IMPORTED-NAMES",
@@ -47593,7 +47600,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by its own territory being spent: the 11 findings inside crates/substrate/nomos-ledger/tests, nomos-spec-store/tests/store_holds.rs, nomos-lang-go-modules/src/discovery/tests.rs, nomos-spec-ingest/src/phases/gate_report.rs and nomos-platform-std/src/launcher/wait.rs are renamed and committed (e3c091ca); nothing remains in this item's own territory for a future claimer to do, yet its done_when still names all 42. Re-scoped as P27-SELFCHECK-ABBREVIATION-DECISION, which reserves the real remaining question (a rule-narrowing decision, not files to edit) instead."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -47609,9 +47620,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "nomos-89",
+          "reason": "The 11 findings in this item's own territory (Temp_Dir/Temp_Db/TempWorkspace/DOC/len, all plain truncations) are renamed and committed (e3c091ca), dropping the workspace count from 41 to 30 blocking. The remaining 30 are all the why text's 'quote a term they are about' group -- a requirement id (CHK_003), a rule's own canonical name quoted by its own derived test names (Vs, Rs), std/external references (Rc, cmp::Ordering, an env shebang, LF), a unit-suffix convention (_ms), an ordinal English word (Nth), and one subgroup that may in fact be safely renamable (param/params) but sits in crates/rules/nomos-rules, which a live peer session has been actively editing all day -- not this item's territory and not a file to touch speculatively. Checked whether 'accepted cost' is actually available: it is not yet -- gate/parsing.rs's own comment states no CLI flag authors a Suppression/BaselineDebt/RuleCalibration, so SuppressionPolicy::default() is hardcoded and there is no way to formally waive a finding today. That leaves only 'narrower rule' as a currently-executable path, which this repo's own precedent (OD-RULES-015, OD-RULES-016, the two existing Check_Abbreviations exemptions) favors -- but designing one exemption clause that correctly covers roughly six heterogeneous justification categories without over-broadening future real abbreviations is a real design decision, which the item's own why text calls out as still open and unresolved. Returning it undecided rather than guessing; see the follow-up item for the categorized findings and the CLI-suppression-gap detail.",
+          "abandoned_at": 1788334194
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-89",
+        "declined_at": 1788334209
+      }
     },
     {
       "id": "OD-RULES-016-FILENAME-RULE-JUDGES-COMPANION-TYPES",
@@ -47716,6 +47736,77 @@
         },
         "revision": "5a7046ec6a553cd5f75d34584da3205b594041a8"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-RULES-EXECUTED-SCRIPTS-NOUNSET",
+      "title": "Executed-scripts-set-nounset rule in script_discipline.rs",
+      "why": "code-standards backlog survey: check-script-discipline's breach.go (rules/general/repository/shared/scripting/breach.go) implements executed-scripts-set-nounset.md (missing_nounset/has_nounset/is_Sourced_Library/quote_State_After) alongside the two sibling hygiene rules already ported here (Check_Scripts_Use_A_Portable_Shebang, Check_A_Script_Declares_Its_Purpose). An earlier session's grep missed this Go source because it lives under rules/general/repository/shared/scripting/, not beside the check-script-discipline command package, and wrongly recorded it as having no real implementation. Direct sibling of the two rules already in script_discipline.rs; no repository-configurable dimension, so a leaf addition rather than a capability.",
+      "done_when": "script_discipline.rs gains Check_Executed_Scripts_Set_Nounset: an executed shebang script (Is_Shebang_Script) with no set -u / set -euo pipefail / set -o nounset (and not set +u) is flagged on line 1, unless it is a sourced library (a file whose only top-level statements are function-header or NAME=value/readonly/declare/typeset/export/local declarations, tracked across multi-line single/double-quoted literals the way quote_State_After does). Unit tests cover: a clean executed script, missing nounset, the combined/-o-nounset/turned-off-with-plus forms, and the sourced-library exemption (including a library that still owes the shebang/purpose rules). Compiles and passes standalone.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/script_discipline.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-53-33946",
+        "acquired_at": 1788333946,
+        "lease_expires_at": 1788341146
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-ABBREVIATION-DECISION",
+      "title": "Check_Abbreviations still blocks 30 findings that quote a term they are about, and the exemption to narrow it is not obvious",
+      "why": "The 11 findings P27-SELFCHECK-ABBREVIATION-FINDINGS's own territory could reach are renamed and committed (e3c091ca); it was declined once spent. These 30 remain, all in crates/rules/nomos-rules (error_text.rs, structure.rs, security_text.rs, concurrency_text.rs, script_discipline.rs, rust_text.rs), tests/contract/tests/requirement_trace/committed.rs, crates/languages/nomos-lang-rust/tests/corpus/claims.rs, crates/spec/nomos-spec-store/tests/{submission/tests.rs,governing_records_are_present/supersession.rs}, crates/spec/nomos-spec-project/tests/projections/determinism.rs, crates/languages/nomos-lang-rust-deny/tests/integration_seams.rs and crates/agent/nomos-agent-executor-claude-code/src/agent_execution_outcome.rs -- none reserved here, since which of them a rule change can even reach is exactly the open question.\n\nUnlike Check_Abbreviations' two existing exemptions (a trait-fixed method name, a use-binding naming another crate's declaration), none of these 30 is a name the author did not choose -- every one is a freely-authored test/const/struct name that happens to contain a banned or vowelless word because that word is what the code is about. That is a fuzzier category with no existing structural signal to key an exemption on, which is why this is a decision and not a mechanical extension of OD-RULES-015/016's precedent.\n\nRoughly six shapes, by inspection of the 2026-09-02 run:\n- CHK_003 (3 findings, committed.rs): quotes a fixed external requirement id.\n- Vs / Eager_Vs_Lazy (7, error_text.rs): a rule's own canonical name, quoted by its own derived test names.\n- Rs / Mod_Rs (5, structure.rs): a rule about the .rs extension, same shape as Vs.\n- param/params / SENSITIVE_URL_PARAMS (4, security_text.rs): may in fact be a safe, ordinary rename (PARAMETERS) with no semantic cost -- not obviously in the \"leave alone\" class the other five are.\n- Rc, cmp::Ordering, an env shebang, LF, duration_ms, Nth (7, scattered): each quotes a std type, a POSIX convention, a line-ending term, an established _ms suffix convention, or an ordinary English ordinal.\n- Docs/Doc quoting \"doc comment\", Rust's own term of art (4, claims.rs/supersession.rs/concurrency_text.rs): same shape as Rc.\n\nChecked whether \"accepted cost\" (a waiver) is available instead of a rule change: it is not. crates/host/nomos-cli/src/gate/parsing.rs:120-123 states plainly that no flag authors a Suppression, a BaselineDebt or a RuleCalibration yet, and hardcodes SuppressionPolicy::default() -- nomos_gate_orchestration::SuppressionPolicy/Suppression/SuppressionDisposition exist and are tested in isolation, but nothing in this workspace can apply one to a real finding today. Building that CLI surface is a real increment of its own, not a substitute for this decision, and OD-GATE-015's suppression/baseline/adoption records (already Accepted) may already cover deciding whether it should exist -- worth reading before assuming it needs a fourth record.",
+      "done_when": "A decision is recorded (a new OD-RULES-01x record, following OD-RULES-015/016's shape) covering as many of the six shapes above as the decision actually reaches -- it is not required to resolve all six at once; a record that narrows the rule for some and explicitly declines to for others, with its reasoning stated, satisfies this. Check_Abbreviations (or a caller) changes to match, with a test proving each side (matching OD-RULES-016's own \"two tests hold the two sides\" pattern). cargo test -p nomos-rules is green. Whatever is left unaddressed by the record is either a plain rename (if the decision concludes one is safe, e.g. the param/params group) executed at its own site, or is named explicitly as still open with a reason, not left silently unequal to the other 29.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs",
+          "docs/records/OD-RULES-017"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "--timeout",
+          "1h"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
