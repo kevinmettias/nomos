@@ -46212,9 +46212,9 @@
       "depends_on": [],
       "blocked": null,
       "claim": {
-        "holder": "claude-nomos-a8",
-        "acquired_at": 1788317035,
-        "lease_expires_at": 1788325341
+        "holder": "nomos-89",
+        "acquired_at": 1788331567,
+        "lease_expires_at": 1788338767
       },
       "verification": {
         "argv": [
@@ -46229,7 +46229,13 @@
       },
       "verified": null,
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-nomos-a8",
+          "acquired_at": 1788317035,
+          "lease_expires_at": 1788325341
+        }
+      ],
       "declined": null
     },
     {
@@ -46830,7 +46836,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P27-SELFCHECK-FILENAME-FAMILY-LAYOUT-2, which reserves the rule file and the record the decision needs. The measurement is unchanged and is carried over."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -46844,9 +46854,18 @@
         "timeout_seconds": 3600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-nomos-a8",
+          "reason": "Territory is the ten family files, but the remedy the measurement supports is a change to the rule, in crates/rules/nomos-rules/src/checks/naming/file_names.rs, plus a record. Neither is reserved here. Re-added as -2 with the territory the decision actually reaches.",
+          "abandoned_at": 1788331497
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-nomos-a8",
+        "declined_at": 1788331503
+      }
     },
     {
       "id": "P27-SELFCHECK-REAL-CODE-FINDINGS",
@@ -46999,10 +47018,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-nomos-a8",
+        "acquired_at": 1788331346,
+        "lease_expires_at": 1788338546
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -47368,6 +47391,148 @@
           "nomos-rules"
         ],
         "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-COMPOSE-WORDS-2",
+      "title": "Declare sdk/std/str approved and compose Check_Abbreviations into Run",
+      "why": "The re-add OD-RULES-011-COMPOSE-WORDS's abandonment asked for. Its two blockers are gone: 8ac2a830 and 0ce5887b took the rule from 327 findings to 56 by stopping it judging names a trait fixes and names another crate declared, and the repository owner has now answered the vocabulary question that was the remainder. sdk, std and str are approved -- StdFileSystem is named for the standard library on purpose -- while vs, rs, chk, stds and rc are not, and neither are the banned truncations temp, doc, param and params; those are names to improve rather than words to bless. Composing the rule is what finally gives nomos.cap.words.policy a real consumer, and it is the fifth and last OD-RULES-011 family to reach a real run.",
+      "done_when": "standards.json's words.approved_abbreviations declares sdk, std and str; run_context.rs's Rule_Findings table carries ABBREVIATIONS at RULE_COUNT 48; composition.rs declares nomos.cap.words.policy and offers nomos-repo-words; facts/policy_materialization.rs gains Materialize_Words_Policy and facts.rs exports it; a gated section materializes it only when the rule is selected; a test proves a declared approved abbreviation suppresses a finding that fires without it; and cargo test -p nomos-check-orchestration is green.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "standards.json",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "erialize_Dependencies_Should_Return_Real_Workspace_Members ... ok\ntest tests::Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact ... ok\ntest tests::Test_Materialize_Lint_Should_Return_Real_Workspace_Members ... ok\ntest tests::Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor ... ok\ntest tests::Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete ... ok\n\ntest result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.27s\n\n\nrunning 6 tests\ntest Test_Registered_Should_Declare_Every_Capability_Crates_Own_Real_Contract ... ok\ntest Test_Registered_Should_Offer_Every_Dependency_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_Every_Syntax_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Clippy_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Reachability_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Deny_Providers_Own_Real_Offer ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 4 tests\ntest Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List ... ok\ntest Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule ... ok\ntest Test_Run_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.44s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-e529bd00b4497790.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-f99ed2ad0d9e2451.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-e65ee2616c31c246.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1788331590,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "451872d0b2d459a118e9a9e11bdab48f01ce88be"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-FILENAME-FAMILY-LAYOUT-2",
+      "title": "file-name-matches-declared-type judges operation modules it has no claim about",
+      "why": "Carried over from P27-SELFCHECK-FILENAME-FAMILY-LAYOUT, declined for reserving only the ten files and not the rule the remedy changes. Measured again 2026-09-02 at 5b0dcc06 across all 46 remaining findings of this rule, and the split is exact: 13 files declaring at least one free public function account for 16 findings, and 23 files declaring none account for the other 30. The 30 are ordinary drift and the rule is right about every one. The 16 are not. Five nomos-cap-X-policy/src/payload.rs hold the payload types and Encode_Payload and Parse_Payload; five nomos-repo-X/src/reading.rs hold Discover_Workspace and the error it returns; three crates/packages reader.rs files have the same shape and sit inside the neighbouring item's territory, which is evidence the boundary is module shape rather than directory. Renaming reading.rs to goals_policy_error.rs would name the module after the least important thing in it: the module exists for Discover_Workspace and the error is subordinate to it. Every one of these modules is private with its types re-exported at the crate root, so no public path stutters and no surface snapshot moves either way.",
+      "done_when": "The rule judges a module whose public surface is types alone and does not judge one that also declares free public functions, with a unit test for each side. A record states the decision so the next capability family needs no further one. The 16 findings on those 13 files are gone and all 30 drift findings still report. cargo test -p nomos-rules is green and tests/contract/surface is unchanged.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/file_names.rs",
+          "crates/capabilities/nomos-cap-goals-policy/src/payload.rs",
+          "crates/repository/nomos-repo-goals/src/reading.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by -3, which reserves docs/records/OD-RULES-015 alongside the rule file. Measurement and done_when carried over unchanged."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-nomos-a8",
+          "reason": "Its own done_when asks for a record and its territory reserves no record identifier, which work add refuses to let me claim after the fact. Re-added as -3.",
+          "abandoned_at": 1788331560
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-a8",
+        "declined_at": 1788331560
+      }
+    },
+    {
+      "id": "P27-SELFCHECK-FILENAME-FAMILY-LAYOUT-3",
+      "title": "file-name-matches-declared-type judges operation modules it has no claim about",
+      "why": "Carried over from P27-SELFCHECK-FILENAME-FAMILY-LAYOUT and its -2, declined for reserving neither the rule the remedy changes nor a record identifier. Measured 2026-09-02 at 5b0dcc06 across all 46 remaining findings of this rule, and the split is exact: 13 files declaring at least one free public function account for 16 findings, and 23 files declaring none account for the other 30. The 30 are ordinary drift and the rule is right about every one. The 16 are not. Five nomos-cap-X-policy/src/payload.rs hold the payload types together with Encode_Payload and Parse_Payload; five nomos-repo-X/src/reading.rs hold Discover_Workspace and the error it returns; three crates/packages reader.rs files have the same shape and sit in the neighbouring item's territory, which is evidence the boundary is module shape and not directory. Renaming reading.rs to goals_policy_error.rs would name the module after the least important thing in it, since the module exists for Discover_Workspace and the error is subordinate to it. Every one of these modules is private with its types re-exported at the crate root, so no public path stutters and no surface snapshot moves either way. The rule already makes this judgment one level up: Comparable_Stem skips lib, main and mod as names that carry no claim about a type.",
+      "done_when": "The rule judges a module whose public surface is types alone and does not judge one that also declares a free public function, with a unit test for each side. OD-RULES-015 states the decision so the next capability family needs no further one, and is registered rather than only written. The 16 findings on those 13 files are gone and all 30 drift findings still report. cargo test -p nomos-rules is green and tests/contract/surface is unchanged.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/file_names.rs",
+          "docs/records/OD-RULES-015"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-a8",
+        "acquired_at": 1788331594,
+        "lease_expires_at": 1788338794
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
       },
       "verified": null,
       "abandoned": [],

@@ -817,6 +817,57 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Goal_Declaration()
     );
 }
 
+/// The words-policy materialization reaching `Check_Abbreviations`, and the only one of the
+/// five whose declaration makes a rule report *less* rather than more.
+///
+/// The other four policy capabilities either replace a threshold or let a silent rule speak.
+/// This one extends a vocabulary the rule already ships, so the proof runs the other way
+/// round: the same name is judged twice, and the finding disappears once the repository says
+/// the word is one it uses on purpose.
+///
+/// `ctx` rather than one of this repository's own real additions, deliberately -- a fixture
+/// asserting `std` would pass the moment `standards.json` declares it and stop proving the
+/// materialization ran at all.
+#[test]
+fn Test_Run_Should_Honor_A_Real_Standards_Json_Approved_Abbreviation()
+{
+    let sources = vec![Source("a.rs", "pub fn Read_Ctx() {}\n")];
+    let selected = [RuleId::New(nomos_rules::ABBREVIATIONS)];
+
+    let unconfigured = Scratch_Directory("words-unconfigured");
+    let CheckOutcome::Judged { findings: unconfigured_findings, .. } = Run(
+        &sources,
+        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        &selected,
+    )
+    else
+    {
+        panic!("a tree with no standards.json must still be judged, against the shipped vocabulary");
+    };
+    assert_eq!(
+        unconfigured_findings.len(),
+        1,
+        "ctx has no vowel and nothing has approved it, so the shipped vocabulary flags it: {unconfigured_findings:?}"
+    );
+
+    let overridden = Scratch_Directory("words-approved");
+    std::fs::write(overridden.join("standards.json"), r#"{"words":{"approved_abbreviations":["ctx"]}}"#)
+        .expect("a scratch standards.json");
+    let CheckOutcome::Judged { findings: approved_findings, .. } = Run(
+        &sources,
+        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        &selected,
+    )
+    else
+    {
+        panic!("a tree with a real standards.json must still be judged")
+    };
+    assert!(
+        approved_findings.is_empty(),
+        "a repository declaring ctx approved must not be told to spell it out: {approved_findings:?}"
+    );
+}
+
 /// A fresh, empty directory under the OS temp root, unique per test name and process --
 /// `nomos-cli::work`'s own `Scratch_Directory` fixture shape, needed here for the same reason:
 /// `StdFileSystem` reads real bytes from a real path, so proving a real override changes real

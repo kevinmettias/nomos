@@ -34,6 +34,7 @@ pub fn Registered() -> Result<Registry, RegistryError>
     Declare_Limits_Policy_Capability(&mut registry)?;
     Declare_Scripting_Policy_Capability(&mut registry)?;
     Declare_Goals_Policy_Capability(&mut registry)?;
+    Declare_Words_Policy_Capability(&mut registry)?;
 
     return Ok(registry);
 }
@@ -213,6 +214,20 @@ fn Declare_Goals_Policy_Capability(registry: &mut Registry) -> Result<(), Regist
     return Ok(());
 }
 
+/// A tenth capability, one offer against it -- the last of `OD-RULES-011`'s five families to
+/// reach a real run, and the one that waited longest for a reason worth recording.
+///
+/// Its rule was composable only once `Check_Abbreviations` stopped judging names a trait
+/// fixes (`8ac2a830`): before that it reported 148 findings against this workspace, 104 of
+/// them the word `fmt`, which `core::fmt::Display` requires and no author can rename.
+fn Declare_Words_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_words_policy::Capability_Contract())?;
+    registry.Offer(nomos_repo_words::Provider_Offer())?;
+
+    return Ok(());
+}
+
 /// Which registered `nomos.cap.syntax.items` provider `path` belongs to, if either does --
 /// `OD-CAPABILITY-009`'s corrected fix, and the one function both halves of the pipeline
 /// consult so they cannot independently drift on the answer.
@@ -349,9 +364,9 @@ mod tests
     use super::*;
 
     /// The composition this crate ships must not be self-contradictory, and it must
-    /// declare exactly the nine capabilities [`Registered`]'s own body wires: syntax,
-    /// dependency, controlflow, lint, dependency-policy, naming-policy, limits-policy,
-    /// scripting-policy and goals-policy.
+    /// declare exactly the ten capabilities [`Registered`]'s own body wires: syntax,
+    /// dependency, controlflow, lint, dependency-policy, and all five of `OD-RULES-011`'s
+    /// families -- naming, limits, scripting, goals and words.
     #[test]
     fn Test_Registered_Should_Declare_Every_Composed_Capability()
     {
@@ -359,8 +374,8 @@ mod tests
 
         assert_eq!(
             registry.Declared().count(),
-            9,
-            "Registered() wires nine Declare calls; a changed count here means the two drifted"
+            10,
+            "Registered() wires ten Declare calls; a changed count here means the two drifted"
         );
     }
 

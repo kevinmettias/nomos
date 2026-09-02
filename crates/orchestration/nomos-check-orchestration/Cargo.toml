@@ -18,6 +18,7 @@ nomos-cap-naming-policy = { workspace = true }
 nomos-cap-limits-policy = { workspace = true }
 nomos-cap-scripting-policy = { workspace = true }
 nomos-cap-goals-policy = { workspace = true }
+nomos-cap-words-policy = { workspace = true }
 nomos-capability = { workspace = true }
 nomos-contracts = { workspace = true }
 nomos-lang-rust = { workspace = true }
@@ -33,6 +34,7 @@ nomos-repo-standards = { workspace = true }
 nomos-repo-limits = { workspace = true }
 nomos-repo-scripting = { workspace = true }
 nomos-repo-goals = { workspace = true }
+nomos-repo-words = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-workspace = { workspace = true }
 
