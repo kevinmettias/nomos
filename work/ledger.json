@@ -45223,6 +45223,59 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P27-RULES-INLINE-ALWAYS-AND-DISABLED-TEST-WIRE",
+      "title": "Export Check_Inline_Always_Justification and Check_A_Disabled_Test_States_Why through checks.rs/lib.rs",
+      "why": "Both rules landed in rust_text.rs (44699cb4) as a leaf-only item to avoid colliding with concurrent hub-file work; checks.rs/lib.rs were free of other in-flight edits at claim time",
+      "done_when": "checks.rs's pub use rust_text::{...} block includes both new functions and consts, lib.rs's rule-count doc comment is updated, nomos-rules compiles and tests with no dead_code warnings on the two new items",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 300
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 359 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-27d32a4363304d08.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-cd1a275ce0c17f78.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788311933,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "44699cb4b53b0aa89075af72e6db1774cd7d5af5"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

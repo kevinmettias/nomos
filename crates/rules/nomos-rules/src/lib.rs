@@ -303,6 +303,18 @@
 //! the judgment is over declared syntax-item names, a shape [`nomos_cap_syntax::PayloadItem`]
 //! carries identically whichever language produced it, not a convention one language alone
 //! states.
+//!
+//! [`Check_Inline_Always_Justification`] and [`Check_A_Disabled_Test_States_Why`] are the
+//! fifty-ninth and sixtieth rules, two more `rust_text` additions on the same "a Rust
+//! construct needs an adjacent explanatory comment" shape [`Check_Every_Allow_Carries_A_
+//! Justification`] and [`Check_Unsafe_Justification`] already generalize through
+//! `rust_text::Previous_Comment_Block_Has` — a fifth and sixth consumer of that primitive.
+//! `#[inline(always)]` reads exactly like `#[allow(...)]`: any adjacent comment satisfies
+//! it. A bare `#[ignore]` is flagged the same way, but an `#[ignore = "reason"]` value in
+//! the attribute itself already states why and is never flagged regardless of a comment —
+//! code-standards' own worked example gives the inline value as the primary form and a
+//! comment as the fallback, not the reverse. No repository-configurable dimension in
+//! either, so `rust_text` rather than a capability.
 
 #![forbid(unsafe_code)]
 
@@ -349,12 +361,13 @@ pub use checks::{
     Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
     UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
     Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE,
-    Check_A_Rust_Path_Stays_Within_Its_Own_Subtree, Check_Every_Allow_Carries_A_Justification,
+    Check_A_Disabled_Test_States_Why, Check_A_Rust_Path_Stays_Within_Its_Own_Subtree,
+    Check_Every_Allow_Carries_A_Justification, Check_Inline_Always_Justification,
     Check_Panics_Are_Justified_Documented_And_Validated, Check_Shared_Interior_Mutability_Says_Why,
     Check_Unsafe_Justification, Check_Unwrap_Expect_Discipline,
-    A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, EVERY_ALLOW_CARRIES_A_JUSTIFICATION,
-    PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED, SHARED_INTERIOR_MUTABILITY_SAYS_WHY, UNSAFE_JUSTIFICATION,
-    UNWRAP_EXPECT_DISCIPLINE,
+    A_DISABLED_TEST_STATES_WHY, A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, EVERY_ALLOW_CARRIES_A_JUSTIFICATION,
+    INLINE_ALWAYS_JUSTIFICATION, PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED, SHARED_INTERIOR_MUTABILITY_SAYS_WHY,
+    UNSAFE_JUSTIFICATION, UNWRAP_EXPECT_DISCIPLINE,
     Check_A_Discarded_Error_Is_Explained, Check_A_Skipped_Test_States_Why, Check_An_Excluded_File_Says_Why,
     Check_Suppression_Directives_Carry_A_Reason, Check_Workspace_Markers_Carry_A_Reason,
     A_DISCARDED_ERROR_IS_EXPLAINED, A_SKIPPED_TEST_STATES_WHY, AN_EXCLUDED_FILE_SAYS_WHY,

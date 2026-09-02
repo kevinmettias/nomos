@@ -1,5 +1,5 @@
-//! The fifty-eight rules this crate implements, one module each — `naming` holds fourteen,
-//! `rust_text` holds six, `go_text` holds five, `structure` holds five, `formatting` holds
+//! The sixty rules this crate implements, one module each — `naming` holds fourteen,
+//! `rust_text` holds eight, `go_text` holds five, `structure` holds five, `formatting` holds
 //! four, `security_text` holds three, `concurrency_text` holds three, `error_text` holds
 //! three, `placement` holds two, and `dependency` holds two, while `script_discipline` holds
 //! three,
@@ -102,12 +102,13 @@ pub use reachability::{
 };
 pub use role_surface_pair::{Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE};
 pub use rust_text::{
-    Check_A_Rust_Path_Stays_Within_Its_Own_Subtree, Check_Every_Allow_Carries_A_Justification,
+    Check_A_Disabled_Test_States_Why, Check_A_Rust_Path_Stays_Within_Its_Own_Subtree,
+    Check_Every_Allow_Carries_A_Justification, Check_Inline_Always_Justification,
     Check_Panics_Are_Justified_Documented_And_Validated, Check_Shared_Interior_Mutability_Says_Why,
     Check_Unsafe_Justification, Check_Unwrap_Expect_Discipline,
-    A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, EVERY_ALLOW_CARRIES_A_JUSTIFICATION,
-    PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED, SHARED_INTERIOR_MUTABILITY_SAYS_WHY, UNSAFE_JUSTIFICATION,
-    UNWRAP_EXPECT_DISCIPLINE,
+    A_DISABLED_TEST_STATES_WHY, A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, EVERY_ALLOW_CARRIES_A_JUSTIFICATION,
+    INLINE_ALWAYS_JUSTIFICATION, PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED, SHARED_INTERIOR_MUTABILITY_SAYS_WHY,
+    UNSAFE_JUSTIFICATION, UNWRAP_EXPECT_DISCIPLINE,
 };
 pub use script_discipline::{
     Check_A_Script_Declares_Its_Purpose, Check_Declared_Tooling_Language_For_Scripts, Check_Scripts_Use_A_Portable_Shebang,
