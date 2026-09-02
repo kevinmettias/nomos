@@ -20,13 +20,17 @@ use super::{BaselineDebtResponse, RuleCalibrationResponse, SuppressionResponse};
 #[must_use]
 pub fn Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse
 {
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
 
     let command = GateCommand { root: root.to_path_buf(), ..Default::default() };
     let walked = sources::Walked_Sources(root);
     let result = nomos_gate_orchestration::Explain_Gate(
         walked,
-        nomos_gate_orchestration::GateEnvironment { variant: composition::Host_Variant(), launcher: &StdProcessLauncher },
+        nomos_gate_orchestration::GateEnvironment {
+            variant: composition::Host_Variant(),
+            launcher: &StdProcessLauncher,
+            filesystem: &StdFileSystem,
+        },
         &command,
         query,
     );

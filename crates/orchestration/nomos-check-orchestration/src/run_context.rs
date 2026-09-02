@@ -4,7 +4,7 @@
 use nomos_analysis::{Context, MemoryFactStore, Reader};
 use nomos_capability::Registry;
 use nomos_contracts::{Finding, RuleId};
-use nomos_platform::ProcessLauncher;
+use nomos_platform::{FileSystem, ProcessLauncher};
 use nomos_rules::{
     Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Discarded_Error_Is_Explained,
     Check_A_Package_Is_Named_After_Its_Directory, Check_A_Rust_Path_Stays_Within_Its_Own_Subtree,
@@ -46,7 +46,7 @@ use std::path::Path;
 use crate::composition::{Recognized_Language, Recognized_Syntax_Provider, Registered};
 use crate::facts::{
     DependencyMaterialization, Ingested_Workspace, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
-    Materialize_Policy, Materialize_Reachability, Materialize_Syntax, PolicyMaterialization,
+    Materialize_Naming_Policy, Materialize_Policy, Materialize_Reachability, Materialize_Syntax, PolicyMaterialization,
 };
 use crate::CheckOutcome;
 
@@ -54,15 +54,17 @@ use crate::CheckOutcome;
 /// literal it sizes is the one and only place this count is spent.
 const RULE_COUNT: usize = 46;
 
-/// [`Run`]'s build variant, its subprocess root, and the launcher those subprocesses run
-/// through -- grouped into one value so [`Run`] stays within this crate's own
-/// parameter-count limit. See [`Run`]'s own documentation for why each is a
-/// composition-root value this crate cannot compute for itself.
-pub struct RunContext<'a, Launcher: ProcessLauncher>
+/// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
+/// through, and the filesystem a repository-declared policy capability (`nomos.cap.naming.
+/// policy` and its siblings) is read through -- grouped into one value so [`Run`] stays
+/// within this crate's own parameter-count limit. See [`Run`]'s own documentation for why
+/// each is a composition-root value this crate cannot compute for itself.
+pub struct RunContext<'a, Launcher: ProcessLauncher, Fs: FileSystem>
 {
     pub variant: BuildVariant,
     pub root: &'a Path,
     pub launcher: &'a Launcher,
+    pub filesystem: &'a Fs,
 }
 
 /// Composes the capability registry, ingests `sources` into one workspace state, materializes
@@ -99,13 +101,13 @@ pub struct RunContext<'a, Launcher: ProcessLauncher>
 /// (`CheckOutcome::NoSource`) made before this function is ever called, not a case this
 /// function classifies.
 #[must_use]
-pub fn Run<Launcher: ProcessLauncher>(
+pub fn Run<Launcher: ProcessLauncher, Fs: FileSystem>(
     sources: &[SourceFile],
-    context: RunContext<'_, Launcher>,
+    context: RunContext<'_, Launcher, Fs>,
     selected: &[RuleId],
 ) -> CheckOutcome
 {
-    let RunContext { variant, root, launcher } = context;
+    let RunContext { variant, root, launcher, filesystem } = context;
 
     let recognized = Recognized_Sources(sources);
     let sources: &[SourceFile] = &recognized;
@@ -123,7 +125,7 @@ pub fn Run<Launcher: ProcessLauncher>(
         None => return CheckOutcome::NoFacts { files: sources.len() },
     };
 
-    let environment = RunEnvironment { root, launcher, registry: &registry, context };
+    let environment = RunEnvironment { root, launcher, filesystem, registry: &registry, context };
     let findings = Judged_Over(sources, environment, &mut store, selected);
 
     return Outcome_Of(sources.len(), facts, findings);
@@ -152,22 +154,23 @@ fn Materialized_Syntax_Facts(sources: &[SourceFile], context: &Context, store: &
     return Some(facts);
 }
 
-/// [`Run`]'s own root, launcher, registry and composed context -- everything [`Judged_Over`]
-/// needs beside the sources and store it is handed separately, grouped so that function's
-/// parameter list names one environment instead of four loose values.
-struct RunEnvironment<'a, Launcher: ProcessLauncher>
+/// [`Run`]'s own root, launcher, filesystem, registry and composed context -- everything
+/// [`Judged_Over`] needs beside the sources and store it is handed separately, grouped so
+/// that function's parameter list names one environment instead of five loose values.
+struct RunEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem>
 {
     root: &'a Path,
     launcher: &'a Launcher,
+    filesystem: &'a Fs,
     registry: &'a Registry,
     context: Context,
 }
 
 /// Every capability [`Run`] can materialize, judged -- the two steps [`Run`] itself used to
 /// inline, composed here so its own body names one step instead of four.
-fn Judged_Over<Launcher: ProcessLauncher>(
+fn Judged_Over<Launcher: ProcessLauncher, Fs: FileSystem>(
     sources: &[SourceFile],
-    environment: RunEnvironment<'_, Launcher>,
+    environment: RunEnvironment<'_, Launcher, Fs>,
     store: &mut MemoryFactStore,
     selected: &[RuleId],
 ) -> Vec<Finding>
@@ -177,6 +180,7 @@ fn Judged_Over<Launcher: ProcessLauncher>(
         context: &environment.context,
         store,
         launcher: environment.launcher,
+        filesystem: environment.filesystem,
     };
     let capabilities = Materialize_Capabilities(sources, &mut materialization_environment, selected);
 
@@ -184,21 +188,25 @@ fn Judged_Over<Launcher: ProcessLauncher>(
     return Judged_Findings(sources, capabilities, judge_environment, selected);
 }
 
-/// The dependency-edges, lint-diagnostics, dependency-policy and reachability facts,
-/// materialized into `store` alongside the syntax facts [`Run`] already wrote -- the
-/// capabilities beside `syntax.items` that this crate's registration composes, each with
-/// its own materialization step for the reasons [`Materialize_Dependencies`],
-/// [`Materialize_Lint`], [`Materialize_Policy`] and [`Materialize_Reachability`] give.
+/// The dependency-edges, lint-diagnostics, dependency-policy, reachability and
+/// naming-policy facts, materialized into `store` alongside the syntax facts [`Run`] already
+/// wrote -- the capabilities beside `syntax.items` that this crate's registration composes,
+/// each with its own materialization step for the reasons [`Materialize_Dependencies`],
+/// [`Materialize_Lint`], [`Materialize_Policy`], [`Materialize_Reachability`] and
+/// [`Materialize_Naming_Policy`] give.
 ///
 /// Each runs only when `selected` asks for a rule it feeds -- `DEPENDENCY_DIRECTION` or
 /// `DEPENDENCY_COMPLETENESS` for the first (both judge the same `dependencies.sources`),
 /// `LINT_DIAGNOSTICS` for the second, `DEPENDENCY_POLICY` for the third,
-/// `UNREAD_REACHES_FINDING` for the fourth, per `OD-GATE-017`. Skipping
-/// `Materialize_Dependencies`, `Materialize_Lint` or `Materialize_Policy` skips its own
-/// subprocess launch entirely, not merely its finding's place in a later disposition.
-fn Materialize_Capabilities<Launcher: ProcessLauncher>(
+/// `UNREAD_REACHES_FINDING` for the fourth, any of `NAMING_CONVENTION`, `DATA_NAMES_STAY_
+/// LOWER_SNAKE`, `EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE`, `UNEXPORTED_FUNCTIONS_
+/// LOWERCASE_ONLY_THE_FIRST_LETTER` or `TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE` for the
+/// fifth, per `OD-GATE-017`. Skipping `Materialize_Dependencies`, `Materialize_Lint`,
+/// `Materialize_Policy` or `Materialize_Naming_Policy` skips its own subprocess launch or
+/// filesystem read entirely, not merely its finding's place in a later disposition.
+fn Materialize_Capabilities<Launcher: ProcessLauncher, Fs: FileSystem>(
     sources: &[SourceFile],
-    env: &mut MaterializationEnvironment<'_, Launcher>,
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs>,
     selected: &[RuleId],
 ) -> CapabilityMaterialization
 {
@@ -206,25 +214,27 @@ fn Materialize_Capabilities<Launcher: ProcessLauncher>(
     let lint = Materialize_Lint_Section(env, selected);
     let policy = Materialize_Policy_Section(env, selected);
     Materialize_Reachability_Section(sources, env, selected);
+    Materialize_Naming_Policy_Section(env, selected);
 
     return Capability_Materialization_Of(dependencies, lint, policy);
 }
 
-/// The `root`, `context`, `store` and `launcher` every [`Materialize_Capabilities`] section
-/// reads or writes through -- grouped into one value so that function takes those four as
-/// one parameter rather than four.
-struct MaterializationEnvironment<'a, Launcher: ProcessLauncher>
+/// The `root`, `context`, `store`, `launcher` and `filesystem` every
+/// [`Materialize_Capabilities`] section reads or writes through -- grouped into one value so
+/// that function takes those five as one parameter rather than five.
+struct MaterializationEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem>
 {
     root: &'a Path,
     context: &'a Context,
     store: &'a mut MemoryFactStore,
     launcher: &'a Launcher,
+    filesystem: &'a Fs,
 }
 
 /// The dependency-edges section: [`Materialize_Dependencies`] when `selected` feeds on it,
 /// an empty result otherwise.
-fn Materialize_Dependency_Section<Launcher: ProcessLauncher>(
-    env: &mut MaterializationEnvironment<'_, Launcher>,
+fn Materialize_Dependency_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs>,
     selected: &[RuleId],
 ) -> DependencyMaterialization
 {
@@ -238,8 +248,8 @@ fn Materialize_Dependency_Section<Launcher: ProcessLauncher>(
 
 /// The lint-diagnostics section: [`Materialize_Lint`] when `selected` feeds on it, an empty
 /// result otherwise.
-fn Materialize_Lint_Section<Launcher: ProcessLauncher>(
-    env: &mut MaterializationEnvironment<'_, Launcher>,
+fn Materialize_Lint_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs>,
     selected: &[RuleId],
 ) -> LintMaterialization
 {
@@ -253,8 +263,8 @@ fn Materialize_Lint_Section<Launcher: ProcessLauncher>(
 
 /// The dependency-policy section: [`Materialize_Policy`] when `selected` feeds on it, an
 /// empty result otherwise.
-fn Materialize_Policy_Section<Launcher: ProcessLauncher>(
-    env: &mut MaterializationEnvironment<'_, Launcher>,
+fn Materialize_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs>,
     selected: &[RuleId],
 ) -> PolicyMaterialization
 {
@@ -269,15 +279,41 @@ fn Materialize_Policy_Section<Launcher: ProcessLauncher>(
 /// The reachability section: [`Materialize_Reachability`] when `selected` feeds on it --
 /// writes into `env.store` directly and produces no return value of its own, the same shape
 /// the call it wraps already has.
-fn Materialize_Reachability_Section<Launcher: ProcessLauncher>(
+fn Materialize_Reachability_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
     sources: &[SourceFile],
-    env: &mut MaterializationEnvironment<'_, Launcher>,
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs>,
     selected: &[RuleId],
 )
 {
     if Is_Rule_Selected(selected, UNREAD_REACHES_FINDING)
     {
         Materialize_Reachability(sources, env.context, env.store);
+    }
+}
+
+/// The naming-policy section: [`Materialize_Naming_Policy`] when `selected` feeds on it --
+/// writes into `env.store` directly and produces no return value of its own, the same shape
+/// [`Materialize_Reachability_Section`] already has.
+///
+/// Gated on the five naming-convention rules this crate composes today that read `nomos.cap.
+/// naming.policy` through their own `Resolve_Case`; `PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_
+/// SNAKE_CASE` reads the identical capability but is not itself composed into
+/// [`Rule_Findings`] yet, so gating on it here would materialize a fact for a rule that never
+/// runs.
+fn Materialize_Naming_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs>,
+    selected: &[RuleId],
+)
+{
+    let feeds_naming_policy = Is_Rule_Selected(selected, NAMING_CONVENTION)
+        || Is_Rule_Selected(selected, DATA_NAMES_STAY_LOWER_SNAKE)
+        || Is_Rule_Selected(selected, EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE)
+        || Is_Rule_Selected(selected, UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER)
+        || Is_Rule_Selected(selected, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE);
+
+    if feeds_naming_policy
+    {
+        Materialize_Naming_Policy(env.root, env.context, env.store, env.filesystem);
     }
 }
 
@@ -506,7 +542,7 @@ mod tests
 {
     use super::*;
     use nomos_contracts::ProviderId;
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
 
     /// `root` is never read: `COMPLETENESS_MIRROR` alone selects none of the
     /// dependency-edges, lint-diagnostics or dependency-policy materializations, so this
@@ -520,7 +556,7 @@ mod tests
         let selected = [RuleId::New(COMPLETENESS_MIRROR)];
         let root = Path::new(".");
 
-        let outcome = Run(&sources, RunContext { variant: Test_Variant(), root, launcher: &StdProcessLauncher }, &selected);
+        let outcome = Run(&sources, RunContext { variant: Test_Variant(), root, launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &selected);
 
         let CheckOutcome::Judged { findings, examined, claim } = outcome
         else

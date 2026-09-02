@@ -15,7 +15,7 @@ use nomos_contracts::{Digest128, GateCategory, RunId};
 use nomos_gate_orchestration::{GateCommand, GateEnvironment, GateRunOutcome, Run_Gate};
 use nomos_platform::ProcessLauncher;
 use nomos_model::Subject_Of_Path;
-use nomos_platform_std::StdProcessLauncher;
+use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::PathBuf;
@@ -58,7 +58,7 @@ fn Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestratio
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
     let command = GateCommand { root: Repository_Root(), ..Default::default() };
 
-    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }), "a source every provider can materialize a fact for must be judged");
     assert_eq!(result.disposition, GateRunOutcome::Passed);
@@ -73,7 +73,7 @@ fn Test_Run_Gate_Should_Report_An_Unreadable_Check_Outcome_As_Indeterminate()
 {
     let command = GateCommand { root: Repository_Root(), ..Default::default() };
 
-    let result = Run_Gate(None, GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher }, &command, Test_Run_Id());
+    let result = Run_Gate(None, GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::Unreadable));
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
@@ -91,7 +91,7 @@ fn Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified()
     )];
     let command = GateCommand { root: Repository_Root(), ..Default::default() };
 
-    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
 
     assert_eq!(result.disposition, GateRunOutcome::Failed);
     assert!(!result.findings.blocking_findings.is_empty());

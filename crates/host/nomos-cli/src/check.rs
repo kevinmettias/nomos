@@ -133,7 +133,7 @@ pub fn Run(command: &CheckCommand, stdout: &mut impl Write, stderr: &mut impl Wr
     use composition::Host_Variant;
     use report::Render_Outcome;
     use nomos_check_orchestration::CheckOutcome;
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
 
     let outcome = match Walked_Sources(&command.root)
     {
@@ -141,7 +141,12 @@ pub fn Run(command: &CheckCommand, stdout: &mut impl Write, stderr: &mut impl Wr
         Some(sources) if sources.is_empty() => CheckOutcome::NoSource,
         Some(sources) => nomos_check_orchestration::Run(
             &sources,
-            nomos_check_orchestration::RunContext { variant: Host_Variant(), root: &command.root, launcher: &StdProcessLauncher },
+            nomos_check_orchestration::RunContext {
+                variant: Host_Variant(),
+                root: &command.root,
+                launcher: &StdProcessLauncher,
+                filesystem: &StdFileSystem,
+            },
             &[],
         ),
     };

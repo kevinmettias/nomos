@@ -436,6 +436,7 @@ dependencies = [
  "nomos-cap-dependency",
  "nomos-cap-dependency-policy",
  "nomos-cap-lint",
+ "nomos-cap-naming-policy",
  "nomos-cap-syntax",
  "nomos-capability",
  "nomos-contracts",
@@ -449,6 +450,7 @@ dependencies = [
  "nomos-model",
  "nomos-platform",
  "nomos-platform-std",
+ "nomos-repo-standards",
  "nomos-rules",
  "nomos-workspace",
 ]

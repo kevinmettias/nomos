@@ -14,6 +14,7 @@ nomos-cap-dependency = { workspace = true }
 nomos-cap-controlflow = { workspace = true }
 nomos-cap-lint = { workspace = true }
 nomos-cap-dependency-policy = { workspace = true }
+nomos-cap-naming-policy = { workspace = true }
 nomos-capability = { workspace = true }
 nomos-contracts = { workspace = true }
 nomos-lang-rust = { workspace = true }
@@ -25,6 +26,7 @@ nomos-lang-go = { workspace = true }
 nomos-lang-go-modules = { workspace = true }
 nomos-model = { workspace = true }
 nomos-platform = { workspace = true }
+nomos-repo-standards = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-workspace = { workspace = true }
 

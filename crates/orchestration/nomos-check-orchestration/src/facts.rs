@@ -9,11 +9,13 @@
 //! for this module to produce).
 
 mod dependency_materialization;
+mod policy_materialization;
 
 pub use dependency_materialization::{
     DependencyMaterialization, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
     Materialize_Policy, Materialize_Reachability, Materialize_Syntax, PolicyMaterialization,
 };
+pub use policy_materialization::Materialize_Naming_Policy;
 
 use nomos_analysis::Context;
 use nomos_capability::Registry;

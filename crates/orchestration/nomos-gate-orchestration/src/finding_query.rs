@@ -9,7 +9,7 @@ pub use gate_explain_result::GateExplainResult;
 
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{Finding, RuleId};
-use nomos_platform::ProcessLauncher;
+use nomos_platform::{FileSystem, ProcessLauncher};
 use nomos_rules::SourceFile;
 
 use crate::gate_environment::{GateEnvironment, JudgeContext, Judged_Sources};
@@ -41,15 +41,15 @@ pub struct FindingQuery
 /// [`nomos_check_orchestration::Run`] computes at all, and a query about a rule
 /// `command.rules` excludes must still be answerable.
 #[must_use]
-pub fn Explain_Gate<Launcher: ProcessLauncher>(
+pub fn Explain_Gate<Launcher: ProcessLauncher, Fs: FileSystem>(
     walked: Option<Vec<SourceFile>>,
-    environment: GateEnvironment<'_, Launcher>,
+    environment: GateEnvironment<'_, Launcher, Fs>,
     command: &GateCommand,
     query: &FindingQuery,
 ) -> GateExplainResult
 {
-    let GateEnvironment { variant, launcher } = environment;
-    let check_outcome = Judged_Sources(walked, launcher, JudgeContext { variant, root: &command.root, selected: &[] });
+    let GateEnvironment { variant, launcher, filesystem } = environment;
+    let check_outcome = Judged_Sources(walked, launcher, filesystem, JudgeContext { variant, root: &command.root, selected: &[] });
     let explanation = Explained_Query(
         &check_outcome,
         query,
@@ -133,7 +133,7 @@ mod tests
     use super::{Explain_Gate, FindingQuery};
     use crate::{Explanation, GateCommand, GateEnvironment};
     use nomos_model::Subject_Of_Path;
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
     use nomos_rules::{SourceFile, COMPLETENESS_MIRROR};
     use nomos_workspace::BuildVariant;
     use std::path::PathBuf;
@@ -156,7 +156,7 @@ mod tests
         let query = FindingQuery { rule: nomos_contracts::RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
         let command = GateCommand { root: Repository_Root(), ..Default::default() };
 
-        let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher }, &command, &query);
+        let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, &query);
 
         let Explanation::Found { would_block, .. } = result.explanation
         else

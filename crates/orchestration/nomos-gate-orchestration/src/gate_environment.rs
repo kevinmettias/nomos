@@ -3,7 +3,7 @@
 
 use nomos_check_orchestration::{CheckOutcome, Claim, Claim_Of};
 use nomos_contracts::{Finding, RuleId, RunId};
-use nomos_platform::ProcessLauncher;
+use nomos_platform::{FileSystem, ProcessLauncher};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::Path;
@@ -32,7 +32,12 @@ use crate::{
 /// at all -- empty for every rule, the same default `RuleSelector::include` already has. A
 /// caller that must see every rule's findings regardless of `command.rules` (`Explain_Gate`)
 /// passes an empty slice here rather than `command.rules.include`.
-pub(crate) fn Judged_Sources<Launcher: ProcessLauncher>(walked: Option<Vec<SourceFile>>, launcher: &Launcher, context: JudgeContext<'_>) -> CheckOutcome
+pub(crate) fn Judged_Sources<Launcher: ProcessLauncher, Fs: FileSystem>(
+    walked: Option<Vec<SourceFile>>,
+    launcher: &Launcher,
+    filesystem: &Fs,
+    context: JudgeContext<'_>,
+) -> CheckOutcome
 {
     return match walked
     {
@@ -40,20 +45,21 @@ pub(crate) fn Judged_Sources<Launcher: ProcessLauncher>(walked: Option<Vec<Sourc
         Some(sources) if sources.is_empty() => CheckOutcome::NoSource,
         Some(sources) => nomos_check_orchestration::Run(
             &sources,
-            nomos_check_orchestration::RunContext { variant: context.variant, root: context.root, launcher },
+            nomos_check_orchestration::RunContext { variant: context.variant, root: context.root, launcher, filesystem },
             context.selected,
         ),
     };
 }
 
-/// The build variant and process launcher [`Run_Gate`] and [`crate::Explain_Gate`] both need
-/// but neither computes -- grouped into one value so each stays within this crate's own
-/// parameter-count limit. `command` and `walked`/`query`/`run` stay separate parameters:
-/// this groups only the two values every gate entry point shares.
-pub struct GateEnvironment<'a, Launcher: ProcessLauncher>
+/// The build variant, process launcher and filesystem [`Run_Gate`] and [`crate::Explain_Gate`]
+/// both need but neither computes -- grouped into one value so each stays within this crate's
+/// own parameter-count limit. `command` and `walked`/`query`/`run` stay separate parameters:
+/// this groups only the three values every gate entry point shares.
+pub struct GateEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem>
 {
     pub variant: BuildVariant,
     pub launcher: &'a Launcher,
+    pub filesystem: &'a Fs,
 }
 
 /// What [`Judged_Sources`] judges a walked tree against, apart from the walk itself and the
@@ -83,16 +89,16 @@ pub(crate) struct JudgeContext<'a>
 /// The composition root supplies one, typically [`crate::Fresh_Run_Id`] over a real clock
 /// reading.
 #[must_use]
-pub fn Run_Gate<Launcher: ProcessLauncher>(
+pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem>(
     walked: Option<Vec<SourceFile>>,
-    environment: GateEnvironment<'_, Launcher>,
+    environment: GateEnvironment<'_, Launcher, Fs>,
     command: &GateCommand,
     run: RunId,
 ) -> GateRunResult
 {
-    let GateEnvironment { variant, launcher } = environment;
+    let GateEnvironment { variant, launcher, filesystem } = environment;
     let scoped = walked.map(|sources| return Scoped_Sources(sources, &command.scope));
-    let outcome = Judged_Sources(scoped, launcher, JudgeContext { variant, root: &command.root, selected: &command.rules.include });
+    let outcome = Judged_Sources(scoped, launcher, filesystem, JudgeContext { variant, root: &command.root, selected: &command.rules.include });
 
     let reduced = Reduced_Findings(
         &outcome,
@@ -224,7 +230,7 @@ mod tests
     use nomos_check_orchestration::CheckOutcome;
     use nomos_contracts::{Digest128, RunId};
     use nomos_model::Subject_Of_Path;
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
     use nomos_rules::SourceFile;
     use nomos_workspace::BuildVariant;
     use std::path::PathBuf;
@@ -238,7 +244,7 @@ mod tests
     fn Test_Judged_Sources_Should_Report_Unreadable_For_An_Unwalked_Root()
     {
         let root = Repository_Root();
-        let outcome = Judged_Sources(None, &StdProcessLauncher, JudgeContext { variant: Test_Variant(), root: &root, selected: &[] });
+        let outcome = Judged_Sources(None, &StdProcessLauncher, &StdFileSystem, JudgeContext { variant: Test_Variant(), root: &root, selected: &[] });
 
         assert!(matches!(outcome, CheckOutcome::Unreadable));
     }
@@ -247,7 +253,7 @@ mod tests
     fn Test_Judged_Sources_Should_Report_No_Source_For_An_Empty_Walk()
     {
         let root = Repository_Root();
-        let outcome = Judged_Sources(Some(Vec::new()), &StdProcessLauncher, JudgeContext { variant: Test_Variant(), root: &root, selected: &[] });
+        let outcome = Judged_Sources(Some(Vec::new()), &StdProcessLauncher, &StdFileSystem, JudgeContext { variant: Test_Variant(), root: &root, selected: &[] });
 
         assert!(matches!(outcome, CheckOutcome::NoSource));
     }
@@ -263,7 +269,7 @@ mod tests
         let command = GateCommand { root: root.clone(), ..Default::default() };
         let run = RunId::From_Digest(Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]));
 
-        let result = Run_Gate(Some(sources), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher }, &command, run);
+        let result = Run_Gate(Some(sources), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, run);
 
         assert!(!result.findings.blocking_findings.is_empty());
     }

@@ -6,7 +6,7 @@ use crate::{composition, sources};
 use nomos_contracts::RunId;
 use nomos_gate_orchestration::{GateCommand, GateRunResult};
 use nomos_platform::Clock;
-use nomos_platform_std::{StdProcessLauncher, SystemClock};
+use nomos_platform_std::{StdFileSystem, StdProcessLauncher, SystemClock};
 use serde::Serialize;
 use std::path::{Path, PathBuf};
 
@@ -23,7 +23,11 @@ pub fn Handle_Gate_Run(root: &Path) -> GateRunResponse
     let run = nomos_gate_orchestration::Fresh_Run_Id(SystemClock.Now());
     let result = nomos_gate_orchestration::Run_Gate(
         walked,
-        nomos_gate_orchestration::GateEnvironment { variant: composition::Host_Variant(), launcher: &StdProcessLauncher },
+        nomos_gate_orchestration::GateEnvironment {
+            variant: composition::Host_Variant(),
+            launcher: &StdProcessLauncher,
+            filesystem: &StdFileSystem,
+        },
         &command,
         run,
     );

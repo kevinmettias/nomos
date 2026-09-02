@@ -13,7 +13,7 @@ use nomos_analysis::{MemoryFactStore, Reader};
 use nomos_contracts::{Finding, GateCategory, RuleId};
 use nomos_model::Subject_Of_Path;
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
-use nomos_platform_std::StdProcessLauncher;
+use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
 use nomos_rules::{Check_Completeness_Mirrors, SourceFile};
 use nomos_workspace::BuildVariant;
 use std::cell::Cell;
@@ -70,7 +70,7 @@ fn Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings()
 {
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher },&Architectural_Rules());
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&Architectural_Rules());
 
     let CheckOutcome::Judged { findings, examined, claim } = outcome
     else
@@ -101,7 +101,7 @@ fn Test_A_Clean_Go_Source_Should_Be_Judged_Through_Its_Own_Real_Provider()
     let sources = vec![Source("main.go", "package main\n\nfunc One() {}\n")];
     let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR), RuleId::New(nomos_rules::NAMING_CONVENTION)];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher },&selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&selected);
 
     let CheckOutcome::Judged { findings, examined, claim } = outcome
     else
@@ -129,7 +129,7 @@ fn Test_A_Genuine_Cross_Language_Field_Mismatch_Should_Be_Reported()
     ];
     let selected = [RuleId::New(nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE)];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher },&selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&selected);
 
     let CheckOutcome::Judged { findings, .. } = outcome else { panic!("a tree the provider can read must be judged") };
 
@@ -150,7 +150,7 @@ fn Test_A_Genuine_Cross_Language_Field_Match_Should_Report_Nothing()
     ];
     let selected = [RuleId::New(nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE)];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher },&selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&selected);
 
     let CheckOutcome::Judged { findings, .. } = outcome else { panic!("a tree the provider can read must be judged") };
 
@@ -171,7 +171,7 @@ fn Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete()
         "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
     )];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher },&[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&[]);
 
     let CheckOutcome::Judged { findings, claim, .. } = outcome
     else
@@ -194,7 +194,7 @@ fn Test_A_Run_That_Materializes_No_Facts_Should_Report_NoFacts()
 {
     let sources = vec![Source("broken.rs", "pub const ??? = ;")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher },&[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&[]);
 
     assert!(
         matches!(outcome, CheckOutcome::NoFacts { files: 1 }),
@@ -211,7 +211,7 @@ fn Test_Conflicting_Paths_Should_Be_Unreadable()
 {
     let sources = vec![Source("a.rs", "pub fn one() {}\n"), Source("a.rs", "pub fn two() {}\n")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher },&[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&[]);
 
     assert!(matches!(outcome, CheckOutcome::Unreadable), "duplicate paths must not be ingested");
 }
@@ -224,7 +224,7 @@ fn Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor()
 {
     let sources = vec![Source("a.rs", "pub const T: &[&str] = &[];\n")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher },&[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&[]);
 
     let CheckOutcome::Judged { findings, .. } = outcome
     else
@@ -417,7 +417,7 @@ fn Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_Metadata()
     let unselected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem },
         &[RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
     );
     assert_eq!(unselected.Count(), 0, "dependency-direction was not selected, so cargo metadata must not run");
@@ -425,7 +425,7 @@ fn Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_Metadata()
     let selected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem },
         &[RuleId::New(nomos_rules::DEPENDENCY_DIRECTION)],
     );
     assert_eq!(selected.Count(), 1, "dependency-direction was selected, so cargo metadata must run exactly once");
@@ -441,7 +441,7 @@ fn Test_A_Deselected_Lint_Rule_Should_Not_Launch_Cargo_Clippy()
     let unselected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem },
         &[RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
     );
     assert_eq!(unselected.Count(), 0, "lint-diagnostics was not selected, so cargo clippy must not run");
@@ -449,7 +449,7 @@ fn Test_A_Deselected_Lint_Rule_Should_Not_Launch_Cargo_Clippy()
     let selected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem },
         &[RuleId::New(nomos_rules::LINT_DIAGNOSTICS)],
     );
     assert_eq!(selected.Count(), 1, "lint-diagnostics was selected, so cargo clippy must run exactly once");
@@ -465,7 +465,7 @@ fn Test_A_Deselected_Dependency_Policy_Rule_Should_Not_Launch_Cargo_Deny()
     let unselected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem },
         &[RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
     );
     assert_eq!(unselected.Count(), 0, "dependency-policy was not selected, so cargo deny must not run");
@@ -473,7 +473,7 @@ fn Test_A_Deselected_Dependency_Policy_Rule_Should_Not_Launch_Cargo_Deny()
     let selected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem },
         &[RuleId::New(nomos_rules::DEPENDENCY_POLICY)],
     );
     assert_eq!(selected.Count(), 1, "dependency-policy was selected, so cargo deny must run exactly once");
@@ -498,5 +498,65 @@ fn Findings_Over(ingested: &[SourceFile], judged: &[SourceFile]) -> Vec<Finding>
     let judged = crate::run_context::Recognized_Sources(judged);
     let mut reader = Reader::On(&store, &registry, context);
     return Check_Completeness_Mirrors(&judged, &mut reader);
+}
+
+/// `RunContext`'s own `filesystem` reaching a real repository-declared policy fact, not just
+/// compiling: without a real `standards.json` under `root`, `NAMING_CONVENTION` has always
+/// judged every function name against its own hardcoded `UpperSnake` default. This proves the
+/// same function, judged twice, disagrees depending only on what `root`'s own real
+/// `standards.json` (read through a real `StdFileSystem`) declares -- the naming-policy
+/// materialization this item wires actually reaches `nomos_rules::Resolve_Case`, not merely a
+/// port that type-checks.
+#[test]
+fn Test_Run_Should_Honor_A_Real_Standards_Json_Naming_Override()
+{
+    let sources = vec![Source("a.rs", "pub fn lower_snake_name() {}\n")];
+    let selected = [RuleId::New(nomos_rules::NAMING_CONVENTION)];
+
+    let unconfigured = Scratch_Directory("naming-unconfigured");
+    let unconfigured_outcome = Run(
+        &sources,
+        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem },
+        &selected,
+    );
+    let CheckOutcome::Judged { findings: unconfigured_findings, .. } = unconfigured_outcome
+    else
+    {
+        panic!("a tree with no standards.json must still be judged, against the hardcoded default");
+    };
+    assert_eq!(
+        unconfigured_findings.len(),
+        1,
+        "an all-lowercase function name violates the hardcoded UpperSnake default when nothing overrides it: {unconfigured_findings:?}"
+    );
+
+    let overridden = Scratch_Directory("naming-overridden");
+    std::fs::write(overridden.join("standards.json"), r#"{"naming":{"function":"lower-snake"}}"#).expect("a scratch standards.json");
+    let overridden_outcome = Run(
+        &sources,
+        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem },
+        &selected,
+    );
+    let CheckOutcome::Judged { findings: overridden_findings, .. } = overridden_outcome
+    else
+    {
+        panic!("a tree with a real standards.json must still be judged")
+    };
+    assert!(
+        overridden_findings.is_empty(),
+        "a repository declaring naming.function = \"lower-snake\" must accept a lower_snake function name: {overridden_findings:?}"
+    );
+}
+
+/// A fresh, empty directory under the OS temp root, unique per test name and process --
+/// `nomos-cli::work`'s own `Scratch_Directory` fixture shape, needed here for the same reason:
+/// `StdFileSystem` reads real bytes from a real path, so proving a real override changes real
+/// behavior needs a real file on disk rather than a fixture handed in by value.
+fn Scratch_Directory(name: &str) -> std::path::PathBuf
+{
+    let root = std::env::temp_dir().join(format!("nomos-check-orchestration-test-{name}-{}", std::process::id()));
+    let _ignored = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(&root).expect("a scratch directory");
+    return root;
 }
 

@@ -30,6 +30,7 @@ pub fn Registered() -> Result<Registry, RegistryError>
     Declare_Controlflow_Capability(&mut registry)?;
     Declare_Lint_Capability(&mut registry)?;
     Declare_Dependency_Policy_Capability(&mut registry)?;
+    Declare_Naming_Policy_Capability(&mut registry)?;
 
     return Ok(registry);
 }
@@ -141,6 +142,19 @@ fn Declare_Dependency_Policy_Capability(registry: &mut Registry) -> Result<(), R
 {
     registry.Declare(nomos_cap_dependency_policy::Capability_Contract())?;
     registry.Offer(nomos_lang_rust_deny::Provider_Offer())?;
+
+    return Ok(());
+}
+
+/// A sixth capability, one offer against it -- `OD-RULES-011`'s first capability instance
+/// wired for real. `nomos_repo_standards` reads this repository's own `standards.json`
+/// through the `FileSystem` [`crate::run_context::RunContext`] now carries, the same
+/// `Declare`-then-`Offer` shape [`Declare_Dependency_Policy_Capability`] already has one
+/// capability over.
+fn Declare_Naming_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_naming_policy::Capability_Contract())?;
+    registry.Offer(nomos_repo_standards::Provider_Offer())?;
 
     return Ok(());
 }
@@ -281,8 +295,8 @@ mod tests
     use super::*;
 
     /// The composition this crate ships must not be self-contradictory, and it must
-    /// declare exactly the five capabilities [`Registered`]'s own body wires: syntax,
-    /// dependency, controlflow, lint and dependency-policy.
+    /// declare exactly the six capabilities [`Registered`]'s own body wires: syntax,
+    /// dependency, controlflow, lint, dependency-policy and naming-policy.
     #[test]
     fn Test_Registered_Should_Declare_Every_Composed_Capability()
     {
@@ -290,8 +304,8 @@ mod tests
 
         assert_eq!(
             registry.Declared().count(),
-            5,
-            "Registered() wires five Declare calls; a changed count here means the two drifted"
+            6,
+            "Registered() wires six Declare calls; a changed count here means the two drifted"
         );
     }
 
