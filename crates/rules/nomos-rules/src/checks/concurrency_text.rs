@@ -9,7 +9,7 @@
 //! is judged by exactly one of the three, never zero and never two.
 //!
 //! Deliberately narrower than code-standards' own tool in one respect, matching this crate's
-//! existing convention (`rust_text::Is_Test_Or_Example_Source`, `security_text::
+//! existing convention (`checks::Is_Test_Or_Example_Source`, `security_text::
 //! Is_Test_Or_Fixture_Source`) rather than inventing a new one: the exemption is file-level
 //! (a whole `tests/`/`examples/` source, or a `_test.rs`/`_tests.rs` file), not code-standards'
 //! finer per-line `Test_Context_Lines` brace-depth tracking of an individual `#[cfg(test)] mod
@@ -76,7 +76,7 @@ fn Findings_For(sources: &[SourceFile], rule: &str, matches_partition: fn(&str) 
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Test_Or_Example_Source(source) && !Is_Own_Implementation_File(source)
+        if source.Is_Written_In(RUST_LANGUAGE) && !super::Is_Test_Or_Example_Source(source) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Ordering_Findings_In(source, rule, matches_partition));
         }
@@ -126,22 +126,11 @@ fn Ordering_Findings_In(source: &SourceFile, rule: &str, matches_partition: fn(&
     return findings;
 }
 
-fn Is_Test_Or_Example_Source(source: &SourceFile) -> bool
-{
-    let normalized = source.path.replace('\\', "/");
-    return normalized.starts_with("tests/")
-        || normalized.starts_with("examples/")
-        || normalized.contains("/tests/")
-        || normalized.contains("/test/")
-        || normalized.ends_with("_test.rs")
-        || normalized.ends_with("_tests.rs");
-}
-
 /// This file's own path. All three rules here exempt their own implementing file, the same
 /// self-exemption `rust_text.rs`'s and `security_text.rs`'s own rules carry: every flagged
 /// line here is inside this file's own `#[cfg(test)] mod tests { ... }` fixtures, which
 /// necessarily spell out real `Ordering::Acquire`/`SeqCst`/`Relaxed` usages to prove the
-/// rules catch them. `Is_Test_Or_Example_Source` above does not cover this case because it
+/// rules catch them. [`super::Is_Test_Or_Example_Source`] does not cover this case because it
 /// is a file-path exemption and this file's own path (`checks/concurrency_text.rs`) is not
 /// itself a test/example path, even though its content carries a test module.
 const OWN_IMPLEMENTATION_FILE: &str = "checks/concurrency_text.rs";

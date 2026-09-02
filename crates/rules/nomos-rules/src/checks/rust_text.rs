@@ -39,7 +39,7 @@ pub fn Check_Unwrap_Expect_Discipline(sources: &[SourceFile]) -> Vec<Finding>
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Test_Or_Example_Source(source)
+        if source.Is_Written_In(RUST_LANGUAGE) && !super::Is_Test_Or_Example_Source(source)
         {
             findings.extend(Unwrap_Expect_Findings_In(source));
         }
@@ -363,7 +363,7 @@ fn Disabled_Test_Findings_In(source: &SourceFile) -> Vec<Finding>
 }
 
 /// This file's own path, checked with the same normalized-slash comparison
-/// [`Is_Test_Or_Example_Source`] already uses. Every rule in this file that reads a
+/// [`super::Is_Test_Or_Example_Source`] already uses. Every rule in this file that reads a
 /// construct's own spelling (`unsafe {`, `#[allow(`, `Rc::new(RefCell::new(`, `#[path`)
 /// exempts this exact file: its own test fixtures and each rule's own detection-pattern
 /// string necessarily spell out the exact syntax the rule looks for, so this is the one
@@ -381,17 +381,6 @@ const OWN_IMPLEMENTATION_FILE: &str = "checks/rust_text.rs";
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
     return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
-}
-
-fn Is_Test_Or_Example_Source(source: &SourceFile) -> bool
-{
-    let normalized = source.path.replace('\\', "/");
-    return normalized.starts_with("tests/")
-        || normalized.starts_with("examples/")
-        || normalized.contains("/tests/")
-        || normalized.contains("/test/")
-        || normalized.ends_with("_test.rs")
-        || normalized.ends_with("_tests.rs");
 }
 
 fn Lines_Of(source: &SourceFile) -> Vec<&str>

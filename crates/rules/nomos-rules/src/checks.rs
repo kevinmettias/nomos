@@ -165,6 +165,34 @@ pub(crate) fn Relay_Findings<Payload>(
     return findings;
 }
 
+/// Whether a source sits in the part of a repository that holds tests and examples rather
+/// than the code they exercise.
+///
+/// A repository-layout convention, not a language or provider fact: it answers where a file
+/// sits, never what it is written in, which is why `OD-RULES-014` measured the two verbatim
+/// copies this replaces and refused to fold them into the carried-language question it was
+/// deciding. Housed here for the reason [`Relay_Findings`] is — plumbing more than one rule
+/// needed by hand — rather than in either module that used to hold a copy: a leaf reaching
+/// into a sibling leaf for it would make the borrower structurally downstream of the lender
+/// over a fact neither one owns.
+///
+/// The prefixes match a workspace-relative path, the infixes a crate-relative one, and the
+/// suffixes the in-file convention; slashes are normalized first so a Windows path answers
+/// the same as a POSIX one. `security_text`'s own `Is_Test_Or_Fixture_Source` is
+/// deliberately not folded in: it admits `/testdata/`, `/fixtures/` and `_test.go` besides,
+/// and reads `examples` as an infix rather than a prefix, so it is a different predicate
+/// that resembles this one rather than a third copy of it.
+pub(crate) fn Is_Test_Or_Example_Source(source: &SourceFile) -> bool
+{
+    let normalized = source.path.replace('\\', "/");
+    return normalized.starts_with("tests/")
+        || normalized.starts_with("examples/")
+        || normalized.contains("/tests/")
+        || normalized.contains("/test/")
+        || normalized.ends_with("_test.rs")
+        || normalized.ends_with("_tests.rs");
+}
+
 #[cfg(test)]
 mod tests
 {
@@ -178,6 +206,37 @@ mod tests
         use nomos_model::Content_Digest;
 
         return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
+    }
+
+    /// One case per clause, plus the two shapes that must stay out: a production path that
+    /// merely contains the word, and a Windows-separated path, which is the reason the
+    /// predicate normalizes before it compares rather than after.
+    #[test]
+    fn Test_Is_Test_Or_Example_Source_Should_Judge_Prefixes_Infixes_And_Suffixes()
+    {
+        let inside = [
+            "tests/contract/main.rs",
+            "examples/one.rs",
+            "crates/rules/nomos-rules/tests/fixtures.rs",
+            "crates/rules/nomos-rules/test/fixtures.rs",
+            "crates/rules/nomos-rules/src/thing_test.rs",
+            "crates/rules/nomos-rules/src/thing_tests.rs",
+            "crates\\rules\\nomos-rules\\tests\\fixtures.rs",
+        ];
+        let outside = [
+            "crates/rules/nomos-rules/src/checks.rs",
+            "crates/latest/src/contests.rs",
+            "crates/rules/src/testing.rs",
+        ];
+
+        for path in inside
+        {
+            assert!(Is_Test_Or_Example_Source(&Source(path)), "should be exempt: {path}");
+        }
+        for path in outside
+        {
+            assert!(!Is_Test_Or_Example_Source(&Source(path)), "should be judged: {path}");
+        }
     }
 
     #[test]
