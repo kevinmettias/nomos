@@ -47665,6 +47665,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-FILENAME-DRIFT-WORKFLOW",
+      "title": "nomos-workflow-orchestration's plan.rs and outcome.rs name no type they declare",
+      "why": "The last four file-name-matches-declared-type findings in the workspace, and the only ones left after OD-RULES-015 and OD-RULES-016 settled which modules the rule may judge and what it may say about them. plan.rs declares WorkflowStepPlan and outcome.rs declares WorkflowOutcome and StepOutcome, so neither stem names a type its file declares and both are the shape the ten crates/packages renames just fixed. The crate arrived during this session, which is why the findings are not in the census the other P27-SELFCHECK items were cut from. Confirmed unclaimed by the session that merged the crate.",
+      "done_when": "Neither file reports file-name-matches-declared-type. Each rename moves the type and its impls together, so no type's public functions end up in a module the pub use route does not name. Any requirement assessment naming an old path is repointed, which tests/contract/tests/requirement_trace catches by name. cargo test -p nomos-contract-tests is green.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workflow-orchestration/src/plan.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/outcome.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-860c7d7f879d39fe.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-7796b93f37c94c9c.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-7e3f7173fb7ec794.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-16033c566fac7044.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-cb90abd5315151d3.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-e925a3efd394c3e0.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-c210d175df0110ef.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6e92a634a03d02bd.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-0311769be47a622d.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-5f8ffa78373709ba.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1788332548,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5a7046ec6a553cd5f75d34584da3205b594041a8"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

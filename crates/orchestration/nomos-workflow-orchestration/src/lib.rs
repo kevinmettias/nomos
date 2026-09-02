@@ -24,14 +24,14 @@
 #![forbid(unsafe_code)]
 
 mod body;
-mod outcome;
-mod plan;
 mod run;
+mod workflow_outcome;
+mod workflow_step_plan;
 
 #[cfg(test)]
 mod tests;
 
 pub use body::Body;
-pub use outcome::{DispatchError, StepOutcome, WorkflowOutcome};
-pub use plan::WorkflowStepPlan;
 pub use run::Run;
+pub use workflow_outcome::{DispatchError, StepOutcome, WorkflowOutcome};
+pub use workflow_step_plan::WorkflowStepPlan;
