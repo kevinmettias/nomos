@@ -98,6 +98,11 @@ impl FileSystem for StdFileSystem
     {
         return path.exists();
     }
+
+    fn Remove_File(&self, path: &Path) -> Result<(), FileSystemError>
+    {
+        return std::fs::remove_file(path).map_err(|error| Self::Classify(path, &error));
+    }
 }
 
 #[cfg(test)]
@@ -167,6 +172,29 @@ mod tests
         {
             eprintln!("{} could not be cleared: {cause}", root.display());
         }
+    }
+
+    #[test]
+    fn Test_Remove_File_Should_Delete_A_Real_File()
+    {
+        let path = Temporary_Path("remove");
+        let filesystem = StdFileSystem;
+        filesystem.Replace_Atomically(&path, "contents").unwrap();
+
+        filesystem.Remove_File(&path).unwrap();
+
+        assert!(!filesystem.Exists(&path));
+    }
+
+    #[test]
+    fn Test_Remove_File_Should_Report_A_Missing_File_As_Not_Found()
+    {
+        let path = Temporary_Path("remove-absent");
+        let filesystem = StdFileSystem;
+
+        let error = filesystem.Remove_File(&path).unwrap_err();
+
+        assert!(matches!(error, FileSystemError::NotFound { .. }));
     }
 
     fn Temporary_Path(name: &str) -> PathBuf

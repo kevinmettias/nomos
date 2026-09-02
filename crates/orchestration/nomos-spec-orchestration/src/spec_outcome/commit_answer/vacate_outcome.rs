@@ -2,10 +2,9 @@
 
 /// What became of the path a rename vacated.
 ///
-/// Outside [`nomos_platform::FileSystem`] on purpose -- deletion is not one of the port's
-/// three declared operations, so this is [`std::fs::remove_file`] directly. See
-/// `crate::run::commit`'s own documentation for why that is the arrangement rather than a
-/// defect.
+/// Read through [`nomos_platform::FileSystem::Remove_File`], the port's fourth operation.
+/// See `crate::run::commit`'s own documentation for why removal is a defaulted method there
+/// rather than a required one.
 #[derive(Debug)]
 pub enum VacateOutcome
 {

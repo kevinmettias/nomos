@@ -9,8 +9,9 @@ use std::path::Path;
 /// File access.
 ///
 /// Small on purpose. This is not an abstraction over filesystems in general — it is the
-/// set of operations Nomos's durable state actually needs, which is read, atomically
-/// replace, and check existence.
+/// set of operations Nomos's durable state actually needs: read, atomically replace, check
+/// existence, and remove. The fourth is defaulted rather than required, so it does not
+/// widen what every implementor must supply — see [`FileSystem::Remove_File`].
 pub trait FileSystem
 {
     /// Reads a file's entire contents as text.
@@ -37,4 +38,65 @@ pub trait FileSystem
 
     /// Whether a path exists.
     fn Exists(&self, path: &Path) -> bool;
+
+    /// Removes a file.
+    ///
+    /// Defaulted, unlike this trait's other three operations: most implementors — a fake
+    /// built to exercise one narrow test — have no real file to remove and no reason to
+    /// support removing one. An implementor backing real durable state overrides this to
+    /// remove for real; one that does not inherits a refusal rather than silently doing
+    /// nothing, which would read exactly like a successful removal to a caller that checked
+    /// only the `Result`.
+    ///
+    /// # Errors
+    ///
+    /// Returns a [`FileSystemError`] when the file could not be removed, or when this
+    /// implementation does not support removal at all.
+    fn Remove_File(&self, path: &Path) -> Result<(), FileSystemError>
+    {
+        return Err(FileSystemError::Other {
+            path: path.display().to_string(),
+            cause: "removal is not supported by this FileSystem implementation".to_owned(),
+        });
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// An implementor that overrides none of `FileSystem`'s three required operations
+    /// meaningfully, so that `Remove_File`'s own default is the only behaviour under test.
+    struct NoOverride;
+
+    impl FileSystem for NoOverride
+    {
+        fn Read_To_String(&self, _path: &Path) -> Result<String, FileSystemError>
+        {
+            unimplemented!("not exercised by this test")
+        }
+
+        fn Replace_Atomically(&self, _path: &Path, _contents: &str) -> Result<(), FileSystemError>
+        {
+            unimplemented!("not exercised by this test")
+        }
+
+        fn Exists(&self, _path: &Path) -> bool
+        {
+            unimplemented!("not exercised by this test")
+        }
+    }
+
+    #[test]
+    fn Test_An_Implementor_That_Does_Not_Override_Remove_File_Should_Refuse_Rather_Than_Succeed()
+    {
+        let error = NoOverride.Remove_File(Path::new("anything")).unwrap_err();
+
+        assert!(
+            matches!(error, FileSystemError::Other { .. }),
+            "a fake that never removes anything must say so rather than report success for a \
+             removal it never performed"
+        );
+    }
 }

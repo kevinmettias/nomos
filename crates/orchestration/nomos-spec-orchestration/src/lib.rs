@@ -57,8 +57,8 @@
 //! exactly the defect it exists to close, and `nomos-platform-std`'s implementation already
 //! creates missing parent directories on the way.
 //!
-//! # Increment 4's decision: `Preview` and `Commit` are generic over `FileSystem` too, and
-//! vacating a rename is not
+//! # Increment 4's decision: `Preview`, `Commit`, and vacating a rename are all generic
+//! over `FileSystem`
 //!
 //! Increment 3 deliberately left this open rather than presumed: `Preview`'s and `Commit`'s
 //! `--from` file is staged by an author at a path this crate does not choose, which it
@@ -78,14 +78,13 @@
 //! [`nomos_platform::FileSystem::Replace_Atomically`] for the same durability reason. See
 //! [`run::commit`] for that half.
 //!
-//! What does *not* follow is vacating a rename's old path. Deletion is not a shape question
-//! at all — [`nomos_platform::FileSystem`] declares three operations (read, atomically
-//! replace, exists) and its own documentation calls that "small on purpose", so there is no
-//! port method for this crate to route through even if the reasoning above otherwise applied.
-//! Extending `nomos-platform` is out of this crate's territory, so [`run::commit`] calls
-//! `std::fs::remove_file` directly for that one step — the same arrangement
-//! [`corpus::Assemble_Corpus`]'s own directory walk already has for an operation the port does not
-//! cover, not a departure from the pattern.
+//! Vacating a rename's old path follows too, now that [`nomos_platform::FileSystem`] has a
+//! fourth operation for it: `Remove_File`, defaulted rather than required so the several
+//! fakes elsewhere in this workspace that implement the other three did not have to grow a
+//! removal they have no reason to support. [`run::commit`] routes through it;
+//! `nomos-platform-std`'s `StdFileSystem` carries the real deletion.
+//! [`corpus::Assemble_Corpus`]'s own directory walk remains outside the port, for an
+//! operation (reading a whole directory tree) the port still does not cover.
 //!
 //! Argument parsing (`spec/parsing.rs`), exit-code mapping (`spec/exit_code.rs`) and text
 //! rendering (`spec/reporting.rs`, and `Note_Absences`'s own decision about *whether* to

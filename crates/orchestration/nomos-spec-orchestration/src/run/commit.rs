@@ -10,13 +10,14 @@
 //! [`FileSystem::Replace_Atomically`] for the same reason -- a truncating write has a window
 //! in which the file is empty or half-written, and this replaces one that had it.
 //!
-//! Removing the path a rename left behind does not go through the port at all, because there
-//! is nothing in it to go through: [`FileSystem`] declares three operations -- read,
-//! atomically replace, and check existence -- and deletion, by its own documentation, is
-//! deliberately not a fourth. That is not a gap this crate's territory can close (extending
-//! `nomos-platform` is out of scope here), so vacating stays a direct `std::fs::remove_file`
-//! call, the same way [`crate::corpus::Assemble_Corpus`]'s own directory walk stays outside the port
-//! for an operation it does not cover either.
+//! Removing the path a rename left behind goes through the port too, now that it has a
+//! fourth operation for it: [`FileSystem::Remove_File`]. Defaulted rather than required, so
+//! adding it did not force every existing implementor -- several of them fakes built for one
+//! narrow test elsewhere in this workspace -- to grow a removal they have no reason to
+//! support. [`StdFileSystem`]'s own override is the real deletion this step performs; nothing
+//! here calls `std::fs::remove_file` directly anymore.
+//!
+//! [`StdFileSystem`]: nomos_platform_std::StdFileSystem
 
 use nomos_platform::FileSystem;
 use nomos_spec_store::EditPreview;
@@ -69,24 +70,26 @@ pub fn Commit_Staged_Edit<Filesystem: FileSystem>(
         return Err(CommitRefusal::Unwritable(preview, report, destination, error));
     }
 
-    let vacated = renamed.map(|old| return Vacate_Renamed_Path(&destination, &request.into.join(old)));
+    let vacated = renamed.map(|old| return Vacate_Renamed_Path(&destination, &request.into.join(old), filesystem));
     let reproduction = Reproduction_Of(assembly, &preview);
 
     return Ok(CommitAnswer { preview, report, destination, vacated, reproduction });
 }
 
-/// The path a rename left behind, removed.
+/// The path a rename left behind, removed through the port.
 ///
 /// A failure here is carried and not fatal: the new file is already written, so the commit
 /// succeeded at the edit and only the tidying failed.
-fn Vacate_Renamed_Path(destination: &Path, old: &Path) -> crate::spec_outcome::Vacated
+fn Vacate_Renamed_Path<Filesystem: FileSystem>(destination: &Path, old: &Path, filesystem: &Filesystem) -> crate::spec_outcome::Vacated
 {
+    use nomos_platform::FileSystemError;
+
     use crate::spec_outcome::{VacateOutcome, Vacated};
 
-    let outcome = match std::fs::remove_file(old)
+    let outcome = match filesystem.Remove_File(old)
     {
         Ok(()) => VacateOutcome::Removed,
-        Err(error) if error.kind() == std::io::ErrorKind::NotFound => VacateOutcome::AlreadyGone,
+        Err(FileSystemError::NotFound { .. }) => VacateOutcome::AlreadyGone,
         Err(error) => VacateOutcome::Failed(format!(
             "{} was written and {} could not be removed ({error}), so two files now declare \
              this record",

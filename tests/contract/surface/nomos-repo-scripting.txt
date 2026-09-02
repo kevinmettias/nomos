@@ -8,6 +8,7 @@ pub struct field nomos_repo_scripting::ScriptingPolicyError::reason: String
 pub struct nomos_repo_scripting::ScriptingPolicyError
 
 # re-exports of items declared outside this crate
+pub use determinism::ScriptingPolicyFactProduction
 pub use provider::FactContext
 pub use provider::Materialize_Workspace
 pub use provider::PolicyFact

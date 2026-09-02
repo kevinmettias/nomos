@@ -8,6 +8,7 @@ pub struct field nomos_repo_standards::NamingPolicyError::reason: String
 pub struct nomos_repo_standards::NamingPolicyError
 
 # re-exports of items declared outside this crate
+pub use determinism::NamingPolicyFactProduction
 pub use provider::FactContext
 pub use provider::Materialize_Workspace
 pub use provider::PolicyFact

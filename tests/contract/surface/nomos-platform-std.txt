@@ -4,6 +4,7 @@ pub fn nomos_platform_std::FileLock::Path(&self) -> &Path
 pub fn nomos_platform_std::FileLockGuard::drop(&mut self)
 pub fn nomos_platform_std::StdFileSystem::Exists(&self, path: &Path) -> bool
 pub fn nomos_platform_std::StdFileSystem::Read_To_String(&self, path: &Path) -> Result<String, FileSystemError>
+pub fn nomos_platform_std::StdFileSystem::Remove_File(&self, path: &Path) -> Result<(), FileSystemError>
 pub fn nomos_platform_std::StdFileSystem::Replace_Atomically(&self, path: &Path, contents: &str) -> Result<(), FileSystemError>
 pub fn nomos_platform_std::StdProcessLauncher::Run(&self, command: &Command) -> Result<ProcessOutput, String>
 pub fn nomos_platform_std::SystemClock::Now(&self) -> Timestamp

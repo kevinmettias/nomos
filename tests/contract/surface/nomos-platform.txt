@@ -21,6 +21,7 @@ pub fn nomos_platform::Command::With_Idle_Timeout(mut self, idle_timeout: std::t
 pub fn nomos_platform::CrossProcessLock::Acquire( &self, holder: &str, wait_limit: Duration, stale_after: Duration, ) -> Result<LockAcquisition<Self::Guard>, LockError>
 pub fn nomos_platform::FileSystem::Exists(&self, path: &Path) -> bool
 pub fn nomos_platform::FileSystem::Read_To_String(&self, path: &Path) -> Result<String, FileSystemError>
+pub fn nomos_platform::FileSystem::Remove_File(&self, path: &Path) -> Result<(), FileSystemError>
 pub fn nomos_platform::FileSystem::Replace_Atomically(&self, path: &Path, contents: &str) -> Result<(), FileSystemError>
 pub fn nomos_platform::FileSystemError::Path(&self) -> &str
 pub fn nomos_platform::FileSystemError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result

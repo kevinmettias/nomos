@@ -44433,14 +44433,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Territory needs three more surface snapshots left stale by this session's own earlier work; re-added as -2."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-external-review-reconciliation",
-        "acquired_at": 1788308044,
-        "lease_expires_at": 1788315244
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -44457,9 +44457,18 @@
         "timeout_seconds": 3600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-external-review-reconciliation",
+          "reason": "Adding FileSystem::Remove_File also revealed tests/contract/surface/nomos-repo-limits.txt, nomos-repo-scripting.txt and nomos-repo-standards.txt were left stale by this session's own earlier OD-LEDGER-DETERMINISM-STRATEGY-GAP-3 work (their pub use of a new FactProduction type was never blessed). Re-adding with those three files in territory to close that out alongside this item's own two platform surface files.",
+          "abandoned_at": 1788308531
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-external-review-reconciliation",
+        "declined_at": 1788308531
+      }
     },
     {
       "id": "OD-RULES-014-TEXT-RULE-LANGUAGE-APPLICABILITY-2",
@@ -44772,10 +44781,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-review-triage",
+        "acquired_at": 1788308466,
+        "lease_expires_at": 1788315666
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -44792,6 +44805,77 @@
         "timeout_seconds": 3600
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P26-PLATFORM-VACATE-THROUGH-THE-PORT-2",
+      "title": "Route the spec-commit rename vacate through nomos-platform rather than raw std::fs",
+      "why": "Same as the declined original. Widened by three files: tests/contract/surface/nomos-repo-limits.txt, nomos-repo-scripting.txt and nomos-repo-standards.txt were left stale by this session's own earlier OD-LEDGER-DETERMINISM-STRATEGY-GAP-3 work (adding pub use determinism::XxxFactProduction to each crate was never blessed), discovered while re-running public_surface for this item's own two platform files.",
+      "done_when": "The rename-vacate step no longer calls std::fs directly: nomos_platform::FileSystem carries a removal operation (defaulted, so no other FileSystem implementor has to change), nomos-platform-std implements it, nomos-spec-orchestration::run::commit routes through it, and the module docs that justified the raw call are corrected. tests/contract/surface/nomos-platform.txt, nomos-platform-std.txt, nomos-repo-limits.txt, nomos-repo-scripting.txt and nomos-repo-standards.txt are all re-blessed; cargo test -p nomos-contract-tests --test public_surface exits 0 except for nomos-repo-words, a live peer claim outside this item's territory.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform/src/file_system.rs",
+          "crates/platform/nomos-platform-std/src/std_file_system.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/run/commit.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/spec_outcome/commit_answer/vacate_outcome.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/lib.rs",
+          "tests/contract/surface/nomos-platform.txt",
+          "tests/contract/surface/nomos-platform-std.txt",
+          "tests/contract/surface/nomos-repo-limits.txt",
+          "tests/contract/surface/nomos-repo-scripting.txt",
+          "tests/contract/surface/nomos-repo-standards.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-orchestration",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-platform-std"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-orchestration",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-platform-std"
+        ],
+        "exit_code": 0,
+        "output_tail": "sts::Test_Submit_Should_Accept_A_Complete_Submission_With_Submitted_Origin ... ok\ntest tests::Test_Run_Of_Preview_Should_Describe_A_Staged_Edit_And_Write_Nothing ... ok\ntest tests::Test_Run_Of_Record_Should_Tell_An_Unsourced_Node_From_An_Unknown_One ... ok\ntest tests::Test_Run_Of_Render_Should_Place_A_Projection_Built_With_No_Corpus ... ok\ntest tests::Test_Run_Of_Freshness_Should_Report_A_Freshly_Rendered_Output_As_Current ... ok\n\ntest result: ok. 80 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.61s\n\n\nrunning 5 tests\ntest Test_Run_Should_Accept_A_Real_Nomos_Platform_File_System ... ok\ntest Test_Submit_Corpus_Request_Should_Accept_A_Real_Submission ... ok\ntest Test_Assemble_Corpus_Should_Seed_A_Real_Specification_Store ... ok\ntest Test_Assemble_Corpus_Should_Report_A_Refused_Corpus_File ... ok\ntest Test_Run_Should_List_And_Render_A_Real_Shipped_Profile ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.51s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_platform-850f3d9aa77513a4.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_platform_std-6d25ac7c36e3a64e.exe)\n     Running tests\\implements_the_platform_ports.rs (target\\debug\\deps\\implements_the_platform_ports-ff986e1fe5e42726.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_orchestration-239318079326fc62.exe)\n     Running tests\\spec_run_seam.rs (target\\debug\\deps\\spec_run_seam-3a7b2cea149c29a2.exe)\n   Doc-tests nomos_platform\n   Doc-tests nomos_platform_std\n   Doc-tests nomos_spec_orchestration\n",
+        "verified_at": 1788308683,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c7b01e3b87b150fca30306d3ff43051ddfadb603"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
