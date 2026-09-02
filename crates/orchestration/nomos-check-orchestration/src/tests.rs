@@ -753,6 +753,70 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Forbidden_Script_Extension()
     );
 }
 
+/// The goals-policy materialization reaching `Check_Goals_And_Parts_Line_Up`, the one
+/// composed rule whose subject is not source at all.
+///
+/// Both halves of this test are load-bearing in a way the limits and scripting pairs are
+/// not. The unconfigured half is what this repository itself looks like -- `standards.json`
+/// declares no goals -- so it is the state the rule runs in on every real check here, and
+/// silence is the correct answer rather than a fallback. The configured half is the only
+/// place anything proves the rule can speak at all through `Run`.
+#[test]
+fn Test_Run_Should_Honor_A_Real_Standards_Json_Goal_Declaration()
+{
+    // The rule reads no sources, but a run whose every source produced no fact reports
+    // `NoFacts` and never reaches any rule, so one real Rust file makes the run a judgment.
+    let sources = vec![Source("a.rs", "pub fn Anything() {}\n")];
+    let selected = [RuleId::New(nomos_rules::GOALS_AND_PARTS_LINE_UP)];
+
+    let unconfigured = Scratch_Directory("goals-unconfigured");
+    let CheckOutcome::Judged { findings: unconfigured_findings, .. } = Run(
+        &sources,
+        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        &selected,
+    )
+    else
+    {
+        panic!("a tree with no standards.json must still be judged");
+    };
+    assert!(
+        unconfigured_findings.is_empty(),
+        "a repository that declared no goals has not taken goal traceability on: {unconfigured_findings:?}"
+    );
+
+    // One declared goal nothing serves, and one part serving nothing: the orphaned goal and
+    // the purposeless subsystem, which is the smallest declaration that exercises both
+    // directions of the audit.
+    let overridden = Scratch_Directory("goals-declared");
+    std::fs::write(
+        overridden.join("standards.json"),
+        r#"{"goals":["render"],"subsystems":[{"subsystem":"utils","paths":["src/utils"]}]}"#,
+    )
+    .expect("a scratch standards.json");
+    let CheckOutcome::Judged { findings: declared_findings, .. } = Run(
+        &sources,
+        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        &selected,
+    )
+    else
+    {
+        panic!("a tree with a real standards.json must still be judged")
+    };
+    assert_eq!(
+        declared_findings.len(),
+        2,
+        "a declared goal nothing serves and a part serving no goal are two findings: {declared_findings:?}"
+    );
+    assert!(
+        declared_findings.iter().any(|finding| return finding.summary.contains("nothing was built for")),
+        "the orphaned goal must be reported: {declared_findings:?}"
+    );
+    assert!(
+        declared_findings.iter().any(|finding| return finding.summary.contains("serves no declared goal")),
+        "the purposeless subsystem must be reported: {declared_findings:?}"
+    );
+}
+
 /// A fresh, empty directory under the OS temp root, unique per test name and process --
 /// `nomos-cli::work`'s own `Scratch_Directory` fixture shape, needed here for the same reason:
 /// `StdFileSystem` reads real bytes from a real path, so proving a real override changes real

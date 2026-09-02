@@ -33,6 +33,7 @@ pub fn Registered() -> Result<Registry, RegistryError>
     Declare_Naming_Policy_Capability(&mut registry)?;
     Declare_Limits_Policy_Capability(&mut registry)?;
     Declare_Scripting_Policy_Capability(&mut registry)?;
+    Declare_Goals_Policy_Capability(&mut registry)?;
 
     return Ok(registry);
 }
@@ -196,6 +197,22 @@ fn Declare_Scripting_Policy_Capability(registry: &mut Registry) -> Result<(), Re
     return Ok(());
 }
 
+/// A ninth capability, one offer against it -- the last of `OD-RULES-011`'s five families to
+/// reach a real run.
+///
+/// Its one rule is composed by the same item that adds this declaration, which is the reverse
+/// of how limits and scripting arrived: those were rules already running and starved of a
+/// fact, this is a fact that had no consumer. The words family is still absent for the same
+/// reason stated the other way round -- its rule cannot be composed yet, so materializing its
+/// fact would be wiring something nobody reads.
+fn Declare_Goals_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_goals_policy::Capability_Contract())?;
+    registry.Offer(nomos_repo_goals::Provider_Offer())?;
+
+    return Ok(());
+}
+
 /// Which registered `nomos.cap.syntax.items` provider `path` belongs to, if either does --
 /// `OD-CAPABILITY-009`'s corrected fix, and the one function both halves of the pipeline
 /// consult so they cannot independently drift on the answer.
@@ -332,9 +349,9 @@ mod tests
     use super::*;
 
     /// The composition this crate ships must not be self-contradictory, and it must
-    /// declare exactly the eight capabilities [`Registered`]'s own body wires: syntax,
-    /// dependency, controlflow, lint, dependency-policy, naming-policy, limits-policy and
-    /// scripting-policy.
+    /// declare exactly the nine capabilities [`Registered`]'s own body wires: syntax,
+    /// dependency, controlflow, lint, dependency-policy, naming-policy, limits-policy,
+    /// scripting-policy and goals-policy.
     #[test]
     fn Test_Registered_Should_Declare_Every_Composed_Capability()
     {
@@ -342,8 +359,8 @@ mod tests
 
         assert_eq!(
             registry.Declared().count(),
-            8,
-            "Registered() wires eight Declare calls; a changed count here means the two drifted"
+            9,
+            "Registered() wires nine Declare calls; a changed count here means the two drifted"
         );
     }
 

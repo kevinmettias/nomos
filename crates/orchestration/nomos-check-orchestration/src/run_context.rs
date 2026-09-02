@@ -18,7 +18,8 @@ use nomos_rules::{
     Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_File_Name_Matches_Declared_Type,
     Check_File_Size_Justification_Trigger, Check_Go_Constants_Split_By_Export, Check_Go_File_Size_Hard_Trigger,
     Check_Go_File_Size_Review_Trigger, Check_Go_Helpers_Package_Five_Inputs, Check_Go_Type_Names_Use_Camel_Case,
-    Check_Go_Variables_Use_Lower_Snake_Case, Check_Lint_Diagnostics, Check_Naming_Convention, Check_No_Mod_Rs_Files,
+    Check_Go_Variables_Use_Lower_Snake_Case, Check_Goals_And_Parts_Line_Up, Check_Lint_Diagnostics,
+    Check_Naming_Convention, Check_No_Mod_Rs_Files,
     Check_No_Trailing_Whitespace, Check_Parameter_Count, Check_Relaxed_Not_Used_When_Ordering_Matters,
     Check_Scripts_Use_A_Portable_Shebang, Check_Seqcst_Justified_Explicitly, Check_Shared_Interior_Mutability_Says_Why,
     Check_Suppression_Directives_Carry_A_Reason, Check_Todo_Format,
@@ -30,6 +31,7 @@ use nomos_rules::{
     CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, COMPLETENESS_MIRROR, CONSTANTS_SPLIT_BY_EXPORT,
     CROSS_LANGUAGE_CORRESPONDENCE, DATA_NAMES_STAY_LOWER_SNAKE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS,
     DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, DEPRECATION, EAGER_VS_LAZY_CONTEXT,
+    GOALS_AND_PARTS_LINE_UP,
     EVERY_ALLOW_CARRIES_A_JUSTIFICATION, EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE,
     FILE_SIZE_JUSTIFICATION_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
     GO_HELPERS_PACKAGE_FIVE_INPUTS, GO_VARIABLES_USE_LOWER_SNAKE_CASE, LINT_DIAGNOSTICS, LOWERCASE_FIRST_LETTER,
@@ -45,15 +47,15 @@ use std::path::Path;
 
 use crate::composition::{Recognized_Language, Recognized_Syntax_Provider, Registered};
 use crate::facts::{
-    DependencyMaterialization, Ingested_Workspace, LintMaterialization, Materialize_Dependencies, Materialize_Limits_Policy,
-    Materialize_Lint, Materialize_Naming_Policy, Materialize_Policy, Materialize_Reachability, Materialize_Scripting_Policy,
-    Materialize_Syntax, PolicyMaterialization,
+    DependencyMaterialization, Ingested_Workspace, LintMaterialization, Materialize_Dependencies, Materialize_Goals_Policy,
+    Materialize_Limits_Policy, Materialize_Lint, Materialize_Naming_Policy, Materialize_Policy, Materialize_Reachability,
+    Materialize_Scripting_Policy, Materialize_Syntax, PolicyMaterialization,
 };
 use crate::CheckOutcome;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 46;
+const RULE_COUNT: usize = 47;
 
 /// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
 /// through, the filesystem a repository-declared policy capability (`nomos.cap.naming.
@@ -237,6 +239,7 @@ fn Materialize_Capabilities<Launcher: ProcessLauncher, Fs: FileSystem>(
     Materialize_Naming_Policy_Section(env, selected);
     Materialize_Limits_Policy_Section(env, selected);
     Materialize_Scripting_Policy_Section(env, selected);
+    Materialize_Goals_Policy_Section(env, selected);
 
     return Capability_Materialization_Of(dependencies, lint, policy);
 }
@@ -381,6 +384,22 @@ fn Materialize_Scripting_Policy_Section<Launcher: ProcessLauncher, Fs: FileSyste
     }
 }
 
+/// The goals-policy section: [`Materialize_Goals_Policy`] when its one rule is selected.
+///
+/// The narrowest gate of the four policy sections, because exactly one rule reads this
+/// capability -- and the first one whose rule takes no sources at all, so there is nothing
+/// here to gate on but the rule's own selection.
+fn Materialize_Goals_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs>,
+    selected: &[RuleId],
+)
+{
+    if Is_Rule_Selected(selected, GOALS_AND_PARTS_LINE_UP)
+    {
+        Materialize_Goals_Policy(env.root, env.context, env.store, env.filesystem);
+    }
+}
+
 /// The assembly section: what the three source-and-finding materializations produced,
 /// gathered into one [`CapabilityMaterialization`].
 fn Capability_Materialization_Of(
@@ -514,6 +533,9 @@ fn Rule_Findings(
         (LOWERCASE_FIRST_LETTER, &|_reader| return Check_Error_Message_Starts_Lowercase(sources)),
         (NO_TRAILING_PUNCTUATION, &|_reader| return Check_Error_Message_Has_No_Trailing_Punctuation(sources)),
         (EAGER_VS_LAZY_CONTEXT, &|_reader| return Check_Eager_Vs_Lazy_Context(sources)),
+        // The one composed rule that takes no sources: its whole subject is the repository's
+        // own declaration, which arrives through the reader.
+        (GOALS_AND_PARTS_LINE_UP, &|reader| return Check_Goals_And_Parts_Line_Up(reader)),
     ];
 
     return Findings_For_Selected_Rules(rules, reader, selected);

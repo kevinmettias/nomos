@@ -47057,6 +47057,95 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "OD-RULES-ABBREVIATIONS-JUDGES-NAMES-NOBODY-CHOSE",
+      "title": "Check_Abbreviations judges trait-impl method names the author cannot rename",
+      "why": "Measured before composing the rule into a real run: an approximation over this workspace's declarations reports about 165 findings, and 104 of them are the single word fmt -- the required method name of core::fmt::Display, which no author picks and none can change without abandoning the trait. Ten more are impl and six are fn, the same shape. code-standards' own sibling check-generic-parameter-name states the carve-out this rule is missing in as many words: the one thing it skips is a declaration whose name was not the author's, because a trait that fixes its implementers' shape also fixes what they may call things. Until that carve-out exists, composing Check_Abbreviations into nomos-check-orchestration::Run would add roughly a hundred findings nothing can act on, which is why OD-RULES-011-COMPOSE-GOALS deliberately leaves the words family unwired: materializing nomos.cap.words.policy for a rule that cannot be composed would be wiring a fact nobody reads.",
+      "done_when": "Check_Abbreviations does not report a name declared inside an impl block that serves a trait, distinguishing it from an inherent impl through the TRAIT/INHERENT shape nomos-cap-syntax already records on the enclosing impl item -- the payload carries the distinction on the block rather than on its members, so the rule has to correlate a member with the block that encloses it. A unit test covers a trait-impl member being skipped and an inherent-impl member of the same qualified name still being judged, and cargo test -p nomos-rules is green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-COMPOSE-GOALS",
+      "title": "Compose Check_Goals_And_Parts_Line_Up into Run and wire nomos.cap.goals.policy",
+      "why": "The goals family has a contract, a provider and a rule, and no real check run consults any of them, because the rule is not in Rule_Findings at all. Unlike limits and scripting, which were composed rules starved of a fact, this needs the rule composed first -- and it is the only one of the five families where that is now possible: composing the words rule is blocked by OD-RULES-ABBREVIATIONS-JUDGES-NAMES-NOBODY-CHOSE, which measured about 165 findings against this workspace, 104 of them on names a trait fixes. Goals reports nothing here, since standards.json declares no goals, so this composes cleanly and the capability finally has a real consumer.",
+      "done_when": "run_context.rs's Rule_Findings table carries GOALS_AND_PARTS_LINE_UP at RULE_COUNT 47, composition.rs declares nomos.cap.goals.policy and offers nomos-repo-goals, facts/policy_materialization.rs gains Materialize_Goals_Policy and facts.rs exports it, a gated section materializes it only when the rule is selected, nomos-check-orchestration depends on both crates, a test proves a real declared goal set reaches a finding through Run and that an undeclared repository reports nothing, and cargo test -p nomos-check-orchestration is green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "st_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings ... ok\ntest tests::Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact ... ok\ntest tests::Test_Materialize_Lint_Should_Return_Real_Workspace_Members ... ok\ntest tests::Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor ... ok\ntest tests::Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete ... ok\n\ntest result: ok. 40 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.22s\n\n\nrunning 6 tests\ntest Test_Registered_Should_Offer_The_Deny_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_Every_Syntax_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Declare_Every_Capability_Crates_Own_Real_Contract ... ok\ntest Test_Registered_Should_Offer_Every_Dependency_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Reachability_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Clippy_Providers_Own_Real_Offer ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List ... ok\ntest Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule ... ok\ntest Test_Run_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.18s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-14f05476268ade42.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-0536814e702ab6ba.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-c80c9d8849c99ea6.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1788320247,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f3ecf1db693b03b1470039f08112bcbadf251cc7"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
