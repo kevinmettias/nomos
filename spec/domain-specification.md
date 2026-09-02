@@ -167,6 +167,7 @@ profile: domain-specification
 | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md@authored | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md | authored | 23 | 6 | sha256:4b0bd63773267478c66835f887728ff0cedb4892a98e85291ed631e1665b53c8 |
 | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md@authored | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md | authored | 20 | 6 | sha256:04c3221540c1dfff84ceb66e9b1cd588331b0e7df89080dc0d714bc2df75102b |
 | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md@authored | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md | authored | 21 | 6 | sha256:ecd850bb6c29efe9ac6e25ef920c7e6492a59d5e6fe177709d05c01a8bbef25f |
+| docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md@authored | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md | authored | 16 | 6 | sha256:be774faf1f653161ca537fca09f49287c8b993c75d9f1cc9385f73849c3136ae |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1491,6 +1492,12 @@ profile: domain-specification
 | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#11 | authored | 2 | The Decision |
 | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#15 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#19 | authored | 2 | Status |
+| docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#1 | authored | 1 | env, doc and docs are resolved by a descriptive rename, not a words-policy addition |
+| docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#9 | authored | 2 | The Decision |
+| docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#12 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#15 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -44102,6 +44109,143 @@ Revisit if a future addition through `standards.json` turns out to mask a real a
 this rule should have caught — that would be the missing-word trade this record makes turning
 out to cost more than the `repo` precedent suggested, and the answer then is to remove the
 addition and rename the sites that prompted it instead.
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#1
+
+*revision: authored · kind: heading · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition · hash: sha256:7a863bccb7feb832f5d867878eea95fc91e83330716324a9d24d510e11973d89*
+
+# env, doc and docs are resolved by a descriptive rename, not a words-policy addition
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#2
+
+*revision: authored · kind: heading · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#3
+
+*revision: authored · kind: prose · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / Question · hash: sha256:a59b356a954beb4cd6792417b637dc5a9d4706ac534cc75fa1870f46827d9329*
+
+`OD-RULES-017` resolved twenty-five of the thirty `Check_Abbreviations` findings it measured
+and left five open at their five sites, reasoning that spelling `env`/`doc`/`docs` out —
+its own examples were `Environment_Shebang` and `Documentation_Own_Unmarked_Example` — would
+misdescribe what the code is about, since none of the five abbreviates "environment" or
+"document" in the ordinary sense the ban exists to catch. It declined to decide them on that
+evidence and named what would resolve them: a scoped-approval extension to
+`nomos.cap.words.policy`, or a structural exemption in `Check_Abbreviations` itself.
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#4
+
+*revision: authored · kind: prose · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / Question · hash: sha256:980afe96f5d004631d82b8fcd214639f31b201c0deab7528dc8510dee2caf20c*
+
+This record takes a third path neither considered: a rename that describes what each site is
+about differently, rather than substituting a synonym for the banned word.
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#5
+
+*revision: authored · kind: heading · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#6
+
+*revision: authored · kind: prose · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / What Was Measured · hash: sha256:2d4f90ac2cc594263157f8dc98b202181218a771d52b283f2e2404ee4db0209b*
+
+Read against each of the five sites, `OD-RULES-017`'s objection holds against the literal
+substitution it evaluated but not against every rename:
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#7
+
+*revision: authored · kind: prose · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / What Was Measured · hash: sha256:c2d7d7c44a84d7cc3816e2091f032d5dd5b9a3f760968881742d9b3e69057910*
+
+- `claims.rs`'s `Has_Misplaced_Inner_Doc`/`Line_Is_Misplaced_Inner_Doc` name what `//!`/`#![...]`
+  is called. "Doc comment" and "documentation comment" are the same term — the Rust Reference
+  uses both — so `Inner_Documentation_Comment` loses nothing a reader would have gotten from
+  `Inner_Doc`.
+- `supersession.rs`'s `Test_Adr_Doc_001_Should_Carry_An_Explicit_Supersession_Edge` names a
+  fixed node id, `ADR-DOC-001`, but the id itself is what needs to stay precise — and it does,
+  quoted verbatim four times in the test body's SQL and assertions. The function name only has
+  to say what is tested, and the very next test in the same file already does this without the
+  word: `Test_The_Superseded_Record_Should_Be_A_Visible_Placeholder`. The flagged test now reads
+  `Test_The_Superseded_Record_Should_Carry_An_Explicit_Supersession_Edge`, matching a convention
+  the file had already established rather than inventing one.
+- `concurrency_text.rs`'s `..._Should_Reject_The_Docs_Own_Unmarked_Example` means "the rule's
+  own doc comment's example" — `Its_Own` says exactly that without the word, since "its" already
+  refers back to the rule under test named earlier in the same identifier.
+- `script_discipline.rs`'s `..._Should_Accept_Env_Shebang` sits beside a sibling,
+  `..._Should_Report_A_Hardcoded_Shebang`, that already contrasts the hardcoded and portable
+  forms without naming either program. `..._Should_Accept_A_Portable_Shebang` completes that
+  contrast; the assertion's own source fixture still spells `#!/usr/bin/env bash` exactly.
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#8
+
+*revision: authored · kind: prose · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / What Was Measured · hash: sha256:32b5b0b7ee3d44781b0eafc0a034c48aba7fdbfaa7d2d2a12b2916e34f2482e8*
+
+Every rename above changes an identifier that names the *relationship* the test or function
+states, never a string literal, node id, or shebang line — the four places precision actually
+lives are untouched.
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#9
+
+*revision: authored · kind: heading · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#10
+
+*revision: authored · kind: prose · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / The Decision · hash: sha256:23318af8a64b1a88eec70353442c73ad766beaefe7ed7b0744476ecbcc237ea0*
+
+**`env`, `doc` and `docs` are not added to `standards.json`.** `OD-RULES-017`'s reasoning for
+declining that stands: both are common enough as lazy shorthand for "environment" and
+"document" elsewhere that a workspace-wide approval risks masking a real abbreviation this rule
+exists to catch, and neither this record nor `OD-RULES-017` has evidence beyond five isolated
+sites to justify that trade.
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#11
+
+*revision: authored · kind: prose · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / The Decision · hash: sha256:91ef2440a5a5d51bce54dc8b69bfcbe564e63691785717806ea2133dac7d1f58*
+
+**The five sites are renamed to describe what they are about instead of quoting the banned
+word**, per the mapping above. `Check_Abbreviations` itself is unchanged, and so is
+`DEFAULT_BANNED_WORDS` — this is not the structural exemption `OD-RULES-017` also named as a
+live option, because no new mechanism was needed once the rename itself stopped being read as a
+literal word substitution.
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#12
+
+*revision: authored · kind: heading · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#13
+
+*revision: authored · kind: prose · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / What This Record Does Not Do · hash: sha256:a079f0ae2aa8c6953a0b1b3aa6215ec7899191b239eccfe174dce6deadc6fcba*
+
+It does not build the scoped-approval channel `OD-RULES-017`'s "What This Record Does Not Do"
+section named. That gap in `nomos.cap.words.policy` is real and still open; this record simply
+found that these five findings did not need it.
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#14
+
+*revision: authored · kind: prose · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / What This Record Does Not Do · hash: sha256:2f844e41a4d2e946557fd7b6cc8fce3169a709da5071ac12438a1ea01ac81397*
+
+It does not claim every future `env`/`doc`/`docs` finding will have an equally clean rename.
+Some future site may genuinely have no way to describe itself without the word, in which case
+`OD-RULES-017`'s two named options — scoped approval or a structural exemption — are still the
+ones to reach for.
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#15
+
+*revision: authored · kind: heading · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#16
+
+*revision: authored · kind: prose · heading: env, doc and docs are resolved by a descriptive rename, not a words-policy addition / Status · hash: sha256:74cb1e186701dd055f04980bb2a998b405cc29d5fd0af237834d36e6d57c73c8*
+
+Accepted. All five sites are renamed, `cargo test -p nomos-lang-rust -p nomos-spec-store
+-p nomos-rules` is green, and the workspace self-check reports zero blocking findings.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

@@ -316,7 +316,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Check_Atomic_Ordering_Choices_Are_Justified_Should_Reject_The_Docs_Own_Unmarked_Example()
+    fn Test_Check_Atomic_Ordering_Choices_Are_Justified_Should_Reject_Its_Own_Unmarked_Example()
     {
         let source = Source(
             "src/counter.rs",

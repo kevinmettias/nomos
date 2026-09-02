@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:7830a1f4bb5f301003e42039147444dbf313eb86dd6417830fd4976f8d0ed4e1",
-  "inputs_digest": "sha256:3b7a5c7afb9b1e96d192633f587dc7cf8c95243242a9b51eb5f8f2c3023e8958",
+  "content_digest": "sha256:2cdade12103d57f8608511b74da9cd846eb9043c8a15116fdf1e8490284c9b0f",
+  "inputs_digest": "sha256:48db6ee4df4b0600cb3a723f105949b865f6c72706b3f39d98cbc0e2468a4433",
   "sections": [
     [
       "Relations",
-      1306
+      1308
     ],
     [
       "Decisions",
-      176
+      177
     ]
   ],
   "inputs": [
@@ -5718,6 +5718,16 @@
     },
     {
       "content": "relations",
+      "identity": "OD-RULES-017 relates-to OD-RULES-018",
+      "hash": "sha256:7f2bef89f9bf3bb8b4d45758e56e03e23917d7dd229cd4dd21ad9d0c61a4548c"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-018 relates-to OD-RULES-017",
+      "hash": "sha256:f1606303892f8f85d1c427c06355615b907d5b3e17bed4fc45fc25595aaf6c62"
+    },
+    {
+      "content": "relations",
       "identity": "OD-SPEC-001 affects ARC-SPECDB-001",
       "hash": "sha256:0a9c2e5ec4e796c5cd41612499e7f8f13aabe9ded4369a4e3e63603bebf83493"
     },
@@ -7290,6 +7300,11 @@
       "content": "nodes",
       "identity": "OD-RULES-017",
       "hash": "sha256:b72ad439115ede0a6b92da36300cb30da5fa0511e5cc6bf03268d2789f56a5ae"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-RULES-018",
+      "hash": "sha256:632cd4eb2a76724c67894e8ed496ee226d91f8f6e058b8a9b8593d6cead3b134"
     },
     {
       "content": "nodes",

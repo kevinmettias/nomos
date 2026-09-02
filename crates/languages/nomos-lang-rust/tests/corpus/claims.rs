@@ -212,7 +212,7 @@ fn Damage_Reason(source: Option<&str>) -> Option<&'static str>
         return Some("stray byte order mark");
     }
 
-    if source.is_some_and(Has_Misplaced_Inner_Doc)
+    if source.is_some_and(Has_Misplaced_Inner_Documentation_Comment)
     {
         return Some("misplaced inner doc comment");
     }
@@ -229,13 +229,13 @@ fn Damage_Reason(source: Option<&str>) -> Option<&'static str>
 /// than a second parse, at the same level of precision the byte-order-mark check above
 /// already uses: comments and blank lines do not count as "an item began", anything else
 /// does.
-fn Has_Misplaced_Inner_Doc(source: &str) -> bool
+fn Has_Misplaced_Inner_Documentation_Comment(source: &str) -> bool
 {
     let mut seen_item = false;
 
     for line in source.lines()
     {
-        if Line_Is_Misplaced_Inner_Doc(line, &mut seen_item)
+        if Line_Is_Misplaced_Inner_Documentation_Comment(line, &mut seen_item)
         {
             return true;
         }
@@ -247,7 +247,7 @@ fn Has_Misplaced_Inner_Doc(source: &str) -> bool
 /// One line's contribution to the scan: whether it is itself an inner doc comment or
 /// attribute arriving after a real item already began the file, and — if it is neither —
 /// whether it is the item that would make a later one misplaced.
-fn Line_Is_Misplaced_Inner_Doc(line: &str, seen_item: &mut bool) -> bool
+fn Line_Is_Misplaced_Inner_Documentation_Comment(line: &str, seen_item: &mut bool) -> bool
 {
     let trimmed = line.trim_start();
 

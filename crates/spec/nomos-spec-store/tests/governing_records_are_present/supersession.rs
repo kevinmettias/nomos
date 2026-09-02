@@ -6,7 +6,7 @@ use nomos_spec_store::{EXTERNAL, NodeRow};
 /// D-129 supersedes ADR-DOC-001. The edge has to be in the store, not only in the prose,
 /// or "what superseded this?" is a question only a person reading markdown can answer.
 #[test]
-fn Test_Adr_Doc_001_Should_Carry_An_Explicit_Supersession_Edge()
+fn Test_The_Superseded_Record_Should_Carry_An_Explicit_Supersession_Edge()
 {
     let store = Seeded();
     let forward = Counted(

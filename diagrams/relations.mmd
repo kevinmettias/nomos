@@ -1143,6 +1143,8 @@ graph LR
     od_rules_016 -->|"relates-to"| od_rules_017
     od_rules_017 -->|"relates-to"| od_rules_011
     od_rules_017 -->|"relates-to"| od_rules_016
+    od_rules_017 -->|"relates-to"| od_rules_018["OD-RULES-018"]
+    od_rules_018 -->|"relates-to"| od_rules_017
     od_spec_001 -->|"affects"| arc_specdb_001
     od_spec_001 -->|"relates-to"| d_133
     od_spec_002 -->|"affected_by"| d_132
@@ -1460,6 +1462,7 @@ graph LR
     od_rules_015
     od_rules_016
     od_rules_017
+    od_rules_018
     od_spec_001
     od_spec_002
     od_spec_004

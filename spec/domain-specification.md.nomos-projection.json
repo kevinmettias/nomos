@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:f5ad2d9b2d30a742f62aa4df299e7ff43bc3729668b0f4c46f751b788f8e41b1",
-  "inputs_digest": "sha256:675da210a7c4421c4b8c17c3d73f81260b6a2f0ebcb21737ee147a3ea2ecb9af",
+  "content_digest": "sha256:f2e52d7b7b2829a773fe24d1e14e5b2bc3905c25936aecc6634674ad3cd4080c",
+  "inputs_digest": "sha256:fb2ad179c0adfdfda2a0610bc29c847e8d0074aefa073ab1a35d199ca69bd661",
   "sections": [
     [
       "Documents",
-      184
+      185
     ],
     [
       "Sections",
-      1534
+      1540
     ],
     [
       "Source blocks",
-      5366
+      5382
     ]
   ],
   "inputs": [
@@ -804,6 +804,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md@authored",
       "hash": "sha256:ecd850bb6c29efe9ac6e25ef920c7e6492a59d5e6fe177709d05c01a8bbef25f"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md@authored",
+      "hash": "sha256:be774faf1f653161ca537fca09f49287c8b993c75d9f1cc9385f73849c3136ae"
     },
     {
       "content": "documents",
@@ -7399,6 +7404,36 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#19",
       "hash": "sha256:ad9d06707cbe3abf5221196f241387b7c237368e64deb0dd24eabee8224852e3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#1",
+      "hash": "sha256:a6c30d0a437c5afb29c8d1dab89706d5d3b4bdc46e29e602b32a14a624c54343"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#2",
+      "hash": "sha256:e03bfc49382f754d2a2f0526000d073adfe3c9e0be6e38cfbeeea807ae2703e0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#5",
+      "hash": "sha256:91c8208111c359b070420628ad531e6c5d5e5b0d448f2d533935c7442bedb8bd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#9",
+      "hash": "sha256:8c059f4e19d76aeaae733124936a5cc65eb7639fff4b5f31f601d532acb147e3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#12",
+      "hash": "sha256:490025fb07314ed6e5c00e57604b9ac4fc6401b3e7ac7c3449a33ecfb19705aa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#15",
+      "hash": "sha256:bb5ba10f86682d945e3adfd906f00c995c989c7b84684dc8903416076fc7e198"
     },
     {
       "content": "headings",
@@ -31474,6 +31509,86 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md#21",
       "hash": "sha256:be36e2df654665544296d9719973448080dae50e616218d6f3a967f16b70019a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#1",
+      "hash": "sha256:7a863bccb7feb832f5d867878eea95fc91e83330716324a9d24d510e11973d89"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#3",
+      "hash": "sha256:a59b356a954beb4cd6792417b637dc5a9d4706ac534cc75fa1870f46827d9329"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#4",
+      "hash": "sha256:980afe96f5d004631d82b8fcd214639f31b201c0deab7528dc8510dee2caf20c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#6",
+      "hash": "sha256:2d4f90ac2cc594263157f8dc98b202181218a771d52b283f2e2404ee4db0209b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#7",
+      "hash": "sha256:c2d7d7c44a84d7cc3816e2091f032d5dd5b9a3f760968881742d9b3e69057910"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#8",
+      "hash": "sha256:32b5b0b7ee3d44781b0eafc0a034c48aba7fdbfaa7d2d2a12b2916e34f2482e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#9",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#10",
+      "hash": "sha256:23318af8a64b1a88eec70353442c73ad766beaefe7ed7b0744476ecbcc237ea0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#11",
+      "hash": "sha256:91ef2440a5a5d51bce54dc8b69bfcbe564e63691785717806ea2133dac7d1f58"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#12",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#13",
+      "hash": "sha256:a079f0ae2aa8c6953a0b1b3aa6215ec7899191b239eccfe174dce6deadc6fcba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#14",
+      "hash": "sha256:2f844e41a4d2e946557fd7b6cc8fce3169a709da5071ac12438a1ea01ac81397"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#15",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#16",
+      "hash": "sha256:74cb1e186701dd055f04980bb2a998b405cc29d5fd0af237834d36e6d57c73c8"
     },
     {
       "content": "blocks",

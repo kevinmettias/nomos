@@ -561,7 +561,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Check_Scripts_Use_A_Portable_Shebang_Should_Accept_Env_Shebang()
+    fn Test_Check_Scripts_Use_A_Portable_Shebang_Should_Accept_A_Portable_Shebang()
     {
         let source = Source("scripts/check.sh", "#!/usr/bin/env bash\n# check -- run checks\n");
 
