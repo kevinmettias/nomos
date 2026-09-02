@@ -48449,6 +48449,58 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P28-RULES-FLAKY-TESTS-WIRE",
+      "title": "Compose Check_Sleep_Is_Not_Synchronization and Check_A_Test_Does_Not_Retry_Until_Green into Run",
+      "why": "P28-RULES-FLAKY-TESTS built both rules and already exported them through checks.rs/lib.rs (Check_Sleep_Is_Not_Synchronization, Check_A_Test_Does_Not_Retry_Until_Green, SLEEP_BASED_SYNCHRONIZATION, ZERO_FLAKE_POLICY are all real public items today, confirmed by grep), but neither appears anywhere in crates/orchestration/nomos-check-orchestration/src/run_context.rs -- the only file that composes a rule into a real nomos gate run. Built and exported but never called is the same declared-and-not-composed shape OD-RULES-011's whole family already names: a rule sitting in the library produces zero findings until something calls it. Both take only sources: &[SourceFile] (no FactReader), the same shape as their already-wired siblings NO_MOD_RS_FILES/EXECUTED_SCRIPTS_SET_NOUNSET immediately above the insertion point.",
+      "done_when": "run_context.rs imports Check_Sleep_Is_Not_Synchronization, Check_A_Test_Does_Not_Retry_Until_Green, SLEEP_BASED_SYNCHRONIZATION and ZERO_FLAKE_POLICY from nomos_rules. RULE_COUNT becomes 51. Rule_Findings' rules array gains (SLEEP_BASED_SYNCHRONIZATION, &|_reader| return Check_Sleep_Is_Not_Synchronization(sources)) and (ZERO_FLAKE_POLICY, &|_reader| return Check_A_Test_Does_Not_Retry_Until_Green(sources)), matching the (&|_reader| ...)(sources) shape their already-wired script-discipline siblings use. cargo test -p nomos-check-orchestration is green, and nomos gate run --root . --rule sleep-based-synchronization --rule zero-flake-policy now judges real files instead of reporting nothing was judged.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "st_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings ... ok\ntest tests::Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact ... ok\ntest tests::Test_Materialize_Lint_Should_Return_Real_Workspace_Members ... ok\ntest tests::Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor ... ok\ntest tests::Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete ... ok\n\ntest result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.04s\n\n\nrunning 6 tests\ntest Test_Registered_Should_Offer_Every_Dependency_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Deny_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Declare_Every_Capability_Crates_Own_Real_Contract ... ok\ntest Test_Registered_Should_Offer_Every_Syntax_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Clippy_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Reachability_Providers_Own_Real_Offer ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List ... ok\ntest Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule ... ok\ntest Test_Run_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-e529bd00b4497790.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-f99ed2ad0d9e2451.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-e65ee2616c31c246.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1788366448,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "68c76081d8b4891b0fe0c563918666f36cc3a2e3"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

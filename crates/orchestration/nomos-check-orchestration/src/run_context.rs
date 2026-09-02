@@ -9,7 +9,7 @@ use nomos_rules::{
     Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Discarded_Error_Is_Explained,
     Check_A_Package_Is_Named_After_Its_Directory, Check_A_Rust_Path_Stays_Within_Its_Own_Subtree,
     Check_A_Script_Declares_Its_Purpose, Check_A_Secret_Does_Not_Travel_In_A_Url, Check_A_Skipped_Test_States_Why,
-    Check_An_Excluded_File_Says_Why, Check_Atomic_Ordering_Choices_Are_Justified,
+    Check_A_Test_Does_Not_Retry_Until_Green, Check_An_Excluded_File_Says_Why, Check_Atomic_Ordering_Choices_Are_Justified,
     Check_Certificate_Verification_Is_Not_Disabled, Check_Completeness_Mirrors, Check_Cross_Language_Correspondence,
     Check_Data_Names_Stay_Lower_Snake, Check_Declared_Tooling_Language_For_Scripts, Check_Dependency_Direction,
     Check_Dependency_Policy, Check_Deprecation_Carries_A_Reason, Check_Eager_Vs_Lazy_Context,
@@ -22,7 +22,7 @@ use nomos_rules::{
     Check_Naming_Convention, Check_No_Mod_Rs_Files,
     Check_No_Trailing_Whitespace, Check_Parameter_Count, Check_Relaxed_Not_Used_When_Ordering_Matters,
     Check_Scripts_Use_A_Portable_Shebang, Check_Seqcst_Justified_Explicitly, Check_Shared_Interior_Mutability_Says_Why,
-    Check_Suppression_Directives_Carry_A_Reason, Check_Todo_Format,
+    Check_Sleep_Is_Not_Synchronization, Check_Suppression_Directives_Carry_A_Reason, Check_Todo_Format,
     Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter, Check_Unread_Reaches_A_Finding,
     Check_Unsafe_Justification, Check_Workspace_Markers_Carry_A_Reason, SourceFile,
     A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, A_DISCARDED_ERROR_IS_EXPLAINED, A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
@@ -38,9 +38,10 @@ use nomos_rules::{
     NAMING_CONVENTION, NO_MOD_RS_FILES, NO_TRAILING_PUNCTUATION, NO_TRAILING_WHITESPACE,
     ONE_THOUSAND_LINE_HARD_TRIGGER, PARAMETER_COUNT,
     RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, SCRIPTS_USE_A_PORTABLE_SHEBANG, SEQCST_JUSTIFIED_EXPLICITLY,
-    SHARED_INTERIOR_MUTABILITY_SAYS_WHY, SUPPRESSION_DIRECTIVES_CARRY_A_REASON,
+    SHARED_INTERIOR_MUTABILITY_SAYS_WHY, SLEEP_BASED_SYNCHRONIZATION, SUPPRESSION_DIRECTIVES_CARRY_A_REASON,
     TODO_FORMAT, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, UNREAD_REACHES_FINDING,
     UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, UNSAFE_JUSTIFICATION, WORKSPACE_MARKERS_CARRY_A_REASON,
+    ZERO_FLAKE_POLICY,
 };
 use nomos_workspace::{BuildVariant, Workspace};
 use std::path::Path;
@@ -55,7 +56,7 @@ use crate::CheckOutcome;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 49;
+const RULE_COUNT: usize = 51;
 
 /// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
 /// through, the filesystem a repository-declared policy capability (`nomos.cap.naming.
@@ -521,6 +522,8 @@ fn Rule_Findings(
         (SCRIPTS_USE_A_PORTABLE_SHEBANG, &|_reader| return Check_Scripts_Use_A_Portable_Shebang(sources)),
         (A_SCRIPT_DECLARES_ITS_PURPOSE, &|_reader| return Check_A_Script_Declares_Its_Purpose(sources)),
         (EXECUTED_SCRIPTS_SET_NOUNSET, &|_reader| return Check_Executed_Scripts_Set_Nounset(sources)),
+        (SLEEP_BASED_SYNCHRONIZATION, &|_reader| return Check_Sleep_Is_Not_Synchronization(sources)),
+        (ZERO_FLAKE_POLICY, &|_reader| return Check_A_Test_Does_Not_Retry_Until_Green(sources)),
         (NO_MOD_RS_FILES, &|_reader| return Check_No_Mod_Rs_Files(sources)),
         (A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, &|_reader| return Check_A_Credential_Is_Not_Hardcoded_In_Source(sources)),
         (A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, &|_reader| return Check_A_Secret_Does_Not_Travel_In_A_Url(sources)),
