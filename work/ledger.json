@@ -44472,7 +44472,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -44486,7 +44486,28 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "./nomos.exe",
+          "spec",
+          "markdown",
+          "--id",
+          "OD-RULES-014"
+        ],
+        "exit_code": 0,
+        "output_tail": "king, or `Syntax_Requirement()`'s subject-agnostic floor — every part\nof `OD-CAPABILITY-009` and `OD-CAPABILITY-001` stands.\n\nIt does not add a language-crate dependency to `nomos-rules`, which is the constraint that\nrejected the obvious repair in the first place.\n\nIt does not decide `Is_Test_Or_Example_Source`, duplicated verbatim in `rust_text.rs:286` and\n`concurrency_text.rs:136`. That is the same duplication disease answering a different question\n— which part of a repository a file sits in, not which language it is — and it needs its own\nitem rather than being folded in here on the strength of looking similar.\n\nIt does not rewire the hand-composed rule table in `nomos-check-orchestration::run_context`,\nand it does not change which rules are selected or registered.\n\n## Status\n\nAccepted. Decided by reading all eleven classifier bodies, the three registered\n`nomos.cap.syntax.items` offers and their identity constants, `Recognition::Of_Path` in both\nlanguage crates, `composition::Recognized_Syntax_Provider`, the three call sites that consume\n`preferred_syntax_provider`, and `nomos-rules/Cargo.toml`'s own statement of the prohibition\nbeing worked around. The implementing change is not in this item's territory and needs its own.\nabsent: the v14 authoring corpus\n  expected: a directory named by NOMOS_V14_CORPUS, holding 01_authoring/domain_volumes/, 01_authoring/source_lineage/normative-source-statements.yaml and 02_machine/catalog/catalog.json\n  cause:    NOMOS_V14_CORPUS is not set, and no --corpus was given\n  so:       the corpus documents, their table rows, the normative statements and the node catalog are not in this store. What this command can answer is what this repository authors about itself, and nothing else\nOD-RULES-014: docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md at revision authored, rendered from the store's rows as sha256:17e863a72244a5226befd13020e7ecf1ff473198ebcac3aeea19cf24b0519524\n",
+        "verified_at": 1788307793,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

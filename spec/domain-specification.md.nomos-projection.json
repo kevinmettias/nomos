@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:c60a21208cebf93fb2149a580e20adaf227b3c060180530f9c73461933796e86",
-  "inputs_digest": "sha256:0667dcf6c1c40fd8e90227ec9fdd15b2cf081672e49cf2bf67b47a011fd43c94",
+  "content_digest": "sha256:ddaee0a25ef54280e0a8359665b14dab8606303d444f5bc523cffb60b80bea3d",
+  "inputs_digest": "sha256:8b1fa573ced9e0d403d45b935f1b8591ef83a426b0d72ede9f01084c3fd8db78",
   "sections": [
     [
       "Documents",
-      178
+      179
     ],
     [
       "Sections",
-      1490
+      1499
     ],
     [
       "Source blocks",
-      5202
+      5233
     ]
   ],
   "inputs": [
@@ -779,6 +779,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored",
       "hash": "sha256:841b1c5bb58bd645f7b84a43c5f4433923df78193de6b7e6e3ffecc92de628c9"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md@authored",
+      "hash": "sha256:17e863a72244a5226befd13020e7ecf1ff473198ebcac3aeea19cf24b0519524"
     },
     {
       "content": "documents",
@@ -7189,6 +7194,51 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#21",
       "hash": "sha256:bbd8bee0e47ae9196f415c7c43625e83c03fe2801a06c611e9213238facc816e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#1",
+      "hash": "sha256:224ce6896a633158b22caf74ea1ee850e502670d90b332f01914decd0b56c764"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#2",
+      "hash": "sha256:8d60bdf49a2129c6d9770d3ba1ca3c94f007cf620122deb635c458981386e523"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#5",
+      "hash": "sha256:5b9043a5f7d2eac1b380bbcec8a303b6c0826c73499d5775ebe5d64e0470d4cd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#14",
+      "hash": "sha256:faf6a00fc0565f9899de6dce69349f90b127cabc8cfa16eee72f419f7dd0439e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#19",
+      "hash": "sha256:97c8167cac8aff8c040ffd854a46053fb530e0405922919249fc5f4ab00532be"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#21",
+      "hash": "sha256:0078a4ca03816b36bab059e743acbad3ddfacb57ed04ca252f44738744e0c3d4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#23",
+      "hash": "sha256:5fb877ac4626f6a5d6ffd562742afda5e7ae4b9b922b1c48cfd32ddf5aab3e88"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#25",
+      "hash": "sha256:2e6cda1207b86e645206d284dce7ddb880e5cd6de376d999ba3f8402c6755b35"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#30",
+      "hash": "sha256:466a1364787a7f03d27c0686586f7e796d9b1c9d931ca9e7279747517d0897b1"
     },
     {
       "content": "headings",
@@ -30509,6 +30559,161 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#23",
       "hash": "sha256:bd793a0b1c3e7c1bb4adb61502f49b85954ca7d2e1b4c776d2514c60f3e44d77"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#1",
+      "hash": "sha256:6dfa791a99b1af98b0769c78e26fec57ff11264a2c85799492451b02fe078559"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#3",
+      "hash": "sha256:70e106ebf6a7050f57455ec22a09267fdc1350af1b0e94f78e4273218e0b3bd7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#4",
+      "hash": "sha256:ebfb557051d3008803b43d73bc8cd6ac98d21ff6a2fa9f4fb8adb40c9568e973"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#6",
+      "hash": "sha256:3c7ecc7d7cb6a11fe1b5e107c2cf34dd46efaadc09bb997f79450b2220b9fc32"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#7",
+      "hash": "sha256:dc274a04379ee5c5e67ce676de63f1b850237c014067a5ae169dcec51ce978c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#8",
+      "hash": "sha256:30c5dbe51a35366441e9c8d699f94bad954f03d57d9d12b499959b82283edbbd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#9",
+      "hash": "sha256:fd3029aee8e56e012ed28817718bfef81311e6e0b4980f62698f6460734d4c26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#10",
+      "hash": "sha256:2e69bbd62d13b8f322aa7f7b3fca26ba8e002a00c1ac4208f3ae97b8b7664c71"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#11",
+      "hash": "sha256:6f8ca182d2a586b9dcc616b9d2c8871d659d9ba0d2fbd321e750d34661930e45"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#12",
+      "hash": "sha256:3c952e379f068a33e0741f1acf9f0258518d20d8e6ac2b8622ab8a7c54cbdf33"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#13",
+      "hash": "sha256:39e9710d41855deea8fa56ad80a91227654550ca70d8f2e615039c69a6e93a59"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#14",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#15",
+      "hash": "sha256:13d15abe15905e99faa150319d0e382ed993496f6a3f09c3be3c1cec1ffc5644"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#16",
+      "hash": "sha256:fba1fbd85d12871551b39931abb5be471cabf341cc31289547e4cc4ba48be0b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#17",
+      "hash": "sha256:603afdae8f53c2996cc30233cf28d822e5b6448c7e3e3d3a0ad1319f73c1b807"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#18",
+      "hash": "sha256:8b7f88899e1a0c2b44651a2446babba7cbb5eef19c16e4e4cead525a93c02217"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#19",
+      "hash": "sha256:d09f1e3d82530a312c5e9b2d601c359a6ed0d0c6aa6cf572865d1e77f8d6e22c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#20",
+      "hash": "sha256:f1fe05c1416e5bd1994cb958d6c4e0abf591d71862d2adebed8d54c1fc931b70"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#21",
+      "hash": "sha256:cff0c76b920a688c741308eb848e77b782845f246ff0f9a084c127987224c025"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#22",
+      "hash": "sha256:baa072a25beb69b2b0d581c6b58c85b325054655893afae95a5b7caa4ca4376b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#23",
+      "hash": "sha256:0da3338093f4cbc090b31bdc7c6b3674f7dc432cd24fd4e4fee15eaceb34e290"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#24",
+      "hash": "sha256:f26dd752af974037f6073b3bd329e4952d8af0ca41cce2be6f6183ad6ef16a5d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#25",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#26",
+      "hash": "sha256:f0bab3c24c660192e851adc941e5c11c4b1fbb718f9026bd6fa8479f4620cf25"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#27",
+      "hash": "sha256:3639946afea51492c8e5c96e5aba5b813f4bf87a00ab7c3d584ead40e5ea5151"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#28",
+      "hash": "sha256:a5a6415779d88bd6eae77ebccb1477db1f216463d309c6ad69417ca3c1c91ec3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#29",
+      "hash": "sha256:629ae60b94c5dda48fc18225e0ae611a4cb974fb1afd6857e503920c9e5e689c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#30",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#31",
+      "hash": "sha256:010612ee9c6a8bb78c3f7132447b43def2d430dd86da0f43f96281744485a9fa"
     },
     {
       "content": "blocks",

@@ -162,6 +162,7 @@ profile: domain-specification
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 41 | 10 | sha256:9ccf6e284cc32aa9f6c12405d202d3fb7d7e2c1994a45e40b8111f45c8863b08 |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 23 | 6 | sha256:841b1c5bb58bd645f7b84a43c5f4433923df78193de6b7e6e3ffecc92de628c9 |
+| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md@authored | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md | authored | 31 | 9 | sha256:17e863a72244a5226befd13020e7ecf1ff473198ebcac3aeea19cf24b0519524 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1449,6 +1450,15 @@ profile: domain-specification
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#10 | authored | 2 | The Decision |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#16 | authored | 2 | What This Does Not Do |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#21 | authored | 2 | Status |
+| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#1 | authored | 1 | How a text-only rule states a language restriction without naming a provider |
+| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#14 | authored | 2 | The Decision |
+| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#19 | authored | 2 | Why Not `preferred_syntax_provider` |
+| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#21 | authored | 2 | Why Not A Capability Fact In The `OD-RULES-011` Family |
+| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#23 | authored | 2 | Why Not An Orchestration-Side Partition Of The Source List |
+| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#25 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#30 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -42654,6 +42664,279 @@ Version 2 adds the read-side rule this record's own text needed before the six r
 could be refactored: how a rule reacts to an absent *optional* capability, settled by
 citing `OD-CAPABILITY-004` rather than re-deciding it, once refactoring the first rule
 onto this capability made the gap in version 1 concrete.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#1
+
+*revision: authored · kind: heading · heading: How a text-only rule states a language restriction without naming a provider · hash: sha256:6dfa791a99b1af98b0769c78e26fec57ff11264a2c85799492451b02fe078559*
+
+# How a text-only rule states a language restriction without naming a provider
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#2
+
+*revision: authored · kind: heading · heading: How a text-only rule states a language restriction without naming a provider / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#3
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Question · hash: sha256:70e106ebf6a7050f57455ec22a09267fdc1350af1b0e94f78e4273218e0b3bd7*
+
+A rule whose norm is intrinsically about one language — Go's `//nolint` needing a reason,
+Rust's `unsafe` needing a justification — has to decide whether the file in front of it is
+that language. `nomos-rules` gives it no way to ask, so eleven functions across nine modules
+have each answered it privately by looking at the file extension.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#4
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Question · hash: sha256:ebfb557051d3008803b43d73bc8cd6ac98d21ff6a2fa9f4fb8adb40c9568e973*
+
+Whether that is a defect is not obvious, and the obvious repair is the one `OD-CAPABILITY-009`
+already rejected. `SourceFile` carries `preferred_syntax_provider` precisely so a rule does not
+recompute recognition, so the apparent fix is to compare that field against a language
+provider's identity. That would reintroduce the thing `nomos-rules`' own manifest exists to
+prevent: a band-30 rule naming a language crate.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#5
+
+*revision: authored · kind: heading · heading: How a text-only rule states a language restriction without naming a provider / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#6
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / What Was Measured · hash: sha256:3c7ecc7d7cb6a11fe1b5e107c2cf34dd46efaadc09bb997f79450b2220b9fc32*
+
+**Eleven private classifiers, four names, two signatures, for one question.**
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#7
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / What Was Measured · hash: sha256:dc274a04379ee5c5e67ce676de63f1b850237c014067a5ae169dcec51ce978c4*
+
+| Module | Function | Takes |
+|---|---|---|
+| `checks/rust_text.rs:279` | `Is_Rust_Source` | `&SourceFile` |
+| `checks/concurrency_text.rs:129` | `Is_Rust_Source` | `&SourceFile` |
+| `checks/error_text.rs:195` | `Is_Rust_Source` | `&SourceFile` |
+| `checks/go_text.rs:232` | `Is_Go_Source` | `&SourceFile` |
+| `checks/placement.rs:171` | `Is_Rust_File` | `&str` |
+| `checks/placement.rs:179` | `Is_Go_File` | `&str` |
+| `checks/structure.rs:223` | `Is_Go_File` | `&str` |
+| `checks/naming/go_data_names.rs:97` | `Is_Go_File` | `&str` |
+| `checks/naming/go_function_names.rs:117` | `Is_Go_File` | `&str` |
+| `checks/naming/go_type_names.rs:64` | `Is_Go_File` | `&str` |
+| `checks/function_shape.rs:264` | `Source_Has_Extension` | `&SourceFile, &str` |
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#8
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / What Was Measured · hash: sha256:30c5dbe51a35366441e9c8d699f94bad954f03d57d9d12b499959b82283edbbd*
+
+Every one of them is the same three lines — `Path::new(path).extension()` compared
+case-insensitively against a literal. The bodies do not disagree, which is what makes this
+duplication rather than eleven considered judgments.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#9
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / What Was Measured · hash: sha256:fd3029aee8e56e012ed28817718bfef81311e6e0b4980f62698f6460734d4c26*
+
+**The pattern is replicating, not settled.** `checks/error_text.rs` was committed while this
+record was being written and arrived carrying a fresh copy of `Is_Rust_Source`. A rule author
+today has no declared alternative to copying it, so each new language-specific rule family
+adds one.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#10
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / What Was Measured · hash: sha256:2e69bbd62d13b8f322aa7f7b3fca26ba8e002a00c1ac4208f3ae97b8b7664c71*
+
+**`preferred_syntax_provider` cannot answer the question, because a provider identity is not
+a language identity.** Three offers are registered against `nomos.cap.syntax.items`:
+`nomos.lang.rust.syn`, `nomos.lang.rust.scan` and `nomos.lang.go.tree-sitter`. Two of the
+three are the same language. The identities name the implementation technology that reads the
+file — `syn`, `scan`, `tree-sitter` — and a rule asking "is this Rust" against one of them is
+asking a narrower question than it means.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#11
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / What Was Measured · hash: sha256:6f8ca182d2a586b9dcc616b9d2c8871d659d9ba0d2fbd321e750d34661930e45*
+
+Today that narrowness is latent rather than live: `composition::Recognized_Syntax_Provider`
+tries `nomos_lang_rust` first and `nomos_lang_go` second and never returns
+`nomos.lang.rust.scan`, so a rule testing for `nomos.lang.rust.syn` would currently be right by
+accident. It stops being right the first time recognition prefers the scan provider for any
+path, and it is silent when it does: the rule returns no findings and reports no absence.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#12
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / What Was Measured · hash: sha256:3c952e379f068a33e0741f1acf9f0258518d20d8e6ac2b8622ab8a7c54cbdf33*
+
+**`Recognition` is per-provider and binary.** `nomos_lang_go::Recognition::Of_Path` answers
+`Recognized` or `Unrecognized { extension }` — "is this mine", not "what is this". There is no
+type anywhere below band 30 that names a language, and `nomos-contracts` has none.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#13
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / What Was Measured · hash: sha256:39e9710d41855deea8fa56ad80a91227654550ca70d8f2e615039c69a6e93a59*
+
+**The prohibition the classifiers are working around is deliberate and documented at length.**
+`nomos-rules/Cargo.toml` states it once per dependency: a rule names a capability contract and
+lets the registry choose who answers it, "never `nomos-lang-rust`, which is where the answer
+happens to come from today". `OD-CAPABILITY-009` kept `preferred_syntax_provider` opaque for the
+same reason, and all three call sites that read it — `checks/crosslang/reading.rs:33`,
+`checks/mirror/index.rs:77`, `checks/naming/reading.rs:31` — pass it straight to
+`Syntax_Requirement_For` without ever inspecting it.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#14
+
+*revision: authored · kind: heading · heading: How a text-only rule states a language restriction without naming a provider / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#15
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / The Decision · hash: sha256:13d15abe15905e99faa150319d0e382ed993496f6a3f09c3be3c1cec1ffc5644*
+
+**A rule's language restriction is a fact carried to it, not a fact it derives.** `SourceFile`
+gains a language field distinct from `preferred_syntax_provider`, populated by the composition
+root before any rule runs, exactly as `subject` and `preferred_syntax_provider` already are and
+for the reason `SourceFile::subject`'s own documentation already gives: "a rule that computed
+its own would be a second answer to that convention, and the two would disagree silently."
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#16
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / The Decision · hash: sha256:fba1fbd85d12871551b39931abb5be471cabf341cc31289547e4cc4ba48be0b3*
+
+Three constraints make it implementable without regressing band 30:
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#17
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / The Decision · hash: sha256:603afdae8f53c2996cc30233cf28d822e5b6448c7e3e3d3a0ad1319f73c1b807*
+
+1. **Each language crate declares its own language beside its provider identity.** A
+   `LANGUAGE` constant sits next to `PROVIDER` in `nomos-lang-rust`, `nomos-lang-rust-scan` and
+   `nomos-lang-go`; the first two declare the same value. A language crate is the only correct
+   author of that string, and this is what keeps the mapping out of the root's own head.
+2. **The carried type is opaque at band 30.** It lives in `nomos-contracts` and holds a string,
+   the way `RuleId` and `ProviderId` already do. A rule compares it against a literal naming
+   the one language its norm is about. Naming one language is inherent to a language-specific
+   norm; knowing the set of languages is not, and the set stays where recognition is.
+3. **Recognition stays in the language crates.** The root keeps asking them, through the single
+   `Recognized_Syntax_Provider` seam that already exists, and gains no second answer of its own.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#18
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / The Decision · hash: sha256:8b7f88899e1a0c2b44651a2446babba7cbb5eef19c16e4e4cead525a93c02217*
+
+**What becomes of the eleven sites.** All eleven are deleted and replaced by a comparison
+against the carried field. `Source_Has_Extension` in `function_shape.rs` is the one that does
+not simply fall out, because it is parameterized rather than fixed to one language; it becomes
+the same comparison with the expected language passed in. None of the eleven keeps sniffing:
+the predicate they compute is not wrong, but it is a second answer to a convention
+`Recognition::Of_Path` already owns, and eleven copies of a correct predicate is the defect
+here rather than the predicate itself.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#19
+
+*revision: authored · kind: heading · heading: How a text-only rule states a language restriction without naming a provider / Why Not `preferred_syntax_provider` · hash: sha256:d09f1e3d82530a312c5e9b2d601c359a6ed0d0c6aa6cf572865d1e77f8d6e22c*
+
+## Why Not `preferred_syntax_provider`
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#20
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Why Not `preferred_syntax_provider` · hash: sha256:f1fe05c1416e5bd1994cb958d6c4e0abf591d71862d2adebed8d54c1fc931b70*
+
+Measured above: two of three registered syntax providers are the same language, and the
+identities name reading technology rather than language. Overloading the field would also take
+it away from the job `OD-CAPABILITY-009` gave it — narrowing a `Require` to the offer that can
+attempt a subject — so a future third Rust provider would silently change which rules fire as
+well as which provider parses. Those are two different questions and they should not share one
+field.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#21
+
+*revision: authored · kind: heading · heading: How a text-only rule states a language restriction without naming a provider / Why Not A Capability Fact In The `OD-RULES-011` Family · hash: sha256:cff0c76b920a688c741308eb848e77b782845f246ff0f9a084c127987224c025*
+
+## Why Not A Capability Fact In The `OD-RULES-011` Family
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#22
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Why Not A Capability Fact In The `OD-RULES-011` Family · hash: sha256:baa072a25beb69b2b0d581c6b58c85b325054655893afae95a5b7caa4ca4376b*
+
+That family carries configuration a repository declares about itself: its naming policy, its
+size limits, its tooling language. Which language a file is written in is not a value a
+repository chooses, so it is not that kind of fact. `checks/go_text.rs`'s own module doc
+already draws this exact line for its own rules — "nothing about whether these markers need a
+reason is a value a repository would configure" — and the line holds one level up: nothing
+about whether a file is Go is configurable either.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#23
+
+*revision: authored · kind: heading · heading: How a text-only rule states a language restriction without naming a provider / Why Not An Orchestration-Side Partition Of The Source List · hash: sha256:0da3338093f4cbc090b31bdc7c6b3674f7dc432cd24fd4e4fee15eaceb34e290*
+
+## Why Not An Orchestration-Side Partition Of The Source List
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#24
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Why Not An Orchestration-Side Partition Of The Source List · hash: sha256:f26dd752af974037f6073b3bd329e4952d8af0ca41cce2be6f6183ad6ef16a5d*
+
+Handing each rule only the sources it applies to would move the knowledge from eleven rules
+into the root's hand-composed rule table, where it becomes a per-rule language column — the
+independently maintained support matrix the specification forbids, and a second answer to
+applicability rather than a first. How that table should generalize is `OD-HOST-004`'s
+question, not this one, and this decision is deliberately shaped so that answering it later
+changes nothing here: a carried fact on `SourceFile` is correct whether the table stays
+hand-written or becomes computed.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#25
+
+*revision: authored · kind: heading · heading: How a text-only rule states a language restriction without naming a provider / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#26
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / What This Record Does Not Do · hash: sha256:f0bab3c24c660192e851adc941e5c11c4b1fbb718f9026bd6fa8479f4620cf25*
+
+It does not change `nomos_capability::{ProviderOffer, Registry, Requirement, Selection}`, or
+`Registry::Resolve`'s ranking, or `Syntax_Requirement()`'s subject-agnostic floor — every part
+of `OD-CAPABILITY-009` and `OD-CAPABILITY-001` stands.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#27
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / What This Record Does Not Do · hash: sha256:3639946afea51492c8e5c96e5aba5b813f4bf87a00ab7c3d584ead40e5ea5151*
+
+It does not add a language-crate dependency to `nomos-rules`, which is the constraint that
+rejected the obvious repair in the first place.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#28
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / What This Record Does Not Do · hash: sha256:a5a6415779d88bd6eae77ebccb1477db1f216463d309c6ad69417ca3c1c91ec3*
+
+It does not decide `Is_Test_Or_Example_Source`, duplicated verbatim in `rust_text.rs:286` and
+`concurrency_text.rs:136`. That is the same duplication disease answering a different question
+— which part of a repository a file sits in, not which language it is — and it needs its own
+item rather than being folded in here on the strength of looking similar.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#29
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / What This Record Does Not Do · hash: sha256:629ae60b94c5dda48fc18225e0ae611a4cb974fb1afd6857e503920c9e5e689c*
+
+It does not rewire the hand-composed rule table in `nomos-check-orchestration::run_context`,
+and it does not change which rules are selected or registered.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#30
+
+*revision: authored · kind: heading · heading: How a text-only rule states a language restriction without naming a provider / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#31
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Status · hash: sha256:010612ee9c6a8bb78c3f7132447b43def2d430dd86da0f43f96281744485a9fa*
+
+Accepted. Decided by reading all eleven classifier bodies, the three registered
+`nomos.cap.syntax.items` offers and their identity constants, `Recognition::Of_Path` in both
+language crates, `composition::Recognized_Syntax_Provider`, the three call sites that consume
+`preferred_syntax_provider`, and `nomos-rules/Cargo.toml`'s own statement of the prohibition
+being worked around. The implementing change is not in this item's territory and needs its own.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
