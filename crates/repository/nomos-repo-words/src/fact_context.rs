@@ -98,6 +98,11 @@ mod tests
             decoded.approved_additions.contains(&"kwb".to_owned()),
             "this workspace's own standards.json declares words.approved_abbreviations to include kwb: {decoded:?}"
         );
+        assert!(
+            decoded.approved_additions.contains(&"vs".to_owned()),
+            "OD-RULES-017 added vs to words.approved_abbreviations as missing from the ported \
+             vocabulary rather than banned by it: {decoded:?}"
+        );
     }
 
     fn Repository_Root() -> std::path::PathBuf
