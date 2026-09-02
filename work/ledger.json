@@ -44511,6 +44511,91 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "OD-RULES-014-CARRY-THE-LANGUAGE",
+      "title": "Carry a language on SourceFile and delete the eleven private extension classifiers",
+      "why": "OD-RULES-014 decided the mechanism and its Status says the implementing change is not in that items territory and needs its own. This is it. Eleven classifiers -- Is_Rust_Source in rust_text.rs, concurrency_text.rs and error_text.rs; Is_Go_Source in go_text.rs; Is_Rust_File and Is_Go_File in placement.rs; Is_Go_File in structure.rs, naming/go_data_names.rs, naming/go_function_names.rs and naming/go_type_names.rs; Source_Has_Extension in function_shape.rs -- all compute the same three-line extension test privately. The record decided they are replaced by a comparison against a language carried on SourceFile by the composition root, with each language crate declaring a LANGUAGE constant beside its PROVIDER and the carried type opaque at nomos-contracts so no band-30 rule names a language crate.",
+      "done_when": "nomos-contracts exposes the opaque carried language type; nomos-lang-rust, nomos-lang-rust-scan and nomos-lang-go each declare a LANGUAGE constant beside PROVIDER, the first two declaring the same value; nomos_rules::SourceFile carries the field and composition::Recognized_Syntax_Provider or its neighbour populates it before any rule runs; all eleven classifiers named above are deleted and their call sites compare the carried field instead, with Source_Has_Extension taking the expected language rather than an extension; no language crate appears in nomos-rules/Cargo.toml; and the four affected surface snapshots are re-blessed.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts/src/lib.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+          "crates/rules/nomos-rules/src/checks/error_text.rs",
+          "crates/rules/nomos-rules/src/checks/go_text.rs",
+          "crates/rules/nomos-rules/src/checks/placement.rs",
+          "crates/rules/nomos-rules/src/checks/structure.rs",
+          "crates/rules/nomos-rules/src/checks/function_shape.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go_data_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go_function_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go_type_names.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "tests/contract/surface/nomos-contracts.txt",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P26-RULES-TEST-OR-EXAMPLE-DUPLICATION",
+      "title": "Is_Test_Or_Example_Source is duplicated verbatim in two rule modules",
+      "why": "OD-RULES-014 measured this while deciding the language question and explicitly refused to fold it in: it is the same duplication disease answering a different question -- which part of a repository a file sits in, not which language it is -- and folding it in on the strength of looking similar would have decided it without measuring it. rust_text.rs:286 and concurrency_text.rs:136 hold byte-identical copies checking tests/ and examples/ prefixes and /tests/ and /test/ infixes. Unlike the language question this one has no capability or carried-fact angle: a repository layout convention is not a provider recognition fact, so the likely answer is simply one shared helper. Small, but it is the second copy and the first one was not noticed until a record went looking.",
+      "done_when": "The two verbatim copies of Is_Test_Or_Example_Source in crates/rules/nomos-rules/src/checks/rust_text.rs and crates/rules/nomos-rules/src/checks/concurrency_text.rs are reduced to one definition both modules use, or the item is declined with a recorded reason why two copies are correct. If a shared home is chosen it does not become a new public surface without re-blessing tests/contract/surface/nomos-rules.txt.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
