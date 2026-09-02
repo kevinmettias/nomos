@@ -380,6 +380,13 @@
 //! written one down has not taken the discipline on; and a ceiling of zero drops only the
 //! spread bound while the two-way audit stands. This workspace declares neither, which
 //! makes it the first rule here whose honest answer against its own tree is silence.
+//!
+//! [`Check_Executed_Scripts_Set_Nounset`] is the sixty-sixth rule, the fourth and last of
+//! `script_discipline`'s own family: an executed shebang script that never enables `set -u`
+//! (or `-euo pipefail`, or the long `-o nounset`) is flagged on line 1, unless it is a
+//! *sourced library* — a file whose only top-level statements define and never do. No
+//! repository-configurable dimension, so a leaf addition beside its two siblings rather
+//! than a fourth thing needing `nomos.cap.scripting.policy`.
 
 #![forbid(unsafe_code)]
 
@@ -442,8 +449,10 @@ pub use checks::{
     Check_Suppression_Directives_Carry_A_Reason, Check_Workspace_Markers_Carry_A_Reason,
     A_DISCARDED_ERROR_IS_EXPLAINED, A_SKIPPED_TEST_STATES_WHY, AN_EXCLUDED_FILE_SAYS_WHY,
     SUPPRESSION_DIRECTIVES_CARRY_A_REASON, WORKSPACE_MARKERS_CARRY_A_REASON,
-    Check_A_Script_Declares_Its_Purpose, Check_Declared_Tooling_Language_For_Scripts, Check_Scripts_Use_A_Portable_Shebang,
-    A_SCRIPT_DECLARES_ITS_PURPOSE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, SCRIPTS_USE_A_PORTABLE_SHEBANG,
+    Check_A_Script_Declares_Its_Purpose, Check_Declared_Tooling_Language_For_Scripts, Check_Executed_Scripts_Set_Nounset,
+    Check_Scripts_Use_A_Portable_Shebang,
+    A_SCRIPT_DECLARES_ITS_PURPOSE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, EXECUTED_SCRIPTS_SET_NOUNSET,
+    SCRIPTS_USE_A_PORTABLE_SHEBANG,
     Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Secret_Does_Not_Travel_In_A_Url,
     Check_Certificate_Verification_Is_Not_Disabled, A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE,
     A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, CERTIFICATE_VERIFICATION_IS_NOT_DISABLED,

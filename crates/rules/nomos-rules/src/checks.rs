@@ -1,9 +1,9 @@
-//! The sixty-five rules this crate implements, one module each — `naming` holds fourteen,
+//! The sixty-six rules this crate implements, one module each — `naming` holds fourteen,
 //! `rust_text` holds eight, `go_text` holds five, `structure` holds five, `formatting` holds
 //! five, `security_text` holds three, `concurrency_text` holds three, `error_text` holds
 //! three, `facade` holds three, `placement` holds two, `dependency` holds two, and `goals`
 //! holds the one rule here whose subject is not source at all, while
-//! `script_discipline` holds three,
+//! `script_discipline` holds four,
 //! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`],
 //! since both judge the same declared architecture and observed
 //! `nomos.cap.dependency.edges` fact, while naming holds the general function convention
@@ -121,8 +121,10 @@ pub use rust_text::{
     UNSAFE_JUSTIFICATION, UNWRAP_EXPECT_DISCIPLINE,
 };
 pub use script_discipline::{
-    Check_A_Script_Declares_Its_Purpose, Check_Declared_Tooling_Language_For_Scripts, Check_Scripts_Use_A_Portable_Shebang,
-    A_SCRIPT_DECLARES_ITS_PURPOSE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, SCRIPTS_USE_A_PORTABLE_SHEBANG,
+    Check_A_Script_Declares_Its_Purpose, Check_Declared_Tooling_Language_For_Scripts, Check_Executed_Scripts_Set_Nounset,
+    Check_Scripts_Use_A_Portable_Shebang,
+    A_SCRIPT_DECLARES_ITS_PURPOSE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, EXECUTED_SCRIPTS_SET_NOUNSET,
+    SCRIPTS_USE_A_PORTABLE_SHEBANG,
 };
 pub use security_text::{
     Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Secret_Does_Not_Travel_In_A_Url,

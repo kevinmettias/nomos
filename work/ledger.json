@@ -47402,10 +47402,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-session-e6f4d433",
+        "acquired_at": 1788334495,
+        "lease_expires_at": 1788341695
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -47823,6 +47827,69 @@
         "timeout_seconds": 600
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-RULES-EXECUTED-SCRIPTS-NOUNSET-WIRE",
+      "title": "Export Check_Executed_Scripts_Set_Nounset and compose it into Run",
+      "why": "P27-RULES-EXECUTED-SCRIPTS-NOUNSET (c0c71f11) landed the rule in script_discipline.rs but left it unexported, per the crate's established leaf-file-then-wire split. Its two siblings (Check_Scripts_Use_A_Portable_Shebang, Check_A_Script_Declares_Its_Purpose) are already exported and composed into nomos-check-orchestration::Run, so this rule belongs beside them rather than staying additive-and-unwired.",
+      "done_when": "Check_Executed_Scripts_Set_Nounset and EXECUTED_SCRIPTS_SET_NOUNSET are exported through checks.rs and lib.rs (module doc counts sixty-six rules, script_discipline holds four), composed into nomos-check-orchestration::Run (RULE_COUNT 49, a new array entry beside its siblings), the nomos-rules public surface snapshot is reblessed, and cargo test -p nomos-rules -p nomos-check-orchestration -p nomos-contract-tests plus cargo clippy over the same are green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "hed in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-e529bd00b4497790.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-f99ed2ad0d9e2451.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-e65ee2616c31c246.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-860c7d7f879d39fe.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-7796b93f37c94c9c.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-7e3f7173fb7ec794.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-16033c566fac7044.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-cb90abd5315151d3.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-e925a3efd394c3e0.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-c210d175df0110ef.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6e92a634a03d02bd.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-0311769be47a622d.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-5f8ffa78373709ba.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788334750,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c0c71f1148bd5d96da53da52cc64e031fad44362"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
