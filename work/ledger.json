@@ -48343,7 +48343,7 @@
       "id": "P28-RULES-FLAKY-TESTS",
       "title": "Sleep-based-synchronization and retry-until-green rules in a new flakiness_text.rs",
       "why": "code-standards' check-flaky-tests (shared package rules/general/testing/shared/flakiness, judge.go/site.go) enforces two rule docs, sleep-based-synchronization.md and zero-flake-policy.md, neither yet ported. Read rust_flakiness.go and go_flakiness.go directly: Rust matches a fixed sleep-call vocabulary (thread::sleep, tokio::time::sleep, async_std::task::sleep, spin_sleep::sleep) inside test functions via tree-sitter, plus a fixed retry-attribute vocabulary (retry, flaky_test, flaky, retry_test) immediately preceding a decorated fn; Go matches only time.Sleep inside Test-prefixed functions in _test.go files and explicitly does not implement retry detection for Go (no attribute syntax to settle it on, stated as a deliberate limit in go_flakiness.go's own doc). zero-flake-policy's other prohibition, silent disabling with no reason, is already covered by a different tool's already-ported rules (a-skipped-test-states-why, a-disabled-test-states-why) so only the retry-until-green half is new here. Neither vocabulary is repository-configurable (fixed lists in code-standards itself, no standards.json block), so per OD-RULES-011's own test this is a leaf module, not a nomos.cap.*.policy capability. Text-scanning without the real tools' tree-sitter/go-ast precision: test-scope is approximated the way this crate's other *_text.rs rules already document doing (Is_Test_Or_Example_Source for file-level test/example paths, widened here to also start scanning from a file's first #[cfg(test)] or #[test] marker onward, since most Rust unit tests live inline in an otherwise-production file and file-path-only scoping would miss the exact case check-flaky-tests' own doc measured against a real corpus).",
-      "done_when": "crates/rules/nomos-rules/src/checks/flakiness_text.rs implements Check_Sleep_Is_Not_Synchronization (rule id sleep-based-synchronization; Go+Rust, fixed sleep-call vocabulary, marker escape hatch 'flakiness: allow' same-line, own-file self-exemption) and Check_A_Test_Does_Not_Retry_Until_Green (rule id zero-flake-policy; Rust only, fixed retry-attribute vocabulary immediately preceding a fn, same marker escape hatch) with unit tests covering each judgment, its marker exemption, its test-scope boundary (a sleep in production code is not flagged), and its own-file self-exemption. checks.rs declares mod flakiness_text and re-exports both functions and both rule-id constants. The nomos-rules public surface snapshot is reblessed. cargo test -p nomos-rules is green.",
+      "done_when": "crates/rules/nomos-rules/src/checks/flakiness_text.rs implements Check_Sleep_Is_Not_Synchronization (rule id sleep-based-synchronization; Go+Rust, fixed sleep-call vocabulary, marker escape hatch 'flakiness: allow' same-line, own-file self-exemption) and Check_A_Test_Does_Not_Retry_Until_Green (rule id zero-flake-policy; Rust only, fixed retry-attribute vocabulary immediately preceding a fn, same marker escape hatch) with unit tests covering each judgment, its marker exemption, its test-scope boundary (a sleep in production code is not flagged), and its own-file self-exemption. checks.rs declares mod flakiness_text and re-exports both functions and both rule-id constants; lib.rs's own pub use checks::{...} re-export block carries them too, since that is what makes them reachable from the crate root at all (found mid-implementation: omitting it leaves every function in the new module dead-code-warned, not merely undocumented). The nomos-rules public surface snapshot is reblessed. cargo test -p nomos-rules is green.",
       "kind": "Capability",
       "origin": "Proposed",
       "territory": {
@@ -48351,18 +48351,15 @@
         "paths": [
           "crates/rules/nomos-rules/src/checks/flakiness_text.rs",
           "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
           "tests/contract/surface/nomos-rules.txt"
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-6f-1788365769",
-        "acquired_at": 1788365769,
-        "lease_expires_at": 1788376569
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -48372,7 +48369,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 441 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788366048,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e355924f45d0512e44994f760886f4a6099b174d"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

@@ -414,6 +414,7 @@ pub use checks::{
     Check_A_Renamed_Facade_Re_Export_Names_The_Contract, FACADE_ALIASES_NAME_THE_CONTRACT,
     FACADE_CHOOSES_FLATTENING_OR_NAMESPACE, FACADE_CONSUMERS_USE_THE_FACADE_PATH,
     Check_Goals_And_Parts_Line_Up, GOALS_AND_PARTS_LINE_UP,
+    Check_A_Test_Does_Not_Retry_Until_Green, Check_Sleep_Is_Not_Synchronization, SLEEP_BASED_SYNCHRONIZATION, ZERO_FLAKE_POLICY,
     Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Single_Line_Function_Bodies,
     Check_No_Trailing_Whitespace, Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS,
     NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_WHITESPACE, TODO_FORMAT,

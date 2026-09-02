@@ -71,6 +71,7 @@ pub const nomos_rules::SCRIPTS_USE_A_PORTABLE_SHEBANG: &str
 pub const nomos_rules::SEQCST_JUSTIFIED_EXPLICITLY: &str
 pub const nomos_rules::SHARED_INTERIOR_MUTABILITY_SAYS_WHY: &str
 pub const nomos_rules::SINGLE_LETTER_NAMES: &str
+pub const nomos_rules::SLEEP_BASED_SYNCHRONIZATION: &str
 pub const nomos_rules::SUPPRESSION_DIRECTIVES_CARRY_A_REASON: &str
 pub const nomos_rules::TEST_NAME_DESCRIBES_BEHAVIOR: &str
 pub const nomos_rules::TODO_FORMAT: &str
@@ -82,6 +83,7 @@ pub const nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::UNSAFE_JUSTIFICATION: &str
 pub const nomos_rules::UNWRAP_EXPECT_DISCIPLINE: &str
 pub const nomos_rules::WORKSPACE_MARKERS_CARRY_A_REASON: &str
+pub const nomos_rules::ZERO_FLAKE_POLICY: &str
 pub enum nomos_rules::FunctionAritySource
 pub enum nomos_rules::Reading
 pub enum nomos_rules::ReceiverAllowance
@@ -107,6 +109,7 @@ pub fn nomos_rules::Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources: &[So
 pub fn nomos_rules::Check_A_Script_Declares_Its_Purpose(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Secret_Does_Not_Travel_In_A_Url(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Skipped_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Test_Does_Not_Retry_Until_Green(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Abbreviations(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_An_Excluded_File_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Atomic_Ordering_Choices_Are_Justified(sources: &[SourceFile]) -> Vec<Finding>
@@ -155,6 +158,7 @@ pub fn nomos_rules::Check_Scripts_Use_A_Portable_Shebang(sources: &[SourceFile])
 pub fn nomos_rules::Check_Seqcst_Justified_Explicitly(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Single_Letter_Names( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Sleep_Is_Not_Synchronization(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Suppression_Directives_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Test_Names_Describe_Behavior( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Todo_Format(sources: &[SourceFile]) -> Vec<Finding>

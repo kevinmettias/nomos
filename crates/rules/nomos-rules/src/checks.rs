@@ -23,6 +23,7 @@ mod crosslang;
 mod dependency;
 mod error_text;
 mod facade;
+mod flakiness_text;
 mod formatting;
 mod goals;
 mod function_shape;
@@ -66,6 +67,9 @@ pub use facade::{
     Check_A_Consumer_Imports_Through_The_Facade, Check_A_Facade_Publishes_A_Child_One_Way,
     Check_A_Renamed_Facade_Re_Export_Names_The_Contract, FACADE_ALIASES_NAME_THE_CONTRACT,
     FACADE_CHOOSES_FLATTENING_OR_NAMESPACE, FACADE_CONSUMERS_USE_THE_FACADE_PATH,
+};
+pub use flakiness_text::{
+    Check_A_Test_Does_Not_Retry_Until_Green, Check_Sleep_Is_Not_Synchronization, SLEEP_BASED_SYNCHRONIZATION, ZERO_FLAKE_POLICY,
 };
 pub use formatting::{
     Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Single_Line_Function_Bodies,
