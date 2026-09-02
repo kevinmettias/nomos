@@ -48209,14 +48209,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Predicate malformed at authoring time (--timeout landed inside the cargo test argv). Superseded by P27-SELFCHECK-ABBREVIATION-ENV-DOC-4, same done_when, corrected predicate. The work itself is already committed at ab15dc2c."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-89",
-        "acquired_at": 1788365063,
-        "lease_expires_at": 1788372263
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -48237,6 +48237,86 @@
         "timeout_seconds": 600
       },
       "verified": null,
+      "abandoned": [
+        {
+          "holder": "nomos-89",
+          "reason": "Predicate malformed: --timeout 1h was placed after the -- separator when the item was added, so it became part of the cargo test argv instead of work add's own flag (the trap this memory already documents: work-add-timeout-must-precede-separator). cargo refuses the unrecognized argument, exit 1. All the actual work (OD-RULES-018, the four renames, the re-render) is done and committed at ab15dc2c; re-adding as -4 with the flag correctly placed before -- so it can finish.",
+          "abandoned_at": 1788365467
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-89",
+        "declined_at": 1788365468
+      }
+    },
+    {
+      "id": "P27-SELFCHECK-ABBREVIATION-ENV-DOC-4",
+      "title": "OD-RULES-017 amended: env/doc/docs resolved by descriptive rename, not a words-policy addition",
+      "why": "OD-RULES-017 left env/doc/docs open, reasoning that spelling them out (\"Environment_Shebang\", \"Documentation_Own_Unmarked_Example\") would misdescribe what the code is about, since none of the five sites abbreviates \"environment\"/\"document\" -- one quotes the literal POSIX env command, the others Rust's own \"doc comment\" term of art or an external node id.\n\nThat reasoning holds against a literal word-substitution rename (doc -> documentation, env -> environment) but not against a rename that describes the relationship differently instead of substituting a synonym for the banned word:\n- claims.rs's Has_Misplaced_Inner_Doc/Line_Is_Misplaced_Inner_Doc: \"doc comment\" is Rust's own formal term (the Rust Reference uses \"doc comment\" and \"documentation comment\" interchangeably) -- Inner_Doc -> Inner_Documentation_Comment loses nothing.\n- supersession.rs's Test_Adr_Doc_001_...: the node id ADR-DOC-001 is quoted verbatim as a string literal inside the test body, where precision actually matters; the function name itself doesn't need to spell the id, only to say what is tested.\n- concurrency_text.rs's ..._Should_Reject_The_Docs_Own_Unmarked_Example: \"the docs\" here means \"the rule's own doc comment\" -- \"Its_Own\" says the same thing without the word.\n- script_discipline.rs's ..._Should_Accept_Env_Shebang: the enclosing test group is already Portable_Shebang; \"the recommended/portable form\" describes the outcome the assertion actually checks without naming the literal env command, which the test body's string literal (#!/usr/bin/env bash) still names precisely.\n\nFiles: crates/languages/nomos-lang-rust/tests/corpus/claims.rs, crates/spec/nomos-spec-store/tests/governing_records_are_present/supersession.rs, crates/rules/nomos-rules/src/checks/concurrency_text.rs, crates/rules/nomos-rules/src/checks/script_discipline.rs.",
+      "done_when": "OD-RULES-017 is amended (a new record, relates-to OD-RULES-017) recording that the five sites it left open are resolved by descriptive rename rather than a words-policy addition, naming the renames and why each preserves the site's precision (the ADR-DOC-001 id and the #!/usr/bin/env bash literal stay exactly as written in test bodies; only the identifiers around them change). The four sites are renamed accordingly. cargo test -p nomos-lang-rust -p nomos-spec-store -p nomos-rules is green, and the workspace self-check (cargo test -p nomos-cli --test check_command) reports zero abbreviation findings.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust/tests/corpus/claims.rs",
+          "crates/spec/nomos-spec-store/tests/governing_records_are_present/supersession.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+          "crates/rules/nomos-rules/src/checks/script_discipline.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "check_command"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "check_command"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 9 tests\ntest Test_The_Binary_Should_Name_The_Check_Group ... ok\ntest Test_A_Tree_With_No_Source_Should_Not_Report_Clean ... ok\ntest Test_A_Run_That_Materialised_No_Facts_Should_Not_Exit_Zero ... ok\ntest Test_An_Invocation_Refused_Before_Walking_Should_Report_Its_Own_Code ... ok\ntest Test_A_Phantom_Should_Fail_The_Command_Though_The_Tree_Holds_A_File_The_Parser_Refuses ... ok\ntest Test_A_Mirror_That_Exists_Should_Pass_The_Command ... ok\ntest Test_An_Admitted_Gap_Should_Be_Reported_Without_Failing ... ok\ntest Test_A_Mirror_That_Exists_Should_Still_Pass_Beside_A_File_The_Parser_Refuses ... ok\ntest Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.91s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.29s\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-f533438d67223778.exe)\n",
+        "verified_at": 1788365509,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ab15dc2ceeabcfe2a547a7cb490f9f460c7d9d37"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
