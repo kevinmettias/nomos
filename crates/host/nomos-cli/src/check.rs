@@ -146,6 +146,8 @@ pub fn Run(command: &CheckCommand, stdout: &mut impl Write, stderr: &mut impl Wr
                 root: &command.root,
                 launcher: &StdProcessLauncher,
                 filesystem: &StdFileSystem,
+                workspace: &mut None,
+                store: &mut nomos_analysis::MemoryFactStore::New(),
             },
             &[],
         ),

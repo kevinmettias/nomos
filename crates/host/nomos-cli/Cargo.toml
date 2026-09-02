@@ -46,6 +46,10 @@ nomos-work-orchestration = { workspace = true }
 # tree and renders; this crate composes and judges, over source and a build variant this
 # crate hands it as values. `OD-HOST-002`.
 nomos-check-orchestration = { workspace = true }
+# MemoryFactStore, the fact store nomos_check_orchestration::RunContext now takes as a
+# caller-supplied value rather than building internally, per OD-ANALYSIS-009's own first
+# increment — this crate constructs a fresh one per call, same as before.
+nomos-analysis = { workspace = true }
 # The seam between the `SpecCommand` vocabulary, the shared corpus-assembly plumbing every
 # spec verb needs, and the two verbs that touch no store or only describe one --
 # `spec.rs` still parses, assembles and dispatches the other seven verbs on its own, over a

@@ -140,6 +140,8 @@ fn Judged_Findings(sources: &[SourceFile], root: &Path, stderr: &mut impl Write)
             root,
             launcher: &StdProcessLauncher,
             filesystem: &StdFileSystem,
+            workspace: &mut None,
+            store: &mut nomos_analysis::MemoryFactStore::New(),
         },
         &selected,
     );

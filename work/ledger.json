@@ -46462,10 +46462,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-nomos-a8",
+        "acquired_at": 1788318992,
+        "lease_expires_at": 1788326192
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -46506,14 +46510,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P14-ANALYSIS-009-STORE-WORKSPACE-REUSE-MERGE-2: identical work, correct --amends target for the real registered record file."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-p27",
-        "acquired_at": 1788318312,
-        "lease_expires_at": 1788325512
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -46530,6 +46534,94 @@
         "timeout_seconds": 900
       },
       "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-nomos-p27",
+          "reason": "Territory reserved the wrong record filename (guessed OD-ANALYSIS-009-a-second-call-reconstructs-a-workspace-and-fact-store-instead-of-constructing-one-fresh-per-invocation.md from a truncated git-show path; the real registered file is OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md). Re-adding with the correct --amends target before touching the record.",
+          "abandoned_at": 1788318949
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-p27",
+        "declined_at": 1788318969
+      }
+    },
+    {
+      "id": "P14-ANALYSIS-009-STORE-WORKSPACE-REUSE-MERGE-2",
+      "title": "Merge the abandoned worktree-agent-a1153a787f5641523 branch: Run accepts a caller-supplied workspace and fact store",
+      "why": "Same as the original item, re-added only to correct a wrong record filename in territory: a stale, never-merged worktree branch built 2026-08-26 (bb2974d0) made Run/Ingested accept a caller-supplied workspace and store per a direct user override of OD-ANALYSIS-009's own decline. The branch's target file (run.rs) was renamed to run_context.rs and restructured (RunContext bundling variant/root/launcher/filesystem) since the branch diverged, so this is a hand-port onto the current shape: workspace and store became two more RunContext fields, rippling to all 24 existing construction sites across run_context.rs, tests.rs, run_seam.rs, nomos-cli's check.rs and correct.rs, and nomos-gate-orchestration's gate_environment.rs (plus two new nomos-analysis dependency lines), each passing &mut None and a fresh MemoryFactStore::New() to reproduce current behavior exactly. Already landed and green: cargo test -p nomos-check-orchestration is 41/41 including the ported Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomputation.",
+      "done_when": "OD-ANALYSIS-009 is amended to v2 recording the override, nomos-check-orchestration's public-surface snapshot is reblessed for the new RunContext fields, spec/domain-specification.md and diagrams/relations.mmd are re-rendered fresh from a clean worktree at this commit's own HEAD and verified via spec freshness exit 0, and cargo test -p nomos-check-orchestration -p nomos-cli --bin nomos -p nomos-gate-orchestration passes",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/dependency_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/tests/run_seam.rs",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/correct.rs",
+          "crates/host/nomos-cli/Cargo.toml",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/Cargo.toml",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "--bin",
+          "nomos",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "--bin",
+          "nomos",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "Selected_Should_Prefer_Absent_Only_When_The_Document_Itself_Had_No_Lines ... ok\ntest spec::reporting::tests::Test_Absent_Or_Should_Report_The_Absence_Over_A_Store_Missing_Its_Corpus ... ok\ntest spec::verb::render::tests::Test_Render_Profile_Should_Report_An_Unknown_Profile ... ok\ntest request::run_coverage::Test_Run_Should_Refuse_A_Submission_Missing_Its_Required_Fields ... ok\ntest spec::verb::table::tests::Test_Unselected_Rows_Should_Note_The_Document_And_Yield_No_Rows ... ok\ntest spec::verb::listing::tests::Test_Empty_Section_Should_Report_Absent_Over_A_Store_Missing_Its_Corpus ... ok\ntest spec::verb::listing::tests::Test_List_Sources_Should_Report_Absent_When_The_Corpus_Was_Never_Configured ... ok\ntest spec::verb::editing::tests::Test_Report_Edit_Error_Should_Map_Each_Error_Kind_To_Its_Own_Exit_Code ... ok\ntest spec::verb::editing::tests::Test_Preview_Edit_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest spec::verb::table::tests::Test_Read_Table_Should_Report_Absent_For_A_Document_The_Store_Never_Had ... ok\ntest spec::verb::editing::tests::Test_Commit_Edit_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest spec::verb::freshness::tests::Test_Freshness_Of_Should_Report_An_Unknown_Profile ... ok\ntest spec::verb::markdown::tests::Test_Render_Markdown_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest vacuity::tests::Test_Spec_Should_Refuse_Ok_Over_A_Record_The_Store_Never_Had ... ok\ntest gate::tests::Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report ... ok\ntest gate::tests::Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree ... ok\ntest gate::tests::Test_Relative_Path_Should_Underlie_A_Real_Explains_Search_Over_A_Clean_Tree ... ok\n\ntest result: ok. 259 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.74s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-68fdfc9e5cebe8a8.exe)\n",
+        "verified_at": 1788319254,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "41c5aa4397170a8621015a6c3bb8147362346a9d"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

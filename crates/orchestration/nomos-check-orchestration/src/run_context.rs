@@ -40,7 +40,7 @@ use nomos_rules::{
     TODO_FORMAT, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, UNREAD_REACHES_FINDING,
     UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, UNSAFE_JUSTIFICATION, WORKSPACE_MARKERS_CARRY_A_REASON,
 };
-use nomos_workspace::BuildVariant;
+use nomos_workspace::{BuildVariant, Workspace};
 use std::path::Path;
 
 use crate::composition::{Recognized_Language, Recognized_Syntax_Provider, Registered};
@@ -55,16 +55,19 @@ use crate::CheckOutcome;
 const RULE_COUNT: usize = 46;
 
 /// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
-/// through, and the filesystem a repository-declared policy capability (`nomos.cap.naming.
-/// policy` and its siblings) is read through -- grouped into one value so [`Run`] stays
-/// within this crate's own parameter-count limit. See [`Run`]'s own documentation for why
-/// each is a composition-root value this crate cannot compute for itself.
+/// through, the filesystem a repository-declared policy capability (`nomos.cap.naming.
+/// policy` and its siblings) is read through, and the workspace and fact store `Run` reads
+/// and writes -- grouped into one value so [`Run`] stays within this crate's own
+/// parameter-count limit. See [`Run`]'s own documentation for why each is a composition-root
+/// value this crate cannot compute for itself.
 pub struct RunContext<'a, Launcher: ProcessLauncher, Fs: FileSystem>
 {
     pub variant: BuildVariant,
     pub root: &'a Path,
     pub launcher: &'a Launcher,
     pub filesystem: &'a Fs,
+    pub workspace: &'a mut Option<Workspace>,
+    pub store: &'a mut MemoryFactStore,
 }
 
 /// Composes the capability registry, ingests `sources` into one workspace state, materializes
@@ -92,8 +95,20 @@ pub struct RunContext<'a, Launcher: ProcessLauncher, Fs: FileSystem>
 /// already read. `context.launcher` is what those subprocess calls run through -- generic
 /// the same way `nomos_work_orchestration::Run` is generic over [`nomos_platform`]'s
 /// traits, so this crate depends on `nomos-platform` and not on any concrete implementation
-/// of it; the composition root supplies one. The three are grouped into [`RunContext`] so
-/// this function stays within this crate's own parameter-count limit.
+/// of it; the composition root supplies one. `context.workspace` and `context.store` are the
+/// caller's, not this function's own -- `OD-ANALYSIS-009`'s own first real increment. Every
+/// caller this crate has today passes `&mut None` and a freshly constructed
+/// [`MemoryFactStore`], which reproduces exactly what this function used to do
+/// unconditionally: build both from nothing, on every call. What changes is that a caller is
+/// no longer forced to. Passing the *same* `workspace` and `store` across two calls reuses
+/// the workspace's own real diff ([`nomos_workspace::Workspace::Apply`] compares each
+/// submitted path's content against what it already holds, so an unmoved file is
+/// `Redundant` and the generation only advances when something genuinely did) and the
+/// store's own generation-scoped history, instead of starting from an empty tree and an
+/// empty store every time. This function still ingests and materializes every source in
+/// `sources` on every call -- reuse buys correctness of carrying state across calls, not yet
+/// a skipped recomputation for a subject nothing touched. The five are grouped into
+/// [`RunContext`] so this function stays within this crate's own parameter-count limit.
 ///
 /// Writes nothing and never exits: [`CheckOutcome`] is the whole answer, the same
 /// division `nomos_work_orchestration::Run` draws around [`nomos_work_orchestration`]'s own
@@ -107,36 +122,40 @@ pub fn Run<Launcher: ProcessLauncher, Fs: FileSystem>(
     selected: &[RuleId],
 ) -> CheckOutcome
 {
-    let RunContext { variant, root, launcher, filesystem } = context;
+    let RunContext { variant, root, launcher, filesystem, workspace, store } = context;
 
     let recognized = Recognized_Sources(sources);
     let sources: &[SourceFile] = &recognized;
 
-    let (registry, context) = match Composed_Registry_And_Context(sources, variant)
+    let (registry, context) = match Composed_Registry_And_Context(sources, variant, workspace)
     {
         Ok(composed) => composed,
         Err(outcome) => return outcome,
     };
 
-    let mut store = MemoryFactStore::New();
-    let facts = match Materialized_Syntax_Facts(sources, &context, &mut store)
+    let facts = match Materialized_Syntax_Facts(sources, &context, store)
     {
         Some(facts) => facts,
         None => return CheckOutcome::NoFacts { files: sources.len() },
     };
 
     let environment = RunEnvironment { root, launcher, filesystem, registry: &registry, context };
-    let findings = Judged_Over(sources, environment, &mut store, selected);
+    let findings = Judged_Over(sources, environment, store, selected);
 
     return Outcome_Of(sources.len(), facts, findings);
 }
 
 /// The registry composed and `sources` ingested through it, or the [`CheckOutcome`] that
-/// already answers the run when either step refuses.
-fn Composed_Registry_And_Context(sources: &[SourceFile], variant: BuildVariant) -> Result<(Registry, Context), CheckOutcome>
+/// already answers the run when either step refuses. `workspace` is threaded through to
+/// [`Ingested_Workspace`] rather than built here: reuse across two calls to [`Run`] is a
+/// property of the same [`Workspace`] object seeing a second `Workspace::Apply`, not
+/// something this function can arrange after the fact.
+fn Composed_Registry_And_Context(
+    sources: &[SourceFile], variant: BuildVariant, workspace: &mut Option<Workspace>,
+) -> Result<(Registry, Context), CheckOutcome>
 {
     let registry = Registered().map_err(CheckOutcome::Contradictory)?;
-    let context = Ingested_Workspace(sources, &registry, variant).map_err(|_error| return CheckOutcome::Unreadable)?;
+    let context = Ingested_Workspace(sources, &registry, variant, workspace).map_err(|_error| return CheckOutcome::Unreadable)?;
 
     return Ok((registry, context));
 }
@@ -556,7 +575,18 @@ mod tests
         let selected = [RuleId::New(COMPLETENESS_MIRROR)];
         let root = Path::new(".");
 
-        let outcome = Run(&sources, RunContext { variant: Test_Variant(), root, launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &selected);
+        let outcome = Run(
+            &sources,
+            RunContext {
+                variant: Test_Variant(),
+                root,
+                launcher: &StdProcessLauncher,
+                filesystem: &StdFileSystem,
+                workspace: &mut None,
+                store: &mut MemoryFactStore::New(),
+            },
+            &selected,
+        );
 
         let CheckOutcome::Judged { findings, examined, claim } = outcome
         else

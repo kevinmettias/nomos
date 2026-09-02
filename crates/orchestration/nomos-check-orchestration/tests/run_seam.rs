@@ -10,14 +10,15 @@
 //! repository's own root -- compiled as a separate crate that can reach nothing but
 //! `nomos_check_orchestration`'s own public API.
 //!
-//! `nomos_analysis` is the one crate `Run` reaches into that this file cannot separately name:
-//! the `nomos_analysis::Context`/`MemoryFactStore` `Run` composes to hold materialized facts is
-//! built and owned entirely inside this crate, never returned or accepted as a parameter, so no
-//! caller outside `nomos-check-orchestration` can construct, inspect or drive one directly.
-//! Every test below that reaches a real `CheckOutcome::Judged` still exercises that seam --
-//! `Run` cannot reach `Judged` without materializing at least one fact through it -- just not
-//! through an assertion this file could write against `nomos_analysis` by name.
+//! `nomos_analysis::Context` is the one thing `Run` reaches into that this file still cannot
+//! separately name: it is built and owned entirely inside this crate, never returned or
+//! accepted as a parameter. `nomos_analysis::MemoryFactStore` is no longer in that position --
+//! `OD-ANALYSIS-009`'s own first increment made it a caller-supplied `RunContext` field, so
+//! this file constructs one directly below, the same way any other real second caller would.
+//! Every test below that reaches a real `CheckOutcome::Judged` still exercises the materialize-
+//! a-fact seam either way -- `Run` cannot reach `Judged` without it.
 
+use nomos_analysis::MemoryFactStore;
 use nomos_check_orchestration::{Run, RunContext};
 use nomos_contracts::RuleId;
 use nomos_model::Subject_Of_Path;
@@ -57,7 +58,7 @@ fn Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher()
 {
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
     assert!(matches!(outcome, nomos_check_orchestration::CheckOutcome::Judged { .. }));
 }
@@ -68,7 +69,7 @@ fn Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher()
 #[test]
 fn Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List()
 {
-    let outcome: nomos_check_orchestration::CheckOutcome = Run(&[], RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &[]);
+    let outcome: nomos_check_orchestration::CheckOutcome = Run(&[], RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
     assert!(matches!(outcome, nomos_check_orchestration::CheckOutcome::Unreadable));
 }
@@ -82,7 +83,7 @@ fn Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule()
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
     let selected = [RuleId::New(COMPLETENESS_MIRROR)];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() }, &selected);
 
     assert!(matches!(outcome, nomos_check_orchestration::CheckOutcome::Judged { .. }));
 }

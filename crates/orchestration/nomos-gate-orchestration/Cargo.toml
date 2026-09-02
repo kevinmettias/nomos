@@ -8,6 +8,10 @@ license.workspace = true
 publish.workspace = true
 
 [dependencies]
+# MemoryFactStore, the fact store nomos_check_orchestration::RunContext now takes as a
+# caller-supplied value rather than building internally, per OD-ANALYSIS-009's own first
+# increment — this crate constructs a fresh one per call, same as before.
+nomos-analysis = { workspace = true }
 nomos-check-orchestration = { workspace = true }
 nomos-contracts = { workspace = true }
 nomos-model = { workspace = true }

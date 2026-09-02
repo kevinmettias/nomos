@@ -600,6 +600,6 @@ mod tests
     fn Fixture_Context(sources: &[SourceFile]) -> Context
     {
         let registry = crate::composition::Registered().expect("fixture composition");
-        return crate::facts::Ingested_Workspace(sources, &registry, Test_Variant()).expect("the fixture is a valid tree");
+        return crate::facts::Ingested_Workspace(sources, &registry, Test_Variant(), &mut None).expect("the fixture is a valid tree");
     }
 }

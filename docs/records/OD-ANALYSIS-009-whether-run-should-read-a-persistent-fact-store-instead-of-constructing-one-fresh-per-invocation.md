@@ -3,7 +3,7 @@ id: OD-ANALYSIS-009
 type: decision
 title: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - analysis
@@ -24,6 +24,8 @@ relations:
   - target: OD-HOST-003
     type: relates-to
   - target: OD-RULES-009
+    type: relates-to
+  - target: OD-ROADMAP-001
     type: relates-to
 ---
 
@@ -129,7 +131,63 @@ this is not in it.
   specifically orders "analysis + incremental fact infrastructure" ahead of the items beside
   it.
 
+## A Direct Override Built The First Real Increment, Narrower Than Any Trigger Above
+
+None of the four triggers named above had fired on their own by 2026-08-26. What changed is
+not evidence — no editor surface, no workflow engine, no measured corpus workload, no
+internal sequencing of `ARC-ROADMAP-001`'s near-term tier arrived. What changed is that the
+user directly and explicitly overrode this record's "wait for a real caller" conclusion,
+the same shape `OD-ROADMAP-001` already used for a different cluster of decisions. This is
+not `OD-ROADMAP-001` reaching a question its own text already said it does not reach — this
+record's own "Decision" section above already measured that and it is still true, unchanged
+by this section. It is a second, distinct override, over this specific question, recorded
+here rather than folded into `OD-ROADMAP-001`'s text or assumed to already be covered by it.
+
+**What was built** (`P14-ANALYSIS-009-STORE-WORKSPACE-REUSE-FIRST-INCREMENT`):
+`nomos_check_orchestration::Run` now takes `workspace: &mut Option<Workspace>` and
+`store: &mut MemoryFactStore` as parameters instead of constructing a
+`nomos_workspace::Workspace` and a `MemoryFactStore` internally on every call. `Ingested`
+(`crates/orchestration/nomos-check-orchestration/src/facts.rs`) reuses an existing
+`Workspace` when one is handed in, via `Option::get_or_insert_with`, rather than always
+starting from `Workspace::Empty`. Both of this crate's real callers —
+`nomos-cli::check::Run` and `nomos-gate-orchestration::run_gate::Judged` — construct a fresh
+`Workspace` (`&mut None`) and a fresh `MemoryFactStore` for every call, unchanged: each is
+still one process per invocation, exactly the finding "What Was Measured" made above, so
+nothing about *their* behavior is different after this increment. What is different is that
+`Run` no longer forces every caller to.
+
+A new test,
+`nomos_check_orchestration::tests::Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomputation`,
+is the first caller this workspace has ever had that reuses either object across two calls.
+It carries one `Workspace` and one `MemoryFactStore` across a call that edits one source and
+leaves another alone, and checks the result against an independent third call that
+recomputes the post-edit tree from nothing. Two things are proven, both new:
+
+- The claim and the findings agree between the reused-state call and the from-nothing call —
+  `IncrementalResult(S) == CleanRecomputation(S)`, the literal invariant `crates/substrate/
+  nomos-analysis/tests/recomputation_equivalence.rs` already proved over synthetic `FactKey`s
+  built by hand, exercised here for the first time through this crate's own real composition
+  (the real syntax provider, the real `Workspace`, `Run`'s real ingestion and judging) rather
+  than bypassing it.
+- The reused `Workspace`'s generation genuinely advances across the two calls
+  (`Workspace::Apply`'s own diff — an untouched file is `Redundant`, an edited one is
+  `Modified` — is what makes the second call a real second generation, not the fresh-store-
+  every-time behavior computing the identical generation twice).
+
+**What this does not close.** `Materialize_Syntax` and its sibling materialization steps
+still re-derive every source's fact on every call, whether or not `store` already holds a
+live one for that identity — this increment proves reuse is *safe*, not that anything is
+*skipped*. `IncrementalResult` above costs exactly what `CleanRecomputation` costs. And no
+long-lived process exists anywhere in this workspace that could hold a `Workspace` and a
+`MemoryFactStore` across two *shell* invocations — `nomos check` and `nomos gate run` remain
+one process each, so the first trigger above ("a real long-lived caller") has still not
+fired; this increment is what a real caller of that kind would need to exist, not that
+caller itself.
+
 ## Status
 
-Accepted. Revisit on any trigger named above, or when `OD-HOST-003`'s editor surface or
-`OD-WORKFLOW-002`'s engine trigger next changes status.
+Accepted, amended. The four triggers named above remain unfired on their own evidence.
+Revisit on any of them, on `OD-HOST-003`'s editor surface or `OD-WORKFLOW-002`'s engine
+trigger next changing status, or on either of this section's own two named remainders: a
+materialization step that consults `store` before recomputing a fact, or a real long-lived
+process that could be the caller this record's first trigger describes.

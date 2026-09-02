@@ -19,7 +19,9 @@ pub struct field nomos_check_orchestration::Examined::files: usize
 pub struct field nomos_check_orchestration::RunContext::filesystem: &'a Fs
 pub struct field nomos_check_orchestration::RunContext::launcher: &'a Launcher
 pub struct field nomos_check_orchestration::RunContext::root: &'a Path
+pub struct field nomos_check_orchestration::RunContext::store: &'a mut MemoryFactStore
 pub struct field nomos_check_orchestration::RunContext::variant: BuildVariant
+pub struct field nomos_check_orchestration::RunContext::workspace: &'a mut Option<Workspace>
 pub struct nomos_check_orchestration::CheckCommand
 pub struct nomos_check_orchestration::Examined
 pub struct nomos_check_orchestration::RunContext<'a, Launcher: ProcessLauncher, Fs: FileSystem>

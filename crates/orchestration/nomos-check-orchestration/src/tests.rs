@@ -70,7 +70,7 @@ fn Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings()
 {
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&Architectural_Rules());
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&Architectural_Rules());
 
     let CheckOutcome::Judged { findings, examined, claim } = outcome
     else
@@ -101,7 +101,7 @@ fn Test_A_Clean_Go_Source_Should_Be_Judged_Through_Its_Own_Real_Provider()
     let sources = vec![Source("main.go", "package main\n\nfunc One() {}\n")];
     let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR), RuleId::New(nomos_rules::NAMING_CONVENTION)];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&selected);
 
     let CheckOutcome::Judged { findings, examined, claim } = outcome
     else
@@ -129,7 +129,7 @@ fn Test_A_Genuine_Cross_Language_Field_Mismatch_Should_Be_Reported()
     ];
     let selected = [RuleId::New(nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE)];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&selected);
 
     let CheckOutcome::Judged { findings, .. } = outcome else { panic!("a tree the provider can read must be judged") };
 
@@ -150,7 +150,7 @@ fn Test_A_Genuine_Cross_Language_Field_Match_Should_Report_Nothing()
     ];
     let selected = [RuleId::New(nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE)];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&selected);
 
     let CheckOutcome::Judged { findings, .. } = outcome else { panic!("a tree the provider can read must be judged") };
 
@@ -171,7 +171,7 @@ fn Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete()
         "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
     )];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&[]);
 
     let CheckOutcome::Judged { findings, claim, .. } = outcome
     else
@@ -194,7 +194,7 @@ fn Test_A_Run_That_Materializes_No_Facts_Should_Report_NoFacts()
 {
     let sources = vec![Source("broken.rs", "pub const ??? = ;")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&[]);
 
     assert!(
         matches!(outcome, CheckOutcome::NoFacts { files: 1 }),
@@ -211,7 +211,7 @@ fn Test_Conflicting_Paths_Should_Be_Unreadable()
 {
     let sources = vec![Source("a.rs", "pub fn one() {}\n"), Source("a.rs", "pub fn two() {}\n")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&[]);
 
     assert!(matches!(outcome, CheckOutcome::Unreadable), "duplicate paths must not be ingested");
 }
@@ -224,7 +224,7 @@ fn Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor()
 {
     let sources = vec![Source("a.rs", "pub const T: &[&str] = &[];\n")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },&[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&[]);
 
     let CheckOutcome::Judged { findings, .. } = outcome
     else
@@ -304,7 +304,7 @@ fn Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members()
     // is enough to build a real one, the same way `Findings_Over`'s own fixtures do.
     let placeholder = [Source("placeholder.rs", "pub fn Placeholder() {}\n")];
     let registry = crate::composition::Registered().expect("fixture composition");
-    let context = crate::facts::Ingested_Workspace(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
+    let context = crate::facts::Ingested_Workspace(&placeholder, &registry, Test_Variant(), &mut None).expect("a single real file ingests");
     let mut store = MemoryFactStore::New();
 
     let crate::facts::DependencyMaterialization { sources, findings } =
@@ -331,7 +331,7 @@ fn Test_Materialize_Lint_Should_Return_Real_Workspace_Members()
 {
     let placeholder = [Source("placeholder.rs", "pub fn Placeholder() {}\n")];
     let registry = crate::composition::Registered().expect("fixture composition");
-    let context = crate::facts::Ingested_Workspace(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
+    let context = crate::facts::Ingested_Workspace(&placeholder, &registry, Test_Variant(), &mut None).expect("a single real file ingests");
     let mut store = MemoryFactStore::New();
 
     let crate::facts::LintMaterialization { sources, findings } =
@@ -362,7 +362,7 @@ fn Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact()
 {
     let placeholder = [Source("placeholder.rs", "pub fn Placeholder() {}\n")];
     let registry = crate::composition::Registered().expect("fixture composition");
-    let context = crate::facts::Ingested_Workspace(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
+    let context = crate::facts::Ingested_Workspace(&placeholder, &registry, Test_Variant(), &mut None).expect("a single real file ingests");
     let mut store = MemoryFactStore::New();
 
     let crate::facts::PolicyMaterialization { sources, findings } =
@@ -417,7 +417,7 @@ fn Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_Metadata()
     let unselected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &[RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
     );
     assert_eq!(unselected.Count(), 0, "dependency-direction was not selected, so cargo metadata must not run");
@@ -425,7 +425,7 @@ fn Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_Metadata()
     let selected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &[RuleId::New(nomos_rules::DEPENDENCY_DIRECTION)],
     );
     assert_eq!(selected.Count(), 1, "dependency-direction was selected, so cargo metadata must run exactly once");
@@ -441,7 +441,7 @@ fn Test_A_Deselected_Lint_Rule_Should_Not_Launch_Cargo_Clippy()
     let unselected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &[RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
     );
     assert_eq!(unselected.Count(), 0, "lint-diagnostics was not selected, so cargo clippy must not run");
@@ -449,7 +449,7 @@ fn Test_A_Deselected_Lint_Rule_Should_Not_Launch_Cargo_Clippy()
     let selected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &[RuleId::New(nomos_rules::LINT_DIAGNOSTICS)],
     );
     assert_eq!(selected.Count(), 1, "lint-diagnostics was selected, so cargo clippy must run exactly once");
@@ -465,7 +465,7 @@ fn Test_A_Deselected_Dependency_Policy_Rule_Should_Not_Launch_Cargo_Deny()
     let unselected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &[RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
     );
     assert_eq!(unselected.Count(), 0, "dependency-policy was not selected, so cargo deny must not run");
@@ -473,7 +473,7 @@ fn Test_A_Deselected_Dependency_Policy_Rule_Should_Not_Launch_Cargo_Deny()
     let selected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &[RuleId::New(nomos_rules::DEPENDENCY_POLICY)],
     );
     assert_eq!(selected.Count(), 1, "dependency-policy was selected, so cargo deny must run exactly once");
@@ -491,13 +491,113 @@ fn Test_A_Deselected_Dependency_Policy_Rule_Should_Not_Launch_Cargo_Deny()
 fn Findings_Over(ingested: &[SourceFile], judged: &[SourceFile]) -> Vec<Finding>
 {
     let registry = crate::composition::Registered().expect("the fixture composition is this crate's own");
-    let context = crate::facts::Ingested_Workspace(ingested, &registry, Test_Variant()).expect("the fixture is a valid tree");
+    let context = crate::facts::Ingested_Workspace(ingested, &registry, Test_Variant(), &mut None).expect("the fixture is a valid tree");
     let mut store = MemoryFactStore::New();
     let _written = crate::facts::Materialize_Syntax(ingested, &context, &mut store);
 
     let judged = crate::run_context::Recognized_Sources(judged);
     let mut reader = Reader::On(&store, &registry, context);
     return Check_Completeness_Mirrors(&judged, &mut reader);
+}
+
+/// `OD-ANALYSIS-009`'s first real increment, exercised end to end: `crates/substrate/
+/// nomos-analysis/tests/recomputation_equivalence.rs` already proves, over synthetic
+/// `FactKey`s built by hand, that `MemoryFactStore::Invalidate` and `Materialize` agree with
+/// a clean rebuild. What that file cannot prove is that this crate's own real composition --
+/// the real syntax provider, the real `Workspace`, `Run`'s real ingestion and judging -- ever
+/// asks a store and a workspace to survive across two calls at all; before `Run` accepted
+/// either through `RunContext`, nothing in this workspace ever did. This is that second real
+/// caller: the same `workspace` and `store` carried across a call that edits one file and
+/// leaves another alone, checked against an independent third call that recomputes the
+/// post-edit tree from nothing.
+///
+/// This does not prove `Run` skips recomputing anything for the untouched file --
+/// `Materialize_Syntax` still re-derives every source's fact on every call regardless of
+/// whether `store` already holds a live one, so `IncrementalResult` here costs the same work
+/// `CleanRecomputation` does. What it proves is the precondition that gap's fix would need:
+/// carrying a workspace and a store across a real edit is *safe* -- reusing them agrees with
+/// throwing them away and starting over, on both the claim and the findings, and the
+/// generation the reused workspace reports genuinely advances rather than repeating itself.
+/// A caller could not have relied on either fact before this increment, because no caller
+/// had ever reused either object.
+#[test]
+fn Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomputation()
+{
+    let unedited = Source("a.rs", "pub fn Ok() {}\n");
+    let edited = Source("a.rs", "pub fn Ok() {}\npub fn Also_Ok() {}\n");
+    let untouched = Source("b.rs", "pub fn Untouched() {}\n");
+    let selected = [RuleId::New(nomos_rules::NAMING_CONVENTION)];
+
+    let mut workspace = None;
+    let mut store = MemoryFactStore::New();
+    let first = Run(
+        &[unedited, untouched.clone()],
+        RunContext {
+            variant: Test_Variant(),
+            root: &Repository_Root(),
+            launcher: &StdProcessLauncher,
+            filesystem: &StdFileSystem,
+            workspace: &mut workspace,
+            store: &mut store,
+        },
+        &selected,
+    );
+    assert!(matches!(first, CheckOutcome::Judged { .. }), "the first call over a readable tree must be judged");
+    let generation_after_first = workspace.as_ref().expect("Run must leave a workspace behind").Generation();
+
+    let incremental = Run(
+        &[edited.clone(), untouched.clone()],
+        RunContext {
+            variant: Test_Variant(),
+            root: &Repository_Root(),
+            launcher: &StdProcessLauncher,
+            filesystem: &StdFileSystem,
+            workspace: &mut workspace,
+            store: &mut store,
+        },
+        &selected,
+    );
+    let generation_after_second = workspace.as_ref().expect("Run must leave a workspace behind").Generation();
+    assert!(
+        generation_after_second > generation_after_first,
+        "a real edit reusing the same workspace must advance its generation, not repeat it: \
+         {generation_after_first} then {generation_after_second}"
+    );
+
+    let mut clean_workspace = None;
+    let mut clean_store = MemoryFactStore::New();
+    let clean = Run(
+        &[edited, untouched],
+        RunContext {
+            variant: Test_Variant(),
+            root: &Repository_Root(),
+            launcher: &StdProcessLauncher,
+            filesystem: &StdFileSystem,
+            workspace: &mut clean_workspace,
+            store: &mut clean_store,
+        },
+        &selected,
+    );
+
+    let CheckOutcome::Judged { findings: incremental_findings, claim: incremental_claim, .. } = incremental
+    else
+    {
+        panic!("the reused workspace and store call over a readable tree must be judged");
+    };
+    let CheckOutcome::Judged { findings: clean_findings, claim: clean_claim, .. } = clean
+    else
+    {
+        panic!("the fresh workspace and store call over a readable tree must be judged");
+    };
+
+    assert_eq!(
+        incremental_claim, clean_claim,
+        "a workspace and store reused across an edit must reach the same claim a clean recomputation reaches"
+    );
+    assert_eq!(
+        incremental_findings, clean_findings,
+        "a workspace and store reused across an edit must report the same findings a clean recomputation reports"
+    );
 }
 
 /// `RunContext`'s own `filesystem` reaching a real repository-declared policy fact, not just
@@ -516,7 +616,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Naming_Override()
     let unconfigured = Scratch_Directory("naming-unconfigured");
     let unconfigured_outcome = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem },
+        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &selected,
     );
     let CheckOutcome::Judged { findings: unconfigured_findings, .. } = unconfigured_outcome
@@ -534,7 +634,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Naming_Override()
     std::fs::write(overridden.join("standards.json"), r#"{"naming":{"function":"lower-snake"}}"#).expect("a scratch standards.json");
     let overridden_outcome = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem },
+        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &selected,
     );
     let CheckOutcome::Judged { findings: overridden_findings, .. } = overridden_outcome

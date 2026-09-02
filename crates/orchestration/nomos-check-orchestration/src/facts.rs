@@ -22,13 +22,22 @@ use nomos_capability::Registry;
 use nomos_rules::SourceFile;
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet, WorkspaceError};
 
-/// The walk applied to an empty workspace, and the context every fact is filed under.
+/// The walk applied to `workspace`, and the context every fact is filed under.
 ///
 /// `variant` is the composition root's own -- what this binary was compiled as is read
 /// through `env!`, which resolves against the crate that calls it, so it cannot be read
 /// correctly from inside this one. `nomos-cli::check::composition::Host_Variant` still
 /// computes it and hands it in, the way `nomos_work_orchestration::Run`'s `published`
 /// argument crosses the same kind of boundary.
+///
+/// `workspace` is the caller's, not this function's own -- `OD-ANALYSIS-009`'s first real
+/// increment. `None` builds a fresh [`Workspace::Empty`] and stores it back, reproducing
+/// exactly what this function always did before this parameter existed. `Some` reuses the
+/// workspace a previous call already advanced: [`Workspace::Apply`] diffs `sources` against
+/// what it already holds, so a call that resubmits an unchanged file leaves it `Redundant`
+/// and only a real edit advances the generation -- the caller does not compute that diff
+/// itself, it falls out of applying the same, full, current source list to the same
+/// [`Workspace`] a second time.
 ///
 /// # Errors
 ///
@@ -39,16 +48,17 @@ pub fn Ingested_Workspace(
     sources: &[SourceFile],
     registry: &Registry,
     variant: BuildVariant,
+    workspace: &mut Option<Workspace>,
 ) -> Result<Context, WorkspaceError>
 {
     use crate::composition::Resolved_Configuration;
 
     let configuration = Resolved_Configuration(registry);
     let variant_id = variant.Id();
-    let mut workspace = Workspace::Empty(variant, configuration);
     let checkout = As_One_Checkout(sources);
 
-    let applied = workspace.Apply(&checkout)?;
+    let ws = workspace.get_or_insert_with(move || return Workspace::Empty(variant, configuration));
+    let applied = ws.Apply(&checkout)?;
 
     return Ok(Context {
         snapshot: applied.Snapshot(),
@@ -89,7 +99,7 @@ mod tests
         let registry = crate::composition::Registered().expect("fixture composition");
         let sources = [SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
 
-        let context = Ingested_Workspace(&sources, &registry, Test_Variant()).expect("a single valid file must ingest");
+        let context = Ingested_Workspace(&sources, &registry, Test_Variant(), &mut None).expect("a single valid file must ingest");
 
         assert_eq!(
             context.configuration,
@@ -110,7 +120,7 @@ mod tests
             SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn two() {}\n"),
         ];
 
-        let ingested = Ingested_Workspace(&sources, &registry, Test_Variant());
+        let ingested = Ingested_Workspace(&sources, &registry, Test_Variant(), &mut None);
 
         assert!(ingested.is_err(), "duplicate paths must not be ingested as one checkout");
     }

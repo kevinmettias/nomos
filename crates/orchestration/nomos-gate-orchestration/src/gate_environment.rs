@@ -45,7 +45,14 @@ pub(crate) fn Judged_Sources<Launcher: ProcessLauncher, Fs: FileSystem>(
         Some(sources) if sources.is_empty() => CheckOutcome::NoSource,
         Some(sources) => nomos_check_orchestration::Run(
             &sources,
-            nomos_check_orchestration::RunContext { variant: context.variant, root: context.root, launcher, filesystem },
+            nomos_check_orchestration::RunContext {
+                variant: context.variant,
+                root: context.root,
+                launcher,
+                filesystem,
+                workspace: &mut None,
+                store: &mut nomos_analysis::MemoryFactStore::New(),
+            },
             context.selected,
         ),
     };
