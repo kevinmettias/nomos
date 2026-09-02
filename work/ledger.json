@@ -48085,6 +48085,87 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-ABBREVIATION-ENV-DOC",
+      "title": "OD-RULES-017 left env/doc/docs open: the last 5 self-check abbreviation findings need a scoped-approval or structural exemption",
+      "why": "OD-RULES-017 (accepted) resolved 25 of the 30 self-check abbreviation findings that quote a term they are about, and explicitly left five open by design, not oversight: crates/languages/nomos-lang-rust/tests/corpus/claims.rs (Has_Misplaced_Inner_Doc, Line_Is_Misplaced_Inner_Doc), crates/spec/nomos-spec-store/tests/governing_records_are_present/supersession.rs (Test_Adr_Doc_001_...), crates/rules/nomos-rules/src/checks/concurrency_text.rs (..._Docs_Own_Unmarked_Example) and crates/rules/nomos-rules/src/checks/script_discipline.rs (..._Accept_Env_Shebang). Its own \"What This Record Does Not Do\" section names the reason and the shape of what would resolve it: \"doc\"/\"docs\"/\"env\" are common enough English-word abbreviations that a whole-workspace standards.json approval (the channel OD-RULES-017 used for chk/vs/rs/rc/cmp/lf/ms/nth) risks silently masking a real abbreviation elsewhere -- these five sites use the words as Rust's own \"doc comment\" term of art and the literal POSIX env command, not as shorthand for \"document\"/\"environment\", but nomos.cap.words.policy has no way to scope an approval to a site or a file, only the whole workspace.\n\nThis is a real gap, not a mechanical follow-up: nomos.cap.words.policy / standards.json would need a scoped-approval shape (e.g. per-file or per-rule-id) that does not exist today, which is capability work, or Check_Abbreviations itself needs a structural exemption in the shape of its existing two (a name nobody chose) rather than a vocabulary addition. Territory intentionally does not commit to either shape.",
+      "done_when": "A decision is recorded, following OD-RULES-017's shape, choosing between: (a) a scoped-approval extension to nomos.cap.words.policy's standards.json shape, naming exactly which scope (file/rule-id/other) and why that scope cannot leak the way a whole-workspace approval would, or (b) a structural exemption in Check_Abbreviations itself for a name that quotes an established term of art at its own declaration site, analogous to its existing two exemptions. Whichever is chosen is implemented and the five sites above report clean. cargo test -p nomos-rules is green.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs",
+          "crates/capability/nomos-cap-words-policy",
+          "docs/records/OD-RULES-018",
+          "crates/spec/nomos-spec-store/records/OD-RULES-018.record"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory typo: crates/capability/nomos-cap-words-policy does not exist, the real path is crates/capabilities/nomos-cap-words-policy (plural). Re-adding correctly-scoped."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "--timeout",
+          "1h"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-89",
+        "declined_at": 1788338437
+      }
+    },
+    {
+      "id": "P27-SELFCHECK-ABBREVIATION-ENV-DOC-2",
+      "title": "OD-RULES-017 left env/doc/docs open: the last 5 self-check abbreviation findings need a scoped-approval or structural exemption",
+      "why": "OD-RULES-017 (accepted) resolved 25 of the 30 self-check abbreviation findings that quote a term they are about, and explicitly left five open by design, not oversight: crates/languages/nomos-lang-rust/tests/corpus/claims.rs (Has_Misplaced_Inner_Doc, Line_Is_Misplaced_Inner_Doc), crates/spec/nomos-spec-store/tests/governing_records_are_present/supersession.rs (Test_Adr_Doc_001_...), crates/rules/nomos-rules/src/checks/concurrency_text.rs (..._Docs_Own_Unmarked_Example) and crates/rules/nomos-rules/src/checks/script_discipline.rs (..._Accept_Env_Shebang). Its own \"What This Record Does Not Do\" section names the reason and the shape of what would resolve it: \"doc\"/\"docs\"/\"env\" are common enough English-word abbreviations that a whole-workspace standards.json approval (the channel OD-RULES-017 used for chk/vs/rs/rc/cmp/lf/ms/nth) risks silently masking a real abbreviation elsewhere -- these five sites use the words as Rust's own \"doc comment\" term of art and the literal POSIX env command, not as shorthand for \"document\"/\"environment\", but nomos.cap.words.policy has no way to scope an approval to a site or a file, only the whole workspace.\n\nThis is a real gap, not a mechanical follow-up: nomos.cap.words.policy / standards.json would need a scoped-approval shape (e.g. per-file or per-rule-id) that does not exist today, which is capability work, or Check_Abbreviations itself needs a structural exemption in the shape of its existing two (a name nobody chose) rather than a vocabulary addition. Territory intentionally does not commit to either shape.",
+      "done_when": "A decision is recorded, following OD-RULES-017's shape, choosing between: (a) a scoped-approval extension to nomos.cap.words.policy's standards.json shape, naming exactly which scope (file/rule-id/other) and why that scope cannot leak the way a whole-workspace approval would, or (b) a structural exemption in Check_Abbreviations itself for a name that quotes an established term of art at its own declaration site, analogous to its existing two exemptions. Whichever is chosen is implemented and the five sites above report clean. cargo test -p nomos-rules is green.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs",
+          "crates/capabilities/nomos-cap-words-policy",
+          "docs/records/OD-RULES-018",
+          "crates/spec/nomos-spec-store/records/OD-RULES-018.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "--timeout",
+          "1h"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
