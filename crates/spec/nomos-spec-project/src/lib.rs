@@ -8,7 +8,7 @@
 
 mod build;
 mod catalogue;
-mod determinism;
+mod projection_output;
 mod profile;
 mod project_error;
 mod projection;
@@ -18,7 +18,7 @@ mod select;
 
 pub use build::{Build, Check, Freshness, SIDECAR_SUFFIX, Stamp};
 pub use catalogue::{Catalogue, SHIPPED, Shipped};
-pub use determinism::ProjectionOutput;
+pub use projection_output::ProjectionOutput;
 pub use profile::{Profile, SUBJECT};
 // Named for the boundary rather than for its module, because two different types here are
 // a Section and both are exported: `section::Section` is a section of a rendered projection,

@@ -8,11 +8,7 @@ use crate::FactKey;
 use crate::MaterializedFact;
 use crate::FactIdentity;
 
-pub(crate) mod sealed
-{
-    pub trait Sealed
-    {}
-}
+#[path = "store/sealed.rs"] pub(crate) mod sealed;
 
 pub trait Store: sealed::Sealed
 {

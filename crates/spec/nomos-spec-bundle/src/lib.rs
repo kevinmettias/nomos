@@ -10,7 +10,7 @@ mod bundle;
 mod bundle_error;
 mod columns;
 mod row;
-mod determinism;
+mod bundle_serialization;
 mod export;
 mod import;
 
@@ -18,7 +18,7 @@ pub use bundle_error::BundleError;
 pub use row::blob::Blob;
 pub use row::blob::encoding::Encoding;
 pub use bundle::Bundle;
-pub use determinism::BundleSerialization;
+pub use bundle_serialization::BundleSerialization;
 pub use row::reference::document_ref::DocumentRef;
 pub use export::Export;
 pub use bundle::header::{FORMAT, Header};

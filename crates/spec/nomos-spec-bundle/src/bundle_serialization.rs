@@ -20,7 +20,8 @@
 // check-dependency-placement reports this crate's `nomos_contracts` edge as existing for
 // this file alone, and it does. That is what a determinism declaration is: one file per
 // crate saying which row of the domain table the crate occupies, in the vocabulary band 0
-// publishes for exactly that. Moving it into nomos_contracts would move the claim away from
+// publishes for exactly that -- named for the strategy it declares, the way every other
+// declaration in this workspace is. Moving it into nomos_contracts would move the claim away from
 // the crate making it, which is the thing the declaration exists to attach.
 use nomos_contracts::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 

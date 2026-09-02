@@ -29,7 +29,15 @@ use crate::{GO_LANGUAGE, SourceFile};
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_limits_policy::Scope;
 use nomos_cap_syntax::{FUNCTION, Function_Arity, PayloadItem, SyntaxPayload};
-use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
+use nomos_contracts::{Applicability, EvidenceClass, Finding, RuleId, SubjectId};
+
+mod function_arity_policy;
+mod function_arity_source;
+mod receiver_allowance;
+
+pub use function_arity_policy::FunctionArityPolicy;
+pub use function_arity_source::FunctionAritySource;
+pub use receiver_allowance::ReceiverAllowance;
 
 /// The code-standards parameter-count rule id.
 pub const PARAMETER_COUNT: &str = "parameter-count";
@@ -43,82 +51,6 @@ const PARAMETER_COUNT_MAX_KEY: &str = "parameter-count-max";
 const GO: &str = "go";
 
 const MAX_VALUE_PARAMETERS: u32 = 4;
-
-/// Which source files a function-arity policy applies to.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum FunctionAritySource
-{
-    /// Every source handed to the rule.
-    All,
-    /// Only files written in this language, as the composition root recognized it.
-    Language(&'static str),
-}
-
-/// Whether the policy may treat one input on a qualified function as a receiver.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum ReceiverAllowance
-{
-    /// Qualified and unqualified functions are judged against the same ceiling.
-    None,
-    /// A qualified function may have one extra input, because it may be a receiver.
-    OneForQualifiedFunctions,
-}
-
-/// A configurable function-arity rule.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct FunctionArityPolicy
-{
-    /// The rule id reported on findings.
-    pub rule: &'static str,
-    /// Which files this policy judges.
-    pub source: FunctionAritySource,
-    /// Maximum value parameters allowed before a finding is reported.
-    pub max_value_parameters: u32,
-    /// Whether qualified functions get one possible receiver input.
-    pub receiver_allowance: ReceiverAllowance,
-    /// The gate category reported for supported findings.
-    pub gate: GateCategory,
-}
-
-impl FunctionArityPolicy
-{
-    /// Builds a policy for every source with no receiver allowance.
-    #[must_use]
-    pub const fn New(rule: &'static str, max_value_parameters: u32) -> Self
-    {
-        return Self {
-            rule,
-            source: FunctionAritySource::All,
-            max_value_parameters,
-            receiver_allowance: ReceiverAllowance::None,
-            gate: GateCategory::Blocking,
-        };
-    }
-
-    /// Narrows this policy to one language.
-    #[must_use]
-    pub const fn For_Language(mut self, language: &'static str) -> Self
-    {
-        self.source = FunctionAritySource::Language(language);
-        return self;
-    }
-
-    /// Allows one possible receiver for qualified functions.
-    #[must_use]
-    pub const fn Allow_One_Receiver_For_Qualified_Functions(mut self) -> Self
-    {
-        self.receiver_allowance = ReceiverAllowance::OneForQualifiedFunctions;
-        return self;
-    }
-
-    /// Changes the gate category reported by supported findings.
-    #[must_use]
-    pub const fn With_Gate(mut self, gate: GateCategory) -> Self
-    {
-        self.gate = gate;
-        return self;
-    }
-}
 
 /// Reports functions that definitely exceed the value-parameter cap — a repository's own
 /// declared `nomos.cap.limits.policy` when it declares `parameter-count-max`, the prior
@@ -320,7 +252,7 @@ mod tests
     use crate::checks::test_support::{self, Test_Context, TestOffering};
     use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
     use nomos_capability::ProviderOffer;
-    use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
+    use nomos_contracts::{Assurance, FactVariant, GateCategory, Guarantee, IncrementalGranularity};
 
     #[test]
     fn Test_Violations_In_Should_Report_A_Free_Function_With_Five_Parameters()

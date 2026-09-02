@@ -47034,7 +47034,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -47047,7 +47047,27 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-860c7d7f879d39fe.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-7796b93f37c94c9c.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-7e3f7173fb7ec794.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-16033c566fac7044.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-cb90abd5315151d3.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-e925a3efd394c3e0.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-c210d175df0110ef.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6e92a634a03d02bd.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-0311769be47a622d.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-5f8ffa78373709ba.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1788323406,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "bc37c188179028b2499e985e9f2a20fa59c6d572"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -47318,6 +47338,38 @@
         },
         "revision": "d709f0177736405fc22d0b1382cfddda84a406f1"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-TODO-DETECTOR-AND-VALIDATOR-DISAGREE",
+      "title": "todo-format detects a marker anywhere in a comment but accepts it only at the start",
+      "why": "Found 2026-09-02 while closing P27-SELFCHECK-REAL-CODE-FINDINGS, and deliberately not fixed there: that item's done_when forbids fixing a finding by changing the rule that raised it, and this is that change. Contains_Todo in formatting.rs is a substring test over the whole comment, while Has_Valid_Todo_Format calls strip_prefix on the marker. A comment whose marker is not at the start therefore reports and has no conforming edit: adding owner, description and ticket does not help, because the validator never reaches them. The rule's own doc comment and the nomos-rules crate doc were two instances; both were reworded to stop naming the marker, which is a workaround at the call site and not an answer. Every existing test for this rule places the marker at the start, so the two halves have never been tested against each other.",
+      "done_when": "Contains_Todo and Has_Valid_Todo_Format agree on what a marker comment is, with the disagreement resolved in a stated direction rather than by widening one to match the other by accident. A test covers a comment whose marker is not at the start, asserting whichever answer the resolution picks. A comment that really does carry a malformed marker still reports. cargo test -p nomos-rules is green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/formatting.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
