@@ -44304,7 +44304,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory defect, re-added as -2. This item reserved only docs/records/OD-RULES-014-<slug>.md and not crates/spec/nomos-spec-store/records/OD-RULES-014.record, the registration file that actually makes a record governing -- writing the record file alone does not. There is no work edit and widening mid-claim is the failure this repository has already had twice, so the recovery is decline plus re-add. The question itself stands and was checked against docs/records/ this time: nothing there decides how a text-only rule scopes itself to one language. OD-CAPABILITY-010 compares two providers rather than restricting one rule, and OD-HOST-004 governs hand-composition rather than applicability."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -44321,7 +44325,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-review-triage",
+        "declined_at": 1788307258
+      }
     },
     {
       "id": "OD-HOST-007-REPO-TOOLING-THROUGH-THE-API-HOST",
@@ -44337,7 +44344,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Already governed, and by a record written against this same external review claim. OD-LEDGER-036 settled the ledger half: nomos-api::work.rs exposes the full verb set but frames itself as a seam exercise, that framing is currently honest, and the revisit trigger is nomos-api becoming a real externally-consumed product surface. OD-HOST-006 extends the identical reasoning to the spec half (Preview/Render/Commit) and deliberately states the trigger once so both crates share it rather than drifting into two near-identical conditions. Between them they cover both readings this item posed -- seam prover versus product API -- and the README [repo tooling] distinction it rested on. The trigger has not fired: nomos-api/src/lib.rs:108 still says it does not read argv, listen on a socket, or speak MCP framing, and no transport dependency exists in its Cargo.toml. Writing OD-HOST-007 would be a third authority over one question. This item should have been checked against docs/records/ before it was added."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -44354,7 +44365,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-review-triage",
+        "declined_at": 1788307250
+      }
     },
     {
       "id": "OD-RULES-011-WORDS-PROVIDER-3",
@@ -44437,6 +44451,40 @@
           "nomos-contract-tests"
         ],
         "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-014-TEXT-RULE-LANGUAGE-APPLICABILITY-2",
+      "title": "How a text-only rule states a language restriction without naming a provider",
+      "why": "Nine rule modules decide their own applicability by sniffing file extensions -- go_text.rs (Is_Go_Source), naming/go_data_names.rs, naming/go_function_names.rs, naming/go_type_names.rs, rust_text.rs, concurrency_text.rs, placement.rs, structure.rs and function_shape.rs all match on .go or .rs or call extension(). nomos-rules deliberately names no language crate: its Cargo.toml argues at length that a rule states a capability floor and the registry chooses who answers it, and OD-CAPABILITY-009 kept SourceFile::preferred_syntax_provider opaque for the same reason -- the three call sites that read it pass it straight to Syntax_Requirement_For and never compare it to a provider identity. So a text-only rule that must apply to Go alone has no non-regressing way to ask the question today: sniffing the extension is a second answer to a convention the composition root owns, and comparing preferred_syntax_provider against nomos_lang_go::PROVIDER would put a band-30 rule back in the business of knowing which languages exist. An external review flagged the sniffing on 2026-09-01; it did not notice that the obvious fix is the thing OD-CAPABILITY-009 rejected. The count is what makes this worth deciding rather than tolerating: it was one module and is now nine. Checked against docs/records/ first: nothing governs it -- OD-CAPABILITY-010 compares two providers rather than restricting one rule, and OD-HOST-004 governs hand-composition rather than applicability.",
+      "done_when": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md is written AND registered by crates/spec/nomos-spec-store/records/OD-RULES-014.record, and decides which mechanism carries a text-only rule language restriction -- a carried SourceFile field distinct from preferred_syntax_provider, a capability fact in the OD-RULES-011 family, an orchestration-side partition of the source list, or the extension check standing as correct -- and says explicitly what becomes of each of the nine modules named above, including whether any of them should keep sniffing.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-014.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "./nomos.exe",
+          "spec",
+          "markdown",
+          "--id",
+          "OD-RULES-014"
+        ],
+        "timeout_seconds": 7200
       },
       "verified": null,
       "abandoned": [],
