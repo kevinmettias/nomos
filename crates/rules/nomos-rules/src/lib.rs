@@ -315,6 +315,13 @@
 //! code-standards' own worked example gives the inline value as the primary form and a
 //! comment as the fallback, not the reverse. No repository-configurable dimension in
 //! either, so `rust_text` rather than a capability.
+//!
+//! [`Check_No_Single_Line_Function_Bodies`] is the sixty-first rule, a `formatting`
+//! addition rather than a `rust_text` one: the deciding evidence is a whole function's
+//! shape (signature, brace, body and closing brace all on one line, including an empty
+//! `{}`), not a construct-plus-adjacent-comment pattern the file's other Rust rules share.
+//! Scoped to Rust only — code-standards names a distinct C# strategy for the same rule id,
+//! and Go's own collapsing shape is left unattempted rather than guessed at.
 
 #![forbid(unsafe_code)]
 
@@ -338,8 +345,9 @@ pub use checks::{
     DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
     Check_Eager_Vs_Lazy_Context, Check_Error_Message_Has_No_Trailing_Punctuation, Check_Error_Message_Starts_Lowercase,
     EAGER_VS_LAZY_CONTEXT, LOWERCASE_FIRST_LETTER, NO_TRAILING_PUNCTUATION,
-    Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Trailing_Whitespace,
-    Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS, NO_TRAILING_WHITESPACE, TODO_FORMAT,
+    Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Single_Line_Function_Bodies,
+    Check_No_Trailing_Whitespace, Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS,
+    NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_WHITESPACE, TODO_FORMAT,
     Check_Function_Arity_Policy, Check_Go_Helpers_Package_Five_Inputs, Check_Parameter_Count, FunctionArityPolicy,
     FunctionAritySource, ReceiverAllowance, GO_HELPERS_PACKAGE_FIVE_INPUTS, PARAMETER_COUNT,
     Check_Lint_Diagnostics, LINT_CONTRACT_RECORD, LINT_CONTRACT_RECORD_VERSION, LINT_DIAGNOSTICS,

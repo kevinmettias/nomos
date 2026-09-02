@@ -1,6 +1,6 @@
-//! The sixty rules this crate implements, one module each — `naming` holds fourteen,
+//! The sixty-one rules this crate implements, one module each — `naming` holds fourteen,
 //! `rust_text` holds eight, `go_text` holds five, `structure` holds five, `formatting` holds
-//! four, `security_text` holds three, `concurrency_text` holds three, `error_text` holds
+//! five, `security_text` holds three, `concurrency_text` holds three, `error_text` holds
 //! three, `placement` holds two, and `dependency` holds two, while `script_discipline` holds
 //! three,
 //! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`],
@@ -60,8 +60,9 @@ pub use error_text::{
     EAGER_VS_LAZY_CONTEXT, LOWERCASE_FIRST_LETTER, NO_TRAILING_PUNCTUATION,
 };
 pub use formatting::{
-    Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Trailing_Whitespace,
-    Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS, NO_TRAILING_WHITESPACE, TODO_FORMAT,
+    Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Single_Line_Function_Bodies,
+    Check_No_Trailing_Whitespace, Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS,
+    NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_WHITESPACE, TODO_FORMAT,
 };
 pub use function_shape::{
     Check_Function_Arity_Policy, Check_Go_Helpers_Package_Five_Inputs, Check_Parameter_Count, FunctionArityPolicy,
