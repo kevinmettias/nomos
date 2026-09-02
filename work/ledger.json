@@ -46729,14 +46729,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-e5-0902",
-        "acquired_at": 1788319354,
-        "lease_expires_at": 1788326554
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -46746,7 +46742,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "erialize_Dependencies_Should_Return_Real_Workspace_Members ... ok\ntest tests::Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact ... ok\ntest tests::Test_Materialize_Lint_Should_Return_Real_Workspace_Members ... ok\ntest tests::Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor ... ok\ntest tests::Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete ... ok\n\ntest result: ok. 39 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.03s\n\n\nrunning 6 tests\ntest Test_Registered_Should_Offer_Every_Dependency_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Deny_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Declare_Every_Capability_Crates_Own_Real_Contract ... ok\ntest Test_Registered_Should_Offer_Every_Syntax_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Clippy_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Reachability_Providers_Own_Real_Offer ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List ... ok\ntest Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule ... ok\ntest Test_Run_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.08s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-35e8f5cb7bc27583.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-6accf3ef8028028f.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-c0ea988693edd1dd.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1788319777,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c43b9427268f23db45fa3796984cb6fea7258a2d"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -46854,14 +46870,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P14-WORKFLOW-005-ENGINE-MERGE-2: identical work, correct bands.rs path."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-p27",
-        "acquired_at": 1788319382,
-        "lease_expires_at": 1788326582
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -46873,9 +46889,18 @@
         "timeout_seconds": 900
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-nomos-p27",
+          "reason": "Territory named the wrong bands.rs path (dependency/bands.rs; the real current path is checks/dependency/bands.rs, moved since the branch's own 2026-08-26 snapshot). Re-adding with the correct path before touching it.",
+          "abandoned_at": 1788319676
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-nomos-p27",
+        "declined_at": 1788319707
+      }
     },
     {
       "id": "P27-SELFCHECK-FILENAME-DRIFT-PACKAGES",
@@ -46961,6 +46986,55 @@
           "nomos-contract-tests"
         ],
         "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-WORKFLOW-005-ENGINE-MERGE-2",
+      "title": "Merge the abandoned workflow-engine-continued branch: nomos-workflow-orchestration's first real execution increment",
+      "why": "Same as the original item, re-added only to correct a wrong bands.rs path in territory. Crate landed, builds and tests clean (8/8), Cargo.toml/README.md band row done; still need both bands.rs declarations, the new OD-WORKFLOW-005 record + registration, the OD-WORKFLOW-002 amendment, public-surface blessing, and a fresh re-render.",
+      "done_when": "crates/orchestration/nomos-workflow-orchestration exists at band 40 (Cargo.toml, README.md, both bands.rs, public-surface snapshot), OD-WORKFLOW-005 is registered and governing, OD-WORKFLOW-002 is amended to v4, spec/domain-specification.md and diagrams/relations.mmd are re-rendered fresh (not copied from the stale branch) and verified via spec freshness exit 0, and cargo test -p nomos-workflow-orchestration --no-fail-fast passes with cargo clippy --workspace --all-targets introducing no new warning",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workflow-orchestration",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-workflow-orchestration.txt",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "crates/spec/nomos-spec-store/records/OD-WORKFLOW-005.record",
+          "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md",
+          "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-p27",
+        "acquired_at": 1788319707,
+        "lease_expires_at": 1788326907
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-workflow-orchestration",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 900
       },
       "verified": null,
       "abandoned": [],

@@ -31,6 +31,8 @@ pub fn Registered() -> Result<Registry, RegistryError>
     Declare_Lint_Capability(&mut registry)?;
     Declare_Dependency_Policy_Capability(&mut registry)?;
     Declare_Naming_Policy_Capability(&mut registry)?;
+    Declare_Limits_Policy_Capability(&mut registry)?;
+    Declare_Scripting_Policy_Capability(&mut registry)?;
 
     return Ok(registry);
 }
@@ -155,6 +157,41 @@ fn Declare_Naming_Policy_Capability(registry: &mut Registry) -> Result<(), Regis
 {
     registry.Declare(nomos_cap_naming_policy::Capability_Contract())?;
     registry.Offer(nomos_repo_standards::Provider_Offer())?;
+
+    return Ok(());
+}
+
+/// A seventh capability, one offer against it -- `OD-RULES-011`'s threshold family, read the
+/// same way naming's is one function above.
+///
+/// Five composed rules already ask for this capability by name and, until this declaration
+/// existed, every one of them fell back to its own hardcoded constant. Worth stating plainly
+/// because it is easy to oversell: on *this* repository the wiring changes no finding at all,
+/// since `standards.json` declares exactly the numbers the fallbacks already carry -- 500
+/// review, 1500 hard, 1000 for Go's own hard trigger, 4 parameters. What it changes is that
+/// those numbers are now read rather than assumed, so a repository declaring different ones
+/// is finally judged by its own.
+fn Declare_Limits_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_limits_policy::Capability_Contract())?;
+    registry.Offer(nomos_repo_limits::Provider_Offer())?;
+
+    return Ok(());
+}
+
+/// An eighth capability, one offer against it -- and unlike its two policy siblings above,
+/// this one is a live defect being closed rather than an assumption being replaced.
+///
+/// `Check_Declared_Tooling_Language_For_Scripts` resolves an absent
+/// `nomos.cap.scripting.policy` to *no findings at all* rather than to a prior default,
+/// because the rule never existed before the capability did and there was no earlier value to
+/// fall back to. So with nothing declaring this capability, that rule has been silent in every
+/// real run since it landed, while `standards.json` named a tooling language and five
+/// forbidden extensions that nothing enforced.
+fn Declare_Scripting_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_scripting_policy::Capability_Contract())?;
+    registry.Offer(nomos_repo_scripting::Provider_Offer())?;
 
     return Ok(());
 }
@@ -295,8 +332,9 @@ mod tests
     use super::*;
 
     /// The composition this crate ships must not be self-contradictory, and it must
-    /// declare exactly the six capabilities [`Registered`]'s own body wires: syntax,
-    /// dependency, controlflow, lint, dependency-policy and naming-policy.
+    /// declare exactly the eight capabilities [`Registered`]'s own body wires: syntax,
+    /// dependency, controlflow, lint, dependency-policy, naming-policy, limits-policy and
+    /// scripting-policy.
     #[test]
     fn Test_Registered_Should_Declare_Every_Composed_Capability()
     {
@@ -304,8 +342,8 @@ mod tests
 
         assert_eq!(
             registry.Declared().count(),
-            6,
-            "Registered() wires six Declare calls; a changed count here means the two drifted"
+            8,
+            "Registered() wires eight Declare calls; a changed count here means the two drifted"
         );
     }
 

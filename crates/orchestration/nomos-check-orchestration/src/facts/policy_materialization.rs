@@ -44,3 +44,62 @@ fn Naming_Production(context: &Context) -> nomos_repo_standards::FactContext
         generation: context.generation,
     };
 }
+
+/// Reads `root`'s own `standards.json` through `filesystem` and writes the one `nomos.cap.
+/// limits.policy` fact it declares into `store`.
+///
+/// The identical shape [`Materialize_Naming_Policy`] has, and absent for the identical
+/// `OD-CAPABILITY-004` reason: the five rules that read this capability through
+/// `nomos_rules`' own `Resolve_Limit` each treat a failed read as "no override" and keep
+/// their prior hardcoded threshold.
+///
+/// Worth knowing what this does and does not buy on *this* repository: `standards.json`
+/// declares exactly the numbers those fallbacks already carry, so no finding here moves.
+/// What moves is that the thresholds are read rather than assumed.
+pub fn Materialize_Limits_Policy<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs)
+{
+    let production = Limits_Production(context);
+
+    if let Ok(fact) = nomos_repo_limits::Materialize_Workspace(root, production, filesystem)
+    {
+        let _ = store.Materialize(fact.fact, &[]);
+    }
+}
+
+fn Limits_Production(context: &Context) -> nomos_repo_limits::FactContext
+{
+    return nomos_repo_limits::FactContext {
+        snapshot: context.snapshot,
+        variant: context.variant,
+        configuration: context.configuration,
+        generation: context.generation,
+    };
+}
+
+/// Reads `root`'s own `standards.json` through `filesystem` and writes the one `nomos.cap.
+/// scripting.policy` fact it declares into `store`.
+///
+/// Same shape as its two siblings above, but the consequence of *not* calling it differs and
+/// that is the reason this one mattered most. `Check_Declared_Tooling_Language_For_Scripts`
+/// has no prior default to fall back to -- the rule never existed before the capability did
+/// -- so an absent fact makes it report nothing rather than report against an assumption.
+/// Without this materialization the rule ran in every real check and could never fire.
+pub fn Materialize_Scripting_Policy<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs)
+{
+    let production = Scripting_Production(context);
+
+    if let Ok(fact) = nomos_repo_scripting::Materialize_Workspace(root, production, filesystem)
+    {
+        let _ = store.Materialize(fact.fact, &[]);
+    }
+}
+
+fn Scripting_Production(context: &Context) -> nomos_repo_scripting::FactContext
+{
+    return nomos_repo_scripting::FactContext {
+        snapshot: context.snapshot,
+        variant: context.variant,
+        configuration: context.configuration,
+        generation: context.generation,
+    };
+}

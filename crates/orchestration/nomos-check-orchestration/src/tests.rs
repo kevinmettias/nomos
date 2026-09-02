@@ -648,6 +648,111 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Naming_Override()
     );
 }
 
+/// The limits-policy materialization reaching `nomos_rules`' own `Resolve_Limit`, proven the
+/// only way it can be proven on this repository: by declaring a threshold this workspace does
+/// not.
+///
+/// `standards.json` here declares exactly the numbers every fallback already carries, so
+/// wiring the capability moves no finding against this tree and a test written against the
+/// real root would pass whether or not the materialization ran. A scratch root declaring a
+/// hard limit of three lines is the smallest thing that tells the two apart.
+#[test]
+fn Test_Run_Should_Honor_A_Real_Standards_Json_File_Size_Limit()
+{
+    let sources = vec![Source("a.rs", "fn one() {}\nfn two() {}\nfn three() {}\nfn four() {}\nfn five() {}\n")];
+    let selected = [RuleId::New(nomos_rules::FILE_SIZE_JUSTIFICATION_TRIGGER)];
+
+    let unconfigured = Scratch_Directory("limits-unconfigured");
+    let CheckOutcome::Judged { findings: unconfigured_findings, .. } = Run(
+        &sources,
+        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        &selected,
+    )
+    else
+    {
+        panic!("a tree with no standards.json must still be judged, against the hardcoded default");
+    };
+    assert!(
+        unconfigured_findings.is_empty(),
+        "five lines is far under the hardcoded 1500-line default, so nothing may fire: {unconfigured_findings:?}"
+    );
+
+    let overridden = Scratch_Directory("limits-overridden");
+    std::fs::write(overridden.join("standards.json"), r#"{"limits":{"file-size-hard-lines":3}}"#).expect("a scratch standards.json");
+    let CheckOutcome::Judged { findings: overridden_findings, .. } = Run(
+        &sources,
+        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        &selected,
+    )
+    else
+    {
+        panic!("a tree with a real standards.json must still be judged")
+    };
+    assert_eq!(
+        overridden_findings.len(),
+        1,
+        "a repository declaring limits.file-size-hard-lines = 3 must judge a five-line file against 3, not 1500: {overridden_findings:?}"
+    );
+}
+
+/// The scripting-policy materialization reaching
+/// `nomos_rules::Check_Declared_Tooling_Language_For_Scripts`.
+///
+/// This is the one policy capability whose absence is not a fallback: the rule resolves an
+/// unreadable policy to no findings at all, because it never had a prior default to keep. So
+/// the unconfigured half of this test is not a control against a hardcoded value the way the
+/// two above are -- it is the exact state every real check ran in before this wiring existed,
+/// with the rule composed, selected, and structurally unable to fire.
+#[test]
+fn Test_Run_Should_Honor_A_Real_Standards_Json_Forbidden_Script_Extension()
+{
+    // A Rust file rides along because no syntax provider recognizes a `.sh` path, and a run
+    // whose every source produced no fact reports `NoFacts` rather than `Judged` -- it would
+    // never reach the rule at all. The script is still what is being judged; `a.rs` is only
+    // what makes the run a judgment.
+    let sources = vec![
+        Source("a.rs", "pub fn Anything() {}\n"),
+        Source("deploy.sh", "#!/usr/bin/env bash\necho deploying\n"),
+    ];
+    let selected = [RuleId::New(nomos_rules::DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS)];
+
+    let unconfigured = Scratch_Directory("scripting-unconfigured");
+    let CheckOutcome::Judged { findings: unconfigured_findings, .. } = Run(
+        &sources,
+        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        &selected,
+    )
+    else
+    {
+        panic!("a tree with no standards.json must still be judged");
+    };
+    assert!(
+        unconfigured_findings.is_empty(),
+        "a repository declaring no tooling language has nothing to hold a script to: {unconfigured_findings:?}"
+    );
+
+    let overridden = Scratch_Directory("scripting-overridden");
+    std::fs::write(
+        overridden.join("standards.json"),
+        r#"{"scripting":{"tooling_language":"rust","forbidden_extensions":[".sh"]}}"#,
+    )
+    .expect("a scratch standards.json");
+    let CheckOutcome::Judged { findings: overridden_findings, .. } = Run(
+        &sources,
+        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        &selected,
+    )
+    else
+    {
+        panic!("a tree with a real standards.json must still be judged")
+    };
+    assert_eq!(
+        overridden_findings.len(),
+        1,
+        "a repository declaring rust tooling and .sh forbidden must report deploy.sh: {overridden_findings:?}"
+    );
+}
+
 /// A fresh, empty directory under the OS temp root, unique per test name and process --
 /// `nomos-cli::work`'s own `Scratch_Directory` fixture shape, needed here for the same reason:
 /// `StdFileSystem` reads real bytes from a real path, so proving a real override changes real

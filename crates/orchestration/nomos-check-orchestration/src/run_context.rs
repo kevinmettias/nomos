@@ -45,8 +45,9 @@ use std::path::Path;
 
 use crate::composition::{Recognized_Language, Recognized_Syntax_Provider, Registered};
 use crate::facts::{
-    DependencyMaterialization, Ingested_Workspace, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
-    Materialize_Naming_Policy, Materialize_Policy, Materialize_Reachability, Materialize_Syntax, PolicyMaterialization,
+    DependencyMaterialization, Ingested_Workspace, LintMaterialization, Materialize_Dependencies, Materialize_Limits_Policy,
+    Materialize_Lint, Materialize_Naming_Policy, Materialize_Policy, Materialize_Reachability, Materialize_Scripting_Policy,
+    Materialize_Syntax, PolicyMaterialization,
 };
 use crate::CheckOutcome;
 
@@ -234,6 +235,8 @@ fn Materialize_Capabilities<Launcher: ProcessLauncher, Fs: FileSystem>(
     let policy = Materialize_Policy_Section(env, selected);
     Materialize_Reachability_Section(sources, env, selected);
     Materialize_Naming_Policy_Section(env, selected);
+    Materialize_Limits_Policy_Section(env, selected);
+    Materialize_Scripting_Policy_Section(env, selected);
 
     return Capability_Materialization_Of(dependencies, lint, policy);
 }
@@ -333,6 +336,48 @@ fn Materialize_Naming_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
     if feeds_naming_policy
     {
         Materialize_Naming_Policy(env.root, env.context, env.store, env.filesystem);
+    }
+}
+
+/// The limits-policy section: [`Materialize_Limits_Policy`] when `selected` feeds on it.
+///
+/// Gated on the six composed rules that read `nomos.cap.limits.policy` through their own
+/// `Resolve_Limit` -- the four file-size triggers and the two parameter-count caps. Each of
+/// them already has a hardcoded fallback equal to what this repository declares, so
+/// materializing the fact changes no finding here; it changes which repositories the
+/// thresholds belong to.
+fn Materialize_Limits_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs>,
+    selected: &[RuleId],
+)
+{
+    let feeds_limits_policy = Is_Rule_Selected(selected, FILE_SIZE_JUSTIFICATION_TRIGGER)
+        || Is_Rule_Selected(selected, ONE_THOUSAND_LINE_HARD_TRIGGER)
+        || Is_Rule_Selected(selected, FIVE_HUNDRED_LINE_REVIEW_TRIGGER)
+        || Is_Rule_Selected(selected, PARAMETER_COUNT)
+        || Is_Rule_Selected(selected, GO_HELPERS_PACKAGE_FIVE_INPUTS);
+
+    if feeds_limits_policy
+    {
+        Materialize_Limits_Policy(env.root, env.context, env.store, env.filesystem);
+    }
+}
+
+/// The scripting-policy section: [`Materialize_Scripting_Policy`] when `selected` feeds on
+/// it.
+///
+/// One composed rule reads this capability, and unlike every other policy section here its
+/// absence is not a fallback: `Check_Declared_Tooling_Language_For_Scripts` reports nothing
+/// at all without the fact, so before this call existed the rule ran in every check and could
+/// never fire.
+fn Materialize_Scripting_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs>,
+    selected: &[RuleId],
+)
+{
+    if Is_Rule_Selected(selected, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS)
+    {
+        Materialize_Scripting_Policy(env.root, env.context, env.store, env.filesystem);
     }
 }
 

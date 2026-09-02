@@ -15,7 +15,7 @@ pub use dependency_materialization::{
     DependencyMaterialization, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
     Materialize_Policy, Materialize_Reachability, Materialize_Syntax, PolicyMaterialization,
 };
-pub use policy_materialization::Materialize_Naming_Policy;
+pub use policy_materialization::{Materialize_Limits_Policy, Materialize_Naming_Policy, Materialize_Scripting_Policy};
 
 use nomos_analysis::Context;
 use nomos_capability::Registry;
