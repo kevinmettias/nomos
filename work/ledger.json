@@ -47538,6 +47538,48 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P27-SELFCHECK-ABBREVIATION-FINDINGS",
+      "title": "Triage the 42 abbreviation findings Check_Abbreviations reports now it is composed",
+      "why": "85477f14 composed the rule and declared sdk, std and str approved, which leaves 42 Blocking findings over 36 names in the self-check. They are not 42 renames and should not be batch-renamed. Reading them rather than counting them, roughly two thirds are names that quote a term they are about -- Check_Eager_Vs_Lazy_Context is a rule about eager versus lazy, Check_No_Mod_Rs_Files is about .rs files, SENSITIVE_URL_PARAMS is about URL parameters, CHK_003 is a requirement identifier, and others quote Rust itself: Rc, core::cmp::Ordering, the env shebang, LF line endings, ms for milliseconds. Renaming those would make them worse. The rest would genuinely read better spelled out -- Temp_Dir, Temp_Db and TempWorkspace across five test files, Doc and Docs where documentation is meant, len, and a Stds that looks like a slip. The repository owner has already ruled that vs, rs, chk, rc and the banned truncations are not to be approved as words, so the answer for the first group is not the words capability either; it is either a narrower rule or an accepted cost, and that is the decision this item exists to take.",
+      "done_when": "Every one of the 42 findings is either resolved by a rename at its site or accounted for by a stated decision recorded where a reader will find it, and the self-check's abbreviation count reflects that outcome. Splitting this into per-group items is an acceptable outcome; leaving the two groups undistinguished is not.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/tests/declining_ends_an_item.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/board.rs",
+          "crates/substrate/nomos-ledger/tests/gate_covers_finish/launcher.rs",
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/board.rs",
+          "crates/substrate/nomos-ledger/tests/scope_verification_integration.rs",
+          "crates/spec/nomos-spec-store/tests/store_holds.rs",
+          "crates/languages/nomos-lang-go-modules/src/discovery/tests.rs",
+          "crates/spec/nomos-spec-ingest/src/phases/gate_report.rs",
+          "crates/platform/nomos-platform-std/src/launcher/wait.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "check_command"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
