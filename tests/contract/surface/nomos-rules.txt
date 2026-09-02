@@ -33,6 +33,7 @@ pub const nomos_rules::DEPENDENCY_POLICY: &str
 pub const nomos_rules::DEPENDENCY_POLICY_CONTRACT_RECORD: &str
 pub const nomos_rules::DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::DEPRECATION: &str
+pub const nomos_rules::DOMAIN_VALUES_ARE_DISTINCT_TYPES: &str
 pub const nomos_rules::EAGER_VS_LAZY_CONTEXT: &str
 pub const nomos_rules::EVERY_ALLOW_CARRIES_A_JUSTIFICATION: &str
 pub const nomos_rules::EXECUTED_SCRIPTS_SET_NOUNSET: &str
@@ -125,6 +126,7 @@ pub fn nomos_rules::Check_Declared_Tooling_Language_For_Scripts(sources: &[Sourc
 pub fn nomos_rules::Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Dependency_Policy(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Deprecation_Carries_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Domain_Values_Are_Distinct_Types(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Eager_Vs_Lazy_Context(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Error_Message_Has_No_Trailing_Punctuation(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Error_Message_Starts_Lowercase(sources: &[SourceFile]) -> Vec<Finding>

@@ -426,6 +426,7 @@ pub use checks::{
     Check_Cross_Language_Correspondence, CROSS_LANGUAGE_CONTRACT_RECORD, CROSS_LANGUAGE_CONTRACT_RECORD_VERSION,
     CROSS_LANGUAGE_CORRESPONDENCE,
     Check_Named_Fields_Over_Positional_Variant_Payloads, NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS,
+    Check_Domain_Values_Are_Distinct_Types, DOMAIN_VALUES_ARE_DISTINCT_TYPES,
     Check_Abbreviations, Check_Boolean_Predicates, Check_Data_Names_Stay_Lower_Snake, Check_File_Name_Matches_Declared_Type,
     Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Go_Constants_Split_By_Export, Check_Go_Type_Names_Use_Camel_Case,
     Check_Go_Variables_Use_Lower_Snake_Case,

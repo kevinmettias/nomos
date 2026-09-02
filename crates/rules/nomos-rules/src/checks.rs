@@ -21,6 +21,7 @@
 mod concurrency_text;
 mod crosslang;
 mod dependency;
+mod domain_type_alias;
 mod enum_shape;
 mod error_text;
 mod facade;
@@ -60,6 +61,7 @@ pub use dependency::{
     Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
     DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
 };
+pub use domain_type_alias::{Check_Domain_Values_Are_Distinct_Types, DOMAIN_VALUES_ARE_DISTINCT_TYPES};
 pub use enum_shape::{Check_Named_Fields_Over_Positional_Variant_Payloads, NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS};
 pub use error_text::{
     Check_Eager_Vs_Lazy_Context, Check_Error_Message_Has_No_Trailing_Punctuation, Check_Error_Message_Starts_Lowercase,
