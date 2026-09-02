@@ -48874,6 +48874,63 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P27-RULES-NO-SINGLE-LINE-FUNCTION-BODIES-STRING-AWARE",
+      "title": "no-single-line-function-bodies is a naive text scan with no string/comment awareness, and reports 287 false positives out of 288",
+      "why": "Composing no-single-line-function-bodies (surveyed in an isolated worktree, not yet composed for real) reports 288 findings across 78 files spanning nearly the whole workspace. A full per-finding classification found 280 are a string literal (a fake source-code fixture like \"fn a() {}\" passed to a test constructor, a byte string, a format! with escaped braces, a raw string, or a backslash-continued string spanning several physical lines) whose text merely contains 'fn '/'{'/'}'; 6 more are a // or /// comment quoting the same shape in prose (including this rule's own module doc); 1 is the rule's own implementation line self-matching (line.find(\"fn \") supplies the trigger substring, the following let-else's { return false } is not a function body). Only 1 of 288 is real: tests/corpus/analysis/gamma/broken.rs:5, pub fn Never_Seen() {} on one physical line in an actual corpus fixture file. Has_Single_Line_Function_Body (formatting.rs) is a bare substring/brace scan over raw line text with no string-literal or comment awareness at all -- the same class of defect already fixed once this session for todo-format's Comment_Text_Of and no-wildcard-imports' use-super-star exemption, at much larger scale here because this scan has no comment/string boundary logic whatsoever, not even a same-line one. Composing the rule as-is would make 287 of 288 blocking findings false, which is not a real gate the workspace could pass honestly.",
+      "done_when": "Single_Line_Body_Findings_In tracks a Rust literal state (none / inside a double-quoted-or-byte string, including its own trailing-backslash line continuation / inside a raw string with N carried #s) across consecutive lines, computing each line's own code-only bytes (string content and an unquoted // line comment blanked out) before searching for the 'fn ' / '{' / '}' shape -- resolving all 199+36+4 same-line string cases, the 4 raw-string and 24 backslash-continuation cases that span multiple physical lines, the 6 comment cases, and the rule's own self-match. Single-quoted literals (char literals, lifetimes) and /* */ block comments are named explicitly as an unattempted, silent gap (this workspace's own measured false positives have neither shape), not guessed at. Unit tests cover: a same-line string fixture ('let s = \"fn a() {}\";' reports nothing), a raw string spanning multiple lines whose content looks like a declaration (reports nothing), a backslash-continued string (reports nothing), a // comment quoting the shape (reports nothing), and a real single-line function body still reporting when none of these apply. cargo test -p nomos-rules is green. run_context.rs composes no-single-line-function-bodies into Run (RULE_COUNT +1) now that it is safe to (only the 1 real corpus-fixture finding remains, which is named here as still open rather than fixed inside this item's own territory -- tests/corpus/analysis/gamma/broken.rs is deliberately-invalid corpus content, not this item's to judge). cargo test -p nomos-check-orchestration is green. nomos gate run --root . --rule no-single-line-function-bodies reports exactly 1 finding (tests/corpus/analysis/gamma/broken.rs:5).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/formatting.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 470 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-e529bd00b4497790.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-f99ed2ad0d9e2451.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-e65ee2616c31c246.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788369656,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1dfdbaf9ed212d3d967d86368ec329648fd472dd"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
