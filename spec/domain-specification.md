@@ -164,6 +164,7 @@ profile: domain-specification
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 23 | 6 | sha256:841b1c5bb58bd645f7b84a43c5f4433923df78193de6b7e6e3ffecc92de628c9 |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md@authored | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md | authored | 38 | 10 | sha256:740a2ca81a0ba769b2370b32a0b5af4aeb3647f2c9a141f1ebaf058f08f9f6c1 |
+| docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md@authored | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md | authored | 23 | 6 | sha256:4b0bd63773267478c66835f887728ff0cedb4892a98e85291ed631e1665b53c8 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1470,6 +1471,12 @@ profile: domain-specification
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#25 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#30 | authored | 2 | Amendment: The Carried Type Belongs At Band 23, Not Band 0 |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#37 | authored | 2 | Status |
+| docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#1 | authored | 1 | A filename rule judges a module of types and not a module named for an operation |
+| docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#12 | authored | 2 | The Decision |
+| docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#17 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#21 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -43514,6 +43521,197 @@ Accepted, and amended once above on the carried type's home. Decided by reading 
 language crates, `composition::Recognized_Syntax_Provider`, the three call sites that consume
 `preferred_syntax_provider`, and `nomos-rules/Cargo.toml`'s own statement of the prohibition
 being worked around. The implementing change is not in this item's territory and needs its own.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#1
+
+*revision: authored · kind: heading · heading: A filename rule judges a module of types and not a module named for an operation · hash: sha256:a3059832da199614774d5acf6b4291f189d1e4e4470c0b38f924147770d3db7a*
+
+# A filename rule judges a module of types and not a module named for an operation
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#2
+
+*revision: authored · kind: heading · heading: A filename rule judges a module of types and not a module named for an operation / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#3
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / Question · hash: sha256:ae7751d5aa1864e3600369ec8e310a5219b7816e444ef7e8129fa9f36b8269fc*
+
+`file-name-matches-declared-type` says a public type should live in the file its name spells.
+Every `OD-RULES-011` capability family lands in violation of it twice over, and does so by
+design rather than by drift: `crates/capabilities/nomos-cap-<X>-policy/src/payload.rs`
+declares `<X>PolicyPayload`, and `crates/repository/nomos-repo-<X>/src/reading.rs` declares
+`<X>PolicyError`. Five families exist, each new one adds two more findings, and the rule and
+the layout have therefore been disagreeing at a fixed rate with no decision behind it.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#4
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / Question · hash: sha256:cda34ed9631436ee4899b1dbe89ff0601294e26674eb8ea2a7549f143f865d09*
+
+The question is not whether either is convenient. It is which of the two is stating something
+true. A rule that a settled layout violates on every instance is either finding a real defect
+five times or is being asked a question it cannot answer, and the two look identical from the
+finding list.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#5
+
+*revision: authored · kind: heading · heading: A filename rule judges a module of types and not a module named for an operation / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#6
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / What Was Measured · hash: sha256:a09c2c58e6def9b67f83829f7cd4b684b10a80752d40b4398d02c4b9f502ac47*
+
+**The workspace was censused whole rather than at the families.** At `5b0dcc06` the rule
+raised 46 blocking findings across 36 files. Classifying every one of those files by whether
+its public surface includes a free function — not a method, a free function — splits them
+exactly:
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#7
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / What Was Measured · hash: sha256:c3dfa9d3348409958b9e46885f286f1ab198d8c3261c18f32de257c853e33bca*
+
+- **13 files declare at least one free public function, and account for 17 findings.** They
+  are the five `payload.rs`, which export `Encode_Payload` and `Parse_Payload` beside their
+  types; the five `reading.rs`, which export `Discover_Workspace` and the error it returns;
+  and three `crates/packages/**/reader.rs`, which have the same shape in a different
+  directory.
+- **23 files declare none, and account for the other 29.** Every one is ordinary naming
+  drift — `AuthorizedCandidateFitAdjustment` in `candidate_fit_adjustment.rs`,
+  `CandidateOutcome` in `validation_diagnostic.rs` — and the rule is right about all of them.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#8
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / What Was Measured · hash: sha256:a0af91b6b71cbeda4110c295b517d2e00e04472a4ad1a9a3421caecaade3102f*
+
+No file sits on the wrong side of that line. The split was not chosen to fit the families: the
+three `reader.rs` files fall on the layout side while sitting in the directory the neighbouring
+drift item was scoped to, which is what makes the boundary module shape rather than location.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#9
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / What Was Measured · hash: sha256:f4fa114f1e2fcc7ed216040445eae7d9a88c9ec07b33e188816606ef3aa68858*
+
+**Renaming would name a module after the least important thing in it.**
+`nomos-repo-goals/src/reading.rs` exists for `Discover_Workspace`. `GoalsPolicyError` is what
+that function returns when it cannot. Renaming the file `goals_policy_error.rs` would move the
+module's name off its purpose and onto its failure mode, which is a worse name than the one
+the rule objected to.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#10
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / What Was Measured · hash: sha256:c1422f45cc067f4cbc87cf57cbd3022d81c258d351db92dddd0dce10070a4cfe*
+
+**Nothing in the public API moves either way.** Every one of the 13 modules is private, with
+its types re-exported at the crate root: `nomos_cap_goals_policy::GoalsPolicyPayload`, not
+`::payload::GoalsPolicyPayload`. So neither the stutter that would argue against renaming nor
+the snapshot churn that would argue against splitting is real. The choice had to be made on
+what the names mean, because nothing mechanical was at stake.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#11
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / What Was Measured · hash: sha256:875c825a19593dd6de172f92f389de3dccba603c22a9615145a38817df46441a*
+
+**The rule already makes this judgment one level up.** `Comparable_Stem` returns `None` for
+`lib`, `main` and `mod`, and `file_names.rs`'s own module doc calls that "a name that carries
+no claim about a type". That is the same category, recognized by enumeration rather than by
+the property the enumeration is standing in for.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#12
+
+*revision: authored · kind: heading · heading: A filename rule judges a module of types and not a module named for an operation / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#13
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / The Decision · hash: sha256:2a2527fa5243eb9fc8dfb6b2f4dbcd6171554f192c4a41679450a1108a1ae2c8*
+
+**A module whose public surface is types alone is named for a type, and this rule says which
+one. A module that also exports a free public function is named for what it does, and this
+rule has no claim about its name.** `Violations_In` returns nothing for the second kind.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#14
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / The Decision · hash: sha256:95b8254065cdd1d2fe4ac85b98c2532658c873dc67306f323f04f564e0436411*
+
+The discriminator is a *free* function deliberately. A method is named inside the type it
+belongs to and says nothing about what the module is for — `OrderBook::New` in `orders.rs`
+leaves `orders.rs` a module of types, and it stays judged. Only a function the module exports
+in its own right is evidence that the module was named for an operation.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#15
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / The Decision · hash: sha256:b9900226d29f66e6f643bb522842d176e6240c8f87b0172b437e8b44d04455a8*
+
+**This holds for the next capability family without a further decision**, which is what the
+item that produced this record asked for. A sixth `nomos-cap-<X>-policy` needs no exemption
+entry, no waiver and no rename: its `payload.rs` exports `Parse_Payload`, and that is already
+the answer.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#16
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / The Decision · hash: sha256:5904495d786e5b101fe5c003bb5e372f2e1aa7d691259b819927bd622551d144*
+
+**The families are not thereby blessed as a layout.** This record says the rule was asking a
+question it could not answer, not that `payload.rs` is the right name. If a family's payload
+module ever loses its codec and becomes types alone, the rule starts judging it again and will
+be right to.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#17
+
+*revision: authored · kind: heading · heading: A filename rule judges a module of types and not a module named for an operation / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#18
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / What This Record Does Not Do · hash: sha256:3c53d4c840eec08e0e7c63151aff28cbca673a559a44c51ad4dc785e5dcf86db*
+
+It does not touch `one-public-type-per-file`, the sibling rule in the same file. That rule is
+not composed into `Run` and finds nothing today, so giving it the same exemption would be
+writing a decision about a population of zero — and `OD-CONTRACTS-001`'s honesty vocabularies
+refuse exactly that. When it is composed, this record's reasoning is available to it and the
+argument is the same one; making it is that increment's work.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#19
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / What This Record Does Not Do · hash: sha256:b9c4b82107383cc293757b54f9a9004eb7d15254cebab784b6e4e574b6304e50*
+
+It does not decide the 29 drift findings. Those are ordinary renames and the rule is right
+about them; they are `P27-SELFCHECK-FILENAME-DRIFT-PACKAGES`'s subject, not this record's.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#20
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / What This Record Does Not Do · hash: sha256:d5e3a54013b999c7776f8b50c9a33e03104e651d85456679d3b34ad772c50102*
+
+It does not claim the free-function discriminator is the only one that would have worked. It
+claims it is the one this workspace's own population supports without a single misclassified
+file, which is a stronger warrant than an argument from taste and a weaker one than a proof.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#21
+
+*revision: authored · kind: heading · heading: A filename rule judges a module of types and not a module named for an operation / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#22
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / Status · hash: sha256:4912b0a8d77ec43e701b1c700af76c7947e7875f33d7b4fd7954b47cd6931703*
+
+Accepted. The rule reads the discriminator, a unit test holds each side of it, and the 17
+findings the families raised are gone while all 29 drift findings still report.
+
+### docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#23
+
+*revision: authored · kind: prose · heading: A filename rule judges a module of types and not a module named for an operation / Status · hash: sha256:12a7a142dbface53f2db64bae4f31b1c1d486fd828bcc3e30d09a357484e7b0d*
+
+Revisit if a module that is genuinely a type module acquires one free function and stops being
+judged when it should be. That would be evidence the discriminator is a proxy that has come
+apart from what it stands for, and the answer then is a better discriminator rather than a
+list of exceptions to this one.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

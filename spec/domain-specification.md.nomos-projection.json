@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:4e8927159f881e634a808af4ad27074cf0d1324291e193062d22321ce95eed33",
-  "inputs_digest": "sha256:7b55d230151a4ec116f8e18bbe1fa2dec35f54cde14aa52d20f6526ca2b7e2f7",
+  "content_digest": "sha256:75e0df5cd9eaa0f05fc0d46dece78ef68c40d34c5f34233d8ec585a5471e0b5c",
+  "inputs_digest": "sha256:c97e1b35c5b069d2dd572844a5e7ffcc2b8e32c4c7d8d148f3a93e9a33f5d013",
   "sections": [
     [
       "Documents",
-      181
+      182
     ],
     [
       "Sections",
-      1516
+      1522
     ],
     [
       "Source blocks",
-      5302
+      5325
     ]
   ],
   "inputs": [
@@ -789,6 +789,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md@authored",
       "hash": "sha256:740a2ca81a0ba769b2370b32a0b5af4aeb3647f2c9a141f1ebaf058f08f9f6c1"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md@authored",
+      "hash": "sha256:4b0bd63773267478c66835f887728ff0cedb4892a98e85291ed631e1665b53c8"
     },
     {
       "content": "documents",
@@ -7294,6 +7299,36 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#37",
       "hash": "sha256:d923a7ef92e6148d347493dd471be65d2f9a42cbfb856ebfe946f6f6c5138e31"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#1",
+      "hash": "sha256:960614e21e2dbcb78285fa65e7766d8a87ed58f4b03e18ee63bed5d48c2efbb5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#2",
+      "hash": "sha256:f43fbd3c5d81059ffb1306261d7af03bee9ab6473b3579b3a99901992fff4e0a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#5",
+      "hash": "sha256:874c5ae785f410990fd2b617255134cb168be56ed70484297dfb6d7e3221bd3c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#12",
+      "hash": "sha256:03e8ca6f14e18346b821c6744fffa8032f4ad026b4efad8d9c649ff1cedfa5d7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#17",
+      "hash": "sha256:e11239fb9f1d941212adc0560191601cce35da0fe347a3385b293e54eb2d91fa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#21",
+      "hash": "sha256:f0a8500a196c8b57054aa54153fbc9e44c0fbd4fdb93b78c8306b7fa57665071"
     },
     {
       "content": "headings",
@@ -31049,6 +31084,121 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#38",
       "hash": "sha256:7899dc102da0a579dd8d3232768f10d9f90487dd58e497cdabd6d6fdb0f34de0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#1",
+      "hash": "sha256:a3059832da199614774d5acf6b4291f189d1e4e4470c0b38f924147770d3db7a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#3",
+      "hash": "sha256:ae7751d5aa1864e3600369ec8e310a5219b7816e444ef7e8129fa9f36b8269fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#4",
+      "hash": "sha256:cda34ed9631436ee4899b1dbe89ff0601294e26674eb8ea2a7549f143f865d09"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#6",
+      "hash": "sha256:a09c2c58e6def9b67f83829f7cd4b684b10a80752d40b4398d02c4b9f502ac47"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#7",
+      "hash": "sha256:c3dfa9d3348409958b9e46885f286f1ab198d8c3261c18f32de257c853e33bca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#8",
+      "hash": "sha256:a0af91b6b71cbeda4110c295b517d2e00e04472a4ad1a9a3421caecaade3102f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#9",
+      "hash": "sha256:f4fa114f1e2fcc7ed216040445eae7d9a88c9ec07b33e188816606ef3aa68858"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#10",
+      "hash": "sha256:c1422f45cc067f4cbc87cf57cbd3022d81c258d351db92dddd0dce10070a4cfe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#11",
+      "hash": "sha256:875c825a19593dd6de172f92f389de3dccba603c22a9615145a38817df46441a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#12",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#13",
+      "hash": "sha256:2a2527fa5243eb9fc8dfb6b2f4dbcd6171554f192c4a41679450a1108a1ae2c8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#14",
+      "hash": "sha256:95b8254065cdd1d2fe4ac85b98c2532658c873dc67306f323f04f564e0436411"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#15",
+      "hash": "sha256:b9900226d29f66e6f643bb522842d176e6240c8f87b0172b437e8b44d04455a8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#16",
+      "hash": "sha256:5904495d786e5b101fe5c003bb5e372f2e1aa7d691259b819927bd622551d144"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#17",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#18",
+      "hash": "sha256:3c53d4c840eec08e0e7c63151aff28cbca673a559a44c51ad4dc785e5dcf86db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#19",
+      "hash": "sha256:b9c4b82107383cc293757b54f9a9004eb7d15254cebab784b6e4e574b6304e50"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#20",
+      "hash": "sha256:d5e3a54013b999c7776f8b50c9a33e03104e651d85456679d3b34ad772c50102"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#21",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#22",
+      "hash": "sha256:4912b0a8d77ec43e701b1c700af76c7947e7875f33d7b4fd7954b47cd6931703"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#23",
+      "hash": "sha256:12a7a142dbface53f2db64bae4f31b1c1d486fd828bcc3e30d09a357484e7b0d"
     },
     {
       "content": "blocks",

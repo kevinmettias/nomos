@@ -318,6 +318,7 @@ graph LR
     od_capability_004 -->|"relates-to"| od_capability_006
     od_capability_004 -->|"relates-to"| od_contracts_002
     od_capability_004 -->|"relates-to"| od_rules_011
+    od_capability_004 -->|"relates-to"| od_rules_015["OD-RULES-015"]
     od_capability_005 -->|"relates-to"| od_capability_001
     od_capability_005 -->|"relates-to"| od_capability_003
     od_capability_005 -->|"relates-to"| od_contracts_002
@@ -1125,10 +1126,15 @@ graph LR
     od_rules_011 -->|"relates-to"| od_rules_001
     od_rules_011 -->|"relates-to"| od_rules_010
     od_rules_011 -->|"relates-to"| od_rules_014
+    od_rules_011 -->|"relates-to"| od_rules_015
     od_rules_014 -->|"relates-to"| od_capability_009
     od_rules_014 -->|"relates-to"| od_host_004
     od_rules_014 -->|"relates-to"| od_rules_001
     od_rules_014 -->|"relates-to"| od_rules_011
+    od_rules_014 -->|"relates-to"| od_rules_015
+    od_rules_015 -->|"relates-to"| od_capability_004
+    od_rules_015 -->|"relates-to"| od_rules_011
+    od_rules_015 -->|"relates-to"| od_rules_014
     od_spec_001 -->|"affects"| arc_specdb_001
     od_spec_001 -->|"relates-to"| d_133
     od_spec_002 -->|"affected_by"| d_132
@@ -1443,6 +1449,7 @@ graph LR
     od_rules_010
     od_rules_011
     od_rules_014
+    od_rules_015
     od_spec_001
     od_spec_002
     od_spec_004

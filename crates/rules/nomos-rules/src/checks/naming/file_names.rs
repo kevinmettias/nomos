@@ -23,7 +23,7 @@
 
 use crate::SourceFile;
 use nomos_analysis::FactReader;
-use nomos_cap_syntax::{PayloadItem, SyntaxPayload};
+use nomos_cap_syntax::{FUNCTION, PayloadItem, SyntaxPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
 /// This rule's own identifier, matching the code-standards rule id.
@@ -102,6 +102,11 @@ fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
         return Vec::new();
     };
 
+    if Declares_A_Public_Operation(payload)
+    {
+        return Vec::new();
+    }
+
     return payload
         .items
         .iter()
@@ -109,6 +114,31 @@ fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
         .filter(|item| return To_Snake_Case(item.Own_Name()) != stem)
         .map(|item| return Violation_Finding(path, &stem, item))
         .collect();
+}
+
+/// Whether a module's public surface includes a free function, and so is named for
+/// something this rule has no claim about.
+///
+/// A module holding types alone is named for a type, and `file-name-matches-declared-type`
+/// says which one. A module that also exports a free function is named for what it does,
+/// and its types are subordinate to that: `nomos-repo-goals/src/reading.rs` exports
+/// `Discover_Workspace` and the error `Discover_Workspace` returns, so renaming it
+/// `goals_policy_error.rs` would name it after the least important thing in it. `OD-RULES-015`
+/// records the decision and the measurement behind it -- across the 46 findings this rule
+/// raised on this workspace, the 13 files declaring a free public function were every false
+/// positive and the 23 declaring none were every true one, with no file on the wrong side.
+///
+/// This is the judgment `Comparable_Stem` already makes one level up when it skips `lib`,
+/// `main` and `mod`: a name that carries no claim about a type is not a name this rule can
+/// check. A method does not count, because a method is named inside the type it belongs to
+/// and says nothing about what the module is for -- which is why this asks for a *free*
+/// function, using the same `Is_Top_Level` the sibling rule below reads.
+fn Declares_A_Public_Operation(payload: &SyntaxPayload) -> bool
+{
+    return payload
+        .items
+        .iter()
+        .any(|item| return item.Is_Public() && item.kind == FUNCTION && Is_Top_Level(item));
 }
 
 fn Is_Type_Like(item: &PayloadItem) -> bool
@@ -299,6 +329,33 @@ item	0	Struct	Public	Anchor	.	.
         let found = findings.first().expect("asserted len 1 above");
         assert_eq!(found.rule, RuleId::New(FILE_NAME_MATCHES_DECLARED_TYPE));
         assert_eq!(found.subject_name, "OrderBook");
+    }
+
+    /// The family layout: a module exporting an operation and the error that operation
+    /// returns. `OD-RULES-015` decides this is not this rule's to judge, because the
+    /// module is named for `Discover_Workspace` and the error is subordinate to it.
+    #[test]
+    fn Test_Violations_In_Should_Not_Judge_A_Module_That_Exports_A_Free_Function()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tStruct\tPublic\tGoalsPolicyError\t.\t.\nitem\t1\tFunction\tPublic\tDiscover_Workspace\t.\t.\n");
+
+        let findings = Violations_In(&payload, "src/reading.rs");
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// The other side of the same decision, and the one that keeps it narrow: a method is
+    /// named inside its own type and says nothing about what the module is for, so a
+    /// module whose only public functions are methods is still a module of types.
+    #[test]
+    fn Test_Violations_In_Should_Still_Judge_A_Module_Whose_Only_Functions_Are_Methods()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tStruct\tPublic\tOrderBook\t.\t.\nitem\t1\tFunction\tPublic\tOrderBook::New\t.\t.\n");
+
+        let findings = Violations_In(&payload, "src/orders.rs");
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "OrderBook");
     }
 
     #[test]
