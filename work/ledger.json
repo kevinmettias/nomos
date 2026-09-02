@@ -46213,8 +46213,8 @@
       "blocked": null,
       "claim": {
         "holder": "nomos-89",
-        "acquired_at": 1788339822,
-        "lease_expires_at": 1788354222
+        "acquired_at": 1788364894,
+        "lease_expires_at": 1788379294
       },
       "verification": {
         "argv": [
@@ -46239,6 +46239,11 @@
           "holder": "nomos-89",
           "acquired_at": 1788331567,
           "lease_expires_at": 1788338767
+        },
+        {
+          "holder": "nomos-89",
+          "acquired_at": 1788339822,
+          "lease_expires_at": 1788354222
         }
       ],
       "declined": null
@@ -48152,10 +48157,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-89",
+        "acquired_at": 1788364895,
+        "lease_expires_at": 1788379295
+      },
       "verification": {
         "argv": [
           "cargo",
