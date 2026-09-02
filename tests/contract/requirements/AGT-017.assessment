@@ -33,7 +33,7 @@
 # need, but D-137 says outright "nothing yet produces or consumes one" -- it grounds nothing
 # itself and is cited only as the nearest real absence-site for the rest of the requirement.
 verdict: Partial
-site: crates/packages/nomos-package/src/version.rs#PackageVersion
+site: crates/packages/nomos-package/src/package_version.rs#PackageVersion
 site: crates/contracts/nomos-contracts/src/contract_version.rs#ContractVersion
-site: crates/packages/nomos-model-package/src/manifest.rs#ModelRoutePackage
+site: crates/packages/nomos-model-package/src/model_route_package.rs#ModelRoutePackage
 gap: crates/contracts/nomos-contracts/src/digest128.rs#KnowledgeReferenceId

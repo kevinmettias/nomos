@@ -61,12 +61,12 @@
 #![forbid(unsafe_code)]
 
 mod known_providers;
-mod language_version;
-mod manifest;
+mod rust_edition;
+mod language_package;
 mod reader;
 
 pub use known_providers::{Is_Known, KNOWN_PROVIDERS};
-pub use language_version::RustEdition;
-pub use manifest::LanguagePackage;
+pub use rust_edition::RustEdition;
+pub use language_package::LanguagePackage;
 pub use nomos_package::{PackageVersion, ProtocolRange, ProviderRegistration};
 pub use reader::{ManifestError, Parse_Manifest, Read_Manifest};

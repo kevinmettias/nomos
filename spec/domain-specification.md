@@ -165,6 +165,7 @@ profile: domain-specification
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 23 | 6 | sha256:841b1c5bb58bd645f7b84a43c5f4433923df78193de6b7e6e3ffecc92de628c9 |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md@authored | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md | authored | 38 | 10 | sha256:740a2ca81a0ba769b2370b32a0b5af4aeb3647f2c9a141f1ebaf058f08f9f6c1 |
 | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md@authored | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md | authored | 23 | 6 | sha256:4b0bd63773267478c66835f887728ff0cedb4892a98e85291ed631e1665b53c8 |
+| docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md@authored | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md | authored | 20 | 6 | sha256:04c3221540c1dfff84ceb66e9b1cd588331b0e7df89080dc0d714bc2df75102b |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1477,6 +1478,12 @@ profile: domain-specification
 | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#12 | authored | 2 | The Decision |
 | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#17 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#21 | authored | 2 | Status |
+| docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#1 | authored | 1 | A file naming one of the types it declares satisfies the filename rule for all of them |
+| docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#10 | authored | 2 | The Decision |
+| docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#14 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#18 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -43712,6 +43719,165 @@ Revisit if a module that is genuinely a type module acquires one free function a
 judged when it should be. That would be evidence the discriminator is a proxy that has come
 apart from what it stands for, and the answer then is a better discriminator rather than a
 list of exceptions to this one.
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#1
+
+*revision: authored · kind: heading · heading: A file naming one of the types it declares satisfies the filename rule for all of them · hash: sha256:a906de5b0dd97e0b06e9a515efc2958f514094b4ba380f17ffb16bb9a40073b8*
+
+# A file naming one of the types it declares satisfies the filename rule for all of them
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#2
+
+*revision: authored · kind: heading · heading: A file naming one of the types it declares satisfies the filename rule for all of them / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#3
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / Question · hash: sha256:0cef47ebe265cff0d7eb89a6fe9435249ea756a0c2f4412baddfc3d18323a340*
+
+`OD-RULES-015` decided which modules `file-name-matches-declared-type` may judge. This record
+decides what it may say about the ones it does.
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#4
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / Question · hash: sha256:af11f2af268072557e77c53c9d66cda7bcaafd74b7bda242c93c29521485d1c4*
+
+A module holding a type and the small vocabulary that type is defined in terms of has one
+name and several public types, so at most one of them can match the file stem. The rule
+reported the others. Satisfying it would mean giving each companion its own file, and after
+eleven of those in one directory the shape of what was being asked became clear: it is
+`one-public-type-per-file`, arrived at sideways.
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#5
+
+*revision: authored · kind: heading · heading: A file naming one of the types it declares satisfies the filename rule for all of them / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#6
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / What Was Measured · hash: sha256:2891dbfe724f2b0171047b65df8dddc550a44a5c25aa8a302e077949e508e11d*
+
+**Eleven of the twenty-four files in `P27-SELFCHECK-FILENAME-DRIFT-PACKAGES` are this shape,
+and its census called all twenty-four ordinary drift.** Ten really were and have been renamed.
+The other eleven each declare a public type whose snake case *is* the stem, plus one or two
+companions:
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#7
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / What Was Measured · hash: sha256:b92d70c027e96599da04072b4e9608ffb7d2a4abc13a7c2634fbea264e80a9d7*
+
+- `budget_estimate.rs` declares `BudgetEstimate` and `CheckOrFixStage`, which is one of
+  `BudgetEstimate`'s own fields. Its module doc reads "A previewed budget for one rule at one
+  check-or-fix stage" — the companion is named in the sentence that names the module.
+- `shadowed_profile.rs` declares `ShadowedProfile` and `ShadowClassification`;
+  `validation_diagnostic.rs`, `ValidationDiagnostic` and `CandidateOutcome`;
+  `telemetry_junction.rs`, `TelemetryJunction` and `PipelineStage`. Eight more of the same.
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#8
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / What Was Measured · hash: sha256:cda17d165a4f3cb9fa55a2e710384b5aef569768ee4b9428863e858dd874bcce*
+
+**`one-public-type-per-file` exists, sits in the same source file, and is composed into
+nothing.** It is registered in `nomos-rules` and no composition root calls it, so it has never
+raised a finding on this workspace. That is a standing decision not to require one public type
+per file. A rule that forces the same outcome by a different route is that decision being
+reversed without anybody making it.
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#9
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / What Was Measured · hash: sha256:c617e0471b0a0d39e97537e88bd2364dac2872b8aef09b9dc4ed64c1e1d32b4d*
+
+**The rule id names the file, in the singular.** `file-name-matches-declared-type`: the file
+name matches *a* declared type. The reading that reports companions is "every declared type
+matches the file name", which is a different claim and would deserve a different name. The
+rule's own module doc opens "Public type declarations should live in the file named for that
+type", which is satisfied by a file named for the type it is about.
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#10
+
+*revision: authored · kind: heading · heading: A file naming one of the types it declares satisfies the filename rule for all of them / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#11
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / The Decision · hash: sha256:93f0a176764c4cce3f4d7062516dcd93fe2cf91bd067cdcd1eae47f6fe56747a*
+
+**A module satisfies `file-name-matches-declared-type` when the snake case of any public type
+it declares equals the file stem.** No finding is raised on that module.
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#12
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / The Decision · hash: sha256:3a179d94871e848c64aeb35cc4055e9570ee949ac10ddc1acea2885baba47b5d*
+
+**A module whose stem matches none of its public types is reported for every one of them**,
+which is unchanged and is what caught the ten real renames. Reporting all of them rather than
+guessing is deliberate: when the stem names nothing in the file, nothing in the file says
+which type the file was meant to be about, and a rule that picked one would be inventing the
+answer it is supposed to be checking.
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#13
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / The Decision · hash: sha256:b1dc9625e4b27292ae2bdf1be3ae1bb2964a7a32a558aa52d641cb62f908e8ed*
+
+Together with `OD-RULES-015` this leaves the rule saying one thing, and only one: *a module of
+types is named for one of the types it declares.* Which one, and how many others share the
+file, are questions this rule does not answer and `one-public-type-per-file` does — if a
+composition root ever asks it.
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#14
+
+*revision: authored · kind: heading · heading: A file naming one of the types it declares satisfies the filename rule for all of them / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#15
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / What This Record Does Not Do · hash: sha256:75f7d04d3fa58e4385547b373cfe2bd48a54e48b5335f34a64bd1ec351054259*
+
+It does not compose `one-public-type-per-file` or argue against composing it. That rule asks a
+real question and this record's whole point is that it is a *separate* question; if this
+workspace later wants one public type per file, the honest way to get it is to compose the
+rule that says so and take the findings.
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#16
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / What This Record Does Not Do · hash: sha256:706b10d28bedd6acdeea87a56ec68b01ad55c0dd6d94caeef5a42824e4dcd639*
+
+It does not bless any particular companion. `CheckOrFixStage` living beside `BudgetEstimate`
+is a judgment about that module which this record does not review; it only declines to make
+that judgment on a filename rule's authority.
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#17
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / What This Record Does Not Do · hash: sha256:cfc9721a09a26e01f76e627dfa7f43a73a5604f4f74673782f46b8c7b8ad536b*
+
+It does not weaken the ten renames it sits beside. Those files named no type they declared,
+and still report.
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#18
+
+*revision: authored · kind: heading · heading: A file naming one of the types it declares satisfies the filename rule for all of them / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#19
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / Status · hash: sha256:956a8e0af2ea6367d351fae3351a3ab9da58cb5beeaa24d409633543a1d7d86a*
+
+Accepted. The rule reads it, two tests hold the two sides, the eleven companion findings are
+gone, and every file whose stem names none of its types still reports.
+
+### docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#20
+
+*revision: authored · kind: prose · heading: A file naming one of the types it declares satisfies the filename rule for all of them / Status · hash: sha256:0de9625ece26ad2fc16e6f4776b70bc7d829c989419ca1d7548263e4452588f7*
+
+Revisit if a file accumulates a matching type as cover — a module named for one small type
+while a dozen unrelated ones shelter behind it. That would be the rule's exemption being used
+to avoid a decomposition rather than to describe one, and the answer then is to compose
+`one-public-type-per-file`, which is the rule that was always about how many.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

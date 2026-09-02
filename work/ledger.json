@@ -47018,14 +47018,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-a8",
-        "acquired_at": 1788331346,
-        "lease_expires_at": 1788338546
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -47035,7 +47031,27 @@
         ],
         "timeout_seconds": 5400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-860c7d7f879d39fe.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-7796b93f37c94c9c.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-7e3f7173fb7ec794.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-16033c566fac7044.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-cb90abd5315151d3.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-e925a3efd394c3e0.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-c210d175df0110ef.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6e92a634a03d02bd.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-0311769be47a622d.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-5f8ffa78373709ba.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1788332315,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "cd57d14c58f2c4112e16008fb84e1e01d6f7b07b"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -47593,6 +47609,59 @@
         "timeout_seconds": 600
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-016-FILENAME-RULE-JUDGES-COMPANION-TYPES",
+      "title": "file-name-matches-declared-type asks every public type to match the stem, which is one-public-type-per-file by another name",
+      "why": "Found 2026-09-02 while doing P27-SELFCHECK-FILENAME-DRIFT-PACKAGES, whose census called all 24 of its files ordinary drift. Ten were, and are now renamed. Eleven are not, and they are a second question the size of OD-RULES-015. Each of the eleven declares a public type whose snake case IS the file stem, plus one or two companions that support it: budget_estimate.rs declares BudgetEstimate and the CheckOrFixStage enum that is one of its fields, and its module doc is A previewed budget for one rule at one check-or-fix stage. The rule reports the companion, so satisfying it means splitting a cohesive sixty-line module into two files. Doing that eleven times is enforcing one-public-type-per-file, which is the sibling rule in the same source file and is deliberately composed into nothing. A workspace that declined to require one public type per file cannot have meant this rule to require it transitively. The rule id names the file, singular: the file name matches a declared type. Reading it as every declared type matches the file name is a different rule with a different name.",
+      "done_when": "The rule is satisfied when any declared public type's snake case equals the stem, or the opposite is decided and recorded with its reason. A unit test covers a module whose stem matches one of two public types and one whose stem matches neither. OD-RULES-016 records the decision. The eleven companion findings resolve accordingly, and a file whose stem matches no declared type still reports. cargo test -p nomos-rules is green.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/file_names.rs",
+          "docs/records/OD-RULES-016"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 419 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.35s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788332252,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "cd57d14c58f2c4112e16008fb84e1e01d6f7b07b"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

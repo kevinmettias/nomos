@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:ebb1573844c1fc31536e7e68bd2e7d695dd4517c7513a286461ade356bb86628",
-  "inputs_digest": "sha256:2fe3075db9da3b3c3bcb7386a472011c3ed01d45268ad50bfdb33ebfa8954ca7",
+  "content_digest": "sha256:a4787c2b750b0396e8ab870e7727bad283505f9e6dae309b88c2cc81a227bee8",
+  "inputs_digest": "sha256:6a82634189d00c3e1dfcab0e8171685e8996628ede5263ec620e1e979b5e465f",
   "sections": [
     [
       "Relations",
-      1298
+      1302
     ],
     [
       "Decisions",
-      174
+      175
     ]
   ],
   "inputs": [
@@ -5638,6 +5638,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-RULES-011 relates-to OD-RULES-016",
+      "hash": "sha256:be2516dad9e4cd68e53c8585e3ae4dd7fd5be919e224b386946e66a207363f4d"
+    },
+    {
+      "content": "relations",
       "identity": "OD-RULES-014 relates-to OD-CAPABILITY-009",
       "hash": "sha256:bff83d7b7d66ab814a87443f3bae97a3df564a20b0fc8b876878d603fc7dc3bb"
     },
@@ -5675,6 +5680,21 @@
       "content": "relations",
       "identity": "OD-RULES-015 relates-to OD-RULES-014",
       "hash": "sha256:041c2cab57fac4c35b4c03c79f48cf707904fab5cbd7c79699419a3e8fa9fca2"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-015 relates-to OD-RULES-016",
+      "hash": "sha256:82855879dc72db878300f7ec47a88f5a30a1fce27f9bd8fc36f6db17eece7ee3"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-016 relates-to OD-RULES-011",
+      "hash": "sha256:77f02dfa2bbf9fed9e07407b978ab03134eb7e187739736d06d47ae17cc0c4c1"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-016 relates-to OD-RULES-015",
+      "hash": "sha256:d481e88619be1e3de35f962e7d78b58a68ce2c625ca0c5a907166d89172cd139"
     },
     {
       "content": "relations",
@@ -7240,6 +7260,11 @@
       "content": "nodes",
       "identity": "OD-RULES-015",
       "hash": "sha256:924e95985fb0f40bef83c7afecc960bcd71d821123e36654d597f0dfacb07c5c"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-RULES-016",
+      "hash": "sha256:a18cd2e26a4ac9c1be121ebb4f85c22583dc2af16a6a0b6dda8628af3df7ddd0"
     },
     {
       "content": "nodes",

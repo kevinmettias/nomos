@@ -10,7 +10,7 @@
 
 use crate::go_version::GoVersion;
 use crate::known_providers::KNOWN_PROVIDERS;
-use crate::manifest::LanguagePackage;
+use crate::language_package::LanguagePackage;
 
 pub use nomos_package::ManifestError;
 

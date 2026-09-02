@@ -10,8 +10,8 @@
 //! the split, so the move is behavior-preserving rather than a new refusal.
 
 use crate::known_providers::KNOWN_PROVIDERS;
-use crate::language_version::RustEdition;
-use crate::manifest::LanguagePackage;
+use crate::rust_edition::RustEdition;
+use crate::language_package::LanguagePackage;
 
 pub use nomos_package::ManifestError;
 

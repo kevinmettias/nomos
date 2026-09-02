@@ -23,15 +23,15 @@
 #![forbid(unsafe_code)]
 
 mod known_providers;
-mod manifest;
+mod package_manifest;
 mod protocol_range;
 mod provider_registration;
 mod reader;
-mod version;
+mod package_version;
 
 pub use known_providers::KnownProviders;
-pub use manifest::PackageManifest;
+pub use package_manifest::PackageManifest;
 pub use protocol_range::ProtocolRange;
 pub use provider_registration::ProviderRegistration;
 pub use reader::{ManifestError, Parse_Manifest, Read_Manifest, SCHEMA_VERSION};
-pub use version::PackageVersion;
+pub use package_version::PackageVersion;

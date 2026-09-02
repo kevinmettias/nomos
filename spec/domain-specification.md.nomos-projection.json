@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:75e0df5cd9eaa0f05fc0d46dece78ef68c40d34c5f34233d8ec585a5471e0b5c",
-  "inputs_digest": "sha256:c97e1b35c5b069d2dd572844a5e7ffcc2b8e32c4c7d8d148f3a93e9a33f5d013",
+  "content_digest": "sha256:43ccd18c71e8ae207a7a7c14789b0ce96a2e1fb67c73d93c59504f81ed10123f",
+  "inputs_digest": "sha256:12631bf35661f523383225fa487dfe94a4edf5ba37b692b7135d0cba79f8f9ee",
   "sections": [
     [
       "Documents",
-      182
+      183
     ],
     [
       "Sections",
-      1522
+      1528
     ],
     [
       "Source blocks",
-      5325
+      5345
     ]
   ],
   "inputs": [
@@ -794,6 +794,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md@authored",
       "hash": "sha256:4b0bd63773267478c66835f887728ff0cedb4892a98e85291ed631e1665b53c8"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md@authored",
+      "hash": "sha256:04c3221540c1dfff84ceb66e9b1cd588331b0e7df89080dc0d714bc2df75102b"
     },
     {
       "content": "documents",
@@ -7329,6 +7334,36 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#21",
       "hash": "sha256:f0a8500a196c8b57054aa54153fbc9e44c0fbd4fdb93b78c8306b7fa57665071"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#1",
+      "hash": "sha256:cdd2a3b90fd6bff675d38cab4c34b4bd5f9a1c305926613f147ead8ddba6d6f6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#2",
+      "hash": "sha256:3d302f18acaa7accf0927bb26fcd43a64adf1cfe389c98709389c4d603b69eea"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#5",
+      "hash": "sha256:c0d775e00a664a7fcb9aa7c869596a5a5b94f802f57d26d157d77a69a86b1501"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#10",
+      "hash": "sha256:46a1ca137b97845cd43578256229277c058b7b368e206d4317b52bf5d8106306"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#14",
+      "hash": "sha256:4164ed804b0d1a7039cedcfabd7ed4087a1acb8b00603a2b321743edb8060cd6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#18",
+      "hash": "sha256:6a128e67e6f7e2bb4e59d22671e2f1024982fb174918c9bd14de19fdb1a508ab"
     },
     {
       "content": "headings",
@@ -31199,6 +31234,106 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md#23",
       "hash": "sha256:12a7a142dbface53f2db64bae4f31b1c1d486fd828bcc3e30d09a357484e7b0d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#1",
+      "hash": "sha256:a906de5b0dd97e0b06e9a515efc2958f514094b4ba380f17ffb16bb9a40073b8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#3",
+      "hash": "sha256:0cef47ebe265cff0d7eb89a6fe9435249ea756a0c2f4412baddfc3d18323a340"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#4",
+      "hash": "sha256:af11f2af268072557e77c53c9d66cda7bcaafd74b7bda242c93c29521485d1c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#6",
+      "hash": "sha256:2891dbfe724f2b0171047b65df8dddc550a44a5c25aa8a302e077949e508e11d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#7",
+      "hash": "sha256:b92d70c027e96599da04072b4e9608ffb7d2a4abc13a7c2634fbea264e80a9d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#8",
+      "hash": "sha256:cda17d165a4f3cb9fa55a2e710384b5aef569768ee4b9428863e858dd874bcce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#9",
+      "hash": "sha256:c617e0471b0a0d39e97537e88bd2364dac2872b8aef09b9dc4ed64c1e1d32b4d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#10",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#11",
+      "hash": "sha256:93f0a176764c4cce3f4d7062516dcd93fe2cf91bd067cdcd1eae47f6fe56747a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#12",
+      "hash": "sha256:3a179d94871e848c64aeb35cc4055e9570ee949ac10ddc1acea2885baba47b5d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#13",
+      "hash": "sha256:b1dc9625e4b27292ae2bdf1be3ae1bb2964a7a32a558aa52d641cb62f908e8ed"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#14",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#15",
+      "hash": "sha256:75f7d04d3fa58e4385547b373cfe2bd48a54e48b5335f34a64bd1ec351054259"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#16",
+      "hash": "sha256:706b10d28bedd6acdeea87a56ec68b01ad55c0dd6d94caeef5a42824e4dcd639"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#17",
+      "hash": "sha256:cfc9721a09a26e01f76e627dfa7f43a73a5604f4f74673782f46b8c7b8ad536b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#18",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#19",
+      "hash": "sha256:956a8e0af2ea6367d351fae3351a3ab9da58cb5beeaa24d409633543a1d7d86a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md#20",
+      "hash": "sha256:0de9625ece26ad2fc16e6f4776b70bc7d829c989419ca1d7548263e4452588f7"
     },
     {
       "content": "blocks",

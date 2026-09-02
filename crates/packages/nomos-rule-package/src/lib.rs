@@ -20,17 +20,17 @@
 
 mod applicability_semantics;
 mod capability_requirement;
-mod correction_and_suppression;
+mod correction_and_suppression_contract;
 mod diagnostic_mapping;
-mod manifest;
+mod rule_package;
 mod reader;
 mod rule_contract;
 
 pub use applicability_semantics::ApplicabilitySemantics;
 pub use capability_requirement::CapabilityRequirement;
-pub use correction_and_suppression::CorrectionAndSuppressionContract;
+pub use correction_and_suppression_contract::CorrectionAndSuppressionContract;
 pub use diagnostic_mapping::DiagnosticMapping;
-pub use manifest::RulePackage;
+pub use rule_package::RulePackage;
 pub use nomos_package::{PackageVersion, ProtocolRange, ProviderRegistration};
 pub use reader::{ManifestError, Parse_Manifest, Read_Manifest, SCHEMA_VERSION};
 pub use rule_contract::RuleContract;

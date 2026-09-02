@@ -35,11 +35,11 @@
 
 mod go_version;
 mod known_providers;
-mod manifest;
+mod language_package;
 mod reader;
 
 pub use go_version::GoVersion;
 pub use known_providers::{Is_Known, KNOWN_PROVIDERS};
-pub use manifest::LanguagePackage;
+pub use language_package::LanguagePackage;
 pub use nomos_package::{PackageVersion, ProtocolRange, ProviderRegistration};
 pub use reader::{ManifestError, Parse_Manifest, Read_Manifest};

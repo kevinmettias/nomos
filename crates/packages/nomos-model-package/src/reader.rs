@@ -5,7 +5,7 @@
 //! version domain that will not parse, a `model_selection.kind` this crate does not
 //! define -- each is a named [`ManifestError`] variant, never a default or a skip.
 
-use crate::manifest::ModelRoutePackage;
+use crate::model_route_package::ModelRoutePackage;
 use crate::model_selection::ModelSelection;
 use nomos_contracts::{ContractVersion, PackageId, PackageKind};
 use nomos_package::ProtocolRange;

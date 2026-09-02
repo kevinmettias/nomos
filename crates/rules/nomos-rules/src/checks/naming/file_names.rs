@@ -107,14 +107,25 @@ fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
         return Vec::new();
     }
 
-    return payload
-        .items
-        .iter()
-        .filter(|item| return item.Is_Public() && Is_Type_Like(item))
-        .filter(|item| return To_Snake_Case(item.Own_Name()) != stem)
-        .map(|item| return Violation_Finding(path, &stem, item))
-        .collect();
+    let public_types: Vec<&PayloadItem> =
+        payload.items.iter().filter(|item| return item.Is_Public() && Is_Type_Like(item)).collect();
+
+    if public_types.iter().any(|item| return To_Snake_Case(item.Own_Name()) == stem)
+    {
+        return Vec::new();
+    }
+
+    return public_types.into_iter().map(|item| return Violation_Finding(path, &stem, item)).collect();
 }
+
+// A file naming one of the types it declares satisfies this rule for all of them, which
+// `OD-RULES-016` decides and this is the whole of. `budget_estimate.rs` declares
+// `BudgetEstimate` and the `CheckOrFixStage` enum that is one of its fields; the file is
+// named for a declared type, which is what the rule id says, and reporting the companion
+// would mean splitting a cohesive module in two. Doing that everywhere is
+// `one-public-type-per-file` -- the sibling rule below, deliberately composed into nothing.
+// A workspace that declined to require one public type per file did not mean this rule to
+// require it transitively.
 
 /// Whether a module's public surface includes a free function, and so is named for
 /// something this rule has no claim about.
@@ -334,6 +345,31 @@ item	0	Struct	Public	Anchor	.	.
     /// The family layout: a module exporting an operation and the error that operation
     /// returns. `OD-RULES-015` decides this is not this rule's to judge, because the
     /// module is named for `Discover_Workspace` and the error is subordinate to it.
+    /// A module naming one of the types it declares is satisfied for all of them.
+    /// `budget_estimate.rs` declares `BudgetEstimate` and the `CheckOrFixStage` that is one
+    /// of its fields, and `OD-RULES-016` decides the companion is not this rule's to report.
+    #[test]
+    fn Test_Violations_In_Should_Not_Judge_A_Companion_Type_Beside_A_Matching_One()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tStruct\tPublic\tBudgetEstimate\t.\t.\nitem\t1\tEnum\tPublic\tCheckOrFixStage\t.\t.\n");
+
+        let findings = Violations_In(&payload, "src/budget_estimate.rs");
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// The other side: a stem naming none of the types it declares is still reported, and
+    /// reported for every one of them, because there is no way to tell which the file meant.
+    #[test]
+    fn Test_Violations_In_Should_Judge_Every_Type_When_The_Stem_Names_None_Of_Them()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tStruct\tPublic\tEffortMappingRecord\t.\t.\nitem\t1\tEnum\tPublic\tMappingQuality\t.\t.\n");
+
+        let findings = Violations_In(&payload, "src/effort_mapping.rs");
+
+        assert_eq!(findings.len(), 2, "{findings:?}");
+    }
+
     #[test]
     fn Test_Violations_In_Should_Not_Judge_A_Module_That_Exports_A_Free_Function()
     {

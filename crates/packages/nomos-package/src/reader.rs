@@ -15,10 +15,10 @@
 //! would be exactly the second authority `nomos-lang-package`'s own `KNOWN_PROVIDERS`
 //! comment warns against -- one this crate has no business keeping in step with anything.
 
-use crate::manifest::PackageManifest;
+use crate::package_manifest::PackageManifest;
 use crate::protocol_range::ProtocolRange;
 use crate::provider_registration::ProviderRegistration;
-use crate::version::PackageVersion;
+use crate::package_version::PackageVersion;
 use nomos_contracts::{ContractVersion, PackageId, PackageKind, ProviderId};
 use serde_json::{Map, Value};
 use std::path::Path;
@@ -380,7 +380,7 @@ fn Protocol_Range_Field(object: &Map<String, Value>, at: &str) -> Result<Protoco
 }
 
 /// `language_versions`, resolved to at least one raw label. Never resolved against a
-/// typed version domain here -- see [`crate::manifest::PackageManifest::language_versions`]
+/// typed version domain here -- see [`crate::package_manifest::PackageManifest::language_versions`]
 /// for why.
 fn Language_Versions_Field(object: &Map<String, Value>, at: &str) -> Result<Vec<String>, ManifestError>
 {

@@ -13,5 +13,5 @@
 # measured that nothing registers a model backend or executor implementation anywhere
 # in this workspace, so there is no real resolution for this type to be emitted from.
 verdict: Partial
-site: crates/packages/nomos-model-package/src/effort_mapping.rs#EffortMappingRecord
+site: crates/packages/nomos-model-package/src/effort_mapping_record.rs#EffortMappingRecord
 gap: crates/packages/nomos-model-package/src/model_execution_profile.rs#ModelExecutionProfile
