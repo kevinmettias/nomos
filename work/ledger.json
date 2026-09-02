@@ -48157,20 +48157,80 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P27-SELFCHECK-ABBREVIATION-ENV-DOC-3, re-scoped to the four actual finding sites -- descriptive renames, not a words-policy or abbreviations.rs change."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-89",
-        "acquired_at": 1788364895,
-        "lease_expires_at": 1788379295
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
           "test",
           "-p",
           "nomos-rules",
+          "--timeout",
+          "1h"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "nomos-89",
+          "reason": "Territory gap found before writing code: reserved abbreviations.rs and nomos-cap-words-policy for a possible scoped-approval or structural-exemption mechanism, but the resolution turned out to be descriptive renames at the four finding sites instead -- neither of the reserved files needs to change. Abandoning to decline and re-add correctly-scoped.",
+          "abandoned_at": 1788365035
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-89",
+        "declined_at": 1788365035
+      }
+    },
+    {
+      "id": "P27-SELFCHECK-ABBREVIATION-ENV-DOC-3",
+      "title": "OD-RULES-017 amended: env/doc/docs resolved by descriptive rename, not a words-policy addition",
+      "why": "OD-RULES-017 left env/doc/docs open, reasoning that spelling them out (\"Environment_Shebang\", \"Documentation_Own_Unmarked_Example\") would misdescribe what the code is about, since none of the five sites abbreviates \"environment\"/\"document\" -- one quotes the literal POSIX env command, the others Rust's own \"doc comment\" term of art or an external node id.\n\nThat reasoning holds against a literal word-substitution rename (doc -> documentation, env -> environment) but not against a rename that describes the relationship differently instead of substituting a synonym for the banned word:\n- claims.rs's Has_Misplaced_Inner_Doc/Line_Is_Misplaced_Inner_Doc: \"doc comment\" is Rust's own formal term (the Rust Reference uses \"doc comment\" and \"documentation comment\" interchangeably) -- Inner_Doc -> Inner_Documentation_Comment loses nothing.\n- supersession.rs's Test_Adr_Doc_001_...: the node id ADR-DOC-001 is quoted verbatim as a string literal inside the test body, where precision actually matters; the function name itself doesn't need to spell the id, only to say what is tested.\n- concurrency_text.rs's ..._Should_Reject_The_Docs_Own_Unmarked_Example: \"the docs\" here means \"the rule's own doc comment\" -- \"Its_Own\" says the same thing without the word.\n- script_discipline.rs's ..._Should_Accept_Env_Shebang: the enclosing test group is already Portable_Shebang; \"the recommended/portable form\" describes the outcome the assertion actually checks without naming the literal env command, which the test body's string literal (#!/usr/bin/env bash) still names precisely.\n\nFiles: crates/languages/nomos-lang-rust/tests/corpus/claims.rs, crates/spec/nomos-spec-store/tests/governing_records_are_present/supersession.rs, crates/rules/nomos-rules/src/checks/concurrency_text.rs, crates/rules/nomos-rules/src/checks/script_discipline.rs.",
+      "done_when": "OD-RULES-017 is amended (a new record, relates-to OD-RULES-017) recording that the five sites it left open are resolved by descriptive rename rather than a words-policy addition, naming the renames and why each preserves the site's precision (the ADR-DOC-001 id and the #!/usr/bin/env bash literal stay exactly as written in test bodies; only the identifiers around them change). The four sites are renamed accordingly. cargo test -p nomos-lang-rust -p nomos-spec-store -p nomos-rules is green, and the workspace self-check (cargo test -p nomos-cli --test check_command) reports zero abbreviation findings.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust/tests/corpus/claims.rs",
+          "crates/spec/nomos-spec-store/tests/governing_records_are_present/supersession.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+          "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+          "docs/records/OD-RULES-018",
+          "crates/spec/nomos-spec-store/records/OD-RULES-018.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-89",
+        "acquired_at": 1788365063,
+        "lease_expires_at": 1788372263
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "check_command",
           "--timeout",
           "1h"
         ],
