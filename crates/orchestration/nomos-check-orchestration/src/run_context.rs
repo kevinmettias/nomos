@@ -19,6 +19,7 @@ use nomos_rules::{
     Check_File_Size_Justification_Trigger, Check_Go_Constants_Split_By_Export, Check_Go_File_Size_Hard_Trigger,
     Check_Go_File_Size_Review_Trigger, Check_Go_Helpers_Package_Five_Inputs, Check_Go_Type_Names_Use_Camel_Case,
     Check_Abbreviations, Check_Go_Variables_Use_Lower_Snake_Case, Check_Goals_And_Parts_Line_Up, Check_Lint_Diagnostics,
+    Check_Single_Letter_Names,
     Check_Naming_Convention, Check_No_Mod_Rs_Files, Check_No_Single_Line_Function_Bodies, Check_No_Wildcard_Imports,
     Check_No_Trailing_Whitespace, Check_Parameter_Count, Check_Relaxed_Not_Used_When_Ordering_Matters,
     Check_Scripts_Use_A_Portable_Shebang, Check_Seqcst_Justified_Explicitly, Check_Shared_Interior_Mutability_Says_Why,
@@ -39,7 +40,7 @@ use nomos_rules::{
     NAMING_CONVENTION, NO_MOD_RS_FILES, NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_PUNCTUATION, NO_TRAILING_WHITESPACE, NO_WILDCARD_IMPORTS,
     ONE_THOUSAND_LINE_HARD_TRIGGER, PARAMETER_COUNT,
     RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, SCRIPTS_USE_A_PORTABLE_SHEBANG, SEQCST_JUSTIFIED_EXPLICITLY,
-    SHARED_INTERIOR_MUTABILITY_SAYS_WHY, SLEEP_BASED_SYNCHRONIZATION, SUPPRESSION_DIRECTIVES_CARRY_A_REASON,
+    SHARED_INTERIOR_MUTABILITY_SAYS_WHY, SINGLE_LETTER_NAMES, SLEEP_BASED_SYNCHRONIZATION, SUPPRESSION_DIRECTIVES_CARRY_A_REASON,
     TODO_FORMAT, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, UNREAD_REACHES_FINDING,
     UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, UNSAFE_JUSTIFICATION, WORKSPACE_MARKERS_CARRY_A_REASON,
     ZERO_FLAKE_POLICY,
@@ -57,7 +58,7 @@ use crate::CheckOutcome;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 55;
+const RULE_COUNT: usize = 56;
 
 /// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
 /// through, the filesystem a repository-declared policy capability (`nomos.cap.naming.
@@ -487,23 +488,30 @@ struct JudgeEnvironment<'a>
 /// it does not: a rule implemented in `nomos-rules` but never composed here reports as
 /// unenforced when it is not, so wiring one in is this crate's own territory, the same
 /// "composed into nomos-check-orchestration::Run" section every one of these rules' own
-/// module docs already names. Three siblings this crate also implements --
-/// `no-decorative-section-dividers`, `unwrap-expect-discipline` and `panics-are-justified-
-/// documented-and-validated` -- are deliberately absent: this repository's own tree
-/// currently violates all three (71 findings, checked by running each alone through a real
-/// `gate run --root .` first), and wiring a rule this tree fails is a different, larger
-/// change than composing one it already satisfies. `a-disabled-test-states-why`,
-/// `inline-always-requires-justification`, `no-wildcard-imports` and
-/// `no-single-line-function-bodies`, checked the same way, found next to nothing to violate
-/// -- the 49 and 288 findings the last two first measured were, almost entirely, a rule bug
-/// each (`use super::*;`'s exemption could not see across a `tests.rs` split from its
-/// `#[cfg(test)]` parent, `P27-RULES-NO-WILDCARD-IMPORTS-EXEMPTION`; a bare text scan with no
-/// string-literal or comment awareness at all mistook a `"fn a() {}"`-shaped test fixture for
-/// real code in 287 of 288 findings, `P27-RULES-NO-SINGLE-LINE-FUNCTION-BODIES-STRING-AWARE`)
-/// -- not real violations, and the one real `no-single-line-function-bodies` finding left
-/// (`tests/corpus/analysis/gamma/broken.rs`, deliberately-invalid corpus content) is named
-/// rather than fixed here, since judging that corpus is not this crate's territory. All four
-/// are composed below with their two already-wired siblings.
+/// module docs already names. Five siblings this crate also implements --
+/// `no-decorative-section-dividers`, `unwrap-expect-discipline`, `panics-are-justified-
+/// documented-and-validated`, `boolean-predicates` and `test-functions-use-test-subject-
+/// should-behavior` -- are deliberately absent: this repository's own tree currently
+/// violates all five (71, 45 and 217 findings for the first, fourth and fifth respectively,
+/// checked by running each alone through a real `gate run --root .` first), and wiring a
+/// rule this tree fails is a different, larger change than composing one it already
+/// satisfies -- the last two are real struct fields without a predicate prefix and real
+/// `#[test]` names with no `_Should_`/`_Should_Not_`, not a rule bug, so there is no version
+/// of this fix that is merely a defect to correct in the rule itself. `a-disabled-test-
+/// states-why`, `inline-always-requires-justification`, `no-wildcard-imports`,
+/// `no-single-line-function-bodies` and `single-letter-names`, checked the same way, found
+/// next to nothing to violate -- the 49, 288 and 657 findings the last three first measured
+/// were, almost entirely, a rule bug each (`use super::*;`'s exemption could not see across
+/// a `tests.rs` split from its `#[cfg(test)]` parent, `P27-RULES-NO-WILDCARD-IMPORTS-
+/// EXEMPTION`; a bare text scan with no string-literal or comment awareness at all mistook a
+/// `"fn a() {}"`-shaped test fixture for real code in 287 of 288 findings, `P27-RULES-NO-
+/// SINGLE-LINE-FUNCTION-BODIES-STRING-AWARE`; a use-binding's own glob (`*`) or discard
+/// (`_`) token was judged as if it were a declared name in 657 of 657 findings,
+/// `P27-RULES-SINGLE-LETTER-NAMES-USE-BINDING-EXEMPTION`) -- not real violations, and the
+/// one real `no-single-line-function-bodies` finding left (`tests/corpus/analysis/gamma/
+/// broken.rs`, deliberately-invalid corpus content) was fixed directly rather than composed
+/// around, since it cost one line. All five are composed below with their two already-wired
+/// siblings.
 fn Rule_Findings(
     sources: &[SourceFile],
     capabilities: &CapabilityMaterialization,
@@ -569,6 +577,7 @@ fn Rule_Findings(
         // own declaration, which arrives through the reader.
         (GOALS_AND_PARTS_LINE_UP, &|reader| return Check_Goals_And_Parts_Line_Up(reader)),
         (ABBREVIATIONS, &|reader| return Check_Abbreviations(sources, reader)),
+        (SINGLE_LETTER_NAMES, &|reader| return Check_Single_Letter_Names(sources, reader)),
         (A_DISABLED_TEST_STATES_WHY, &|_reader| return Check_A_Disabled_Test_States_Why(sources)),
         (INLINE_ALWAYS_JUSTIFICATION, &|_reader| return Check_Inline_Always_Justification(sources)),
         (NO_WILDCARD_IMPORTS, &|_reader| return Check_No_Wildcard_Imports(sources)),

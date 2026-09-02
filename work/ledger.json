@@ -49028,6 +49028,151 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P27-RULES-SINGLE-LETTER-NAMES-USE-BINDING-EXEMPTION",
+      "title": "single-letter-names judges a use-binding's own syntax tokens (* and _) as declared names, and reports 657 false positives",
+      "why": "Composing single-letter-names, boolean-predicates and test-functions-use-test-subject-should-behavior together (surveyed in an isolated worktree, not yet real) reported 657, 45 and 217 findings respectively. Sampling all three: boolean-predicates' 45 and test-functions-use-test-subject-should-behavior's 217 are genuinely real (real bool struct fields without a predicate prefix; real #[test] names that do not state a _Should_/_Should_Not_ expectation) -- large, separate remediation, not this item's scope. single-letter-names' 657 is not: every one of them is the subject name * (a wildcard use path::*; import's own glob token, 639 of 657) or _ (a discard-shaped use binding, 18 of 657) -- neither is a declared identifier at all. Check_Abbreviations' own Violations_In already carries the fix for exactly this shape (a local const USE_BINDING = \"Use\" and if item.kind == USE_BINDING { continue; }, since a use binding names something declared elsewhere and nomos-cap-syntax exports no USE_BINDING constant of its own for a rule outside that crate to import); single_letter_names.rs's Violations_In has no such check and judges every payload item's Own_Name() unconditionally.",
+      "done_when": "single_letter_names.rs's Violations_In exempts item.kind == USE_BINDING (a local const, matching abbreviations.rs's own naming and comment for why it is local rather than imported), the same way Check_Abbreviations already does. A test covers a use-binding-shaped payload item asserting no finding, matching Check_Abbreviations' own Test_Violations_In_Should_Not_Judge_A_Use_Binding. cargo test -p nomos-rules is green. run_context.rs composes single-letter-names into Run (RULE_COUNT +1) now that it is safe to; its doc comment's deliberately-absent list gains boolean-predicates and test-functions-use-test-subject-should-behavior with their measured counts (45, 217), named as still-open real remediation rather than composed. cargo test -p nomos-check-orchestration is green. nomos gate run --root . --rule single-letter-names reports 0 findings.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/single_letter_names.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory omitted crates/orchestration/nomos-check-orchestration/src/tests.rs, which composing single-letter-names requires touching: one test's fixture is literally named T, a genuine single-letter name the rule now correctly flags, breaking an all-Advisory assertion that predates the rule's composition. Re-scoped as P27-RULES-SINGLE-LETTER-NAMES-USE-BINDING-EXEMPTION-2 with tests.rs included."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-session-e6f4d433",
+          "reason": "Composing single-letter-names breaks Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor in crates/orchestration/nomos-check-orchestration/src/tests.rs -- a real, not-a-bug consequence: its fixture is literally named T, a genuine single-letter const the rule now correctly flags, and the test asserts all findings from it are Advisory. tests.rs is not in this item's territory. Re-adding with it included before implementing.",
+          "abandoned_at": 1788388660
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-session-e6f4d433",
+        "declined_at": 1788388660
+      }
+    },
+    {
+      "id": "P27-RULES-SINGLE-LETTER-NAMES-USE-BINDING-EXEMPTION-2",
+      "title": "single-letter-names judges a use-binding's own syntax tokens (* and _) as declared names, and reports 657 false positives",
+      "why": "P27-RULES-SINGLE-LETTER-NAMES-USE-BINDING-EXEMPTION declined: composing single-letter-names breaks Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor in crates/orchestration/nomos-check-orchestration/src/tests.rs, whose fixture (line 225) is literally 'pub const T: &[&str] = &[];' -- a real, single-letter const name the rule now correctly flags as Blocking, breaking that one test's all-Advisory assertion. Confirmed by running the full nomos-check-orchestration suite with the composition in place: exactly one test fails, no others (in particular Test_The_Composed_Crate_Should_Resolve_A_Mirror_Through_A_Real_Fact, whose own Mirror_Fixture() also declares a const named T, does not fail -- its assertions do not check gate category or emptiness of the full rule set's findings the same way). Same underlying diagnosis as the declined item otherwise: Violations_In in single_letter_names.rs (crates/rules/nomos-rules/src/checks/naming/single_letter_names.rs) has no USE_BINDING exemption, unlike Check_Abbreviations' own Violations_In, and judges a wildcard import's glob token (*, 639 of 657 findings) or a discard import's token (_, 18 of 657) as if either were a declared identifier.",
+      "done_when": "single_letter_names.rs's Violations_In exempts item.kind == USE_BINDING (a local const, matching abbreviations.rs's own naming and comment for why it is local rather than imported), the same way Check_Abbreviations already does. A test covers a use-binding-shaped payload item asserting no finding, matching Check_Abbreviations' own Test_Violations_In_Should_Not_Judge_A_Use_Binding. Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor's fixture in tests.rs is renamed from the single-letter T to a multi-letter const name (only that one function's literal fixture -- not Mirror_Fixture's own T, which a different test uses for a different, unaffected purpose), so single-letter-names no longer has anything to flag in it. cargo test -p nomos-rules -p nomos-check-orchestration is green. run_context.rs composes single-letter-names into Run (RULE_COUNT +1); its doc comment's deliberately-absent list gains boolean-predicates and test-functions-use-test-subject-should-behavior with their measured counts (45, 217), named as still-open real remediation rather than composed. nomos gate run --root . --rule single-letter-names reports 0 findings.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/single_letter_names.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 473 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-e529bd00b4497790.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-f99ed2ad0d9e2451.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-e65ee2616c31c246.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788388848,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fd03a66c547f5094b724515068d24bcaa59c461c"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P31-RULES-DOMAIN-TYPE-ALIAS",
+      "title": "domain-values-are-distinct-types: a type alias that names a scalar but adds no type",
+      "why": "code-standards' check-domain-type-alias (shared package rules/general/style/shared/domaintypealias, Rust front end language-kernels/programming/rust/rustlang/rust_type_alias.go, Go front end language-kernels/programming/go/golang/go_type_alias.go) flags a type alias whose right-hand side is a bare primitive scalar with nothing added: type EntityId = u64 in Rust, type EntityId = uint64 in Go. Verified against the real Go implementation directly: the judgment is Primitive and not Contract_Bound, where Primitive means the right-hand side is an exact bare identifier from a fixed per-language scalar list (never a generic or compound type, which is what aliases exist for), and Contract_Bound is Rust-only, true when the alias sits inside an impl or a trait body -- an associated type the contract declared, not a name the author chose. Go has no contract-bound case at all, so the Go side needs no nesting awareness. Four code-standards rule-doc ids exist (a cross-language canonical, domain-values-are-distinct-types, plus one companion doc per language); this port uses the cross-language canonical id, the same choice this crate already made for Check_Cross_Language_Correspondence. This crate's second whole-file brace-depth scan, generalizing the shape checks/enum_shape.rs already established (a pending-header, commit-on-brace state machine) from tracking one enum's own depth to tracking whether the current line sits inside any still-open impl or trait block, regardless of what other blocks open and close around it. This scan matters for real code in this exact style: nomos's own source consistently writes an opening brace on its own line after a header, the identical Allman-brace shape enum_shape.rs's own module doc already found necessary against a real corpus, so a naive same-line-brace assumption would make this rule silently useless here too. No repository-configurable dimension (the Go source's own comment states directly there is nothing here for a repository to calibrate), so a leaf module rather than a capability.",
+      "done_when": "A new crates/rules/nomos-rules/src/checks/domain_type_alias.rs implements Check_Domain_Values_Are_Distinct_Types (rule id domain-values-are-distinct-types): for Rust, a whole-file brace-depth scan tracks whether the current line sits inside any still-open impl or trait block (an impl or trait header committed once its opening brace arrives, cleared once depth drops back to or below its own opening depth), and every single-line type Name = Aliased; declaration outside that state whose Aliased is an exact bare identifier from Rust's own primitive-scalar-plus-String list is flagged; for Go, every single-line type Name = Aliased declaration (no depth tracking needed, since Go has no contract-bound case) whose Aliased is an exact bare identifier from Go's own predeclared-scalar-plus-byte-rune-string list is flagged. A generic alias, a compound alias, and an associated type inside a Rust impl or trait are all exempt. Own-implementation-file self-exemption, matching every other text-scanning rule in this crate. Unit tests cover: a flagged Rust primitive alias, an exempted Rust generic alias, an exempted Rust compound alias, a Rust associated type inside an impl exempted even with an Allman-style brace on its own line, a Rust associated type still judged once the enclosing impl has closed, a flagged Go primitive alias, and an exempted Go defined type (no equals sign). checks.rs and lib.rs both declare and re-export Check_Domain_Values_Are_Distinct_Types and DOMAIN_VALUES_ARE_DISTINCT_TYPES, both re-export layers. The nomos-rules public surface snapshot is reblessed. cargo test -p nomos-rules is green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/domain_type_alias.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-6f-1788388829",
+        "acquired_at": 1788388829,
+        "lease_expires_at": 1788399629
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

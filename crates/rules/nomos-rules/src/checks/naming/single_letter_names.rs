@@ -3,6 +3,13 @@
 //! code-standards also governs locals, parameters, generic parameters and closure
 //! arguments. The current syntax payload exposes declared item names and named struct
 //! fields, so this rule judges that subset and leaves the rest to a richer syntax shape.
+//!
+//! A `use` binding is exempt the same way [`Check_Abbreviations`]'s own does: its name was
+//! chosen wherever the thing it imports was declared, not here, and for a wildcard import
+//! that "name" is not a declared identifier at all -- `*`, the payload's own glob token, a
+//! single character nobody authored. `_` is exempt everywhere, not only there: `const _: ()
+//! = assert!(...);` is Rust's own idiom for a compile-time check nobody names, the same
+//! discard token a wildcard-adjacent `use` binding can also carry.
 
 use crate::SourceFile;
 use nomos_analysis::FactReader;
@@ -13,6 +20,19 @@ use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleI
 pub const SINGLE_LETTER_NAMES: &str = "single-letter-names";
 
 const STRUCT: &str = "Struct";
+
+/// The payload's `kind` for a `use` binding.
+///
+/// Named locally rather than imported for the same reason [`Check_Abbreviations`]'s own
+/// copy is: `nomos-cap-syntax` publishes an *open* kind vocabulary and exports a constant
+/// only for the labels its own API needs, so a rule that cares about a third one states the
+/// literal it is matching.
+///
+/// A `use` binding's own `Own_Name()` is not a declared identifier at all: for a wildcard
+/// import (`use path::*;`) it is the literal glob token `*`, and for a discard-shaped import
+/// it is `_` -- both single characters, and neither one this repository chose. Judging them
+/// was 657 of this rule's own findings against this workspace, all of them one or the other.
+const USE_BINDING: &str = "Use";
 
 /// Reports declared item names and named struct fields that are a single character.
 #[must_use]
@@ -42,6 +62,11 @@ fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
 
     for item in &payload.items
     {
+        if item.kind == USE_BINDING
+        {
+            continue;
+        }
+
         if Is_Single_Letter(item.Own_Name())
         {
             findings.push(Violation_Finding(path, item, item.Own_Name()));
@@ -71,9 +96,13 @@ fn Field_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
         .collect();
 }
 
+/// `_` is exempt regardless of what declared it: `const _: () = assert!(...);` is Rust's own
+/// idiom for a compile-time check nobody references by name, not a human choosing a
+/// one-letter name for brevity, and it is the only value where that distinction holds for
+/// every item kind rather than only for a use binding.
 fn Is_Single_Letter(name: &str) -> bool
 {
-    return name.chars().count() == 1;
+    return name != "_" && name.chars().count() == 1;
 }
 
 fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
@@ -128,6 +157,42 @@ mod tests
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "x");
+    }
+
+    /// A wildcard import's own glob token, `*` -- 639 of this rule's 657 findings against
+    /// this workspace before this exemption existed.
+    #[test]
+    fn Test_Violations_In_Should_Not_Judge_A_Wildcard_Use_Bindings_Own_Name()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tUse\tPrivate\t*\t.\t.\n");
+
+        let findings = Violations_In(&payload, "src/lib.rs");
+
+        assert!(findings.is_empty(), "an import names something declared elsewhere: {findings:?}");
+    }
+
+    /// A discard-shaped import's own name, `_` -- the rest of this rule's 657 findings.
+    #[test]
+    fn Test_Violations_In_Should_Not_Judge_A_Discard_Use_Bindings_Own_Name()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tUse\tPrivate\t_\t.\t.\n");
+
+        let findings = Violations_In(&payload, "src/lib.rs");
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// `const _: () = assert!(...);` -- a real declaration, not a `use` binding, whose name
+    /// is still the language's own discard token rather than a human's one-letter choice.
+    /// `crates/kernel/nomos-model/src/digest.rs`'s own compile-time assertion is this shape.
+    #[test]
+    fn Test_Violations_In_Should_Not_Judge_A_Discard_Named_Declaration()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPrivate\t_\t.\t+fn/0\n");
+
+        let findings = Violations_In(&payload, "src/lib.rs");
+
+        assert!(findings.is_empty(), "{findings:?}");
     }
 
     #[test]

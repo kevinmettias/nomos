@@ -222,7 +222,7 @@ fn Test_Conflicting_Paths_Should_Be_Unreadable()
 #[test]
 fn Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor()
 {
-    let sources = vec![Source("a.rs", "pub const T: &[&str] = &[];\n")];
+    let sources = vec![Source("a.rs", "pub const TABLE: &[&str] = &[];\n")];
 
     let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&[]);
 
