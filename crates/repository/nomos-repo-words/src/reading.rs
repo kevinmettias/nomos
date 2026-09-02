@@ -1,8 +1,10 @@
-//! Reading `standards.json`'s `words.approved_abbreviations` into a repository's own
-//! vocabulary additions.
+//! Reading `standards.json`'s `words.approved_abbreviations`, `words.vague` and
+//! `words.vague_exempt` into a repository's own vocabulary additions and exemptions.
 //!
 //! Verified directly against this repository's own `standards.json` before this reader
-//! was written: `{"words": {"approved_abbreviations": ["api", "arc", ...]}}`.
+//! was written: `{"words": {"approved_abbreviations": ["api", "arc", ...]}}`. `vague`
+//! and `vague_exempt` are read the identical way, mirroring code-standards' own
+//! `Config.Vague`/`Config.Vague_Exempt` JSON tags.
 
 use nomos_cap_words_policy::WordsPolicyPayload;
 use nomos_platform::{FileSystem, FileSystemError};
@@ -25,15 +27,15 @@ impl core::fmt::Display for WordsPolicyError
     }
 }
 
-/// The vocabulary additions `root`'s own `standards.json` declares — declaring nothing
-/// when the file is absent or declares no `words.approved_abbreviations`, since an
+/// The vocabulary additions and exemptions `root`'s own `standards.json` declares —
+/// declaring nothing when the file is absent or declares no `words` block at all, since an
 /// unconfigured repository is not a repository this capability failed to read.
 ///
 /// # Errors
 ///
 /// [`WordsPolicyError`] if `standards.json` exists but could not be read for a reason
-/// other than absence, is not valid JSON, or declares `words.approved_abbreviations` as
-/// something other than an array of strings.
+/// other than absence, is not valid JSON, or declares `words.approved_abbreviations`,
+/// `words.vague` or `words.vague_exempt` as something other than an array of strings.
 pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<WordsPolicyPayload, WordsPolicyError>
 {
     let path = root.join(STANDARDS_JSON);
@@ -52,30 +54,39 @@ pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Resul
         reason: format!("{STANDARDS_JSON} is not valid JSON: {error}"),
     })?;
 
-    let Some(declared) = value
-        .get("words")
-        .and_then(|words| return words.get("approved_abbreviations"))
-        .and_then(serde_json::Value::as_array)
+    let words = value.get("words");
+    let approved_additions = Read_Word_Array(words, "approved_abbreviations")?;
+    let vague_additions = Read_Word_Array(words, "vague")?;
+    let vague_exempt = Read_Word_Array(words, "vague_exempt")?;
+
+    return Ok(WordsPolicyPayload { approved_additions, vague_additions, vague_exempt });
+}
+
+/// `words.<key>` as a sorted list of strings, or an empty list when `words` or `words.<key>`
+/// is absent — the same "absence declares nothing" reading each of the three keys shares.
+fn Read_Word_Array(words: Option<&serde_json::Value>, key: &str) -> Result<Vec<String>, WordsPolicyError>
+{
+    let Some(declared) = words.and_then(|words| return words.get(key)).and_then(serde_json::Value::as_array)
     else
     {
-        return Ok(WordsPolicyPayload::default());
+        return Ok(Vec::new());
     };
 
-    let mut approved_additions = Vec::new();
+    let mut collected = Vec::new();
     for entry in declared
     {
         let Some(word) = entry.as_str()
         else
         {
             return Err(WordsPolicyError {
-                reason: format!("{STANDARDS_JSON}'s words.approved_abbreviations has a non-string entry"),
+                reason: format!("{STANDARDS_JSON}'s words.{key} has a non-string entry"),
             });
         };
-        approved_additions.push(word.to_owned());
+        collected.push(word.to_owned());
     }
 
-    approved_additions.sort();
-    return Ok(WordsPolicyPayload { approved_additions });
+    collected.sort();
+    return Ok(collected);
 }
 
 #[cfg(test)]
@@ -142,6 +153,30 @@ mod tests
         let payload = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON");
 
         assert_eq!(payload.approved_additions, vec!["aabb".to_owned(), "lod".to_owned()], "sorted canonically");
+    }
+
+    #[test]
+    fn Test_Discover_Workspace_Should_Read_A_Declared_Vague_Addition_And_Exemption()
+    {
+        let filesystem = FakeFileSystem {
+            text: serde_json::json!({ "words": { "vague": ["registry"], "vague_exempt": ["info"] } }).to_string(),
+        };
+
+        let payload = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON");
+
+        assert_eq!(payload.vague_additions, vec!["registry".to_owned()]);
+        assert_eq!(payload.vague_exempt, vec!["info".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Discover_Workspace_Should_Refuse_A_Non_String_Vague_Entry()
+    {
+        let filesystem = FakeFileSystem { text: serde_json::json!({ "words": { "vague": [5] } }).to_string() };
+
+        let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a non-string entry must be refused");
+
+        assert!(error.reason.contains("words.vague"), "{}", error.reason);
+        assert!(error.reason.contains("non-string entry"), "{}", error.reason);
     }
 
     #[test]

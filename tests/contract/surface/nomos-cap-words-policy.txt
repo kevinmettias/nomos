@@ -9,5 +9,7 @@ pub fn nomos_cap_words_policy::Parse_Payload(bytes: &[u8]) -> Result<WordsPolicy
 pub fn nomos_cap_words_policy::Payload_Schema() -> SchemaId
 pub struct field nomos_cap_words_policy::Refusal::reason: String
 pub struct field nomos_cap_words_policy::WordsPolicyPayload::approved_additions: Vec<String>
+pub struct field nomos_cap_words_policy::WordsPolicyPayload::vague_additions: Vec<String>
+pub struct field nomos_cap_words_policy::WordsPolicyPayload::vague_exempt: Vec<String>
 pub struct nomos_cap_words_policy::Refusal
 pub struct nomos_cap_words_policy::WordsPolicyPayload

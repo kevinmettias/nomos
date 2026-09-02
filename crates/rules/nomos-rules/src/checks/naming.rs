@@ -52,6 +52,7 @@ mod file_names;
 mod go_data_names;
 mod go_function_names;
 mod go_type_names;
+mod naming_clarity;
 pub(super) mod reading;
 mod single_letter_names;
 mod test_names;
@@ -78,6 +79,7 @@ pub use go_function_names::{
     EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,
 };
 pub use go_type_names::{Check_Go_Type_Names_Use_Camel_Case, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE};
+pub use naming_clarity::{Check_Naming_Clarity, NAMING_CLARITY};
 pub use single_letter_names::{Check_Single_Letter_Names, SINGLE_LETTER_NAMES};
 pub use test_names::{Check_Test_Names_Describe_Behavior, TEST_NAME_DESCRIBES_BEHAVIOR};
 

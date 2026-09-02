@@ -48555,6 +48555,110 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P29-RULES-NAMING-CLARITY",
+      "title": "naming-clarity: vague grab-bag names, a fifth nomos.cap.words.policy dimension",
+      "why": "code-standards' check-naming-clarity (rules/general/style/checks/naming/word-choice/check-naming-clarity, main.go + kernel/config/words/{config.go,defaults.go}) flags a declared name whose first word is on a repository-configurable vague-word list (default 20 words: data, do, helper, helpers, manager, managers, object, objects, process, processor, service, services, stuff, thing, things, util, utils, utility, handler, wrapper), extendable via standards.json's words.vague and subtractable via words.vague_exempt -- the exact same Config shape words.approved_abbreviations already uses, read by the same Vague_Word(name, lists.Vague) -> (word, bool) function abbreviations.rs already mirrors the sibling of (Name_Abbreviations). Structurally this rule is a near-exact twin of the already-ported abbreviations.rs: same symbols/syntax-payload iteration, same trait-impl exemption (a trait fixes a member's name), same use-binding exemption (an import names something declared elsewhere), same struct-field judgment, same Split_Identifier_Words word-splitter. It is repository-configurable (vague/vague_exempt are real standards.json dimensions, not a fixed compiled-in list), so per OD-RULES-011 this extends the existing nomos.cap.words.policy capability (contract, provider, WordsPolicyPayload wire format) rather than creating a new leaf module or a new capability family. Verified against the real Go source directly (main.go, kernel/config/words/config.go's Config.Vague/Vague_Exempt json tags, defaults.go's default_Vague_Words, lists.go's Vague_Word). One real narrowing found and accepted: the Go tool's naming-clarity marker escape hatch (// naming: allow <reason>, required non-empty reason, Marker_Reason_At_Or_Above) cannot be ported at all -- nomos_cap_syntax::PayloadItem carries no line number for any declared item (only ordinal/kind/visibility/qualified_name/documentation/shape), the same payload limitation abbreviations.rs already accepted by shipping with zero marker support for the identical reason. Also intentionally narrower than the real tool in scope: code-standards' naming-clarity judges local let-bindings too ('Local bindings are judged too'), which the syntax payload cannot represent at all (it carries no function-body-local declarations), so this port judges only top-level/type-level declarations and struct fields, exactly what abbreviations.rs already judges.",
+      "done_when": "nomos-cap-words-policy's WordsPolicyPayload gains vague_additions: Vec<String> and vague_exempt: Vec<String> fields with new 'vague'/'vague_exempt' wire tags in Encode_Payload/Parse_Payload, tested for round-trip and unrecognized-tag refusal same as the existing approved tag; contract.rs's Capability_Contract summary is updated to mention the vague-word dimension. nomos-repo-words' reading.rs reads standards.json's words.vague and words.vague_exempt arrays into the new payload fields (mirroring words.approved_abbreviations's own reader exactly, same absent-file/absent-block/non-string-entry error handling), with unit tests for a declared list, an absent block, and a non-string entry, for both new keys. crates/rules/nomos-rules/src/checks/naming/naming_clarity.rs implements Check_Naming_Clarity (rule id naming-clarity): judges every declared item's own name (plus struct fields) against the default 20-word vague vocabulary extended/reduced by a repository's own nomos.cap.words.policy additions/exemptions, with the same trait-impl and use-binding exemptions abbreviations.rs already established, one finding per subject naming its first vague word. Unit tests cover: a flagged vague word, an exempted word, a repository-added vague word, the trait-impl exemption, the use-binding exemption, and a struct field. naming.rs, checks.rs and lib.rs all declare/re-export Check_Naming_Clarity and NAMING_CLARITY (three re-export layers, per the flakiness item's own finding that checks.rs alone is not enough). The nomos-rules public surface snapshot is reblessed. cargo test -p nomos-cap-words-policy -p nomos-repo-words -p nomos-rules is green.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-words-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-words-policy/src/contract.rs",
+          "crates/repository/nomos-repo-words/src/reading.rs",
+          "crates/rules/nomos-rules/src/checks/naming/naming_clarity.rs",
+          "crates/rules/nomos-rules/src/checks/naming.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-cap-words-policy.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-words-policy",
+          "-p",
+          "nomos-repo-words",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-words-policy",
+          "-p",
+          "nomos-repo-words",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "e_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 451 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_words_policy-51ad571a4e432d5d.exe)\n     Running tests\\contract.rs (target\\debug\\deps\\contract-2ab06effb6bc3e93.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_repo_words-5b28b4d24a41c4df.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_cap_words_policy\n   Doc-tests nomos_repo_words\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788367309,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d5d529dc8250bc9396c2a30525020112d9cbf0a2"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P27-RULES-FOUR-MORE-UNCOMPOSED",
+      "title": "Four more rules built and exported but never composed into Run: disabled-test, inline-always, wildcard-imports, single-line-bodies",
+      "why": "Cross-referencing every RuleId constant nomos-rules defines against run_context.rs's Rule_Findings array (the only place a rule produces findings in a real gate run) found 4 more accidental gaps beyond sleep-based-synchronization/zero-flake-policy (already fixed by P28-RULES-FLAKY-TESTS-WIRE): Check_A_Disabled_Test_States_Why (A_DISABLED_TEST_STATES_WHY), Check_Inline_Always_Justification (INLINE_ALWAYS_JUSTIFICATION), Check_No_Wildcard_Imports (NO_WILDCARD_IMPORTS), Check_No_Single_Line_Function_Bodies (NO_SINGLE_LINE_FUNCTION_BODIES). All four are real, tested, take only sources: &[SourceFile], and are already exported through checks.rs/lib.rs -- confirmed none has a RuleId::New(...) call outside its own #[cfg(test)] module today, meaning a real gate run currently reports zero findings for all four rule ids regardless of what the tree contains. Distinguished from the three rules run_context.rs's own comment (lines 489-494) names as DELIBERATELY excluded (no-decorative-section-dividers, unwrap-expect-discipline, panics-are-justified-documented-and-validated -- 71 pre-existing findings, a different and larger change) -- these four are not named there at all, and are recent enough (their own -WIRE items only ever promised the checks.rs/lib.rs export, not composition) that the gap reads as an oversight, not a policy.",
+      "done_when": "run_context.rs imports all four Check_ functions and constants from nomos_rules. RULE_COUNT becomes 55. Rule_Findings' rules array gains all four as (RULE_ID, &|_reader| return Check_X(sources)) entries, matching the existing ten-sibling sources-only shape immediately above the insertion point. cargo test -p nomos-check-orchestration is green. nomos gate run --root . --rule a-disabled-test-states-why --rule inline-always-requires-justification --rule no-wildcard-imports --rule no-single-line-function-bodies judges real files instead of reporting nothing was judged -- if it finds real findings against this tree, they are named here as still open rather than silently fixed inside this item's own territory (matching the run_context.rs precedent of not conflating composing a rule with fixing what it finds).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-session-e6f4d433",
+        "acquired_at": 1788367121,
+        "lease_expires_at": 1788374321
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

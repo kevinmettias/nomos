@@ -62,10 +62,13 @@ pub fn Capability_Contract() -> CapabilityContract
         id: Capability(),
         version: CONTRACT_VERSION,
         summary: "A repository's own additions to code-standards' default approved-\
-                  abbreviation vocabulary -- read from its own configuration rather than \
-                  compiled into whichever rule judges against it. Removal is not \
-                  supported: a repository extends the default vocabulary, it does not \
-                  replace it."
+                  abbreviation vocabulary, and its own additions to and exemptions from \
+                  the default vague-word vocabulary -- read from its own configuration \
+                  rather than compiled into whichever rule judges against it. Approved-\
+                  word removal is not supported: a repository extends that default \
+                  vocabulary, it does not replace it. A vague-word exemption is, because \
+                  a word vague in general can be the correct name inside one repository's \
+                  own vocabulary."
             .to_owned(),
         ceiling: Ceiling(),
     };
