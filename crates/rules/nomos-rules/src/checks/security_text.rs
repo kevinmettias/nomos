@@ -60,7 +60,7 @@ pub fn Check_A_Credential_Is_Not_Hardcoded_In_Source(sources: &[SourceFile]) -> 
     let mut findings = Vec::new();
     for source in sources
     {
-        if !Is_Test_Or_Fixture_Source(source)
+        if !Is_Test_Or_Fixture_Source(source) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Credential_Findings_In(source));
         }
@@ -80,7 +80,7 @@ pub fn Check_A_Secret_Does_Not_Travel_In_A_Url(sources: &[SourceFile]) -> Vec<Fi
     let mut findings = Vec::new();
     for source in sources
     {
-        if !Is_Test_Or_Fixture_Source(source)
+        if !Is_Test_Or_Fixture_Source(source) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Url_Secret_Findings_In(source));
         }
@@ -102,7 +102,7 @@ pub fn Check_Certificate_Verification_Is_Not_Disabled(sources: &[SourceFile]) ->
     let mut findings = Vec::new();
     for source in sources
     {
-        if !Is_Test_Or_Fixture_Source(source)
+        if !Is_Test_Or_Fixture_Source(source) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Tls_Verification_Findings_In(source));
         }
@@ -188,6 +188,24 @@ fn Is_Test_Or_Fixture_Source(source: &SourceFile) -> bool
         || normalized.ends_with("_test.rs")
         || normalized.ends_with("_tests.rs")
         || normalized.ends_with("_test.go");
+}
+
+/// This file's own path. Every rule in this file exempts its own implementing file, the
+/// same self-exemption `rust_text.rs`'s syntax-shaped rules carry: its own
+/// test fixtures and each rule's own detection-pattern constants (`CREDENTIAL_PREFIXES`,
+/// the PEM-block markers, `SENSITIVE_URL_PARAMS`, the disabled-verification literals)
+/// necessarily spell out the exact values each rule looks for. Unlike `rust_text.rs`'s
+/// syntax-shaped rules, these three are content-shaped -- the violation *is* a string's
+/// text, so a general string-literal-stripping fix would defeat every one of these rules
+/// everywhere, not just here; a self-file exemption is the only correct fix for this file.
+/// Checked safe today: this file's own doc comments and detection code contain no genuine
+/// live credential, sensitive-parameter URL, or disabled-verification literal outside its
+/// own patterns and fixtures.
+const OWN_IMPLEMENTATION_FILE: &str = "checks/security_text.rs";
+
+fn Is_Own_Implementation_File(source: &SourceFile) -> bool
+{
+    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
 }
 
 fn Line_Number(index: usize) -> usize
@@ -440,6 +458,16 @@ mod tests
     {
         let source = Source("tests/tls_helper.go", "tls.Config{InsecureSkipVerify: true}\n");
         let findings = Check_Certificate_Verification_Is_Not_Disabled(&[source]);
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_A_Credential_Is_Not_Hardcoded_In_Source_Should_Not_Judge_Its_Own_Implementation_File()
+    {
+        let source = Source("crates/rules/nomos-rules/src/checks/security_text.rs", "let key = \"AKIAABCDEFGHIJKLMNOP\";\n");
+
+        let findings = Check_A_Credential_Is_Not_Hardcoded_In_Source(&[source]);
+
         assert!(findings.is_empty(), "{findings:?}");
     }
 

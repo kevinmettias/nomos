@@ -76,7 +76,7 @@ fn Findings_For(sources: &[SourceFile], rule: &str, matches_partition: fn(&str) 
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Test_Or_Example_Source(source)
+        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Test_Or_Example_Source(source) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Ordering_Findings_In(source, rule, matches_partition));
         }
@@ -135,6 +135,20 @@ fn Is_Test_Or_Example_Source(source: &SourceFile) -> bool
         || normalized.contains("/test/")
         || normalized.ends_with("_test.rs")
         || normalized.ends_with("_tests.rs");
+}
+
+/// This file's own path. All three rules here exempt their own implementing file, the same
+/// self-exemption `rust_text.rs`'s and `security_text.rs`'s own rules carry: every flagged
+/// line here is inside this file's own `#[cfg(test)] mod tests { ... }` fixtures, which
+/// necessarily spell out real `Ordering::Acquire`/`SeqCst`/`Relaxed` usages to prove the
+/// rules catch them. `Is_Test_Or_Example_Source` above does not cover this case because it
+/// is a file-path exemption and this file's own path (`checks/concurrency_text.rs`) is not
+/// itself a test/example path, even though its content carries a test module.
+const OWN_IMPLEMENTATION_FILE: &str = "checks/concurrency_text.rs";
+
+fn Is_Own_Implementation_File(source: &SourceFile) -> bool
+{
+    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
 }
 
 fn Line_Number(index: usize) -> usize
@@ -395,6 +409,16 @@ mod tests
         let source = Source("src/counter.rs", "state.compare_exchange(old, new, Ordering::AcqRel, Ordering::Acquire).ok();\n");
         let choices = Check_Atomic_Ordering_Choices_Are_Justified(&[source]);
         assert_eq!(choices.len(), 1, "one decision, one finding: {choices:?}");
+    }
+
+    #[test]
+    fn Test_Check_Seqcst_Justified_Explicitly_Should_Not_Judge_Its_Own_Implementation_File()
+    {
+        let source = Source("crates/rules/nomos-rules/src/checks/concurrency_text.rs", "let value = counter.load(Ordering::SeqCst);\n");
+
+        let findings = Check_Seqcst_Justified_Explicitly(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
     }
 
     fn Source(path: &str, text: &str) -> SourceFile

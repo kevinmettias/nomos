@@ -75,7 +75,7 @@ pub fn Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources: &[SourceFile]) ->
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE)
+        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Path_Attribute_Findings_In(source));
         }
@@ -93,7 +93,7 @@ pub fn Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE)
+        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Shared_Interior_Mutability_Findings_In(source));
         }
@@ -111,7 +111,7 @@ pub fn Check_Every_Allow_Carries_A_Justification(sources: &[SourceFile]) -> Vec<
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE)
+        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Allow_Findings_In(source));
         }
@@ -129,7 +129,7 @@ pub fn Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Finding>
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE)
+        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Unsafe_Findings_In(source));
         }
@@ -147,7 +147,7 @@ pub fn Check_Inline_Always_Justification(sources: &[SourceFile]) -> Vec<Finding>
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE)
+        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Inline_Always_Findings_In(source));
         }
@@ -166,7 +166,7 @@ pub fn Check_A_Disabled_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE)
+        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Disabled_Test_Findings_In(source));
         }
@@ -360,6 +360,27 @@ fn Disabled_Test_Findings_In(source: &SourceFile) -> Vec<Finding>
     }
 
     return findings;
+}
+
+/// This file's own path, checked with the same normalized-slash comparison
+/// [`Is_Test_Or_Example_Source`] already uses. Every rule in this file that reads a
+/// construct's own spelling (`unsafe {`, `#[allow(`, `Rc::new(RefCell::new(`, `#[path`)
+/// exempts this exact file: its own test fixtures and each rule's own detection-pattern
+/// string necessarily spell out the exact syntax the rule looks for, so this is the one
+/// file in the workspace guaranteed to look like a violation of every rule it implements,
+/// regardless of whether the match is a fixture or the pattern-matching code itself.
+/// `#![forbid(unsafe_code)]` at the crate root makes the `unsafe-justification` instance of
+/// this provably safe forever; the others are safe today (checked: no real `#[allow(...)]`/
+/// `Rc<RefCell<...>>`/escaping `#[path]` usage exists in this file outside its own fixtures
+/// and patterns), and trade a theoretical future in-file violation going unflagged for not
+/// building the per-line, string-literal-aware self-reference tracking this crate has so
+/// far declined to build — the same tradeoff every other path-based exemption here already
+/// makes.
+const OWN_IMPLEMENTATION_FILE: &str = "checks/rust_text.rs";
+
+fn Is_Own_Implementation_File(source: &SourceFile) -> bool
+{
+    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
 }
 
 fn Is_Test_Or_Example_Source(source: &SourceFile) -> bool
@@ -980,6 +1001,16 @@ mod tests
         );
 
         let findings = Check_A_Disabled_Test_States_Why(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Unsafe_Justification_Should_Not_Judge_Its_Own_Implementation_File()
+    {
+        let source = Source("crates/rules/nomos-rules/src/checks/rust_text.rs", "let slice = unsafe { core::slice::from_raw_parts(ptr, len) };\n");
+
+        let findings = Check_Unsafe_Justification(&[source]);
 
         assert!(findings.is_empty(), "{findings:?}");
     }

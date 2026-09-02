@@ -82,7 +82,7 @@ pub fn Check_Eager_Vs_Lazy_Context(sources: &[SourceFile]) -> Vec<Finding>
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE)
+        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Context_Laziness_Findings_In(source));
         }
@@ -98,7 +98,7 @@ fn Error_Message_Findings(sources: &[SourceFile], rule: &str, judge: impl Fn(&st
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE)
+        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Error_Attribute_Findings_In(source, rule, &judge));
         }
@@ -190,6 +190,18 @@ fn Finding_At(source: &SourceFile, rule: &str, line_number: usize, summary: &str
         summary: format!("{} line {line_number}: {summary}", source.path),
         locations: vec![format!("{}:{line_number}", source.path)],
     };
+}
+
+/// This file's own path. All three rules here exempt their own implementing file, the same
+/// self-exemption `rust_text.rs`, `security_text.rs` and `concurrency_text.rs` each carry:
+/// this file's own finding-message text and detection code (`#[error("...")]`,
+/// `.With_Context(`) and its `#[cfg(test)] mod tests { ... }` fixtures necessarily spell out
+/// the exact shapes each rule looks for.
+const OWN_IMPLEMENTATION_FILE: &str = "checks/error_text.rs";
+
+fn Is_Own_Implementation_File(source: &SourceFile) -> bool
+{
+    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
 }
 
 fn Line_Number(index: usize) -> usize
@@ -423,6 +435,19 @@ mod tests
             "Operation().With_Context(format!(\"processing entity {}\", entity_id))?; // context-laziness: allow: measured, allocation cost is negligible next to the I/O this wraps\n",
         );
         let findings = Check_Eager_Vs_Lazy_Context(&[source]);
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Error_Message_Starts_Lowercase_Should_Not_Judge_Its_Own_Implementation_File()
+    {
+        let source = Source(
+            "crates/rules/nomos-rules/src/checks/error_text.rs",
+            "#[error(\"Failed to read the file\")]\nstruct ReadError;\n",
+        );
+
+        let findings = Check_Error_Message_Starts_Lowercase(&[source]);
+
         assert!(findings.is_empty(), "{findings:?}");
     }
 
