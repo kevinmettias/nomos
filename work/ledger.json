@@ -48373,14 +48373,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-89",
-        "acquired_at": 1788365781,
-        "lease_expires_at": 1788369381
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -48392,7 +48388,29 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--bin",
+          "nomos"
+        ],
+        "exit_code": 0,
+        "output_tail": "sts::Test_Read_Record_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest spec::verb::table::tests::Test_No_Such_Document_Should_Report_Absent_Over_A_Store_Missing_Its_Corpus ... ok\ntest spec::verb::record::tests::Test_Nothing_Behind_Should_Report_Absent_With_Or_Without_A_Sourceless_Node ... ok\ntest spec::verb::editing::tests::Test_Report_Edit_Error_Should_Map_Each_Error_Kind_To_Its_Own_Exit_Code ... ok\ntest spec::verb::table::tests::Test_Unselected_Rows_Should_Note_The_Document_And_Yield_No_Rows ... ok\ntest spec::verb::editing::tests::Test_Commit_Edit_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest spec::verb::editing::tests::Test_Preview_Edit_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest spec::verb::table::tests::Test_Read_Table_Should_Report_Absent_For_A_Document_The_Store_Never_Had ... ok\ntest spec::verb::freshness::tests::Test_Freshness_Of_Should_Report_An_Unknown_Profile ... ok\ntest spec::verb::listing::tests::Test_Empty_Section_Should_Report_Absent_Over_A_Store_Missing_Its_Corpus ... ok\ntest spec::verb::listing::tests::Test_List_Sources_Should_Report_Absent_When_The_Corpus_Was_Never_Configured ... ok\ntest spec::verb::markdown::tests::Test_Render_Markdown_Should_Report_Absent_For_A_Record_The_Store_Never_Had ... ok\ntest vacuity::tests::Test_Spec_Should_Refuse_Ok_Over_A_Record_The_Store_Never_Had ... ok\ntest gate::tests::Test_Relative_Path_Should_Underlie_A_Real_Explains_Search_Over_A_Clean_Tree ... ok\ntest gate::tests::Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report ... ok\ntest gate::tests::Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree ... ok\n\ntest result: ok. 259 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.00s\n\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.30s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-311560cfd964c1ee.exe)\n",
+        "verified_at": 1788365888,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4372c060ea6985fac666197f6f049445e1b7ea07"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
