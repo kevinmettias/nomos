@@ -44433,10 +44433,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-external-review-reconciliation",
+        "acquired_at": 1788308044,
+        "lease_expires_at": 1788315244
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -44540,7 +44544,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by OD-RULES-014-CARRY-THE-LANGUAGE-2. This item reserved crates/contracts/nomos-contracts/src/lib.rs and its done_when required the carried type to live there, both following OD-RULES-014 constraint 2 as originally written. OD-RULES-014-AMEND-CARRIED-TYPE-HOME corrects that constraint to nomos-cap-syntax on OD-CONTRACTS-001 admission test, so this items territory reserves a file the work will not touch and omits the one it will."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -44560,9 +44568,18 @@
         "timeout_seconds": 3600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-review-triage",
+          "reason": "Territory and done_when both name nomos-contracts, which the amendment in flight corrects to nomos-cap-syntax. Re-added as -2.",
+          "abandoned_at": 1788308201
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-review-triage",
+        "declined_at": 1788308201
+      }
     },
     {
       "id": "P26-RULES-TEST-OR-EXAMPLE-DUPLICATION",
@@ -44593,6 +44610,60 @@
         "timeout_seconds": 3600
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-014-AMEND-CARRIED-TYPE-HOME",
+      "title": "OD-RULES-014 put the carried language type in the wrong crate",
+      "why": "OD-RULES-014 constraint 2 says the carried type lives in nomos-contracts, the way RuleId and ProviderId do. Implementing it exposed that this fails nomos-contracts own admission test. OD-CONTRACTS-001 admits a type when it crosses a subsystem, process or plugin boundary and the parties on both sides need one stable shared representation, and its stated deciding question is whether a peer that never compiles the crate would be unable to agree with us without it. Nothing exchanges a language identifier with a peer today: nomos_package::PackageManifest carries language_versions but no language name, so a LanguagePackage manifest does not declare which language it is for. The parties that must agree are the three language crates, nomos-rules and nomos-check-orchestration, all inside this workspace. That is exactly the worked counter-example nomos-contracts own module doc gives for refusing a type: nomos-cap-syntax SyntaxPayload is a real shared representation read by more than one provider, and it lives at band 23 rather than band 0 because the parties that must agree are the providers of one capability rather than every peer that speaks to Nomos. A language identity has the same shape. It is also measurably free to put it at band 23: all five parties already depend on nomos-cap-syntax, so the move adds no dependency edge at all. No mechanical test catches this, which is why it needs a record rather than a silent correction.",
+      "done_when": "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md carries an amendment section correcting constraint 2 to place the carried type in nomos-cap-syntax rather than nomos-contracts, giving OD-CONTRACTS-001 admission test as the reason, recording that all five parties already depend on nomos-cap-syntax so no edge is added, and saying why a new band-23 capability crate for one newtype was not preferred. The rest of the decision is unchanged and the amendment says so. Both required projections are re-rendered from a worktree holding exactly the record set the commit publishes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "./nomos.exe",
+          "spec",
+          "markdown",
+          "--id",
+          "OD-RULES-014"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": {
+        "argv": [
+          "./nomos.exe",
+          "spec",
+          "markdown",
+          "--id",
+          "OD-RULES-014"
+        ],
+        "exit_code": 0,
+        "output_tail": " shared\nvocabulary between the language providers and their consumers lives. One newtype is not an\nindependent replacement, release or compile-time boundary, so it does not clear the bar for\nits own crate.\n\n**What is unchanged.** Everything else this record decided: that the restriction is carried\nrather than derived, that each language crate declares a `LANGUAGE` constant beside its\n`PROVIDER` with the two Rust crates declaring the same value, that the type stays opaque at\nband 30 so a rule names one language without learning the set, that recognition stays in the\nlanguage crates, that all eleven classifiers are deleted rather than any kept, and every\ndeclined alternative recorded above. Only the destination crate changes.\n\n## Status\n\nAccepted, and amended once above on the carried type's home. Decided by reading all eleven classifier bodies, the three registered\n`nomos.cap.syntax.items` offers and their identity constants, `Recognition::Of_Path` in both\nlanguage crates, `composition::Recognized_Syntax_Provider`, the three call sites that consume\n`preferred_syntax_provider`, and `nomos-rules/Cargo.toml`'s own statement of the prohibition\nbeing worked around. The implementing change is not in this item's territory and needs its own.\nabsent: the v14 authoring corpus\n  expected: a directory named by NOMOS_V14_CORPUS, holding 01_authoring/domain_volumes/, 01_authoring/source_lineage/normative-source-statements.yaml and 02_machine/catalog/catalog.json\n  cause:    NOMOS_V14_CORPUS is not set, and no --corpus was given\n  so:       the corpus documents, their table rows, the normative statements and the node catalog are not in this store. What this command can answer is what this repository authors about itself, and nothing else\nOD-RULES-014: docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md at revision authored, rendered from the store's rows as sha256:740a2ca81a0ba769b2370b32a0b5af4aeb3647f2c9a141f1ebaf058f08f9f6c1\n",
+        "verified_at": 1788308363,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

@@ -162,9 +162,52 @@ item rather than being folded in here on the strength of looking similar.
 It does not rewire the hand-composed rule table in `nomos-check-orchestration::run_context`,
 and it does not change which rules are selected or registered.
 
+## Amendment: The Carried Type Belongs At Band 23, Not Band 0
+
+Constraint 2 above places the carried type in `nomos-contracts`. That is wrong, and
+implementing the decision is what surfaced it.
+
+`nomos-contracts` admits a type on `OD-CONTRACTS-001`'s test — it crosses a subsystem,
+process or plugin boundary and the parties on both sides need one stable shared
+representation — whose stated deciding question is whether *a peer that never compiles this
+crate would be unable to agree with us without this type*. A language identity does not pass
+it. Nothing exchanges one with a peer today: `nomos_package::PackageManifest` carries
+`language_versions` but no language name, so a `LanguagePackage` manifest never declares
+which language it is for. The parties that must agree are `nomos-lang-rust`,
+`nomos-lang-rust-scan`, `nomos-lang-go`, `nomos-rules` and `nomos-check-orchestration`, all
+inside this workspace.
+
+That is the shape of the counter-example `nomos-contracts`' own module doc already gives for
+refusing a type: `nomos-cap-syntax`'s `SyntaxPayload` is a real shared representation read by
+more than one provider, and it sits at band 23 rather than band 0 "because the parties that
+must agree about it are the providers of one capability rather than every peer that speaks to
+Nomos." A language identity read by three language crates and their two consumers is that
+same shape, and the citation of `RuleId` and `ProviderId` in constraint 2 does not rescue it:
+those are peer-visible identities, and this one is not.
+
+**The correction: the carried type lives in `nomos-cap-syntax`.** The move costs nothing
+measurable, which is the second half of why it is right — all five parties already depend on
+`nomos-cap-syntax`, and it is band 23, below every one of them, so no dependency edge is added
+in either direction and no band table moves.
+
+**Why not a new band-23 capability crate for it.** Semantically cleaner — a file has a
+language whether or not anything parses it, so language identity is not strictly the syntax
+capability's business — but a crate carrying one newtype has to earn a `bands.rs` entry, a
+`README.md` row and harness registration, and `nomos-cap-syntax` is already where the shared
+vocabulary between the language providers and their consumers lives. One newtype is not an
+independent replacement, release or compile-time boundary, so it does not clear the bar for
+its own crate.
+
+**What is unchanged.** Everything else this record decided: that the restriction is carried
+rather than derived, that each language crate declares a `LANGUAGE` constant beside its
+`PROVIDER` with the two Rust crates declaring the same value, that the type stays opaque at
+band 30 so a rule names one language without learning the set, that recognition stays in the
+language crates, that all eleven classifiers are deleted rather than any kept, and every
+declined alternative recorded above. Only the destination crate changes.
+
 ## Status
 
-Accepted. Decided by reading all eleven classifier bodies, the three registered
+Accepted, and amended once above on the carried type's home. Decided by reading all eleven classifier bodies, the three registered
 `nomos.cap.syntax.items` offers and their identity constants, `Recognition::Of_Path` in both
 language crates, `composition::Recognized_Syntax_Provider`, the three call sites that consume
 `preferred_syntax_provider`, and `nomos-rules/Cargo.toml`'s own statement of the prohibition

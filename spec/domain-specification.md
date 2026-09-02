@@ -162,7 +162,7 @@ profile: domain-specification
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 41 | 10 | sha256:9ccf6e284cc32aa9f6c12405d202d3fb7d7e2c1994a45e40b8111f45c8863b08 |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 23 | 6 | sha256:841b1c5bb58bd645f7b84a43c5f4433923df78193de6b7e6e3ffecc92de628c9 |
-| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md@authored | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md | authored | 31 | 9 | sha256:17e863a72244a5226befd13020e7ecf1ff473198ebcac3aeea19cf24b0519524 |
+| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md@authored | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md | authored | 38 | 10 | sha256:740a2ca81a0ba769b2370b32a0b5af4aeb3647f2c9a141f1ebaf058f08f9f6c1 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1458,7 +1458,8 @@ profile: domain-specification
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#21 | authored | 2 | Why Not A Capability Fact In The `OD-RULES-011` Family |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#23 | authored | 2 | Why Not An Orchestration-Side Partition Of The Source List |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#25 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#30 | authored | 2 | Status |
+| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#30 | authored | 2 | Amendment: The Carried Type Belongs At Band 23, Not Band 0 |
+| docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#37 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -42924,15 +42925,86 @@ and it does not change which rules are selected or registered.
 
 ### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#30
 
+*revision: authored · kind: heading · heading: How a text-only rule states a language restriction without naming a provider / Amendment: The Carried Type Belongs At Band 23, Not Band 0 · hash: sha256:4d60b1bae188f213689c5a3be43b67e54e76b96bc6286157361c71d1eacdcb5c*
+
+## Amendment: The Carried Type Belongs At Band 23, Not Band 0
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#31
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Amendment: The Carried Type Belongs At Band 23, Not Band 0 · hash: sha256:a942d6e8630cd914540a8fdfb6a3386df15cede29a4fadd451be39cb1737bafa*
+
+Constraint 2 above places the carried type in `nomos-contracts`. That is wrong, and
+implementing the decision is what surfaced it.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#32
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Amendment: The Carried Type Belongs At Band 23, Not Band 0 · hash: sha256:834e246c3fc80cd08b98697e7b75c64f5ebe35e3fec836cd3aeca681d653f116*
+
+`nomos-contracts` admits a type on `OD-CONTRACTS-001`'s test — it crosses a subsystem,
+process or plugin boundary and the parties on both sides need one stable shared
+representation — whose stated deciding question is whether *a peer that never compiles this
+crate would be unable to agree with us without this type*. A language identity does not pass
+it. Nothing exchanges one with a peer today: `nomos_package::PackageManifest` carries
+`language_versions` but no language name, so a `LanguagePackage` manifest never declares
+which language it is for. The parties that must agree are `nomos-lang-rust`,
+`nomos-lang-rust-scan`, `nomos-lang-go`, `nomos-rules` and `nomos-check-orchestration`, all
+inside this workspace.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#33
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Amendment: The Carried Type Belongs At Band 23, Not Band 0 · hash: sha256:6b7b3384ce02cef30cd5026558843e28a79f3c56ec1acc3e8446dc1ca88b55a7*
+
+That is the shape of the counter-example `nomos-contracts`' own module doc already gives for
+refusing a type: `nomos-cap-syntax`'s `SyntaxPayload` is a real shared representation read by
+more than one provider, and it sits at band 23 rather than band 0 "because the parties that
+must agree about it are the providers of one capability rather than every peer that speaks to
+Nomos." A language identity read by three language crates and their two consumers is that
+same shape, and the citation of `RuleId` and `ProviderId` in constraint 2 does not rescue it:
+those are peer-visible identities, and this one is not.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#34
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Amendment: The Carried Type Belongs At Band 23, Not Band 0 · hash: sha256:13571d71ff91cb077d166c2dfe581f70c92c4f4491a34e46f5970db5396237e4*
+
+**The correction: the carried type lives in `nomos-cap-syntax`.** The move costs nothing
+measurable, which is the second half of why it is right — all five parties already depend on
+`nomos-cap-syntax`, and it is band 23, below every one of them, so no dependency edge is added
+in either direction and no band table moves.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#35
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Amendment: The Carried Type Belongs At Band 23, Not Band 0 · hash: sha256:5bf3f11c716f4cd7445b09ffc39dc99a33f3f1bf806b74ab079c7e3a94d9e991*
+
+**Why not a new band-23 capability crate for it.** Semantically cleaner — a file has a
+language whether or not anything parses it, so language identity is not strictly the syntax
+capability's business — but a crate carrying one newtype has to earn a `bands.rs` entry, a
+`README.md` row and harness registration, and `nomos-cap-syntax` is already where the shared
+vocabulary between the language providers and their consumers lives. One newtype is not an
+independent replacement, release or compile-time boundary, so it does not clear the bar for
+its own crate.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#36
+
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Amendment: The Carried Type Belongs At Band 23, Not Band 0 · hash: sha256:87c9736806db2142b916637d4012070155c98f6c5ab1f6a2f4be7c03722f38a1*
+
+**What is unchanged.** Everything else this record decided: that the restriction is carried
+rather than derived, that each language crate declares a `LANGUAGE` constant beside its
+`PROVIDER` with the two Rust crates declaring the same value, that the type stays opaque at
+band 30 so a rule names one language without learning the set, that recognition stays in the
+language crates, that all eleven classifiers are deleted rather than any kept, and every
+declined alternative recorded above. Only the destination crate changes.
+
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#37
+
 *revision: authored · kind: heading · heading: How a text-only rule states a language restriction without naming a provider / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#31
+### docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#38
 
-*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Status · hash: sha256:010612ee9c6a8bb78c3f7132447b43def2d430dd86da0f43f96281744485a9fa*
+*revision: authored · kind: prose · heading: How a text-only rule states a language restriction without naming a provider / Status · hash: sha256:7899dc102da0a579dd8d3232768f10d9f90487dd58e497cdabd6d6fdb0f34de0*
 
-Accepted. Decided by reading all eleven classifier bodies, the three registered
+Accepted, and amended once above on the carried type's home. Decided by reading all eleven classifier bodies, the three registered
 `nomos.cap.syntax.items` offers and their identity constants, `Recognition::Of_Path` in both
 language crates, `composition::Recognized_Syntax_Provider`, the three call sites that consume
 `preferred_syntax_provider`, and `nomos-rules/Cargo.toml`'s own statement of the prohibition
