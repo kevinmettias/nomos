@@ -6,6 +6,7 @@ pub const nomos_rules::ABBREVIATIONS: &str
 pub const nomos_rules::AN_EXCLUDED_FILE_SAYS_WHY: &str
 pub const nomos_rules::ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED: &str
 pub const nomos_rules::A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE: &str
+pub const nomos_rules::A_DISABLED_TEST_STATES_WHY: &str
 pub const nomos_rules::A_DISCARDED_ERROR_IS_EXPLAINED: &str
 pub const nomos_rules::A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY: &str
 pub const nomos_rules::A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE: &str
@@ -35,6 +36,9 @@ pub const nomos_rules::DEPRECATION: &str
 pub const nomos_rules::EAGER_VS_LAZY_CONTEXT: &str
 pub const nomos_rules::EVERY_ALLOW_CARRIES_A_JUSTIFICATION: &str
 pub const nomos_rules::EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE: &str
+pub const nomos_rules::FACADE_ALIASES_NAME_THE_CONTRACT: &str
+pub const nomos_rules::FACADE_CHOOSES_FLATTENING_OR_NAMESPACE: &str
+pub const nomos_rules::FACADE_CONSUMERS_USE_THE_FACADE_PATH: &str
 pub const nomos_rules::FILE_NAME_MATCHES_DECLARED_TYPE: &str
 pub const nomos_rules::FILE_SIZE_JUSTIFICATION_TRIGGER: &str
 pub const nomos_rules::FILE_SIZE_REVIEW_TRIGGER: &str
@@ -42,6 +46,7 @@ pub const nomos_rules::FIVE_HUNDRED_LINE_REVIEW_TRIGGER: &str
 pub const nomos_rules::GO_HELPERS_PACKAGE_FIVE_INPUTS: &str
 pub const nomos_rules::GO_LANGUAGE: &str
 pub const nomos_rules::GO_VARIABLES_USE_LOWER_SNAKE_CASE: &str
+pub const nomos_rules::INLINE_ALWAYS_JUSTIFICATION: &str
 pub const nomos_rules::LINT_CONTRACT_RECORD: &str
 pub const nomos_rules::LINT_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::LINT_DIAGNOSTICS: &str
@@ -49,6 +54,7 @@ pub const nomos_rules::LOWERCASE_FIRST_LETTER: &str
 pub const nomos_rules::NAMING_CONVENTION: &str
 pub const nomos_rules::NO_DECORATIVE_SECTION_DIVIDERS: &str
 pub const nomos_rules::NO_MOD_RS_FILES: &str
+pub const nomos_rules::NO_SINGLE_LINE_FUNCTION_BODIES: &str
 pub const nomos_rules::NO_TRAILING_PUNCTUATION: &str
 pub const nomos_rules::NO_TRAILING_WHITESPACE: &str
 pub const nomos_rules::NO_WILDCARD_IMPORTS: &str
@@ -88,9 +94,13 @@ pub enum variant nomos_rules::ReceiverAllowance::OneForQualifiedFunctions
 pub enum variant nomos_rules::RuleRegistryError::AlreadyOffered(RuleId)
 pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
+pub fn nomos_rules::Check_A_Consumer_Imports_Through_The_Facade(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Credential_Is_Not_Hardcoded_In_Source(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Disabled_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Discarded_Error_Is_Explained(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Facade_Publishes_A_Child_One_Way(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Package_Is_Named_After_Its_Directory(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Renamed_Facade_Re_Export_Names_The_Contract(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Script_Declares_Its_Purpose(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Secret_Does_Not_Travel_In_A_Url(sources: &[SourceFile]) -> Vec<Finding>
@@ -124,10 +134,12 @@ pub fn nomos_rules::Check_Go_File_Size_Review_Trigger(sources: &[SourceFile], fa
 pub fn nomos_rules::Check_Go_Helpers_Package_Five_Inputs( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_Type_Names_Use_Camel_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_Variables_Use_Lower_Snake_Case(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Inline_Always_Justification(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Lint_Diagnostics(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Naming_Convention( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Decorative_Section_Dividers(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Mod_Rs_Files(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_No_Single_Line_Function_Bodies(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Trailing_Whitespace(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Wildcard_Imports(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_One_Public_Type_Per_File( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>

@@ -322,6 +322,35 @@
 //! `{}`), not a construct-plus-adjacent-comment pattern the file's other Rust rules share.
 //! Scoped to Rust only — code-standards names a distinct C# strategy for the same rule id,
 //! and Go's own collapsing shape is left unattempted rather than guessed at.
+//!
+//! [`Check_A_Facade_Publishes_A_Child_One_Way`],
+//! [`Check_A_Renamed_Facade_Re_Export_Names_The_Contract`] and
+//! [`Check_A_Consumer_Imports_Through_The_Facade`] are the sixty-second, sixty-third and
+//! sixty-fourth rules, and the first family here to arrive as three rule documents out of
+//! one code-standards tool rather than one document per function. `check-facade-surface`
+//! is written as a single binary because all three read the same two statement shapes —
+//! `pub mod <child>;` and `pub use <child>::<item>;` — and differ only in what they
+//! conclude; this crate's unit of export is the rule rather than the tool, so they are
+//! three functions in one `facade` module. No repository-configurable dimension in any of
+//! the three, so a leaf module rather than a fifth `OD-RULES-011` capability, by the same
+//! test the marker-comment family already applied: a facade either publishes a child twice
+//! or it does not, and there is no threshold or vocabulary a repository would state
+//! differently.
+//!
+//! The consumer-import rule is the third in this crate to read across files rather than
+//! within one — it collects what every facade publishes before it can judge any import —
+//! and it is the first to derive a subject's *module path* from where the file sits, which
+//! is why `src/pipeline/mod.rs` and `src/pipeline.rs` are read as one module and a source
+//! outside a crate's own source directory roots no facade at all.
+//!
+//! Composition into a real run is deliberately not part of the increment that landed
+//! these. Measured against this workspace first: the double-publication rule reports
+//! nothing, the consumer rule reports twelve findings over ten real imports reaching around
+//! a crate-root facade, and the alias rule reports fifty-nine, because
+//! `pub use id::Id as EntityId;` is this
+//! workspace's own settled idiom for a one-type module. That last number is a genuine
+//! disagreement between two standards rather than a defect in either, and weighing it is
+//! its own decision rather than a side effect of porting the rules.
 
 #![forbid(unsafe_code)]
 
@@ -345,6 +374,9 @@ pub use checks::{
     DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
     Check_Eager_Vs_Lazy_Context, Check_Error_Message_Has_No_Trailing_Punctuation, Check_Error_Message_Starts_Lowercase,
     EAGER_VS_LAZY_CONTEXT, LOWERCASE_FIRST_LETTER, NO_TRAILING_PUNCTUATION,
+    Check_A_Consumer_Imports_Through_The_Facade, Check_A_Facade_Publishes_A_Child_One_Way,
+    Check_A_Renamed_Facade_Re_Export_Names_The_Contract, FACADE_ALIASES_NAME_THE_CONTRACT,
+    FACADE_CHOOSES_FLATTENING_OR_NAMESPACE, FACADE_CONSUMERS_USE_THE_FACADE_PATH,
     Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Single_Line_Function_Bodies,
     Check_No_Trailing_Whitespace, Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS,
     NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_WHITESPACE, TODO_FORMAT,

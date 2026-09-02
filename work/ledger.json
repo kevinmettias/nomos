@@ -44634,7 +44634,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P26-RULES-TEST-OR-EXAMPLE-DUPLICATION-2, which reserves crates/rules/nomos-rules/src/checks.rs alongside the two leaf files, because the one shared definition this item asks for has to be declared there."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -44648,9 +44652,18 @@
         "timeout_seconds": 3600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-nomos-a8",
+          "reason": "The item's territory cannot express its own done_when. This crate's stated convention for plumbing more than one rule needs is a pub(crate) fn in checks.rs called as super::X -- checks.rs's own module doc says so, and Relay_Findings is the worked instance, used that way by lint.rs and policy.rs. checks.rs is not in this item's two-file territory. The alternatives that stay inside it are both worse than the duplication: pub(super) in rust_text.rs with concurrency_text.rs importing from a sibling leaf makes concurrency rules structurally downstream of Rust-text rules, which is false and which no other module in this crate does; a new checks/source_location.rs needs a mod line in checks.rs anyway. Re-added as -2 with checks.rs included.",
+          "abandoned_at": 1788315804
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-nomos-a8",
+        "declined_at": 1788315804
+      }
     },
     {
       "id": "OD-RULES-014-AMEND-CARRIED-TYPE-HOME",
@@ -45727,14 +45740,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-e5-0902",
-        "acquired_at": 1788315591,
-        "lease_expires_at": 1788322791
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -45743,6 +45752,228 @@
           "nomos-rules"
         ],
         "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 388 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-27d32a4363304d08.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-cd1a275ce0c17f78.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788316313,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "78ae5832d75359bd0ad49346dffcba0993bdf147"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P26-RULES-TEST-OR-EXAMPLE-DUPLICATION-2",
+      "title": "Is_Test_Or_Example_Source is duplicated verbatim in two rule modules",
+      "why": "OD-RULES-014 measured this while deciding the language question and explicitly refused to fold it in: it is the same duplication disease answering a different question -- which part of a repository a file sits in, not which language it is. rust_text.rs and concurrency_text.rs hold byte-identical copies checking tests/ and examples/ prefixes, /tests/ and /test/ infixes, and _test.rs/_tests.rs suffixes. This one has no capability or carried-fact angle: a repository layout convention is not a provider recognition fact, so the answer is one shared helper. The declined -1 reserved only the two leaf files, which cannot hold the answer: this crate's own convention for plumbing more than one rule needs is a pub(crate) fn in checks.rs called as super::X, stated in checks.rs's module doc and worked by Relay_Findings, which lint.rs and policy.rs both reach that way. Reserving checks.rs is therefore part of the fix, not a widening of it.",
+      "done_when": "One definition of Is_Test_Or_Example_Source exists, declared pub(crate) in crates/rules/nomos-rules/src/checks.rs beside Relay_Findings and reached as super::Is_Test_Or_Example_Source from both rust_text.rs and concurrency_text.rs, with its own unit test for the prefix, infix and suffix judgments. It stays pub(crate), so tests/contract/surface/nomos-rules.txt does not move; cargo test -p nomos-rules is green.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-HOST-007-MCP-PROJECTION-REOPENS-REPO-TOOLING",
+      "title": "An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, reopening what nomos-api may project",
+      "why": "AGT-006.assessment is the only requirement assessment in the registry that calls its gap total: 'MCP tools is a clean, total gap: nomos-api's own module doc states outright it does not read argv, listen on a socket, or speak MCP's JSON-RPC framing, and no MCP transport or tool surface exists anywhere in the workspace.' ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item, not a proposal. OD-ROADMAP-001 already licenses building ahead of a caller. So the open question is not whether, it is what the projection may carry -- and that question is currently answered by two records on a ground an MCP server removes. OD-LEDGER-036 and OD-HOST-006 both hold that nomos-api's exposure of repo-tooling verbs (work's full verb set, spec's Preview/Render/Commit) is honest because nomos-api frames itself as a seam exercise, and both name one shared revisit trigger: nomos-api becoming a real externally-consumed product surface. An MCP server is that surface by construction. OD-HOST-007-REPO-TOOLING-THROUGH-THE-API-HOST was declined as already governed by exactly those two records; the decline is sound today and stops being sound the moment a transport exists, because README marks nomos-ledger, nomos-work-orchestration, nomos-spec-orchestration and nomos-surface-provenance [repo tooling] -- verbs that run this repository, not ones an end-user repository would ask Nomos. Deciding this before a transport is built is the difference between a boundary and an apology for one.",
+      "done_when": "docs/records/OD-HOST-007-*.md exists and is registered under crates/spec/nomos-spec-store/records/OD-HOST-007.record, deciding (a) whether an MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, (b) which verbs an MCP surface may project given README's [repo tooling] marking, and (c) where such a surface lives relative to nomos-api's band. OD-LEDGER-036 and OD-HOST-006 each state the trigger's disposition in their own Status section rather than leaving it to be read out of the new record. Both committed projections are re-rendered from the record set the commit publishes, and cargo test -p nomos-spec-validate -p nomos-contract-tests is green.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-007.record",
+          "docs/records/OD-LEDGER-036-nomos-apis-work-verb-set-is-a-seam-exercise-and-the-framing-is-currently-honest.md",
+          "docs/records/OD-HOST-006-nomos-spec-orchestrations-exposure-through-nomos-api-shares-od-ledger-036s-trigger.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by OD-HOST-007-MCP-PROJECTION-REOPENS-REPO-TOOLING-2, which amends the two records by their real filenames. This spelling reserves two paths with no file behind them and leaves both real records open to a second writer."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-nomos-a8",
+          "reason": "Reserved two record paths that do not exist. --amends validated that OD-LEDGER-036 and OD-HOST-006 are published identifiers but not that the slugs I typed name their real files, so the item reserves docs/records/OD-LEDGER-036-nomos-apis-work-verb-set-...md and docs/records/OD-HOST-006-nomos-spec-orchestrations-...md while the real files (OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-... and OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-...) stay unreserved. Re-added as -2 with the real paths.",
+          "abandoned_at": 1788316125
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-a8",
+        "declined_at": 1788316125
+      }
+    },
+    {
+      "id": "OD-HOST-007-MCP-PROJECTION-REOPENS-REPO-TOOLING-2",
+      "title": "An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, reopening what nomos-api may project",
+      "why": "AGT-006.assessment is the only entry in the requirement registry that calls its own gap total: 'MCP tools is a clean, total gap: nomos-api's own module doc states outright it does not read argv, listen on a socket, or speak MCP's JSON-RPC framing, and no MCP transport or tool surface exists anywhere in the workspace.' ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item, not a proposal, and OD-ROADMAP-001 already licenses building ahead of a caller. So the open question is not whether, it is what the projection may carry -- and that is currently answered by two records on a ground an MCP server removes. OD-LEDGER-036 and OD-HOST-006 both hold that nomos-api's exposure of repo-tooling verbs (work's full verb set, spec's Preview/Render/Commit) is honest because nomos-api frames itself as a seam exercise, and both name one shared revisit trigger: nomos-api becoming a real externally-consumed product surface. An MCP server is that surface by construction. The declined OD-HOST-007-REPO-TOOLING-THROUGH-THE-API-HOST was retired as already governed by exactly those two records; that decline is sound today and stops being sound the moment a transport exists, because README marks nomos-ledger, nomos-work-orchestration, nomos-spec-orchestration and nomos-surface-provenance [repo tooling] -- verbs that run this repository, not ones an end-user repository would ask Nomos. Deciding this before a transport is built is the difference between a boundary and an apology for one. Re-spelled from the declined -1, which passed --amends two record slugs that name no file.",
+      "done_when": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md exists and is registered as crates/spec/nomos-spec-store/records/OD-HOST-007.record, deciding (a) whether an MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, (b) which verbs an MCP surface may project given README's [repo tooling] marking, and (c) where such a surface lives relative to nomos-api's band. Both amended records state the trigger's disposition in their own Status section rather than leaving it to be read out of the new record. Both committed projections are re-rendered from the record set the commit publishes, and cargo test -p nomos-spec-validate -p nomos-contract-tests is green.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-007.record",
+          "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md",
+          "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-a8",
+        "acquired_at": 1788316144,
+        "lease_expires_at": 1788323344
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-LEDGER-AMENDS-PATH-NOT-CHECKED",
+      "title": "work add --amends checks the record identifier and not the file, so a wrong slug reserves nothing",
+      "why": "Hit directly on 2026-09-01 adding OD-HOST-007-MCP-PROJECTION-REOPENS-REPO-TOOLING:  was accepted at exit 0 and printed back verbatim, but no such file exists -- the real record is OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md. The same happened for OD-HOST-006. AddRefusal::AmendmentNotPublished exists and did not fire, because it asks whether the identifier parsed out of the path is published, not whether the path names that record's file. The result is the exact failure the reservation exists to prevent, arrived at silently: the item reserves a path nothing will ever write, and the record it says it amends stays open to a second writer, while the printed confirmation names the amendment as though it took. It is worse than the misspelling it hides, because an author who reads the success line has been told the record is reserved. Nearby precedent for the fix's shape: work add already refuses --territory on a record file that exists (OD-LEDGER's own allocate-once rule), so the machinery to stat a docs/records path is present and only the inverse check is missing.",
+      "done_when": "work add --amends refuses a docs/records path that does not name a file on disk, and refuses a path whose file exists but is not the file the named record identifier is registered to, each with its own refusal wording distinguishable from AmendmentNotPublished; a unit test covers the wrong-slug case that motivated this, asserting a refusal rather than a reservation; cargo test -p nomos-ledger -p nomos-cli is green.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/store/add_refusal.rs",
+          "crates/host/nomos-cli/src/work/parse.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "The why text lost its central sentence to shell command substitution: backticks quoting the accepted command line were evaluated by the shell before nomos saw them, so the item records the consequence without the evidence. Re-added as -2 with the same content and no backticks."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-a8",
+        "declined_at": 1788316201
+      }
+    },
+    {
+      "id": "OD-LEDGER-AMENDS-PATH-NOT-CHECKED-2",
+      "title": "work add --amends checks the record identifier and not the file, so a wrong slug reserves nothing",
+      "why": "Hit directly on 2026-09-01 adding OD-HOST-007-MCP-PROJECTION-REOPENS-REPO-TOOLING. The flag --amends was given docs/records/OD-LEDGER-036-nomos-apis-work-verb-set-is-a-seam-exercise-and-the-framing-is-currently-honest.md; it was accepted at exit 0 and printed back verbatim, and no such file exists. The real record is docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md. The same happened in the same command for OD-HOST-006. AddRefusal::AmendmentNotPublished exists and did not fire, because it asks whether the identifier parsed out of the path is published, not whether the path names that record's file. The result is the exact failure the reservation exists to prevent, arrived at silently: the item reserves a path nothing will ever write, and the record it says it amends stays open to a second writer, while the printed confirmation names the amendment as though it took. It is worse than the misspelling it hides, because an author who reads the success line has been told the record is reserved. Nearby precedent for the fix's shape: work add already refuses --territory on a record file that is already published, so the machinery to resolve an identifier to its file on disk is present, and only the inverse check is missing.",
+      "done_when": "work add --amends refuses a docs/records path that names no file on disk, and refuses a path whose file exists but is not the file the named record identifier is registered to, each with refusal wording distinguishable from AmendmentNotPublished. A unit test covers the wrong-slug case that motivated this, asserting a refusal rather than a reservation. cargo test -p nomos-ledger -p nomos-cli is green.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/store/add_refusal.rs",
+          "crates/host/nomos-cli/src/work/parse.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 2400
       },
       "verified": null,
       "abandoned": [],

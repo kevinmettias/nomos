@@ -1,8 +1,8 @@
-//! The sixty-one rules this crate implements, one module each — `naming` holds fourteen,
+//! The sixty-four rules this crate implements, one module each — `naming` holds fourteen,
 //! `rust_text` holds eight, `go_text` holds five, `structure` holds five, `formatting` holds
 //! five, `security_text` holds three, `concurrency_text` holds three, `error_text` holds
-//! three, `placement` holds two, and `dependency` holds two, while `script_discipline` holds
-//! three,
+//! three, `facade` holds three, `placement` holds two, and `dependency` holds two, while
+//! `script_discipline` holds three,
 //! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`],
 //! since both judge the same declared architecture and observed
 //! `nomos.cap.dependency.edges` fact, while naming holds the general function convention
@@ -21,6 +21,7 @@ mod concurrency_text;
 mod crosslang;
 mod dependency;
 mod error_text;
+mod facade;
 mod formatting;
 mod function_shape;
 mod go_text;
@@ -58,6 +59,11 @@ pub use dependency::{
 pub use error_text::{
     Check_Eager_Vs_Lazy_Context, Check_Error_Message_Has_No_Trailing_Punctuation, Check_Error_Message_Starts_Lowercase,
     EAGER_VS_LAZY_CONTEXT, LOWERCASE_FIRST_LETTER, NO_TRAILING_PUNCTUATION,
+};
+pub use facade::{
+    Check_A_Consumer_Imports_Through_The_Facade, Check_A_Facade_Publishes_A_Child_One_Way,
+    Check_A_Renamed_Facade_Re_Export_Names_The_Contract, FACADE_ALIASES_NAME_THE_CONTRACT,
+    FACADE_CHOOSES_FLATTENING_OR_NAMESPACE, FACADE_CONSUMERS_USE_THE_FACADE_PATH,
 };
 pub use formatting::{
     Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Single_Line_Function_Bodies,
