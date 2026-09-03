@@ -49354,6 +49354,105 @@
         ],
         "patterns": []
       },
+      "state": {
+        "Declined": {
+          "reason": "Malformed territory (reserved the rendered diagram/spec-doc projections, which are deliberately nobody's territory per the nomos-spec-change skill and OD-GATE-005). Superseded by P33-RULES-019-RECORD-2."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-ledger-reconcile",
+        "declined_at": 1788395110
+      }
+    },
+    {
+      "id": "P33-GATE-020-RECORD",
+      "title": "OD-GATE-020: what nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8",
+      "why": "Measured directly at HEAD, not reported by a review: nomos_check_orchestration::run_context::RULE_COUNT is 56 (run_context.rs:61) while nomos-gate-orchestration::Registered() makes exactly eight registry.Offer(RuleOffer) calls (composition.rs:68-174), guarded by a test literally named Test_Registered_Should_Offer_All_Eight_Shipped_Rules. That crate's own module doc still asserts 'Registers this workspace's eight shipped rules' and 'The eight are exactly what nomos-check-orchestration::run::Run calls' -- a load-bearing claim that is now false by 48. OD-GATE-019-REGISTRY-COHERENCE-A/B already corrected this exact drift once, at four-versus-eight, and composition.rs's own doc states the principle it was corrected under: 'Honest requires whole ... a plan smaller than the run it describes is worse than no plan: a caller reading it concludes dependency direction is unenforced when every nomos check enforces it.' The gap cannot be closed mechanically: RuleOffer requires a citable governing record and only six *CONTRACT_RECORD constants exist in nomos-rules, so 48 composed rules have no authority to cite. Precedent points both ways -- OD-GATE-019 treated the gap as a defect to close, while the lint/dependency-policy items deliberately left the registry untouched when composing a rule. Nothing on the board covers the current gap. This also bears on P33-RULES-009-SIXTH-ROUND-RECHECK: OD-RULES-009's fifth amendment leaned on 'the list Run and gate-orchestration's RuleRegistry maintain ... has grown by one', which the measured 8-versus-56 divergence contradicts.",
+      "done_when": "OD-GATE-020 exists, is registered, and decides what Registered() is: the honest whole of what Run enforces (and therefore what authority the 48 rules lacking a *CONTRACT_RECORD cite, given only six exist), or a deliberately narrower population whose doc and test must stop claiming parity with Run. The record states its answer against the measured numbers -- RULE_COUNT 56, eight offers, six contract-record constants -- not hypothetically, and says whether the false 'the eight are exactly what Run calls' doc claim is corrected here or by a named follow-on item. It does not itself add 48 offers.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-GATE-020.record",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md",
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Malformed territory (reserved the rendered diagram/spec-doc projections and an implementation file a record-only item should not reserve, per the nomos-spec-change skill). Superseded by P33-GATE-020-RECORD-2."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-gate-020-decision",
+          "reason": "Territory malformed: reserved diagrams/relations.mmd, its projection json, spec/domain-specification.md, its projection json, and composition.rs, none of which a record-writing item should reserve per the nomos-spec-change skill (a record's territory is only the two record files; the diagram/spec-doc are deliberately nobody's territory per OD-GATE-005, and this item does not itself touch composition.rs). Re-filing corrected.",
+          "abandoned_at": 1788395106
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-gate-020-decision",
+        "declined_at": 1788395106
+      }
+    },
+    {
+      "id": "P33-RULES-019-RECORD-2",
+      "title": "OD-RULES-019: whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider",
+      "why": "Same as the original item, declined only for malformed territory (it reserved the rendered diagram/spec-doc projections, which the nomos-spec-change skill and OD-GATE-005 say are deliberately nobody's territory). Verified directly against current HEAD: each of nomos-repo-standards/-limits/-scripting/-words/-goals' src/reading.rs independently declares its own const STANDARDS_JSON, its own Discover_Workspace, its own filesystem.Read_To_String(root.join(STANDARDS_JSON)) followed by its own serde_json::from_str, and its own error type -- real, duplicated I/O and parsing, not a shared parse anywhere. OD-RULES-011 decided a rule's parameters are a repository-declared fact resolved through a capability contract and established one-capability-one-provider-crate as the shape for the first family (naming); every later family (limits, scripting, words, goals) followed that same crate-per-capability precedent without OD-RULES-011 or any later record ever weighing whether the file-reading itself should be shared. This is a genuinely open question: OD-PACKAGE-006 and OD-HOST-004 cover hand-written registration and provider composition, not duplicated file I/O across otherwise-independent provider crates.",
+      "done_when": "OD-RULES-019 exists, is registered, and decides whether the five repo-policy provider crates should read and parse standards.json through one shared reader (e.g. a nomos-repo-standards-json crate each depends on) while keeping their five capability contracts and five provider registrations distinct, or whether five independent reads is the accepted, bounded cost of keeping each capability provider crate self-sufficient -- checked against the real duplication measured (five copies of Discover_Workspace/Read_To_String/serde_json::from_str), not decided in the abstract. Does not itself build a shared reader; that is a later item's territory if the decision calls for one.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-RULES-019.record",
+          "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md"
+        ],
+        "patterns": []
+      },
       "state": "Ready",
       "depends_on": [],
       "blocked": null,
@@ -49376,26 +49475,25 @@
       "declined": null
     },
     {
-      "id": "P33-GATE-020-RECORD",
+      "id": "P33-GATE-020-RECORD-2",
       "title": "OD-GATE-020: what nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8",
-      "why": "Measured directly at HEAD, not reported by a review: nomos_check_orchestration::run_context::RULE_COUNT is 56 (run_context.rs:61) while nomos-gate-orchestration::Registered() makes exactly eight registry.Offer(RuleOffer) calls (composition.rs:68-174), guarded by a test literally named Test_Registered_Should_Offer_All_Eight_Shipped_Rules. That crate's own module doc still asserts 'Registers this workspace's eight shipped rules' and 'The eight are exactly what nomos-check-orchestration::run::Run calls' -- a load-bearing claim that is now false by 48. OD-GATE-019-REGISTRY-COHERENCE-A/B already corrected this exact drift once, at four-versus-eight, and composition.rs's own doc states the principle it was corrected under: 'Honest requires whole ... a plan smaller than the run it describes is worse than no plan: a caller reading it concludes dependency direction is unenforced when every nomos check enforces it.' The gap cannot be closed mechanically: RuleOffer requires a citable governing record and only six *CONTRACT_RECORD constants exist in nomos-rules, so 48 composed rules have no authority to cite. Precedent points both ways -- OD-GATE-019 treated the gap as a defect to close, while the lint/dependency-policy items deliberately left the registry untouched when composing a rule. Nothing on the board covers the current gap. This also bears on P33-RULES-009-SIXTH-ROUND-RECHECK: OD-RULES-009's fifth amendment leaned on 'the list Run and gate-orchestration's RuleRegistry maintain ... has grown by one', which the measured 8-versus-56 divergence contradicts.",
-      "done_when": "OD-GATE-020 exists, is registered, and decides what Registered() is: the honest whole of what Run enforces (and therefore what authority the 48 rules lacking a *CONTRACT_RECORD cite, given only six exist), or a deliberately narrower population whose doc and test must stop claiming parity with Run. The record states its answer against the measured numbers -- RULE_COUNT 56, eight offers, six contract-record constants -- not hypothetically, and says whether the false 'the eight are exactly what Run calls' doc claim is corrected here or by a named follow-on item. It does not itself add 48 offers.",
+      "why": "Same as the original item, declined only for malformed territory (it reserved the rendered diagram/spec-doc projections and composition.rs, none of which a record-only item should reserve). Measured directly at HEAD: nomos_check_orchestration::run_context::RULE_COUNT is 56 (run_context.rs:61) while nomos-gate-orchestration::Registered() makes exactly eight registry.Offer(RuleOffer) calls (composition.rs:56-64), guarded by a test literally named Test_Registered_Should_Offer_All_Eight_Shipped_Rules. That crate's own module doc still asserts 'Registers this workspace's eight shipped rules' and 'The eight are exactly what nomos-check-orchestration::run::Run calls' -- a load-bearing claim that is now false by 48. OD-GATE-019-REGISTRY-COHERENCE-A/B already corrected this exact drift once, at four-versus-eight, and composition.rs's own doc states the principle it was corrected under: 'Honest requires whole ... a plan smaller than the run it describes is worse than no plan.' Offer_Naming_Convention already establishes a sentinel for a record-less rule (contract_record: \"README.md\", contract_record_version: 0), with its own doc noting OD-RULES-005/OD-RULES-006 declined to extend RuleOffer's shape without a second real case forcing it, and calling a record-less rule needing its own representation 'that second case, left for whoever next needs more than a sentinel here to say so' -- 48 more candidate rules is that moment, not yet checked against it. This also bears on P33-RULES-009-SIXTH-ROUND-RECHECK: OD-RULES-009's fifth amendment leaned on 'the list Run and gate-orchestration's RuleRegistry maintain ... has grown by one', which the measured 8-versus-56 divergence contradicts.",
+      "done_when": "OD-GATE-020 exists, is registered, and decides what Registered() is: the honest whole of what Run enforces (extended, rule by rule, via a real *_CONTRACT_RECORD where a governing decision exists and the existing README.md/contract_record_version:0 sentinel where a rule's authority is prose only), or a deliberately narrower population whose doc and test must stop claiming parity with Run. If the honest-whole answer holds, the record also resolves whether more than one record-less rule forces RuleOffer's shape past a bare sentinel (OD-RULES-005/OD-RULES-006's declined generalization, checked against real count rather than hypothetically). States its answer against the measured numbers -- RULE_COUNT 56, eight offers, six formal CONTRACT_RECORD constants, roughly thirty modules citing some record in prose -- not hypothetically. Does not itself add the 48 offers; that is later correction-item territory, named but not built here.",
       "kind": "Decision",
       "origin": "Proposed",
       "territory": {
         "resolution": "File",
         "paths": [
           "crates/spec/nomos-spec-store/records/OD-GATE-020.record",
-          "diagrams/relations.mmd",
-          "diagrams/relations.mmd.nomos-projection.json",
-          "spec/domain-specification.md",
-          "spec/domain-specification.md.nomos-projection.json",
-          "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md",
-          "crates/orchestration/nomos-gate-orchestration/src/composition.rs"
+          "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Malformed predicate (named -p nomos-gate-orchestration, whose own real-run tests are red for pre-existing, unrelated reasons and were never actually exercised by this item's done_when). Superseded by P33-GATE-020-RECORD-3."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -49414,6 +49512,73 @@
         "timeout_seconds": 600
       },
       "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-gate-020-decision",
+          "reason": "Predicate malformed: included -p nomos-gate-orchestration, which pulls in that crate's own real-run tests (Test_A_Clean_Source_Should_Pass and siblings) that judge the live repository tree and are currently red for pre-existing, unrelated reasons -- verified directly by removing this item's own two new files and re-running: the failure persists without them. Established precedent for a pure record-authoring item (OD-CAPABILITY-009-SUBJECT-PARTITIONED-RESOLVE-DECISION-2, P14-RULES-009-CROSSLANG-TRIGGER-CHECK) scopes the predicate to -p nomos-spec-store -p nomos-contract-tests only, never the crate the record discusses, since this item's own done_when does not touch that crate's code. Re-filing corrected.",
+          "abandoned_at": 1788395635
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-gate-020-decision",
+        "declined_at": 1788395635
+      }
+    },
+    {
+      "id": "P33-GATE-020-RECORD-3",
+      "title": "OD-GATE-020: what nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8",
+      "why": "Same as the original item, declined twice: once for malformed territory (reserved the rendered diagram/spec-doc projections and composition.rs, which a record-only item should not reserve), once for a malformed predicate (-p nomos-gate-orchestration pulls in that crate's own real-run tests, currently red for pre-existing, unrelated reasons -- verified by removing this item's two files and confirming the failure persists without them). Measured directly at HEAD: nomos_check_orchestration::run_context::RULE_COUNT is 56 (run_context.rs:61) while nomos-gate-orchestration::Registered() makes exactly eight registry.Offer(RuleOffer) calls (composition.rs:56-64), guarded by a test literally named Test_Registered_Should_Offer_All_Eight_Shipped_Rules. That crate's own module doc still asserts 'Registers this workspace's eight shipped rules' and 'The eight are exactly what nomos-check-orchestration::run::Run calls' -- a load-bearing claim that is now false by 48. OD-GATE-019-REGISTRY-COHERENCE-A/B already corrected this exact drift once, at four-versus-eight, and composition.rs's own doc states the principle it was corrected under: 'Honest requires whole ... a plan smaller than the run it describes is worse than no plan.' Offer_Naming_Convention already establishes a sentinel for a record-less rule (contract_record: \"README.md\", contract_record_version: 0), with its own doc noting OD-RULES-005/OD-RULES-006 declined to extend RuleOffer's shape without a second real case forcing it, and calling a record-less rule needing its own representation 'that second case, left for whoever next needs more than a sentinel here to say so' -- 48 more candidate rules is that moment, not yet checked against it. This also bears on P33-RULES-009-SIXTH-ROUND-RECHECK: OD-RULES-009's fifth amendment leaned on 'the list Run and gate-orchestration's RuleRegistry maintain ... has grown by one', which the measured 8-versus-56 divergence contradicts.",
+      "done_when": "OD-GATE-020 exists, is registered, and decides what Registered() is: the honest whole of what Run enforces (extended, rule by rule, via a real *_CONTRACT_RECORD where a governing decision exists and the existing README.md/contract_record_version:0 sentinel where a rule's authority is prose only), or a deliberately narrower population whose doc and test must stop claiming parity with Run. If the honest-whole answer holds, the record also resolves whether more than one record-less rule forces RuleOffer's shape past a bare sentinel (OD-RULES-005/OD-RULES-006's declined generalization, checked against real count rather than hypothetically). States its answer against the measured numbers -- RULE_COUNT 56, eight offers, six formal CONTRACT_RECORD constants, roughly thirty modules citing some record in prose -- not hypothetically. Does not itself add the 48 offers; that is later correction-item territory, named but not built here.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "formed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-186c9275f5206d2c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-92a19d1ed2470b65.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-41241d6199c72425.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-7a1588675061f262.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-87fa961365caa679.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-1b4d36d07debf0eb.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-179ba14357ba7376.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-280350e521002222.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-d522dabd63da018d.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-308886a889376e75.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788395737,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5a91c66f9f0a20a9b39c3daed7e05e990a399c57"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

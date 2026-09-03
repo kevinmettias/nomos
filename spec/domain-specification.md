@@ -87,6 +87,7 @@ profile: domain-specification
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md | authored | 20 | 7 | sha256:0c813c23245ff0e95b51d6914c67d7ab36ae6d18b05e2bd82bd69892016f969e |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md | authored | 25 | 7 | sha256:6b6d9f41076761c1a5af15719547c1b28ab365e7b4e46ba305c59bc4de3a71b5 |
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md | authored | 20 | 6 | sha256:c69ceac45b63a2a7fdbf575e0aae4e6917ff2f5e7d2ef0497149ca8d811344da |
+| docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md@authored | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md | authored | 19 | 6 | sha256:ffd91e41c359c960915b5ede74bcd07222979d279b5e92f6e2cc0038ebf121e5 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 36 | 8 | sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -814,6 +815,12 @@ profile: domain-specification
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#8 | authored | 2 | Decision |
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#13 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#18 | authored | 2 | Status |
+| docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#1 | authored | 1 | What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 |
+| docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#12 | authored | 2 | Decision |
+| docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#16 | authored | 2 | What This Record Does Not Decide |
+| docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#18 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -21509,6 +21516,228 @@ One deferral this record made itself still stands, and stands for the reason it 
 repository as its argument and this working tree still carries live, divergent worktrees under
 `.claude/worktrees/` and elsewhere. That condition has not changed, so a repository-root run's
 count is still not ground truth. Revisit when the shared tree does not carry them.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#1
+
+*revision: authored · kind: heading · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 · hash: sha256:f0062adf61bbc1adc51a96d58beb0509a16f057efbffedb70bd1ac83f08c7591*
+
+# What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#2
+
+*revision: authored · kind: heading · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#3
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Question · hash: sha256:ec051087c1fb390cfa0d0f88075ed6bea761c7f6b20a0a90a556830a3dcf108a*
+
+`crates/orchestration/nomos-gate-orchestration/src/composition.rs`'s own module doc states the
+registry's charter without qualification: "Registers this workspace's eight shipped rules and
+hands back the registry... The eight are exactly what `nomos-check-orchestration::run::Run`
+calls." A prior cluster of corrections (tracked on the work ledger under the id prefix
+`OD-GATE-019-REGISTRY-COHERENCE-*`, never itself registered as a governing record) closed this
+same gap twice already, at four-versus-eight and again at five-versus-eight, each time citing
+the same principle stated in the file's own doc: "Honest requires whole... a plan smaller than
+the run it describes is worse than no plan."
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#4
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Question · hash: sha256:323ed027b6193ae86bce7c17ba827380b01750d4f6bc505b1b6c0437bb0de646*
+
+Measured directly against this workspace at the current revision: `nomos_check_orchestration::
+run_context::RULE_COUNT` is `56` (`run_context.rs:61`), and the private `rules` array it bounds
+composes exactly that many `Check_*` functions into `Run` (`run_context.rs:526-579`).
+`nomos_gate_orchestration::composition::Registered()` still makes exactly eight
+`registry.Offer(RuleOffer {...})` calls (`composition.rs:56-64`), guarded by a test named
+`Test_Registered_Should_Offer_All_Eight_Shipped_Rules`. The doc's claim of parity is false by
+48, the same shape the prior two corrections closed, now an order of magnitude larger.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#5
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Question · hash: sha256:710fd6384d1828414e561df61d62ddf3dde389e06e88a0035b2b3bf57d8c0289*
+
+The open question is not whether to correct the count — the prior corrections already answer
+that by precedent — but what `Registered()` *is*, structurally, now that the population has
+grown past the size that made "add the next `Offer_*` function by hand" a proportionate
+response, and whether the mechanism the eight already use (a `RuleOffer{contract_record,
+contract_record_version}` pair, with a `contract_record_version: 0` sentinel for a rule whose
+authority is prose rather than a versioned decision) still generalizes at this scale.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#6
+
+*revision: authored · kind: heading · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#7
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / What Was Measured · hash: sha256:628bdf1919a61ca4d77b728ffd854d216270576139d5c62e37a41277bdc999df*
+
+**The pair does not meet `OD-GATE-011`'s own legitimate-exception test.** `OD-GATE-011` names
+"two independent encodings of one decision" as a defect class and states the narrow condition
+under which a second encoding is not that defect: both sides derive independently from one
+named external authority outside either artifact, the reason is stated in a doc comment or
+record at the site, and a test pins the two sides together rather than a check's silent
+exclusion. `Registered()`'s list does not derive from `Run`'s list, or from any third, named
+authority both sides read — it is a second, independently hand-typed enumeration that is
+*supposed* to equal the first, which is exactly the shape the class describes ("each is
+independently readable as the authoritative answer to the same question"). `Test_Registered_
+Should_Offer_All_Eight_Shipped_Rules` pins `Registered()` against a literal, hand-written
+expectation of eight named ids — the same "a count agrees with itself" risk `composition.rs`'s
+own doc already names and tries to avoid by asserting rule ids rather than a bare count — but a
+hand-written expectation checked against a hand-written registration is still two hand-written
+artifacts, not one authority and one derived projection. The pair fails the test's first
+condition regardless of how carefully the second registration is worded.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#8
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / What Was Measured · hash: sha256:e571820fac71b43e61e21c1dbff65030d83cd1dacfb78f296f4cc8e950c3a9d4*
+
+This is a narrower finding than "this is one of `OD-GATE-011`'s five closed instances,"
+because that record's own definition also requires "neither artifact says the other exists" —
+and `composition.rs` names `Run` explicitly and claims parity with it. This is not a hidden
+duplicate nobody thought to compare; it is a known, declared pair whose own stated invariant
+has already gone false twice, silently, between the moments anyone checked it by hand.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#9
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / What Was Measured · hash: sha256:c34ed0e1806b876ee68eed2a67dbc97efaac425e147d4d587e378afefdab7744*
+
+**`nomos-check-orchestration` exposes no authority `Registered()` could derive from even if it
+tried.** `run_context::RULE_COUNT` and the private `rules` array are not `pub`; `lib.rs`'s
+export list (`Run`, `RunContext`, `CheckCommand`, `Claim`/`Claim_Of`/`CheckOutcome`/`Examined`,
+and its own separate `composition::Registered`) carries no accessor for the composed rule-id
+set. A shared-derivation fix — the shape that *would* satisfy `OD-GATE-011`'s exception test —
+does not exist to switch to today; it would need a new, deliberate export, not a rewire of
+something already there.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#10
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / What Was Measured · hash: sha256:764bfc7e6549e2df1f1fc2594577aa680ee7950274578ba22e8e0d027ab6d142*
+
+**The `contract_record_version: 0` sentinel already generalizes past its first instance.**
+`Offer_Naming_Convention`'s own doc names `contract_record: "README.md", contract_record_
+version: 0` as a marker for "no versioned record", not "version zero of one," and states
+plainly that `OD-RULES-005` and `OD-RULES-006` already declined to extend `RuleOffer`'s shape
+without a second real case forcing it, calling a record-less rule needing its own
+representation "that second case, left for whoever next needs more than a sentinel here to say
+so." Measured now: of the eight offered rules, seven cite a real, versioned record through a
+`*_CONTRACT_RECORD` constant (`CONTRACT_RECORD` for `D-134`, `DEPENDENCY_CONTRACT_RECORD` for
+`OD-RULES-003` — shared by both `DEPENDENCY_DIRECTION` and `DEPENDENCY_COMPLETENESS`,
+`LINT_CONTRACT_RECORD` and `DEPENDENCY_POLICY_CONTRACT_RECORD` for `OD-RULES-010`,
+`CROSS_LANGUAGE_CONTRACT_RECORD` for `OD-CAPABILITY-010`, `UNREAD_REACHES_FINDING_CONTRACT_
+RECORD` for `OD-RULES-008`) — six constants across seven offers — and exactly one,
+`NAMING_CONVENTION`, uses the sentinel. Of the 48 rules `Run` composes and `Registered()` does
+not yet offer, a direct search (`grep -rl` for an `OD-RULES-`/`OD-CAPABILITY-`/`D-`-shaped
+citation across `crates/rules/nomos-rules/src/checks*`) finds roughly thirty module files
+naming some record in prose without yet carrying a formal constant — more of the same shape
+`Check_Dependency_Policy` and `Check_Lint_Diagnostics` were in before their own corrections gave
+them constants — and the remainder cite no record at all, the `Check_Naming_Convention` shape.
+Both populations exist at real, multi-instance scale now, not as a hypothetical this record
+would be deciding in the abstract.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#11
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / What Was Measured · hash: sha256:5fb907ff1409c7973da24a82e94bc7effdf88451b29da1e9f51185f7dd8e8b6c*
+
+**`OD-RULES-009` leaned on this pair's size as disconfirming evidence, on a premise this
+measurement contradicts.** That record's fifth amendment states "the list `Run` and
+`gate-orchestration`'s `RuleRegistry` maintain has not grown by thirty-one entries; it has
+grown by one." Measured today, `Run`'s list grew from eight (that amendment's own count) to
+fifty-six, and `Registered()`'s stayed at eight — the two diverged by forty-eight, not by one.
+This record does not re-decide `OD-RULES-009`'s question; `P33-RULES-009-SIXTH-ROUND-RECHECK`
+is that item, and this measurement is data for it, not a substitute for it.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#12
+
+*revision: authored · kind: heading · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#13
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Decision · hash: sha256:e075e34145689ff0bfc4aae870f38726a052c9028dc27bb651135a89eaea49d5*
+
+**`Registered()`'s charter is the honest whole, unchanged from what its own doc already
+claims — parity with `Run` — and the two-field `RuleOffer{contract_record, contract_record_
+version}` shape need not grow to sustain it at this scale.** The `contract_record_version: 0`
+sentinel `Offer_Naming_Convention` introduced provisionally is accepted as the general pattern
+for a record-less rule, not a one-off awaiting its own type: a `String` already carries a
+versioned record id (`"OD-RULES-003"`) or a prose authority (`"README.md"`, or whatever a
+rule's own module doc already names) without ambiguity, and `contract_record_version: 0`
+already means "no version" unambiguously as a sentinel rather than a real version zero. Forty-
+eight more instances of the same two shapes `Offer_Naming_Convention` already covers is exactly
+the second-and-onward case `OD-RULES-005`/`OD-RULES-006` asked for before extending `RuleOffer`,
+and the shape those forty-eight instances take is the same shape the ninth rule already proved
+out, not a new one. No new field, enum, or type is added to `RuleOffer` by this decision.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#14
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Decision · hash: sha256:63f47338a27c2042181951c6c8eea882c2c815eac9687eb77a661c4cf4a55c8b*
+
+**Closing the gap by hand, rule by rule, the way the prior two corrections did, is not
+declined — but it does not, by itself, bring the pair into `OD-GATE-011`'s legitimate-exception
+shape, and a later item should not claim that it does.** A correction that adds forty-eight more
+`Offer_*` functions and raises a hand-written test's expected count from eight to fifty-six
+would make `Registered()` honestly whole again, exactly as the prior two corrections did — but
+it reproduces the same not-yet-a-legitimate-exception pair at a larger size, one more manual
+synchronization a person has to remember to repeat at rule fifty-seven. That is an acceptable
+near-term shape, consistent with this workspace's standing discipline of composing by hand until
+a real trigger forces otherwise (`OD-HOST-004`), and is explicitly not foreclosed here.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#15
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Decision · hash: sha256:b129d30ed9c9096736b9ee85a4d819efa678e9f47f9bb0f26977b592782883a1*
+
+**The fix that would satisfy `OD-GATE-011`'s own exception test does not exist to adopt today,
+and building it is named rather than done by this record.** `nomos-check-orchestration` would
+need to export its composed rule-id set — a `pub fn` beside `Run`, not a rewire of
+`RULE_COUNT` or the private `rules` array themselves — for `nomos-gate-orchestration` to derive
+`Registered()`'s test (or `Registered()` itself) from, turning "two hand-typed lists, checked
+against each other by eye at correction time" into "one hand-typed list and one comparison
+against it, checked by `cargo test` every time." Whether that export is worth building now, or
+waits for a further trigger the way `OD-RULES-009`'s planner does, is left to the item that
+proposes it, informed by this record rather than decided here.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#16
+
+*revision: authored · kind: heading · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#17
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / What This Record Does Not Decide · hash: sha256:858d75ca66334139bbc53f8402f7765d8a793636770d9d618b3fabe413e67f7a*
+
+It does not add any of the forty-eight offers, does not write the export `nomos-check-
+orchestration` would need for a shared-derivation fix, and does not choose between "close the
+gap by hand again" and "build the export first" — both remain open, real options for a
+follow-on item, and this record's job was to establish that the second option is what would
+actually satisfy `OD-GATE-011`, not merely another instance of the first at a bigger number. It
+does not re-decide `OD-RULES-009`; `P33-RULES-009-SIXTH-ROUND-RECHECK` carries that question,
+informed by the divergence this record measured. It does not audit which of the forty-eight
+rules cite a real record versus need the sentinel individually — that per-rule classification is
+a correction item's own territory, sized by how much of it a single item can honestly close.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#18
+
+*revision: authored · kind: heading · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#19
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Status · hash: sha256:71af49ec4bfe9b4c2b1398aa0e5f313b9b7860f7cd4ebbed28c5bfa9b7a56ca6*
+
+Accepted. `Registered()`'s charter stays the honest whole; `RuleOffer`'s two-field shape,
+including the `contract_record_version: 0` sentinel, is confirmed sufficient at real,
+multi-instance scale and gains no new field. The gap itself — eight offered against
+fifty-six composed — remains open, tracked as future correction-item territory this record
+names but does not build. Revisit if a shared-derivation export is built and this record's
+"what would satisfy `OD-GATE-011`" analysis needs checking against it, or if the record-less
+population turns out not to fit the two shapes measured here once audited rule by rule.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 
