@@ -13,10 +13,9 @@
 //! decide.
 
 use nomos_cap_goals_policy::{GoalsPolicyPayload, SubsystemDeclaration};
-use nomos_platform::{FileSystem, FileSystemError};
+use nomos_platform::FileSystem;
+use nomos_repo_standards_document::{Read_Standards_Document, STANDARDS_JSON};
 use std::path::Path;
-
-const STANDARDS_JSON: &str = "standards.json";
 
 const GOALS_KEY: &str = "goals";
 const CEILING_KEY: &str = "max_subsystems_per_goal";
@@ -56,22 +55,7 @@ impl core::fmt::Display for GoalsPolicyError
 /// malformed file.
 pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<GoalsPolicyPayload, GoalsPolicyError>
 {
-    let path = root.join(STANDARDS_JSON);
-    let text = match filesystem.Read_To_String(&path)
-    {
-        Ok(text) => text,
-        Err(FileSystemError::NotFound { .. }) => return Ok(GoalsPolicyPayload::default()),
-        Err(error) =>
-        {
-            return Err(GoalsPolicyError {
-                reason: format!("{STANDARDS_JSON} could not be read: {error}"),
-            });
-        }
-    };
-
-    let value: serde_json::Value = serde_json::from_str(&text).map_err(|error| GoalsPolicyError {
-        reason: format!("{STANDARDS_JSON} is not valid JSON: {error}"),
-    })?;
+    let value = Read_Standards_Document(root, filesystem).map_err(|error| GoalsPolicyError { reason: error.reason })?;
 
     return Ok(GoalsPolicyPayload {
         goals: Goals_In(&value)?,
@@ -191,6 +175,7 @@ fn String_List_At(value: &serde_json::Value, key: &str, where_named: &str) -> Re
 mod tests
 {
     use super::*;
+    use nomos_platform::FileSystemError;
     use nomos_platform_std::StdFileSystem;
     use std::path::PathBuf;
 

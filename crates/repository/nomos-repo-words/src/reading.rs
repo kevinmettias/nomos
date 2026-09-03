@@ -7,10 +7,9 @@
 //! `Config.Vague`/`Config.Vague_Exempt` JSON tags.
 
 use nomos_cap_words_policy::WordsPolicyPayload;
-use nomos_platform::{FileSystem, FileSystemError};
+use nomos_platform::FileSystem;
+use nomos_repo_standards_document::{Read_Standards_Document, STANDARDS_JSON};
 use std::path::Path;
-
-const STANDARDS_JSON: &str = "standards.json";
 
 /// `standards.json` could not be read as this reader expects.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -38,21 +37,7 @@ impl core::fmt::Display for WordsPolicyError
 /// `words.vague` or `words.vague_exempt` as something other than an array of strings.
 pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<WordsPolicyPayload, WordsPolicyError>
 {
-    let path = root.join(STANDARDS_JSON);
-    let text = match filesystem.Read_To_String(&path)
-    {
-        Ok(text) => text,
-        Err(FileSystemError::NotFound { .. }) => return Ok(WordsPolicyPayload::default()),
-        Err(error) => {
-            return Err(WordsPolicyError {
-                reason: format!("{STANDARDS_JSON} could not be read: {error}"),
-            });
-        }
-    };
-
-    let value: serde_json::Value = serde_json::from_str(&text).map_err(|error| WordsPolicyError {
-        reason: format!("{STANDARDS_JSON} is not valid JSON: {error}"),
-    })?;
+    let value = Read_Standards_Document(root, filesystem).map_err(|error| WordsPolicyError { reason: error.reason })?;
 
     let words = value.get("words");
     let approved_additions = Read_Word_Array(words, "approved_abbreviations")?;
@@ -93,6 +78,7 @@ fn Read_Word_Array(words: Option<&serde_json::Value>, key: &str) -> Result<Vec<S
 mod tests
 {
     use super::*;
+    use nomos_platform::FileSystemError;
     use nomos_platform_std::StdFileSystem;
     use std::path::PathBuf;
 

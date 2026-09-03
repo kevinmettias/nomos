@@ -74,6 +74,13 @@ members = [
     # none of them may name it. `OD-CAPABILITY-009`.
     "crates/languages/nomos-lang-go-modules",
 
+    # Band 24 — the shared standards.json acquisition step OD-RULES-019 decided the five
+    # nomos.cap.*.policy providers below owe one read/parse boundary. Owns STANDARDS_JSON,
+    # the Read_To_String/serde_json::from_str sequence and one error type; no semantic
+    # extraction, which stays in each provider's own reading.rs. Strictly below the five
+    # providers it is depended on by, and above nomos-platform, the port it reads through.
+    "crates/repository/nomos-repo-standards-document",
+
     # Band 25 — nomos.cap.naming.policy's one provider, and the first crate under
     # crates/repository/ rather than crates/languages/: it reads standards.json, a
     # repository-wide configuration file, not one language's source or manifest format.
@@ -341,6 +348,7 @@ nomos-repo-standards = { path = "crates/repository/nomos-repo-standards" }
 nomos-repo-limits = { path = "crates/repository/nomos-repo-limits" }
 nomos-repo-scripting = { path = "crates/repository/nomos-repo-scripting" }
 nomos-repo-words = { path = "crates/repository/nomos-repo-words" }
+nomos-repo-standards-document = { path = "crates/repository/nomos-repo-standards-document" }
 nomos-package = { path = "crates/packages/nomos-package" }
 nomos-lang-rust-package = { path = "crates/packages/nomos-lang-rust-package" }
 nomos-model-package = { path = "crates/packages/nomos-model-package" }

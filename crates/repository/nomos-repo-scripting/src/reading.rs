@@ -10,10 +10,9 @@
 //! is this capability's own next instance to extend, not a reason to guess at a shape now.
 
 use nomos_cap_scripting_policy::ScriptingPolicyPayload;
-use nomos_platform::{FileSystem, FileSystemError};
+use nomos_platform::FileSystem;
+use nomos_repo_standards_document::{Read_Standards_Document, STANDARDS_JSON};
 use std::path::Path;
-
-const STANDARDS_JSON: &str = "standards.json";
 
 /// `standards.json` could not be read as this reader expects.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -43,21 +42,7 @@ impl core::fmt::Display for ScriptingPolicyError
 /// `forbidden_extensions` that is not a string.
 pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<ScriptingPolicyPayload, ScriptingPolicyError>
 {
-    let path = root.join(STANDARDS_JSON);
-    let text = match filesystem.Read_To_String(&path)
-    {
-        Ok(text) => text,
-        Err(FileSystemError::NotFound { .. }) => return Ok(ScriptingPolicyPayload::default()),
-        Err(error) => {
-            return Err(ScriptingPolicyError {
-                reason: format!("{STANDARDS_JSON} could not be read: {error}"),
-            });
-        }
-    };
-
-    let value: serde_json::Value = serde_json::from_str(&text).map_err(|error| ScriptingPolicyError {
-        reason: format!("{STANDARDS_JSON} is not valid JSON: {error}"),
-    })?;
+    let value = Read_Standards_Document(root, filesystem).map_err(|error| ScriptingPolicyError { reason: error.reason })?;
 
     let Some(scripting) = value.get("scripting").and_then(serde_json::Value::as_object)
     else
@@ -116,6 +101,7 @@ fn Forbidden_Extensions_In(scripting: &serde_json::Map<String, serde_json::Value
 mod tests
 {
     use super::*;
+    use nomos_platform::FileSystemError;
     use nomos_platform_std::StdFileSystem;
     use std::path::PathBuf;
 

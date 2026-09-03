@@ -9,10 +9,9 @@
 //! repository's own `standards.json` once written.
 
 use nomos_cap_limits_policy::{PolicyRow, Scope};
-use nomos_platform::{FileSystem, FileSystemError};
+use nomos_platform::FileSystem;
+use nomos_repo_standards_document::{Read_Standards_Document, STANDARDS_JSON};
 use std::path::Path;
-
-const STANDARDS_JSON: &str = "standards.json";
 
 /// `standards.json` could not be read as this reader expects.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -42,21 +41,7 @@ impl core::fmt::Display for LimitsPolicyError
 /// non-negative integer.
 pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<Vec<PolicyRow>, LimitsPolicyError>
 {
-    let path = root.join(STANDARDS_JSON);
-    let text = match filesystem.Read_To_String(&path)
-    {
-        Ok(text) => text,
-        Err(FileSystemError::NotFound { .. }) => return Ok(Vec::new()),
-        Err(error) => {
-            return Err(LimitsPolicyError {
-                reason: format!("{STANDARDS_JSON} could not be read: {error}"),
-            });
-        }
-    };
-
-    let value: serde_json::Value = serde_json::from_str(&text).map_err(|error| LimitsPolicyError {
-        reason: format!("{STANDARDS_JSON} is not valid JSON: {error}"),
-    })?;
+    let value = Read_Standards_Document(root, filesystem).map_err(|error| LimitsPolicyError { reason: error.reason })?;
 
     let mut rows = Vec::new();
     Limits_Rows_Into(&value, &Scope::Repository, &mut rows)?;
@@ -115,6 +100,7 @@ fn Canonical_Order(mut rows: Vec<PolicyRow>) -> Vec<PolicyRow>
 mod tests
 {
     use super::*;
+    use nomos_platform::FileSystemError;
     use nomos_platform_std::StdFileSystem;
     use std::path::PathBuf;
 

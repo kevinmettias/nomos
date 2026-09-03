@@ -1,0 +1,6 @@
+pub const nomos_repo_standards_document::STANDARDS_JSON: &str
+pub fn nomos_repo_standards_document::Read_Standards_Document<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<serde_json::Value, StandardsDocumentError>
+pub fn nomos_repo_standards_document::StandardsDocumentError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub impl nomos_repo_standards_document::StandardsDocumentError implements core::fmt::Display
+pub struct field nomos_repo_standards_document::StandardsDocumentError::reason: String
+pub struct nomos_repo_standards_document::StandardsDocumentError

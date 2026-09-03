@@ -75,6 +75,13 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // so a second language's package crate can depend on this one without also
     // depending on Rust's. `OD-PACKAGE-007`.
     ("nomos-package", 24),
+    // The shared standards.json acquisition step OD-RULES-019 decided the five
+    // nomos.cap.*.policy providers below owe one read/parse boundary: STANDARDS_JSON, the
+    // Read_To_String/serde_json::from_str sequence, and one error type each of the five
+    // providers' own errors converts from. Strictly below the five providers that depend
+    // on it and above nomos-platform, the port it reads through. No semantic extraction —
+    // that stays in each provider's own reading.rs, unchanged by this crate's existence.
+    ("nomos-repo-standards-document", 24),
     // Language providers sit above analysis because they produce the facts it stores,
     // and nothing sits above them but a composition root. They reach each other not at
     // all: two languages are two providers of one capability, and the registry is the

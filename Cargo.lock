@@ -373,6 +373,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-cap-goals-policy"
+version = "0.1.0"
+dependencies = [
+ "nomos-capability",
+ "nomos-contracts",
+]
+
+[[package]]
 name = "nomos-cap-limits-policy"
 version = "0.1.0"
 dependencies = [
@@ -435,9 +443,13 @@ dependencies = [
  "nomos-cap-controlflow",
  "nomos-cap-dependency",
  "nomos-cap-dependency-policy",
+ "nomos-cap-goals-policy",
+ "nomos-cap-limits-policy",
  "nomos-cap-lint",
  "nomos-cap-naming-policy",
+ "nomos-cap-scripting-policy",
  "nomos-cap-syntax",
+ "nomos-cap-words-policy",
  "nomos-capability",
  "nomos-contracts",
  "nomos-lang-go",
@@ -450,7 +462,11 @@ dependencies = [
  "nomos-model",
  "nomos-platform",
  "nomos-platform-std",
+ "nomos-repo-goals",
+ "nomos-repo-limits",
+ "nomos-repo-scripting",
  "nomos-repo-standards",
+ "nomos-repo-words",
  "nomos-rules",
  "nomos-workspace",
 ]
@@ -461,9 +477,11 @@ version = "0.1.0"
 dependencies = [
  "nomos-agent-contracts",
  "nomos-agent-executor-claude-code",
+ "nomos-analysis",
  "nomos-capability",
  "nomos-check-orchestration",
  "nomos-contracts",
+ "nomos-corrections",
  "nomos-gate-orchestration",
  "nomos-lang-go",
  "nomos-lang-rust",
@@ -513,6 +531,7 @@ dependencies = [
 name = "nomos-gate-orchestration"
 version = "0.1.0"
 dependencies = [
+ "nomos-analysis",
  "nomos-check-orchestration",
  "nomos-contracts",
  "nomos-model",
@@ -542,6 +561,7 @@ dependencies = [
  "nomos-lang-rust-scan",
  "nomos-model",
  "nomos-platform-std",
+ "nomos-repo-goals",
  "nomos-repo-limits",
  "nomos-repo-scripting",
  "nomos-repo-standards",
@@ -734,6 +754,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-repo-goals"
+version = "0.1.0"
+dependencies = [
+ "nomos-analysis",
+ "nomos-cap-goals-policy",
+ "nomos-capability",
+ "nomos-contracts",
+ "nomos-model",
+ "nomos-platform",
+ "nomos-platform-std",
+ "nomos-repo-standards-document",
+ "serde_json",
+]
+
+[[package]]
 name = "nomos-repo-limits"
 version = "0.1.0"
 dependencies = [
@@ -744,6 +779,7 @@ dependencies = [
  "nomos-model",
  "nomos-platform",
  "nomos-platform-std",
+ "nomos-repo-standards-document",
  "serde_json",
 ]
 
@@ -758,6 +794,7 @@ dependencies = [
  "nomos-model",
  "nomos-platform",
  "nomos-platform-std",
+ "nomos-repo-standards-document",
  "serde_json",
 ]
 
@@ -770,6 +807,16 @@ dependencies = [
  "nomos-capability",
  "nomos-contracts",
  "nomos-model",
+ "nomos-platform",
+ "nomos-platform-std",
+ "nomos-repo-standards-document",
+ "serde_json",
+]
+
+[[package]]
+name = "nomos-repo-standards-document"
+version = "0.1.0"
+dependencies = [
  "nomos-platform",
  "nomos-platform-std",
  "serde_json",
@@ -786,6 +833,7 @@ dependencies = [
  "nomos-model",
  "nomos-platform",
  "nomos-platform-std",
+ "nomos-repo-standards-document",
  "serde_json",
 ]
 
@@ -806,6 +854,7 @@ dependencies = [
  "nomos-cap-controlflow",
  "nomos-cap-dependency",
  "nomos-cap-dependency-policy",
+ "nomos-cap-goals-policy",
  "nomos-cap-limits-policy",
  "nomos-cap-lint",
  "nomos-cap-naming-policy",
@@ -937,6 +986,19 @@ dependencies = [
  "nomos-ledger",
  "nomos-platform",
  "nomos-platform-std",
+]
+
+[[package]]
+name = "nomos-workflow-orchestration"
+version = "0.1.0"
+dependencies = [
+ "nomos-agent-contracts",
+ "nomos-agent-executor-claude-code",
+ "nomos-contracts",
+ "nomos-ledger",
+ "nomos-model-backend-ollama",
+ "nomos-model-package",
+ "nomos-platform",
 ]
 
 [[package]]
