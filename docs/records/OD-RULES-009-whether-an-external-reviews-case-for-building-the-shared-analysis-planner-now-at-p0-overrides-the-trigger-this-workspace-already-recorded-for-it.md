@@ -3,7 +3,7 @@ id: OD-RULES-009
 type: decision
 title: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it
 status: accepted
-version: 5
+version: 6
 authority: canonical-normative-record
 tags:
   - rules
@@ -25,6 +25,8 @@ relations:
   - target: ARC-ROADMAP-001
     type: relates-to
   - target: OD-CAPABILITY-010
+    type: relates-to
+  - target: OD-GATE-020
     type: relates-to
 ---
 
@@ -346,16 +348,91 @@ by one, reconverging, absorbed by mechanism already built. A population multiply
 fivefold while the hand-written surface it is measured against grows by one is not evidence the
 hand-written approach is straining — it is a fifth consecutive data point that it is not.
 
+## Amendment: A Sixth Round, Checked Against A Registry That Stopped Absorbing And A Materialization Step That Stopped Being Free
+
+A sixth round of the same external review cited the measured divergence between `Run`'s
+composed rule count and `nomos-gate-orchestration`'s registry as new evidence, rather than
+repeating the P0 framing unchanged. Rather than re-arguing what five prior rounds already
+settled, this amendment checks that measurement directly, and checks the two triggers still
+unfired at the fifth amendment against the growth since.
+
+**Trigger 1 is not reopened, but this record's own most-cited supporting number was assumed
+stable and was not.** The fifth amendment's closing argument rested in part on "the list `Run`
+and `gate-orchestration`'s `RuleRegistry` maintain has not grown by thirty-one entries; it has
+grown by one" — true at that amendment's checkpoint, where both stood at eight. `OD-GATE-020`,
+decided in the same session as this amendment, measured the same pair at current HEAD: `Run`
+composes fifty-six rules; the registry still offers eight. The two lists this record has cited
+since its first amendment as evidence of "mechanism already built ... absorbing" have, since the
+last check, diverged by forty-eight rather than staying level. This does not reopen trigger 1 —
+that trigger was about `Run` itself gaining a selector, which it has and keeps — but it corrects
+the premise this record's own text used as supporting evidence. `OD-GATE-020` applied
+`OD-GATE-011`'s own legitimate-exception test to the pair directly and found it fails the test's
+first condition (no shared derivation from one named external authority), so `OD-GATE-019`'s two
+prior corrections narrowed a real instance of `OD-GATE-011`'s named defect class without ever
+making it a legitimate exception to it.
+
+**Trigger 3 has its first real, if narrow, instance.** This record's own "efficiency case"
+claim — "no rule in this workspace recomputes a fact another rule already produced" — no longer
+holds without qualification. `run_context.rs::Materialize_Capabilities` (`run_context.rs:
+232-247`) now runs `Materialize_Naming_Policy_Section`, `Materialize_Limits_Policy_Section`,
+`Materialize_Scripting_Policy_Section`, `Materialize_Goals_Policy_Section` and
+`Materialize_Words_Policy_Section` in sequence within one call, each gated on its own rule
+selection per `OD-GATE-017`'s mechanism, and each — verified directly — independently reads and
+parses the identical `standards.json` (`nomos-repo-standards`, `-limits`, `-scripting`, `-goals`
+and `-words`'s own `Discover_Workspace` functions, each with its own `Read_To_String`/
+`serde_json::from_str`). A normal full `nomos check` run, selecting all five families' rules,
+launches five reads and five parses of one file in one invocation. This is not the exact shape
+the trigger's own wording anticipated — five *different* facts rather than one fact recomputed —
+but it is the same underlying inefficiency the shared-fact-DAG argument targets, and it is real,
+measured waste where the fifth amendment found none. `P33-RULES-019-RECORD`, filed independently
+in the same session, already carries this instance as its own decision item; this amendment does
+not re-decide it, and notes only that the trigger's "not yet observed" status from the third and
+fifth amendments no longer holds.
+
+**Trigger 4's population diverged further, not less, and the divergence is now real rather than
+scaffolding.** Ten capability contract crates now exist under `crates/capabilities/`
+(`nomos-cap-controlflow`, `-dependency`, `-dependency-policy`, `-goals-policy`, `-limits-policy`,
+`-lint`, `-naming-policy`, `-scripting-policy`, `-syntax`, `-words-policy`), against five at the
+fifth amendment's checkpoint and the sixth crate (`nomos-cap-naming-policy`) that amendment found
+was "scaffolding one commit ahead of the question this record tracks... no provider and no rule
+reads it yet." All five of the new ones now have a real provider and at least one real, wired
+rule reading them — `Materialize_Capabilities`'s own five new sections above are exactly that
+wiring. None of the five is a second offer against an existing contract; each is `OD-RULES-011`'s
+own family, a structurally distinct `nomos.cap.*.policy` contract in its own crate. This
+continues the pattern every round but the fourth has found; the fourth's own reconverging
+instance (`Check_Cross_Language_Correspondence`) remains the only rule this record has found
+reusing an existing family rather than adding one.
+
+**Trigger 2 remains exactly as unfired as every prior round found it.** `run_context.rs`'s only
+participation gate is still `Is_Rule_Selected` against `selected: &[RuleId]` (`run_context.rs:
+667`); `Check_Declared_Role_Matches_Surface`, the rule the first amendment already found additive
+and unwired, still has zero references in `run_context.rs` — unchanged since that amendment, now
+three rounds later.
+
+**Neither new finding argues for building the `RunPlanner` this record has declined five times,
+and the workspace's own response to each new instance continues to be the narrow one this record
+has documented from its first amendment on.** Both new pieces of evidence — the registry
+divergence and the repo-policy read duplication — already have their own filed decision items
+(`OD-GATE-020`, accepted; `P33-RULES-019-RECORD`, ready) rather than a generalized mechanism
+proposed to cover both at once. That is itself data bearing on the review's own repeated
+argument: six rounds in, every real problem this workspace has found under the review's general
+banner has been real, and every one has been fixed, or is being decided, narrowly, by an item
+scoped to the actual instance, not by the abstraction the review keeps proposing ahead of one. A
+planner remains undeclined-against in principle; it remains, six rounds in, still short of a
+trigger that asks for it specifically rather than for a narrower fix at the site where growth
+actually happened.
+
 ## Status
 
-Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`, not by
-building the `RunPlanner` this record declines. The fourth trigger has now also fired, for the
-first time, via `Check_Cross_Language_Correspondence` — and its own stated reasoning, checked
-against that real instance, argues against the planner rather than for it. The second and third
-triggers remain unfired through a fifth round, this one checked against the largest rule-count
-burst this record has yet measured, whose growth landed almost entirely in a bucket — unwired,
-zero-cost rule functions — the review's own scaling argument has no room for. Revisit if a
-materialization step is measured wasting real work, participation varies by a second axis, an
-unwired rule is wired into `Run` in a way that fires trigger 2 or reconverges/diverges under
-trigger 4, or a *diverging* rule population resumes growing the hand-written list past a point
-future evidence shows it stops absorbing cleanly.
+Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`; the fourth
+fired once, via `Check_Cross_Language_Correspondence`, arguing against the planner on its own
+terms. The third trigger has now fired for the first time, narrowly, via the repo-policy family's
+duplicated `standards.json` reads — tracked as `P33-RULES-019-RECORD`, not decided here. The
+second remains unfired through six rounds. The registry-versus-`Run` divergence `OD-GATE-020`
+measured corrects this record's own fifth-amendment premise that the two lists were growing
+together, without reopening trigger 1, and is itself now decided narrowly rather than by the
+general mechanism this record continues to decline. Revisit if `P33-RULES-019-RECORD` or a
+correction closing `OD-GATE-020`'s gap is itself found to need a second, independently-maintained
+representation rather than the shared-derivation or sentinel shapes each has already named, or if
+participation varies by a second axis, or if a *diverging* rule population resumes growing the
+hand-written surface past a point future evidence shows it stops absorbing cleanly.
