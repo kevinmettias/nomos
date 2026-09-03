@@ -49299,6 +49299,81 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P33-RULES-009-SIXTH-ROUND-RECHECK",
+      "title": "OD-RULES-009 sixth named-trigger check: rule population and Run's wired subset both grew substantially since the fifth round's checkpoint",
+      "why": "A pasted external review repeated the same P0 case for a generalized RunPlanner OD-RULES-009 has already declined five times, citing nomos-check-orchestration's hand-written composition.rs and run_context.rs materialization map as the biggest architectural problem -- the identical argument this record tracks. Verified directly against current HEAD (d9aeebcf): nomos-rules now holds 75 Check_* functions (grep -c against crates/rules/nomos-rules/src/), up from 39 at the fifth round's checkpoint (521cd4fa); run_context.rs's RULE_COUNT, the wired subset Run actually calls, is 56, up from 8 at that same checkpoint. The wired fraction rose from about a fifth to about three quarters -- real growth on both axes the fifth amendment measured, unchecked against the four named triggers since. This is not evidence the planner is now due; it is evidence the record's own re-check discipline (used for rounds two through five) has not yet been applied to this much larger population, and should be before the review's repeated P0 framing is either accepted or declined a sixth time on stale evidence.",
+      "done_when": "OD-RULES-009 amended with a sixth round: the two still-unfired named triggers (participation varying by a second axis beyond OD-GATE-017's; a materialization step measured wasting real work) and the reconverging/diverging capability-family count re-examined against real code at current HEAD, given nomos-rules grew from 39 to 75 Check_* functions and Run's wired subset grew from 8 to 56, stating plainly whether this growth fires any trigger or continues to disconfirm building the planner now.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P33-RULES-019-RECORD",
+      "title": "OD-RULES-019: whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider",
+      "why": "A pasted external review names nomos-repo-standards/-limits/-scripting/-words/-goals as over-fragmentation: five provider crates each re-reading and re-parsing the same file. Verified directly against current HEAD (d9aeebcf): each of the five crates' src/reading.rs independently declares its own const STANDARDS_JSON, its own Discover_Workspace, its own filesystem.Read_To_String(root.join(STANDARDS_JSON)) followed by its own serde_json::from_str, and its own error type -- real, duplicated I/O and parsing, not a shared parse anywhere. OD-RULES-011 decided a rule's parameters are a repository-declared fact resolved through a capability contract, and established one-capability-one-provider-crate as the shape for the first family (naming); every later family (limits, scripting, words, goals) followed that same crate-per-capability precedent without OD-RULES-011 or any later record ever weighing whether the file-reading itself should be shared. This is a genuinely open question, not one already governed: OD-PACKAGE-006 and OD-HOST-004 cover hand-written registration and provider composition, not duplicated file I/O across otherwise-independent provider crates.",
+      "done_when": "OD-RULES-019 exists, is registered, and decides whether the five repo-policy provider crates should read and parse standards.json through one shared reader (e.g. a nomos-repo-standards-json crate each depends on) while keeping their five capability contracts and five provider registrations distinct, or whether five independent reads is the accepted, bounded cost of keeping each capability provider crate self-sufficient -- checked against the real duplication measured (five copies of Discover_Workspace/Read_To_String/serde_json::from_str), not decided in the abstract. Does not itself build a shared reader; that is a later item's territory if the decision calls for one.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-RULES-019.record",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
