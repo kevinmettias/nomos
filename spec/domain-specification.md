@@ -169,6 +169,7 @@ profile: domain-specification
 | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md@authored | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md | authored | 20 | 6 | sha256:04c3221540c1dfff84ceb66e9b1cd588331b0e7df89080dc0d714bc2df75102b |
 | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md@authored | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md | authored | 21 | 6 | sha256:ecd850bb6c29efe9ac6e25ef920c7e6492a59d5e6fe177709d05c01a8bbef25f |
 | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md@authored | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md | authored | 16 | 6 | sha256:be774faf1f653161ca537fca09f49287c8b993c75d9f1cc9385f73849c3136ae |
+| docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md@authored | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md | authored | 16 | 6 | sha256:2021593cf5f8734035d023e39e1f1fc3fabf8ee21b2ddd4dd7322195e9ff483f |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1506,6 +1507,12 @@ profile: domain-specification
 | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#9 | authored | 2 | The Decision |
 | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#12 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#15 | authored | 2 | Status |
+| docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#1 | authored | 1 | Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider |
+| docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#10 | authored | 2 | Decision |
+| docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#13 | authored | 2 | What This Record Does Not Decide |
+| docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#15 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -44579,6 +44586,165 @@ ones to reach for.
 
 Accepted. All five sites are renamed, `cargo test -p nomos-lang-rust -p nomos-spec-store
 -p nomos-rules` is green, and the workspace self-check reports zero blocking findings.
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#1
+
+*revision: authored · kind: heading · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider · hash: sha256:e16005b5589df10a30e18c04361213fce7640c6b94056b084ec2c3aece941e37*
+
+# Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#2
+
+*revision: authored · kind: heading · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#3
+
+*revision: authored · kind: prose · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / Question · hash: sha256:b095446eca0134a06f8f3af67eb66f8362e9990ce82c8891379ab50fbec6b128*
+
+`OD-RULES-011` decided a rule's configurable parameters are read as a capability fact through
+a provider crate under `crates/repository/`, parallel to `crates/languages/` —
+`nomos-repo-standards`, its first instance, providing `nomos.cap.naming.policy`. Four more
+families followed the identical crate-per-capability shape, deferred by that same record's own
+"What This Does Not Do" section to their own future instances: `nomos-repo-limits`,
+`nomos-repo-scripting`, `nomos-repo-words`, `nomos-repo-goals`, one per `nomos.cap.*.policy`
+contract. Nowhere in `OD-RULES-011` or any later record was a separate question asked: should
+the five share how they read and parse `standards.json`, or does each read independently.
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#4
+
+*revision: authored · kind: prose · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / Question · hash: sha256:09aaeef67a1c2ec70ad8b703cffb8086a22e69dd3a6071e290568fa371af68a2*
+
+Measured directly against this workspace: each crate's `src/reading.rs` declares its own
+`const STANDARDS_JSON: &str = "standards.json"`, its own `Discover_Workspace` function, its own
+`filesystem.Read_To_String(root.join(STANDARDS_JSON))` followed by its own
+`serde_json::from_str`, and its own error type — `NamingPolicyError`, `LimitsPolicyError`,
+`ScriptingPolicyError`, `WordsPolicyError`, `GoalsPolicyError` — each a byte-for-byte identical
+`{ reason: String }` struct with an identical `Display` impl, renamed per crate.
+`run_context.rs::Materialize_Capabilities` runs all five crates' materialization sections in
+sequence within one `Run` call whenever their rules are selected together, so a normal full
+`nomos check` invocation launches five reads and five parses of the same 9,032-byte file.
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#5
+
+*revision: authored · kind: prose · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / Question · hash: sha256:1fe755eb97e9d6641432b706304f76cb79125779f5185872e7943fb348d3d881*
+
+The open question is whether that duplication is worth closing with a shared read/parse
+boundary beneath the five capability contracts, or whether it is the accepted, bounded cost of
+keeping each provider crate self-sufficient.
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#6
+
+*revision: authored · kind: heading · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#7
+
+*revision: authored · kind: prose · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / What Was Measured · hash: sha256:67414b497282a12f20675d1de2a421c6970de7ac1654f5a8a609b594d27cd285*
+
+**The duplication is real, current, and already at a five-instance population — not a
+hypothetical this record would be deciding ahead of need.** `OD-RULES-011`'s crate-per-capability
+shape was chosen once, for one instance, and repeated four more times by precedent rather than by
+a decision that weighed sharing the read side. `OD-PACKAGE-006` and `OD-RULES-005`/`OD-RULES-006`
+— the closest precedent for "does a repeated shape warrant extraction" — each declined to extract
+until a second or third real instance existed to check the design against; this workspace already
+holds five, past any threshold those records applied favorably elsewhere.
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#8
+
+*revision: authored · kind: prose · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / What Was Measured · hash: sha256:455e22525fa143f0d8c49d9ce2185ee95ed76b918dda26e0d3c424e67670285b*
+
+**What is duplicated is mechanism, not the five capabilities' own authority.** This is not
+`OD-GATE-011`'s named defect class in the strict sense that record defines it: the five providers
+are not "independently readable as the authoritative answer to the same question" —
+`nomos.cap.naming.policy` and `nomos.cap.limits.policy` answer different questions, and neither
+could silently drift against the other the way two encodings of one decision can. What is shared
+is the physical acquisition step beneath all five: the same file, at the same path, read through
+the same filesystem port, parsed with the same library, into an error shape reinvented
+identically five times. Collapsing that boundary does not touch the five capabilities' own
+semantic independence, and this record does not invoke `OD-GATE-011` as its authority for that
+reason — the case here is duplicated mechanism at real, measured, multi-instance scale, argued on
+its own evidence.
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#9
+
+*revision: authored · kind: prose · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / What Was Measured · hash: sha256:4c2e34ff8e53d4400fffe9ecb955e60cf934afca078acfdf9a2a916c8769e05f*
+
+**`OD-RULES-009`'s sixth amendment already leaned on this measurement as a real, if narrow,
+instance of a materialization step wasting real work** — the first such instance that record has
+found in six rounds, tracked there and not re-decided here. Declining to close this gap after
+citing it as real evidence would leave that finding without a resolution.
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#10
+
+*revision: authored · kind: heading · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#11
+
+*revision: authored · kind: prose · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / Decision · hash: sha256:75661fb55fd7bccf6b68c525149d2abe1d95e0fdd05713a81b5c3ae69ad35aa8*
+
+**A shared read/parse boundary is warranted, beneath the five capability contracts and
+providers, which stay exactly as separate as `OD-RULES-011` built them.** A new crate under
+`crates/repository/` — `nomos-repo-standards-document` is this record's working name, chosen to
+read distinctly from `nomos-repo-standards` (the naming-policy provider, whose own name already
+collides with what a reader would expect "the standards document" itself to mean, a landmine
+`OD-RULES-011` left unaddressed and this record does not reach) — owns `const STANDARDS_JSON`,
+the `Read_To_String`/`serde_json::from_str` sequence, and one shared error type each of the five
+providers' own errors can wrap or convert from rather than re-declare. It hands back a parsed
+`serde_json::Value` (or an equivalently thin wrapper), not a typed naming/limits/scripting/
+words/goals payload — semantic extraction of the `naming`, `limits`, `scripting`, `words` and
+`goals` blocks stays exactly where `OD-RULES-011` put it, in each provider's own `reading.rs`.
+The five providers each gain one new dependency and lose their own copy of the acquisition step;
+their five capability contracts, five `nomos.cap.*.policy` ids, and five provider registrations
+are unchanged.
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#12
+
+*revision: authored · kind: prose · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / Decision · hash: sha256:36c6876fbd96004e3a03adb50d85265e713e8b9abb0c30c5700f3ec7b90cc5f8*
+
+This follows the same discipline `OD-PACKAGE-006`'s resolution already applied to
+`KNOWN_PROVIDERS`: share the mechanism once a real population justifies it, without collapsing
+the semantics the population exists to keep separate.
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#13
+
+*revision: authored · kind: heading · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#14
+
+*revision: authored · kind: prose · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / What This Record Does Not Decide · hash: sha256:2c657f23a4b0e924bfac1b3a4cbd6ffd88c09a9e4bf7d3d97b6bd9ecb2dc3adf*
+
+It does not build `nomos-repo-standards-document` or migrate the five providers onto it; that is
+a later item's own territory, sized by how much of the migration a single item can honestly
+close. It does not decide the new crate's exact public shape beyond "a parsed document and one
+error type, no semantic extraction" — the working name and API sketch above are this record's own
+proposal, not a binding interface a later item cannot refine. It does not touch
+`nomos-repo-standards`'s own name, despite naming the collision risk; renaming a shipped,
+registered provider crate is a correction with its own territory and its own cost, not a
+consequence of this decision. It does not decide whether a future sixth repo-policy family should
+depend on the new crate from its first commit or retrofit later — `OD-RULES-011`'s own "the rest
+is deferred" precedent for future families applies unchanged.
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#15
+
+*revision: authored · kind: heading · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#16
+
+*revision: authored · kind: prose · heading: Whether the five repo-policy providers owe standards.json one shared read, or independent parsing stays the accepted cost of one-capability-one-provider / Status · hash: sha256:92e54c5372dd330db6893e106d30f5f2d6d51587b2ef33f14cad970de4c0db02*
+
+Accepted. The five repo-policy providers stay five capability contracts and five providers; the
+file-acquisition mechanism beneath them is decided to warrant one shared crate, not built here.
+Revisit if the migration, once attempted, finds the five providers' semantic extraction more
+entangled with the raw read than this record's measurement assumed.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

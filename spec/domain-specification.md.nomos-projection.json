@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:f67e9d53eb744408eea5083cc333e46d1c4ca7820341440bbd63d235c380d54f",
-  "inputs_digest": "sha256:c54b960332bee4e674043ed688888791eee0cbc5fd3d922ea8fab0448b9abd3e",
+  "content_digest": "sha256:fa75999e3812675584e230ad37ccd7b066779d4794ffe17137c24af62961ac09",
+  "inputs_digest": "sha256:210ace19439247ecdfe8656be9e4050fb3d3597072a33529ef750ca62aa057a8",
   "sections": [
     [
       "Documents",
-      186
+      187
     ],
     [
       "Sections",
-      1547
+      1553
     ],
     [
       "Source blocks",
-      5408
+      5424
     ]
   ],
   "inputs": [
@@ -814,6 +814,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md@authored",
       "hash": "sha256:be774faf1f653161ca537fca09f49287c8b993c75d9f1cc9385f73849c3136ae"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md@authored",
+      "hash": "sha256:2021593cf5f8734035d023e39e1f1fc3fabf8ee21b2ddd4dd7322195e9ff483f"
     },
     {
       "content": "documents",
@@ -7474,6 +7479,36 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#15",
       "hash": "sha256:bb5ba10f86682d945e3adfd906f00c995c989c7b84684dc8903416076fc7e198"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#1",
+      "hash": "sha256:e9714f529fa472a0659a5e200e6e76a4846b374e6dce19f75b2950d0d663e269"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#2",
+      "hash": "sha256:0c9cbd6fe59da7975cc4ff96cf25b1ad8225eefec0bc0b5dedac00c5bdc50f1d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#6",
+      "hash": "sha256:3db6818d24ae88222262dd2a7f538c79c9fb16394c30d174b43cb095123d6c57"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#10",
+      "hash": "sha256:3ca671c9e8a33f5fca4beb833c6f7d77f3f547f6571f22aedee72b8b060c1561"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#13",
+      "hash": "sha256:3704fc8c5578889cceff0ab642e2eaaf1353311540fabd3bda8efad8e1f37bd9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#15",
+      "hash": "sha256:eba929b6e6bacad9bf424b38174d2bbbc66a44bad0368d3a492b8c55fa935529"
     },
     {
       "content": "headings",
@@ -31759,6 +31794,86 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md#16",
       "hash": "sha256:74cb1e186701dd055f04980bb2a998b405cc29d5fd0af237834d36e6d57c73c8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#1",
+      "hash": "sha256:e16005b5589df10a30e18c04361213fce7640c6b94056b084ec2c3aece941e37"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#3",
+      "hash": "sha256:b095446eca0134a06f8f3af67eb66f8362e9990ce82c8891379ab50fbec6b128"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#4",
+      "hash": "sha256:09aaeef67a1c2ec70ad8b703cffb8086a22e69dd3a6071e290568fa371af68a2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#5",
+      "hash": "sha256:1fe755eb97e9d6641432b706304f76cb79125779f5185872e7943fb348d3d881"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#7",
+      "hash": "sha256:67414b497282a12f20675d1de2a421c6970de7ac1654f5a8a609b594d27cd285"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#8",
+      "hash": "sha256:455e22525fa143f0d8c49d9ce2185ee95ed76b918dda26e0d3c424e67670285b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#9",
+      "hash": "sha256:4c2e34ff8e53d4400fffe9ecb955e60cf934afca078acfdf9a2a916c8769e05f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#10",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#11",
+      "hash": "sha256:75661fb55fd7bccf6b68c525149d2abe1d95e0fdd05713a81b5c3ae69ad35aa8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#12",
+      "hash": "sha256:36c6876fbd96004e3a03adb50d85265e713e8b9abb0c30c5700f3ec7b90cc5f8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#13",
+      "hash": "sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#14",
+      "hash": "sha256:2c657f23a4b0e924bfac1b3a4cbd6ffd88c09a9e4bf7d3d97b6bd9ecb2dc3adf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#15",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#16",
+      "hash": "sha256:92e54c5372dd330db6893e106d30f5f2d6d51587b2ef33f14cad970de4c0db02"
     },
     {
       "content": "blocks",
