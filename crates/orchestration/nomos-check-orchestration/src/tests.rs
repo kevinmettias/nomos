@@ -511,15 +511,17 @@ fn Findings_Over(ingested: &[SourceFile], judged: &[SourceFile]) -> Vec<Finding>
 /// leaves another alone, checked against an independent third call that recomputes the
 /// post-edit tree from nothing.
 ///
-/// This does not prove `Run` skips recomputing anything for the untouched file --
-/// `Materialize_Syntax` still re-derives every source's fact on every call regardless of
-/// whether `store` already holds a live one, so `IncrementalResult` here costs the same work
-/// `CleanRecomputation` does. What it proves is the precondition that gap's fix would need:
-/// carrying a workspace and a store across a real edit is *safe* -- reusing them agrees with
-/// throwing them away and starting over, on both the claim and the findings, and the
-/// generation the reused workspace reports genuinely advances rather than repeating itself.
-/// A caller could not have relied on either fact before this increment, because no caller
-/// had ever reused either object.
+/// `P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS` closed the gap this doc used to name here:
+/// `Materialize_Syntax` no longer re-derives a fact for a subject whose own bytes did not
+/// move since the reused `store` last saw it. What this test still proves is the
+/// precondition that fix needed: carrying a workspace and a store across a real edit is
+/// *safe* -- reusing them agrees with throwing them away and starting over, on both the
+/// claim and the findings, and the generation the reused workspace reports genuinely
+/// advances rather than repeating itself. A caller could not have relied on either fact
+/// before this increment, because no caller had ever reused either object.
+/// [`Test_A_Store_And_Workspace_Reused_With_No_Change_Between_Two_Calls_Should_Still_Be_Judged`],
+/// below, is the test that exercises the skip itself, over the zero-change case this one
+/// does not reach.
 #[test]
 fn Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomputation()
 {
@@ -598,6 +600,70 @@ fn Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomput
         incremental_findings, clean_findings,
         "a workspace and store reused across an edit must report the same findings a clean recomputation reports"
     );
+}
+
+/// `P40-INCREMENTAL-SKIP-COVERAGE-REGRESSION`: a second `Run` over a reused workspace and
+/// store, with *no* content change at all between the two calls, must still report
+/// `CheckOutcome::Judged` with `examined.facts` equal to the file count -- not
+/// `CheckOutcome::NoFacts`, which is what `Materialize_Syntax`'s own return value briefly
+/// meant "newly written" rather than "current" would have produced here, since skipping
+/// every source as already-current would have made that count zero. This is the exact
+/// usage `P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS`'s own done_when asked a caller to be
+/// free to adopt, so it is the one case that regression's own fix owes a real test.
+#[test]
+fn Test_A_Store_And_Workspace_Reused_With_No_Change_Between_Two_Calls_Should_Still_Be_Judged()
+{
+    let sources = [Source("a.rs", "pub fn Ok() {}\n"), Source("b.rs", "pub fn Also_Ok() {}\n")];
+    let selected = [RuleId::New(nomos_rules::NAMING_CONVENTION)];
+
+    let mut workspace = None;
+    let mut store = MemoryFactStore::New();
+    let first = Run(
+        &sources,
+        RunContext {
+            variant: Test_Variant(),
+            root: &Repository_Root(),
+            launcher: &StdProcessLauncher,
+            filesystem: &StdFileSystem,
+            workspace: &mut workspace,
+            store: &mut store,
+        },
+        &selected,
+    );
+    let CheckOutcome::Judged { examined: first_examined, .. } = first
+    else
+    {
+        panic!("the first call over a readable tree must be judged");
+    };
+    assert_eq!(first_examined.facts, sources.len(), "a fresh store must report a current fact for every real source");
+
+    let second = Run(
+        &sources,
+        RunContext {
+            variant: Test_Variant(),
+            root: &Repository_Root(),
+            launcher: &StdProcessLauncher,
+            filesystem: &StdFileSystem,
+            workspace: &mut workspace,
+            store: &mut store,
+        },
+        &selected,
+    );
+
+    let CheckOutcome::Judged { examined: second_examined, findings: second_findings, .. } = second
+    else
+    {
+        panic!(
+            "a second call with no content change at all must still be judged, not NoFacts: \
+             skipping an already-current subject must not read as failing to find one"
+        );
+    };
+    assert_eq!(
+        second_examined.facts,
+        sources.len(),
+        "every source still has a current fact after the second call, none of them newly written"
+    );
+    assert!(second_findings.is_empty(), "{second_findings:?}");
 }
 
 /// `RunContext`'s own `filesystem` reaching a real repository-declared policy fact, not just

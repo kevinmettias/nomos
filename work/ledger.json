@@ -50772,7 +50772,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory (nomos-analysis's invalidation.rs/propagation.rs) does not cover what done_when's rule-reassessment half actually needs: 'reassesses only the rules that read them' requires a skip mechanism in nomos-check-orchestration's Composed_Rules dispatch (run_context.rs), a file this item never reserved. The facts half is effectively already delivered by P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS (8db1ae46): today's fact graph is entirely leaf/flat (every store.Materialize call passes dependencies: &[]), so 'facts reachable from a changed subject' already collapses to 'that subject's own fact' with nothing to propagate through. Re-authoring narrower, achievable scope with correct territory covering the real dispatch file."
+        }
+      },
       "depends_on": [
         "P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS"
       ],
@@ -50792,7 +50796,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788637923
+      }
     },
     {
       "id": "P40-GATE-POLICY-AUTHORING",
@@ -55352,6 +55359,59 @@
           "exit_code": 0
         },
         "revision": "86f7ec740754a79bd11ce8e0fc20145dbdb36bb7"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-INCREMENTAL-SKIP-COVERAGE-REGRESSION",
+      "title": "Materialize_Syntax's own skip made a fully-unchanged reused run report NoFacts",
+      "why": "P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS (8db1ae46) changed Materialize_Syntax's return value from a coverage count (how many sources now have a materialized fact, whether newly written or already current) to a newly-written count, so that skipped subjects would not inflate it. Nothing downstream of that return value was updated to match: run_context.rs's own Materialized_Syntax_Facts still treats a zero return as CheckOutcome::NoFacts (the vacuity gate), and Outcome_Of still files it into Examined.facts, a coverage statistic Claim_Of reads to judge completeness. A second Run over a store and workspace reused across two calls with zero content changes -- the exact usage pattern that item's own done_when asked callers to be free to adopt -- would today report NoFacts and an Incomplete claim over a tree every file of which has a perfectly good, current fact. No real caller has hit this yet: every current caller either passes a fresh store per call or always has at least one real edit between reused calls. It is latent, not yet observed wrong, and it is a landmine directly in the path of any future demand-driven recompute work.,",
+      "done_when": "Materialize_Syntax's return value again means what Examined.facts and the NoFacts vacuity gate need it to mean -- the count of sources with a current materialized fact, whether skipped or newly written -- and the newly-written count P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS's own test needs is read from MemoryFactStore::Materializations()'s own delta instead. A test proves a Run reused across two calls with zero content changes between them still reports CheckOutcome::Judged with Examined.facts equal to the file count, not NoFacts.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/facts/dependency_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "erialize_Dependencies_Should_Return_Real_Workspace_Members ... ok\ntest tests::Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact ... ok\ntest tests::Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete ... ok\ntest tests::Test_Materialize_Lint_Should_Return_Real_Workspace_Members ... ok\ntest tests::Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor ... ok\n\ntest result: ok. 56 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.33s\n\n\nrunning 6 tests\ntest Test_Registered_Should_Declare_Every_Capability_Crates_Own_Real_Contract ... ok\ntest Test_Registered_Should_Offer_Every_Dependency_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_Every_Syntax_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Clippy_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Deny_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Reachability_Providers_Own_Real_Offer ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List ... ok\ntest Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule ... ok\ntest Test_Run_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.55s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-b490f8ea84770ab5.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-64ecfdd75ebc30bd.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-c9e29199ba5db01b.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1788638234,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8db1ae46324b024d7f3522cef39e83134e49901b"
       },
       "abandoned": [],
       "displaced": [],

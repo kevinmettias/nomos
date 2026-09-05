@@ -19,9 +19,17 @@ use nomos_rules::SourceFile;
 
 use std::path::Path;
 
-/// Produces one syntax fact per source and returns how many were newly written -- not how
-/// many sources this run found a fact for, which [`Already_Current`] can now answer
-/// without materializing anything new.
+/// Produces one syntax fact per source and returns how many sources now have a current
+/// one -- whether this call wrote it or [`Already_Current`] found the store already held
+/// it. `crate::run_context::Materialized_Syntax_Facts`'s own vacuity gate and
+/// `Examined::facts`'s own coverage statistic both read this as "how many of `sources`
+/// this run can judge," and neither means "how much work this call actually did" --
+/// [`nomos_analysis::MemoryFactStore::Materializations`]'s own delta across two calls is
+/// the honest answer to that question, and what `P40-INCREMENTAL-SKIP-UNCHANGED-
+/// SUBJECTS`'s own test now reads instead (`P40-INCREMENTAL-SKIP-COVERAGE-REGRESSION`
+/// fixed this return value back to the coverage meaning every real caller already
+/// depended on, after briefly repurposing it to mean the newly-written count with nothing
+/// downstream updated to match).
 ///
 /// A file neither provider recognizes, or one its own recognized provider refuses to
 /// parse, materializes nothing and is not dropped silently: the count returned is the
@@ -43,17 +51,18 @@ use std::path::Path;
 /// under it. A caller that reuses the same `store` (and therefore the same, monotonically
 /// advancing generation `crate::facts::Ingested_Workspace` reads off a reused `Workspace`)
 /// across two calls pays for a real parse only for a subject whose own bytes moved since
-/// the store last saw it.
+/// the store last saw it -- but still counts that subject as covered either way.
 pub fn Materialize_Syntax(sources: &[SourceFile], context: &Context, store: &mut MemoryFactStore) -> usize
 {
     let rust_production = Rust_Production(context);
     let go_production = Go_Production(context);
-    let mut written = 0_usize;
+    let mut current = 0_usize;
 
     for source in sources
     {
         if Already_Current(source, context, store)
         {
+            current = current.saturating_add(1);
             continue;
         }
 
@@ -67,11 +76,11 @@ pub fn Materialize_Syntax(sources: &[SourceFile], context: &Context, store: &mut
         // from nothing this store holds.
         if store.Materialize(*fact, &[]).is_ok()
         {
-            written = written.saturating_add(1);
+            current = current.saturating_add(1);
         }
     }
 
-    return written;
+    return current;
 }
 
 /// Whether `store` already holds a live `nomos.cap.syntax.items` fact for `source` at
@@ -576,16 +585,19 @@ mod tests
 
         let first_sources = [unchanged.clone(), changed_before];
         let first_context = Reused_Fixture_Context(&first_sources, &mut workspace);
-        let first_written = Materialize_Syntax(&first_sources, &first_context, &mut store);
-        assert_eq!(first_written, 2, "a fresh store must materialize both real sources");
+        let first_current = Materialize_Syntax(&first_sources, &first_context, &mut store);
+        assert_eq!(first_current, 2, "a fresh store must report a current fact for both real sources");
+        let materializations_after_first = store.Materializations();
 
         let second_sources = [unchanged, changed_after];
         let second_context = Reused_Fixture_Context(&second_sources, &mut workspace);
-        let second_written = Materialize_Syntax(&second_sources, &second_context, &mut store);
+        let second_current = Materialize_Syntax(&second_sources, &second_context, &mut store);
+        let materializations_after_second = store.Materializations();
 
+        assert_eq!(second_current, 2, "both sources still have a current fact after the second call, one of them reused rather than rewritten");
         assert_eq!(
-            second_written, 1,
-            "the unchanged subject must be skipped and the changed one must still be materialized, on the same reused store and workspace"
+            materializations_after_second, materializations_after_first.saturating_add(1),
+            "only the changed subject's fact should be newly written to the store; the unchanged one must be skipped"
         );
     }
 
