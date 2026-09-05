@@ -179,14 +179,17 @@ fn First_Party_Relative_Root_Of(value: &serde_json::Value, root: &Path) -> Optio
 /// slashes — the same convention `nomos_lang_rust_cargo::metadata::Manifest_Relative_Root`
 /// derives from `cargo metadata`'s own `manifest_path`, derived here instead from `cargo
 /// clippy`'s `package_id`, since this crate may not depend on that one to reuse its
-/// reader. `None` for a registry dependency (`package_id` prefixed `registry+`, never
-/// `path+file://`) or a package outside `root`.
+/// reader. `None` only for a registry dependency (`package_id` prefixed `registry+`, never
+/// `path+file://`); a path package `root` cannot relativize against (`root` given relative
+/// while `package_id` is always absolute, the CLI's own default) falls back to the absolute
+/// path rather than being read as external, the same `unwrap_or` `Manifest_Relative_Root`
+/// already uses on the identical mismatch.
 fn First_Party_Relative_Root(package_id: &str, root: &Path) -> Option<String>
 {
     let after_scheme = package_id.strip_prefix("path+file://")?;
     let (raw_path, _version) = after_scheme.rsplit_once('#')?;
     let absolute = PathBuf::from(Windows_Drive_Path(raw_path));
-    let relative = absolute.strip_prefix(root).ok()?;
+    let relative = absolute.strip_prefix(root).unwrap_or(&absolute);
 
     return Some(relative.to_string_lossy().replace('\\', "/"));
 }
@@ -353,5 +356,23 @@ mod local_tests
         let error = Discover_Workspace(root, &launcher).expect_err("an empty stream names no first-party package");
 
         assert!(error.reason.contains("no first-party workspace member"), "{}", error.reason);
+    }
+
+    #[test]
+    fn Test_Discover_Workspace_Should_Not_Refuse_Under_A_Relative_Root()
+    {
+        let root = Path::new(".");
+        let stdout = serde_json::json!({
+            "reason": "compiler-artifact",
+            "package_id": "path+file:///F:/repos/nomos/crates/contracts/nomos-contracts#0.1.0",
+            "target": { "kind": ["lib"] }
+        })
+        .to_string();
+        let launcher = FakeLauncher { stdout };
+
+        let discovered = Discover_Workspace(root, &launcher)
+            .expect("a relative root -- nomos check's own CLI default -- must still find the first-party package the stream named");
+
+        assert_eq!(discovered.len(), 1);
     }
 }

@@ -49963,6 +49963,61 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P36-CLIPPY-RELATIVE-ROOT-DROPS-EVERY-MEMBER",
+      "title": "nomos-lang-rust-clippy's first-party filter drops every package under a relative root",
+      "why": "nomos check's default --root is a bare relative dot (crates/host/nomos-cli/src/check/parsing.rs). First_Party_Relative_Root strip_prefix(root).ok()? treats a package_id it cannot relativize as a registry dependency and drops it, so under the CLI's own default every real workspace member is silently excluded and Require_Nonempty then refuses the whole capability -- verified live: nomos check --root . reports lint-diagnostics could not be materialized, nomos check --root $(pwd) (absolute) reports real diagnostics. nomos_lang_rust_cargo's own Manifest_Relative_Root (metadata_error.rs:254) already falls back to the absolute path instead of dropping the package on the identical mismatch; clippy_error.rs is the one asymmetric case.",
+      "done_when": "First_Party_Relative_Root falls back to the absolute (unrelativized) path when it is not under root, mirroring Manifest_Relative_Root's unwrap_or, so a relative or mismatched root no longer causes Require_Nonempty to refuse every first-party package; a regression test in src/tests.rs proves a package_id that does not relativize against root still resolves rather than being read as a registry dependency.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-clippy/src/clippy_error.rs",
+          "crates/languages/nomos-lang-rust-clippy/src/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-rust-clippy"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-rust-clippy"
+        ],
+        "exit_code": 0,
+        "output_tail": "Target_Compiles_Should_Collapse_To_One ... ok\ntest reading::tests::Test_Package_Name_Reads_The_Last_Path_Segment ... ok\ntest reading::tests::Test_A_Message_With_No_Lint_Code_Should_Still_Parse ... ok\ntest provider::tests::Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Workspace_Member ... ok\n\ntest result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.67s\n\n\nrunning 3 tests\ntest Test_The_Ceiling_Should_Satisfy_The_Declared_Guarantee ... ok\ntest Test_An_Offer_Claiming_More_Than_The_Ceiling_Should_Be_Refused ... ok\ntest Test_This_Crates_Offer_Should_Be_Accepted_By_Nomos_Cap_Lints_Own_Registry ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_A_Non_Zero_Exit_Should_Refuse_Rather_Than_Report_A_Clean_Result ... ok\ntest Test_Materialize_Workspace_Should_Produce_A_Fact_Nomos_Analysis_And_Nomos_Model_Both_Recognize ... ok\ntest Test_The_Facts_Key_Should_Depend_On_The_Build_Variant_But_Not_On_The_Generation ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 1 test\ntest Test_Materialize_Workspace_Should_Run_A_Real_Clippy_Pass_Through_The_Real_Std_Process_Launcher ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_clippy-a02c7f5532147368.exe)\n     Running tests\\capability_seam.rs (target\\debug\\deps\\capability_seam-118eae8748dbef6d.exe)\n     Running tests\\materialize_workspace_seam.rs (target\\debug\\deps\\materialize_workspace_seam-1544cf997244cb10.exe)\n     Running tests\\platform_std_seam.rs (target\\debug\\deps\\platform_std_seam-3f0052eea271ea0a.exe)\n   Doc-tests nomos_lang_rust_clippy\n",
+        "verified_at": 1788581667,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "9feeacdb5097b76333663a516bd928dcbdb89811"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

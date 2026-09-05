@@ -65,6 +65,19 @@ fn Posix_First_Party_Package_Id_Cases() -> Vec<(&'static str, &'static str, &'st
 }
 
 #[test]
+fn Test_A_First_Party_Package_Id_Should_Resolve_Even_When_Root_Does_Not_Relativize_It()
+{
+    let root = Path::new(".");
+    let id = "path+file:///F:/repos/nomos/crates/substrate/nomos-ledger#0.1.0";
+
+    assert_eq!(
+        First_Party_Relative_Root(id, root),
+        Some("F:/repos/nomos/crates/substrate/nomos-ledger".to_owned()),
+        "a relative root (nomos check's own CLI default) must not read a real path package as a registry dependency"
+    );
+}
+
+#[test]
 fn Test_Package_Name_Reads_The_Last_Path_Segment()
 {
     assert_eq!(Package_Name("crates/substrate/nomos-ledger"), "nomos-ledger");
