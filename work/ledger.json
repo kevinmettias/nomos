@@ -52232,7 +52232,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Its territory is crates/capabilities, and OD-PACKAGE-015 marked nothing there for\nconsolidation: all ten nomos-cap-* crates pass the boundary test's third clause (each has\nits own distinct, disjoint downstream provider) and stay crates by name in the record's own\nverdict. The family the record does mark -- nomos-repo-standards-document and its five\nproviders -- lives entirely under crates/repository, a directory this item's territory\ncannot reach. Attempting done_when inside crates/capabilities alone would mean moving\nnothing while the review's real finding sits untouched outside this item's own reach.\nDeclining rather than forcing a no-op inside the wrong directory; a correctly-scoped\nreplacement follows, territoried at crates/repository."
+        }
+      },
       "depends_on": [
         "P41-CRATE-BOUNDARY-REVIEW"
       ],
@@ -52249,7 +52253,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788648301
+      }
     },
     {
       "id": "P41-REPO-TOOLING-SEPARATION",
@@ -55809,6 +55816,58 @@
           "exit_code": 0
         },
         "revision": "0afaba0b7410f77d875f9ae3d04bee3df858d8c6"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-PACKAGE-015-RECONCILE-RULES-019",
+      "title": "OD-PACKAGE-015 did not check its own verdict against OD-RULES-019",
+      "why": "OD-PACKAGE-015's repository-policy verdict was written without checking it against\nOD-RULES-019, which already decided the five repo-policy providers \"stay exactly as\nseparate as OD-RULES-011 built them\" -- a crate-per-provider outcome. OD-PACKAGE-015's\nconsolidation verdict for that same family, left unreconciled, reads as a silent reversal\nof an accepted decision rather than an answer to a question OD-RULES-019 never asked.",
+      "done_when": "OD-PACKAGE-015 versions to 2, gains a relation to OD-RULES-019, and states explicitly that\nOD-RULES-011/019's separateness is about capability and provider identity (five contracts,\nfive ProviderIds, five registrations, grouped by what kind of input each reads) rather than\nabout how many Cargo.toml files implement that identity, so the module verdict revises only\nthe latter and leaves the former exactly as those records built it.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s\n\n\nrunning 15 tests\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.39s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788648938,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "797b22ef56e3c1a53cf0da068827a2c02b0599d8"
       },
       "abandoned": [],
       "displaced": [],

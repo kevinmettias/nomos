@@ -149,7 +149,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md@authored | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md | authored | 19 | 7 | sha256:6a14772c529dbb5589b38e4fdaec088191dcfbec7c6381e15d216537c6d1e4dd |
 | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md@authored | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md | authored | 23 | 7 | sha256:dcc46751eb94d3bee57169f30884a606ccba06f0162d77b4587cb383ee7e499e |
 | docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md@authored | docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md | authored | 18 | 6 | sha256:f17c861d194a9cc9d84cd2a1dd636f2d20cf8f6ce02d03d175153c13487a2288 |
-| docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md@authored | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md | authored | 17 | 6 | sha256:34c406b20aaf1ee0d77ab0495057b552c3027f639b31976e76ee87bf2a36efcc |
+| docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md@authored | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md | authored | 21 | 7 | sha256:ad7db84e0e6c5bd783952fb02f6bde672224a893e8ea7fdf510c2a1ceb6cedd2 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
@@ -1360,8 +1360,9 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#2 | authored | 2 | Question |
 | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#4 | authored | 2 | The test |
 | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#7 | authored | 2 | Applying it |
-| docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#12 | authored | 2 | What This Does Not Do |
-| docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#16 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#12 | authored | 2 | Reconciling with OD-RULES-019 |
+| docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#16 | authored | 2 | What This Does Not Do |
+| docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#20 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -39158,11 +39159,60 @@ one provider module — that materializes it.
 
 ### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#12
 
+*revision: authored · kind: heading · heading: A crate earns its boundary by independent versioning, isolation, or installation, not by naming a concept / Reconciling with OD-RULES-019 · hash: sha256:f5ad1d18085d0296a09e8a857e9fddddbefe816f1a7912eaeb846fefddb2dc8e*
+
+## Reconciling with OD-RULES-019
+
+### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#13
+
+*revision: authored · kind: prose · heading: A crate earns its boundary by independent versioning, isolation, or installation, not by naming a concept / Reconciling with OD-RULES-019 · hash: sha256:482908ce584789ffc0e18e4126ea67f376a5f11e67ef6be7568e6d6b8a0fab12*
+
+`OD-RULES-019` measured the same six crates this record does and reached, on its face, the
+opposite packaging outcome: "a shared read/parse boundary is warranted, beneath the five
+capability contracts and providers, **which stay exactly as separate as `OD-RULES-011` built
+them**." Read at that sentence alone, this record looks like a silent reversal rather than an
+answer to an open question.
+
+### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#14
+
+*revision: authored · kind: prose · heading: A crate earns its boundary by independent versioning, isolation, or installation, not by naming a concept / Reconciling with OD-RULES-019 · hash: sha256:5a438a3d767e189c21e3445b46e4c38d417931eea21ceb698cd43ef86d2a8b5c*
+
+It is not a reversal, because `OD-RULES-019` was never asked, and did not answer, the question
+this record's test poses. `OD-RULES-019`'s own measurement is explicit about what problem it
+was solving — "what is duplicated is mechanism, not the five capabilities' own authority" —
+and its own decision extracted exactly that mechanism into a new crate, `nomos-repo-standards-
+document`, by the same "share the mechanism once a real population justifies it, without
+collapsing the semantics" reasoning `OD-PACKAGE-006` used first. Nowhere in that reasoning is
+independent versioning, an enforced isolation boundary, or a consumer wanting one provider
+without its siblings — this record's three clauses — put forward as the reason a *crate*,
+rather than a *module*, was the right container for the extracted mechanism. `OD-RULES-011`'s
+own stated reason for crate-per-provider is narrower still: "grouped by what kind of input a
+crate reads, not by band alone" — an organizational convention borrowed from `crates/languages/`,
+not a claim that packaging as separate crates buys anything a shared crate's modules would not.
+Both records answer "does this capability need its own identity, its own provider, its own
+registration" — five times, correctly, and this record leaves all five answers exactly as they
+were built. Neither record asks "does that identity need its own `Cargo.toml`," which is the
+only question this record's test poses.
+
+### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#15
+
+*revision: authored · kind: prose · heading: A crate earns its boundary by independent versioning, isolation, or installation, not by naming a concept / Reconciling with OD-RULES-019 · hash: sha256:4c127cc67a91609a9df7a5a16f5ed9fedda964cac962d56202c9608fe8f529f8*
+
+**This record revises `OD-RULES-019`'s packaging choice and leaves its semantic decision
+untouched.** The five `nomos.cap.*.policy` contracts, the five `ProviderId` registrations, and
+the one shared read step stay exactly as separate as `OD-RULES-011` and `OD-RULES-019` built
+them — as capabilities, as providers, as facts. What changes, if a future item carries this
+verdict out, is only how many compilation units implement that separateness: six modules
+inside one crate answer `OD-RULES-019`'s own duplication measurement identically to six crates
+do, at the packaging cost this record's test was written to notice.
+
+### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#16
+
 *revision: authored · kind: heading · heading: A crate earns its boundary by independent versioning, isolation, or installation, not by naming a concept / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
 
 ## What This Does Not Do
 
-### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#13
+### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#17
 
 *revision: authored · kind: prose · heading: A crate earns its boundary by independent versioning, isolation, or installation, not by naming a concept / What This Does Not Do · hash: sha256:e952c5402c0c2826057e6704432a9f0f9f5b38ca6f7d5fac81191887eb611b46*
 
@@ -39172,17 +39222,15 @@ moving five crates' source into its modules, updating the dependency graph, `REA
 table and every generated projection — is a future item's own territory, scoped against this
 record's finding rather than re-deriving it.
 
-### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#14
+### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#18
 
-*revision: authored · kind: prose · heading: A crate earns its boundary by independent versioning, isolation, or installation, not by naming a concept / What This Does Not Do · hash: sha256:62bc81b1b3a6282840f9e041c3b6fc69f85cdba572bed1fbc2ff7b65478574c9*
+*revision: authored · kind: prose · heading: A crate earns its boundary by independent versioning, isolation, or installation, not by naming a concept / What This Does Not Do · hash: sha256:f306ec5a0a9cc4608ddbee578ef8faa472471089f0a25d91d2a2e0642062c188*
 
-It does not reopen `OD-RULES-011`, which decided the five policy families are exactly as
-separate as capabilities and providers, or `OD-RULES-019`, which decided the physical read
-step beneath them is shared. Both decisions are about the *providers and the capability they
-implement*; this record is about how many `Cargo.toml` files that already-decided shape needs,
-which is a question neither record asked.
+It does not reopen `OD-RULES-011`'s or `OD-RULES-019`'s decision that the five policy families
+are, and remain, five separate capabilities with five separate providers and one shared read
+step — the paragraph above is exactly the boundary of what this record touches and does not.
 
-### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#15
+### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#19
 
 *revision: authored · kind: prose · heading: A crate earns its boundary by independent versioning, isolation, or installation, not by naming a concept / What This Does Not Do · hash: sha256:003f2df6b642f23ed7721ea3ba7555d7f672ac023a4ce5d649b1e35423f1bc7a*
 
@@ -39190,19 +39238,20 @@ It does not examine any crate outside the sixteen this session's own why named. 
 session applying this test to a different crate does not need a second record to state the
 test again.
 
-### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#16
+### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#20
 
 *revision: authored · kind: heading · heading: A crate earns its boundary by independent versioning, isolation, or installation, not by naming a concept / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#17
+### docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#21
 
-*revision: authored · kind: prose · heading: A crate earns its boundary by independent versioning, isolation, or installation, not by naming a concept / Status · hash: sha256:cfd7c691c32327ac94031534a489984bbf851bf7af98904eff3a121e60a926d8*
+*revision: authored · kind: prose · heading: A crate earns its boundary by independent versioning, isolation, or installation, not by naming a concept / Status · hash: sha256:53153332b12b057dbbb7a5018f8c31c95c252e02bab2235f0b0523ecb3cf9aed*
 
-Accepted. Ten capability-contract crates stay crates; six repository-policy crates are found
-to be paying crate cost for what a module would give free, with the consolidation itself left
-to a future item.
+Accepted, version 2. Ten capability-contract crates stay crates; six repository-policy crates
+are found to be paying crate cost for what a module would give free, reconciled explicitly
+against `OD-RULES-019`'s own packaging choice for the same six crates, with the consolidation
+itself left to a future item.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 

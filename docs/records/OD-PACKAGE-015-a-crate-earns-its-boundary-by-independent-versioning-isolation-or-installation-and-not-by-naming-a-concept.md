@@ -3,7 +3,7 @@ id: OD-PACKAGE-015
 type: decision
 title: A crate earns its boundary by independent versioning, isolation, or installation, not by naming a concept
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - package
@@ -102,6 +102,39 @@ unaffected by this verdict: they keep their own place in the capability-contract
 each with the one provider crate — or, after a future increment carries this verdict out, the
 one provider module — that materializes it.
 
+## Reconciling with OD-RULES-019
+
+`OD-RULES-019` measured the same six crates this record does and reached, on its face, the
+opposite packaging outcome: "a shared read/parse boundary is warranted, beneath the five
+capability contracts and providers, **which stay exactly as separate as `OD-RULES-011` built
+them**." Read at that sentence alone, this record looks like a silent reversal rather than an
+answer to an open question.
+
+It is not a reversal, because `OD-RULES-019` was never asked, and did not answer, the question
+this record's test poses. `OD-RULES-019`'s own measurement is explicit about what problem it
+was solving — "what is duplicated is mechanism, not the five capabilities' own authority" —
+and its own decision extracted exactly that mechanism into a new crate, `nomos-repo-standards-
+document`, by the same "share the mechanism once a real population justifies it, without
+collapsing the semantics" reasoning `OD-PACKAGE-006` used first. Nowhere in that reasoning is
+independent versioning, an enforced isolation boundary, or a consumer wanting one provider
+without its siblings — this record's three clauses — put forward as the reason a *crate*,
+rather than a *module*, was the right container for the extracted mechanism. `OD-RULES-011`'s
+own stated reason for crate-per-provider is narrower still: "grouped by what kind of input a
+crate reads, not by band alone" — an organizational convention borrowed from `crates/languages/`,
+not a claim that packaging as separate crates buys anything a shared crate's modules would not.
+Both records answer "does this capability need its own identity, its own provider, its own
+registration" — five times, correctly, and this record leaves all five answers exactly as they
+were built. Neither record asks "does that identity need its own `Cargo.toml`," which is the
+only question this record's test poses.
+
+**This record revises `OD-RULES-019`'s packaging choice and leaves its semantic decision
+untouched.** The five `nomos.cap.*.policy` contracts, the five `ProviderId` registrations, and
+the one shared read step stay exactly as separate as `OD-RULES-011` and `OD-RULES-019` built
+them — as capabilities, as providers, as facts. What changes, if a future item carries this
+verdict out, is only how many compilation units implement that separateness: six modules
+inside one crate answer `OD-RULES-019`'s own duplication measurement identically to six crates
+do, at the packaging cost this record's test was written to notice.
+
 ## What This Does Not Do
 
 **No crate moves under this record.** It states the test and the six-crate verdict; carrying
@@ -110,11 +143,9 @@ moving five crates' source into its modules, updating the dependency graph, `REA
 table and every generated projection — is a future item's own territory, scoped against this
 record's finding rather than re-deriving it.
 
-It does not reopen `OD-RULES-011`, which decided the five policy families are exactly as
-separate as capabilities and providers, or `OD-RULES-019`, which decided the physical read
-step beneath them is shared. Both decisions are about the *providers and the capability they
-implement*; this record is about how many `Cargo.toml` files that already-decided shape needs,
-which is a question neither record asked.
+It does not reopen `OD-RULES-011`'s or `OD-RULES-019`'s decision that the five policy families
+are, and remain, five separate capabilities with five separate providers and one shared read
+step — the paragraph above is exactly the boundary of what this record touches and does not.
 
 It does not examine any crate outside the sixteen this session's own why named. A future
 session applying this test to a different crate does not need a second record to state the
@@ -122,6 +153,7 @@ test again.
 
 ## Status
 
-Accepted. Ten capability-contract crates stay crates; six repository-policy crates are found
-to be paying crate cost for what a module would give free, with the consolidation itself left
-to a future item.
+Accepted, version 2. Ten capability-contract crates stay crates; six repository-policy crates
+are found to be paying crate cost for what a module would give free, reconciled explicitly
+against `OD-RULES-019`'s own packaging choice for the same six crates, with the consolidation
+itself left to a future item.

@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:50f7ec879ee8e91ce70c06d66c3dd899a294c9c61996cbe7fa469545de313c96",
-  "inputs_digest": "sha256:952fdf327d6ed2737cb1823ef3f7ed89a706678b9bee6a79f1596d8405969604",
+  "content_digest": "sha256:a632d68d31bb7c11901665cdd5b8d7aa403cdd8d367b93d266d16946b031a6ff",
+  "inputs_digest": "sha256:dffa3f713b0ede622828928ae00cbabb3cbb92528945fa76af30d9c9739525c2",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1586
+      1587
     ],
     [
       "Source blocks",
-      5546
+      5550
     ]
   ],
   "inputs": [
@@ -718,7 +718,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md@authored",
-      "hash": "sha256:34c406b20aaf1ee0d77ab0495057b552c3027f639b31976e76ee87bf2a36efcc"
+      "hash": "sha256:ad7db84e0e6c5bd783952fb02f6bde672224a893e8ea7fdf510c2a1ceb6cedd2"
     },
     {
       "content": "documents",
@@ -6748,12 +6748,17 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#12",
-      "hash": "sha256:fa26f7e4a7d9c7d733445b6670dbfa58f1530b7c0e9760b84ef90886f08748c0"
+      "hash": "sha256:5fbf64b23829cf4e13abb1dcfff7d84a694ed5b1432bc06fcfbc2429cc6765de"
     },
     {
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#16",
-      "hash": "sha256:cbd6c5c5cd876361abbffc4ee0f4400ce04c4d70996baed9aa322b24e438ff53"
+      "hash": "sha256:8704ab23191e6e77e82c922456b3203f307a307d7e39a45606d3d0425999dc01"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#20",
+      "hash": "sha256:9674267d33f0c571a6121791f1fccb2fbb39a53045db3604c51960eb55f1c5e3"
     },
     {
       "content": "headings",
@@ -29138,32 +29143,52 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#12",
-      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+      "hash": "sha256:f5ad1d18085d0296a09e8a857e9fddddbefe816f1a7912eaeb846fefddb2dc8e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#13",
-      "hash": "sha256:e952c5402c0c2826057e6704432a9f0f9f5b38ca6f7d5fac81191887eb611b46"
+      "hash": "sha256:482908ce584789ffc0e18e4126ea67f376a5f11e67ef6be7568e6d6b8a0fab12"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#14",
-      "hash": "sha256:62bc81b1b3a6282840f9e041c3b6fc69f85cdba572bed1fbc2ff7b65478574c9"
+      "hash": "sha256:5a438a3d767e189c21e3445b46e4c38d417931eea21ceb698cd43ef86d2a8b5c"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#15",
-      "hash": "sha256:003f2df6b642f23ed7721ea3ba7555d7f672ac023a4ce5d649b1e35423f1bc7a"
+      "hash": "sha256:4c127cc67a91609a9df7a5a16f5ed9fedda964cac962d56202c9608fe8f529f8"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#16",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#17",
-      "hash": "sha256:cfd7c691c32327ac94031534a489984bbf851bf7af98904eff3a121e60a926d8"
+      "hash": "sha256:e952c5402c0c2826057e6704432a9f0f9f5b38ca6f7d5fac81191887eb611b46"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#18",
+      "hash": "sha256:f306ec5a0a9cc4608ddbee578ef8faa472471089f0a25d91d2a2e0642062c188"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#19",
+      "hash": "sha256:003f2df6b642f23ed7721ea3ba7555d7f672ac023a4ce5d649b1e35423f1bc7a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#20",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#21",
+      "hash": "sha256:53153332b12b057dbbb7a5018f8c31c95c252e02bab2235f0b0523ecb3cf9aed"
     },
     {
       "content": "blocks",
