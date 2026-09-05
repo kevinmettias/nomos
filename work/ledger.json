@@ -54529,6 +54529,104 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P51-RULES-NESTING-DEPTH",
+      "title": "Nothing judges how deeply a function nests, and the shared scanner that could is private",
+      "why": "code-standards' check-nesting-depth (rules/general/style/checks/control-flow/readability/check-nesting-depth, judgment in the language-free shared package rules/general/style/shared/nesting) reports a function whose control flow nests deeper than three levels. Depth counts control-flow constructs and not braces: the first if, loop or match is level one, one directly inside it is level two, and a function reaching three is fine while one past it is reported once, at the first construct to cross. An else-if continues at its neighbour's level rather than deepening, and its own body still deepens as usual. Deep nesting is the readability signal an over-long function is, and the remedy is a guard clause or an extracted helper. Ported as a text rule rather than faithfully: the Go original reaches tree-sitter, but so does check-constant-scope, which this crate already re-decided as a text rule, and so does the single-line-body check it ships as NO_SINGLE_LINE_FUNCTION_BODIES. Whether a given one survives that translation is a per-rule question answered by prototyping, and it was answered twice here. It failed for allman-brace-placement, whose text prototype produced thirteen false positives in six structural classes against this workspace. It succeeded for this one: a prototype reached exact agreement with the real Go tool on the positive fixture and on six control probes covering if-else chains, items, nested blocks, match arms, closures and every governed loop form, and then reported zero over the whole of crates, which is what the Go tool reports. Zero was also checked for the two ways it lies: the prototype fires on a hand-written four-deep function, so the population is judged rather than empty, and the count is identical when the same sources are copied to a scratch path, so no waiver is doing the work.",
+      "done_when": "nomos-rules exports a rule for nesting depth that counts control-flow constructs rather than braces, treats an else-if as continuing at its neighbour's level while still deepening its own body, reports a function once at the first construct past the limit, and resolves that limit through nomos.cap.limits.policy with three as the default the way the file-size rules already do. Brace counting reads only a line's own code through the cross-line literal-state scanner formatting.rs already owns, rather than a fourth private copy of a comment stripper. It is composed into nomos-check-orchestration's Run behind the same per-call selection, carries a descriptor naming the limits capability, has a row in nomos-gate-orchestration's OFFERINGS, and the blessed public surface names it. A real nomos check over this workspace reports zero from it, and the same binary reports it against a scratch crate that nests four deep. cargo test -p nomos-rules -p nomos-check-orchestration -p nomos-gate-orchestration -p nomos-contract-tests passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/nesting_depth.rs",
+          "crates/rules/nomos-rules/src/checks/formatting.rs",
+          "crates/rules/nomos-rules/src/checks/structure.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-opus5-rule-migration",
+        "acquired_at": 1788604642,
+        "lease_expires_at": 1788615442
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P52-COMPOSED-RULES-BECOME-DECLARATIONS",
+      "title": "Fifty-seven rules are declared three times in three crates and resolved from none of them",
+      "why": "OD-RULES-022 decided composition resolves a declared rule package against a linked implementation, and 6b35e202 built Resolve_Rules, which nothing calls. The three hand-maintained declarations that record measured are still the authority: rule_descriptor.rs DESCRIPTORS, the ComposedRule table with RULE_COUNT and its capability mapping in run_context.rs, and OFFERINGS in composition.rs carrying the contract citation. Two parity tests hold two of the three together and they went red on 2026-09-05 within hours of reaching fifty-seven entries, fixed by 8be7904a, because an item predicate covered four of the five registration sites. A test can catch that drift and cannot stop it. This is the item that removes the duplication rather than adding a fourth guard over it.",
+      "done_when": "The rules a run judges by are resolved through Resolve_Rules from a declared set rather than read from a hand-written array, and the duplication OD-RULES-022 measured is smaller afterwards rather than larger. It settles and states where a declaration lives -- a manifest read at runtime, or a compiled declaration table -- since OD-RULES-022 deliberately did not decide the carriage, and a decision that outlives this item is recorded rather than left in a comment. What a run judges does not change: the same rules produce the same findings over this workspace, proven by the gate reporting the same count before and after. A rule that is exported and judged by nothing is either declared or reported, which is P46-UNCOMPOSED-RULES-ARE-COUNTED closed from the declaration side. The predicate names nomos-gate-orchestration alongside nomos-check-orchestration.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/packages/nomos-rule-package",
+          "tests/contract/surface",
+          "tests/contract/tests/boundaries"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P50-RULE-PACKAGE-RESOLUTION-STEP"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rule-package",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
