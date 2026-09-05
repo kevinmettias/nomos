@@ -3,7 +3,7 @@ id: OD-HOST-007
 type: decision
 title: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - host
@@ -138,9 +138,32 @@ it in advance rather than waiting to be surprised by it: the trigger fires on a 
 transport is bounded to the three Gate verbs, and both records keep their reasoning intact
 because the commitment they worried about is made one crate above the one they govern.
 
-Open until the first transport exists. This record's exclusion is a rule with no artifact
-enforcing it yet, and a contract test asserting a registry that does not exist would be the
-vacuous-truth trap `OD-CONTRACTS-001`'s honesty vocabularies refuse. Revisit if a transport
-increment finds a Gate verb it cannot serve without a repo-tooling handler beneath it, which
-would be evidence that the three-verb boundary was drawn in the wrong place rather than a
-reason to widen the registry quietly.
+Closed by `P40-API-TRANSPORT-2`, which built the first transport: `nomos-api-transport`, band
+92, speaking JSON-RPC 2.0 over a TCP socket. This record was open for one stated reason -- its
+exclusion was a rule with no artifact enforcing it, and a contract test asserting a registry
+that did not exist would have been the vacuous-truth trap `OD-CONTRACTS-001`'s honesty
+vocabularies refuse. The artifact exists now.
+`tests/contract/tests/boundaries/transport_registry.rs` reads `nomos-api`'s own blessed surface
+snapshot and refuses the transport for calling any handler outside `Handle_Gate_Plan`,
+`Handle_Gate_Run` and `Handle_Gate_Explain`. Two companion assertions are what make that one
+worth having: one refuses any import from `nomos-api`, so no call can hide under an
+unqualified name the first never searches for, and one requires both sides of the comparison
+to have real subjects -- this record's own vacuity objection, turned on the check it asked
+for.
+
+The revisit condition did not fire, and it was measured rather than assumed. It asked whether
+a transport increment would find a Gate verb it could not serve without a repo-tooling handler
+beneath it, which would have been evidence the three-verb boundary was drawn in the wrong
+place. None of the three needed one: `Handle_Gate_Plan` reaches `nomos_gate_orchestration::Run`,
+`Handle_Gate_Run` and `Handle_Gate_Explain` reach `Run_Gate` and `Explain_Gate` with that
+crate's own walk and build-variant composition, and the transport crate's manifest names
+`nomos-api`, `nomos-contracts` and `nomos-gate-orchestration` and no `[repo tooling]` crate at
+all. The boundary was drawn in the right place, on exactly the evidence this record asked to
+be shown.
+
+The three questions this record left to the increment were answered there rather than here: a
+socket rather than stdio, line-delimited framing rather than `Content-Length`, and no JSON-RPC
+library, each argued at the site that makes it. None of them reopens what this record decided.
+What stays governing is the exclusion: `P40-MCP-SURFACE-4` projects this same registry over MCP
+framing and is bound by this record rather than by a fresh decision of its own, and a later
+surface making the opposite case about a repo-tooling verb must still make it explicitly.

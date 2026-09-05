@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:8e04c58b2a1269e6bc6678e4df84c0a6d239d3d74e66768dffb9ce238d9e2aad",
-  "inputs_digest": "sha256:bc78e64b8290cdddab080faa0486affaabc87b978c2c1f6f87d4fcf38b6910d8",
+  "content_digest": "sha256:c3f736e868a43d2ece6029d9b1f8c4d7abbed9091683784976071bdd649fc352",
+  "inputs_digest": "sha256:b59e8e7777a890048531b3e3ae8a6564eca83c257050ff882bd61c9e6cdf4376",
   "sections": [
     [
       "Documents",
@@ -16,7 +16,7 @@
     ],
     [
       "Source blocks",
-      5452
+      5454
     ]
   ],
   "inputs": [
@@ -443,7 +443,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md@authored",
-      "hash": "sha256:f31a5228612e1a5f28b29052e9a7bc6c7f86770511cf7472c39a55a8c1826145"
+      "hash": "sha256:3e1ca21fa30a1ca546fe40667181bda7de5ca80622a019656889537e6a72d206"
     },
     {
       "content": "documents",
@@ -20098,7 +20098,17 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#23",
-      "hash": "sha256:a0481c09af1cb899f2a38029f1b8a61b9a74a3c86d9aa3a32d939dd7c709f3a2"
+      "hash": "sha256:e601b30496e4404826383fc52222e6b1c22057d5802256cfcc5ad8af1fd0efe2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#24",
+      "hash": "sha256:edb23fee39126f1b033032c6b310f0e8d1ef50e0c11bec54d8495069f190a86e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#25",
+      "hash": "sha256:8e33db5173e9d29860ea98d7187034f305a88b73815d28e7cfeeb2f9cddf3a08"
     },
     {
       "content": "blocks",

@@ -94,7 +94,7 @@ profile: domain-specification
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 15 | 5 | sha256:bcf1bfd865c60493754d4a765742627fd4c18504722d27a065b5201be2ac218f |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md | authored | 15 | 5 | sha256:0cb15b83d0fb7a58f4a2afda083ac512ba0ac344d15ca0556f3446736cbd7ea9 |
 | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md@authored | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md | authored | 19 | 6 | sha256:c4b59b0c06e3e68eee7656804c4cf4fe6685ba8cf63bc66976ccc67c481f2120 |
-| docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md@authored | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md | authored | 23 | 6 | sha256:f31a5228612e1a5f28b29052e9a7bc6c7f86770511cf7472c39a55a8c1826145 |
+| docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md@authored | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md | authored | 25 | 6 | sha256:3e1ca21fa30a1ca546fe40667181bda7de5ca80622a019656889537e6a72d206 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -23254,14 +23254,45 @@ because the commitment they worried about is made one crate above the one they g
 
 ### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#23
 
-*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / Status · hash: sha256:a0481c09af1cb899f2a38029f1b8a61b9a74a3c86d9aa3a32d939dd7c709f3a2*
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / Status · hash: sha256:e601b30496e4404826383fc52222e6b1c22057d5802256cfcc5ad8af1fd0efe2*
 
-Open until the first transport exists. This record's exclusion is a rule with no artifact
-enforcing it yet, and a contract test asserting a registry that does not exist would be the
-vacuous-truth trap `OD-CONTRACTS-001`'s honesty vocabularies refuse. Revisit if a transport
-increment finds a Gate verb it cannot serve without a repo-tooling handler beneath it, which
-would be evidence that the three-verb boundary was drawn in the wrong place rather than a
-reason to widen the registry quietly.
+Closed by `P40-API-TRANSPORT-2`, which built the first transport: `nomos-api-transport`, band
+92, speaking JSON-RPC 2.0 over a TCP socket. This record was open for one stated reason -- its
+exclusion was a rule with no artifact enforcing it, and a contract test asserting a registry
+that did not exist would have been the vacuous-truth trap `OD-CONTRACTS-001`'s honesty
+vocabularies refuse. The artifact exists now.
+`tests/contract/tests/boundaries/transport_registry.rs` reads `nomos-api`'s own blessed surface
+snapshot and refuses the transport for calling any handler outside `Handle_Gate_Plan`,
+`Handle_Gate_Run` and `Handle_Gate_Explain`. Two companion assertions are what make that one
+worth having: one refuses any import from `nomos-api`, so no call can hide under an
+unqualified name the first never searches for, and one requires both sides of the comparison
+to have real subjects -- this record's own vacuity objection, turned on the check it asked
+for.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#24
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / Status · hash: sha256:edb23fee39126f1b033032c6b310f0e8d1ef50e0c11bec54d8495069f190a86e*
+
+The revisit condition did not fire, and it was measured rather than assumed. It asked whether
+a transport increment would find a Gate verb it could not serve without a repo-tooling handler
+beneath it, which would have been evidence the three-verb boundary was drawn in the wrong
+place. None of the three needed one: `Handle_Gate_Plan` reaches `nomos_gate_orchestration::Run`,
+`Handle_Gate_Run` and `Handle_Gate_Explain` reach `Run_Gate` and `Explain_Gate` with that
+crate's own walk and build-variant composition, and the transport crate's manifest names
+`nomos-api`, `nomos-contracts` and `nomos-gate-orchestration` and no `[repo tooling]` crate at
+all. The boundary was drawn in the right place, on exactly the evidence this record asked to
+be shown.
+
+### docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#25
+
+*revision: authored · kind: prose · heading: An MCP projection fires OD-LEDGER-036 and OD-HOST-006's shared trigger, and the answer bounds the transport rather than nomos-api / Status · hash: sha256:8e33db5173e9d29860ea98d7187034f305a88b73815d28e7cfeeb2f9cddf3a08*
+
+The three questions this record left to the increment were answered there rather than here: a
+socket rather than stdio, line-delimited framing rather than `Content-Length`, and no JSON-RPC
+library, each argued at the site that makes it. None of them reopens what this record decided.
+What stays governing is the exclusion: `P40-MCP-SURFACE-4` projects this same registry over MCP
+framing and is bound by this record rather than by a fresh decision of its own, and a later
+surface making the opposite case about a repo-tooling verb must still make it explicitly.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 
