@@ -12,7 +12,7 @@
 //! `Handle_Gate_*` call's environment (`composition::Host_Variant`) but is not itself carried by
 //! any response, so its own seam is proven independently of the other three.
 
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::time::Duration;
 
 // ---------------------------------------------------------------------------------------------
@@ -348,7 +348,8 @@ fn Test_This_Packages_Build_Variant_Should_Be_Well_Formed_For_A_Real_Gate_Run()
     assert!(!variant.profile.is_empty(), "{variant:?}");
     assert!(!variant.toolchain.is_empty(), "{variant:?}");
 
-    let response = nomos_api::Handle_Gate_Run(Path::new("."));
+    let command = nomos_gate_orchestration::GateCommand { root: PathBuf::from("."), ..Default::default() };
+    let response = nomos_api::Handle_Gate_Run(&command);
     assert_ne!(
         response.disposition,
         nomos_api::Disposition::Indeterminate,

@@ -134,7 +134,7 @@ pub enum variant nomos_api::VerdictResponse::Unbodied
 pub enum variant nomos_api::VerdictResponse::Unstamped
 pub fn nomos_api::Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse
 pub fn nomos_api::Handle_Gate_Plan() -> GatePlanResponse
-pub fn nomos_api::Handle_Gate_Run(root: &Path) -> GateRunResponse
+pub fn nomos_api::Handle_Gate_Run(command: &GateCommand) -> GateRunResponse
 pub fn nomos_api::Handle_Spec_Commit(request: &CommitRequest) -> CommitResponse
 pub fn nomos_api::Handle_Spec_Freshness(request: &FreshnessRequest) -> FreshnessResponse
 pub fn nomos_api::Handle_Spec_Markdown(request: &RecordRequest) -> MarkdownResponse

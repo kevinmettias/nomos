@@ -8,18 +8,21 @@ use nomos_gate_orchestration::{GateCommand, GateRunResult};
 use nomos_platform::Clock;
 use nomos_platform_std::{StdFileSystem, StdProcessLauncher, SystemClock};
 use serde::Serialize;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 use super::{Disposition, GateFindings};
 
-/// Walks `root` and judges it exactly as `nomos gate run` would, over the default
-/// [`GateCommand`] -- every rule, every file, no baseline, no suppression, no adoption
-/// calibration -- and hands back a JSON-serializable [`GateRunResponse`].
+/// Walks `command.root` and judges it exactly as `nomos gate run` would, and hands back a
+/// JSON-serializable [`GateRunResponse`].
+///
+/// `command` travels straight through to [`nomos_gate_orchestration::Run_Gate`], so its
+/// `scope` and `rules` selectors reach the same materialization-skipping `OD-GATE-017` gives
+/// `nomos-cli`'s own `run` verb -- a caller that narrows either pays for only what it asked
+/// to judge, not for every registered rule on every call.
 #[must_use]
-pub fn Handle_Gate_Run(root: &Path) -> GateRunResponse
+pub fn Handle_Gate_Run(command: &GateCommand) -> GateRunResponse
 {
-    let command = GateCommand { root: root.to_path_buf(), ..Default::default() };
-    let walked = sources::Walked_Sources(root);
+    let walked = sources::Walked_Sources(&command.root);
     let run = nomos_gate_orchestration::Fresh_Run_Id(SystemClock.Now());
     let result = nomos_gate_orchestration::Run_Gate(
         walked,
@@ -28,7 +31,7 @@ pub fn Handle_Gate_Run(root: &Path) -> GateRunResponse
             launcher: &StdProcessLauncher,
             filesystem: &StdFileSystem,
         },
-        &command,
+        command,
         run,
     );
 
@@ -68,6 +71,16 @@ impl GateRunResponse
 mod tests
 {
     use super::*;
+    use nomos_contracts::RuleId;
+    use nomos_gate_orchestration::RuleSelector;
+    use nomos_rules::NAMING_CONVENTION;
+
+    /// [`GateCommand`] over `root`, every selector at its select-everything default -- the
+    /// shape every test here builds before narrowing one field of its own.
+    fn Command_At(root: PathBuf) -> GateCommand
+    {
+        return GateCommand { root, ..Default::default() };
+    }
 
     /// A real run over this crate's own tree reaches a real judgment -- not
     /// [`Disposition::Indeterminate`], the state a walk that never became a judged check
@@ -75,7 +88,7 @@ mod tests
     #[test]
     fn Test_Handle_Gate_Run_And_Walked_Sources_Should_Reach_A_Judgment_Over_A_Real_Tree()
     {
-        let response = Handle_Gate_Run(Path::new("."));
+        let response = Handle_Gate_Run(&Command_At(PathBuf::from(".")));
 
         assert_ne!(
             response.disposition,
@@ -94,7 +107,7 @@ mod tests
         let _ignored = std::fs::remove_dir_all(&empty);
         std::fs::create_dir_all(&empty).expect("creates an empty directory");
 
-        let response = Handle_Gate_Run(&empty);
+        let response = Handle_Gate_Run(&Command_At(empty.clone()));
 
         let _ignored = std::fs::remove_dir_all(&empty);
 
@@ -108,7 +121,7 @@ mod tests
     #[test]
     fn Test_From_Should_Produce_A_Response_That_Round_Trips_As_Json()
     {
-        let response = Handle_Gate_Run(Path::new("."));
+        let response = Handle_Gate_Run(&Command_At(PathBuf::from(".")));
         let expected = match response.disposition
         {
             Disposition::Passed => "passed",
@@ -121,5 +134,36 @@ mod tests
         let disposition = parsed.get("disposition").expect("a serialized GateRunResponse always has this field");
 
         assert_eq!(disposition, expected, "{json}");
+    }
+
+    /// A [`GateCommand::rules`] selection reaches `Run_Gate` through this crate's real entry
+    /// point, not only the response built from it: excluding the rule behind this fixture's
+    /// one real finding turns a Failed run into a Passed one with no blocking findings at
+    /// all, the same "the deselected rule was never asked to run" property
+    /// `nomos_gate_orchestration`'s own `Test_A_Deselected_Rules_Finding_Should_Not_Exist`
+    /// proves one layer down.
+    #[test]
+    fn Test_A_Rule_Selection_Should_Reach_Run_Gate_Through_This_Crates_Entry_Point()
+    {
+        let root = std::env::temp_dir().join("nomos-api-gate-run-rule-selection");
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("creates a fresh directory");
+        std::fs::write(root.join("a.rs"), "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n")
+            .expect("writes a fixture whose stale mirror is one real blocking finding");
+
+        let every_rule = Handle_Gate_Run(&Command_At(root.clone()));
+        let naming_only = Handle_Gate_Run(&GateCommand {
+            rules: RuleSelector { include: vec![RuleId::New(NAMING_CONVENTION)] },
+            ..Command_At(root.clone())
+        });
+
+        let _ignored = std::fs::remove_dir_all(&root);
+
+        assert_eq!(every_rule.disposition, Disposition::Failed, "{every_rule:?}");
+        assert_eq!(naming_only.disposition, Disposition::Passed, "{naming_only:?}");
+        assert!(
+            naming_only.findings.blocking_findings.is_empty(),
+            "the deselected rule's finding must not exist at all: {naming_only:?}"
+        );
     }
 }

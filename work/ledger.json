@@ -51138,7 +51138,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory reserved only crates/host/nomos-api/src/lib.rs. The real implementation, its existing call site, and the surface snapshot it changes sit in three other files this item did not reserve. Re-added as -2 with the full, grepped file set."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -51154,9 +51158,18 @@
         "timeout_seconds": 2700
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-api-gate-selection",
+          "reason": "Territory reserved only crates/host/nomos-api/src/lib.rs, which merely re-exports. Handle_Gate_Run itself lives in crates/host/nomos-api/src/response/gate_run_response.rs, its only existing call site outside this crate's own unit tests is crates/host/nomos-api/tests/integration_seams.rs, and changing its signature from root: &Path to command: &GateCommand changes the textual line tests/contract/surface/nomos-api.txt records for it. None of those three were reserved, so the item could not be finished honestly. Re-adding as -2 with all four paths.",
+          "abandoned_at": 1788591547
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-api-gate-selection",
+        "declined_at": 1788591553
+      }
     },
     {
       "id": "P40-API-TRANSPORT",
@@ -52696,13 +52709,114 @@
         ],
         "patterns": []
       },
+      "state": {
+        "Declined": {
+          "reason": "Territory reserved only the new descriptor file and the new contract test. A new module cannot exist without a declaration in crates/rules/nomos-rules/src/lib.rs, and adding a public type re-blesses tests/contract/surface/nomos-rules.txt. Both were outside what it reserved, so it could not be finished honestly either. Re-added as -3 with all four paths, determined by reading how lib.rs declares modules and confirming the surface snapshot exists, rather than by guessing a second time."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-opus-session",
+          "reason": "Territory still incomplete; abandoning to re-add with the full file set an implementation actually touches.",
+          "abandoned_at": 1788591036
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-opus-session",
+        "declined_at": 1788591036
+      }
+    },
+    {
+      "id": "P41-RULE-DECLARES-ITS-REQUIREMENTS-3",
+      "title": "A rule is a bare function, so the engine has to learn each one individually",
+      "why": "A rule today is a function the composition root names, plus a RuleId, plus membership in a hand-written mapping from rule to the capability materialization it needs. Nothing about a rule declares its own subjects or its required facts, so that knowledge lives centrally and grows once per rule: 56 composed entries, and nine separate selection predicates deciding which capability families to materialize. The package specification says applicability is derived from canonical capability requirements rather than duplicated support information, which is the opposite of what the code does. A descriptor is the prerequisite for the planner, because a planner with nothing to plan from would only relocate the same table. This item delivers the descriptors and proves them complete; deleting the central mapping is P41-RUN-STOPS-NAMING-EVERY-RULE, where both sides of that edit sit in one territory.",
+      "done_when": "Every composed rule has a descriptor declaring its identifier, the subject kind it judges, and the capability facts it requires; a contract test proves the descriptor identifier set equals the Composed_Rules set nomos-check-orchestration already exports, so a rule added on either side without the other fails; the declared capability requirements match the nine existing selection predicates; and the public surface snapshot is re-blessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/tests/rule_descriptors.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "The parity test needs both nomos-rules and nomos-check-orchestration in one crate. tests/contract has the first and not the second, tests/integration has the second and not the first, and nomos-check-orchestration own tests sit inside a peer live claim. So the test belongs in tests/contract with nomos-check-orchestration added as a dev-dependency, which means tests/contract/Cargo.toml is part of the change and was not reserved. Re-added as -4 with all five paths, each verified against the manifests rather than assumed."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-opus-session",
+          "reason": "Territory still short by one manifest; abandoning to re-add with the complete verified set.",
+          "abandoned_at": 1788591133
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-opus-session",
+        "declined_at": 1788591133
+      }
+    },
+    {
+      "id": "P41-RULE-DECLARES-ITS-REQUIREMENTS-4",
+      "title": "A rule is a bare function, so the engine has to learn each one individually",
+      "why": "A rule today is a function the composition root names, plus a RuleId, plus membership in a hand-written mapping from rule to the capability materialization it needs. Nothing about a rule declares its own subjects or its required facts, so that knowledge lives centrally and grows once per rule: 56 composed entries, and nine separate selection predicates deciding which capability families to materialize. The package specification says applicability is derived from canonical capability requirements rather than duplicated support information, which is the opposite of what the code does. A descriptor is the prerequisite for the planner, because a planner with nothing to plan from would only relocate the same table. This item delivers the descriptors and proves them complete; deleting the central mapping is P41-RUN-STOPS-NAMING-EVERY-RULE, where both sides of that edit sit in one territory.",
+      "done_when": "Every composed rule has a descriptor declaring its identifier, the subject kind it judges, and the capability facts it requires; a contract test proves the descriptor identifier set equals the Composed_Rules set nomos-check-orchestration already exports, so a rule added on either side without the other fails; the declared capability requirements match the nine existing selection predicates; and the nomos-rules public surface snapshot is re-blessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/tests/rule_descriptors.rs",
+          "tests/contract/Cargo.toml",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
       "state": "Claimed",
       "depends_on": [],
       "blocked": null,
       "claim": {
         "holder": "claude-opus-session",
-        "acquired_at": 1788590977,
-        "lease_expires_at": 1788598177
+        "acquired_at": 1788591133,
+        "lease_expires_at": 1788598333
       },
       "verification": {
         "argv": [
@@ -52716,6 +52830,65 @@
         "timeout_seconds": 3600
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-API-GATE-SELECTION-SURFACE-2",
+      "title": "The API cannot express gate scope or rule selection, so its gate run is not the gate",
+      "why": "nomos-api reaches the canonical orchestration seams for the gate verbs, the work ledger verbs and the spec surface, which is what makes the second host real. Its own documentation records that the request surface does not expose gate scope or rule selection, and the committed requirement assessments name Handle_Gate_Run as a gap for exactly that reason. ScopeSelector and RuleSelector are real, and OD-GATE-017 drove selection down into check orchestration so an unselected rule can skip its materialization entirely. An API caller that cannot select is therefore not merely less expressive than the CLI, it is paying for every expensive provider on every call. Re-issue of P40-API-GATE-SELECTION-SURFACE: that item reserved only src/lib.rs, which merely re-exports; Handle_Gate_Run itself lives in src/response/gate_run_response.rs, its one real call site outside this crate's own tests is tests/integration_seams.rs, and changing its parameter from root: &Path to command: &GateCommand rewrites the line tests/contract/surface/nomos-api.txt records for it.",
+      "done_when": "Handle_Gate_Run takes a &GateCommand instead of a bare root, so an API caller can set scope and rules exactly as GateCommand already carries them through to Run_Gate; a test proves a deselected rule's finding does not exist in the response rather than being filtered from it after the fact; the existing call site and the public surface snapshot are updated to match; and cargo test -p nomos-api -p nomos-gate-orchestration is green.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/lib.rs",
+          "crates/host/nomos-api/src/response/gate_run_response.rs",
+          "crates/host/nomos-api/tests/integration_seams.rs",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": ". ok\ntest tests::Test_Explain_Should_Report_A_Baseline_That_Applies ... ok\ntest tests::Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed ... ok\n\ntest result: ok. 65 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 14.90s\n\n\nrunning 4 tests\ntest Test_Run_Gate_Should_Report_An_Unreadable_Check_Outcome_As_Indeterminate ... ok\ntest Test_Run_Gate_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified ... ok\ntest Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestration_Seam ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.89s\n\n\nrunning 4 tests\ntest Test_Disposition_Of_Findings_Should_Pass_When_Nothing_Can_Fail_A_Build ... ok\ntest Test_Disposition_Of_Findings_Should_Fail_On_A_Blocking_Finding ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_With_No_Findings ... ok\ntest Test_Disposition_Of_Findings_Should_Fail_With_One_Blocking_Finding_Among_Many ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-8c1670b4d4533162.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-784e3322545c6465.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-31e6c63c39ae0219.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-3f77655671fb7e9c.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-d620cc4fd5641a80.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1788591773,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "89a81c7583c5a78163dbb8b69561a901c5fcf322"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

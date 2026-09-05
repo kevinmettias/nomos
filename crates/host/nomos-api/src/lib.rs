@@ -92,16 +92,17 @@
 //! rather than getting it from `Run`.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
-//! `Invocation::Run` arm: it walks `root` for `.rs` sources
+//! `Invocation::Run` arm: it walks `command.root` for `.rs` sources
 //! ([`sources::Walked_Sources`] -- a twin of `crates/host/nomos-cli/src/gate/sources.rs`, since a
 //! walk is a composition-root concern `OD-HOST-002` does not seam), reads this crate's own
 //! build variant ([`composition::Host_Variant`] -- `env!` resolves against the crate that
-//! calls it, so this cannot be shared either), and calls `Run_Gate` with the default
-//! `GateCommand` every verb had before `OD-GATE-014`'s scope/rule selectors gave one a real
-//! caller -- narrowing `root`'s own tree is this crate's only input today. What differs from
-//! `nomos-cli` is the return: [`response::GateRunResponse`] instead of rendered text, because
-//! this crate's reason to exist is a JSON-serializable answer a wire transport can hand back,
-//! not a terminal one.
+//! calls it, so this cannot be shared either), and calls `Run_Gate` with the caller's own
+//! `GateCommand` whole -- `P40-API-GATE-SELECTION-SURFACE-2` closed the "select-everything
+//! only" gap this doc used to name here, so a caller's `scope` and `rules` reach `Run_Gate`
+//! exactly as `nomos-cli`'s own `run` verb already lets them. What differs from `nomos-cli`
+//! is the return: [`response::GateRunResponse`] instead of rendered text, because this
+//! crate's reason to exist is a JSON-serializable answer a wire transport can hand back, not
+//! a terminal one.
 //!
 //! # What this crate deliberately does not do
 //!
@@ -112,11 +113,6 @@
 //! follow-up increment wires a real transport over [`Handle_Gate_Run`] once one exists to
 //! design it against; this increment's job is only to prove the seam is reachable and
 //! projectable from a second composition root at all.
-//!
-//! It does not select scope or rules either -- `GateCommand::scope` and `GateCommand::rules`
-//! stay at their select-everything default, the same starting point every construction site
-//! that predates `OD-GATE-014`'s selectors has. A caller that needs to narrow either is a
-//! later increment to this crate's request shape, not a gap this one leaves silently.
 
 mod composition;
 mod response;
