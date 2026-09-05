@@ -68,6 +68,15 @@ members = [
     # any of them -- same band.
     "crates/languages/nomos-lang-rust-deny",
 
+    # Band 25 — nomos.cap.rust.copy_clones's one provider, and this workspace's first
+    # provider backed by a real compiler semantic API rather than a syntax tree (its
+    # siblings above) or another tool's own report (nomos-lang-rust-deny,
+    # nomos-lang-rust-clippy). Loads a crate through `ra_ap_hir` -- the rust-analyzer
+    # project's own semantic-analysis engine, published as a library -- and asks it to
+    # resolve method calls and trait implementations, questions `syn`'s parse tree has no
+    # answer to. `P40-COMPILER-BACKED-PROVIDER`.
+    "crates/languages/nomos-lang-rust-compiler",
+
     # Band 25 — a second provider of nomos.cap.dependency.edges, for a Go workspace rather
     # than a Cargo one. Reads go.work/go.mod text directly rather than running a subprocess
     # -- its own module doc says why -- so it names neither of its three siblings above and
@@ -350,6 +359,7 @@ nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
 nomos-lang-rust-cargo = { path = "crates/languages/nomos-lang-rust-cargo" }
 nomos-lang-rust-clippy = { path = "crates/languages/nomos-lang-rust-clippy" }
 nomos-lang-rust-deny = { path = "crates/languages/nomos-lang-rust-deny" }
+nomos-lang-rust-compiler = { path = "crates/languages/nomos-lang-rust-compiler" }
 nomos-lang-go-modules = { path = "crates/languages/nomos-lang-go-modules" }
 nomos-repo-standards = { path = "crates/repository/nomos-repo-standards" }
 nomos-repo-limits = { path = "crates/repository/nomos-repo-limits" }
@@ -390,6 +400,24 @@ serde_yaml_ng = "0.10"
 # Deflate only. The archives are ordinary zips, and the other backends are
 # compression formats this corpus does not contain.
 zip = { version = "4", default-features = false, features = ["deflate"] }
+
+# rust-analyzer's own semantic-analysis engine, published as a library rather than
+# vendored, for `nomos-lang-rust-compiler`'s real compiler-backed provider. Pinned to an
+# exact version rather than a caret range, and to `=0.0.293` specifically rather than a
+# newer one: the rust-analyzer project bumps this whole family's transitive floor ahead
+# of releasing it, so the newest release compatible with `rust-version = "1.88"` (this
+# workspace's own floor, `OD-GATE-008`) is several releases behind the newest one
+# published, not the newest one available. A caret range would let a routine `cargo
+# update` silently raise this workspace's real compile floor past what it declares.
+ra_ap_hir = "=0.0.293"
+ra_ap_ide_db = "=0.0.293"
+ra_ap_load-cargo = "=0.0.293"
+ra_ap_project_model = "=0.0.293"
+ra_ap_syntax = "=0.0.293"
+# Already part of `ra_ap_hir`'s own dependency graph; a direct dependency here so
+# `nomos-lang-rust-compiler` can turn a resolved text offset into a line and column
+# without re-deriving what its own transitive dependency already computes.
+line-index = "=0.1.2"
 
 # Workspace-wide lint policy, mirrored from F:\repos\xvpe\Cargo.toml. Crates inherit
 # it by declaring `lints.workspace = true`. The severity choices are XVPE's and the

@@ -51423,7 +51423,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -51436,7 +51436,27 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-compiler"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 13 tests\ntest guarantee::tests::Test_The_Ceiling_Should_Satisfy_The_Declared_Guarantee ... ok\ntest payload::tests::Test_Encode_Payload_Should_Produce_Stable_Diffable_Bytes ... ok\ntest check::tests::Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean ... ok\ntest payload::tests::Test_An_Empty_Byte_String_Should_Decode_To_A_Clean_Payload ... ok\ntest guarantee::tests::Test_Provider_Offer_Should_Be_Accepted_Under_The_Capabilitys_Contract ... ok\ntest check::tests::Test_Check_Copy_Clones_Should_Produce_No_Finding_For_A_Clean_Fact ... ok\ntest provider::tests::Test_A_Fact_Key_Should_Depend_On_The_Guarantee ... ok\ntest check::tests::Test_Check_Copy_Clones_Should_Relay_A_Real_Findings_Own_Location ... ok\ntest payload::tests::Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding ... ok\ntest payload::tests::Test_A_Line_Not_Prefixed_Clone_On_Copy_Should_Be_Refused ... ok\ntest reading::tests::Test_Discover_Crate_Should_Refuse_A_Root_With_No_Cargo_Project ... ok\ntest reading::tests::Test_Discover_Crate_Should_Find_Exactly_The_Real_Clone_On_Copy_Call ... ok\ntest provider::tests::Test_Materialize_Crate_Should_Find_The_Real_Fixtures_Own_Finding ... ok\n\ntest result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 32.08s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.23s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_compiler-cbb1fa0a4b533971.exe)\n   Doc-tests nomos_lang_rust_compiler\n",
+        "verified_at": 1788632424,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "31405cab2d86e4647a739efae9f550de9809661e"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

@@ -28,8 +28,8 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
     let declared = Declared_Domains();
     assert_eq!(
         declared.len(),
-        18,
-        "eighteen productions are covered by sixteen declarations; a new producer needs a \
+        19,
+        "nineteen productions are covered by seventeen declarations; a new producer needs a \
          row in this table and a test of its own, whether or not it also needs a \
          declaration of its own"
     );
@@ -38,13 +38,14 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
 }
 
 /// Every domain this workspace has, with the row of the contracts table it occupies.
-fn Declared_Domains() -> [(&'static str, DeterminismStrength); 18]
+fn Declared_Domains() -> [(&'static str, DeterminismStrength); 19]
 {
     use nomos_analysis::FactReuse;
     use nomos_corrections::CorrectionStaging;
     use nomos_lang_rust::SyntaxFactProduction;
     use nomos_lang_rust_cargo::DependencyFactProduction;
     use nomos_lang_rust_clippy::LintFactProduction;
+    use nomos_lang_rust_compiler::CloneOnCopyFactProduction;
     use nomos_lang_rust_deny::DependencyPolicyFactProduction;
     use nomos_lang_rust_scan::ScanFactProduction;
     use nomos_repo_limits::LimitsPolicyFactProduction;
@@ -84,6 +85,7 @@ fn Declared_Domains() -> [(&'static str, DeterminismStrength); 18]
             "dependency-policy-fact-production",
             DependencyPolicyFactProduction::STRENGTH,
         ),
+        ("copy-clones-fact-production", CloneOnCopyFactProduction::STRENGTH),
         ("limits-policy-fact-production", LimitsPolicyFactProduction::STRENGTH),
         ("naming-policy-fact-production", NamingPolicyFactProduction::STRENGTH),
         ("scripting-policy-fact-production", ScriptingPolicyFactProduction::STRENGTH),
@@ -100,7 +102,7 @@ fn Declared_Domains() -> [(&'static str, DeterminismStrength); 18]
 /// Each declared domain has a test registered under its name, and measures something —
 /// `DeterminismStrength::None` would be an obligation this loop discharges without ever
 /// checking anything.
-fn Each_Domain_Declares_A_Strategy_And_Is_Registered(declared: [(&str, DeterminismStrength); 18])
+fn Each_Domain_Declares_A_Strategy_And_Is_Registered(declared: [(&str, DeterminismStrength); 19])
 {
     use crate::harness::Test_Name_For;
 

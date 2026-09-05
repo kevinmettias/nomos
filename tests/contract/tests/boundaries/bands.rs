@@ -112,6 +112,11 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // nomos-lang-rust-cargo and nomos-lang-rust-clippy, naming neither them nor either of
     // its syntax-reading siblings.
     ("nomos-lang-rust-deny", 25),
+    // The one provider of nomos.cap.rust.copy_clones -- this workspace's first provider
+    // backed by a real compiler semantic API (`ra_ap_hir`) rather than a syntax tree or
+    // another tool's own report. Same band as its syntax- and subprocess-backed
+    // siblings above: a new evidence source, not a new layer. `P40-COMPILER-BACKED-PROVIDER`.
+    ("nomos-lang-rust-compiler", 25),
     // A second provider of nomos.cap.dependency.edges, for a Go workspace. Reads
     // go.work/go.mod text directly rather than running a subprocess -- its own module doc
     // says why -- but the same band and the same rule as its three siblings above: none of

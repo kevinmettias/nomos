@@ -519,6 +519,50 @@ fn Rendered_Dependency_Policy_Fact(fact: &nomos_lang_rust_deny::PolicyFact) -> V
     return rendered;
 }
 
+/// `nomos-lang-rust-compiler`'s one fact over its own small, committed fixture crate.
+///
+/// Not this repository's own real tree, unlike [`Dependency_Policy_Production`]: a real
+/// `ra_ap_hir` analysis loads a full sysroot and the whole of whatever crate graph it is
+/// pointed at, so pointing it at this repository's own hundred-odd crates would make this
+/// determinism check the slowest thing this suite runs to re-verify a claim its own small
+/// fixture already proves just as honestly -- `Discover_Crate`'s real compiler frontend
+/// does not know or care that the crate it is loading is a fixture.
+pub(crate) fn Copy_Clones_Production() -> Vec<u8>
+{
+    let context = Copy_Clones_Context();
+    let fact = Discovered_Copy_Clones_Fact(context);
+
+    return Rendered_Copy_Clones_Fact(&fact);
+}
+
+fn Copy_Clones_Context() -> nomos_lang_rust_compiler::FactContext
+{
+    return nomos_lang_rust_compiler::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
+        generation: GenerationId::INITIAL,
+    };
+}
+
+/// This crate's own committed fixture crate, materialized through the door this provider
+/// actually reads a real compiler frontend's analysis through.
+fn Discovered_Copy_Clones_Fact(context: nomos_lang_rust_compiler::FactContext) -> nomos_lang_rust_compiler::CloneOnCopyFact
+{
+    let root = Repository_Root().join("crates/languages/nomos-lang-rust-compiler/fixtures/clone_on_copy_sample");
+    return nomos_lang_rust_compiler::Materialize_Crate(&root, context)
+        .expect("this crate's own committed fixture is a real, loadable Cargo project; a provider that cannot see it verifies nothing");
+}
+
+fn Rendered_Copy_Clones_Fact(fact: &nomos_lang_rust_compiler::CloneOnCopyFact) -> Vec<u8>
+{
+    let mut rendered = Vec::new();
+    rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
+    rendered.extend_from_slice(&fact.fact.payload.bytes);
+
+    return rendered;
+}
+
 /// `nomos-lang-go-modules`'s facts over a small, synthetic Go workspace.
 ///
 /// Not this repository's own real tree, unlike [`Dependency_Production`] and

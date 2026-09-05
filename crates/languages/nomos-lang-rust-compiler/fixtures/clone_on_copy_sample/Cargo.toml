@@ -1,0 +1,13 @@
+# An empty `[workspace]` table makes this manifest its own workspace root rather than a
+# member `cargo` would otherwise walk up and find inside the real `nomos` workspace --
+# `ra_ap_load-cargo::load_workspace_at` (this crate's own real analysis path, exercised
+# in `src/reading.rs`'s tests) loads exactly this one small crate's own resolved graph
+# rather than the whole of `nomos`, which would make the test slow and its subject list
+# depend on every other crate in this repository.
+[workspace]
+
+[package]
+name = "clone-on-copy-sample"
+version = "0.1.0"
+edition = "2021"
+publish = false
