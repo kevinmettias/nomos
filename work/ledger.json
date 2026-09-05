@@ -55541,6 +55541,43 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P40-SURFACE-SNAPSHOTS-STALE",
+      "title": "Four surfaces widened and their snapshots were never blessed",
+      "why": "cargo test -p nomos-contract-tests --test public_surface's Test_Every_Crates_Public_Surface_\nShould_Match_Its_Snapshot fails today for four crates -- nomos-api,\nnomos-correction-orchestration, nomos-corrections and nomos-gate-orchestration -- each\nexporting something its own committed snapshot under tests/contract/surface/ does not show.\n\nTraced each to a real, already-committed change earlier in this session that never ran the\nNOMOS_SURFACE_BLESS step afterward: nomos-correction-orchestration's and nomos-api's own\nCorrectionOutcome/CorrectionResponse enums renamed a claimed field to summary; nomos-gate-\norchestration gained Compare_Gate_Runs, GateCompareResult, DispositionChange and\nFindingDisposition (commit d99b689e, confirmed via git show --stat: it touched\ngate_compare.rs and lib.rs and nothing under tests/contract/surface/); nomos-corrections\ngained CorrectionCandidate::Read_Write and With_Read_Write. Each item's own predicate at the\ntime only named its own package, so none of them reached this suite and the gap went\nuncaught until an unrelated item (P40-MCP-SURFACE-4) ran the whole contract suite and found\nit red for a reason that was not its own change.\n\nNobody currently holds these four files; they are stale, not mid-flight.",
+      "done_when": "cargo test -p nomos-contract-tests --test public_surface passes, with\ntests/contract/surface/nomos-api.txt, nomos-correction-orchestration.txt,\nnomos-corrections.txt and nomos-gate-orchestration.txt rewritten by NOMOS_SURFACE_BLESS to\nagree with what each crate really exports today, and nothing else in this workspace's real\npublic surface changed to make that comparison pass -- verified by re-reading each diff the\nbless step would have compared away and confirming it matches only the additions this\nitem's own why already names (the claimed-to-summary rename, Compare_Gate_Runs and its\nsupporting types, and CorrectionCandidate::Read_Write/With_Read_Write), not a fifth,\nunnoticed drift.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/surface/nomos-api.txt",
+          "tests/contract/surface/nomos-correction-orchestration.txt",
+          "tests/contract/surface/nomos-corrections.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
