@@ -55,7 +55,7 @@ fn Source(path: &str, text: &str) -> SourceFile
 #[test]
 fn Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestration_Seam()
 {
-    let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
+    let sources = vec![Source("a.rs", "pub fn Ok()\n{\n}\n")];
     let command = GateCommand { root: Repository_Root(), ..Default::default() };
 
     let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());

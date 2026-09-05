@@ -54,6 +54,19 @@ fn Repository_Root() -> PathBuf
     return Path::new(env!("CARGO_MANIFEST_DIR")).join("../../..");
 }
 
+/// Where a copy of this workspace's committed unparseable fixture is written in a scratch
+/// tree, and why the directory is part of the fixture rather than incidental.
+///
+/// The committed original is `tests/corpus/analysis/gamma/broken.rs`, and its first line is
+/// `use super::*;`. `Check_No_Wildcard_Imports` exempts that exact idiom in a file its own
+/// `Is_Test_Or_Example_Source` recognizes, which the committed path is and a bare `broken.rs`
+/// at a scratch root is not -- so a copy written at the root picks up a blocking finding the
+/// original never has, and the tests below need this file to be inert about everything except
+/// being unreadable. Writing it under `tests/` restores the exemption by restoring the fact
+/// the exemption is about, rather than by editing committed content or asserting around the
+/// finding.
+const UNPARSEABLE_FIXTURE: &str = "tests/broken.rs";
+
 /// The text of a file this workspace's parser refuses, taken from the workspace itself.
 ///
 /// Not a hand-written approximation. `tests/corpus/analysis/gamma/broken.rs` is committed,
@@ -109,10 +122,18 @@ impl Tree
         return Self { root };
     }
 
-    /// Writes one file into the tree.
+    /// Writes one file into the tree, creating any directory its name asks for.
+    ///
+    /// Nested names matter here: [`UNPARSEABLE_FIXTURE`] has to land under a directory that
+    /// makes it a test source, the way its committed original is one.
     fn With(self, name: &str, text: &str) -> Self
     {
-        std::fs::write(self.root.join(name), text).expect("writing into a directory just created");
+        let path = self.root.join(name);
+        if let Some(parent) = path.parent()
+        {
+            std::fs::create_dir_all(parent).expect("parent directories are creatable");
+        }
+        std::fs::write(path, text).expect("writing into a directory just created");
         return self;
     }
 
@@ -172,7 +193,7 @@ fn Test_A_Phantom_Should_Fail_The_Command_Though_The_Tree_Holds_A_File_The_Parse
             "universe.rs",
             "/// Mirrored by `Test_Nothing_Named_This`.\npub const TABLES: &[&str] = &[];\n",
         )
-        .With("broken.rs", &Text_The_Parser_Refuses());
+        .With(UNPARSEABLE_FIXTURE, &Text_The_Parser_Refuses());
 
     let Ran { code, said: output } = tree.Check();
 
@@ -233,7 +254,7 @@ fn Test_A_Mirror_That_Exists_Should_Still_Pass_Beside_A_File_The_Parser_Refuses(
             "guard.rs",
             "#[test]\nfn Test_Every_Table_Should_Be_Declared()\n{\n}\n",
         )
-        .With("broken.rs", &Text_The_Parser_Refuses());
+        .With(UNPARSEABLE_FIXTURE, &Text_The_Parser_Refuses());
 
     let Ran { code, said: output } = tree.Check();
 
@@ -291,7 +312,7 @@ fn Test_A_Tree_With_No_Source_Should_Not_Report_Clean()
 #[test]
 fn Test_A_Run_That_Materialised_No_Facts_Should_Not_Exit_Zero()
 {
-    let tree = Tree::New("no-facts").With("broken.rs", &Text_The_Parser_Refuses());
+    let tree = Tree::New("no-facts").With(UNPARSEABLE_FIXTURE, &Text_The_Parser_Refuses());
 
     let Ran { code, said: output } = tree.Check();
 

@@ -35,7 +35,7 @@ fn Test_Rust_Extension_Constant_Should_Equal_The_Literal_The_Walk_Hardcodes()
 fn Test_Check_Should_Examine_And_Materialize_A_Fact_For_A_File_Named_With_The_Rust_Extension()
 {
     let tree = Tree::New("lang-rust-seam")
-        .With(&format!("a.{}", nomos_lang_rust::RUST_EXTENSION), "pub fn One() {}\n");
+        .With(&format!("a.{}", nomos_lang_rust::RUST_EXTENSION), "pub fn One()\n{\n}\n");
 
     let ran = Run(&["check", "--root", &tree.Root()]);
 

@@ -49783,6 +49783,146 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P35-GATE-020-REGISTRY-WHOLE",
+      "title": "Offer all 56 composed rules from the gate registry, pinned to Composed_Rules by a test",
+      "why": "OD-GATE-020 measured Registered() offering eight rules while Run composes fifty-six, and left closing it to a correction item sized by how much of the per-rule citation audit that item could honestly do. The gap is not only a doc claiming a parity it does not have: Contract_Of in finding_query.rs looks a findings contract citation up in this same registry, so nomos gate explain answers nothing at all about a finding from any of the forty-eight unoffered rules, and nomos gate plan reports eight where a caller judging this workspace gets fifty-six. P35-GATE-020-COMPOSED-RULES-EXPORT built the authority the record named, so the hand-typed pair can now become one list and one comparison checked by cargo test rather than by eye at correction time.",
+      "done_when": "Registered() offers every rule Composed_Rules names and no other; a test asserts that correspondence against nomos_check_orchestration::Composed_Rules rather than against a hand-written expectation, so a rule composed into Run without an offer fails rather than drifting; each offer cites the authority the rule actually has, classified per rule rather than assumed, with the audit written down where a reader meets it; the two existing eight-rule expectations in nomos-gate-orchestration tests.rs and nomos-cli gate tests.rs are updated to whatever the derived answer is; gate run over this tree still exits clean, since the registry does not select what runs.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs",
+          "crates/rules/nomos-rules/src/checks/naming/file_names.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/tests/rule_contract_citation.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-opus-5-session",
+        "acquired_at": 1788573123,
+        "lease_expires_at": 1788587523
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P35-CLI-CHECK-FIXTURE-SINGLE-LINE-BODY",
+      "title": "Two nomos-cli check tests are red because their clean fixture collides with a rule composed after them",
+      "why": "Test_A_Provider_Refusal_Must_Not_Render_The_Same_As_A_Clean_Run and Test_A_Phantom_Should_Block_Though_The_Tree_Holds_A_File_The_Parser_Refuses both write a fixture whose whole content is a function with its signature, body and closing brace on one line. That was clean when they were written; no-single-line-function-bodies was composed into Run afterwards and now reports it as Blocking, so both tests fail on a finding neither is about. Red at 544e29eb, before this session touched anything, and it blocks every predicate naming nomos-cli. The same collision hit nomos-gate-orchestration tests.rs, whose six failures P35-GATE-020-REGISTRY-WHOLE is repairing inside its own territory; this file is not that item territory, so it needs its own.",
+      "done_when": "Both tests pass, through a fixture that is genuinely clean under every rule Run composes rather than through a narrowed assertion; the fixture change is the smallest one that clears the collision, and nothing else about what the two tests assert is altered; cargo test for nomos-cli is green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/check/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-opus-5-session",
+        "acquired_at": 1788573766,
+        "lease_expires_at": 1788580966
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P35-INTEGRATION-FIXTURES-COLLIDE-WITH-COMPOSED-RULES",
+      "title": "Four integration tests are red on fixtures that predate the rules now composed into Run",
+      "why": "The same collision P35-CLI-CHECK-FIXTURE-SINGLE-LINE-BODY repairs in the unit tier, one tier out, in test binaries that drive the real command over a real temporary tree. Two shapes. In lang_rust_seam.rs and nomos-gate-orchestration check_orchestration_seam.rs the clean fixture is a function whose signature, body and brace sit on one line, which no-single-line-function-bodies now reports as Blocking. In check_command.rs the fixture is this repository own committed unparseable corpus file, copied into the temporary tree at its root: in the real tree it lives under tests/ and its leading use super star is exempt as a test source, but at a bare root path the exemption does not apply and no-wildcard-imports reports it, so the file the two tests need to be inert is no longer inert. All four are red at 544e29eb, before this session, and the gate own Test step runs cargo test --workspace, so the whole gate is red on them.",
+      "done_when": "All four tests pass through fixtures that are genuinely clean under every rule Run composes, not through weakened assertions: the single-line bodies become real bodies, and the unparseable fixture is placed where it carries the same exemption it carries in the real tree rather than having its committed content edited or its reader replaced by a hand-written approximation. cargo test --workspace is green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/tests/check_command.rs",
+          "crates/host/nomos-cli/tests/lang_rust_seam.rs",
+          "crates/orchestration/nomos-gate-orchestration/tests/check_orchestration_seam.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "0ccbda68c0b73c7.exe)\n     Running tests\\portable\\main.rs (target\\debug\\deps\\portable-9a2bf1b556beb617.exe)\n   Doc-tests nomos_agent_contracts\n   Doc-tests nomos_agent_executor_claude_code\n   Doc-tests nomos_analysis\n   Doc-tests nomos_api\n   Doc-tests nomos_cap_controlflow\n   Doc-tests nomos_cap_dependency\n   Doc-tests nomos_cap_dependency_policy\n   Doc-tests nomos_cap_goals_policy\n   Doc-tests nomos_cap_limits_policy\n   Doc-tests nomos_cap_lint\n   Doc-tests nomos_cap_naming_policy\n   Doc-tests nomos_cap_scripting_policy\n   Doc-tests nomos_cap_syntax\n   Doc-tests nomos_cap_words_policy\n   Doc-tests nomos_capability\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_contracts\n   Doc-tests nomos_corrections\n   Doc-tests nomos_gate_orchestration\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_lang_go\n   Doc-tests nomos_lang_go_modules\n   Doc-tests nomos_lang_go_package\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_lang_rust_cargo\n   Doc-tests nomos_lang_rust_clippy\n   Doc-tests nomos_lang_rust_deny\n   Doc-tests nomos_lang_rust_package\n   Doc-tests nomos_lang_rust_scan\n   Doc-tests nomos_ledger\n   Doc-tests nomos_model\n   Doc-tests nomos_model_backend_ollama\n   Doc-tests nomos_model_package\n   Doc-tests nomos_package\n   Doc-tests nomos_platform\n   Doc-tests nomos_platform_std\n   Doc-tests nomos_repo_goals\n   Doc-tests nomos_repo_limits\n   Doc-tests nomos_repo_scripting\n   Doc-tests nomos_repo_standards\n   Doc-tests nomos_repo_standards_document\n   Doc-tests nomos_repo_words\n   Doc-tests nomos_rule_package\n   Doc-tests nomos_rules\n   Doc-tests nomos_scope_verification\n   Doc-tests nomos_spec_bundle\n   Doc-tests nomos_spec_ingest\n   Doc-tests nomos_spec_model\n   Doc-tests nomos_spec_orchestration\n   Doc-tests nomos_spec_project\n   Doc-tests nomos_spec_store\n   Doc-tests nomos_spec_validate\n   Doc-tests nomos_store\n   Doc-tests nomos_work_orchestration\n   Doc-tests nomos_workflow_orchestration\n   Doc-tests nomos_workspace\n",
+        "verified_at": 1788576169,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "192b6594250beee57a4948d461c68cae4fece5ba"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
