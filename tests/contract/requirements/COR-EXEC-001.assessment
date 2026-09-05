@@ -10,11 +10,12 @@
 #
 # ReadWriteSet/ReadWriteResolution/DerivedProvenance are real and tested: all seven named
 # resolution tiers, and all four named derived-provenance fields (reusing
-# nomos_contracts::ProviderId/Guarantee for the first two). What is not real: "every
-# correction operation" does not hold. CorrectionCandidate, the type a correction
-# operation actually is in this crate, has no field of this type and constructs nothing
-# through it -- ChangeSet::Touched remains the only read/write answer any real candidate
-# carries, at Artifact resolution, the weakest tier this type names.
-verdict: Partial
+# nomos_contracts::ProviderId/Guarantee for the first two). CorrectionCandidate, the type
+# a correction operation actually is in this crate, now carries them: New seeds one
+# ReadWriteSet::Declared at Artifact resolution from the change it is given -- the
+# strongest tier a bare ChangeSet justifies -- and With_Read_Write lets a caller with
+# something stronger to say add a declared or derived set beside it, never in place of
+# it, since a stronger claim about part of a change is not a claim about the rest of it.
+verdict: Met
 site: crates/corrections/nomos-corrections/src/read_write_resolution/read_write_set.rs#ReadWriteSet
-gap: crates/corrections/nomos-corrections/src/correction_id/correction_candidate.rs#CorrectionCandidate
+site: crates/corrections/nomos-corrections/src/correction_id/correction_candidate.rs#Read_Write
