@@ -55432,10 +55432,62 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Only Materialize_Syntax has a currency check. Read all nine other materializers this\ncrate composes (Materialize_Dependencies, Materialize_Lint, Materialize_Policy,\nMaterialize_Reachability in dependency_materialization.rs, and the five policy-family\nfunctions in policy_materialization.rs): every one calls store.Materialize() unconditionally\nwhenever its section runs, with no Already_Current-shaped check first. A family other than\nnomos.cap.syntax.items therefore reads as \"changed\" on every call it is selected for,\nwhether or not the run's inputs actually differ.\n\nSyntax's own dedup is whole-call, not per-subject: Materialize_Syntax reports one count over\nall of `sources`, so one changed file among many flips the same signal a hundred unchanged\nfiles would leave untouched. There is no selection of real composed rules where one family\ncan be shown to have changed while another, also-selected family did not, for a one-file\nchange in a many-file tree -- the exact scenario this item's own done_when named as the\ntest. Building that honestly needs either per-subject syntax tracking (which the rule\nclosures cannot use today -- each one reads the whole `sources` list and returns one\nVec<Finding>, not a per-subject partial result) or a currency check added to each of the\nother nine materializers first, and either is a larger, separate body of work.\n\nRe-authoring the half that is real: zero content changes across two calls skips a rule\nrequiring only nomos.cap.syntax.items or nothing at all (a SourceText rule), and says\nplainly that a rule needing any other family still reassesses every call until that\nfamily's own materializer gets the currency check syntax already has."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "Re-scoping before implementing: the done_when's second clause is not honestly demonstrable against real providers, per direct inspection of every materializer this crate composes.",
+          "abandoned_at": 1788639339
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788639357
+      }
+    },
+    {
+      "id": "P40-INCREMENTAL-SKIP-UNCHANGED-RULES",
+      "title": "A rule needing only syntax, or nothing, skips a call where nothing changed",
+      "why": "P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS gave Materialize_Syntax a currency check, so a\nreused store and workspace no longer re-parse a subject nothing touched. Nothing yet uses\nthat saved work above the materialization layer: Findings_For_Selected_Rules still runs\nevery selected rule's closure on every call regardless of whether anything it reads moved.\n\nOnly syntax has that currency check today -- direct inspection of Materialize_Dependencies,\nMaterialize_Lint, Materialize_Policy, Materialize_Reachability and the five policy-family\nfunctions in policy_materialization.rs shows every one of them writes unconditionally\nwhenever its section runs, so their own family always reads as changed. A rule needing one\nof those other nine families cannot be skipped honestly until its own materializer earns\nthe check syntax already has -- that is separate, later work, one materializer at a time.\nWhat is real right now is the syntax-only and source-text case: a rule that reads nothing\nbut nomos.cap.syntax.items, or reads no fact at all and judges sources directly, has nothing\nleft to see when a second call over the same, unmoved sources runs.",
+      "done_when": "A caller that keeps a workspace, fact store and a new per-rule reassessment cache across\ntwo calls to this crate's run pipeline, with the same selection and zero content changes\nbetween calls, does not run the closure again for any selected rule whose own\nnomos_rules::RuleDescriptor.requires names only RequiredFact::SyntaxItems, or names no\nfamily at all (every SubjectKind::SourceText rule) -- its prior findings are reused\ninstead. A selected rule needing any other family still runs its closure again on the\nsecond call, since that family's own materializer has no currency check yet. Existing\ncallers of the existing Run function, which construct a fresh cache per call, see no\nbehavior change at all. Proven by a test that counts real rule-closure invocations, not\njust materializations, across a selection spanning both kinds of rule, over an\notherwise-identical second call: the syntax-only and source-text rules' counts do not\ngrow, the other kind's does.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context/rule_reassessment.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop",
+        "acquired_at": 1788639397,
+        "lease_expires_at": 1788646597
+      },
       "verification": {
         "argv": [
           "cargo",
