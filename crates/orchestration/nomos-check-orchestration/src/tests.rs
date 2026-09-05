@@ -8,7 +8,7 @@
 //! same paths again through the compiled binary; this file is the crate's own guarantee,
 //! independent of that caller ever existing.
 
-use crate::{CheckOutcome, Claim, Run, RunContext};
+use crate::{CheckOutcome, Claim, Composed_Rules, Run, RunContext};
 use nomos_analysis::{MemoryFactStore, Reader};
 use nomos_contracts::{Finding, GateCategory, RuleId};
 use nomos_model::Subject_Of_Path;
@@ -880,3 +880,85 @@ fn Scratch_Directory(name: &str) -> std::path::PathBuf
     return root;
 }
 
+
+/// Every rule [`Composed_Rules`] names must be named once.
+///
+/// A rule composed twice into the run table is invisible from inside this crate -- the
+/// second entry simply runs the same check again -- but
+/// `nomos-gate-orchestration::composition::Registered` derives its offers from this export
+/// and refuses a repeated [`RuleId`] with `RuleRegistryError::AlreadyOffered`, so a
+/// duplicate here turns a harmless double-run into a whole-registry refusal one crate away.
+/// This is the assertion that catches it at the source rather than at the consumer.
+#[test]
+fn Test_Composed_Rules_Should_Name_Each_Rule_Once()
+{
+    let composed = Composed_Rules();
+
+    let mut seen = std::collections::HashSet::new();
+    let repeated: Vec<&RuleId> = composed.iter().filter(|rule| return !seen.insert(*rule)).collect();
+
+    assert!(repeated.is_empty(), "the run table composes these rules more than once: {repeated:?}");
+}
+
+/// The exported identifiers are the run table's own selection keys, proved by selecting
+/// through one.
+///
+/// This is the assertion a length or uniqueness check cannot make. A second, hand-typed
+/// list would satisfy both while carrying a lookalike string -- `no_trailing_whitespace`
+/// against `no-trailing-whitespace`, or an identifier left behind by a rename -- and every
+/// caller that selected through the export would then silently run nothing where it asked
+/// for a rule. So the rule below is selected by the string [`Composed_Rules`] handed back,
+/// never by the constant, and the finding that comes back has to carry it.
+#[test]
+fn Test_A_Rule_Selected_Through_Its_Exported_Identifier_Should_Run()
+{
+    let exported = Composed_Rules()
+        .into_iter()
+        .find(|rule| return rule.As_Str() == nomos_rules::NO_TRAILING_WHITESPACE)
+        .expect("the export must name a rule the run table composes");
+
+    let sources = vec![Source("a.rs", "pub fn one() {} \n")];
+
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&[exported.clone()]);
+
+    let CheckOutcome::Judged { findings, .. } = outcome
+    else
+    {
+        panic!("a tree the provider can read must be judged");
+    };
+    assert!(
+        !findings.is_empty(),
+        "selecting through the exported identifier must run the rule it names"
+    );
+    assert!(
+        findings.iter().all(|finding| return finding.rule == exported),
+        "only the selected rule may report: {findings:?}"
+    );
+}
+
+/// The negative control for the test above.
+///
+/// Without it, a selection seam that ignored `selected` entirely and ran everything would
+/// satisfy that assertion by accident -- the trailing-whitespace finding would still arrive
+/// -- and the export could name anything at all.
+#[test]
+fn Test_An_Identifier_The_Export_Does_Not_Name_Should_Select_Nothing()
+{
+    let composed = Composed_Rules();
+    let absent = RuleId::New("no-rule-by-this-name");
+    assert!(!composed.contains(&absent), "this control needs an identifier the table does not carry");
+
+    let sources = vec![Source("a.rs", "pub fn one() {} \n")];
+
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&[absent]);
+
+    let CheckOutcome::Judged { findings, .. } = outcome
+    else
+    {
+        panic!("a tree the provider can read must be judged");
+    };
+    assert!(
+        findings.is_empty(),
+        "an unselected run table must report nothing: {findings:?}"
+    );
+}

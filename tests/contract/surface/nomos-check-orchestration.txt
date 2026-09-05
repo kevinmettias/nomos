@@ -9,6 +9,7 @@ pub enum variant nomos_check_orchestration::Claim::Complete
 pub enum variant nomos_check_orchestration::Claim::Incomplete
 pub fn nomos_check_orchestration::Claim::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_check_orchestration::Claim_Of(findings: &[Finding]) -> Claim
+pub fn nomos_check_orchestration::Composed_Rules() -> Vec<RuleId>
 pub fn nomos_check_orchestration::Registered() -> Result<Registry, RegistryError>
 pub fn nomos_check_orchestration::Resolved_Configuration(registry: &Registry) -> ConfigurationId
 pub fn nomos_check_orchestration::Run<Launcher: ProcessLauncher, Fs: FileSystem>( sources: &[SourceFile], context: RunContext<'_, Launcher, Fs>, selected: &[RuleId], ) -> CheckOutcome

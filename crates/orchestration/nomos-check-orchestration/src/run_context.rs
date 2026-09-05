@@ -519,11 +519,81 @@ fn Rule_Findings(
     selected: &[RuleId],
 ) -> Vec<Finding>
 {
+    return With_Composed_Rules(sources, capabilities, |rules| {
+        return Findings_For_Selected_Rules(rules, reader, selected);
+    });
+}
+
+/// One entry of the rule table: the identifier a caller selects by, and the check that
+/// identifier runs.
+///
+/// Named because the table is now written down in three places -- built in
+/// [`With_Composed_Rules`], read by [`Composed_Rules`], and run by
+/// [`Findings_For_Selected_Rules`] -- and a type spelled out three times is three places
+/// for one of them to drift.
+type ComposedRule<'a> = (&'a str, &'a dyn Fn(&mut Reader<'_, '_>) -> Vec<Finding>);
+
+/// Every rule [`Run`] composes, in the order it runs them.
+///
+/// This is the authority `nomos-gate-orchestration::composition::Registered` derives from.
+/// `OD-GATE-020` measured that registry offering eight rules against the fifty-six composed
+/// here, found the declared parity between the two had gone false silently twice, and named
+/// why closing it by hand again would not fix the shape: `OD-GATE-011`'s legitimate-exception
+/// test asks that both sides of a duplicated answer derive from one named authority outside
+/// either artifact, and this crate exported none for a second list to derive from. It does
+/// now, and it is not a second copy of the table -- [`With_Composed_Rules`] builds the one
+/// array literal [`Rule_Findings`] runs, and the identifiers below are read straight off it,
+/// so a rule composed into that table appears here with no second edit and none can be
+/// composed without appearing.
+///
+/// The empty source slice and [`Nothing_Materialized`] are not a pretend run. Every
+/// identifier in that table is a `&'static str` constant that closes over neither input; the
+/// two arguments exist only because each identifier is paired there with the closure that
+/// would run it, and no closure is called on this path.
+#[must_use]
+pub fn Composed_Rules() -> Vec<RuleId>
+{
+    let capabilities = Nothing_Materialized();
+
+    return With_Composed_Rules(&[], &capabilities, |rules| {
+        return rules.iter().map(|(rule, _check)| return RuleId::New(*rule)).collect();
+    });
+}
+
+/// A materialization holding nothing, for [`Composed_Rules`]' read of the rule table.
+///
+/// Named rather than spelled inline so the six empty lists read as one deliberate absence
+/// rather than six oversights.
+fn Nothing_Materialized() -> CapabilityMaterialization
+{
+    return CapabilityMaterialization {
+        dependency_sources: Vec::new(),
+        dependency_findings: Vec::new(),
+        lint_sources: Vec::new(),
+        lint_findings: Vec::new(),
+        policy_sources: Vec::new(),
+        policy_findings: Vec::new(),
+    };
+}
+
+/// Builds the rule table and hands it to `body`, which is the only way anything reads it.
+///
+/// The table cannot be returned: each entry pairs an identifier with a `&dyn Fn` borrowed
+/// from a closure local to this function, so a signature handing the array back would be
+/// handing back references to temporaries that die at the brace. Passing a `body` in keeps
+/// the borrow alive for exactly as long as somebody is reading, which is what lets
+/// [`Rule_Findings`] and [`Composed_Rules`] share one literal instead of maintaining two.
+fn With_Composed_Rules<Answer>(
+    sources: &[SourceFile],
+    capabilities: &CapabilityMaterialization,
+    body: impl FnOnce([ComposedRule<'_>; RULE_COUNT]) -> Answer,
+) -> Answer
+{
     // Boxed as `dyn Fn` because the closures below close over different captures
     // (`sources`, `capabilities.dependency_sources`, `capabilities.lint_sources`, ...) and so
     // are distinct anonymous types -- an array needs one common element type, and `dyn
     // Fn` is that common type where `impl Fn` cannot be.
-    let rules: [(&str, &dyn Fn(&mut Reader<'_, '_>) -> Vec<Finding>); RULE_COUNT] = [
+    let rules: [ComposedRule<'_>; RULE_COUNT] = [
         (COMPLETENESS_MIRROR, &|reader| return Check_Completeness_Mirrors(sources, reader)),
         (NAMING_CONVENTION, &|reader| return Check_Naming_Convention(sources, reader)),
         (DEPENDENCY_DIRECTION, &|reader| return Check_Dependency_Direction(&capabilities.dependency_sources, reader)),
@@ -584,7 +654,7 @@ fn Rule_Findings(
         (NO_SINGLE_LINE_FUNCTION_BODIES, &|_reader| return Check_No_Single_Line_Function_Bodies(sources)),
     ];
 
-    return Findings_For_Selected_Rules(rules, reader, selected);
+    return body(rules);
 }
 
 /// Runs every `rules` entry `selected` names, in table order, and collects what each
@@ -592,7 +662,7 @@ fn Rule_Findings(
 fn Findings_For_Selected_Rules(
     // `dyn Fn` matches the array element type `Rule_Findings` builds, above: eight distinct
     // closures need one common type, and `dyn Fn` is that type where `impl Fn` cannot be.
-    rules: [(&str, &dyn Fn(&mut Reader<'_, '_>) -> Vec<Finding>); RULE_COUNT],
+    rules: [ComposedRule<'_>; RULE_COUNT],
     reader: &mut Reader<'_, '_>,
     selected: &[RuleId],
 ) -> Vec<Finding>

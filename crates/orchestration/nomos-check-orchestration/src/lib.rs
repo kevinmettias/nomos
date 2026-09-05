@@ -48,4 +48,4 @@ mod tests;
 pub use check_command::CheckCommand;
 pub use composition::{Registered, Resolved_Configuration};
 pub use examined::{Claim, Claim_Of, CheckOutcome, Examined};
-pub use run_context::{Run, RunContext};
+pub use run_context::{Composed_Rules, Run, RunContext};
