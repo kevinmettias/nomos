@@ -54317,6 +54317,126 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P50-HOST-004-TRIGGER-HAS-FIRED",
+      "title": "OD-HOST-004 reads as though its trigger is ahead of it, and it fired some time ago",
+      "why": "OD-HOST-004 says Run stays hand-written for as long as every rule it calls runs unconditionally, and names the event that ends that: Run flips the first time a rule is meant to run for some check invocations and not others, selected by something the request states. Run now takes selected as a slice of RuleId, OD-GATE-017 made a non-empty selection narrow what Run computes at all, and nomos gate run --rule reaches it from a command line. The record still describes that condition as future. OD-RULES-022 records that the trigger fired and decides what composition resolves against, but a reader who reaches OD-HOST-004 first is told the opposite of the tree. This is the same class this repository has corrected three times in two weeks, in P43-CAPABILITY-008-TRIGGERS-FIRED and in P44-HOST-007-TRANSPORT-NOW-EXISTS.",
+      "done_when": "OD-HOST-004 states that its own named trigger has fired, what fired it, and what answered it, rather than describing a condition that has passed. Its reasoning is not revised and its What Flips The Answer section is not rewritten as though it had always said this; the amendment records the outcome the way a named trigger is meant to be discharged. Both required projections are re-rendered from the record set the commit publishes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P50-RULE-PACKAGE-DECLARES-ITS-JUDGMENT",
+      "title": "A rule package cannot say whether anything mechanically judges the rule it declares",
+      "why": "OD-RULES-022 decided that a declaration states its own judgment, and that this is what makes the resolution total: a declaration is either mechanical, in which case an implementation must exist and resolution fails if it does not, or model-judged, in which case there is none and the rule contributes nothing to a deterministic run. RulePackage carries no such field today. Its ApplicabilitySemantics is a different question entirely, AlwaysSupported against StructurallyPartial, which is about the subjects a judgment covers rather than whether a judgment exists. Without the distinction the resolution step has only two bad options for the Go predecessor population, where by its own rulespec doc 728 of 1116 rules are decided by a model rather than by a parser: refuse every one of them, or admit them as implementations that silently judge clean, which OD-GATE-001 already names as the defect the gate exists to prevent. The manifest already carries agent_guidance for exactly the rules this field would mark, and that field is empty for every shipped rule because no rule it was meant for can be declared yet.",
+      "done_when": "RulePackage carries a declared judgment, its reader parses and refuses an unknown value the way it already refuses an unknown applicability semantics or evidence class, and a round-trip test covers both arms. The crate surface snapshot is reblessed. Nothing consumes the field yet: this item makes the distinction representable, and the resolution step that reads it is its own item.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-rule-package",
+          "tests/contract/surface/nomos-rule-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P48-RULE-PACKAGE-DRIVES-COMPOSITION-DECISION"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rule-package",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P50-RULE-PACKAGE-RESOLUTION-STEP",
+      "title": "nomos-rule-package parses a manifest nothing resolves, so a declaration reaches no run",
+      "why": "OD-RULES-022 decided composition resolves a declared rule package against a linked implementation and refuses in both directions: a mechanical declaration naming no implementation is a rule the gate would report and cannot perform, and an implementation with no declaration is one of the eighteen rules that are exported, tested, documented and judge nothing while reading to any reader of the crate as though they are in force. Nothing performs that resolution. nomos-rule-package parses a manifest and, grepped at 95d4079b, no crate depends on it. This is the first item that gives it a consumer, and the point at which the three hand-maintained tables OD-RULES-022 measured stop being the authority on what a rule is.",
+      "done_when": "A resolution step matches declared rule packages against registered implementations and returns a typed refusal naming which side is missing, with the mechanical and model-judged arms treated as OD-RULES-022 decided. It is exercised by a real test over real declarations rather than a fixture that could pass over an empty set, and a run whose declaration set is empty is refused rather than reported clean, which is the same distinction OD-GATE-001 draws. It changes what no existing run judges: the fifty-seven composed rules keep judging exactly what they judge today, because migrating the array rows into declarations is the following item and this one must not do both. Its predicate names nomos-gate-orchestration as well as nomos-check-orchestration, per the five-registration-site lesson d57c437a records.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/packages/nomos-rule-package",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "standards.json",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries",
+          "tests/contract/surface"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P50-RULE-PACKAGE-DECLARES-ITS-JUDGMENT"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rule-package",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
