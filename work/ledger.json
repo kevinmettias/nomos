@@ -54010,6 +54010,185 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P48-RULE-PACKAGE-DRIVES-COMPOSITION-DECISION",
+      "title": "OD-HOST-004 said hand-written composition holds until a rule runs conditionally, and one does",
+      "why": "OD-HOST-004 decided Run stays hand-written for as long as every rule it calls runs unconditionally, and named the exact event that flips it: Run flips the first time a rule is meant to run for some check invocations and not others, selected by something the request states. That has happened. nomos_check_orchestration Run now takes selected as a slice of RuleId, OD-GATE-017 made a non-empty selection narrow what Run computes at all, and nomos gate run --rule reaches it from the command line. The answer given at the time was a filter over a fixed array: run_context.rs holds RULE_COUNT equal to fifty-seven and its own doc calls the accompanying structure a fixed, hand-written mapping from RuleId to the fact or facts it needs. That is a declaration doing registry work inside a function body, which is the accretion OD-HOST-004 exists to head off. Meanwhile nomos-rule-package already parses a manifest carrying exactly that per-rule information, measured field by field against four real rules by OD-PACKAGE-008, and nothing in this workspace depends on it: grepped 2026-09-05, its only appearances outside its own directory are two band tables and one doc comment. Seventy-five rules are exported and fifty-seven composed, and the gap is invisible because there is no declaration to compare the array against. The porting target makes this structural rather than tidy: the Go predecessor declares one thousand one hundred and forty-three rules, and a hand-written array is not the shape that holds them.",
+      "done_when": "A governing record decides whether rule composition resolves a declared rule package against a linked implementation, the way a provider offer already resolves through KnownProviders and the capability registry, or stays a hand-written array with a request-carried filter. It states what a rule package declares versus what only linked code can supply, since a manifest cannot conjure a function. It records that OD-HOST-004 named a trigger, that the trigger fired, and what became of it, rather than leaving that record describing a condition that has passed. It is registered under crates/spec/nomos-spec-store/records and both required projections are re-rendered from the record set the commit publishes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-022.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-opus5-session-rulepkg",
+        "acquired_at": 1788599919,
+        "lease_expires_at": 1788610719
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P47-RULES-RUST-DISCIPLINE-TRIO",
+      "title": "Three text-decidable Rust rules exist in the tool this ports and in no rule here",
+      "why": "Of the twenty Rust-specific checks code-standards ships that nomos has not ported, thirteen are tree-sitter-backed and need structure the nomos.cap.syntax.items payload does not carry, which is P46-SYNTAX-PAYLOAD-TREE-OR-INDEX's own question and not this item's. Three of the remaining text-decidable ones were measured against this workspace before being chosen and each reports zero: check-borrowing (rules/language-specific/rust/borrowing-and-ownership/borrowing, a borrowed owning container in a signature -- ampersand-String, ampersand-Vec, ampersand-PathBuf, ampersand-Box -- where the unsized view is what the caller can supply without allocating), check-lifetime-discipline (rules/language-specific/rust/lifetimes/lifetime-discipline, two or more distinct single-letter lifetimes on one declaration, and a static bound with no justification), and check-proc-macro (rules/language-specific/rust/structure/proc-macro, a function-like procedural macro with no justification, deliberately not the derive and attribute forms the rule sanctions). Zero was checked for vacuity rather than trusted: each was run against a hand-written positive fixture and fired, so the clean result is a real population judged clean and not the empty-population reading P43-EMPTY-POPULATION-IS-NOT-CLEAN names. Two neighbours were measured and rejected for cause and are not in scope: check-move-out-of-mut cannot fire on Allman-braced code at all, and a corrected version producing five findings against this tree was checked site by site and all five are reads the field must survive rather than moves out; check-closure-bounds reports four findings that would redden the gate and needs its own item.",
+      "done_when": "nomos-rules exports four rules -- one for the borrowed owning container, one for terse multi-lifetime declarations, one for an unjustified static bound, one for the function-like procedural macro -- each in its own module named for what it judges, each judging only a line's own code the way this crate's sibling text rules already do. A static bound and a procedural macro are justified by an adjacent explanatory comment, the shape Check_Inline_Always_Justification already established here, rather than by one exact marker spelling. All four are composed into nomos-check-orchestration's Run behind the same per-call selection, each carries a descriptor saying it reads source text and needs no fact, the blessed public surface names them, and a real nomos check over this workspace reports zero findings from all four. cargo test -p nomos-rules -p nomos-check-orchestration -p nomos-contract-tests passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/borrowed_container.rs",
+          "crates/rules/nomos-rules/src/checks/lifetime_discipline.rs",
+          "crates/rules/nomos-rules/src/checks/procedural_macro.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P47-ORPHAN-MODULES-HAS-NO-OFFERINGS-ROW",
+      "title": "A rule composed into Run without a registry row leaves the gate crate red",
+      "why": "P47-RULES-ORPHAN-MODULES composed no-orphan-modules into nomos-check-orchestration's Run and raised RULE_COUNT to 57, but left OFFERINGS in nomos-gate-orchestration at 56 rows. Test_Registered_Should_Offer_Every_Composed_Rule and Test_Registered_Should_Compose_Every_Rule_A_Check_Run_Composes both compare the two lists and both fail at a clean tree, so the workspace test step is red for every session until this lands. The item that caused it named a verification predicate over nomos-rules, nomos-check-orchestration and nomos-contract-tests and so could pass while the crate that actually holds the second list was never built -- composing a rule costs five registration sites and its predicate covered four. Reported by a peer session rather than found here, which is the whole cost of a predicate narrower than the change.",
+      "done_when": "OFFERINGS carries a row for no-orphan-modules beside its own module's other rows with the same contract citation its siblings use, and cargo test -p nomos-gate-orchestration -p nomos-check-orchestration passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "ressed_Finding_Should_Not_Block ... ok\n\ntest result: ok. 65 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 22.92s\n\n\nrunning 4 tests\ntest Test_Run_Gate_Should_Report_An_Unreadable_Check_Outcome_As_Indeterminate ... ok\ntest Test_Run_Gate_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestration_Seam ... ok\ntest Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.35s\n\n\nrunning 4 tests\ntest Test_Disposition_Of_Findings_Should_Fail_On_A_Blocking_Finding ... ok\ntest Test_Disposition_Of_Findings_Should_Fail_With_One_Blocking_Finding_Among_Many ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_With_No_Findings ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_When_Nothing_Can_Fail_A_Build ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-20afa862507daea8.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-5f003f2bf76a0745.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-84c9cd07ede5fffc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-647868cae596fd44.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-ed0c2651f92bfdf8.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-5092a3f1210c5d03.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1788600284,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e9b9363f67bd8cc8a7640d7fb87edd256f726654"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P49-ORPHAN-MODULES-OFFERINGS-ROW",
+      "title": "no-orphan-modules is composed into the run and missing from the plan, so the gate crate is red at HEAD",
+      "why": "HEAD e9b9363f composes no-orphan-modules into nomos-check-orchestration, raising RULE_COUNT to 57, and adds no row to OFFERINGS in nomos-gate-orchestration, which still lists 56. Two tests fail on a clean tree: composition::tests::Test_Registered_Should_Offer_Every_Composed_Rule and tests::Test_Registered_Should_Compose_Every_Rule_A_Check_Run_Composes. Verified by running the crate: 63 passed, 2 failed, and the assertion diff names exactly one identifier, no-orphan-modules. The parity test is doing its job; the composing item simply never ran it. P47-RULES-ORPHAN-MODULES is Done, and neither its territory nor its predicate reaches nomos-gate-orchestration: it reserved the rules crate, the check-orchestration run context and the surface snapshot, and it verified with cargo test over nomos-rules, nomos-check-orchestration and nomos-contract-tests. So the item went green while leaving a fourth crate red, and the workspace test step is red for every session until this lands. The recurrence cause is in the procedure rather than in that item's judgment. The nomos-add-plugin skill tells an author to compose a rule into nomos-check-orchestration's own composition and never mentions the gate's OFFERINGS table or the crate whose tests assert the two agree, so the next rule repeats this. P41-RUN-STOPS-NAMING-EVERY-RULE is the structural fix and is a different size of job; this is the row and the sentence that stop it happening again meanwhile.",
+      "done_when": "OFFERINGS carries no-orphan-modules with the citation its siblings use, since the rule is ported from code-standards and cites no versioned record. The two named tests pass and nothing else in the crate changes. The nomos-add-plugin skill names the OFFERINGS row as part of composing a rule and names nomos-gate-orchestration among the crates a composing item's predicate has to run, so the next author is told about the second list before the parity test tells them.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs",
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded for its code half by P47-ORPHAN-MODULES-HAS-NO-OFFERINGS-ROW, claimed by claude-opus5-rule-migration before this was authored and carrying the stronger predicate of the two (it runs nomos-check-orchestration alongside nomos-gate-orchestration). That item's territory reserves composition.rs, so this one could not be claimed and should not be. Its remaining half, the nomos-add-plugin skill never naming the OFFERINGS table or the gate crate a composing item's predicate has to run, is not in that item's territory or done_when and is re-added as P49-ADD-PLUGIN-SKILL-NAMES-THE-SECOND-LIST."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-orphan-offerings",
+        "declined_at": 1788600278
+      }
     }
   ]
 }
