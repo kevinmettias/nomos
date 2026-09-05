@@ -89,7 +89,12 @@
 //! (`OD-HOST-005`'s own resolution: a `nomos request submit` invocation is not a `nomos spec`
 //! verb by the CLI's own naming), and takes an already-assembled `&mut Assembly` directly, so
 //! this is the first `Handle_Spec_*` function here that calls `corpus::Assemble_Corpus` itself
-//! rather than getting it from `Run`.
+//! rather than getting it from `Run`. Its twenty-second, [`correction::Handle_Correction_Run`],
+//! is this crate's first correction verb: `P40-CORRECTIONS-CANONICAL-SEAM` moved correction
+//! planning and lifecycle out of `nomos-cli`'s own `correct.rs` into
+//! `nomos_correction_orchestration::Run_Correction`, a seam both hosts now call -- this
+//! crate's own first real caller outside that orchestration crate's unit tests and
+//! `nomos-cli`.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `Invocation::Run` arm: it walks `command.root` for `.rs` sources
@@ -115,6 +120,7 @@
 //! projectable from a second composition root at all.
 
 mod composition;
+mod correction;
 mod response;
 mod sources;
 mod spec;
@@ -122,6 +128,7 @@ mod spec;
 mod test_support;
 mod work;
 
+pub use correction::{CorrectionResponse, Handle_Correction_Run};
 pub use response::{
     BaselineDebtResponse, Disposition, GateExplainResponse, GatePlanResponse, GateRunResponse, Handle_Gate_Explain,
     Handle_Gate_Plan, Handle_Gate_Run, RuleCalibrationResponse, RuleOfferResponse, SuppressionDispositionResponse,

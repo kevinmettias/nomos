@@ -901,6 +901,7 @@ name = "nomos-api"
 version = "0.1.0"
 dependencies = [
  "nomos-contracts",
+ "nomos-correction-orchestration",
  "nomos-gate-orchestration",
  "nomos-ledger",
  "nomos-model",
@@ -1062,7 +1063,7 @@ dependencies = [
  "nomos-capability",
  "nomos-check-orchestration",
  "nomos-contracts",
- "nomos-corrections",
+ "nomos-correction-orchestration",
  "nomos-gate-orchestration",
  "nomos-lang-go",
  "nomos-lang-rust",
@@ -1099,6 +1100,21 @@ name = "nomos-contracts"
 version = "0.1.0"
 dependencies = [
  "serde",
+]
+
+[[package]]
+name = "nomos-correction-orchestration"
+version = "0.1.0"
+dependencies = [
+ "nomos-analysis",
+ "nomos-check-orchestration",
+ "nomos-contracts",
+ "nomos-corrections",
+ "nomos-model",
+ "nomos-platform",
+ "nomos-platform-std",
+ "nomos-rules",
+ "nomos-workspace",
 ]
 
 [[package]]

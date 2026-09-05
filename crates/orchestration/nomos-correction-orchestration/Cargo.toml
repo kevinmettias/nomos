@@ -1,0 +1,24 @@
+[package]
+name = "nomos-correction-orchestration"
+version = "0.1.0"
+description = "Band 41. The seam for correction planning and lifecycle both hosts call: Run_Correction composes nomos-check-orchestration and nomos-corrections into a judged, staged, validated (and optionally committed) outcome, apart from choosing a platform, walking a tree or rendering the answer."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-analysis = { workspace = true }
+nomos-check-orchestration = { workspace = true }
+nomos-contracts = { workspace = true }
+nomos-corrections = { workspace = true }
+nomos-model = { workspace = true }
+nomos-platform = { workspace = true }
+nomos-rules = { workspace = true }
+nomos-workspace = { workspace = true }
+
+[dev-dependencies]
+nomos-platform-std = { workspace = true }
+
+[lints]
+workspace = true

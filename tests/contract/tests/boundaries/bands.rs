@@ -212,6 +212,11 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // 41 rather than a fourth sibling at 40 -- a band may not depend on its own band.
     // `OD-HOST-001`, `P13-GATE-RUN-SEAM-CRATE`.
     ("nomos-gate-orchestration", 41),
+    // The seam for correction planning and lifecycle both hosts call: `Run_Correction`
+    // reaches `nomos-check-orchestration` (40) and `nomos-corrections` (35), one band
+    // below, the identical reason `nomos-gate-orchestration` sits at 41 rather than
+    // beside either -- a band may not depend on its own band. `P40-CORRECTIONS-CANONICAL-SEAM`.
+    ("nomos-correction-orchestration", 41),
     ("nomos-cli", 90),
     // A second real caller of `nomos-gate-orchestration`'s `Run_Gate`: walks a tree,
     // judges it exactly as `nomos gate run` would, and hands back a JSON-serializable

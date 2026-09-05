@@ -3,6 +3,7 @@ pub enum nomos_api::AddResponse
 pub enum nomos_api::AuditResponse
 pub enum nomos_api::BlockChangeResponse
 pub enum nomos_api::CommitResponse
+pub enum nomos_api::CorrectionResponse
 pub enum nomos_api::DeclineResponse
 pub enum nomos_api::Disposition
 pub enum nomos_api::FinishResponse
@@ -47,6 +48,15 @@ pub enum variant nomos_api::CommitResponse::Refused { cause: String, }
 pub enum variant nomos_api::CommitResponse::StoreRefused { preview: CommittedPreviewResponse, cause: String, }
 pub enum variant nomos_api::CommitResponse::Unreadable { path: String, cause: String, }
 pub enum variant nomos_api::CommitResponse::Unwritable { preview: CommittedPreviewResponse, report: CommitReportResponse, path: String, cause: String, }
+pub enum variant nomos_api::CorrectionResponse::Clean
+pub enum variant nomos_api::CorrectionResponse::Committed { path: String, claimed: String, preview: String, base: String, after: String, }
+pub enum variant nomos_api::CorrectionResponse::ContradictoryRegistry { reason: String, }
+pub enum variant nomos_api::CorrectionResponse::NoFactsMaterialized { files: usize, }
+pub enum variant nomos_api::CorrectionResponse::NoSourceFound
+pub enum variant nomos_api::CorrectionResponse::Refused { reason: String, }
+pub enum variant nomos_api::CorrectionResponse::Staged { path: String, claimed: String, preview: String, }
+pub enum variant nomos_api::CorrectionResponse::UnreadableRoot
+pub enum variant nomos_api::CorrectionResponse::UnreadableWorkspaceState
 pub enum variant nomos_api::DeclineResponse::Declined
 pub enum variant nomos_api::DeclineResponse::Refused { cause: String, retryable: bool, }
 pub enum variant nomos_api::Disposition::Failed
@@ -132,6 +142,7 @@ pub enum variant nomos_api::VerdictResponse::BuildFailed { cause: String, }
 pub enum variant nomos_api::VerdictResponse::Compared { fresh: bool, stale: Option<(String, String)>, edited: Option<(String, String)>, diverged: Option<(String, String)>, }
 pub enum variant nomos_api::VerdictResponse::Unbodied
 pub enum variant nomos_api::VerdictResponse::Unstamped
+pub fn nomos_api::Handle_Correction_Run(command: &CorrectionCommand) -> CorrectionResponse
 pub fn nomos_api::Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse
 pub fn nomos_api::Handle_Gate_Plan() -> GatePlanResponse
 pub fn nomos_api::Handle_Gate_Run(command: &GateCommand) -> GateRunResponse

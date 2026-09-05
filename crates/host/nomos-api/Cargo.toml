@@ -9,6 +9,7 @@ publish.workspace = true
 
 [dependencies]
 nomos-contracts = { workspace = true }
+nomos-correction-orchestration = { workspace = true }
 nomos-gate-orchestration = { workspace = true }
 nomos-ledger = { workspace = true }
 nomos-model = { workspace = true }

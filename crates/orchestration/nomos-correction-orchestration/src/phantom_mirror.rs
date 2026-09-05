@@ -1,6 +1,12 @@
 //! One blocking Phantom finding from `Check_Completeness_Mirrors`, turned into a real,
 //! judgment-free [`CorrectionCandidate`].
 //!
+//! Moved here from `nomos-cli`'s own `correct/candidate.rs`, unchanged in substance, as
+//! part of giving correction planning and lifecycle a seam both hosts call rather than a
+//! CLI module the second host cannot reach. Everything this module's own doc originally
+//! said about why this one finding shape, and only this one, is safe to correct without
+//! judgment still applies unchanged.
+//!
 //! # Why this rule, and why only this one finding shape of it
 //!
 //! `OD-CORRECTIONS-001` checked every rule shipped at the time and found none produced a
@@ -41,6 +47,8 @@
 use nomos_contracts::{Finding, GateCategory};
 use nomos_corrections::{CandidateLabel, ChangeSet, CorrectionCandidate, CorrectionClass, Edit};
 use nomos_model::EvidenceRef;
+use nomos_platform::FileSystem;
+use std::path::Path;
 
 /// The stable text `EnforcementBreach::Phantom::Describe` puts after the claimed name,
 /// which `Unresolved_Claim` never alters for a Blocking finding — only ever appends to.
@@ -54,7 +62,7 @@ const MIRROR_MARKER: &str = "Mirrored by `";
 
 /// A phantom mirror claim this module can safely correct: the exact line it lives on, and
 /// what a corrected file looks like with that line struck.
-pub(super) struct PhantomClaim<'a>
+pub(crate) struct PhantomClaim<'a>
 {
     /// The finding this claim was read from — carried through so a caller can report it
     /// alongside the candidate it produced.
@@ -71,7 +79,7 @@ pub(super) struct PhantomClaim<'a>
 /// rather than approximating is the same discipline `naming.rs`'s own floor states:
 /// "nothing weaker than a sound parse can promise that."
 #[must_use]
-pub(super) fn Phantom_Claim(finding: &Finding) -> Option<PhantomClaim<'_>>
+pub(crate) fn Phantom_Claim(finding: &Finding) -> Option<PhantomClaim<'_>>
 {
     if !Is_A_Blocking_Phantom(finding)
     {
@@ -129,10 +137,10 @@ fn Sole_Location(finding: &Finding) -> Option<&str>
 
 /// Why [`Candidate_For`] could not build a candidate for an otherwise-real phantom claim.
 #[derive(Debug)]
-pub(super) enum ClaimError
+pub(crate) enum ClaimError
 {
     /// The file `claim.path` names could not be read from `root`.
-    Unreadable(std::io::Error),
+    Unreadable(nomos_platform::FileSystemError),
     /// The exact "Mirrored by `{name}`" marker this claim names appears zero, or more
     /// than one, time in the file. Either way this module refuses to guess which line is
     /// the real declaration.
@@ -150,9 +158,9 @@ pub(super) enum ClaimError
 /// # Errors
 ///
 /// See [`ClaimError`].
-pub(super) fn Candidate_For(root: &std::path::Path, claim: &PhantomClaim<'_>) -> Result<(CorrectionCandidate, String, String), ClaimError>
+pub(crate) fn Candidate_For<Fs: FileSystem>(root: &Path, claim: &PhantomClaim<'_>, filesystem: &Fs) -> Result<(CorrectionCandidate, String, String), ClaimError>
 {
-    let before = std::fs::read_to_string(root.join(claim.path)).map_err(ClaimError::Unreadable)?;
+    let before = filesystem.Read_To_String(&root.join(claim.path)).map_err(ClaimError::Unreadable)?;
     let after = Strike_Claim_Line(ClaimStrike { before: &before, claimed: &claim.claimed })?;
 
     let edit = Edit::New(claim.path, Some(before.clone()), Some(after.clone()));
@@ -207,7 +215,7 @@ fn Strike_Claim_Line(strike: ClaimStrike<'_>) -> Result<String, ClaimError>
 /// [`nomos_model::Evidence`] a real commit carries — `OD-CORRECTIONS-002`'s own
 /// declared-not-judged `Evidence` parameter, filled honestly rather than left empty.
 #[must_use]
-pub(super) fn Finding_Reference(claim: &PhantomClaim<'_>) -> EvidenceRef
+pub(crate) fn Finding_Reference(claim: &PhantomClaim<'_>) -> EvidenceRef
 {
     return EvidenceRef {
         kind: "finding".to_owned(),
@@ -221,6 +229,7 @@ mod tests
     use super::*;
     use nomos_contracts::{Applicability, EvidenceClass, RuleId, SubjectId};
     use nomos_model::Content_Digest;
+    use nomos_platform_std::StdFileSystem;
 
     #[test]
     fn Test_A_Real_Phantom_Findings_Claim_Should_Be_Read()
@@ -315,6 +324,25 @@ mod tests
     /// -- named so [`Test_Two_Identical_Markers_Should_Be_Ambiguous_Rather_Than_Guessed`]'s
     /// own assertion reads as "the fixture's own count" rather than an unexplained `2`.
     const TWO_IDENTICAL_MARKERS: usize = 2;
+
+    #[test]
+    fn Test_Candidate_For_Should_Read_Through_The_Filesystem_Port()
+    {
+        let root = std::env::temp_dir().join("nomos-correction-orchestration-candidate-for");
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+        std::fs::write(root.join("a.rs"), "/// Mirrored by `Test_Ghost`.\npub const TABLES: &[&str] = &[];\n").expect("writable");
+
+        let finding = Phantom_Finding(PhantomFixture { claimed: "Test_Ghost", path: "a.rs" });
+        let claim = Phantom_Claim(&finding).expect("this is a real phantom");
+
+        let (candidate, before, after) = Candidate_For(&root, &claim, &StdFileSystem).expect("a real file with the marker exactly once");
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        assert!(before.contains("Mirrored by"));
+        assert!(!after.contains("Mirrored by"));
+        assert!(candidate.Description().contains("Test_Ghost"), "{}", candidate.Description());
+    }
 
     /// The claimed name and the path a phantom fixture names, paired so a caller cannot
     /// transpose which is which -- both are `&str` and the compiler cannot catch a swap

@@ -273,6 +273,15 @@ members = [
     # answer.
     "crates/orchestration/nomos-gate-orchestration",
 
+    # Band 41 — orchestration. The seam for correction planning and lifecycle both hosts
+    # call: Run_Correction composes nomos-check-orchestration and nomos-corrections into
+    # a judged, staged, validated (and optionally committed) outcome, apart from choosing
+    # a platform, walking a tree or rendering the answer. One band above
+    # nomos-check-orchestration (40) and nomos-corrections (35), the same reason
+    # nomos-gate-orchestration sits at 41 rather than beside either.
+    # `P40-CORRECTIONS-CANONICAL-SEAM`.
+    "crates/orchestration/nomos-correction-orchestration",
+
     # Band 1 — the specification system. Reaches the product only through a
     # KnowledgeCapability, never directly.
     "crates/spec/nomos-spec-model",
@@ -381,6 +390,7 @@ nomos-check-orchestration = { path = "crates/orchestration/nomos-check-orchestra
 nomos-spec-orchestration = { path = "crates/orchestration/nomos-spec-orchestration" }
 nomos-workflow-orchestration = { path = "crates/orchestration/nomos-workflow-orchestration" }
 nomos-gate-orchestration = { path = "crates/orchestration/nomos-gate-orchestration" }
+nomos-correction-orchestration = { path = "crates/orchestration/nomos-correction-orchestration" }
 nomos-api = { path = "crates/host/nomos-api" }
 nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }

@@ -50965,7 +50965,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -50980,7 +50980,29 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-corrections",
+          "-p",
+          "nomos-api"
+        ],
+        "exit_code": 0,
+        "output_tail": "ts::Test_Validate_Should_Accept_A_Workspace_That_Has_Not_Moved ... ok\ntest test_support::tests::Test_Agent_Judged_Should_Report_The_Agent_Judged_Evidence_Class ... ok\ntest staged_plan::tests::Test_Validate_Should_Refuse_A_Workspace_That_Has_Moved_Since_Staging ... ok\ntest test_support::tests::Test_Base_Should_Start_With_The_Configured_File_Present ... ok\ntest test_support::tests::Test_Plan_Changing_A_Should_Build_A_Plan_That_Rewrites_The_File ... ok\ntest validated_plan::tests::Test_A_Validated_Plan_Belongs_To_The_Validate_Mutation_Class ... ok\ntest validated_plan::tests::Test_Commit_Should_Be_Refused_After_The_Workspace_Moved ... ok\ntest validated_plan::tests::Test_Commit_Should_Change_The_Workspace ... ok\ntest validated_plan::tests::Test_Of_Should_Carry_The_Given_Snapshot_Into_The_Committed_Plan ... ok\n\ntest result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_A_Correction_Ids_Digest_Round_Trips_A_Real_Digest128 ... ok\ntest Test_Staging_Against_Stale_Content_Reports_The_Real_Digest_Of_What_Is_There ... ok\ntest Test_The_Full_Lifecycle_Round_Trips_A_Real_Workspace_Through_The_Public_Api ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-d6a4f4321f2cb238.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-1656b5807fd1e7db.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_corrections-081951eb8a8710e0.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-ac68e4afc2afa4dc.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_corrections\n",
+        "verified_at": 1788634271,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "484951cbbe4e112f300133b1e30a0f443d35cb60"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

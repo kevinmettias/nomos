@@ -7,8 +7,8 @@
 #[derive(Clone, Copy)]
 pub struct Point
 {
-    pub x: i32,
-    pub y: i32,
+    pub horizontal: i32,
+    pub vertical: i32,
 }
 
 #[derive(Clone)]
