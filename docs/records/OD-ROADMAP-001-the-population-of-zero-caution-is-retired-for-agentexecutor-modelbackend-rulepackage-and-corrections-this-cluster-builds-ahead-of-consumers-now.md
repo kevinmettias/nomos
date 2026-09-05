@@ -3,7 +3,7 @@ id: OD-ROADMAP-001
 type: decision
 title: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - roadmap
@@ -26,6 +26,8 @@ relations:
   - target: OD-PACKAGE-012
     type: relates-to
   - target: OD-CORRECTIONS-001
+    type: relates-to
+  - target: OD-ROADMAP-002
     type: relates-to
 ---
 
@@ -104,6 +106,21 @@ rather than transcribing a closed fact, `nomos-model-package`'s genuine lack of 
 backend or executor implementation — all of that stays true and stays useful context for
 *how* to build the deferred shape well. What changes is the answer to "build it now or
 wait," not the measurements that answer informed.
+
+## Amendment: This Licence Answers Consumers, Not Successors
+
+Added at version 2. An architectural review asked for new model-routing vocabulary, new gate
+policy increments and additional one-off capability orchestration to stop until a run planner
+exists. Read against this record that appears to be a reversal of it, and it is not one.
+
+This record answers whether a component may be built before anything consumes it. It does not
+answer whether a component may be built onto a mechanism already known to be being replaced.
+`OD-ROADMAP-002` decides that second question, scoped to those three areas and lifted for each
+by a named successor landing. The licence recorded here is unchanged everywhere else, and a
+component with no consumers at all remains buildable.
+
+Read `OD-ROADMAP-002` before concluding that this record permits a particular piece of work: it
+narrows the three named areas and nothing beyond them.
 
 ## Status
 

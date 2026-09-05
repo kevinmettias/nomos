@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:fa75999e3812675584e230ad37ccd7b066779d4794ffe17137c24af62961ac09",
-  "inputs_digest": "sha256:210ace19439247ecdfe8656be9e4050fb3d3597072a33529ef750ca62aa057a8",
+  "content_digest": "sha256:8e04c58b2a1269e6bc6678e4df84c0a6d239d3d74e66768dffb9ce238d9e2aad",
+  "inputs_digest": "sha256:bc78e64b8290cdddab080faa0486affaabc87b978c2c1f6f87d4fcf38b6910d8",
   "sections": [
     [
       "Documents",
-      187
+      188
     ],
     [
       "Sections",
-      1553
+      1560
     ],
     [
       "Source blocks",
-      5424
+      5452
     ]
   ],
   "inputs": [
@@ -733,7 +733,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md@authored",
-      "hash": "sha256:dc44c7fd6a8db12af37648fc6e34499aca6c2cedf4d0203b3596ac13ea5d2be8"
+      "hash": "sha256:5369feac3ebd7b343b32234f25aa30ba669d4151b15af6d83d2ad37da0f58379"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored",
+      "hash": "sha256:b8159cff04a7379eb48a47ce46a3da98ad447cc8ccec98c33ab48526d604e57f"
     },
     {
       "content": "documents",
@@ -6853,7 +6858,42 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#13",
-      "hash": "sha256:cff588391d632a22b2a44b5c4e465117e73cb0dba04cfa02aa552267647dc7f2"
+      "hash": "sha256:81297b765325c3ec4196c6d32aeb281ac17242feabcf94b946fc6e3823102fe9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#17",
+      "hash": "sha256:a4c650d8f75f87643eec0b7f534c512eca580bc1923cd64764eb495582cfa993"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#1",
+      "hash": "sha256:3b445d51da03a2725a84c55b7c0926ffb892b5e2889139b9e9aad383c8248726"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#2",
+      "hash": "sha256:e84074fc78cb74a605faecd03076b267bcf3dbd5c25eda1f6789b1212e3403c8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#6",
+      "hash": "sha256:fb4bfae5ed5ddcf241ad230fc01a99a1a4bb82fa8aac6045e1c5287db9033551"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#12",
+      "hash": "sha256:e306f545669aea0936737378fea6e18ac085caf72fa799d1ad9cb78b20781342"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#17",
+      "hash": "sha256:7c6023e2ce6e2ea7348f2b467e50b4b00ddcad1a516e2d43141bae9550ac96b5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#23",
+      "hash": "sha256:3be98049387b37ec0ce5059b70793689ffe9451998cae1e0ea5983ac0543c89c"
     },
     {
       "content": "headings",
@@ -29443,12 +29483,152 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#13",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:503b5db6e6ae569fc0b7bcea64b8bed7c6c54ed36a35a6fa376d77e62cd2cac5"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#14",
+      "hash": "sha256:c0a58695820a4e822de4b5338526707f8d07296a21c58fc59164fcf8ba9db309"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#15",
+      "hash": "sha256:1858256e71bc4bf5d7abc8755b2a639ee75df0ac1993f65671dd86dabf37a887"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#16",
+      "hash": "sha256:b46c3ea237b6a368154f56fd744d186d1d07c97d77d0897362ada3d630fda2e9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#17",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#18",
       "hash": "sha256:babe67922b5b7e1cd375d26771241fbf70b94ae26f4e8ee48ccc0064483d1217"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#1",
+      "hash": "sha256:229d23206d86d62f37610f9b2dda8ad151929d9d8991dc35ce3cef39a76c8ab4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#3",
+      "hash": "sha256:6b2af776401388bb8b3817eae7c69cfde0d9d8d2a0306bc150df7b33340ba869"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#4",
+      "hash": "sha256:b21c7f31eb283e22917a97b124923f4987789a5f6520d71a624e878eaa9e3d7b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#5",
+      "hash": "sha256:6de56ef6c41018f63c36d17f1a95d924480660175aa1e5e5d9785224f66ab82e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#7",
+      "hash": "sha256:59fbf443a11a0b53a93dc6dda2265d8e7c04110a605ed1d80d8fc00dfef47481"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#8",
+      "hash": "sha256:281eddfca9dfd7823652332abe89999a60e1c2b91eeec04819b5b0a2173d6a6f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#9",
+      "hash": "sha256:699e88ef9db7c4c2ac2eaafffbaf8092b571560733d18435c74df76e7ad3023f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#10",
+      "hash": "sha256:ef59c5d961774fb672cfe5afa5c594954a86d07b7c68c1443cc3a1db83e40a0a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#11",
+      "hash": "sha256:d3191ec7757d0fedb830637a3a25409717efd4108475f6886b1b0b59294d3a9b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#12",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#13",
+      "hash": "sha256:a444e632134a9f8001c0028dde6336abfa42ca5925a8bf6fb4b866dd18672144"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#14",
+      "hash": "sha256:6d9b2e7064c81deb8e8b501d78560c81e80561295954b7d9441b56a2a328e66c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#15",
+      "hash": "sha256:74b36f5b187a1bc9c75b116413fc18cc4caa6b7163973ddae6aaa206dca62a98"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#16",
+      "hash": "sha256:212295a8d790332cbc94f96d79286d40460dce93581251b989eff5991fbe6e7a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#17",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#18",
+      "hash": "sha256:da7a9295ed962496faa1f0d054ff7225941e8caa93713ddebe10df7f87ed606b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#19",
+      "hash": "sha256:285c2628b25930fa48d2117295d4944933647e0f0fa2be133ad440e8e87f1f45"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#20",
+      "hash": "sha256:60bc042a24f20c7315c823372b645c7189230aaa95575df1c32b3928aee4f965"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#21",
+      "hash": "sha256:c8d0379462707a57f61d1e3787547727092d020336393b9bc95198d947af44e9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#22",
+      "hash": "sha256:0cadf948fd6cd860c369dc5dd6a33806ab810083e581cb2fcb5e27fcf6f56782"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#23",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#24",
+      "hash": "sha256:cb06e95531b574b85ed80076b14016113bbca8fab2abe12e115969b1c8d4ef0e"
     },
     {
       "content": "blocks",

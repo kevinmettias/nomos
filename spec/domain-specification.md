@@ -152,7 +152,8 @@ profile: domain-specification
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
-| docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md@authored | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md | authored | 14 | 5 | sha256:dc44c7fd6a8db12af37648fc6e34499aca6c2cedf4d0203b3596ac13ea5d2be8 |
+| docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md@authored | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md | authored | 18 | 6 | sha256:5369feac3ebd7b343b32234f25aa30ba669d4151b15af6d83d2ad37da0f58379 |
+| docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md | authored | 24 | 6 | sha256:b8159cff04a7379eb48a47ce46a3da98ad447cc8ccec98c33ab48526d604e57f |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md@authored | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md | authored | 67 | 12 | sha256:f55068c0987852129b3103770502611bec876fd8c119bc01cd6616b6ecdf7bc6 |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md | authored | 69 | 16 | sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a |
 | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
@@ -1381,7 +1382,14 @@ profile: domain-specification
 | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#2 | authored | 2 | Question |
 | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#5 | authored | 2 | The Decision |
 | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#9 | authored | 2 | What This Does Not Do |
-| docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#13 | authored | 2 | Status |
+| docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#13 | authored | 2 | Amendment: This Licence Answers Consumers, Not Successors |
+| docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#17 | authored | 2 | Status |
+| docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#1 | authored | 1 | Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not |
+| docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#2 | authored | 2 | Question |
+| docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#12 | authored | 2 | The Decision |
+| docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#17 | authored | 2 | What This Does Not Do |
+| docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#23 | authored | 2 | Status |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1 | authored | 1 | A rule states what it needs and is refused an answer beneath it |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#7 | authored | 2 | The Charge Is Correct |
@@ -39885,11 +39893,42 @@ wait," not the measurements that answer informed.
 
 ### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#13
 
+*revision: authored · kind: heading · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / Amendment: This Licence Answers Consumers, Not Successors · hash: sha256:503b5db6e6ae569fc0b7bcea64b8bed7c6c54ed36a35a6fa376d77e62cd2cac5*
+
+## Amendment: This Licence Answers Consumers, Not Successors
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#14
+
+*revision: authored · kind: prose · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / Amendment: This Licence Answers Consumers, Not Successors · hash: sha256:c0a58695820a4e822de4b5338526707f8d07296a21c58fc59164fcf8ba9db309*
+
+Added at version 2. An architectural review asked for new model-routing vocabulary, new gate
+policy increments and additional one-off capability orchestration to stop until a run planner
+exists. Read against this record that appears to be a reversal of it, and it is not one.
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#15
+
+*revision: authored · kind: prose · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / Amendment: This Licence Answers Consumers, Not Successors · hash: sha256:1858256e71bc4bf5d7abc8755b2a639ee75df0ac1993f65671dd86dabf37a887*
+
+This record answers whether a component may be built before anything consumes it. It does not
+answer whether a component may be built onto a mechanism already known to be being replaced.
+`OD-ROADMAP-002` decides that second question, scoped to those three areas and lifted for each
+by a named successor landing. The licence recorded here is unchanged everywhere else, and a
+component with no consumers at all remains buildable.
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#16
+
+*revision: authored · kind: prose · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / Amendment: This Licence Answers Consumers, Not Successors · hash: sha256:b46c3ea237b6a368154f56fd744d186d1d07c97d77d0897362ada3d630fda2e9*
+
+Read `OD-ROADMAP-002` before concluding that this record permits a particular piece of work: it
+narrows the three named areas and nothing beyond them.
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#17
+
 *revision: authored · kind: heading · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#14
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#18
 
 *revision: authored · kind: prose · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / Status · hash: sha256:babe67922b5b7e1cd375d26771241fbf70b94ae26f4e8ee48ccc0064483d1217*
 
@@ -39899,6 +39938,191 @@ Accepted. Standing, not scoped to one session — a future session reading `ARC-
 caution those records' own older text still describes. Each of those records is amended in
 the same change that adds this one, pointing back here rather than leaving this record as
 the only place the supersession is stated.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#1
+
+*revision: authored · kind: heading · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not · hash: sha256:229d23206d86d62f37610f9b2dda8ad151929d9d8991dc35ce3cef39a76c8ab4*
+
+# Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#2
+
+*revision: authored · kind: heading · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#3
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / Question · hash: sha256:6b2af776401388bb8b3817eae7c69cfde0d9d8d2a0306bc150df7b33340ba869*
+
+`OD-ROADMAP-001` retired the population-of-zero caution and licensed a named cluster to be
+built before it had consumers. That licence has been reaffirmed repeatedly since, and
+nothing here withdraws it.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#4
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / Question · hash: sha256:b21c7f31eb283e22917a97b124923f4987789a5f6520d71a624e878eaa9e3d7b*
+
+An architectural review then asked for the opposite in three named places: no new
+model-routing vocabulary, no new gate policy increments, and no additional one-off
+capability orchestration, until the run planner exists. Read as answers to one question
+those two positions cannot both hold, and the board would have resolved the contradiction
+by whichever item somebody claimed next.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#5
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / Question · hash: sha256:6de56ef6c41018f63c36d17f1a95d924480660175aa1e5e5d9785224f66ab82e*
+
+They are not answers to one question. `OD-ROADMAP-001` answers **whether a thing may be
+built before anything consumes it**. This record answers **whether a thing may be built
+before the mechanism that will have to carry it exists**. A thing can be permitted by the
+first and refused by the second without either being wrong.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#6
+
+*revision: authored · kind: heading · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#7
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / What Was Measured · hash: sha256:59fbf443a11a0b53a93dc6dda2265d8e7c04110a605ed1d80d8fc00dfef47481*
+
+The distinction is not hypothetical here, and the same file states both halves of it.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#8
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / What Was Measured · hash: sha256:281eddfca9dfd7823652332abe89999a60e1c2b91eeec04819b5b0a2173d6a6f*
+
+`nomos-check-orchestration` imports a concrete list of rule functions and rule identifiers,
+declares a rule count of 56, and maps selected rules to capability materialization through
+what its own documentation calls a fixed, hand-written mapping. Every rule added since the
+first has increased what the composition root knows.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#9
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / What Was Measured · hash: sha256:699e88ef9db7c4c2ac2eaafffbaf8092b571560733d18435c74df76e7ad3023f*
+
+The gate crate says the same about itself one tier up: its rule selector now layers a
+post-hoc, per-caller finding filter over a `Run` that is already selective on its own. That
+is a transitional mechanism that outlived its transition, and `OD-GATE-017` is the decision
+that made it transitional by driving selection down into check orchestration.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#10
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / What Was Measured · hash: sha256:ef59c5d961774fb672cfe5afa5c594954a86d07b7c68c1443cc3a1db83e40a0a*
+
+`nomos-model-package` documents that nothing outside the crate references a profile yet.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#11
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / What Was Measured · hash: sha256:d3191ec7757d0fedb830637a3a25409717efd4108475f6886b1b0b59294d3a9b*
+
+So the three named areas share a property that the rest of the licensed cluster does not:
+each already has an identified successor mechanism, and work added to them now is work that
+will have to be moved onto that mechanism afterwards. That is a different cost from building
+a type before it has a caller, which is what `OD-ROADMAP-001` weighed and accepted.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#12
+
+*revision: authored · kind: heading · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#13
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / The Decision · hash: sha256:a444e632134a9f8001c0028dde6336abfa42ca5925a8bf6fb4b866dd18672144*
+
+`OD-ROADMAP-001` stands. A component may be built before a consumer exists, and the cluster
+it named keeps that licence.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#14
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / The Decision · hash: sha256:6d9b2e7064c81deb8e8b501d78560c81e80561295954b7d9441b56a2a328e66c*
+
+Alongside it: **a component may not be built onto a mechanism that is already known to be
+being replaced.** This is scoped, not general. It binds exactly three areas, and it lapses
+for each of them when a named successor lands:
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#15
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / The Decision · hash: sha256:74b36f5b187a1bc9c75b116413fc18cc4caa6b7163973ddae6aaa206dca62a98*
+
+- **New model-routing vocabulary** waits for a real routing consumer. This forbids adding
+  further declared-not-computed routing shapes. It explicitly does **not** forbid wiring the
+  vocabulary that already exists to a real consumer: that work reduces the gap this pause
+  exists because of, and refusing it would preserve the condition rather than end it.
+- **New gate policy increments** — further phases, thresholds, approvals or policy
+  vocabulary — wait for the gate to stop selecting twice and to compile into one resolved
+  run plan.
+- **Additional one-off capability orchestration** — another branch of the form "if this rule
+  was selected, call this materializer" — waits for the run planner. A capability may still
+  be built; what waits is wiring it in by extending the hand-written mapping.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#16
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / The Decision · hash: sha256:212295a8d790332cbc94f96d79286d40460dce93581251b989eff5991fbe6e7a*
+
+Anything outside those three areas is governed by `OD-ROADMAP-001` alone and is not paused
+by this record.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#17
+
+*revision: authored · kind: heading · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#18
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / What This Does Not Do · hash: sha256:da7a9295ed962496faa1f0d054ff7225941e8caa93713ddebe10df7f87ed606b*
+
+**It does not reinstate the population-of-zero caution.** That caution asked for a second
+real instance before typing a shape. This asks for a successor mechanism before extending a
+predecessor. A component with no consumers at all remains buildable, which is the whole of
+what `OD-ROADMAP-001` decided.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#19
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / What This Does Not Do · hash: sha256:285c2628b25930fa48d2117295d4944933647e0f0fa2be133ad440e8e87f1f45*
+
+**It does not pause the analysis kernel, corrections, workflow bodies, the agent task
+envelope, the host surfaces, or the language and provider layer.** None of those is being
+built onto a mechanism with a named replacement in flight.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#20
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / What This Does Not Do · hash: sha256:60bc042a24f20c7315c823372b645c7189230aaa95575df1c32b3928aee4f965*
+
+**It does not judge the three pauses to be equally costly.** The capability-orchestration
+pause is the strictest, because every new branch is a line the planner migration must later
+delete. The model-routing pause is the loosest, because it forbids only new vocabulary.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#21
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / What This Does Not Do · hash: sha256:c8d0379462707a57f61d1e3787547727092d020336393b9bc95198d947af44e9*
+
+**It does not decide the successor mechanisms themselves.** What a run planner is, and how a
+gate compiles to one resolved plan, are separate decisions this record only sequences against.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#22
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / What This Does Not Do · hash: sha256:0cadf948fd6cd860c369dc5dd6a33806ab810083e581cb2fcb5e27fcf6f56782*
+
+**It sets no date.** The pause is lifted by a landed mechanism, not by elapsed time, and if a
+successor is abandoned rather than built then the pause it justified lapses with it.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#23
+
+*revision: authored · kind: heading · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#24
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / Status · hash: sha256:cb06e95531b574b85ed80076b14016113bbca8fab2abe12e115969b1c8d4ef0e*
+
+Accepted. `OD-ROADMAP-001` is amended to point here rather than restating any of it, so the
+two do not have to be read against each other to find out which governs.
 
 ### docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1
 
