@@ -50068,6 +50068,406 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P37-CODESTANDARDS-RULES-FORMATTING-FACADE",
+      "title": "code-standards drift: fix real findings in nomos-rules' formatting/goals/facade/placement/concurrency_text checks",
+      "why": "The kevinmettias/code-standards external checker (all eight rust gate phases) found genuine style findings in nomos-rules' own rule-implementation source, accumulated since the 2026-08-29 OD-GATE-018 campaign closed (P27 through P35 added a lot of new check code). These are production code, not test fixtures, so they need real fixes: lift nested calls into named locals, extract self-contained blocks into helpers, name magic-number literals as constants, name tuple returns, extract dispatch-arm procedures into named functions, and name multi-operand conditions.",
+      "done_when": "check.exe (kevinmettias/code-standards, nested-call/function-size/literals/vertical-organization/responsibility-extraction/condition-operand/tuple-return/dispatch-arms/condition-shape/nesting-depth) reports zero findings against these five files, and cargo test -p nomos-rules is green",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/formatting.rs",
+          "crates/rules/nomos-rules/src/checks/goals.rs",
+          "crates/rules/nomos-rules/src/checks/facade.rs",
+          "crates/rules/nomos-rules/src/checks/placement.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-standards-sweep",
+        "acquired_at": 1788582954,
+        "lease_expires_at": 1788593754
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P37-CODESTANDARDS-RULES-STRUCTURE-TEXT",
+      "title": "code-standards drift: fix real findings in nomos-rules' rust_text/structure/script_discipline/go_text checks",
+      "why": "Same drift as P37-CODESTANDARDS-RULES-FORMATTING-FACADE (see that item for the full context), affecting a second, disjoint group of nomos-rules implementation files.",
+      "done_when": "check.exe (nested-call/function-size/literals/intrafile-duplication/vertical-organization/responsibility-extraction/condition-shape) reports zero findings against these four files, and cargo test -p nomos-rules is green",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks/structure.rs",
+          "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+          "crates/rules/nomos-rules/src/checks/go_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-standards-sweep",
+        "acquired_at": 1788582954,
+        "lease_expires_at": 1788593754
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P37-CODESTANDARDS-RULES-FUNCTION-TYPE-SHAPE",
+      "title": "code-standards drift: fix real findings in nomos-rules' function_shape/scalar_range/domain_type_alias/constant_scope/flakiness_text/enum_shape/error_text/security_text checks",
+      "why": "Same drift as P37-CODESTANDARDS-RULES-FORMATTING-FACADE (see that item for the full context), affecting a third, disjoint group. security_text.rs's own hardcoded-secret and secret-in-url findings (fake test fixtures for its own rule) are ALREADY waived in suppressions.json -- this item is only its other seven real findings (responsibility-extraction, vertical-organization, nested-call x3, function-size, nesting-depth).",
+      "done_when": "check.exe (nested-call/function-size/literals/vertical-organization/responsibility-extraction/nesting-depth/bool-parameter) reports zero findings against these eight files, and cargo test -p nomos-rules is green",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/function_shape.rs",
+          "crates/rules/nomos-rules/src/checks/scalar_range.rs",
+          "crates/rules/nomos-rules/src/checks/domain_type_alias.rs",
+          "crates/rules/nomos-rules/src/checks/constant_scope.rs",
+          "crates/rules/nomos-rules/src/checks/flakiness_text.rs",
+          "crates/rules/nomos-rules/src/checks/enum_shape.rs",
+          "crates/rules/nomos-rules/src/checks/error_text.rs",
+          "crates/rules/nomos-rules/src/checks/security_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-standards-sweep",
+        "acquired_at": 1788582955,
+        "lease_expires_at": 1788593755
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P37-CODESTANDARDS-RULES-NAMING",
+      "title": "code-standards drift: fix real findings across nomos-rules' naming.rs and checks/naming/* family",
+      "why": "Same drift as P37-CODESTANDARDS-RULES-FORMATTING-FACADE (see that item for the full context), affecting the naming.rs dispatcher and its eleven-file checks/naming/ submodule.",
+      "done_when": "check.exe (nested-call/function-size/literals/vertical-organization/responsibility-extraction/condition-shape) reports zero findings against these twelve files, and cargo test -p nomos-rules is green",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming.rs",
+          "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs",
+          "crates/rules/nomos-rules/src/checks/naming/boolean_predicates.rs",
+          "crates/rules/nomos-rules/src/checks/naming/data_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/file_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go_data_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go_function_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go_type_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/naming_clarity.rs",
+          "crates/rules/nomos-rules/src/checks/naming/single_letter_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/test_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/violations.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-standards-sweep",
+        "acquired_at": 1788582955,
+        "lease_expires_at": 1788593755
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P37-CODESTANDARDS-POLICY-FAMILY",
+      "title": "code-standards drift: fix real findings across the nomos-cap-*-policy / nomos-repo-* provider family",
+      "why": "Same drift class as the P37-CODESTANDARDS-RULES-* items (see P37-CODESTANDARDS-RULES-FORMATTING-FACADE for full context): the external code-standards checker found genuine findings, this time in the OD-RULES-011 capability/provider family that grew during P34's standards-document work. one-public-type findings split a shared Refusal type out of each payload.rs; function-size/literals/vertical-organization are real; presumption findings are inside #[cfg(test)] mod tests {} test fixtures (.expect/.unwrap on hand-built byte strings) and get waived per the established OD-GATE-018 test-code category, not fixed.",
+      "done_when": "check.exe (one-public-type/function-size/literals/vertical-organization) reports zero findings against these twelve files, presumption findings in them are waived in suppressions.json with owner+reason+expiry, and cargo test --workspace is green",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-goals-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-limits-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-naming-policy/src/case.rs",
+          "crates/capabilities/nomos-cap-scripting-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-words-policy/src/payload.rs",
+          "crates/repository/nomos-repo-goals/src/fact_context.rs",
+          "crates/repository/nomos-repo-goals/src/reading.rs",
+          "crates/repository/nomos-repo-limits/src/reading.rs",
+          "crates/repository/nomos-repo-scripting/src/reading.rs",
+          "crates/repository/nomos-repo-standards-document/src/lib.rs",
+          "crates/repository/nomos-repo-standards/src/reading.rs",
+          "crates/repository/nomos-repo-words/src/reading.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "predicate too broad (cargo test --workspace pulls in nomos-cli's whole-workspace self-check); superseded by P37-CODESTANDARDS-POLICY-FAMILY-2 with scoped -p flags"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-standards-sweep",
+        "declined_at": 1788583368
+      }
+    },
+    {
+      "id": "P37-CODESTANDARDS-POLICY-FAMILY-2",
+      "title": "code-standards drift: fix real findings across the nomos-cap-*-policy / nomos-repo-* provider family",
+      "why": "Same drift class as the P37-CODESTANDARDS-RULES-* items (see P37-CODESTANDARDS-RULES-FORMATTING-FACADE for full context): the external code-standards checker found genuine findings, this time in the OD-RULES-011 capability/provider family that grew during P34's standards-document work. one-public-type findings split a shared Refusal type out of each payload.rs; function-size/literals/vertical-organization are real; presumption findings are inside #[cfg(test)] mod tests {} test fixtures (.expect/.unwrap on hand-built byte strings) and get waived per the established OD-GATE-018 test-code category, not fixed.",
+      "done_when": "check.exe (one-public-type/function-size/literals/vertical-organization) reports zero findings against these twelve files, presumption findings in them are waived in suppressions.json with owner+reason+expiry, and cargo test for each affected crate is green",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-goals-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-limits-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-naming-policy/src/case.rs",
+          "crates/capabilities/nomos-cap-scripting-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-words-policy/src/payload.rs",
+          "crates/repository/nomos-repo-goals/src/fact_context.rs",
+          "crates/repository/nomos-repo-goals/src/reading.rs",
+          "crates/repository/nomos-repo-limits/src/reading.rs",
+          "crates/repository/nomos-repo-scripting/src/reading.rs",
+          "crates/repository/nomos-repo-standards-document/src/lib.rs",
+          "crates/repository/nomos-repo-standards/src/reading.rs",
+          "crates/repository/nomos-repo-words/src/reading.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-standards-sweep",
+        "acquired_at": 1788583368,
+        "lease_expires_at": 1788594168
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-goals-policy",
+          "-p",
+          "nomos-cap-limits-policy",
+          "-p",
+          "nomos-cap-naming-policy",
+          "-p",
+          "nomos-cap-scripting-policy",
+          "-p",
+          "nomos-cap-words-policy",
+          "-p",
+          "nomos-repo-goals",
+          "-p",
+          "nomos-repo-limits",
+          "-p",
+          "nomos-repo-scripting",
+          "-p",
+          "nomos-repo-standards-document",
+          "-p",
+          "nomos-repo-standards",
+          "-p",
+          "nomos-repo-words"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P37-CODESTANDARDS-HOST-ORCHESTRATION",
+      "title": "code-standards drift: fix real findings across nomos-cli, nomos-check-orchestration, nomos-workflow-orchestration, nomos-ledger, nomos-platform-std",
+      "why": "Same drift class as the P37-CODESTANDARDS-RULES-* items (see P37-CODESTANDARDS-RULES-FORMATTING-FACADE for full context). This group covers the scattered remainder outside nomos-rules and the policy-provider family: function-size/vertical-organization/literals fixes in nomos-cli's correct/ subtree, one-public-type in nomos-workflow-orchestration's WorkflowOutcome/DispatchError, callable-shape and a repeated error-info let-_-discard pattern in nomos-check-orchestration, an allman-braces alignment fix in nomos-ledger, and presumption findings inside #[cfg(test)] fixtures that get waived rather than fixed.",
+      "done_when": "check.exe (function-size/vertical-organization/literals/one-public-type/callable-shape/error-info/allman-braces) reports zero findings against these files, presumption findings in them are waived in suppressions.json with owner+reason+expiry, and cargo test for each affected crate is green",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/correct.rs",
+          "crates/host/nomos-cli/src/correct/candidate.rs",
+          "crates/host/nomos-cli/src/correct/exit_code.rs",
+          "crates/host/nomos-cli/src/correct/parsing.rs",
+          "crates/host/nomos-cli/src/correct/sources.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/workflow_outcome.rs",
+          "crates/platform/nomos-platform-std/src/launcher/drain.rs",
+          "crates/platform/nomos-platform-std/src/launcher/spawn.rs",
+          "crates/platform/nomos-platform-std/src/std_file_system.rs",
+          "crates/substrate/nomos-ledger/src/store/add_refusal.rs",
+          "crates/substrate/nomos-ledger/src/store/reservation.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-standards-sweep",
+        "acquired_at": 1788583394,
+        "lease_expires_at": 1788594194
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P38-PROVIDER-DECLARATIONS-CITE-A-MISSING-TEST",
+      "title": "Two determinism declarations cite a verification test that does not exist",
+      "why": "Both LintFactProduction in nomos-lang-rust-clippy and DependencyPolicyFactProduction in nomos-lang-rust-deny justify their CrossRun reproducibility scope by naming Test_Materialize_Workspace_Over_This_Repository as the test that already exercises it implicitly. No such test exists anywhere in the workspace: a grep for its definition returns zero results, and the only two occurrences of the name are these two doc comments. A declaration whose stated verification does not exist is the phantom shape this repository already treats as worse than an admitted gap, where a mirror claim naming a check that does not exist is a blocking finding while claiming no mirror at all is only advisory. Each crate does define the real whole-workspace test the sentence means, under a different name: Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Workspace_Member in the clippy crate and Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Policy_Violation in the deny crate.",
+      "done_when": "Neither declaration mentions Test_Materialize_Workspace_Over_This_Repository, each names the real whole-workspace test defined in its own crate, and a workspace grep for the old name returns no results.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-clippy/src/lint_fact_production.rs",
+          "crates/languages/nomos-lang-rust-deny/src/dependency_policy_fact_production.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-lang-rust-deny"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-lang-rust-deny"
+        ],
+        "exit_code": 0,
+        "output_tail": "ic_Lines_And_Malformed_Ones ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Read_A_Violation_From_The_Json_Stream ... ok\ntest provider::tests::Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Policy_Violation ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s\n\n\nrunning 6 tests\ntest Test_This_Crates_Declared_Guarantee_Should_Satisfy_The_Capabilitys_Own_Ceiling ... ok\ntest Test_Provider_Offer_Should_Be_Accepted_By_Nomos_Capabilitys_Own_Registry ... ok\ntest Test_Discover_Workspace_Should_Read_A_Real_Diagnostic_Shape_Through_The_Process_Launcher_Port ... ok\ntest Test_The_Materialized_Facts_Subject_Should_Be_Nomos_Models_Subject_Of_Path ... ok\ntest Test_A_Materialized_Fact_Should_Be_Accepted_And_Read_Back_By_Nomos_Analysiss_Own_Store ... ok\ntest Test_Discover_Workspace_Should_Run_A_Real_Process_Through_Nomos_Platform_Std_Launcher ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_clippy-a02c7f5532147368.exe)\n     Running tests\\capability_seam.rs (target\\debug\\deps\\capability_seam-118eae8748dbef6d.exe)\n     Running tests\\materialize_workspace_seam.rs (target\\debug\\deps\\materialize_workspace_seam-1544cf997244cb10.exe)\n     Running tests\\platform_std_seam.rs (target\\debug\\deps\\platform_std_seam-3f0052eea271ea0a.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_deny-7d95e79b2537890d.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-fac943e9d62c876d.exe)\n   Doc-tests nomos_lang_rust_clippy\n   Doc-tests nomos_lang_rust_deny\n",
+        "verified_at": 1788583758,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7c923ec6ca0ed1700f5d0a465e3293d9b5134c69"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -29,11 +29,11 @@ impl Strategy for DependencyPolicyFactProduction
     const STRENGTH: DeterminismStrength = DeterminismStrength::State;
 
     /// `CrossRun`, not `CrossPlatform`. Two runs on this machine are what this crate's own
-    /// `Test_Materialize_Workspace_Over_This_Repository` already exercises implicitly and
-    /// what this declaration commits to verifying explicitly. `CrossPlatform` would
-    /// require a golden digest captured on a second real platform this crate has not been
-    /// run on — claiming it now would be the same overclaim `docs/records/OD-ANALYSIS-004`
-    /// warns against elsewhere.
+    /// `Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Policy_Violation`
+    /// already exercises implicitly and what this declaration commits to verifying
+    /// explicitly. `CrossPlatform` would require a golden digest captured on a second real platform
+    /// this crate has not been run on — claiming it now would be the same overclaim
+    /// `docs/records/OD-ANALYSIS-004` warns against elsewhere.
     const SCOPE: ReproducibilityScope = ReproducibilityScope::CrossRun;
 
     /// `BitIdentical`. The output is bytes, encoded by this crate's own writer, and a
