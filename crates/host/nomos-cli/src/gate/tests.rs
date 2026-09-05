@@ -202,29 +202,35 @@ fn Run_Over_This_Tree(invocation: Invocation) -> (ExitCode, String, String)
     return (code, rendered, rendered_stderr);
 }
 
-/// A real run over this workspace's own eight shipped rules reports all eight, and exits
+/// A real run over this workspace's own shipped rules reports every one of them, and exits
 /// clean.
 ///
 /// End to end, the way the shipped binary is actually called -- `nomos_gate_orchestration
-/// ::Registered` composes the same eight real offers `P13-GATE-ORCHESTRATION-1`'s own crate
-/// test already checks; this is the assertion that the CLI seam renders what came back
-/// rather than trusting the crate boundary silently.
+/// ::Registered` composes the offers `P13-GATE-ORCHESTRATION-1`'s own crate test already
+/// checks; this is the assertion that the CLI seam renders what came back rather than
+/// trusting the crate boundary silently.
+///
+/// Against [`nomos_check_orchestration::Composed_Rules`] rather than a written-out list of
+/// eight names and a literal `rules: 8`, which is what this asserted while the registry was
+/// eight rules behind the run and `P35-GATE-020-REGISTRY-WHOLE` closed. Both halves matter:
+/// the count catches a rule offered and not rendered, and naming each one catches a count
+/// that is right for the wrong reasons.
 #[test]
-fn Test_Render_Plan_Should_Report_All_Eight_Shipped_Rules()
+fn Test_Render_Plan_Should_Report_Every_Rule_A_Check_Run_Composes()
 {
     let command = GateCommand { root: PathBuf::from("."), ..Default::default() };
     let (code, rendered, stderr) = Run_Over_This_Tree(Invocation::Plan(command));
+    let composed = nomos_check_orchestration::Composed_Rules();
 
     assert_eq!(code, ExitCode::Ok, "{rendered}");
-    assert!(rendered.contains("rules: 8"), "{rendered}");
-    assert!(rendered.contains("completeness-mirror"), "{rendered}");
-    assert!(rendered.contains("cross-language-correspondence"), "{rendered}");
-    assert!(rendered.contains("dependency-completeness"), "{rendered}");
-    assert!(rendered.contains("dependency-direction"), "{rendered}");
-    assert!(rendered.contains("dependency-policy"), "{rendered}");
-    assert!(rendered.contains("function-naming-convention"), "{rendered}");
-    assert!(rendered.contains("lint-diagnostics"), "{rendered}");
-    assert!(rendered.contains("unread-reaches-finding"), "{rendered}");
+    assert!(rendered.contains(&format!("rules: {}", composed.len())), "{rendered}");
+    for rule in &composed
+    {
+        assert!(
+            rendered.contains(rule.As_Str()),
+            "{rule} is composed into a check run but the plan does not name it: {rendered}"
+        );
+    }
     assert!(stderr.is_empty());
 }
 
@@ -232,7 +238,7 @@ fn Test_Render_Plan_Should_Report_All_Eight_Shipped_Rules()
 /// real tree" discipline the `plan` test above already uses. This repository's own `Rules`
 /// step already runs `gate run` over this same tree and expects it clean -- the exact
 /// command under test here -- so this test, exercising the same command CI actually runs,
-/// must agree with itself end to end: `Ok`, not `Violations`, and the same eight rule names
+/// must agree with itself end to end: `Ok`, not `Violations`, and the same rule names
 /// `plan` already reports must be nameable in the rendered findings' rule ids where any
 /// exist, or the finding count must be zero.
 #[test]

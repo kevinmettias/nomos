@@ -14,8 +14,7 @@ use nomos_model::Subject_Of_Path;
 use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
 use nomos_rules::{
     SourceFile, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION,
-    CROSS_LANGUAGE_CORRESPONDENCE, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
-    DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, LINT_DIAGNOSTICS,
+    DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
     NAMING_CONVENTION, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
     UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
 };
@@ -139,7 +138,7 @@ fn Real_Finding_For(query: &FindingQuery, source: impl Fn() -> SourceFile) -> Fi
 /// build identically, before either addresses that finding with its own policy.
 fn Explain_Applies_Fixture() -> (impl Fn() -> SourceFile, FindingQuery, Finding)
 {
-    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n");
     let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
     let real_finding = Real_Finding_For(&query, source);
 
@@ -207,15 +206,23 @@ fn Repository_Root() -> PathBuf
         .expect("this crate sits three levels below the workspace root");
 }
 
-/// The whole plan, by identity and in `RuleId` order, rather than by length. A count agrees
-/// with itself: this registry composed two of the three shipped rules until
-/// `P13-GATE-REGISTRY-THIRD-RULE`, then three of four until
-/// `P13-CONTROLFLOW-REACHABILITY-WIRE`, then four of five until
-/// `OD-GATE-019-REGISTRY-COHERENCE-A-3`, then five of eight until
-/// `OD-GATE-019-REGISTRY-COHERENCE-B-4`, and an assertion on `plan.rules.len()` would have
-/// been green throughout.
+/// The whole plan, by identity rather than by length, and against the list `Run` actually
+/// composes rather than one written out here.
+///
+/// A count agrees with itself: this registry composed two of the three shipped rules until
+/// `P13-GATE-REGISTRY-THIRD-RULE`, three of four until `P13-CONTROLFLOW-REACHABILITY-WIRE`,
+/// four of five until `OD-GATE-019-REGISTRY-COHERENCE-A-3`, five of eight until
+/// `OD-GATE-019-REGISTRY-COHERENCE-B-4`, and eight of fifty-six until
+/// `P35-GATE-020-REGISTRY-WHOLE`. An assertion on `plan.rules.len()` would have been green
+/// throughout.
+///
+/// So would the hand-written list of eight identifiers this replaced. That is the part
+/// `OD-GATE-020` named: a hand-written expectation checked against a hand-written
+/// registration is two hand-written artifacts agreeing with each other, and neither says
+/// anything about `Run`. [`nomos_check_orchestration::Composed_Rules`] is the authority both
+/// now answer to, read off the same array literal `Run` executes.
 #[test]
-fn Test_Registered_Should_Compose_All_Eight_Shipped_Rules()
+fn Test_Registered_Should_Compose_Every_Rule_A_Check_Run_Composes()
 {
     let GateOutcome::Planned(plan) = Run(&Command())
     else
@@ -223,20 +230,15 @@ fn Test_Registered_Should_Compose_All_Eight_Shipped_Rules()
         panic!("this crate's own registration must not be contradictory");
     };
 
-    let ids: Vec<RuleId> = plan.rules.iter().map(|offer| return offer.rule.clone()).collect();
+    let mut planned: Vec<RuleId> = plan.rules.iter().map(|offer| return offer.rule.clone()).collect();
+    let mut composed = nomos_check_orchestration::Composed_Rules();
+    planned.sort();
+    composed.sort();
+
     assert_eq!(
-        ids,
-        vec![
-            RuleId::New(COMPLETENESS_MIRROR),
-            RuleId::New(CROSS_LANGUAGE_CORRESPONDENCE),
-            RuleId::New(DEPENDENCY_COMPLETENESS),
-            RuleId::New(DEPENDENCY_DIRECTION),
-            RuleId::New(DEPENDENCY_POLICY),
-            RuleId::New(NAMING_CONVENTION),
-            RuleId::New(LINT_DIAGNOSTICS),
-            RuleId::New(UNREAD_REACHES_FINDING)
-        ],
-        "in RuleId order: {ids:?}"
+        planned, composed,
+        "the plan a caller reads must name the rules a run would judge by, or it is a plan \
+         smaller than the run it describes"
     );
 }
 
@@ -446,7 +448,7 @@ fn Test_A_Walk_That_Found_No_Source_Should_Be_Indeterminate()
 #[test]
 fn Test_A_Clean_Source_Should_Pass()
 {
-    let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
+    let sources = vec![Source("a.rs", "pub fn Ok()\n{\n}\n")];
 
     let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(Repository_Root()), Test_Run_Id());
 
@@ -465,7 +467,7 @@ fn Test_Run_Gate_Should_Fail_On_A_Blocking_Finding()
 {
     let sources = vec![Source(
         "a.rs",
-        "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n",
     )];
 
     let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(Repository_Root()), Test_Run_Id());
@@ -487,7 +489,7 @@ fn Test_A_Scoped_Out_Source_Should_Not_Be_Judged()
 {
     let sources = vec![Source(
         "a.rs",
-        "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n",
     )];
     let command = GateCommand {
         scope: ScopeSelector { include: vec!["b.rs".to_owned()], exclude: Vec::new() },
@@ -510,7 +512,7 @@ fn Test_A_Deselected_Rules_Finding_Should_Not_Exist()
 {
     let sources = vec![Source(
         "a.rs",
-        "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n",
     )];
     let command = GateCommand {
         rules: RuleSelector { include: vec![RuleId::New(NAMING_CONVENTION)] },
@@ -543,7 +545,7 @@ fn Test_A_Deselected_Rules_Finding_Should_Not_Exist()
 #[test]
 fn Test_A_Suppressed_Finding_Should_Not_Block()
 {
-    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n");
     let real_finding = One_Real_Blocking_Finding(source);
     let command = Command_With_Suppression(Repository_Root(), Suppression_Of(&real_finding));
 
@@ -566,7 +568,7 @@ fn Test_A_Suppressed_Finding_Should_Not_Block()
 #[test]
 fn Test_A_Baselined_Finding_Should_Not_Block()
 {
-    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n");
     let real_finding = One_Real_Blocking_Finding(source);
     let command = Command_With_Baseline(Repository_Root(), Baseline_Of(&real_finding));
 
@@ -582,7 +584,7 @@ fn Test_A_Baselined_Finding_Should_Not_Block()
 #[test]
 fn Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed()
 {
-    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n");
     let real_finding = One_Real_Blocking_Finding(source);
     let command = GateCommand {
         suppressions: SuppressionPolicy { suppressions: vec![Suppression_Of(&real_finding)] },
@@ -609,7 +611,7 @@ fn Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed()
 #[test]
 fn Test_A_Calibrated_Finding_Should_Not_Block()
 {
-    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n");
     let real_finding = One_Real_Blocking_Finding(source);
     let command = Command_With_Calibration(Repository_Root(), Calibration_Of(&real_finding));
 
@@ -625,7 +627,7 @@ fn Test_A_Calibrated_Finding_Should_Not_Block()
 #[test]
 fn Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrated()
 {
-    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n");
     let real_finding = One_Real_Blocking_Finding(source);
     let command = GateCommand {
         adoption: AdoptionPolicy { calibrated: vec![Calibration_Of(&real_finding)] },
@@ -655,7 +657,7 @@ fn Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrate
 #[test]
 fn Test_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers()
 {
-    let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
+    let sources = vec![Source("a.rs", "pub fn Ok()\n{\n}\n")];
     let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "nowhere.rs".to_owned() };
 
     let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(Repository_Root()), &query);
@@ -672,7 +674,7 @@ fn Test_Explain_Gate_Should_Find_A_Real_Blocking_Finding()
 {
     let sources = vec![Source(
         "a.rs",
-        "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n",
     )];
     let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
 
@@ -748,7 +750,7 @@ fn Test_Explain_Should_Ignore_Scope()
 {
     let sources = vec![Source(
         "a.rs",
-        "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n",
     )];
     let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
     let command = GateCommand {
@@ -767,7 +769,7 @@ fn Test_Explain_Should_Ignore_Scope()
 /// premise, not the thing under test, for every fixture that reuses this text.
 fn Coverage_Debt_Fixture() -> Vec<SourceFile>
 {
-    return vec![Source("a.rs", "pub fn Ok() {}\n"), Source("broken.rs", "pub const ??? = ;")];
+    return vec![Source("a.rs", "pub fn Ok()\n{\n}\n"), Source("broken.rs", "pub const ??? = ;")];
 }
 
 /// [`CoveragePolicy::Unset`] -- `Default`, the state every existing caller is in -- leaves a
@@ -816,7 +818,7 @@ fn Test_Required_Completeness_Should_Downgrade_An_Incomplete_Passed_Run()
 fn Test_Required_Completeness_Should_Not_Touch_A_Failed_Run()
 {
     let mut sources = Coverage_Debt_Fixture();
-    sources.push(Source("phantom.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n"));
+    sources.push(Source("phantom.rs", "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n"));
     let command = GateCommand { coverage: CoveragePolicy::RequireCompleteness, ..Command_At(Repository_Root()) };
 
     let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
