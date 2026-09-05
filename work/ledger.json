@@ -53682,6 +53682,72 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P46-SYNTAX-PAYLOAD-TREE-OR-INDEX",
+      "title": "The syntax payload is a tab-separated index, so every rule needing structure re-parses the text",
+      "why": "Measured 2026-09-05. Render_Payload writes one tab-separated line per item carrying ordinal, kind, visibility, qualified name, documentation and shape. A tab-separated line cannot express a tree, so the parse tree is flattened before it is ever stored, and five of those six fields are strings. syn builds the full tree and the provider walks it properly with a Visit implementation, then discards it: visit_item_enum records no shape at all while node.variants is in hand, Function_Shape keeps a parameter count and no names, types or return type, and Type_Shape collapses every type to either slice or value, so a struct field of u32 and one of String are recorded identically. The shape that does survive is a string that Struct_Fields and Function_Arity have to re-parse to get structure back. The consequence is that a rule needing anything more re-parses the raw text it was also handed: enum_shape re-derives variant members, constant_scope re-derives function and constant headers and visibility one line at a time, domain_type_alias keeps a second copy of the visibility stripper, facade re-derives re-exports. Those re-derivations are wrong the way hand parsers are wrong. Split_At_Top_Level_Commas was compiled verbatim and run: two plain members split correctly, a generic member with an inner comma splits correctly, and a member whose type contains a function arrow does not, because the arrow's closing angle decrements a bracket depth that never opened, so a variant holding a callback reads as one member instead of two. Its author did handle generic nesting, which is the point: careful hand parsing still loses to the parser that already ran. Two different gaps are being conflated. P42-SEMANTIC-FACT-FAMILY and P40-COMPILER-BACKED-PROVIDER name the absence of a semantic model, name resolution and symbols, and name it correctly. Nothing names the absence of typed syntax, which is far cheaper because syn already produces it in process on every run and the tree is thrown away about sixty lines before the rules that rebuild it from text. Worth noting alongside: kind and visibility being strings is exactly what Check_Domain_Values_Are_Distinct_Types exists to catch, and that rule is one of the nineteen built and never composed, so it has never judged the payload it would fail.",
+      "done_when": "A record decides whether the syntax payload carries a typed tree or stays a flat item index. It states what a second language provider owes under that answer, since nomos-lang-go must produce the same shape from tree-sitter and nomos-lang-rust-scan must produce it without a parser at all. It states what happens to the content-addressed encoding and to the determinism declarations that depend on byte identity if the encoding changes. It names which of the four hand-parsing rules the answer removes and which keep their own parser and why. No code moves under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-011.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P46-UNCOMPOSED-RULES-ARE-COUNTED",
+      "title": "Nineteen of seventy-five rules are exported and never composed, and nothing reports the gap",
+      "why": "Measured 2026-09-05 by comparing the Check functions nomos-rules exports against the ones run_context composes: seventy-five declared, fifty-six composed, nineteen that judge nothing. Building a rule first and composing it in a later item is a deliberate and sensible pattern here, because composing an unmeasured rule can redden the gate by hundreds of findings, and this workspace has done it on purpose before, in OD-RULES-012-WIRE-CLEAN-TEXT-RULES and again in P27-RULES-TWO-MORE-UNCOMPOSED. The defect is not the pattern; it is that the gap is found by hand each time somebody happens to diff the two lists, and nothing reports it in between. A rule that is built, tested, documented and exported costs the same to maintain as one that runs, and reads to any reader of the crate as though it is in force. Two of the nineteen matter beyond bookkeeping. Check_Domain_Values_Are_Distinct_Types would judge the stringly-typed fields P46-SYNTAX-PAYLOAD-TREE-OR-INDEX is about, and has never run against them. The three facade rules are the only check on a boundary this workspace states as architecture. Composed_Rules already exists as the single authority on what a run judges, and nothing compares it against what the rules crate offers.",
+      "done_when": "A contract test compares the rules nomos-rules exports against the rules a run composes and fails when the difference contains a rule nobody has accounted for. Every rule in the difference today is either composed or carries a stated reason it is not, so nineteen becomes a set of decisions rather than an unexamined number. A rule exported tomorrow without either falls out of the test rather than out of a future review.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/rule_composition.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
