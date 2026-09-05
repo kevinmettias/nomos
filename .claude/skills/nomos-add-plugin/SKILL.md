@@ -87,30 +87,43 @@ expected to offer against it, not only once one actually has.
 
 ## 3. A second rule
 
-Much smaller than a provider. `crates/rules/nomos-rules` holds four rules today,
-`Check_Completeness_Mirrors`, `Check_Naming_Convention`, `Check_Dependency_Direction` and
-`Check_Unread_Reaches_A_Finding` — all
-`fn(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>` — a fifth rule
-is a fifth function of that same shape inside the same crate, not a new crate or a new
-band. There is no `Rule` trait; match the signature.
+Much smaller than a provider. `crates/rules/nomos-rules` holds every rule this workspace
+ships. How many that is, and which, is `RULE_COUNT` and the `ComposedRule` table in
+`crates/orchestration/nomos-check-orchestration/src/run_context.rs` — read it rather than
+trusting a count written here, which goes stale the moment a rule lands.
 
-**Wiring it in**: `crates/orchestration/nomos-check-orchestration/src/run_context.rs`'s `Run`
-function calls every rule it knows about unconditionally:
+A rule is a free function taking the sources it judges and, if it reads facts, a
+`&mut dyn FactReader`, returning `Vec<Finding>`. A new rule is one more function of that
+shape inside the same crate, not a new crate and not a new band. There is no `Rule` trait;
+match the signature of the rule nearest what yours does.
 
-```rust
-let mut findings = Check_Completeness_Mirrors(sources, &mut reader);
-findings.extend(Check_Naming_Convention(sources, &mut reader));
-findings.extend(Check_Dependency_Direction(dependency_sources, &mut reader));
-findings.extend(Check_Unread_Reaches_A_Finding(sources, &mut reader));
-```
+**Wiring it in is two lists, not one.** This is the step that most often lands half done,
+and the failure is silent in the crate you edited and loud in one you did not.
 
-`OD-HOST-004` decided `Run()` stays hand-written, and one more unconditional call beside the
-existing ones is composition, not the accretion the record warns about — add your own
-`findings.extend(Your_Rule(sources, &mut reader));` and fold the result into the
-`CheckOutcome::Judged` `Run` returns. **This stops being true the moment your rule is meant
-to run only for some invocations** (a per-language rule, an opt-in, a subset) — at that
-point read `OD-HOST-004` in full before writing an `if`; it names the declared selection
-mechanism that case needs instead.
+*The run.* `crates/orchestration/nomos-check-orchestration/src/run_context.rs` holds a
+`ComposedRule` table of fixed length `RULE_COUNT`. Add your entry — its `RuleId` and a
+closure calling your function — and raise `RULE_COUNT` by one. This decides what a run
+actually judges.
+
+*The plan.* `crates/orchestration/nomos-gate-orchestration/src/composition.rs` holds
+`OFFERINGS`, one row per rule of `(id, authority, authority version)`. Add your row there
+too. This decides what `nomos gate plan` reports and what `nomos gate explain` can cite.
+A rule ported from code-standards with no record behind it cites `PORTED_STANDARD` and
+`NO_VERSIONED_RECORD`, the way most rows do; a rule backed by a governing record cites
+that record and its version, the way `COMPLETENESS_MIRROR` and `DEPENDENCY_DIRECTION` do.
+
+Two tests assert the lists agree — `Test_Registered_Should_Offer_Every_Composed_Rule` and
+`Test_Registered_Should_Compose_Every_Rule_A_Check_Run_Composes`, both in
+`nomos-gate-orchestration`. They read `nomos_check_orchestration::Composed_Rules()`, so
+they are the authority on the pairing rather than a second hand-written copy of it. They
+live in a crate a rules-and-check predicate never runs, which is exactly how a composed
+rule with no `OFFERINGS` row left the workspace red at commit `e9b9363f`.
+
+`OD-HOST-004` decided the composition root stays hand-written, and one more entry beside
+the existing ones is composition, not the accretion that record warns about.
+**This stops being true the moment your rule is meant to run only for some invocations**
+(a per-language rule, an opt-in, a subset) — at that point read `OD-HOST-004` in full
+before writing an `if`; it names the declared selection mechanism that case needs instead.
 
 **State your own floor.** `nomos_rules::Syntax_Requirement` is `Check_Completeness_Mirrors`'s
 own stated `Requirement` against the capability it reads — not `Registered()`'s and not
@@ -119,8 +132,14 @@ what your rule needs.
 
 **Reserve in the ledger item's territory**: `crates/rules/nomos-rules` (your new function
 and its own test module), `crates/orchestration/nomos-check-orchestration/src/run_context.rs`
-(the new call site), and `tests/contract/surface/nomos-rules.txt` if the crate's public
+(the `ComposedRule` entry), `crates/orchestration/nomos-gate-orchestration/src/composition.rs`
+(the `OFFERINGS` row), and `tests/contract/surface/nomos-rules.txt` if the crate's public
 surface grows a new export.
+
+**The item's verification predicate must run `nomos-gate-orchestration`.** A predicate over
+`nomos-rules`, `nomos-check-orchestration` and `nomos-contract-tests` alone passes while the
+parity tests fail, so the item finishes green and the workspace test step is red for every
+other session until somebody else notices.
 
 ## 4. A second language's package manifest
 

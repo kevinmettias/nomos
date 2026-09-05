@@ -54072,7 +54072,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory and verification predicate both omit crates/orchestration/nomos-gate-orchestration/src/composition.rs, the fifth registration site composing a rule costs -- the exact omission P47-ORPHAN-MODULES-HAS-NO-OFFERINGS-ROW had just corrected. Superseded by P47-RULES-RUST-DISCIPLINE-TRIO-2 with the same content, that path reserved, and nomos-gate-orchestration in the predicate."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -54092,7 +54096,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-opus5-rule-migration",
+        "declined_at": 1788600330
+      }
     },
     {
       "id": "P47-ORPHAN-MODULES-HAS-NO-OFFERINGS-ROW",
@@ -54189,6 +54196,109 @@
         "holder": "claude-orphan-offerings",
         "declined_at": 1788600278
       }
+    },
+    {
+      "id": "P49-ADD-PLUGIN-SKILL-NAMES-THE-SECOND-LIST",
+      "title": "The skill that tells an author how to add a rule never mentions the second list they must edit",
+      "why": "A rule's identity is written in two hand-maintained places: the ComposedRule table in nomos-check-orchestration decides what a run judges, and OFFERINGS in nomos-gate-orchestration decides what a plan reports, with a parity test asserting the two agree. The nomos-add-plugin skill documents only the first. It names composing a rule into nomos-check-orchestration's own composition and never names the OFFERINGS table, the gate crate, or the parity test that fails when they disagree. The cost is not hypothetical: HEAD e9b9363f composed no-orphan-modules with no OFFERINGS row and left two tests red on a clean tree for every session, and the composing item passed its own predicate because that predicate never ran nomos-gate-orchestration either. The code half is P47-ORPHAN-MODULES-HAS-NO-OFFERINGS-ROW, already claimed. This is the half that stops the next author repeating it. It is deliberately not a fix for the underlying coupling: P41-RUN-STOPS-NAMING-EVERY-RULE is that, and until it lands the procedure has to tell the truth about both lists rather than half of them.",
+      "done_when": "The nomos-add-plugin skill names the OFFERINGS table in nomos-gate-orchestration as a step in composing a rule, says what citation a ported rule versus a record-backed rule carries there, and names nomos-gate-orchestration among the crates a composing item's verification predicate must run. An author following the skill end to end leaves no parity test red.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "--quiet",
+          "OFFERINGS",
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "--quiet",
+          "OFFERINGS",
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "",
+        "verified_at": 1788600396,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8be7904a159e18b74d6e737bd626993c7d1ab57b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P47-RULES-RUST-DISCIPLINE-TRIO-2",
+      "title": "Three text-decidable Rust rules exist in the tool this ports and in no rule here",
+      "why": "Same content as P47-RULES-RUST-DISCIPLINE-TRIO, declined only because its territory and predicate both omitted the fifth registration site. Of the twenty Rust-specific checks code-standards ships that nomos has not ported, thirteen are tree-sitter-backed and need structure the nomos.cap.syntax.items payload does not carry, which is P46-SYNTAX-PAYLOAD-TREE-OR-INDEX's question and not this item's. Three of the remaining text-decidable ones were measured against this workspace before being chosen and each reports zero: check-borrowing (borrowing-and-ownership/borrowing -- a borrowed owning container in a signature, ampersand-String, ampersand-Vec, ampersand-PathBuf, ampersand-Box, where the unsized view is what a caller can supply without allocating), check-lifetime-discipline (lifetimes/lifetime-discipline -- two or more distinct single-letter lifetimes on one declaration, and a static bound with no justification), and check-proc-macro (structure/proc-macro -- a function-like procedural macro with no justification, deliberately not the derive and attribute forms the rule sanctions). Zero was checked for vacuity rather than trusted: each was run against a hand-written positive fixture and fired, so the clean result is a real population judged clean and not the empty-population reading P43-EMPTY-POPULATION-IS-NOT-CLEAN names. Two neighbours were measured and rejected for cause and are out of scope: check-move-out-of-mut cannot fire on Allman-braced code at all, and a corrected version producing five findings here was checked site by site and all five are reads the field must survive rather than moves out; check-closure-bounds reports four findings that would redden the gate and needs its own item.",
+      "done_when": "nomos-rules exports four rules -- one for the borrowed owning container, one for terse multi-lifetime declarations, one for an unjustified static bound, one for the function-like procedural macro -- each in its own module named for what it judges, each judging only a line's own code the way this crate's sibling text rules already do. A static bound and a procedural macro are justified by an adjacent explanatory comment, the shape Check_Inline_Always_Justification already established here, rather than by one exact marker spelling. All four are composed into nomos-check-orchestration's Run behind the same per-call selection, each carries a descriptor saying it reads source text and needs no fact, each has a row in nomos-gate-orchestration's OFFERINGS, the blessed public surface names them, and a real nomos check over this workspace reports zero findings from all four. cargo test -p nomos-rules -p nomos-check-orchestration -p nomos-gate-orchestration -p nomos-contract-tests passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/borrowed_container.rs",
+          "crates/rules/nomos-rules/src/checks/lifetime_discipline.rs",
+          "crates/rules/nomos-rules/src/checks/procedural_macro.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-opus5-rule-migration",
+        "acquired_at": 1788600350,
+        "lease_expires_at": 1788611150
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
