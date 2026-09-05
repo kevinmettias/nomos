@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:c82e2a3c234bd723de238b2ae669b022bd6028cf20599bcead04e93e5579cb62",
-  "inputs_digest": "sha256:c3f216f06236925a1dff7cc56ca01b2872cda6693fde3923a38a9ccf1276d447",
+  "content_digest": "sha256:3cedb16f49fe49e7d73134fe0b23167eb9baf22ce96561711a1992cd45348ed9",
+  "inputs_digest": "sha256:fac442a36d4c3bd53777d4fffa4fbb416f8381890a0c3a3f95385d1ae3b8f308",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1566
+      1567
     ],
     [
       "Source blocks",
-      5484
+      5490
     ]
   ],
   "inputs": [
@@ -428,7 +428,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored",
-      "hash": "sha256:bcf1bfd865c60493754d4a765742627fd4c18504722d27a065b5201be2ac218f"
+      "hash": "sha256:f15f1623bf65a26c9d0362552ef27a8f675a8a796a842d76ad48583d354f6066"
     },
     {
       "content": "documents",
@@ -4184,6 +4184,11 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#13",
       "hash": "sha256:73248b3b09ed90ff9bd197ab6ff2f70b14309c4d47babfbcaa349e319f929278"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#16",
+      "hash": "sha256:a581bac19b494b3ccdeba771c6a1d01e3ffd50c92dc55149550d7ffb153f8df4"
     },
     {
       "content": "headings",
@@ -19849,6 +19854,36 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#15",
       "hash": "sha256:2cae576700de19c21abc326cf827aaef45f8c85225074c220d7b7d96e414eccb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#16",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#17",
+      "hash": "sha256:a0c5c2bb25f876f367399e79ab53b9f7bdbae30de47954cd96ef6e8aa331e2a3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#18",
+      "hash": "sha256:cfca306c7955234ce906b277e53b3f5331ebba1cb5e253b5504b3f2ccbd836be"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#19",
+      "hash": "sha256:cd89f2ba5760604b0885fbb1ecfc9ec86c38fe488a35d995903739b9842e29bb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#20",
+      "hash": "sha256:1672d87472a0b48ca027b665f45bc7adc47dd9feffe0a07717a0dd3eb4649181"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#21",
+      "hash": "sha256:1fb9eb3d448297bc0d47da52b620ff36320d62b015d1833d0d012b7ba42cf5c0"
     },
     {
       "content": "blocks",

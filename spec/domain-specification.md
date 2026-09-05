@@ -91,7 +91,7 @@ profile: domain-specification
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 36 | 8 | sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
-| docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 15 | 5 | sha256:bcf1bfd865c60493754d4a765742627fd4c18504722d27a065b5201be2ac218f |
+| docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 21 | 6 | sha256:f15f1623bf65a26c9d0362552ef27a8f675a8a796a842d76ad48583d354f6066 |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md | authored | 15 | 5 | sha256:0cb15b83d0fb7a58f4a2afda083ac512ba0ac344d15ca0556f3446736cbd7ea9 |
 | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md@authored | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md | authored | 19 | 6 | sha256:c4b59b0c06e3e68eee7656804c4cf4fe6685ba8cf63bc66976ccc67c481f2120 |
 | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md@authored | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md | authored | 25 | 6 | sha256:3e1ca21fa30a1ca546fe40667181bda7de5ca80622a019656889537e6a72d206 |
@@ -848,6 +848,7 @@ profile: domain-specification
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#6 | authored | 2 | What flips the answer |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#11 | authored | 2 | Why not build the mechanism now |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#13 | authored | 2 | Alternatives considered |
+| docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#16 | authored | 2 | Status |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#1 | authored | 1 | Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#2 | authored | 2 | Question |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#8 | authored | 2 | What Would Decide It |
@@ -22723,6 +22724,58 @@ more likely it is decided by whichever shape the second rule happens to need, ra
 a recorded choice checkable in advance. This record is written before that rule exists so
 the criterion, and not the accident of what the second rule turns out to want, decides the
 shape.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#16
+
+*revision: authored · kind: heading · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#17
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / Status · hash: sha256:a0c5c2bb25f876f367399e79ab53b9f7bdbae30de47954cd96ef6e8aa331e2a3*
+
+Accepted, and the trigger this record names has since fired.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#18
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / Status · hash: sha256:cfca306c7955234ce906b277e53b3f5331ebba1cb5e253b5504b3f2ccbd836be*
+
+The criterion was stated here as: `Run` flips the first time a rule is meant to run for
+*some* check invocations and not others, selected by something the request states.
+`nomos_check_orchestration::Run` now takes `selected: &[RuleId]`; `OD-GATE-017` decided that a
+non-empty selection narrows what `Run` computes at all rather than merely filtering its
+output; and `nomos gate run --rule <id>` reaches it from a command line. That is the criterion
+met, not an approximation of it.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#19
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / Status · hash: sha256:cd89f2ba5760604b0885fbb1ecfc9ec86c38fe488a35d995903739b9842e29bb*
+
+What answered it was not the declared mechanism this record asked for. `Run` gained a
+`RuleId` filter over a fixed `[ComposedRule; RULE_COUNT]` array, and its own doc calls the
+structure beside it "a fixed, hand-written mapping from `RuleId` to the fact(s) it needs". A
+declaration doing registry work inside a function body is what the reasoning above refuses; it
+arrived as a table rather than as the `if`/`match` this record predicted, which is why the
+flip passed unremarked at the time.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#20
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / Status · hash: sha256:1672d87472a0b48ca027b665f45bc7adc47dd9feffe0a07717a0dd3eb4649181*
+
+`OD-RULES-022` picks the question up from here and decides what composition resolves against:
+a declared rule package matched to a linked implementation, refused in both directions. It does
+not revise any reasoning on this page. The criterion above was right, and finding it already
+satisfied is what that record is a response to.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#21
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / Status · hash: sha256:1fb9eb3d448297bc0d47da52b620ff36320d62b015d1833d0d012b7ba42cf5c0*
+
+Nothing here is withdrawn. `Registered()` still never flips, for the reason stated above — the
+capability registry was always the layer that chose. This record's own restraint about
+building a mechanism ahead of a rule that needs one also stands: what changed is that a rule
+that needs one now exists, which is exactly the condition it said to wait for.
 
 ### docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#1
 

@@ -3,7 +3,7 @@ id: OD-HOST-004
 type: decision
 title: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - host
@@ -116,3 +116,31 @@ more likely it is decided by whichever shape the second rule happens to need, ra
 a recorded choice checkable in advance. This record is written before that rule exists so
 the criterion, and not the accident of what the second rule turns out to want, decides the
 shape.
+
+## Status
+
+Accepted, and the trigger this record names has since fired.
+
+The criterion was stated here as: `Run` flips the first time a rule is meant to run for
+*some* check invocations and not others, selected by something the request states.
+`nomos_check_orchestration::Run` now takes `selected: &[RuleId]`; `OD-GATE-017` decided that a
+non-empty selection narrows what `Run` computes at all rather than merely filtering its
+output; and `nomos gate run --rule <id>` reaches it from a command line. That is the criterion
+met, not an approximation of it.
+
+What answered it was not the declared mechanism this record asked for. `Run` gained a
+`RuleId` filter over a fixed `[ComposedRule; RULE_COUNT]` array, and its own doc calls the
+structure beside it "a fixed, hand-written mapping from `RuleId` to the fact(s) it needs". A
+declaration doing registry work inside a function body is what the reasoning above refuses; it
+arrived as a table rather than as the `if`/`match` this record predicted, which is why the
+flip passed unremarked at the time.
+
+`OD-RULES-022` picks the question up from here and decides what composition resolves against:
+a declared rule package matched to a linked implementation, refused in both directions. It does
+not revise any reasoning on this page. The criterion above was right, and finding it already
+satisfied is what that record is a response to.
+
+Nothing here is withdrawn. `Registered()` still never flips, for the reason stated above — the
+capability registry was always the layer that chose. This record's own restraint about
+building a mechanism ahead of a rule that needs one also stands: what changed is that a rule
+that needs one now exists, which is exactly the condition it said to wait for.
