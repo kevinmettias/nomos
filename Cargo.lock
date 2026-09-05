@@ -505,6 +505,8 @@ name = "nomos-contract-tests"
 version = "0.1.0"
 dependencies = [
  "nomos-cap-syntax",
+ "nomos-check-orchestration",
+ "nomos-contracts",
  "nomos-lang-rust",
  "nomos-ledger",
  "nomos-rules",
