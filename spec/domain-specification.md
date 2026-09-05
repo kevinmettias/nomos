@@ -87,7 +87,7 @@ profile: domain-specification
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md | authored | 20 | 7 | sha256:0c813c23245ff0e95b51d6914c67d7ab36ae6d18b05e2bd82bd69892016f969e |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md | authored | 25 | 7 | sha256:6b6d9f41076761c1a5af15719547c1b28ab365e7b4e46ba305c59bc4de3a71b5 |
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md | authored | 20 | 6 | sha256:c69ceac45b63a2a7fdbf575e0aae4e6917ff2f5e7d2ef0497149ca8d811344da |
-| docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md@authored | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md | authored | 19 | 6 | sha256:ffd91e41c359c960915b5ede74bcd07222979d279b5e92f6e2cc0038ebf121e5 |
+| docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md@authored | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md | authored | 24 | 6 | sha256:a1950bc3193e80ab3048937686ee5af16afe5f70f160c318aa0fad2915067313 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 36 | 8 | sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -21762,6 +21762,65 @@ fifty-six composed — remains open, tracked as future correction-item territory
 names but does not build. Revisit if a shared-derivation export is built and this record's
 "what would satisfy `OD-GATE-011`" analysis needs checking against it, or if the record-less
 population turns out not to fit the two shapes measured here once audited rule by rule.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#20
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Status · hash: sha256:5fae559c947568d3ee273046e6322b347212ae85ae981d89130d4c2014510813*
+
+The revisit condition named above has since fired, twice and in that order.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#21
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Status · hash: sha256:8577147ffa7600cf0a29c5311cbe9d3aedd2210b71f536e180a4fc93ddf77fa7*
+
+`P35-GATE-020-COMPOSED-RULES-EXPORT` built the export this record named:
+`nomos_check_orchestration::Composed_Rules`, a `pub fn` beside `Run` reading the same array
+literal `Run` executes, exactly the shape described here and not a rewire of `RULE_COUNT` or
+the private table. That turned "two hand-typed lists, checked against each other by eye at
+correction time" into "one hand-typed list and one comparison against it", which is what this
+record predicted it would buy.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#22
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Status · hash: sha256:cdc5290382f7ed8a209c62edb995de833258b2b7e84dc2025d718fc617883a88*
+
+`P52-COMPOSED-RULES-BECOME-DECLARATIONS-3` then went further than this record anticipated, and
+the difference is the part the analysis above did not reach. This record identified the
+remaining obstacle correctly -- "a rule's contract citation is knowledge no export carries", so
+`OFFERINGS` had to stay authored even once the comparison existed. What it did not consider is
+that the citation could move onto the descriptor already carrying the rule's identity and its
+capability requirements. It did: `nomos_rules::RuleDescriptor` gained `contract_record` and
+`contract_record_version`, `OFFERINGS` was deleted, and `Registered` derives from
+`nomos_rules::DESCRIPTORS`. `composition.rs` fell from 323 lines to 177, and all seventy-six of
+its rule-identifier imports became unused, which is what a table being removed rather than
+relocated looks like from the outside.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#23
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Status · hash: sha256:24546771dd2214d598f08d27c552f6faf207ba572fd1593762c82aad1544c8ec*
+
+**The analysis held up, and the conclusion about scale is the thing that aged.** What this
+record said would satisfy `OD-GATE-011` -- one authority named outside both artifacts, each
+side deriving from it rather than restating it -- is what was built, and the two parity tests
+now compare a derivation against its source. What it also said was that closing the gap by hand
+was "an acceptable near-term shape... one more manual synchronization a person has to remember
+to repeat at rule fifty-seven". That stopped being hypothetical: it was repeated by hand up to
+fifty-six, and at fifty-seven it was not remembered. `P47-RULES-ORPHAN-MODULES` composed a rule
+without its row, `nomos gate plan` described a smaller gate than `nomos gate run` performed,
+and the parity test this record's own export made possible is what caught it within hours. The
+near-term shape was acceptable exactly as long as this record said it would be, and the number
+it named as the limit is the number at which it failed.
+
+### docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#24
+
+*revision: authored · kind: prose · heading: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 / Status · hash: sha256:f23fc6d2d0254ee1aaa4267750303bb70ab073e4d49e9542fcff00ce1504883b*
+
+**Nothing above is withdrawn.** `RuleOffer`'s two-field shape gained no field, the
+`contract_record_version: 0` sentinel remains the general pattern for a record-less rule --
+`RuleDescriptor::Cites_A_Versioned_Record` is now where it is read, so no caller compares
+against zero -- and the per-rule classification this record left to a correction item came out
+as predicted: seven rules citing a versioned governing record, one citing `README.md`, every
+other rule citing the ported standard, and no third shape found.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

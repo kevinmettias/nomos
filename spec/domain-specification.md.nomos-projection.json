@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:3cedb16f49fe49e7d73134fe0b23167eb9baf22ce96561711a1992cd45348ed9",
-  "inputs_digest": "sha256:fac442a36d4c3bd53777d4fffa4fbb416f8381890a0c3a3f95385d1ae3b8f308",
+  "content_digest": "sha256:422c56ecb28997afa5d5fcbbe89466e3b9061eb32bf70890de2c91c04899b1d0",
+  "inputs_digest": "sha256:0639a90e4685df71ebe422e9da8cf6989aefa84a85a0544b6ecd87b39b6e5b27",
   "sections": [
     [
       "Documents",
@@ -16,7 +16,7 @@
     ],
     [
       "Source blocks",
-      5490
+      5495
     ]
   ],
   "inputs": [
@@ -408,7 +408,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md@authored",
-      "hash": "sha256:ffd91e41c359c960915b5ede74bcd07222979d279b5e92f6e2cc0038ebf121e5"
+      "hash": "sha256:a1950bc3193e80ab3048937686ee5af16afe5f70f160c318aa0fad2915067313"
     },
     {
       "content": "documents",
@@ -19424,6 +19424,31 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#19",
       "hash": "sha256:71af49ec4bfe9b4c2b1398aa0e5f313b9b7860f7cd4ebbed28c5bfa9b7a56ca6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#20",
+      "hash": "sha256:5fae559c947568d3ee273046e6322b347212ae85ae981d89130d4c2014510813"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#21",
+      "hash": "sha256:8577147ffa7600cf0a29c5311cbe9d3aedd2210b71f536e180a4fc93ddf77fa7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#22",
+      "hash": "sha256:cdc5290382f7ed8a209c62edb995de833258b2b7e84dc2025d718fc617883a88"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#23",
+      "hash": "sha256:24546771dd2214d598f08d27c552f6faf207ba572fd1593762c82aad1544c8ec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#24",
+      "hash": "sha256:f23fc6d2d0254ee1aaa4267750303bb70ab073e4d49e9542fcff00ce1504883b"
     },
     {
       "content": "blocks",

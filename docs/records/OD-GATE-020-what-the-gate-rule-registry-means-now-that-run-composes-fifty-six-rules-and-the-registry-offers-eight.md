@@ -3,7 +3,7 @@ id: OD-GATE-020
 type: decision
 title: What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - gate
@@ -176,3 +176,42 @@ fifty-six composed — remains open, tracked as future correction-item territory
 names but does not build. Revisit if a shared-derivation export is built and this record's
 "what would satisfy `OD-GATE-011`" analysis needs checking against it, or if the record-less
 population turns out not to fit the two shapes measured here once audited rule by rule.
+
+The revisit condition named above has since fired, twice and in that order.
+
+`P35-GATE-020-COMPOSED-RULES-EXPORT` built the export this record named:
+`nomos_check_orchestration::Composed_Rules`, a `pub fn` beside `Run` reading the same array
+literal `Run` executes, exactly the shape described here and not a rewire of `RULE_COUNT` or
+the private table. That turned "two hand-typed lists, checked against each other by eye at
+correction time" into "one hand-typed list and one comparison against it", which is what this
+record predicted it would buy.
+
+`P52-COMPOSED-RULES-BECOME-DECLARATIONS-3` then went further than this record anticipated, and
+the difference is the part the analysis above did not reach. This record identified the
+remaining obstacle correctly -- "a rule's contract citation is knowledge no export carries", so
+`OFFERINGS` had to stay authored even once the comparison existed. What it did not consider is
+that the citation could move onto the descriptor already carrying the rule's identity and its
+capability requirements. It did: `nomos_rules::RuleDescriptor` gained `contract_record` and
+`contract_record_version`, `OFFERINGS` was deleted, and `Registered` derives from
+`nomos_rules::DESCRIPTORS`. `composition.rs` fell from 323 lines to 177, and all seventy-six of
+its rule-identifier imports became unused, which is what a table being removed rather than
+relocated looks like from the outside.
+
+**The analysis held up, and the conclusion about scale is the thing that aged.** What this
+record said would satisfy `OD-GATE-011` -- one authority named outside both artifacts, each
+side deriving from it rather than restating it -- is what was built, and the two parity tests
+now compare a derivation against its source. What it also said was that closing the gap by hand
+was "an acceptable near-term shape... one more manual synchronization a person has to remember
+to repeat at rule fifty-seven". That stopped being hypothetical: it was repeated by hand up to
+fifty-six, and at fifty-seven it was not remembered. `P47-RULES-ORPHAN-MODULES` composed a rule
+without its row, `nomos gate plan` described a smaller gate than `nomos gate run` performed,
+and the parity test this record's own export made possible is what caught it within hours. The
+near-term shape was acceptable exactly as long as this record said it would be, and the number
+it named as the limit is the number at which it failed.
+
+**Nothing above is withdrawn.** `RuleOffer`'s two-field shape gained no field, the
+`contract_record_version: 0` sentinel remains the general pattern for a record-less rule --
+`RuleDescriptor::Cites_A_Versioned_Record` is now where it is read, so no caller compares
+against zero -- and the per-rule classification this record left to a correction item came out
+as predicted: seven rules citing a versioned governing record, one citing `README.md`, every
+other rule citing the ported standard, and no third shape found.
