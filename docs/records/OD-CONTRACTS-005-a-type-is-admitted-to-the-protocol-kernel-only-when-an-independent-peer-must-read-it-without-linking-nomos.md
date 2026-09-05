@@ -3,7 +3,7 @@ id: OD-CONTRACTS-005
 type: decision
 title: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - contracts
@@ -116,4 +116,5 @@ abstract rule; this record is its first systematic application, not its replacem
 
 ## Status
 
-Accepted.
+Accepted. `WorkflowStep`, the knowledge-context types, `PackageKind`, and `Finding` with its
+reporting vocabulary each pass the sharpened admission test; no type moves.

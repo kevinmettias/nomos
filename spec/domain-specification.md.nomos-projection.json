@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:a632d68d31bb7c11901665cdd5b8d7aa403cdd8d367b93d266d16946b031a6ff",
-  "inputs_digest": "sha256:dffa3f713b0ede622828928ae00cbabb3cbb92528945fa76af30d9c9739525c2",
+  "content_digest": "sha256:1440dbe85a83d68e8e855bd5e72c957ff10cc2961252fb75c81434bd4c0deb36",
+  "inputs_digest": "sha256:a7eccd178a896afe2d69bdbfc941f6760f2b7eccf00babd54d472f5a726e1552",
   "sections": [
     [
       "Documents",
@@ -273,7 +273,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md@authored",
-      "hash": "sha256:1d0b1a4fb86109a6326e96b1d69325fc8f877dd73b8cc4c03cd526e10c6a3206"
+      "hash": "sha256:c6fc5672b5319e9f6ccd43df0120f2fa7e51f3fc22ebd463b20b8651485eeaea"
     },
     {
       "content": "documents",
@@ -743,7 +743,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md@authored",
-      "hash": "sha256:d7ded9695bea187461bbce38e7d13e4470b49e330f74983a92294a61ed9be415"
+      "hash": "sha256:4264b9448cf95f7bb22780f4a6cd970a7f64828eea993961df2987984417b701"
     },
     {
       "content": "documents",
@@ -15488,7 +15488,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#16",
-      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+      "hash": "sha256:a30ba82ab413ebe9fa68659b10812b8fa4b1040eb181523a0b00f6e5c98ee5bc"
     },
     {
       "content": "blocks",
@@ -29913,7 +29913,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#18",
-      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+      "hash": "sha256:06315e34273fbbe974efc3396b76f398ad092f3261c6ff5e2c754a4770fc4b27"
     },
     {
       "content": "blocks",

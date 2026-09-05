@@ -3,7 +3,7 @@ id: OD-RELEASE-001
 type: decision
 title: Main and dev mean different things, and the distance between them is a decision, not an accident
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - repository
@@ -98,4 +98,5 @@ record is entirely about the one door between `dev` and a branch nothing current
 
 ## Status
 
-Accepted.
+Accepted. `main` is a published milestone; a `dev` commit becomes eligible only through a
+clean-checkout green gate and a claim-free merge, and only a person authorizes the push.

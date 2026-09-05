@@ -55872,6 +55872,117 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P41-REPOSITORY-CRATE-CONSOLIDATION",
+      "title": "Collapse the six repository-policy crates OD-PACKAGE-015 marked, not the capability-contract family",
+      "why": "OD-PACKAGE-015 (v2) marked the repository-policy family for consolidation: six crates --\nnomos-repo-standards-document and its five providers nomos-repo-standards, nomos-repo-limits,\nnomos-repo-scripting, nomos-repo-words, nomos-repo-goals -- fail every clause of the\ncrate-boundary test (no independent versioning, no enforced isolation, and their only two\nconsumers, nomos-check-orchestration and tests/integration, already depend on all five\nproviders together every time). The record explicitly left carrying that verdict out to a\nfuture item. This is that item.",
+      "done_when": "A new crate nomos-repo-policy under crates/repository/ holds the former nomos-repo-standards-\ndocument, nomos-repo-standards, nomos-repo-limits, nomos-repo-scripting, nomos-repo-words and\nnomos-repo-goals as its own modules; the six original crates are deleted from the workspace;\nevery public type any of the six exported is reachable from nomos-repo-policy under the same\nname, only under a new crate-qualified path; nomos-check-orchestration and tests/integration\nbuild and pass against the new crate; README.md's band table and Cargo.toml's member list\nname nomos-repo-policy in place of the six; tests/contract's boundary/band tests and surface\nsnapshots reflect one crate instead of six, with no stale snapshot left for a deleted crate.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository",
+          "README.md",
+          "Cargo.toml",
+          "tests/contract/tests/boundaries/bands.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "crates/rules/nomos-rules/src/checks/naming/file_names.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+          "tests/integration/Cargo.toml",
+          "tests/integration/tests/determinism/declarations.rs",
+          "tests/integration/tests/determinism/domains.rs",
+          "tests/integration/tests/determinism/productions.rs",
+          "tests/contract/surface/nomos-repo-standards-document.txt",
+          "tests/contract/surface/nomos-repo-standards.txt",
+          "tests/contract/surface/nomos-repo-limits.txt",
+          "tests/contract/surface/nomos-repo-scripting.txt",
+          "tests/contract/surface/nomos-repo-words.txt",
+          "tests/contract/surface/nomos-repo-goals.txt",
+          "tests/contract/surface/nomos-repo-policy.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [
+        "P41-PACKAGE-015-RECONCILE-RULES-019"
+      ],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop",
+        "acquired_at": 1788649012,
+        "lease_expires_at": 1788656212
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-UNDECLARED-STATUS-TEMPLATE",
+      "title": "Three records share one templated Status line, and a real preservation rule catches it",
+      "why": "cargo test --workspace surfaced a real, pre-existing failure unrelated to any in-flight\nitem: NSV-PRESERVE-004 (nomos-spec-validate's undeclared-filler-template rule) flags three\ngoverning records whose Status section is the bare, byte-identical text \"Accepted.\" with\nnothing else -- OD-CONTRACTS-005, OD-RELEASE-001 and OD-RULES-022 -- crossing the rule's\nSHARED_BY=3 shared-template threshold. Confirmed pre-existing by stashing all in-flight\nchanges and re-running the test against committed HEAD, where it fails identically. Blocks\n`cargo test --workspace`, the predicate several ledger items declare.",
+      "done_when": "OD-CONTRACTS-005 and OD-RELEASE-001's Status sections each carry record-specific text\nrather than the bare templated word \"Accepted.\", dropping the shared-text group below\nNSV-PRESERVE-004's SHARED_BY=3 threshold; `cargo test -p nomos-spec-validate` passes\nnon-vacuously (a real subject count, not an absent-corpus skip).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md",
+          "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "exit_code": 0,
+        "output_tail": "_run::tests::Test_Vacuous_Rules_Should_List_Every_Rule_When_All_Examined_Nothing ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 3 tests\ntest Test_The_Ruleset_Hash_Should_Round_Trip_Through_Content_Hash_Parse ... ok\ntest Test_Validate_Rules_Should_Report_The_Hash_Nomos_Spec_Model_Computes_For_The_Ruleset ... ok\ntest Test_A_Narrowed_Ruleset_Should_Change_The_Hash_Nomos_Spec_Model_Computed_For_It ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 12 tests\ntest Test_Registered_Should_Build_One_Rule_Object_Per_Declared_Identifier ... ok\ntest Test_An_Empty_Store_Should_Report_Vacuous_Rules ... ok\ntest Test_The_Registry_Should_Match_The_Manifest ... ok\ntest Test_A_Traced_Statement_Should_Satisfy_Preserve_006 ... ok\ntest Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004 ... ok\ntest Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules ... ok\ntest Test_An_Undisposed_Block_Should_Violate_Preserve_002 ... ok\ntest Test_Disposed_Blocks_Should_Satisfy_Preserve_002 ... ok\ntest Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006 ... ok\ntest Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004 ... ok\ntest Test_An_Omitted_Block_Should_Satisfy_Preserve_002 ... ok\ntest Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.42s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.76s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-acd7b674edff1f45.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-cc86bb37eb4785b6.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-c1582b858346687e.exe)\n   Doc-tests nomos_spec_validate\n",
+        "verified_at": 1788652515,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "087b585a8dad45d2c6e1cbded7bc24759e1df0a3"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

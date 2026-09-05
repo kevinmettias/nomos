@@ -60,7 +60,7 @@ profile: domain-specification
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:15b5d49cfd110c5912afc3312550bed3193d467d2b5f619a78b9b8d9ed1efe01 |
 | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md | authored | 15 | 6 | sha256:ab9189d05ec02e249414c7a358c58dc965d46acbb87964ef26bd2fea4379fe87 |
 | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md@authored | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md | authored | 16 | 6 | sha256:eeea4b8c691ee0ca6bf5a71335c2d8c5b5335b8cdf217d2ac7fdc9a1f578ee88 |
-| docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md@authored | docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md | authored | 16 | 6 | sha256:1d0b1a4fb86109a6326e96b1d69325fc8f877dd73b8cc4c03cd526e10c6a3206 |
+| docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md@authored | docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md | authored | 16 | 6 | sha256:c6fc5672b5319e9f6ccd43df0120f2fa7e51f3fc22ebd463b20b8651485eeaea |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md | authored | 28 | 9 | sha256:a91dd75d56e4bce49e2a0d37621e02d0ee2ba9fa0fcaab509dbe114813bad215 |
 | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md@authored | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md | authored | 14 | 6 | sha256:e55bd46b259be4c661ac4bb95475cd427ad66c783465edae129bac816f1ababf |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
@@ -154,7 +154,7 @@ profile: domain-specification
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
-| docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md@authored | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md | authored | 18 | 7 | sha256:d7ded9695bea187461bbce38e7d13e4470b49e330f74983a92294a61ed9be415 |
+| docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md@authored | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md | authored | 18 | 7 | sha256:4264b9448cf95f7bb22780f4a6cd970a7f64828eea993961df2987984417b701 |
 | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md@authored | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md | authored | 18 | 6 | sha256:5369feac3ebd7b343b32234f25aa30ba669d4151b15af6d83d2ad37da0f58379 |
 | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md | authored | 24 | 6 | sha256:b8159cff04a7379eb48a47ce46a3da98ad447cc8ccec98c33ab48526d604e57f |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md@authored | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md | authored | 67 | 12 | sha256:f55068c0987852129b3103770502611bec876fd8c119bc01cd6616b6ecdf7bc6 |
@@ -14036,9 +14036,10 @@ abstract rule; this record is its first systematic application, not its replacem
 
 ### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#16
 
-*revision: authored · kind: prose · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+*revision: authored · kind: prose · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / Status · hash: sha256:a30ba82ab413ebe9fa68659b10812b8fa4b1040eb181523a0b00f6e5c98ee5bc*
 
-Accepted.
+Accepted. `WorkflowStep`, the knowledge-context types, `PackageKind`, and `Finding` with its
+reporting vocabulary each pass the sharpened admission test; no type moves.
 
 ### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#1
 
@@ -40479,9 +40480,10 @@ record is entirely about the one door between `dev` and a branch nothing current
 
 ### docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#18
 
-*revision: authored · kind: prose · heading: Main and dev mean different things, and the distance between them is a decision, not an accident / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+*revision: authored · kind: prose · heading: Main and dev mean different things, and the distance between them is a decision, not an accident / Status · hash: sha256:06315e34273fbbe974efc3396b76f398ad092f3261c6ff5e2c754a4770fc4b27*
 
-Accepted.
+Accepted. `main` is a published milestone; a `dev` commit becomes eligible only through a
+clean-checkout green gate and a claim-free merge, and only a person authorizes the push.
 
 ### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#1
 
