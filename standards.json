@@ -440,6 +440,12 @@
       ]
     },
     {
+      "tier": "band-93",
+      "paths": [
+        "crates/host/nomos-mcp"
+      ]
+    },
+    {
       "tier": "band-100",
       "paths": [
         "tests/contract",

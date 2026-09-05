@@ -239,6 +239,11 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // it. Above nomos-surface-provenance for no relationship between the two: 91 was
     // taken, and neither names the other. `OD-HOST-001`, `OD-HOST-007`.
     ("nomos-api-transport", 92),
+    // An MCP server over stdio, projecting nomos-api-transport's own three Gate verbs
+    // as MCP tools through that crate's own dispatch. Above nomos-api-transport rather
+    // than beside it, because it depends on that crate and a band may not depend on
+    // its own band. `P40-MCP-SURFACE-4`.
+    ("nomos-mcp", 93),
     // The contract tests sit at the top: they observe the workspace and nothing
     // observes them.
     ("nomos-contract-tests", 100),

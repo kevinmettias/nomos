@@ -248,4 +248,12 @@ pub(crate) const UNIVERSES: &[Universe] = &[
             by: "Test_The_Transport_Should_Name_No_Repo_Tooling_Handler",
         },
     },
+    Universe {
+        path: "crates/host/nomos-mcp/src/served_tool.rs",
+        name: "REGISTRY",
+        kind: UniverseKind::Constant,
+        standing: Standing::Mirrored {
+            by: "Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry",
+        },
+    },
 ];

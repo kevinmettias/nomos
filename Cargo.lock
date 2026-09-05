@@ -1316,6 +1316,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-mcp"
+version = "0.1.0"
+dependencies = [
+ "nomos-api-transport",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "nomos-model"
 version = "0.1.0"
 dependencies = [

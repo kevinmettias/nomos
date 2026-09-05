@@ -53659,7 +53659,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P40-API-TRANSPORT-2"
       ],
@@ -53674,7 +53674,27 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-mcp"
+        ],
+        "exit_code": 0,
+        "output_tail": "served_tool::tests::Test_A_Name_Outside_The_Registry_Should_Not_Resolve ... ok\ntest served_tool::tests::Test_Every_Registered_Tool_Should_Be_Found_By_Its_Own_Name ... ok\ntest serve::tests::Test_The_Unrenderable_Fallback_Should_Itself_Be_A_Valid_Answer ... ok\ntest dispatch::tests::Test_Initialize_Should_Report_The_Declared_Revision_And_The_Tools_Capability ... ok\ntest served_tool::tests::Test_Every_Listing_Should_Carry_A_Name_A_Description_And_An_Object_Schema ... ok\ntest served_tool::tests::Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry ... ok\ntest dispatch::tests::Test_Tools_List_Should_Name_Exactly_The_Three_Gate_Verbs ... ok\ntest dispatch::tests::Test_An_Unknown_Method_Should_Be_Refused_Naming_What_Is_Served ... ok\ntest dispatch::tests::Test_A_Tool_Refusing_Its_Own_Arguments_Should_Answer_With_Is_Error_True ... ok\ntest dispatch::tests::Test_A_Tool_Call_For_An_Unknown_Tool_Should_Be_Method_Not_Found ... ok\ntest dispatch::tests::Test_A_Real_Tool_Call_Should_Reach_A_Real_Registry ... ok\ntest serve::tests::Test_A_Real_Conversation_Should_Answer_Every_Request_On_Its_Own_Line ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 1 test\ntest Test_A_Real_Subprocess_Should_Answer_A_Real_Conversation_Over_Its_Own_Stdio ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_mcp-ab50412a6df13229.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_mcp-eff647925d04cdf3.exe)\n     Running tests\\stdio.rs (target\\debug\\deps\\stdio-dede2c948710a0a0.exe)\n   Doc-tests nomos_mcp\n",
+        "verified_at": 1788641203,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "99a374eb897d4f3ee895e47f90aa9cc03eadc5d6"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

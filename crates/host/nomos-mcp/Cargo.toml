@@ -1,0 +1,20 @@
+[package]
+name = "nomos-mcp"
+version = "0.1.0"
+description = "Band 93. An MCP server over stdio, projecting the same three Gate verbs nomos-api-transport already serves -- as MCP tools, dispatched through that crate's own JSON-RPC handler rather than a second one."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "nomos-mcp"
+path = "src/main.rs"
+
+[dependencies]
+nomos-api-transport = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

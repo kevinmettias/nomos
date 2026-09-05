@@ -314,6 +314,11 @@ members = [
     # record excludes. `P40-API-TRANSPORT-2`.
     "crates/host/nomos-api-transport",
 
+    # Band 93 — host. An MCP server over stdio, projecting nomos-api-transport's own
+    # three Gate verbs as MCP tools through that crate's own dispatch rather than a
+    # second one. Above nomos-api-transport because it depends on it. `P40-MCP-SURFACE-4`.
+    "crates/host/nomos-mcp",
+
     # Assertions about the workspace itself: dependency bands, the contracts
     # allowlist, and module reachability.
     "tests/contract",
@@ -392,6 +397,7 @@ nomos-workflow-orchestration = { path = "crates/orchestration/nomos-workflow-orc
 nomos-gate-orchestration = { path = "crates/orchestration/nomos-gate-orchestration" }
 nomos-correction-orchestration = { path = "crates/orchestration/nomos-correction-orchestration" }
 nomos-api = { path = "crates/host/nomos-api" }
+nomos-api-transport = { path = "crates/host/nomos-api-transport" }
 nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }

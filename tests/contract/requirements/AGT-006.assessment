@@ -24,12 +24,17 @@
 # `KnowledgeReferenceId` (D-137), a type built specifically for citing an external knowledge
 # system's claim without depending on it.
 #
-# 'MCP tools' is a clean, total gap: `nomos-api`'s own module doc states outright it "does
-# not read argv, listen on a socket, or speak MCP's JSON-RPC framing," and no MCP transport
-# or tool surface exists anywhere in the workspace.
-verdict: Partial
+# 'MCP tools' was a clean, total gap at this assessment's first pass: `nomos-api`'s own
+# module doc stated outright it "does not read argv, listen on a socket, or speak MCP's
+# JSON-RPC framing," and no MCP transport or tool surface existed anywhere in the workspace.
+# `P40-MCP-SURFACE-4` closed it: `nomos-mcp` is a real, runnable MCP server over stdio,
+# exposing `nomos-api-transport`'s own three Gate verbs as MCP tools (`tools/list`,
+# `tools/call`), proven against a real spawned subprocess talking to it over its own stdin
+# and stdout, not merely against a direct dispatch call.
+verdict: Met
 site: crates/contracts/nomos-contracts/Cargo.toml#Every type here is copied into a KnowledgeWorkbench
 site: crates/contracts/nomos-contracts/src/digest128.rs#KnowledgeReferenceId
 site: tests/contract/tests/boundaries/graph.rs#Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace
 site: tests/contract/tests/boundaries/graph.rs#Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench
-gap: crates/host/nomos-api/src/lib.rs#speak MCP's JSON-RPC framing
+site: crates/host/nomos-mcp/src/lib.rs#An MCP server over stdio
+site: crates/host/nomos-mcp/tests/stdio.rs#Test_A_Real_Subprocess_Should_Answer_A_Real_Conversation_Over_Its_Own_Stdio

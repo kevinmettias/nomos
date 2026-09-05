@@ -75,6 +75,7 @@ pub(super) const BANDS: &[(&str, u32)] = &[
     ("nomos-api", 90),
     ("nomos-surface-provenance", 91),
     ("nomos-api-transport", 92),
+    ("nomos-mcp", 93),
     ("nomos-contract-tests", 100),
     ("nomos-integration-tests", 100),
 ];
