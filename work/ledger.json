@@ -55416,6 +55416,41 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P40-INCREMENTAL-DEMAND-DRIVEN-RECOMPUTE-2",
+      "title": "Only demanded invalidated facts are recomputed, and only affected rules are reassessed",
+      "why": "The original item named nomos-analysis's invalidation.rs/propagation.rs as territory, but on investigation those own a different question (what happens to already-materialized dependents once a cause retires a fact) than the one done_when actually asks: whether a rule needs to run again at all. The facts half is effectively delivered already by P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS (8db1ae46, fixed by 7b721edb): today's fact graph is entirely leaf/flat (every store.Materialize call across every provider passes dependencies: &[]), so 'facts reachable from a changed subject' already collapses to 'that subject's own fact', already skipped when unchanged. What remains unbuilt is the rule half: run_context.rs's own 64-entry Composed_Rules array invokes every selected rule's closure unconditionally on every call, over a MemoryFactStore::Materializations() count nothing reads to decide whether a rule's own required capability actually produced anything new since the last call over a reused store. nomos_rules::DESCRIPTORS already declares, per rule, which RequiredFact capability families it reads -- the one piece of declarative data a skip decision needs and does not yet have a consumer for.",
+      "done_when": "A Run reused across two calls with zero content changes reassesses none of the selected rules a second time -- their prior findings are reused rather than recomputed -- and a Run reused across two calls where one subject changed reassesses only the rules whose own nomos_rules::RuleDescriptor.requires names a capability family that subject's change actually touched, proven by a test that counts real rule-closure invocations (not just materializations) against a one-file change in a many-file, many-rule tree.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context/rule_reassessment.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
