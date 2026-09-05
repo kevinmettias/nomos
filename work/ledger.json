@@ -52331,7 +52331,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "P41-CONTRACTS-ADMISSION-RULE's own outcome (OD-CONTRACTS-005) declined nothing: all four\nnamed families -- WorkflowStep, KnowledgeContextItem/KnowledgeSourceRole, PackageKind, and\nFinding with its reporting vocabulary -- pass the sharpened admission test on inspection,\neach with a justification already written into this workspace (OD-WORKFLOW-003's own\n\"a peer executor must agree with Nomos about... before either side can speak about 'a\nstep' at all\"; the knowledge_source_role module's own citation of the ARC-ECOSYSTEM-001\nboundary; PackageKind's own \"a peer reimplementing this enum in another language\" doc; and\nFinding's own real, already-shipped serialization to nomos-api-transport, nomos-mcp and\nevery --output-format json surface).\n\nThis item's own done_when is \"every type the admission rule declined is declared by its\nnamed owner\" -- with nothing declined, there is nothing to repatriate. Declining rather\nthan closing it silently or forcing a contrived move: a future admission-rule audit that\ndoes find a real candidate re-authors this item against that finding, with a real type\nnamed in its own territory rather than \"crates/contracts/nomos-contracts/src/lib.rs\" left\nto stand for whatever eventually fails."
+        }
+      },
       "depends_on": [
         "P41-CONTRACTS-ADMISSION-RULE"
       ],
@@ -52348,7 +52352,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788647211
+      }
     },
     {
       "id": "P41-COLLAPSE-TRANSITIONAL-LAYERS",
