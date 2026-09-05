@@ -50087,14 +50087,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-standards-sweep",
-        "acquired_at": 1788582954,
-        "lease_expires_at": 1788593754
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -50104,7 +50100,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 496 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788590822,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6bdb027b2b8ef8dd4bdbee5f435cce5429df96c0"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -50132,7 +50148,7 @@
       "claim": {
         "holder": "claude-standards-sweep",
         "acquired_at": 1788582954,
-        "lease_expires_at": 1788593754
+        "lease_expires_at": 1788601435
       },
       "verification": {
         "argv": [
@@ -50175,7 +50191,7 @@
       "claim": {
         "holder": "claude-standards-sweep",
         "acquired_at": 1788582955,
-        "lease_expires_at": 1788593755
+        "lease_expires_at": 1788601435
       },
       "verification": {
         "argv": [
@@ -50222,7 +50238,7 @@
       "claim": {
         "holder": "claude-standards-sweep",
         "acquired_at": 1788582955,
-        "lease_expires_at": 1788593755
+        "lease_expires_at": 1788601435
       },
       "verification": {
         "argv": [
@@ -50318,7 +50334,7 @@
       "claim": {
         "holder": "claude-standards-sweep",
         "acquired_at": 1788583368,
-        "lease_expires_at": 1788594168
+        "lease_expires_at": 1788601435
       },
       "verification": {
         "argv": [
@@ -50388,7 +50404,7 @@
       "claim": {
         "holder": "claude-standards-sweep",
         "acquired_at": 1788583394,
-        "lease_expires_at": 1788594194
+        "lease_expires_at": 1788601435
       },
       "verification": {
         "argv": [
@@ -50536,14 +50552,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-standards-sweep",
-        "acquired_at": 1788585047,
-        "lease_expires_at": 1788588647
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -50553,9 +50565,35 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-limits"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 10 tests\ntest guarantee::tests::Test_The_Ceiling_Should_Satisfy_The_Declared_Guarantee ... ok\ntest guarantee::tests::Test_Provider_Offer_Should_Be_Accepted_Under_The_Capabilitys_Contract ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Negative_Value ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Declare_Nothing_For_A_Missing_File ... ok\ntest provider::tests::Test_Materialize_Workspace_Should_Materialize_Declared_Thresholds ... ok\ntest provider::tests::Test_A_Fact_Key_Should_Depend_On_The_Guarantee ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Non_Numeric_Value ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Read_A_Repository_Wide_And_A_Language_Row ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Return_An_Empty_Policy_For_A_File_Declaring_Neither_Block ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_Invalid_Json ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_repo_limits-0a0f8371f11427c2.exe)\n   Doc-tests nomos_repo_limits\n",
+        "verified_at": 1788590812,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6bdb027b2b8ef8dd4bdbee5f435cce5429df96c0"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-standards-sweep",
+          "acquired_at": 1788585047,
+          "lease_expires_at": 1788588647
+        }
+      ],
       "declined": null
     },
     {
@@ -51092,7 +51130,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Authored on a false premise. Its why said no single typed envelope bundles goal, scope, prohibited changes, tools and output schema, quoting the committed AGT-001 assessment. TaskEnvelope has carried exactly those seven parts since 2026-08-24 in commit c00c5369, named P13-AGT-001-002-TASK-ENVELOPE-WORK-RESULT, and its own test says it closes AGT-001. The assessment is stale, not the tree. The real gap is that the executor accepts and ignores five of those fields, which is P42-AGENT-ENVELOPE-ENFORCEMENT, and the staleness itself is P42-REQUIREMENT-TRACE-STALENESS-RULE and P42-AGT-001-ASSESSMENT-CORRECTION."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -51110,7 +51152,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-opus-session",
+        "declined_at": 1788590779
+      }
     },
     {
       "id": "P40-AGENT-WORKRESULT-VALIDATED-PATH",
@@ -51126,7 +51171,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Re-added as -2 with an added dependency on P42-AGENT-STRUCTURED-WORKRESULT. As authored it assumed an agent run already produces a canonical WorkResult; the Claude executor documents that it does not construct one from the model response at all, so the validated correction path had a missing prerequisite rather than a missing consumer."
+        }
+      },
       "depends_on": [
         "P40-CORRECTIONS-CANONICAL-SEAM"
       ],
@@ -51146,7 +51195,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-opus-session",
+        "declined_at": 1788590779
+      }
     },
     {
       "id": "P40-MODEL-ROUTING-REAL-CONSUMER",
@@ -51297,14 +51349,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-standards-sweep",
-        "acquired_at": 1788589091,
-        "lease_expires_at": 1788590891
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "./nomos.exe",
@@ -51313,7 +51361,26 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "./nomos.exe",
+          "work",
+          "validate"
+        ],
+        "exit_code": 0,
+        "output_tail": "ledger is valid (schema 5, and this build understands 5)\n",
+        "verified_at": 1788590803,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6bdb027b2b8ef8dd4bdbee5f435cce5429df96c0"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -52023,6 +52090,468 @@
           "test",
           "-p",
           "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-AGENT-ENVELOPE-ENFORCEMENT",
+      "title": "Five TaskEnvelope fields are accepted and ignored, so the contract is ahead of enforcement",
+      "why": "TaskEnvelope carries goal, scope, knowledge_context, applicable_rules, prohibited_changes, available_tools, expected_output_schema and effort. The Claude Code executor consumes goal and effort and documents that it accepts and ignores the other five, matching what OD-EXECUTOR-001 already found. So an executor is bounded by a fresh isolated working directory, a tool allow-list, one turn, a budget ceiling and a timeout, all of which are real, but not by anything the task itself declared: scope does not constrain what it can reach, prohibited_changes does not contain what it may not touch, available_tools does not shape its capability surface, and applicable_rules bounds neither its context nor its validation. The code is commendably explicit that these do not work yet, which is why this is a gap to close rather than a defect to report.",
+      "done_when": "Scope structurally constrains the workspace the executor can reach, prohibited changes are rejected or contained rather than merely declared, available tools shape the executor tool surface, applicable rules reach the run as context and as its validation boundary, and each of the four is covered by a test that fails when the constraint is removed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-claude-code/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-agent-contracts"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-AGENT-STRUCTURED-WORKRESULT",
+      "title": "The executor returns a vendor-shaped response rather than a canonical WorkResult",
+      "why": "TaskEnvelope declares an expected_output_schema and the executor does not construct a canonical WorkResult from the model response. What comes back is parsed structurally rather than trusted as prose, which is the right instinct, but it is still the vendor shape rather than the contract shape. Every consumer downstream inherits that: a validated correction path, a workflow body, and any second harness executor all have to agree on what an agent produced, and today there is no one artifact to agree on. The declared output schema is the intended route and is already a field nobody reads.",
+      "done_when": "The executor produces a canonical WorkResult built against the envelope declared output schema, a response that does not satisfy the schema is refused rather than coerced, and no consumer of an agent run reads a vendor-specific response shape.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-claude-code/src/response.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-agent-contracts"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-REQUIREMENT-TRACE-STALENESS-RULE",
+      "title": "A requirement assessment can contradict the tree for weeks and nothing notices",
+      "why": "Found by hand, and it is the motivating case rather than a hypothetical. The committed assessment of AGT-001 says no single typed envelope bundles goal, scope, prohibited changes, tools and output schema into one artifact. TaskEnvelope has carried exactly those since 2026-08-24, in a commit named P13-AGT-001-002-TASK-ENVELOPE-WORK-RESULT, and its own test says it closes AGT-001. The assessment was last touched on 2026-09-01 by a sweep that fixed 72 stale citations across 26 assessment files and did not catch this one, because that sweep checked whether cited paths still exist and not whether the prose still holds. A ledger item was then authored on the false premise, which is the cost. Nomos already has the shape that would catch it: a declared claim plus an observed fact judged by a rule. The trace is the declared claim and the tree is the fact.",
+      "done_when": "A rule judges committed requirement assessments against the tree they describe, reports an assessment whose cited sites or gaps no longer match what is there, the AGT-001 case is caught by it, and the rule is composed into a real run rather than only unit tested.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/requirement_trace.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-LSP-PROJECTION",
+      "title": "Nomos has no editor surface, and the backend it would project already exists",
+      "why": "There is no language server anywhere in this workspace. That is the largest missing presentation surface, and the important point is what it should not be: not another analyzer. Facts, rules, findings, declared architecture, requirements, work state and evidence all already exist behind canonical services, so an editor surface is a projection and a transport over them. What it buys that no ordinary linter can is the walk outward from a diagnostic: which rule governs it, which facts support it, which requirement and which architectural component it belongs to, how strong the evidence is, and what correction is available. One current design point must survive the crossing: LintDiagnostic deliberately carries only the tool reported line and refuses to invent an editor-grade span, so precise locations are combined at projection time from the language provider rather than by widening that fact contract.",
+      "done_when": "A language server exposes Nomos findings as diagnostics over canonical services with no analysis logic of its own, a diagnostic can be walked to its governing rule, supporting facts and subject, the LintDiagnostic contract is unchanged, and the server is a thin adapter that owns no product semantics.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-lsp/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-ARCHITECTURE-AUTHORITY-RULES",
+      "title": "Dependency direction is the only declared-architecture rule, and authority has none",
+      "why": "Check_Dependency_Direction already proves the shape this system is for: a declared architecture beside an observed fact, judged into a finding. Nothing else uses it. Two authority questions are the nearest and most valuable extensions, and both are things this repository has already been bitten by in prose rather than mechanically. Declared component ownership against the actual public and dependency surface answers whether a component owns what it claims. A declared service authority against observed mutation paths answers whether a second write door exists, which is exactly the property nomos-store was built around and which nothing currently checks. These belong as additional rules over existing facts, not as a parallel architecture-analysis subsystem.",
+      "done_when": "Two rules judge declared ownership against the observed surface and declared write authority against observed mutation paths, both read facts that already exist or a fact family added for them, both are composed into a real run, and their finding counts over this workspace are measured before composition rather than after.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/architecture_authority.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-ARCHITECTURE-DRIFT-AND-LEAKAGE-RULES",
+      "title": "Nothing judges declared topology against the observed graph, or catches provider representation leaking",
+      "why": "The second pair of declared-architecture rules. Declared topology against the observed call, data and dependency graph is architecture drift, which is the question a band table answers only for direction and not for shape. A canonical provider boundary against actual type flow is representation leakage: a provider specific type reaching a consumer that was promised only the capability contract. This workspace already cares about the second one in prose, which is what makes it a rule rather than a preference, and it is the mechanism that keeps a capability contract from being a boundary only by intention.",
+      "done_when": "Two rules judge declared topology against the observed graph and canonical provider boundaries against actual type flow, both are composed into a real run, and each rule finding count over this workspace is measured before composition so that composing it does not redden the gate by surprise.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/architecture_drift.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-DUPLICATE-AUTHORITY-RULE",
+      "title": "Nothing detects the same engineering decision encoded independently in two places",
+      "why": "This is not source duplication, which ordinary tools already find. It is two artifacts that independently determine the same behaviour, where one should have been a projection of the other. This repository has paid for exactly that shape more than once: a band table maintained by hand in three places with a fourth checking it, and a measured figure restated in a comment that then drifted from the guard that declares it. The general class reaches far past code into configuration, schemas, package metadata, generated documentation, editor and agent configuration, and external system mappings. It is a strong candidate for a rule because neither a linter nor a language server has the normative project knowledge to know which of two artifacts is meant to be canonical.",
+      "done_when": "A rule reports two artifacts that independently determine one behaviour where one is declared canonical, at least one real instance in this workspace is found by it, and a declared projection relationship suppresses the finding rather than a per-file exemption.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/duplicate_authority.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-EXTERNAL-REVIEW-CAPABILITY",
+      "title": "A semantic review tool has no capability to answer under, and lint is the wrong shape for it",
+      "why": "The tool-provider seam is already right: a tool produces a fact and a native rule judges it, so no external tool emits a Nomos finding directly. What is missing is a second contract for tools whose output is not lint-shaped. The lint contract is deliberately narrow, carrying level, optional lint identifier, message, repository-relative file and line, and that narrowness is correct for a compiler diagnostic. A semantic review tool such as CodeRabbit can report a multi-file issue, a change-level observation, a suggested correction, pull-request context, a requirement relationship, a review thread and a confidence. Flattening those into the lint payload would destroy them, so the governing rule should hold: normalize to the lowest canonical contract that truthfully represents what the provider produced, rather than normalizing every tool into lint.",
+      "done_when": "A review capability contract carries what a semantic review tool actually produces rather than a lint-shaped subset, at least one provider answers under it, a native rule judges its facts into findings, and nothing about the lint contract changed to accommodate it.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-review/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-SECOND-HARNESS-EXECUTOR",
+      "title": "One agent executor exists, so nothing has shown which of its choices are the contract",
+      "why": "The Claude Code executor is properly bounded: fresh isolated working directory, strict tool configuration, a structural allow-list, one turn, a budget ceiling, timeout and stall handling, and structured parsing rather than trusting prose. A second executor over a richer session or harness runtime, of which Clay is the motivating example, would be an adapter rather than a new execution architecture. Its value is evidence: with one implementation nothing distinguishes what the canonical task contract requires from what one vendor happened to need. It is deliberately sequenced after the envelope constraints and the canonical result, so the second executor is written against the contract as enforced rather than inheriting the first executor accepted-and-ignored fields. A harness executor gets no scheduler authority, no work-graph authority and no rule authority.",
+      "done_when": "A second executor satisfies the same task contract with the same enforced constraints and produces the same canonical result type, what the two implementations disagree about is recorded, and no scheduling, work-graph or rule authority moved into either.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-harness/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P42-AGENT-STRUCTURED-WORKRESULT",
+        "P42-AGENT-ENVELOPE-ENFORCEMENT"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-KWB-CONTEXT-BRIDGE",
+      "title": "knowledge_context is a declared field with no acquisition, provenance or promotion path",
+      "why": "TaskEnvelope carries knowledge_context as a list of knowledge references, and the executor ignores it. That field is the anticipated seam to KWB, and the seam being anticipated structurally is genuinely most of the design work, but nothing acquires a context, records where it came from, selects what is relevant to a task, or promotes anything back. ARC-ECOSYSTEM-001 is explicit that what a source or a decision claimed is KWB and not Nomos, so this bridge is where the boundary is honoured or quietly crossed. Two committed requirement assessments already name the knowledge reference identifier as their gap.",
+      "done_when": "A task envelope knowledge context is acquired from a real source rather than constructed by a caller, each item carries provenance, selection for a task is a decision the system makes rather than a caller guessing, promotion back across the boundary is either implemented or recorded as refused, and no normative authority moves out of Nomos.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-knowledge-context/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-SEMANTIC-FACT-FAMILY",
+      "title": "Every fact family is syntactic, so no rule can ask a question that needs resolved semantics",
+      "why": "The fact substrate is ready for more than it carries: identity, keys, payloads, readers, dependency tracking, invalidation reports, rematerialization groups and condensation all exist and are structural rather than embedded in individual checks. What it holds is syntax, dependency edges, control flow, and two external tool reports. Ownership, borrowing, allocation and escape, effects, and concurrency and synchronization are the families that would let a rule ask a question no syntax scan can answer, and each is provider-neutral in the same way syntax already is. Sequenced after the first compiler-backed provider because these need resolved semantics as their source, and building the family before anything can produce it would be a contract with no provider.",
+      "done_when": "One new semantic fact family from that list is a real capability with a real provider and a declared guarantee, at least one rule judges it and could not have been written without it, and the family is provider-neutral rather than shaped around the one compiler that produces it.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-semantics/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-COMPILER-BACKED-PROVIDER"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-RUNTIME-AND-HISTORY-RULES",
+      "title": "Every rule judges the tree as it is now, with no runtime evidence and no history",
+      "why": "This is where Nomos can be qualitatively different from static analysis rather than incrementally better at it. A declared zero-allocation path judged against runtime allocation evidence, a performance requirement judged against benchmark history, and a previously removed dependency reappearing as an architectural regression are all the same declared-constraint-plus-observed-fact shape the dependency direction rule already proves, with the observation coming from a run or from the past rather than from the current source. Neither a linter nor a language server can ask these, because neither has the normative project knowledge or the retained history. The fact substrate already carries generations and invalidation, which is most of what a historical claim needs.",
+      "done_when": "A rule judges a declared constraint against evidence from a real run or from retained history rather than from current source, the evidence family it reads is a real capability with a provider, and a regression it reports is reproducible rather than dependent on one machine.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/runtime_history.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-AGENT-WORKRESULT-VALIDATED-PATH-2",
+      "title": "No agent run reaches a validated correction, so agent output is never checked before it lands",
+      "why": "A Claude Code executor and an Ollama backend both really run, and typed agent contracts exist, but nothing carries what an agent produced into a correction the system validates before committing. The game plan is explicit that an agent executor should not precede a solid mutation and validation contract; the executor was built first, so closing this restores that ordering rather than adding to the inversion. Sequenced behind the canonical correction seam because a workflow or agent tier calling into a CLI module would invert the layering, and behind the canonical result because the executor does not construct one yet, so this path would otherwise be built on a vendor-shaped response.",
+      "done_when": "An agent run produces a canonical WorkResult that becomes a correction candidate, that candidate goes through Preview, Stage, Validate and Commit, a validation failure leaves the tree untouched, and a test covers both outcomes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts/src/work_result.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-CORRECTIONS-CANONICAL-SEAM",
+        "P42-AGENT-STRUCTURED-WORKRESULT"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-corrections"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-AGT-001-ASSESSMENT-CORRECTION",
+      "title": "The AGT-001 assessment says no typed task envelope exists, and one has for eleven days",
+      "why": "The committed assessment states that no single typed envelope bundles goal, scope, prohibited changes, tools and an output schema into one artifact, and names Claim and WorkflowStep as its gaps. TaskEnvelope carries all seven AGT-001 parts and has since 2026-08-24. The assessment was last touched on 2026-09-01 by a sweep that fixed 72 stale citations across 26 files, which checked whether cited paths still exist rather than whether the prose still held, so this survived it. The verdict is load-bearing: these assessments are how remaining work is chosen, and a ledger item was authored against this one and then declined. Fixing the file is the correction; making the class impossible is a separate rule.",
+      "done_when": "The AGT-001 assessment describes the tree as it is, names TaskEnvelope as a site rather than asserting no envelope exists, its verdict is whatever the corrected reading supports, and the sibling AGT and AGT-EXEC assessments are checked for the same staleness rather than only this one.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/requirements/AGT-001.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
         ],
         "timeout_seconds": 2700
       },
