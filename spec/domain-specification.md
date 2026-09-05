@@ -60,6 +60,7 @@ profile: domain-specification
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:15b5d49cfd110c5912afc3312550bed3193d467d2b5f619a78b9b8d9ed1efe01 |
 | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md | authored | 15 | 6 | sha256:ab9189d05ec02e249414c7a358c58dc965d46acbb87964ef26bd2fea4379fe87 |
 | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md@authored | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md | authored | 16 | 6 | sha256:eeea4b8c691ee0ca6bf5a71335c2d8c5b5335b8cdf217d2ac7fdc9a1f578ee88 |
+| docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md@authored | docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md | authored | 16 | 6 | sha256:1d0b1a4fb86109a6326e96b1d69325fc8f877dd73b8cc4c03cd526e10c6a3206 |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md | authored | 28 | 9 | sha256:a91dd75d56e4bce49e2a0d37621e02d0ee2ba9fa0fcaab509dbe114813bad215 |
 | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md@authored | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md | authored | 14 | 6 | sha256:e55bd46b259be4c661ac4bb95475cd427ad66c783465edae129bac816f1ababf |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
@@ -586,6 +587,12 @@ profile: domain-specification
 | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#8 | authored | 2 | The Decision |
 | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#11 | authored | 2 | What This Does Not Do |
 | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#15 | authored | 2 | Status |
+| docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#1 | authored | 1 | A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos |
+| docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#2 | authored | 2 | Question |
+| docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#5 | authored | 2 | The test |
+| docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#8 | authored | 2 | Applying it |
+| docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#13 | authored | 2 | What This Does Not Do |
+| docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#15 | authored | 2 | Status |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#1 | authored | 1 | Corrections has real staging machinery and zero real callers |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#2 | authored | 2 | Question |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#4 | authored | 2 | What Was Measured |
@@ -13861,6 +13868,169 @@ appends `--effort` exactly as decided -- `Minimal`/`Low` collapsing to `low`,
 tested for all six variants including the deliberately unreachable `xhigh` case.
 `ModelSelector` and a real `MODEL-ROUTE-015` `EffortMappingRecord` remain exactly as unbuilt
 as "What This Does Not Do" already said.
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#1
+
+*revision: authored · kind: heading · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos · hash: sha256:4dc6472c8f5f8526f4c57d8c0c2e46253bec28815a9c47ced7628efa83ccd281*
+
+# A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#2
+
+*revision: authored · kind: heading · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#3
+
+*revision: authored · kind: prose · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / Question · hash: sha256:16c5aff16952136f7d8170130121658658a3a6a54477de82a27a259fb69b330d*
+
+`nomos-contracts` started as a thin protocol kernel and has grown: authority classes,
+semantic change classes, knowledge-source roles, the workflow step contract, the finding
+and reporting vocabulary, package kinds, peer synchronisation, determinism and
+enforcement, several files now hundreds of lines. `OD-CONTRACTS-001` already states an
+admission test in the abstract -- "a type is admitted when it crosses a subsystem, process
+or plugin boundary and the parties on both sides need one stable shared representation of
+it," decided by asking "would a peer that never compiles this crate be unable to agree
+with us without this type?" -- but has never been walked through the types that have
+since accumulated here. The specification distinguishes a protocol and identity kernel
+from canonical models, the provider and package layer, and the analysis engines; it does
+not say every stable domain model belongs in the kernel by default, and without a
+type-by-type accounting the lowest crate becomes the path of least resistance for
+anything two parts of this workspace happen to share.
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#4
+
+*revision: authored · kind: prose · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / Question · hash: sha256:9c487f1b08012f5cffcb2319661a700686404da480189f043e0f0e7cc4b34c77*
+
+This record sharpens `OD-CONTRACTS-001`'s own question into one with a concrete artifact
+to check against -- *does an independently implemented peer need to understand this
+type's serialized (JSON Schema) form without linking Nomos domain code?* -- and applies
+it, by name, to the four families this session's own audit named: the workflow step
+contract, the knowledge-context types, package kinds, and the finding and reporting
+structures. No type moves under this record; the outcome is the accounting itself, and a
+named destination for anything that fails it.
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#5
+
+*revision: authored · kind: heading · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / The test · hash: sha256:5e4afa360b3e74a5d21f9a05fb4a18f025ec7e8ded39aa8c7e65372389fac113*
+
+## The test
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#6
+
+*revision: authored · kind: prose · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / The test · hash: sha256:a1301f5a864dcfeaa2702f193127146d7edb5940f634d18c060ad6bfc1a3ef8b*
+
+**A type earns a place in `nomos-contracts` only when a system that has never linked this
+crate -- a knowledge service in another language, an independently implemented platform
+adapter, a client reading a JSON-RPC or MCP response -- must construct or interpret its
+serialized form correctly in order to agree with Nomos about what happened.** The artifact
+that crosses the boundary is the wire shape, not the Rust type: `lib.rs`'s own doc already
+names this exception for `serde` itself -- "the artifact a peer really reads is the JSON
+Schema generated from these declarations." A type nothing outside this workspace ever
+deserializes, however central to Nomos's own semantics, fails the test and belongs beside
+the code that gives it meaning instead.
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#7
+
+*revision: authored · kind: prose · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / The test · hash: sha256:77f0e004661af13e894c12287c45b14fbc60cf7d2cb7bb0198cfb90f70a1df94*
+
+This does not replace `OD-CONTRACTS-001`; it is that record's own question, asked with the
+serialized artifact named explicitly rather than left as "one stable shared
+representation." A type failing this test also fails `OD-CONTRACTS-001`'s, and a type
+passing this one satisfies it by the same reasoning `OD-CONTRACTS-001`'s own worked
+example (`nomos-cap-syntax::SyntaxPayload`, admitted one band up because the parties who
+must agree about it are one capability's own providers, not every peer that speaks to
+Nomos) already uses.
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#8
+
+*revision: authored · kind: heading · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / Applying it · hash: sha256:3364334a6bcf8b3e71c32425b13aa10d9eea6bba13eae3d6e42bf3b1885b3509*
+
+## Applying it
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#9
+
+*revision: authored · kind: prose · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / Applying it · hash: sha256:1f41e3bf0d7ebaf8831ad7025154d512d3db8c79ff6db7c77a9045180a696212*
+
+**`WorkflowStep` (and the `Cacheability`, `CancellationBehavior`, `Compensation`,
+`RetryPolicy` and `Timeout` types it carries as fields) passes.** `OD-WORKFLOW-003`
+already made this argument directly, before this record existed to ask for it: "the
+contract a peer executor -- API-hosted, subscription-agent, human, or recorded-replay --
+must agree with Nomos about before either side can speak about 'a step' at all... the same
+admission `OD-CONTRACTS-001` already gives `RunId`, `EvidenceClass` and `GateCategory` for
+the same reason." A future executor peer that has never linked `nomos-workflow-
+orchestration` still has to construct or read a `WorkflowStep`'s serialized declaration
+correctly to participate in Check-then-Correction-then-Gate at all. Its own five field
+types are entailed by the same admission -- a peer agreeing about the step must agree
+about what each of its fields means -- and are not a separate question.
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#10
+
+*revision: authored · kind: prose · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / Applying it · hash: sha256:3225fa630bcbf9f9f59d9fb5da6a707f07a21938e88d09e9fbf59fa11190776f*
+
+**`KnowledgeContextItem` and `KnowledgeSourceRole` pass.** Their own module doc already
+states the boundary directly: "vocabulary shared with an external knowledge system across
+the process boundary `ARC-ECOSYSTEM-001` names." The knowledge system is exactly the
+independent peer this test asks about -- a service that has never compiled this crate and
+must still read what role a piece of borrowed context plays.
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#11
+
+*revision: authored · kind: prose · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / Applying it · hash: sha256:1ea6334b5c07935d91a5e59871b9c18bd2371aa2628e0b2fcb65284b5a4c823b*
+
+**`PackageKind` passes.** Its own doc states the same shape again: "a peer reimplementing
+this enum in another language reads the label and never sees this Rust, so a label is a
+protocol commitment rather than a local identifier." Twelve of its sixteen kinds have no
+consumer inside this workspace yet, which is a different question `OD-PACKAGE-001` already
+owns; the type's admission does not wait for an internal consumer, the same distinction
+`WorkflowStep`'s own doc draws for a runtime engine that does not exist yet either.
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#12
+
+*revision: authored · kind: prose · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / Applying it · hash: sha256:4303e22474e2dbc3a58b68b174427c53dff0fa0d2276dde9c95dd9277f93b89c*
+
+**`Finding` and the reporting vocabulary it carries (`Applicability`, `EvidenceClass`,
+`GateCategory`, `EnforcementBreach`, `EnforcementReach`, `EnforcerRef`) pass, and are the
+clearest case of the four.** `nomos-api-transport`, `nomos-mcp` and every `--output-format
+json` surface this workspace has already serialize `Finding` directly to a caller that may
+never have compiled a line of this workspace's Rust -- an MCP client, a CI dashboard, a
+script reading a JSON-RPC response. A `Finding` a peer could not correctly parse is a
+finding that peer cannot act on, which is the exact failure this crate's own "honesty
+vocabularies" section says the five look-alike enums exist to prevent.
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#13
+
+*revision: authored · kind: heading · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#14
+
+*revision: authored · kind: prose · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / What This Does Not Do · hash: sha256:454884a0a29ddac1c5acfe9d768bbca79748008e8769d83a8ec18192de1b4b19*
+
+It does not move any type. Every one of the four families named above stays exactly where
+it is, because every one of them passes the sharpened test on inspection -- the audit this
+session's own why names has been carried out, and its answer is that this crate's current
+population is not the problem `OD-CONTRACTS-001` was written to prevent. It does not
+audit the whole crate: `AuthorityClass`, `SemanticChangeClass`, the determinism vocabulary,
+`Guarantee`, peer synchronisation and the digest-identity types were not re-examined here,
+because nothing in this session's own why named them as suspect. A future session
+finding a fifth candidate applies this same test to it rather than re-deriving one. It
+does not change `OD-CONTRACTS-001` itself, which stays the canonical statement of the
+abstract rule; this record is its first systematic application, not its replacement.
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#15
+
+*revision: authored · kind: heading · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#16
+
+*revision: authored · kind: prose · heading: A type is admitted to the protocol kernel only when an independent peer must read it without linking Nomos / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
 
 ### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#1
 

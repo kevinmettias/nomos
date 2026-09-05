@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:6d09b5d5cb7168894f07de34df57a62829021dc965f205e7f44a42f901bd662d",
-  "inputs_digest": "sha256:74d3b9751f6b57ca92fd6df30cdcabc9250facfda12637bd6cbc6a87c8e1a109",
+  "content_digest": "sha256:0f6d7299a61040c52353611445f60b0eb3863174a667aac1c3b534ca28aed888",
+  "inputs_digest": "sha256:df27fb123be1c6b98158a1d87ec6e3de800543e85ba07c2946b1493d73d2141a",
   "sections": [
     [
       "Documents",
-      190
+      191
     ],
     [
       "Sections",
-      1574
+      1580
     ],
     [
       "Source blocks",
-      5513
+      5529
     ]
   ],
   "inputs": [
@@ -269,6 +269,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md@authored",
       "hash": "sha256:eeea4b8c691ee0ca6bf5a71335c2d8c5b5335b8cdf217d2ac7fdc9a1f578ee88"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md@authored",
+      "hash": "sha256:1d0b1a4fb86109a6326e96b1d69325fc8f877dd73b8cc4c03cd526e10c6a3206"
     },
     {
       "content": "documents",
@@ -2874,6 +2879,36 @@
       "content": "headings",
       "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#15",
       "hash": "sha256:873650a892b33f540bb84407ef496afe0cc796409a07dbb7f2706d05089d2c9b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#1",
+      "hash": "sha256:c1a4197e1eb7991e1949f5b2d523ab08bb126b4258e172ea1987f8e3e56783ca"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#2",
+      "hash": "sha256:27c752a67186943c8c31a1df2e8ae473fec86e08a94449c408e1ebbdbdc571ed"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#5",
+      "hash": "sha256:30e8378e856ec1cdd1112e83033d85c0245e249b0f5ba7d2d175b47a158beb82"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#8",
+      "hash": "sha256:c05cf35a74e5634ea54e28969349190c9bdbbecee6398491297c4ecfaec83d0c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#13",
+      "hash": "sha256:163fff025c0822b9e6c1f6ecb222f2d791feaa0394efd135e48741decbf614e4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#15",
+      "hash": "sha256:8520d49e2a6d6749afa68bfee4a18e5d30dd933cb41aee5260c56ddad1b67309"
     },
     {
       "content": "headings",
@@ -15334,6 +15369,86 @@
       "content": "blocks",
       "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#16",
       "hash": "sha256:8a791bb7c6d1be46dc69c9d8004585b4f6eaa53e915b40fb739ab8fb51af760c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#1",
+      "hash": "sha256:4dc6472c8f5f8526f4c57d8c0c2e46253bec28815a9c47ced7628efa83ccd281"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#3",
+      "hash": "sha256:16c5aff16952136f7d8170130121658658a3a6a54477de82a27a259fb69b330d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#4",
+      "hash": "sha256:9c487f1b08012f5cffcb2319661a700686404da480189f043e0f0e7cc4b34c77"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#5",
+      "hash": "sha256:5e4afa360b3e74a5d21f9a05fb4a18f025ec7e8ded39aa8c7e65372389fac113"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#6",
+      "hash": "sha256:a1301f5a864dcfeaa2702f193127146d7edb5940f634d18c060ad6bfc1a3ef8b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#7",
+      "hash": "sha256:77f0e004661af13e894c12287c45b14fbc60cf7d2cb7bb0198cfb90f70a1df94"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#8",
+      "hash": "sha256:3364334a6bcf8b3e71c32425b13aa10d9eea6bba13eae3d6e42bf3b1885b3509"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#9",
+      "hash": "sha256:1f41e3bf0d7ebaf8831ad7025154d512d3db8c79ff6db7c77a9045180a696212"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#10",
+      "hash": "sha256:3225fa630bcbf9f9f59d9fb5da6a707f07a21938e88d09e9fbf59fa11190776f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#11",
+      "hash": "sha256:1ea6334b5c07935d91a5e59871b9c18bd2371aa2628e0b2fcb65284b5a4c823b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#12",
+      "hash": "sha256:4303e22474e2dbc3a58b68b174427c53dff0fa0d2276dde9c95dd9277f93b89c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#13",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#14",
+      "hash": "sha256:454884a0a29ddac1c5acfe9d768bbca79748008e8769d83a8ec18192de1b4b19"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#15",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#16",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
     },
     {
       "content": "blocks",

@@ -42,6 +42,7 @@ graph LR
     arc_ecosystem_001 -->|"relates-to"| od_agent_001["OD-AGENT-001"]
     arc_ecosystem_001 -->|"relates-to"| od_capability_004["OD-CAPABILITY-004"]
     arc_ecosystem_001 -->|"relates-to"| od_contracts_001["OD-CONTRACTS-001"]
+    arc_ecosystem_001 -->|"relates-to"| od_contracts_005["OD-CONTRACTS-005"]
     arc_ecosystem_001 -->|"relates-to"| od_host_006["OD-HOST-006"]
     arc_ecosystem_001 -->|"relates-to"| od_host_007["OD-HOST-007"]
     arc_ecosystem_001 -->|"relates-to"| od_ledger_001["OD-LEDGER-001"]
@@ -399,6 +400,7 @@ graph LR
     od_contracts_001 -->|"relates-to"| od_analysis_004
     od_contracts_001 -->|"relates-to"| od_contracts_002
     od_contracts_001 -->|"relates-to"| od_contracts_004["OD-CONTRACTS-004"]
+    od_contracts_001 -->|"relates-to"| od_contracts_005
     od_contracts_001 -->|"relates-to"| od_gate_003
     od_contracts_001 -->|"relates-to"| od_gate_018["OD-GATE-018"]
     od_contracts_001 -->|"relates-to"| od_workflow_001
@@ -424,6 +426,9 @@ graph LR
     od_contracts_004 -->|"relates-to"| od_executor_001
     od_contracts_004 -->|"relates-to"| od_package_011
     od_contracts_004 -->|"relates-to"| od_package_012
+    od_contracts_005 -->|"relates-to"| arc_ecosystem_001
+    od_contracts_005 -->|"relates-to"| od_contracts_001
+    od_contracts_005 -->|"relates-to"| od_workflow_003
     od_corrections_001 -->|"relates-to"| arc_roadmap_001
     od_corrections_001 -->|"relates-to"| od_corrections_002
     od_corrections_001 -->|"relates-to"| od_executor_001
@@ -1349,6 +1354,7 @@ graph LR
     od_workflow_002 -->|"relates-to"| od_workflow_004
     od_workflow_002 -->|"relates-to"| od_workflow_005
     od_workflow_003 -->|"relates-to"| od_contracts_001
+    od_workflow_003 -->|"relates-to"| od_contracts_005
     od_workflow_003 -->|"relates-to"| od_package_010
     od_workflow_003 -->|"relates-to"| od_workflow_001
     od_workflow_003 -->|"relates-to"| od_workflow_002
@@ -1411,6 +1417,7 @@ graph LR
     od_contracts_002
     od_contracts_003
     od_contracts_004
+    od_contracts_005
     od_corrections_001
     od_corrections_002
     od_determinism_001
