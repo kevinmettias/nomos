@@ -6,6 +6,7 @@ use nomos_capability::Registry;
 use nomos_contracts::{Finding, RuleId};
 use nomos_platform::{FileSystem, ProcessLauncher};
 use nomos_rules::{
+    RequiredFact,
     Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Disabled_Test_States_Why, Check_A_Discarded_Error_Is_Explained,
     Check_A_Package_Is_Named_After_Its_Directory, Check_A_Rust_Path_Stays_Within_Its_Own_Subtree,
     Check_A_Script_Declares_Its_Purpose, Check_A_Secret_Does_Not_Travel_In_A_Url, Check_A_Skipped_Test_States_Why,
@@ -65,6 +66,9 @@ use crate::facts::{
     Materialize_Scripting_Policy, Materialize_Syntax, Materialize_Words_Policy, PolicyMaterialization,
 };
 use crate::CheckOutcome;
+
+mod rule_reassessment;
+pub use rule_reassessment::RuleReassessmentCache;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
@@ -131,11 +135,40 @@ pub struct RunContext<'a, Launcher: ProcessLauncher, Fs: FileSystem>
 /// `WorkOutcome`. An empty `sources` is a composition root's decision
 /// (`CheckOutcome::NoSource`) made before this function is ever called, not a case this
 /// function classifies.
+///
+/// Delegates to [`Run_Reassessing`] with a cache built fresh for this call alone and
+/// dropped at its end -- every rule this crate composes has never run under that cache, so
+/// every one still runs, unconditionally, exactly as this function did before
+/// [`RuleReassessmentCache`] existed. A caller wanting the skip keeps its own cache across
+/// calls and calls [`Run_Reassessing`] directly instead.
 #[must_use]
 pub fn Run<Launcher: ProcessLauncher, Fs: FileSystem>(
     sources: &[SourceFile],
     context: RunContext<'_, Launcher, Fs>,
     selected: &[RuleId],
+) -> CheckOutcome
+{
+    let mut reassessment = RuleReassessmentCache::New();
+
+    return Run_Reassessing(sources, context, selected, &mut reassessment);
+}
+
+/// [`Run`], with one addition: a rule already recorded in `reassessment` does not run its
+/// closure again this call when none of its own `nomos_rules::RuleDescriptor.requires`
+/// names a family that changed since it was recorded -- see `rule_reassessment`'s own
+/// module doc for exactly which rules that covers today, and why it stops there.
+///
+/// `context.store` decides which families this call is even judged against a currency
+/// check for: `Materialize_Syntax`'s own well before this crate had a second entry point,
+/// so a source whose bytes did not move since `store` last saw it never re-parses, on
+/// either function. What only this function adds is skipping the *rule* on top of that,
+/// for a rule the syntax family is the only thing it reads.
+#[must_use]
+pub fn Run_Reassessing<Launcher: ProcessLauncher, Fs: FileSystem>(
+    sources: &[SourceFile],
+    context: RunContext<'_, Launcher, Fs>,
+    selected: &[RuleId],
+    reassessment: &mut RuleReassessmentCache,
 ) -> CheckOutcome
 {
     let RunContext { variant, root, launcher, filesystem, workspace, store } = context;
@@ -149,14 +182,21 @@ pub fn Run<Launcher: ProcessLauncher, Fs: FileSystem>(
         Err(outcome) => return outcome,
     };
 
+    let materializations_before_syntax = store.Materializations();
     let facts = match Materialized_Syntax_Facts(sources, &context, store)
     {
         Some(facts) => facts,
         None => return CheckOutcome::NoFacts { files: sources.len() },
     };
 
+    let mut changed = Vec::new();
+    if store.Materializations() > materializations_before_syntax
+    {
+        changed.push(RequiredFact::SyntaxItems);
+    }
+
     let environment = RunEnvironment { root, launcher, filesystem, registry: &registry, context };
-    let findings = Judged_Over(sources, environment, store, selected);
+    let findings = Judged_Over(sources, environment, store, selected, reassessment, &mut changed);
 
     return Outcome_Of(sources.len(), facts, findings);
 }
@@ -208,6 +248,8 @@ fn Judged_Over<Launcher: ProcessLauncher, Fs: FileSystem>(
     environment: RunEnvironment<'_, Launcher, Fs>,
     store: &mut MemoryFactStore,
     selected: &[RuleId],
+    reassessment: &mut RuleReassessmentCache,
+    changed: &mut Vec<RequiredFact>,
 ) -> Vec<Finding>
 {
     let mut materialization_environment = MaterializationEnvironment {
@@ -217,10 +259,10 @@ fn Judged_Over<Launcher: ProcessLauncher, Fs: FileSystem>(
         launcher: environment.launcher,
         filesystem: environment.filesystem,
     };
-    let capabilities = Materialize_Capabilities(sources, &mut materialization_environment, selected);
+    let capabilities = Materialize_Capabilities(sources, &mut materialization_environment, selected, changed);
 
     let judge_environment = JudgeEnvironment { store, registry: environment.registry, context: environment.context };
-    return Judged_Findings(sources, capabilities, judge_environment, selected);
+    return Judged_Findings(sources, capabilities, judge_environment, selected, reassessment, changed);
 }
 
 /// The dependency-edges, lint-diagnostics, dependency-policy, reachability and
@@ -239,23 +281,53 @@ fn Judged_Over<Launcher: ProcessLauncher, Fs: FileSystem>(
 /// fifth, per `OD-GATE-017`. Skipping `Materialize_Dependencies`, `Materialize_Lint`,
 /// `Materialize_Policy` or `Materialize_Naming_Policy` skips its own subprocess launch or
 /// filesystem read entirely, not merely its finding's place in a later disposition.
+///
+/// Each call also names, into `changed`, the family it just wrote to at all -- every one of
+/// them does, unconditionally, whenever `selected` triggers it at all: none of the nine has
+/// `Materialize_Syntax`'s own currency check yet. `rule_reassessment::RuleReassessmentCache`
+/// reads `changed` to decide which rules are still safe to reuse; a family missing from it
+/// because this function forgot to report it would let a stale rule's prior findings stand
+/// in for a real one, which is why every section below is wrapped rather than only the ones
+/// a caller might expect to benefit.
 fn Materialize_Capabilities<Launcher: ProcessLauncher, Fs: FileSystem>(
     sources: &[SourceFile],
     env: &mut MaterializationEnvironment<'_, Launcher, Fs>,
     selected: &[RuleId],
+    changed: &mut Vec<RequiredFact>,
 ) -> CapabilityMaterialization
 {
-    let dependencies = Materialize_Dependency_Section(env, selected);
-    let lint = Materialize_Lint_Section(env, selected);
-    let policy = Materialize_Policy_Section(env, selected);
-    Materialize_Reachability_Section(sources, env, selected);
-    Materialize_Naming_Policy_Section(env, selected);
-    Materialize_Limits_Policy_Section(env, selected);
-    Materialize_Scripting_Policy_Section(env, selected);
-    Materialize_Goals_Policy_Section(env, selected);
-    Materialize_Words_Policy_Section(env, selected);
+    let dependencies = Tracking(env, changed, RequiredFact::DependencyEdges, |env| return Materialize_Dependency_Section(env, selected));
+    let lint = Tracking(env, changed, RequiredFact::LintDiagnostics, |env| return Materialize_Lint_Section(env, selected));
+    let policy = Tracking(env, changed, RequiredFact::DependencyPolicy, |env| return Materialize_Policy_Section(env, selected));
+    Tracking(env, changed, RequiredFact::Reachability, |env| Materialize_Reachability_Section(sources, env, selected));
+    Tracking(env, changed, RequiredFact::NamingPolicy, |env| Materialize_Naming_Policy_Section(env, selected));
+    Tracking(env, changed, RequiredFact::LimitsPolicy, |env| Materialize_Limits_Policy_Section(env, selected));
+    Tracking(env, changed, RequiredFact::ScriptingPolicy, |env| Materialize_Scripting_Policy_Section(env, selected));
+    Tracking(env, changed, RequiredFact::GoalsPolicy, |env| Materialize_Goals_Policy_Section(env, selected));
+    Tracking(env, changed, RequiredFact::WordsPolicy, |env| Materialize_Words_Policy_Section(env, selected));
 
     return Capability_Materialization_Of(dependencies, lint, policy);
+}
+
+/// Runs `section`, and records `family` into `changed` if `env.store` gained a new
+/// materialization while it ran -- the one signal available today for "did this family just
+/// change," since a skipped section (its own gating rule not selected) writes nothing and a
+/// run one writes unconditionally.
+fn Tracking<Launcher: ProcessLauncher, Fs: FileSystem, Answer>(
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs>,
+    changed: &mut Vec<RequiredFact>,
+    family: RequiredFact,
+    section: impl FnOnce(&mut MaterializationEnvironment<'_, Launcher, Fs>) -> Answer,
+) -> Answer
+{
+    let before = env.store.Materializations();
+    let result = section(env);
+    if env.store.Materializations() > before
+    {
+        changed.push(family);
+    }
+
+    return result;
 }
 
 /// The `root`, `context`, `store`, `launcher` and `filesystem` every
@@ -469,11 +541,18 @@ struct CapabilityMaterialization
 /// than judged) -- unconditionally, since each such finding already carries its own rule
 /// and a caller that did not select it would never have triggered the materialization
 /// that raises it.
-fn Judged_Findings(sources: &[SourceFile], capabilities: CapabilityMaterialization, env: JudgeEnvironment<'_>, selected: &[RuleId]) -> Vec<Finding>
+fn Judged_Findings(
+    sources: &[SourceFile],
+    capabilities: CapabilityMaterialization,
+    env: JudgeEnvironment<'_>,
+    selected: &[RuleId],
+    reassessment: &mut RuleReassessmentCache,
+    changed: &[RequiredFact],
+) -> Vec<Finding>
 {
     let mut reader = Reader::On(env.store, env.registry, env.context);
 
-    let mut findings = Rule_Findings(sources, &capabilities, &mut reader, selected);
+    let mut findings = Rule_Findings(sources, &capabilities, &mut reader, selected, reassessment, changed);
     findings.extend(Capability_Findings(capabilities));
 
     return findings;
@@ -528,29 +607,44 @@ fn Rule_Findings(
     capabilities: &CapabilityMaterialization,
     reader: &mut Reader<'_, '_>,
     selected: &[RuleId],
+    reassessment: &mut RuleReassessmentCache,
+    changed: &[RequiredFact],
 ) -> Vec<Finding>
 {
     return With_Composed_Rules(sources, capabilities, |rules| {
-        return Findings_For_Selected_Rules(rules, reader, selected);
+        return Findings_For_Selected_Rules(rules, reader, selected, reassessment, changed);
     });
 }
 
 /// Runs every `rules` entry `selected` names, in table order, and collects what each
-/// produces.
+/// produces -- except one already recorded in `reassessment` whose own required families
+/// are all absent from `changed`, whose prior findings are reused instead of running its
+/// closure again. See `rule_reassessment`'s own module doc for which rules that is, today.
 fn Findings_For_Selected_Rules(
     rules: [ComposedRule<'_>; RULE_COUNT],
     reader: &mut Reader<'_, '_>,
     selected: &[RuleId],
+    reassessment: &mut RuleReassessmentCache,
+    changed: &[RequiredFact],
 ) -> Vec<Finding>
 {
     let mut findings = Vec::new();
     for rule in rules
     {
-        if Is_Rule_Selected(selected, rule.id)
+        if !Is_Rule_Selected(selected, rule.id)
         {
-            let rule_findings = rule.check.Findings(reader);
-            findings.extend(rule_findings);
+            continue;
         }
+
+        if let Some(reused) = reassessment.Reusable(rule.id, changed)
+        {
+            findings.extend(reused.clone());
+            continue;
+        }
+
+        let rule_findings = rule.check.Findings(reader);
+        reassessment.Record(rule.id, rule_findings.clone());
+        findings.extend(rule_findings);
     }
 
     return findings;
@@ -828,6 +922,67 @@ mod tests
         assert!(findings.is_empty(), "{findings:?}");
         assert_eq!(examined, crate::examined::Examined { files: 1, facts: 1 });
         assert_eq!(claim, crate::examined::Claim::Complete);
+    }
+
+    /// `P40-INCREMENTAL-SKIP-UNCHANGED-RULES`'s own done_when: a second [`Run_Reassessing`]
+    /// call over a workspace, store and cache all reused from the first, with the same
+    /// selection and no source changed at all, must not run `COMPLETENESS_MIRROR`'s closure
+    /// again -- it requires only `nomos.cap.syntax.items`, and nothing in that family moved.
+    /// `FILE_SIZE_JUSTIFICATION_TRIGGER` requires `nomos.cap.limits.policy`, whose own
+    /// materializer (`crate::facts::policy_materialization`) has no currency check yet, so
+    /// it must run again regardless -- proving this is a real skip of a real closure and not
+    /// an accident of the whole rule table going quiet.
+    #[test]
+    fn Test_Run_Reassessing_Should_Skip_A_Syntax_Only_Rule_When_Nothing_Changed_And_Rerun_One_Whose_Family_Has_No_Currency_Check()
+    {
+        let sources = vec![
+            SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n"),
+            SourceFile::New("b.rs", nomos_model::Subject_Of_Path("b.rs"), "pub fn Also_Ok() {}\n"),
+        ];
+        let selected = [RuleId::New(COMPLETENESS_MIRROR), RuleId::New(FILE_SIZE_JUSTIFICATION_TRIGGER)];
+        let root = Path::new(".");
+
+        let mut workspace = None;
+        let mut store = MemoryFactStore::New();
+        let mut reassessment = RuleReassessmentCache::New();
+
+        let first = Run_Reassessing(
+            &sources,
+            RunContext {
+                variant: Test_Variant(),
+                root,
+                launcher: &StdProcessLauncher,
+                filesystem: &StdFileSystem,
+                workspace: &mut workspace,
+                store: &mut store,
+            },
+            &selected,
+            &mut reassessment,
+        );
+        assert!(matches!(first, CheckOutcome::Judged { .. }), "a tree the provider can read must be judged");
+        let recorded_after_first = reassessment.Recorded();
+        assert_eq!(recorded_after_first, 2, "both selected rules must run their real closure the first time, with nothing yet cached");
+
+        let second = Run_Reassessing(
+            &sources,
+            RunContext {
+                variant: Test_Variant(),
+                root,
+                launcher: &StdProcessLauncher,
+                filesystem: &StdFileSystem,
+                workspace: &mut workspace,
+                store: &mut store,
+            },
+            &selected,
+            &mut reassessment,
+        );
+        assert!(matches!(second, CheckOutcome::Judged { .. }), "a tree the provider can read must be judged");
+
+        assert_eq!(
+            reassessment.Recorded(),
+            recorded_after_first + 1,
+            "only the limits-policy rule should have run its closure again; the syntax-only rule's prior findings should have been reused"
+        );
     }
 
     fn Test_Variant() -> BuildVariant
