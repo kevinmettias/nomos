@@ -12,4 +12,6 @@ pub enum StepOutcome
     ClaudeCode(nomos_agent_executor_claude_code::AgentExecutionOutcome),
     /// What `nomos-model-backend-ollama::Execute_Task` reported.
     Ollama(nomos_model_backend_ollama::AgentExecutionOutcome),
+    /// What `nomos-check-orchestration::Run` reported.
+    Check(nomos_check_orchestration::CheckOutcome),
 }

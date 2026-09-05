@@ -1,7 +1,7 @@
 [package]
 name = "nomos-workflow-orchestration"
 version = "0.1.0"
-description = "Band 40. The workflow tier's first real execution increment: runs an ordered sequence of WorkflowStep declarations, each paired with a real dispatch to one of this workspace's two real AgentExecutor crates, refusing whichever step first declares itself incoherent before that step's body ever dispatches. OD-WORKFLOW-005."
+description = "Band 41. The workflow tier's first real execution increment: runs an ordered sequence of WorkflowStep declarations, each paired with a real dispatch to one of this workspace's three real dispatch targets (two AgentExecutor/ModelBackend crates and nomos-check-orchestration::Run), refusing whichever step first declares itself incoherent before that step's body ever dispatches. OD-WORKFLOW-005, P40-WORKFLOW-CHECK-BODY."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -10,13 +10,19 @@ publish.workspace = true
 [dependencies]
 nomos-agent-contracts = { workspace = true }
 nomos-agent-executor-claude-code = { workspace = true }
+nomos-analysis = { workspace = true }
+nomos-check-orchestration = { workspace = true }
 nomos-contracts = { workspace = true }
 nomos-model-backend-ollama = { workspace = true }
 nomos-platform = { workspace = true }
+nomos-rules = { workspace = true }
+nomos-workspace = { workspace = true }
 
 [dev-dependencies]
 nomos-ledger = { workspace = true }
+nomos-model = { workspace = true }
 nomos-model-package = { workspace = true }
+nomos-platform-std = { workspace = true }
 
 [lints]
 workspace = true

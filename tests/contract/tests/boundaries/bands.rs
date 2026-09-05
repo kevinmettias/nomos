@@ -200,12 +200,6 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // band as its two siblings above: the middle of a three-crate seam, increment 1 of 4
     // closing family 9's `SpecCommand` half. `OD-HOST-002`.
     ("nomos-spec-orchestration", 40),
-    // The workflow tier's first real execution increment: runs an ordered sequence of
-    // `WorkflowStep` declarations, each dispatched to one of this workspace's two real
-    // backends. Reaches only `nomos-agent-contracts` (36), `nomos-agent-executor-claude-code`
-    // (37), `nomos-model-backend-ollama` (37), `nomos-contracts` (0) and `nomos-platform`
-    // (1p), all below this band -- same band as its three siblings above. `OD-WORKFLOW-005`.
-    ("nomos-workflow-orchestration", 40),
     // The seam for the first-class Gate object `ARC-ROADMAP-001` names: `Plan` reaches
     // only `nomos-rules` (30) and `nomos-contracts` (0); `Run_Gate` reaches
     // `nomos-check-orchestration` (40) too, one band below, which is why this crate is
@@ -217,6 +211,12 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // below, the identical reason `nomos-gate-orchestration` sits at 41 rather than
     // beside either -- a band may not depend on its own band. `P40-CORRECTIONS-CANONICAL-SEAM`.
     ("nomos-correction-orchestration", 41),
+    // The workflow tier's first real execution increment: runs an ordered sequence of
+    // `WorkflowStep` declarations, each dispatched to one of this workspace's three real
+    // dispatch targets. `Body::Check` reaches `nomos-check-orchestration` (40), one band
+    // below, the identical reason its two siblings above sit at 41 rather than beside it
+    // -- a band may not depend on its own band. `OD-WORKFLOW-005`, `P40-WORKFLOW-CHECK-BODY`.
+    ("nomos-workflow-orchestration", 41),
     ("nomos-cli", 90),
     // A second real caller of `nomos-gate-orchestration`'s `Run_Gate`: walks a tree,
     // judges it exactly as `nomos gate run` would, and hands back a JSON-serializable

@@ -6,6 +6,7 @@ use nomos_contracts::Finding;
 use crate::examined::{Claim, Examined};
 
 /// What a `nomos check` run produced.
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum CheckOutcome
 {
     /// The root does not exist or is not a directory, or the walked source could not be

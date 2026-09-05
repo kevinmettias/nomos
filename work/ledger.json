@@ -51101,7 +51101,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -51114,7 +51114,27 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-workflow-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 11 tests\ntest body::check_body::tests::Test_A_Different_Selection_Should_Change_Equality ... ok\ntest body::check_body::tests::Test_Bodies_With_Equal_Content_Should_Be_Equal ... ok\ntest tests::Test_An_Incoherent_Step_Is_Refused_Before_Dispatch ... ok\ntest tests::Test_An_Empty_Plan_Completes_Vacuously ... ok\ntest tests::Test_A_Failure_Prevents_A_Later_Step_From_Running ... ok\ntest tests::Test_A_Failed_Dispatch_Stops_The_Run ... ok\ntest tests::Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes ... ok\ntest tests::Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions ... ok\ntest tests::Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes ... ok\ntest tests::Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonical_Seam ... ok\ntest tests::Test_A_Two_Step_Sequence_Completes_In_Order ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workflow_orchestration-6c2e19cd72afcd92.exe)\n   Doc-tests nomos_workflow_orchestration\n",
+        "verified_at": 1788642952,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "69c4dd4331de32ef3acd72d2a74c090f0c8139b4"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

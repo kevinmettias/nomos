@@ -10,8 +10,20 @@ use nomos_contracts::{
 use nomos_ledger::Territory;
 use nomos_model_package::EffortLevel;
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+use nomos_platform_std::StdFileSystem;
+use nomos_workspace::BuildVariant;
 
-use crate::{Body, DispatchError, Run, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
+use crate::{Body, CheckBody, DispatchError, Run, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
+
+/// This process's own build variant is not what a workflow step should be judged as --
+/// `nomos_check_orchestration::Run`'s own doc says `variant` must come from the
+/// *compiling* binary read through `env!`, and a test binary is not the composition root
+/// any real caller would be. A fixed, named test variant, the same shape
+/// `nomos_check_orchestration`'s own fixtures already use.
+fn Test_Variant() -> BuildVariant
+{
+    return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
+}
 
 fn Task(goal: &str) -> TaskEnvelope
 {
@@ -123,7 +135,7 @@ fn Test_An_Empty_Plan_Completes_Vacuously()
 {
     let launcher = Scripted::Of(Vec::new());
 
-    let outcome = Run(&[], &launcher);
+    let outcome = Run(&[], &launcher, &StdFileSystem, &Test_Variant());
 
     assert_eq!(outcome, WorkflowOutcome::Completed { completed: Vec::new() });
 }
@@ -134,7 +146,7 @@ fn Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes()
     let launcher = Scripted::Of(vec![Clean_Claude_Code_Response("PONG")]);
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("say PONG")) }];
 
-    let outcome = Run(&plan, &launcher);
+    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
@@ -152,7 +164,7 @@ fn Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes()
     let launcher = Scripted::Of(vec![Clean_Ollama_Response("PONG")]);
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("say PONG")) }];
 
-    let outcome = Run(&plan, &launcher);
+    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
@@ -173,7 +185,7 @@ fn Test_A_Two_Step_Sequence_Completes_In_Order()
         WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("second")) },
     ];
 
-    let outcome = Run(&plan, &launcher);
+    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
@@ -193,7 +205,7 @@ fn Test_An_Incoherent_Step_Is_Refused_Before_Dispatch()
     let launcher = Scripted::Of(Vec::new());
     let plan = [WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task("never runs")) }];
 
-    let outcome = Run(&plan, &launcher);
+    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
 
     assert_eq!(outcome, WorkflowOutcome::Refused { completed: Vec::new(), index: 0 });
 }
@@ -207,7 +219,7 @@ fn Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions()
         WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task("never runs")) },
     ];
 
-    let outcome = Run(&plan, &launcher);
+    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
 
     let WorkflowOutcome::Refused { completed, index } = outcome
     else
@@ -226,7 +238,7 @@ fn Test_A_Failed_Dispatch_Stops_The_Run()
     let launcher = Scripted::Of(vec![Failing_Response("claude exited 1")]);
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("fails")) }];
 
-    let outcome = Run(&plan, &launcher);
+    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
 
     let WorkflowOutcome::Failed { completed, index, error } = outcome
     else
@@ -236,6 +248,48 @@ fn Test_A_Failed_Dispatch_Stops_The_Run()
     assert_eq!(index, 0);
     assert!(completed.is_empty());
     assert!(matches!(error, DispatchError::ClaudeCode(_)));
+}
+
+/// `P40-WORKFLOW-CHECK-BODY`'s own `done_when`: a two-step workflow whose first step is a
+/// check runs through `nomos-check-orchestration::Run` against the canonical check seam,
+/// its outcome carried in the same `StepOutcome` shape the agent and model bodies already
+/// use, and its second step still dispatches through `nomos-model-backend-ollama`
+/// afterward -- proving the new body composes with the two that already existed rather
+/// than replacing them.
+#[test]
+fn Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonical_Seam()
+{
+    let launcher = Scripted::Of(vec![Clean_Ollama_Response("second")]);
+    let sources = vec![nomos_rules::SourceFile::New(
+        "a.rs",
+        nomos_model::Subject_Of_Path("a.rs"),
+        "pub fn Ok() {}\n",
+    )];
+    let check = CheckBody::New(
+        std::path::PathBuf::from("."),
+        sources,
+        vec![nomos_contracts::RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
+    );
+    let plan = [
+        WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Check(check) },
+        WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("second")) },
+    ];
+
+    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
+
+    let WorkflowOutcome::Completed { completed } = outcome
+    else
+    {
+        panic!("expected Completed: {outcome:?}")
+    };
+    assert_eq!(completed.len(), 2);
+    let first = completed.first().expect("asserted len 2 above");
+    let second = completed.get(1).expect("asserted len 2 above");
+    assert!(
+        matches!(first, StepOutcome::Check(nomos_check_orchestration::CheckOutcome::Judged { findings, .. }) if findings.is_empty()),
+        "{first:?}"
+    );
+    assert!(matches!(second, StepOutcome::Ollama(answer) if answer.response == "second"));
 }
 
 /// Only one scripted answer: if the second step's body were ever dispatched, the
@@ -251,7 +305,7 @@ fn Test_A_Failure_Prevents_A_Later_Step_From_Running()
         WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("never runs")) },
     ];
 
-    let outcome = Run(&plan, &launcher);
+    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
 
     let WorkflowOutcome::Failed { completed, index, .. } = outcome
     else

@@ -1619,11 +1619,17 @@ version = "0.1.0"
 dependencies = [
  "nomos-agent-contracts",
  "nomos-agent-executor-claude-code",
+ "nomos-analysis",
+ "nomos-check-orchestration",
  "nomos-contracts",
  "nomos-ledger",
+ "nomos-model",
  "nomos-model-backend-ollama",
  "nomos-model-package",
  "nomos-platform",
+ "nomos-platform-std",
+ "nomos-rules",
+ "nomos-workspace",
 ]
 
 [[package]]

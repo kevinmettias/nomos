@@ -1,9 +1,15 @@
-//! Which real backend a workflow step's body dispatches through.
+//! Which real backend, or which canonical check seam, a workflow step's body dispatches
+//! through.
+
+mod check_body;
+
+pub use check_body::CheckBody;
 
 use nomos_agent_contracts::TaskEnvelope;
 
 /// Which real backend a workflow step's body dispatches through, and the `TaskEnvelope`
-/// it carries.
+/// it carries -- or, for [`Body::Check`], the tree and rule selection
+/// `nomos_check_orchestration::Run` judges.
 ///
 /// Names both of this workspace's real dispatch targets directly — `ClaudeCode`, the one
 /// real `AgentExecutor`, and `Ollama`, the one real `ModelBackend` — the same shape
@@ -12,6 +18,13 @@ use nomos_agent_contracts::TaskEnvelope;
 /// both decline a shared dispatch trait ahead of a real need, and `OD-PACKAGE-013` settles
 /// `Ollama` as a `ModelBackendPackage` instance dispatched through the same shape rather than
 /// a second `AgentExecutor` — this crate does not reach past either restraint.
+///
+/// `Check` is the same restraint applied to a third dispatch target that shares no trait
+/// with either of the first two: `nomos_check_orchestration::Run` is neither an
+/// `AgentExecutor` nor a `ModelBackend`, so it gets its own variant rather than being forced
+/// through a shape built for the other two. `OD-WORKFLOW-005` named this the real, heavier
+/// next step and declined to build it in that increment; `P40-WORKFLOW-CHECK-BODY` is that
+/// step.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Body
 {
@@ -19,4 +32,6 @@ pub enum Body
     ClaudeCode(TaskEnvelope),
     /// Dispatches through `nomos-model-backend-ollama`.
     Ollama(TaskEnvelope),
+    /// Dispatches through `nomos-check-orchestration::Run`.
+    Check(CheckBody),
 }

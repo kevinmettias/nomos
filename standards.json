@@ -417,7 +417,8 @@
     {
       "tier": "band-41",
       "paths": [
-        "crates/orchestration/nomos-gate-orchestration"
+        "crates/orchestration/nomos-gate-orchestration",
+        "crates/orchestration/nomos-workflow-orchestration"
       ]
     },
     {

@@ -1,7 +1,10 @@
 //! Running an ordered sequence of `WorkflowStepPlan` declarations against a real
-//! `AgentExecutor`.
+//! `AgentExecutor`, `ModelBackend`, or `nomos-check-orchestration::Run`.
 
-use nomos_platform::ProcessLauncher;
+use nomos_analysis::MemoryFactStore;
+use nomos_check_orchestration::RunContext;
+use nomos_platform::{FileSystem, ProcessLauncher};
+use nomos_workspace::BuildVariant;
 
 use crate::{Body, DispatchError, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
 
@@ -13,8 +16,17 @@ use crate::{Body, DispatchError, StepOutcome, WorkflowOutcome, WorkflowStepPlan}
 /// first dispatch failure stops the run. Either way, every real outcome from the steps
 /// that ran before the stop is preserved in the order they ran. An empty `plan`
 /// completes vacuously.
+///
+/// `filesystem` and `variant` exist only for a [`Body::Check`] step -- the identical two
+/// pieces `nomos_check_orchestration::RunContext` needs beside a real `ProcessLauncher`
+/// that neither an agent nor a model dispatch reads at all. Taken here rather than
+/// constructed by this function for the same reason `nomos_check_orchestration::Run`
+/// itself takes them from its own caller: `variant` is what the *compiling* binary was
+/// built as, read through `env!` there and nowhere this crate could read it correctly
+/// from, and `filesystem` is a platform choice a composition root makes once rather than
+/// this crate hard-coding one.
 #[must_use]
-pub fn Run<P: ProcessLauncher>(plan: &[WorkflowStepPlan], launcher: &P) -> WorkflowOutcome
+pub fn Run<P: ProcessLauncher, Fs: FileSystem>(plan: &[WorkflowStepPlan], launcher: &P, filesystem: &Fs, variant: &BuildVariant) -> WorkflowOutcome
 {
     let mut completed = Vec::new();
 
@@ -25,7 +37,7 @@ pub fn Run<P: ProcessLauncher>(plan: &[WorkflowStepPlan], launcher: &P) -> Workf
             return WorkflowOutcome::Refused { completed, index };
         }
 
-        match Dispatch(&step.body, launcher)
+        match Dispatch(&step.body, launcher, filesystem, variant)
         {
             Ok(outcome) => completed.push(outcome),
             Err(error) => return WorkflowOutcome::Failed { completed, index, error },
@@ -35,11 +47,16 @@ pub fn Run<P: ProcessLauncher>(plan: &[WorkflowStepPlan], launcher: &P) -> Workf
     return WorkflowOutcome::Completed { completed };
 }
 
-/// Runs `body`'s task through whichever real `AgentExecutor` it names, and reports
-/// which of the two answered. The entire dispatch, not a stand-in for a shared trait —
-/// the same restraint `nomos_cli::agent::Dispatch` already holds for a person's own
-/// single call.
-fn Dispatch<P: ProcessLauncher>(body: &Body, launcher: &P) -> Result<StepOutcome, DispatchError>
+/// Runs `body`'s task through whichever real dispatch target it names, and reports which
+/// one answered. The entire dispatch, not a stand-in for a shared trait — the same
+/// restraint `nomos_cli::agent::Dispatch` already holds for a person's own single call.
+///
+/// `Body::Check` never produces a [`DispatchError`]: `nomos_check_orchestration::Run`
+/// folds its own failure taxonomy (an unreadable tree, a contradictory registry, no
+/// facts) into `CheckOutcome` itself rather than a separate error type, so there is
+/// nothing here for `DispatchError` to name that `StepOutcome::Check` does not already
+/// carry.
+fn Dispatch<P: ProcessLauncher, Fs: FileSystem>(body: &Body, launcher: &P, filesystem: &Fs, variant: &BuildVariant) -> Result<StepOutcome, DispatchError>
 {
     return match body
     {
@@ -53,5 +70,28 @@ fn Dispatch<P: ProcessLauncher>(body: &Body, launcher: &P) -> Result<StepOutcome
             Ok(outcome) => Ok(StepOutcome::Ollama(outcome)),
             Err(error) => Err(DispatchError::Ollama(error)),
         },
+        Body::Check(check) => Ok(StepOutcome::Check(Dispatched_Check(check, launcher, filesystem, variant))),
     };
+}
+
+/// A [`Body::Check`]'s own dispatch: a fresh workspace and fact store per call, the same
+/// "every caller today passes a fresh one" shape `nomos_check_orchestration::Run`'s own
+/// doc names as what reproduces its pre-reuse behavior exactly. A workflow step dispatches
+/// once; there is no second call here for a reused store to help.
+fn Dispatched_Check<P: ProcessLauncher, Fs: FileSystem>(
+    check: &crate::CheckBody, launcher: &P, filesystem: &Fs, variant: &BuildVariant,
+) -> nomos_check_orchestration::CheckOutcome
+{
+    return nomos_check_orchestration::Run(
+        &check.sources,
+        RunContext {
+            variant: variant.clone(),
+            root: &check.root,
+            launcher,
+            filesystem,
+            workspace: &mut None,
+            store: &mut MemoryFactStore::New(),
+        },
+        &check.selected,
+    );
 }
