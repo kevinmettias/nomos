@@ -7,7 +7,7 @@
 
 use crate::{
     ApplicabilitySemantics, CapabilityRequirement, CorrectionAndSuppressionContract,
-    DiagnosticMapping, RuleContract, RulePackage,
+    DiagnosticMapping, Judgment, RuleContract, RulePackage,
 };
 use nomos_contracts::{
     Assurance, CapabilityId, EvidenceClass, FactVariant, Guarantee, IncrementalGranularity,
@@ -80,6 +80,12 @@ pub enum ManifestError
         at: String,
         found: String,
     },
+    /// `judgment` names something [`Judgment`] does not define.
+    UnknownJudgment
+    {
+        at: String,
+        found: String,
+    },
     /// A `required_capabilities[n].minimum` sub-field names something its own enum does
     /// not define.
     UnknownGuaranteeValue
@@ -137,6 +143,10 @@ impl core::fmt::Display for ManifestError
                 "{at}'s `applicability` is `{found}`, which is not `always_supported` or \
                  `structurally_partial`."
             ),
+            Self::UnknownJudgment { at, found } => write!(
+                formatter,
+                "{at}'s `judgment` is `{found}`, which is not `mechanical` or `model_judged`."
+            ),
             Self::UnknownGuaranteeValue { at, field, found } =>
             {
                 write!(formatter, "{at}'s `{field}` is `{found}`, not a value that field defines.")
@@ -189,6 +199,7 @@ pub fn Parse_Manifest(text: &str, at: &str) -> Result<RulePackage, ManifestError
     let protocol_range = Protocol_Range_Field(root, at)?;
     let rule_id = String_At(root, "rule_id", at, "rule_id")?;
     let contract = Contract_Field(root, at)?;
+    let judgment = Judgment_Field(root, at)?;
     let applicability = Applicability_Field(root, at)?;
     let required_capabilities = Required_Capabilities_Field(root, at)?;
     let evidence_schema = Evidence_Schema_Field(root, at)?;
@@ -209,6 +220,7 @@ pub fn Parse_Manifest(text: &str, at: &str) -> Result<RulePackage, ManifestError
         protocol_range,
         rule_id: RuleId::New(rule_id),
         contract,
+        judgment,
         applicability,
         required_capabilities,
         evidence_schema,
@@ -440,6 +452,24 @@ fn Contract_Field(object: &Map<String, Value>, at: &str) -> Result<Option<RuleCo
     let version = U32_At(inner, "version", at, "contract.version")?;
 
     return Ok(Some(RuleContract::New(record, version)));
+}
+
+/// `judgment`, which every manifest must state.
+///
+/// Required rather than defaulted to `mechanical`. A manifest that does not say whether
+/// anything judges its rule is exactly the ambiguity `OD-RULES-022` closes, and a default
+/// would resolve it silently in the direction that makes a model-judged rule look like a
+/// mechanical one whose implementation is missing.
+fn Judgment_Field(object: &Map<String, Value>, at: &str) -> Result<Judgment, ManifestError>
+{
+    let label = String_At(object, "judgment", at, "judgment")?;
+
+    return match label.as_str()
+    {
+        "mechanical" => Ok(Judgment::Mechanical),
+        "model_judged" => Ok(Judgment::ModelJudged),
+        _ => Err(ManifestError::UnknownJudgment { at: at.to_owned(), found: label }),
+    };
 }
 
 fn Applicability_Field(object: &Map<String, Value>, at: &str) -> Result<ApplicabilitySemantics, ManifestError>

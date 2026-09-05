@@ -6,7 +6,7 @@ use nomos_contracts::{
     IncrementalGranularity, PackageId, PackageKind, ProviderId, RuleId,
 };
 use nomos_rule_package::{
-    ApplicabilitySemantics, CapabilityRequirement, DiagnosticMapping, ManifestError,
+    ApplicabilitySemantics, CapabilityRequirement, DiagnosticMapping, Judgment, ManifestError,
     PackageVersion, Parse_Manifest, ProtocolRange, ProviderRegistration, RuleContract, RulePackage,
 };
 
@@ -24,6 +24,7 @@ fn Manifest_Text() -> &'static str
         "protocol_range": {"minimum": {"major": 1, "minor": 0}, "maximum": {"major": 1, "minor": 0}},
         "rule_id": "COMPLETENESS_MIRROR",
         "contract": {"record": "D-134", "version": 2},
+        "judgment": "mechanical",
         "applicability": "always_supported",
         "required_capabilities": [
             {
@@ -58,6 +59,7 @@ fn Expected() -> RulePackage
         protocol_range: ProtocolRange::New(ContractVersion::New(1, 0), ContractVersion::New(1, 0)),
         rule_id: RuleId::New("COMPLETENESS_MIRROR"),
         contract: Some(RuleContract::New("D-134".to_owned(), 2)),
+        judgment: Judgment::Mechanical,
         applicability: ApplicabilitySemantics::AlwaysSupported,
         required_capabilities: vec![CapabilityRequirement::New(
             CapabilityId::New("nomos.cap.syntax.tree"),
@@ -107,6 +109,63 @@ fn Test_A_Structurally_Partial_Rule_Resolves()
     let manifest = Parse_Manifest(&text, "test").expect("parses");
 
     assert_eq!(manifest.applicability, ApplicabilitySemantics::StructurallyPartial);
+}
+
+/// The other arm of `OD-RULES-022`'s judgment clause: a rule nothing mechanically judges,
+/// declared with the agent guidance that stands in for an implementation it does not have.
+///
+/// This is the shape the Go predecessor's 728 model-decided rules land in, and the reason the
+/// field exists at all. `Needs_An_Implementation` is false here, which is what the resolution
+/// step reads rather than matching the variant itself.
+#[test]
+fn Test_A_Model_Judged_Rule_Resolves_And_Needs_No_Implementation()
+{
+    let text = Manifest_Text()
+        .replacen("\"judgment\": \"mechanical\"", "\"judgment\": \"model_judged\"", 1)
+        .replacen(
+            "\"agent_guidance\": []",
+            "\"agent_guidance\": [\"read the module for a mirror the members contradict\"]",
+            1,
+        );
+
+    let manifest = Parse_Manifest(&text, "test").expect("parses");
+
+    assert_eq!(manifest.judgment, Judgment::ModelJudged);
+    assert!(!manifest.judgment.Needs_An_Implementation());
+    assert_eq!(manifest.agent_guidance.len(), 1, "{:?}", manifest.agent_guidance);
+}
+
+/// A judgment value outside the two the enum defines is refused by name, the same way an
+/// unknown applicability semantics or evidence class already is.
+#[test]
+fn Test_An_Unknown_Judgment_Is_Refused()
+{
+    let text = Manifest_Text().replacen("\"mechanical\"", "\"vibes\"", 1);
+
+    let refusal = Parse_Manifest(&text, "test").expect_err("vibes is not a real judgment value");
+
+    assert_eq!(
+        refusal,
+        ManifestError::UnknownJudgment { at: "test".to_owned(), found: "vibes".to_owned() }
+    );
+}
+
+/// A manifest that does not state its judgment is refused rather than assumed mechanical.
+///
+/// The default this test forbids is the one that would make every model-judged rule look like
+/// a mechanical rule whose implementation is missing, which is the resolution failure
+/// `OD-RULES-022` added the field to avoid.
+#[test]
+fn Test_A_Manifest_Stating_No_Judgment_Is_Refused()
+{
+    let text = Manifest_Text().replacen("\"judgment\": \"mechanical\",", "", 1);
+
+    let refusal = Parse_Manifest(&text, "test").expect_err("judgment carries no default");
+
+    assert_eq!(
+        refusal,
+        ManifestError::MissingField { at: "test".to_owned(), field: "judgment".to_owned() }
+    );
 }
 
 #[test]

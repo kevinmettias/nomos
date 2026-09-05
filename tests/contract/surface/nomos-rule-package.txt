@@ -2,12 +2,17 @@ pub const fn nomos_rule_package::ApplicabilitySemantics::Label(self) -> &'static
 pub const fn nomos_rule_package::CapabilityRequirement::New(capability: CapabilityId, minimum: Guarantee) -> Self
 pub const fn nomos_rule_package::CorrectionAndSuppressionContract::New(mechanical_correction_available: bool, suppression_supported: bool) -> Self
 pub const fn nomos_rule_package::DiagnosticMapping::New(external_tool: ProviderId, external_code: String, maps_to: RuleId) -> Self
+pub const fn nomos_rule_package::Judgment::Label(self) -> &'static str
+pub const fn nomos_rule_package::Judgment::Needs_An_Implementation(self) -> bool
 pub const fn nomos_rule_package::RuleContract::New(record: String, version: u32) -> Self
 pub const nomos_rule_package::SCHEMA_VERSION: u32
 pub enum nomos_rule_package::ApplicabilitySemantics
+pub enum nomos_rule_package::Judgment
 pub enum nomos_rule_package::ManifestError
 pub enum variant nomos_rule_package::ApplicabilitySemantics::AlwaysSupported
 pub enum variant nomos_rule_package::ApplicabilitySemantics::StructurallyPartial
+pub enum variant nomos_rule_package::Judgment::Mechanical
+pub enum variant nomos_rule_package::Judgment::ModelJudged
 pub enum variant nomos_rule_package::ManifestError::InvertedProtocolRange { at: String, }
 pub enum variant nomos_rule_package::ManifestError::MalformedVersion { at: String, field: String, cause: String, }
 pub enum variant nomos_rule_package::ManifestError::MissingField { at: String, field: String, }
@@ -15,16 +20,19 @@ pub enum variant nomos_rule_package::ManifestError::NotJson { at: String, cause:
 pub enum variant nomos_rule_package::ManifestError::UnknownApplicabilitySemantics { at: String, found: String, }
 pub enum variant nomos_rule_package::ManifestError::UnknownEvidenceClass { at: String, found: String, }
 pub enum variant nomos_rule_package::ManifestError::UnknownGuaranteeValue { at: String, field: String, found: String, }
+pub enum variant nomos_rule_package::ManifestError::UnknownJudgment { at: String, found: String, }
 pub enum variant nomos_rule_package::ManifestError::UnknownPackageKind { at: String, found: String, }
 pub enum variant nomos_rule_package::ManifestError::UnknownSchema { at: String, understood: u32, found: u32, }
 pub enum variant nomos_rule_package::ManifestError::Unreadable { at: String, cause: String, }
 pub enum variant nomos_rule_package::ManifestError::WrongPackageKind { at: String, found: PackageKind, }
 pub enum variant nomos_rule_package::ManifestError::WrongType { at: String, field: String, expected: String, }
 pub fn nomos_rule_package::ApplicabilitySemantics::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_rule_package::Judgment::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_rule_package::ManifestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_rule_package::Parse_Manifest(text: &str, at: &str) -> Result<RulePackage, ManifestError>
 pub fn nomos_rule_package::Read_Manifest(path: &Path) -> Result<RulePackage, ManifestError>
 pub impl nomos_rule_package::ApplicabilitySemantics implements core::fmt::Display
+pub impl nomos_rule_package::Judgment implements core::fmt::Display
 pub impl nomos_rule_package::ManifestError implements core::fmt::Display
 pub struct field nomos_rule_package::CapabilityRequirement::capability: CapabilityId
 pub struct field nomos_rule_package::CapabilityRequirement::minimum: Guarantee
@@ -46,6 +54,7 @@ pub struct field nomos_rule_package::RulePackage::evaluation_corpus: Option<Stri
 pub struct field nomos_rule_package::RulePackage::evidence_schema: EvidenceClass
 pub struct field nomos_rule_package::RulePackage::examples: Vec<String>
 pub struct field nomos_rule_package::RulePackage::external_diagnostics: Vec<DiagnosticMapping>
+pub struct field nomos_rule_package::RulePackage::judgment: Judgment
 pub struct field nomos_rule_package::RulePackage::package_id: PackageId
 pub struct field nomos_rule_package::RulePackage::package_kind: PackageKind
 pub struct field nomos_rule_package::RulePackage::package_version: PackageVersion

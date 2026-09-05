@@ -54389,7 +54389,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P48-RULE-PACKAGE-DRIVES-COMPOSITION-DECISION"
       ],
@@ -54406,7 +54406,29 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rule-package",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ics_Is_Refused ... ok\ntest Test_An_Unknown_Evidence_Class_Is_Refused ... ok\ntest Test_A_Model_Judged_Rule_Resolves_And_Needs_No_Implementation ... ok\ntest Test_An_Unknown_Judgment_Is_Refused ... ok\ntest Test_A_Manifest_Shaped_Like_A_Real_Shipped_Rule_Resolves ... ok\n\ntest result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-4c1bf963398008d9.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2bbc7f37545f3961.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-1b64e3bfb5603fc9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-548f68c67f68b46e.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-71f222077937d837.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-de1361669e2f1c0c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-1c8a6666f259a153.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-390e53f243c52514.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-6fcde9ebde18f4a4.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-e84f1274a16d1745.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-fa1d9e2ab03f28fc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rule_package-44a7f2bcd1f1445a.exe)\n     Running tests\\manifest.rs (target\\debug\\deps\\manifest-d621e40d0574f94a.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rule_package\n",
+        "verified_at": 1788601667,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2074a5f8305fa4a7a344f87ca34005e4f19c7cf5"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

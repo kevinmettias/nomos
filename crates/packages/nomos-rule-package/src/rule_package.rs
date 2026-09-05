@@ -2,7 +2,7 @@
 
 use crate::{
     ApplicabilitySemantics, CapabilityRequirement, CorrectionAndSuppressionContract,
-    DiagnosticMapping, RuleContract,
+    DiagnosticMapping, Judgment, RuleContract,
 };
 use nomos_contracts::{EvidenceClass, PackageId, PackageKind, RuleId};
 use nomos_package::{PackageVersion, ProtocolRange, ProviderRegistration};
@@ -47,6 +47,14 @@ pub struct RulePackage
     /// version, normative specification" — `Option` because `Check_Naming_Convention`
     /// genuinely has none, by its own module doc's design.
     pub contract: Option<RuleContract>,
+    /// Whether a linked implementation decides this rule at all, or a model does.
+    /// `OD-RULES-022`'s own clause, and what makes composition's resolution total.
+    ///
+    /// Read before `applicability` and `required_capabilities`, because both of those
+    /// describe an implementation and [`Judgment::ModelJudged`] says there is none. A
+    /// model-judged declaration still carries them, at whatever the manifest states, and
+    /// nothing resolves against them.
+    pub judgment: Judgment,
     /// Which shape of `Applicability` this rule's own judgment implementation raises
     /// for a genuine violation. `ARCH-002`'s "applicability semantics".
     pub applicability: ApplicabilitySemantics,
