@@ -50521,6 +50521,1495 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P37-REPO-LIMITS-MATERIALIZE-TEST-COUPLED-TO-REAL-FILE",
+      "title": "nomos-repo-limits: decouple Materialize_Workspace's own test from this repository's real standards.json",
+      "why": "P36-STANDARDS-JSON-SCHEMA-DRIFT removed standards.json's limits/languages.go.limits block (code-standards' new schema hard-rejects any top-level key it does not itself declare, with no extensibility point for a consuming repository's own data -- verified empirically: naming/scripting/words/goals happen to share compatible key names with the external tool's own schema, but limits does not, and never can again). This broke Test_Materialize_Workspace_Should_Materialize_This_Repositorys_Own_Declared_Thresholds, the only test covering Materialize_Workspace, which asserted against the real committed file. reading.rs's sibling Discover_Workspace already had a synthetic-fixture test (Test_Discover_Workspace_Should_Read_A_Repository_Wide_And_A_Language_Row) proving the same real-file-coupled test in reading.rs was pure duplication once the real file could no longer carry this data; that one is being removed as part of finishing P37-CODESTANDARDS-POLICY-FAMILY-2, whose territory already covers reading.rs. fact_context.rs has no such sibling and needed a new FakeFileSystem fixture instead of deletion, to avoid losing Materialize_Workspace's only coverage.",
+      "done_when": "cargo test -p nomos-repo-limits is green with no test reading this repository's own root standards.json for domain data, and check.exe reports no new findings against fact_context.rs",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository/nomos-repo-limits/src/fact_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-standards-sweep",
+        "acquired_at": 1788585047,
+        "lease_expires_at": 1788588647
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-limits"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS",
+      "title": "Run re-ingests and re-materializes every source on every call, including subjects nothing touched",
+      "why": "Reuse across calls is correct but buys no saved work. run_context.rs says so in as many words: reuse buys correctness of carrying state across calls, not yet a skipped recomputation for a subject nothing touched. The primitives to do better already exist one band down and are unused for this: nomos-analysis carries InvalidationReport, Broadening, Supersession and a DependencyPropagation walk over a dependents adjacency map. What is missing is the orchestration step that compares a subject content digest against what the store already holds at the current generation and declines to re-ingest or re-materialize when they agree. This is the first half of the efficiency invariant the design promises, and it is the single largest unbuilt piece of the deterministic kernel.",
+      "done_when": "A second Run over an unchanged tree, reusing the same Workspace and MemoryFactStore, materializes no syntax fact it already holds, and a test asserts the count of newly materialized facts is zero for an unchanged subject set and nonzero for a changed one.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-INCREMENTAL-DEMAND-DRIVEN-RECOMPUTE",
+      "title": "Only demanded invalidated facts are recomputed, and only affected rules are reassessed",
+      "why": "The second half of the efficiency invariant: change set, then invalidate the affected dependency subgraph, then recompute only the demanded invalidated facts, then reassess only the rules those facts feed. Skipping unchanged subjects is necessary but not sufficient, because a changed subject today still drags every downstream capability materialization and every rule with it. nomos-analysis already owns the propagation walk and the invalidation report this needs; nothing consumes them to bound a run. Without this the analysis kernel stays linear in workspace size rather than in change size, which is the property the whole fact-identity and generation design was built to enable.",
+      "done_when": "A Run over a workspace where one file changed recomputes only the facts reachable from that subject in the dependency graph and reassesses only the rules that read them, proven by a test that counts materializations and rule invocations against a one-file change in a many-file tree.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/invalidation.rs",
+          "crates/substrate/nomos-analysis/src/propagation.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-GATE-POLICY-AUTHORING",
+      "title": "Nothing constructs a non-empty suppression, baseline, adoption or coverage policy",
+      "why": "The internal semantics of suppressions, baselines, adoption and calibration, and coverage are real and tested, but GateCommand documents repeatedly that nothing builds a non-empty one. A policy that only ever arrives empty is a policy nobody can use, and the tests that exercise it are exercising a shape no caller can reach. What is missing is the authoring and configuration surface: a declared, readable source a real run resolves these four policies from, so that suppressing a finding, adopting a baseline, or demanding a coverage floor is something a person can express rather than something only a unit test constructs.",
+      "done_when": "A real gate run resolves all four policies from a declared configuration source rather than from defaults, a non-default coverage floor and at least one suppression and one baseline entry are exercised end to end, and GateCommand no longer documents that nothing constructs a non-empty policy.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_command.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Re-added as -2 with a dependency on P41-GATE-SELECTION-COLLAPSE. The architectural review asks for no new gate policy increments until the gate stops selecting twice and compiles to one resolved run plan; this item as authored was claimable before that and would have added policy authoring onto the mechanism being replaced."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-opus-session",
+        "declined_at": 1788589488
+      }
+    },
+    {
+      "id": "P40-GATE-COMPARE-VERB",
+      "title": "The gate has plan, run and explain but no compare",
+      "why": "plan, run and explain are all real and CLI-wired. compare is named in the gate module as deliberately absent, and it is the verb that answers the question a gate is actually adopted to answer: what changed between two runs. Without it a baseline is a number nobody can diff and an adoption decision has no before and after. RunId already exists and is printed, which is the identity a comparison needs, so the missing piece is the verb rather than the addressing.",
+      "done_when": "A compare verb takes two run identities and reports findings added, findings removed and findings whose disposition changed, is reachable from the gate orchestration seam the other three verbs use, and is covered by a test over two real runs that differ.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-GATE-PHASES-APPROVALS",
+      "title": "Declared phases, thresholds and approvals are named as unbuilt WF-001 gate semantics",
+      "why": "The gate module names declared phases, thresholds and approvals among the parts of WF-001 it does not implement. A gate today is one undifferentiated pass over every selected rule: there is no way to say that one group of checks must pass before another is even attempted, no numeric threshold a run is judged against, and no approval that a human or an agent supplies to let a run proceed despite a finding. These are what turn a gate from a single verdict into a policy a team can actually adopt incrementally.",
+      "done_when": "A gate run can declare ordered phases whose later phases do not run when an earlier one fails, judge a numeric threshold, and record an approval that changes a disposition, each covered by a test and each reachable from the gate orchestration seam.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_phase.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Re-added as -2 with a dependency on P41-GATE-SELECTION-COLLAPSE, for the reason given on P40-GATE-POLICY-AUTHORING: phases, thresholds and approvals are new gate policy semantics and should be built onto the collapsed selection rather than onto the transitional one."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-opus-session",
+        "declined_at": 1788589489
+      }
+    },
+    {
+      "id": "P40-CORRECTIONS-READWRITE-SET",
+      "title": "COR-EXEC-001 says every correction operation declares its read/write sets, and none does",
+      "why": "ReadWriteSet implements all seven resolution tiers and all four derived-provenance fields the requirement names, and its own doc admits it is free-standing, referencing nothing from CorrectionCandidate and not threaded into its constructor, so no existing call site changes because this exists. CorrectionCandidate, the type a correction operation actually is, carries only a ChangeSet, whose Touched answer sits at Artifact resolution, the weakest tier the requirement names. So the machinery is real and tested and the requirement is unmet: the committed assessment of COR-EXEC-001 records exactly this as its one gap. This is also the shape this repository blocks on elsewhere, a declaration nothing exercises.",
+      "done_when": "A correction operation carries its read/write sets at the strongest resolution available to it rather than only a ChangeSet, the COR-EXEC-001 assessment no longer names CorrectionCandidate as a gap, and a test covers both a declared set and a derived one carrying provenance.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections/nomos-corrections/src/correction_id/correction_candidate.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-corrections"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-CORRECTIONS-SECOND-FAMILY",
+      "title": "One correction family exists, so nothing has yet shown what generalizes",
+      "why": "The phantom-mirror vertical is a real end to end proof that a finding can reach a deterministic type-state lifecycle and a filesystem commit, and it deliberately handles only the first recognized finding and only one candidate per run. That narrowness was the right call, but it means every generalization question is still unanswered by evidence: batching, ranking between competing candidates, and whether two families share a producer seam cannot be decided from a population of one. A second genuinely different family, chosen from a rule whose fix is not a text deletion on one line, is what makes the generalization decidable rather than speculative.",
+      "done_when": "A second correction family over a different rule reaches Preview, Stage, Validate and Commit through the same lifecycle, the two families are produced through one shared entry point rather than two bespoke ones, and what the pair proves about batching and ranking is recorded rather than assumed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/correct/second_family.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-corrections"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-CORRECTIONS-CANONICAL-SEAM",
+      "title": "Correction product semantics live in nomos-cli, and nomos-api cannot reach them at all",
+      "why": "Gate, work and spec all call canonical orchestration seams that both hosts share, which is what makes the claim that a host must not own product semantics true for those three. Correction is the exception and nothing marks it as one: the whole family lives in nomos-cli correct.rs and its correct/ directory, and nomos-api has no correct surface, so the second host cannot preview, stage, validate or commit a correction at all. Every later consumer inherits that hole: an agent-proposed validated fix, an API transport and an MCP surface each need a correction seam that is not a CLI module.",
+      "done_when": "Correction planning and lifecycle are reachable through an orchestration seam both hosts call, nomos-cli correct is a thin renderer over it the way the gate verbs already are, nomos-api exposes the same verbs, and a new crate carries its band declaration, README row and contract-test harness entries.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-correction-orchestration/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-corrections",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-WORKFLOW-CHECK-BODY",
+      "title": "A workflow step can only dispatch an agent or a model, never run a check",
+      "why": "The workflow executor performs a real ordered sequence against real Claude Code and Ollama backends, which proves that workflow orchestration belongs in Core and can drive real work. Its module names check steps, correction steps and gate steps among the bodies it does not have. A check body is the first one to build because it is the cheapest and the most load bearing: it needs no external process, the check orchestration seam it would call is already the one both hosts use, and it is the step every composed Core workflow starts with. Until a body exists that is not an agent or a model dispatch, the claim that this tier composes Core operations rests on a population of one kind.",
+      "done_when": "A workflow step whose body is a check runs through the executor against the canonical check orchestration seam, its outcome is carried in the same typed shape the agent and model bodies already use, and a test runs a two-step workflow whose first step is a check.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workflow-orchestration/src/body/check_body.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-workflow-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-WORKFLOW-GATE-BODY",
+      "title": "No workflow step can run a gate, so no workflow can end in a verdict",
+      "why": "A gate body is what lets a workflow terminate in the judgment the whole system exists to produce, and it is the second half of the Check then Correction then Validate then Gate composition. It is deliberately sequenced after the check body: the two share whatever body seam the first one establishes, and building the cheaper one first is what stops that seam from being designed around a single case. Run_Gate is already the seam both hosts call, so the work is the body and its outcome shape rather than any new gate machinery.",
+      "done_when": "A workflow step whose body is a gate run reports its disposition through the workflow outcome, a failing gate ends the workflow rather than being reported as a step that merely ran, and a test covers both a passing and a failing gate step.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workflow-orchestration/src/body/gate_body.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-WORKFLOW-CHECK-BODY"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-workflow-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-WORKFLOW-CORRECTION-BODY",
+      "title": "No workflow step can propose or commit a correction",
+      "why": "The correction body is the step that makes a workflow able to change the tree rather than only report on it, and it is what turns Check then Correction then Validate then Gate from a diagram into something executable. It depends on the correction seam existing outside nomos-cli, because a workflow tier calling into a CLI module would invert the layering the rest of this tier respects. Sequenced after the check body for the same reason the gate body is: the body seam should be shaped by more than one case before a mutating body uses it.",
+      "done_when": "A workflow step whose body is a correction reaches Preview, Stage, Validate and Commit through the canonical correction seam, a validation failure ends the step without committing, and a test covers the committed and the refused path.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workflow-orchestration/src/body/correction_body.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-WORKFLOW-CHECK-BODY",
+        "P40-CORRECTIONS-CANONICAL-SEAM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-corrections"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-WORKFLOW-CLI-VERB",
+      "title": "The workflow tier has no CLI verb, so nobody outside a test can run a workflow",
+      "why": "The workflow executor is real and dispatches real backends, and there is no way to invoke it. Every other tier in this system has a host surface, and the workflow module names the absent CLI verb among its own exclusions. Without one the tier cannot be exercised by anybody who is not writing a test against it, which means the ordinary evidence that would tell us what workflows people actually compose is not being collected.",
+      "done_when": "A nomos workflow verb runs a declared workflow and renders its outcome, exit codes follow the same table the other verbs use, and the verb is a thin renderer over the workflow orchestration seam rather than a second place workflow semantics live.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/workflow.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-WORKFLOW-CHECK-BODY"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-workflow-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-API-GATE-SELECTION-SURFACE",
+      "title": "The API cannot express gate scope or rule selection, so its gate run is not the gate",
+      "why": "nomos-api reaches the canonical orchestration seams for the gate verbs, the work ledger verbs and the spec surface, which is what makes the second host real. Its own documentation records that the request surface does not expose gate scope or rule selection, and the committed requirement assessments name Handle_Gate_Run as a gap for exactly that reason. ScopeSelector and RuleSelector are real, and OD-GATE-017 drove selection down into check orchestration so an unselected rule can skip its materialization entirely. An API caller that cannot select is therefore not merely less expressive than the CLI, it is paying for every expensive provider on every call.",
+      "done_when": "The API request surface carries scope and rule selection through to Run_Gate, an API caller can run a single rule over a subset of a tree, and a test proves selection reaches check orchestration rather than being applied after the fact.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-API-TRANSPORT",
+      "title": "nomos-api is a serializable seam that listens on nothing",
+      "why": "The application-service boundary is proven: typed serializable projections over gate, work and spec that both hosts share. What does not exist is anything that carries them off the machine. nomos-api documents that it does not listen on a socket and implements no transport, so the headless surface the design promises is today reachable only by a Rust caller linking the crate. Every remote consumer, and the editor surface OD-HOST-003 describes as a client of the canonical services, needs a transport before it can exist at all.",
+      "done_when": "A transport serves the existing typed request and response surface over a real protocol, the seam crate itself gains no socket and no protocol dependency so the boundary stays where it is, and a test drives a real request over the transport rather than through a direct call.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api-transport/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-MCP-SURFACE",
+      "title": "There is no MCP surface, which is now a clearer gap than the API itself",
+      "why": "The intended headless projection is canonical application services beneath a CLI, an API transport and MCP. The first is proven and the API seam is substantially built, which leaves MCP as the sharpest remaining hole in that row: nomos-api states plainly that it does not speak the JSON-RPC framing MCP requires. An MCP surface is what lets an agent consume Nomos as a tool rather than by shelling out to a CLI and parsing rendered text, which is precisely the coupling OD-HOST-003 rejects for the editor surface. Sequenced after the transport so that framing and serving are not designed twice.",
+      "done_when": "An MCP server exposes the canonical gate, work and spec operations as tools over JSON-RPC framing, an MCP client can run a gate and read typed findings without parsing rendered output, and no product semantics live in the MCP crate.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-mcp/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-API-TRANSPORT"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-AGENT-TASK-ENVELOPE",
+      "title": "An agent is handed a claim, not the typed task envelope AGT-001 requires",
+      "why": "AGT-001 requires a typed envelope carrying goal, scope, applicable rules, prohibited changes, available tools and an expected output schema before agent work begins. Its committed assessment finds two of those real and the rest with no site at all: LedgerItem is the goal and territory is the scope, but Claim carries only who holds an item and when the lease lapses, nothing about what an agent may change or which tools it may use. Three separate requirement assessments name Claim as their gap. Nothing bundles any of it into one artifact, so an executor today is trusted rather than bounded, which is the wrong footing for a mutating agent.",
+      "done_when": "One typed envelope carries goal, scope, applicable rules, prohibited changes, available tools and an output schema, an agent executor receives that envelope rather than a bare claim, and the AGT-001 assessment no longer names Claim as a gap.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/claim.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-agent-contracts"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-AGENT-WORKRESULT-VALIDATED-PATH",
+      "title": "No agent run reaches a validated correction, so agent output is never checked before it lands",
+      "why": "A Claude Code executor and an Ollama backend both really run, and typed agent contracts exist, but nothing carries what an agent produced through WorkResult into a correction the system validates before committing. The game plan is explicit that an agent executor should not precede a solid mutation and validation contract; the executor was built first, so closing this is what restores that ordering rather than adding to the inversion. Until it closes, an agent either writes to the tree unchecked or produces output nobody applies, and both make the executor evidence rather than product.",
+      "done_when": "An agent run produces a WorkResult that becomes a correction candidate, that candidate goes through Preview, Stage, Validate and Commit, a validation failure leaves the tree untouched, and a test covers both outcomes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts/src/work_result.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-CORRECTIONS-CANONICAL-SEAM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-corrections"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-MODEL-ROUTING-REAL-CONSUMER",
+      "title": "The model routing vocabulary is declared and wired into nothing",
+      "why": "The manifest vocabulary for model routing is rich and the README says outright that it is declared but not wired into a real consumer. The committed assessments agree and are specific: ModelExecutionProfile is the single named gap for four separate MODEL-ROUTE requirements, with Catalog and ResolvedModelExecution named for two more. An Ollama backend really runs, so a consumer exists to route to; what is missing is anything that chooses a backend by the declared profile rather than by a caller naming one directly. This is the same population-of-one trap the rest of the system has learned to avoid, one tier over.",
+      "done_when": "A real model dispatch selects its backend by resolving a declared execution profile against the catalog rather than by a hard-coded choice, at least one routing constraint changes which backend is chosen, and the four MODEL-ROUTE assessments naming ModelExecutionProfile no longer do.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-model-package/src/model_execution_profile.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-model-package",
+          "-p",
+          "nomos-model-backend-ollama"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-FACT-STORE-PERSISTENCE",
+      "title": "The fact store dies with the process, so incremental work cannot survive an invocation",
+      "why": "OD-ANALYSIS-009 already frames the question of whether Run should read a persistent fact store instead of constructing one fresh per invocation, and leaves it open. Skipping unchanged subjects and recomputing only demanded facts both buy nothing across process boundaries while the only store is in memory: every CLI invocation starts cold, which is the case that actually matters to somebody running the gate. This is sequenced after demand-driven recomputation deliberately, because what is worth persisting and what a cache entry must carry to be safely reused are answered by that work rather than guessed ahead of it. It also brings a lifecycle with it, since a durable cache needs eviction, a version boundary and a way to be invalidated wholesale when the build variant changes.",
+      "done_when": "The persistence question OD-ANALYSIS-009 leaves open is decided and recorded, and if the decision is to persist, a store survives process exit, is keyed so a stale entry cannot be served across a build-variant or contract-version change, and has a stated eviction and invalidation lifecycle.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/persistent_store.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-INCREMENTAL-DEMAND-DRIVEN-RECOMPUTE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-COMPILER-BACKED-PROVIDER",
+      "title": "No provider uses a real compiler semantic API, so deep correctness evidence has no source",
+      "why": "The language set is Rust and Go through syn, a scanner, Cargo, Clippy and cargo-deny. Every one of those reads syntax, manifests or another tool output; none consults a compiler for resolved semantics, so questions needing types, resolved paths, trait selection or borrow facts have no evidence source in this system today. The abstraction discipline here should be unchanged: do not build a CompilerProvider or LspProvider taxonomy first. Build one concrete provider backed by a real compiler API, let it expose ordinary capabilities like every other provider, and let it generate the evidence for whether any shared abstraction is warranted at all.",
+      "done_when": "One provider produces facts from a real compiler semantic API rather than from a syntax tree or a tool report, it registers as an ordinary capability provider with a declared guarantee and determinism strategy, at least one rule judges what it produces, and no provider taxonomy is introduced for it.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-compiler/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-compiler"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-RELEASE-BRANCH-DISCIPLINE",
+      "title": "main is at the August Phase-0 commit while dev carries the entire system",
+      "why": "Every commit in this repository lands on dev and reaches main only by a merge, and no merge has happened since the Phase-0 state in August. The gate already runs on dev for exactly this reason, so the risk is not an unchecked branch; it is that main no longer means anything a reader could rely on, and the distance is now large enough that the first merge is itself a significant and untested event. This is repository management rather than product architecture, which is why it is a decision to be recorded rather than a refactor: what main is for, when dev reaches it, and whether anything other than a person is allowed to decide that.",
+      "done_when": "A record states what main is for, what makes a dev commit eligible to reach it, and who or what decides; the record is registered in the specification store; and both committed projections are re-rendered from the record set the commit publishes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md",
+          "crates/spec/nomos-spec-store/records/OD-RELEASE-001.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P37-GITIGNORE-ROOT-NOMOS-EXE",
+      "title": "gitignore the root-level nomos.exe copy the ledger workflow recurringly produces",
+      "why": "AGENTS.md's own workflow says to build nomos-cli fresh and re-copy the binary to the repo root for ledger verb use; that copy is a build artifact, not source, and has repeatedly shown up as an untracked file at the repo root across sessions (this session accidentally staged it once via a subagent slip, caught before commit).",
+      "done_when": ".gitignore excludes /nomos.exe and git status reports it as ignored rather than untracked",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".gitignore"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-standards-sweep",
+        "acquired_at": 1788589091,
+        "lease_expires_at": 1788590891
+      },
+      "verification": {
+        "argv": [
+          "./nomos.exe",
+          "work",
+          "validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-RULE-DECLARES-ITS-REQUIREMENTS",
+      "title": "A rule is a bare function, so the engine has to learn each one individually",
+      "why": "A rule today is a function the composition root names, plus a RuleId, plus an entry in a hand-written mapping from rule to the capability materialization it needs. Nothing about a rule declares its own subjects, its required facts, or its applicability, so that knowledge lives centrally and grows once per rule. The package specification already says applicability is derived from canonical capability requirements rather than duplicated support information, which is the opposite of what the code does. A descriptor carrying id, subjects, required facts, applicability and judgment is the prerequisite for any planner: without it a planner would have nothing to plan from and would simply relocate the same hand-written table.",
+      "done_when": "Every composed rule is reachable as a descriptor declaring its id, subjects, required facts and applicability alongside its judgment, the descriptors are the only place that knowledge is written, and a test proves the descriptor set and the composed rule set are the same set.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/rule_descriptor.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-RUN-PLANNER",
+      "title": "Nothing computes a plan: selected scope and rules never become a resolved analysis DAG",
+      "why": "The intended centre of this system is selected scope crossed with selected rules, resolved through applicability into rule requirements, unioned into required capabilities, reduced to a minimum shared analysis DAG where each required fact is materialized once, then judged. What exists instead is a sequence of conditionals that calls one materializer per selected rule family. The consequence is that capability work is deduplicated only by accident of ordering, the cost of a run cannot be known before running it, and every new capability adds another branch to the same function. A planner that turns descriptors and a selection into an explicit plan is the single change the rest of this critique depends on.",
+      "done_when": "A planner produces an explicit plan from selected subjects and selected rules, naming resolved subjects, selected rules, capability requirements, provider resolutions and the analysis operations in dependency order; each required fact appears once; the plan is inspectable before execution; and the architectural decision is recorded.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_planner.rs",
+          "docs/records/OD-ANALYSIS-011-a-run-is-planned-from-declared-rule-requirements-rather-than-assembled-by-a-hand-written-mapping.md",
+          "crates/spec/nomos-spec-store/records/OD-ANALYSIS-011.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-RULE-DECLARES-ITS-REQUIREMENTS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-APPLICABILITY-IN-THE-PLAN",
+      "title": "Applicability is resolved during judgment, so the plan cannot know what it will not judge",
+      "why": "Applicability is one of this system strongest ideas and it is currently answered late, per rule, while judging. That means the plan cannot say in advance which subjects a rule will decline, coverage is computed from what happened rather than from what was intended, and the same question is asked separately by execution and by coverage accounting. Once a plan exists, applicability belongs inside it: resolved once, driving which analysis operations are worth running at all, and read afterwards by coverage rather than recomputed.",
+      "done_when": "Applicability is resolved as part of the plan rather than during judgment, the same resolution drives execution and coverage accounting with no second computation, and a test shows a subject a rule declines costs no capability materialization.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/applicability_plan.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-RUN-PLANNER"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-RUN-STOPS-NAMING-EVERY-RULE",
+      "title": "Adding a rule edits central orchestration, which is the coupling the design exists to avoid",
+      "why": "run_context.rs imports a concrete list of rule functions and rule ids, declares a rule count of 56, and its own documentation calls the rule to capability mapping a fixed, hand-written mapping. Every rule added since the first has increased what the composition root knows. This item is the migration that makes the planner real rather than parallel: all 56 rules move through descriptors, and the central function stops naming any of them. Until that happens the planner is a second mechanism beside the old one, which is exactly the transitional accretion this critique identifies elsewhere.",
+      "done_when": "The composition root names no individual rule function, no individual materializer and no rule count; all 56 composed rules run through the planner; and a test proves a newly registered rule is executed without editing any central mapping.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-RUN-PLANNER"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-GATE-SELECTION-COLLAPSE",
+      "title": "Gate and Check each decide what runs, and the gate crate says so about itself",
+      "why": "Gate filtered findings after Check ran everything, then Check gained real selection, and the gate keeps its own selector anyway. The gate crate states the result in its own words: the rule selector now layers a post-hoc per-caller finding filter over a Run that is already selective on its own. Two mechanisms answer one question, so a rule can be executed and then discarded, coverage can disagree with what ran, and a caller must know which of the two selections is authoritative. There should be one resolution of selected rules, compiled once, driving capability demand, execution, applicability, coverage and disposition alike.",
+      "done_when": "A gate compiles its policy into a run plan plus a result policy, one resolved selected-rule set drives execution and evaluation, no finding is filtered out after being computed for a rule the gate did not select, and the transitional post-hoc filter is deleted rather than left beside the new path. The decision is recorded.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/policy/rule_selector.rs",
+          "docs/records/OD-GATE-021-a-gate-compiles-to-one-resolved-run-plan-rather-than-selecting-twice.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-021.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-RUN-PLANNER"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-GATE-PLAN-IS-A-PLAN",
+      "title": "gate plan describes the registry and does not vary with scope, rules or policy",
+      "why": "The plan verb is the one place a person can ask what a gate would do before it does it, and today it answers the same way regardless of root, scope, selected rules, suppressions, baseline or adoption. That makes it registry introspection wearing the name of a plan. Once selection is resolved once and a run plan exists, the gate plan should be that resolved plan rendered: which subjects, which rules, which capabilities, which providers, and what the result policy would do to what comes back.",
+      "done_when": "Two gate plan invocations differing only in scope, selected rules, or any result policy produce different plans; the plan is the same resolved object a run would execute rather than a separate description; and a test pins that correspondence.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-GATE-SELECTION-COLLAPSE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-PLATFORM-DIRECTORY-ENUMERATION",
+      "title": "The filesystem port cannot list a directory, which is why every host walks the tree itself",
+      "why": "The port offers Read_To_String, Replace_Atomically, Exists and Remove_File and nothing that enumerates a directory. Because of that omission every caller that needs to find files reaches past the port to std::fs directly, and check orchestration documents the walk staying outside for exactly this reason. That was defensible when one host walked; it is now the mechanical cause of duplicated walkers in nomos-cli and nomos-api and of the hardcoded extension lists in both. A port missing a capability that several real consumers need is a gap in the port, not a reason to keep bypassing it.",
+      "done_when": "The filesystem port enumerates a directory, the standard implementation and the test double both provide it, at least one existing caller that reached for std::fs directly now goes through the port, and the decision is recorded.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform/src/file_system.rs",
+          "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md",
+          "crates/spec/nomos-spec-store/records/OD-PLATFORM-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-platform-std"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-WORKSPACE-DISCOVERY-SERVICE",
+      "title": "Two hosts walk the tree themselves and each hardcodes the languages Nomos supports",
+      "why": "nomos-api sources.rs calls itself a deliberate twin of the CLI walker, and both hardcode the same rs and go extensions and the same target and git exclusions, both reaching std::fs directly. That is two copies of the answer to which files Nomos analyses, in the layer that is supposed to be a thin adapter, and a third and fourth appear the moment MCP or a daemon exists. The specification puts file and project recognition in LanguagePackage and says every user-visible action gets a canonical application service rather than client-specific logic; discovery is currently the clearest violation of both. Recognition should come from registered packages and providers so that adding a language does not require editing every host.",
+      "done_when": "One canonical discovery service resolves the source set, both hosts call it and neither names a file extension or an excluded directory, recognition comes from package and provider registration, and adding a language changes no host.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workspace-discovery/src/lib.rs",
+          "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-008.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-PLATFORM-DIRECTORY-ENUMERATION"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-SOURCE-ARTIFACT-OWNERSHIP",
+      "title": "A discovered file is a nomos-rules type, so discovery is owned by the layer that judges",
+      "why": "SourceFile is declared in nomos-rules, and it is what the API and CLI walkers return and what the whole orchestration passes around. That inverts ownership: a discovered artifact exists before any rule does, and making the rules package its owner means the workspace, analysis and discovery layers all depend on the judging layer to describe their own input. It also means a future consumer that never judges anything still links the rules package to name a file. A canonical source or artifact representation belongs to workspace, model or analysis, with rules consuming it.",
+      "done_when": "The canonical discovered-source type is owned by workspace, model or analysis rather than by the rules package, rules consume it rather than declaring it, and no crate depends on nomos-rules solely to name its input.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-WORKSPACE-DISCOVERY-SERVICE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-ZONES-REPLACE-NUMERIC-BANDS",
+      "title": "A total order over 21 band numbers is stricter than the architecture it describes",
+      "why": "Bands mechanically prevent upward dependencies, which is worth keeping. What is not worth keeping is that the answer to whether the gate may call check orchestration is derived from 40 being less than 41, and that the gate had to be renumbered to make a legitimate dependency legal. The system is a directed acyclic graph of semantic layers, not a ladder, and a total order forces an arbitrary claim of precedence between peers that have none. Named zones with explicitly allowed edges express the same constraint without inventing an ordering: host may depend on application service, application service on provider, provider on capability contract, and the reverse edges are forbidden by name rather than by arithmetic.",
+      "done_when": "A record decides whether numeric bands are replaced by named zones with declared allowed edges, and if so names the zones, the permitted edges, and how two peers in one zone are treated. No code moves under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-020.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-ZONES-MIGRATION",
+      "title": "The band table is maintained by hand in three places and a fourth checks it",
+      "why": "Whatever the zone decision concludes, the mechanism that enforces it is currently a numeric table copied into the contract-test boundaries suite, into the dependency rule inside nomos-rules, and into the README, with a real gate run checking the third copy against the first two. Three hand-maintained copies of the architecture is the same unchecked-copy defect this repository has paid for elsewhere, and it is why a band change is remembered as touching three files rather than one. The migration should land the decided model once and derive the rest.",
+      "done_when": "The dependency model is declared in one place, the enforcement rule and the contract-test boundary suite both read that one declaration rather than their own copies, the README table is derived or checked rather than maintained by hand, and a real gate run still refuses a forbidden edge.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-ZONES-REPLACE-NUMERIC-BANDS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-CRATE-BOUNDARY-REVIEW",
+      "title": "One semantic capability became one crate, which is not what a crate should buy",
+      "why": "There are ten capability-contract crates and five repository-policy provider crates that between them read different portions of one standards.json, with a sixth crate existing only as the shared read boundary for those five. A Rust module already gives namespace and responsibility separation; a crate should buy independent versioning, an enforced isolation boundary, or independent installation. Where none of those three is true the crate is paying compilation and dependency-graph cost for a name a module would have given free. The judgement should be made explicitly and per crate rather than by continuing the current default.",
+      "done_when": "A record states the admission test for a crate, applies it to the capability-contract and repository-policy families by name, and records which stay crates and which become modules. No crate moves under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md",
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-015.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-CAPABILITY-CRATE-CONSOLIDATION",
+      "title": "Collapse the capability-contract crates the boundary review does not justify",
+      "why": "The migration the review decides. Kept separate from the decision so that consolidating compilation units is a mechanical change reviewed on its own, and so that the decision can land and be cited even if the merge is sequenced later. Any crate the review keeps stays a crate; the rest become modules behind the same strongly separated types, so no consumer loses a name it currently uses.",
+      "done_when": "Every crate the review marked for consolidation is a module of its consolidated crate, no public type is renamed or removed by the move alone, the band or zone declaration and the README topology are updated to match, and the contract-test harness entries for the removed crates are gone rather than stale.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-CRATE-BOUNDARY-REVIEW"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-REPO-TOOLING-SEPARATION",
+      "title": "The tools that govern this repository sit in the same hierarchy as the product they govern",
+      "why": "The README already names nomos-ledger, nomos-work-orchestration, nomos-spec-orchestration and nomos-surface-provenance as repository tooling rather than product, and draws the same line through the specification family. Naming the distinction is not the same as enforcing it. The risk is not that a tool ships by accident; it is architectural attention, and the evidence is visible: the specification database and the work ledger have absorbed a great deal of refinement while the central analysis planner is still a hand-written mapping. A physical boundary is what makes the distinction cost something to cross.",
+      "done_when": "A record decides whether repository tooling moves out of the product crate hierarchy, and if so where it goes, whether it becomes a separate workspace, and how a product crate is prevented from depending on a tool. No crate moves under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md",
+          "crates/spec/nomos-spec-store/records/OD-PROJECT-004.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-CONTRACTS-ADMISSION-RULE",
+      "title": "nomos-contracts started as a thin protocol kernel and is accumulating domain models",
+      "why": "It now carries authority classes, semantic change classes, knowledge-source roles, workflow step contracts, finding and reporting structures, package kinds, peer synchronisation, determinism and enforcement, with individual files running to hundreds of lines. The specification distinguishes a protocol and identity kernel from canonical models, the provider and package layer, and the analysis engines; it does not say every stable domain model belongs in the kernel. Without an admission rule the lowest crate becomes the default home for anything shared, and that matters most exactly when the peer systems implement these contracts independently.",
+      "done_when": "A record states the admission test, proposed as a type belonging here only when an independently implemented peer must understand its serialized semantics without linking Nomos domain code, applies it by name to the workflow step contract, the knowledge-context types, package kinds and the finding and reporting structures, and names the owner each type moves to if it moves. No type moves under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md",
+          "crates/spec/nomos-spec-store/records/OD-CONTRACTS-005.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-CONTRACTS-REPATRIATION",
+      "title": "Move the types the admission rule does not admit back to their domain owners",
+      "why": "The migration the admission rule decides, kept separate so the rule can be cited before the moves happen and so each move is reviewed as a mechanical change. Every type the rule declines stays real and keeps its name; what changes is which crate declares it, and therefore what a consumer must link to read it.",
+      "done_when": "Every type the admission rule declined is declared by its named owner rather than by the protocol kernel, the kernel dependency list has not grown, no serialized shape changed, and the public surface snapshots are re-blessed to match.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-CONTRACTS-ADMISSION-RULE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-COLLAPSE-TRANSITIONAL-LAYERS",
+      "title": "Superseded mechanisms are kept beside their replacements and narrated as increments",
+      "why": "Several of the most mature modules describe themselves as a sequence of increments, and the gate crate is the clearest case: an old mechanism, a transitional one, and a current one all still present and all still reachable. That narration is valuable history and it belongs in the decision records, which already exist for these choices. What should not persist is the code: a compatibility layer nobody needs is a second way to get an answer, and a reader cannot tell which path is authoritative. A consolidation pass after a concept has survived several increments is what stops the architecture becoming a museum of its own stages.",
+      "done_when": "In the gate crate, every mechanism a later increment superseded is deleted rather than left reachable, module documentation describes the current design rather than its history, the history it removes is present in the governing records, and no test still exercises a path no caller can reach.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-GATE-SELECTION-COLLAPSE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-SEAM-FIRST-SEQUENCING",
+      "title": "Build-everything and finish-the-seam-first now disagree, and nothing says which wins",
+      "why": "OD-ROADMAP-001 retired the population-of-zero caution and licensed building ahead of consumers, and that licence has been reaffirmed repeatedly. The architectural review now asks for the opposite in three named places: no new model-routing vocabulary, no new gate policy increments, and no further one-off capability orchestration until the planner seam exists. These are not the same question and both can be right, which is exactly why the board should not be left to resolve them by whichever item somebody claims next. The distinction worth recording is that OD-ROADMAP-001 answers whether a thing may be built before it has consumers, while this answers whether it may be built before the mechanism it will have to be rewritten onto exists.",
+      "done_when": "A record decides how the build-ahead licence and the finish-the-seam-first constraint compose, names which of the two governs each of model routing, gate policy and capability orchestration, states what unblocks the paused work, and amends OD-ROADMAP-001 so the two records do not have to be read against each other.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md",
+          "crates/spec/nomos-spec-store/records/OD-ROADMAP-002.record",
+          "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-GATE-POLICY-AUTHORING-2",
+      "title": "Nothing constructs a non-empty suppression, baseline, adoption or coverage policy",
+      "why": "The internal semantics of suppressions, baselines, adoption and calibration, and coverage are real and tested, but GateCommand documents repeatedly that nothing builds a non-empty one. A policy that only ever arrives empty is a policy nobody can use, and the tests that exercise it are exercising a shape no caller can reach. What is missing is the authoring and configuration surface: a declared, readable source a real run resolves these four policies from, so that suppressing a finding, adopting a baseline, or demanding a coverage floor is something a person can express rather than something only a unit test constructs. Sequenced after the gate selection collapse so that policy authoring is written against one resolved run plan rather than against the transitional two-selection design.",
+      "done_when": "A real gate run resolves all four policies from a declared configuration source rather than from defaults, a non-default coverage floor and at least one suppression and one baseline entry are exercised end to end, and GateCommand no longer documents that nothing constructs a non-empty policy.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_command.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-GATE-SELECTION-COLLAPSE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-GATE-PHASES-APPROVALS-2",
+      "title": "Declared phases, thresholds and approvals are named as unbuilt WF-001 gate semantics",
+      "why": "The gate module names declared phases, thresholds and approvals among the parts of WF-001 it does not implement. A gate today is one undifferentiated pass over every selected rule: there is no way to say that one group of checks must pass before another is even attempted, no numeric threshold a run is judged against, and no approval that a human or an agent supplies to let a run proceed despite a finding. These are what turn a gate from a single verdict into a policy a team can adopt incrementally. Sequenced after the gate selection collapse, since a phase is a partition of the selected rule set and partitioning a set that is resolved in two places would inherit that ambiguity.",
+      "done_when": "A gate run can declare ordered phases whose later phases do not run when an earlier one fails, judge a numeric threshold, and record an approval that changes a disposition, each covered by a test and each reachable from the gate orchestration seam.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_phase.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-GATE-SELECTION-COLLAPSE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
