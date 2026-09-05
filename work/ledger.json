@@ -51185,7 +51185,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P40-API-TRANSPORT-2, which is this item with the territory a new workspace member actually needs. The defect is unchanged and still open; what could not be executed was this item. Its territory reserved crates/host/nomos-api-transport/src/lib.rs alone, and a crate reachable from that file only does not compile, is not a workspace member, declares no band, and appears in neither of the two hand-maintained band tables a real gate run reads. OD-HOST-007 additionally requires the transport registry exclusion be structural rather than advisory, which is an assertion under tests/contract this territory could not reach either. Same subject, never published by either version."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -51199,9 +51203,18 @@
         "timeout_seconds": 2700
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-opus5-session-transport",
+          "reason": "Territory reserves only the new crate lib.rs, and a new workspace member cannot be built from that file alone. Re-authored as P40-API-TRANSPORT-2 with the eight further paths a new crate really costs, measured rather than guessed: the root Cargo.toml members list and workspace dependency table, Cargo.lock, the README band table, standards.json tier list, the two hand-maintained band copies in nomos-rules and tests/contract, the boundaries test directory that must gain OD-HOST-007 registry exclusion assertion, and the crate surface snapshot.",
+          "abandoned_at": 1788594740
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-opus5-session-transport",
+        "declined_at": 1788594748
+      }
     },
     {
       "id": "P40-MCP-SURFACE",
@@ -51217,7 +51230,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Stranded by P40-API-TRANSPORT going declined, and stale on its own terms besides. Its done_when asks an MCP server to expose the canonical gate, work and spec operations as tools; OD-HOST-007, accepted after this item was written, decides the opposite for the first such surface: it projects the three Gate verbs and does not project the twenty-one repo-tooling verbs, because a transport that projected nomos-api wholesale would publish seven repo-tooling verbs for every product verb, two of which carry authority rather than information. Re-authored as P40-MCP-SURFACE-2 against that boundary and against the transport item that now precedes it."
+        }
+      },
       "depends_on": [
         "P40-API-TRANSPORT"
       ],
@@ -51235,7 +51252,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-opus5-session-transport",
+        "declined_at": 1788594790
+      }
     },
     {
       "id": "P40-AGENT-TASK-ENVELOPE",
@@ -53339,6 +53359,326 @@
         },
         "revision": "a82159108114667d77d5145013dbf3120d913adf"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-API-TRANSPORT-2",
+      "title": "nomos-api is a serializable seam that listens on nothing",
+      "why": "The application-service boundary is proven: typed serializable projections over gate, work and spec that both hosts share. What does not exist is anything that carries them off the machine. nomos-api documents that it does not listen on a socket and implements no transport, so the headless surface the design promises is today reachable only by a Rust caller linking the crate. Every remote consumer, and the editor surface OD-HOST-003 describes as a client of the canonical services, needs a transport before it can exist at all. This is P40-API-TRANSPORT with the territory a new workspace member actually costs, and with OD-HOST-007 now governing what the transport may project: the three Gate verbs and none of the twenty-one repo-tooling verbs, structurally rather than advisorily.",
+      "done_when": "A transport serves nomos-api Gate handlers over a real protocol on a real socket, the seam crate itself gains no socket and no protocol dependency so the boundary stays where it is, a test drives a real request over the transport rather than through a direct call, the crate declares a band above 91 and below 100 in every table that carries one, and a tests/contract assertion refuses a registry naming any handler belonging to a repo-tooling crate rather than leaving the exclusion to a list that is merely short today.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api-transport",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "standards.json",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries",
+          "tests/contract/surface/nomos-api-transport.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-opus5-session-transport",
+        "acquired_at": 1788594881,
+        "lease_expires_at": 1788605681
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api-transport",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-MCP-SURFACE-2",
+      "title": "There is no MCP surface, which is now a clearer gap than the API itself",
+      "why": "The intended headless projection is canonical application services beneath a CLI, an API transport and MCP. The first is proven and the API seam is substantially built, which leaves MCP as the sharpest remaining hole in that row: nomos-api states plainly that it does not speak the JSON-RPC framing MCP requires, and AGT-006 assessment calls MCP tools a clean, total gap. An MCP surface is what lets an agent consume Nomos as a tool rather than by shelling out to a CLI and parsing rendered text, which is precisely the coupling OD-HOST-003 rejects for the editor surface. Sequenced after the transport so that framing and serving are not designed twice. This is P40-MCP-SURFACE with its scope corrected to OD-HOST-007, which was accepted after that item was written.",
+      "done_when": "An MCP server exposes the three Gate operations as tools over MCP JSON-RPC framing and exposes no handler belonging to a repo-tooling crate, an MCP client can run a gate and read typed findings without parsing rendered output, no product semantics live in the MCP crate, and the AGT-006 assessment is re-measured against what actually shipped rather than left saying MCP tools is a total gap.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-mcp",
+          "tests/contract/requirements/AGT-006.assessment"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Authored minutes earlier in this session with the same defect its own predecessor was declined for: a new workspace member reserved by its source directory alone, which does not compile, is not a member, declares no band, and appears in neither hand-maintained band table. Re-authored immediately as P40-MCP-SURFACE-3 with those paths named. Never claimed and never published."
+        }
+      },
+      "depends_on": [
+        "P40-API-TRANSPORT-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-mcp"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-opus5-session-transport",
+        "declined_at": 1788594826
+      }
+    },
+    {
+      "id": "P40-MCP-SURFACE-3",
+      "title": "There is no MCP surface, which is now a clearer gap than the API itself",
+      "why": "The intended headless projection is canonical application services beneath a CLI, an API transport and MCP. The first is proven and the API seam is substantially built, which leaves MCP as the sharpest remaining hole in that row: nomos-api states plainly that it does not speak the JSON-RPC framing MCP requires, and the AGT-006 assessment calls MCP tools a clean, total gap. An MCP surface is what lets an agent consume Nomos as a tool rather than by shelling out to a CLI and parsing rendered text, which is precisely the coupling OD-HOST-003 rejects for the editor surface. Sequenced after the transport so that framing and serving are not designed twice. This is P40-MCP-SURFACE with its scope corrected to OD-HOST-007, accepted after that item was written, and with the territory a new workspace member actually costs.",
+      "done_when": "An MCP server exposes the three Gate operations as tools over MCP JSON-RPC framing and exposes no handler belonging to a repo-tooling crate, an MCP client can run a gate and read typed findings without parsing rendered output, no product semantics live in the MCP crate, the crate declares a band in every table that carries one, and the AGT-006 assessment is re-measured against what actually shipped rather than left saying MCP tools is a total gap.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-mcp",
+          "tests/contract/requirements/AGT-006.assessment",
+          "tests/contract/surface/nomos-mcp.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Authored minutes earlier in this session to fix its predecessor missing workspace-registration territory, and it named only the surface snapshot of the six paths that fix required. Re-authored immediately as P40-MCP-SURFACE-4 with the whole set: the root manifest members list and workspace dependency table, Cargo.lock, the README band table, standards.json tier list, and the two hand-maintained band copies in nomos-rules and tests/contract. Never claimed and never published."
+        }
+      },
+      "depends_on": [
+        "P40-API-TRANSPORT-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-mcp"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-opus5-session-transport",
+        "declined_at": 1788594851
+      }
+    },
+    {
+      "id": "P40-MCP-SURFACE-4",
+      "title": "There is no MCP surface, which is now a clearer gap than the API itself",
+      "why": "The intended headless projection is canonical application services beneath a CLI, an API transport and MCP. The first is proven and the API seam is substantially built, which leaves MCP as the sharpest remaining hole in that row: nomos-api states plainly that it does not speak the JSON-RPC framing MCP requires, and the AGT-006 assessment calls MCP tools a clean, total gap. An MCP surface is what lets an agent consume Nomos as a tool rather than by shelling out to a CLI and parsing rendered text, which is precisely the coupling OD-HOST-003 rejects for the editor surface. Sequenced after the transport so that framing and serving are not designed twice. This is P40-MCP-SURFACE with its scope corrected to OD-HOST-007, accepted after that item was written, and with the territory a new workspace member actually costs.",
+      "done_when": "An MCP server exposes the three Gate operations as tools over MCP JSON-RPC framing and exposes no handler belonging to a repo-tooling crate, an MCP client can run a gate and read typed findings without parsing rendered output, no product semantics live in the MCP crate, the crate declares a band in every table that carries one, and the AGT-006 assessment is re-measured against what actually shipped rather than left saying MCP tools is a total gap.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-mcp",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "standards.json",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries",
+          "tests/contract/surface/nomos-mcp.txt",
+          "tests/contract/requirements/AGT-006.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-API-TRANSPORT-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-mcp"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P44-HOST-007-TRANSPORT-NOW-EXISTS",
+      "title": "OD-HOST-007 says it stays open until a transport exists, and one will",
+      "why": "OD-HOST-007 closes with: Open until the first transport exists. This record exclusion is a rule with no artifact enforcing it yet, and a contract test asserting a registry that does not exist would be the vacuous-truth trap OD-CONTRACTS-001 honesty vocabularies refuse. P40-API-TRANSPORT-2 builds that transport and the assertion the record was waiting for, at which point the sentence describes a state that has passed. This repository has already paid for the class twice this month: P43-CAPABILITY-008-TRIGGERS-FIRED found a record still saying neither of its revisit triggers had fired when both had, and four P42 assessment corrections were one stale citation each. A record whose own status is behind the tree is the same defect at the authority layer rather than the assessment layer.",
+      "done_when": "OD-HOST-007 status names the transport that discharged it and the assertion that now enforces its exclusion, rather than describing the exclusion as unenforced; the revisit condition it states is re-measured against what the transport increment actually found rather than restated; and both required projections are re-rendered from the record set this commit publishes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-API-TRANSPORT-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P45-CODE-PREFIX-KNOWS-STRINGS",
+      "title": "The shared text substrate under the rules does not know what a string literal is",
+      "why": "Measured 2026-09-05 against the built binary. Three defects, one layer, all reproduced against real fixtures rather than read. First, the comment stripper every text rule copies is a split on the two-slash sequence taking the first part, so a line whose string literal holds a URL is truncated at that URL and everything after it becomes invisible: two identical unsafe blocks were judged, and the one preceded on the same line by a string containing a scheme-and-double-slash was not reported while the other was. Second, there is no string-literal awareness at all, so violation-shaped text inside a string is judged as code: a string holding the text of an unsafe block, a string holding an atomic ordering, and a raw string holding both an unsafe block and an unbalanced quote were all reported as violations. Third, the self-exemption nine modules carry is keyed on a path suffix, so it exempts any file in any repository whose path ends the same way: two byte-identical files carrying the same live-looking token were judged, and the one at checks slash security_text.rs was silently skipped while the one at ordinary.rs was reported. The third is the urgent one and is separable from the other two. It is worth saying that security_text.rs is right about itself: its own doc comment argues that a general string-stripping fix would defeat a content-shaped rule whose violation is the text of a string, and that reasoning holds and must survive this change. What is wrong there is the mechanism, not the policy. A syntax-shaped rule wants the string blinded; a content-shaped rule does not; neither wants a path suffix a stranger can match.",
+      "done_when": "One shared code-prefix helper exists, aware of line comments, string literals, raw strings and char literals holding a quote, and every syntax-shaped rule that keeps its own copy today uses it instead. A content-shaped rule still judges the text of a string, so the credential, sensitive-URL and disabled-verification rules keep reporting what they report now. No rule decides whether to judge a file from a path suffix a user repository can match: two files with identical content get identical verdicts unless the tree really is this one. The three fixtures above reproduce as tests, including a URL inside a string followed by real code, a char literal holding a double quote, and identical content at two paths.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/code_prefix.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+          "crates/rules/nomos-rules/src/checks/constant_scope.rs",
+          "crates/rules/nomos-rules/src/checks/domain_type_alias.rs",
+          "crates/rules/nomos-rules/src/checks/enum_shape.rs",
+          "crates/rules/nomos-rules/src/checks/error_text.rs",
+          "crates/rules/nomos-rules/src/checks/facade.rs",
+          "crates/rules/nomos-rules/src/checks/flakiness_text.rs",
+          "crates/rules/nomos-rules/src/checks/go_text.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks/scalar_range.rs",
+          "crates/rules/nomos-rules/src/checks/security_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P45-SAFETY-JUSTIFICATION-ARTIFACT",
+      "title": "The unsafe rule demands one comment spelling and rejects the one Rust actually uses",
+      "why": "Measured 2026-09-05 against aho-corasick, 32 files and 20937 lines, a crate that documents its safety contracts carefully. The rule produced 219 blocking findings there. Checked against the source rather than counted: packed/ext.rs line 8 declares an unsafe fn with a rustdoc Safety section on the three lines directly above it and was reported as using unsafe without an adjacent justification; automaton.rs line 198 declares an unsafe trait whose own doc block carries the same section. The rule looks for one spelling, the two-slash SAFETY comment, which is the right artifact at an unsafe block and the wrong one at an unsafe fn, trait or impl declaration, where a rustdoc Safety section is the convention and is what rustc and clippy missing-safety-doc already ask for. Separately, a marker with nothing after it satisfies the rule, and so does one whose text is a placeholder, which is inconsistent with the sibling rules in this workspace that require a suppression or an exclusion to carry an actual reason. Both halves are one question and neither is answerable by editing the matcher alone: what artifact discharges a justification requirement, and does it have to say anything. A decision first, because the answer sets the shape of at least four rules that each ask for a justification today.",
+      "done_when": "A record states which artifacts discharge a justification requirement, distinguishing the construct that takes an adjacent comment from the declaration that takes a documentation section, and states whether a justification must carry text beyond its marker and what the rule does when it does not. It applies the answer by name to the unsafe, inline-always, allow and suppression rules that each ask for one today, and says what changes for each. No rule code moves under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-021.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON",
+      "title": "Nothing measures the rule set against code this repository did not write",
+      "why": "The eight gate phases were driven to zero findings against this workspace, and that is the only corpus the rule set has ever been measured on. Tuning a rule until its author's own tree is clean proves the tree is clean, not that the rule is right. Measured 2026-09-05 against aho-corasick, 32 files and 20937 lines: 483 blocking findings, of which 219 came from one rule and were checked individually against the source and found false. A further 612 advisories cited README.md's Conventions section, which is this repository's README and says nothing in the repository being judged. None of that was visible from inside, because from inside the number is zero. The gap is not any single rule; it is that no test exercises a rule against source written by someone who had never heard of it, which is the only condition under which a rule tuned to its own corpus reveals what it actually matches. This repository already knows the shape of the hazard: a test that cannot find its corpus passes, and the three existing corpora live outside the tree where CI cannot see them, so the fixture this item builds has to be committed rather than referenced.",
+      "done_when": "A committed fixture of idiomatic third-party source, small enough to review and carrying its provenance and licence, is judged by the composed rule set in a test. The test asserts a stated expected verdict per rule rather than a total, so a rule that starts reporting on ordinary code fails it. Every finding the fixture does produce is either justified in the test as a true positive or is an open item naming the rule. A rule whose expected verdict cannot be stated honestly today is recorded as uncalibrated rather than given a number that matches whatever it currently does.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration/tests/calibration.rs",
+          "tests/integration/fixtures/third-party"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
