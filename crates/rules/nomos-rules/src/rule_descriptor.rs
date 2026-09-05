@@ -164,6 +164,7 @@ pub const DESCRIPTORS: &[RuleDescriptor] = &[
     Described(crate::INLINE_ALWAYS_JUSTIFICATION, SubjectKind::SourceText, &[]),
     Described(crate::NO_WILDCARD_IMPORTS, SubjectKind::SourceText, &[]),
     Described(crate::NO_SINGLE_LINE_FUNCTION_BODIES, SubjectKind::SourceText, &[]),
+    Described(crate::NO_ORPHAN_MODULES, SubjectKind::SourceText, &[]),
 ];
 
 #[cfg(test)]

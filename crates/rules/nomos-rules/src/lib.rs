@@ -462,6 +462,7 @@ pub use checks::{
     Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Secret_Does_Not_Travel_In_A_Url,
     Check_Certificate_Verification_Is_Not_Disabled, A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE,
     A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, CERTIFICATE_VERIFICATION_IS_NOT_DISABLED,
+    Check_No_Orphan_Modules, NO_ORPHAN_MODULES,
     Check_A_Package_Is_Named_After_Its_Directory, Check_No_Wildcard_Imports, A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
     NO_WILDCARD_IMPORTS,
     Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_Go_File_Size_Hard_Trigger,

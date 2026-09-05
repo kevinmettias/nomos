@@ -34,6 +34,7 @@ mod go_text;
 mod lint;
 mod mirror;
 mod naming;
+mod orphan_modules;
 mod placement;
 mod policy;
 mod reachability;
@@ -109,6 +110,7 @@ pub use naming::{
     TEST_NAME_DESCRIBES_BEHAVIOR, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
     UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,
 };
+pub use orphan_modules::{Check_No_Orphan_Modules, NO_ORPHAN_MODULES};
 pub use placement::{
     Check_A_Package_Is_Named_After_Its_Directory, Check_No_Wildcard_Imports, A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
     NO_WILDCARD_IMPORTS,

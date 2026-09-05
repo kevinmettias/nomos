@@ -53944,6 +53944,72 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P47-RULES-ORPHAN-MODULES",
+      "title": "An unreferenced Rust source file compiles into nothing and no rule notices",
+      "why": "code-standards' check-orphan-modules (rules/language-specific/rust/checks/check-orphan-modules, main.go plus module_reachability.go) reports a .rs file under a crate's src/ that no mod declaration reaches. Rust compiles only what the module tree names, so such a file is never parsed: it does not compile, its tests never run, its lints never fire, and nothing says so. It reads as finished work. Go compiles every file in a package directory and C# globs the project, so Rust is unusual in needing this at all, and nomos is a sixty-crate Rust workspace with no rule that asks the question. Verified against the real Go implementation rather than its prose: resolution tries the sibling file name.rs before the directory module name/mod.rs, an inline mod name { } is excluded by requiring the terminating semicolon, mod r#name is backed by name.rs with the raw-identifier prefix dropped, and a hash-bracket path attribute resolves against the directory the DECLARING FILE sits in while the file it names then owns the directory it lands in rather than a subdirectory named after it. Those last three are each recorded there as a false positive on real code, the third having reported all thirty-nine files of one live crate as orphans. Measured against this workspace before writing anything: sixty crates, zero orphans, so composing it costs the gate nothing today.",
+      "done_when": "nomos-rules exports a rule for no-orphan-modules that resolves mod declarations against the sources it was handed rather than the filesystem, honoring the sibling-file and mod.rs layouts, the raw-identifier prefix, the semicolon that excludes an inline module, and the path attribute's declaring-file-relative resolution. It is composed into nomos-check-orchestration's Run behind the same per-call selection every other rule sits behind, carries a descriptor saying it reads source text and needs no fact, and the crate's blessed public surface names it. cargo test -p nomos-rules -p nomos-check-orchestration -p nomos-contract-tests passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/orphan_modules.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "tered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-20afa862507daea8.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-5f003f2bf76a0745.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-84c9cd07ede5fffc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-4c1bf963398008d9.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2bbc7f37545f3961.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-1b64e3bfb5603fc9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-548f68c67f68b46e.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-71f222077937d837.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-de1361669e2f1c0c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-1c8a6666f259a153.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-390e53f243c52514.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-6fcde9ebde18f4a4.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-e84f1274a16d1745.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-fa1d9e2ab03f28fc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788599262,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "9810bf3f22c6d3b38e8db8eea13ab18e975154d2"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

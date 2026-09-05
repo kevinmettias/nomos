@@ -63,6 +63,7 @@ pub const nomos_rules::NAMING_CONVENTION: &str
 pub const nomos_rules::NONNEGATIVE_STORAGE_IS_UNSIGNED: &str
 pub const nomos_rules::NO_DECORATIVE_SECTION_DIVIDERS: &str
 pub const nomos_rules::NO_MOD_RS_FILES: &str
+pub const nomos_rules::NO_ORPHAN_MODULES: &str
 pub const nomos_rules::NO_SINGLE_LINE_FUNCTION_BODIES: &str
 pub const nomos_rules::NO_TRAILING_PUNCTUATION: &str
 pub const nomos_rules::NO_TRAILING_WHITESPACE: &str
@@ -173,6 +174,7 @@ pub fn nomos_rules::Check_Naming_Clarity(sources: &[SourceFile], facts: &mut dyn
 pub fn nomos_rules::Check_Naming_Convention( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Decorative_Section_Dividers(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Mod_Rs_Files(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_No_Orphan_Modules(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Single_Line_Function_Bodies(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Trailing_Whitespace(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Wildcard_Imports(sources: &[SourceFile]) -> Vec<Finding>

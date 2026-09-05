@@ -20,7 +20,8 @@ use nomos_rules::{
     Check_Go_File_Size_Review_Trigger, Check_Go_Helpers_Package_Five_Inputs, Check_Go_Type_Names_Use_Camel_Case,
     Check_Abbreviations, Check_Go_Variables_Use_Lower_Snake_Case, Check_Goals_And_Parts_Line_Up, Check_Lint_Diagnostics,
     Check_Single_Letter_Names,
-    Check_Naming_Convention, Check_No_Mod_Rs_Files, Check_No_Single_Line_Function_Bodies, Check_No_Wildcard_Imports,
+    Check_Naming_Convention, Check_No_Mod_Rs_Files, Check_No_Orphan_Modules, Check_No_Single_Line_Function_Bodies,
+    Check_No_Wildcard_Imports,
     Check_No_Trailing_Whitespace, Check_Parameter_Count, Check_Relaxed_Not_Used_When_Ordering_Matters,
     Check_Scripts_Use_A_Portable_Shebang, Check_Seqcst_Justified_Explicitly, Check_Shared_Interior_Mutability_Says_Why,
     Check_Sleep_Is_Not_Synchronization, Check_Suppression_Directives_Carry_A_Reason, Check_Todo_Format,
@@ -37,7 +38,7 @@ use nomos_rules::{
     FILE_SIZE_JUSTIFICATION_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
     GO_HELPERS_PACKAGE_FIVE_INPUTS, GO_VARIABLES_USE_LOWER_SNAKE_CASE, INLINE_ALWAYS_JUSTIFICATION, LINT_DIAGNOSTICS,
     LOWERCASE_FIRST_LETTER,
-    NAMING_CONVENTION, NO_MOD_RS_FILES, NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_PUNCTUATION, NO_TRAILING_WHITESPACE, NO_WILDCARD_IMPORTS,
+    NAMING_CONVENTION, NO_MOD_RS_FILES, NO_ORPHAN_MODULES, NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_PUNCTUATION, NO_TRAILING_WHITESPACE, NO_WILDCARD_IMPORTS,
     ONE_THOUSAND_LINE_HARD_TRIGGER, PARAMETER_COUNT,
     RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, SCRIPTS_USE_A_PORTABLE_SHEBANG, SEQCST_JUSTIFIED_EXPLICITLY,
     SHARED_INTERIOR_MUTABILITY_SAYS_WHY, SINGLE_LETTER_NAMES, SLEEP_BASED_SYNCHRONIZATION, SUPPRESSION_DIRECTIVES_CARRY_A_REASON,
@@ -58,7 +59,7 @@ use crate::CheckOutcome;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 56;
+const RULE_COUNT: usize = 57;
 
 /// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
 /// through, the filesystem a repository-declared policy capability (`nomos.cap.naming.
@@ -755,6 +756,7 @@ fn With_Composed_Rules<Answer>(
         ComposedRule { id: INLINE_ALWAYS_JUSTIFICATION, check: &|_reader: &mut Reader<'_, '_>| return Check_Inline_Always_Justification(sources) },
         ComposedRule { id: NO_WILDCARD_IMPORTS, check: &|_reader: &mut Reader<'_, '_>| return Check_No_Wildcard_Imports(sources) },
         ComposedRule { id: NO_SINGLE_LINE_FUNCTION_BODIES, check: &|_reader: &mut Reader<'_, '_>| return Check_No_Single_Line_Function_Bodies(sources) },
+        ComposedRule { id: NO_ORPHAN_MODULES, check: &|_reader: &mut Reader<'_, '_>| return Check_No_Orphan_Modules(sources) },
     ];
 
     return body(rules);
