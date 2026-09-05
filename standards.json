@@ -6,21 +6,11 @@
     "function": "upper-snake",
     "method": "upper-snake"
   },
-  "limits": {
-    "file-size-review-lines": 500,
-    "file-size-hard-lines": 1500,
-    "parameter-count-max": 4
-  },
   "languages": {
     "rust": {
       "naming": {
         "function": "upper-snake",
         "method": "upper-snake"
-      }
-    },
-    "go": {
-      "limits": {
-        "file-size-hard-lines": 1000
       }
     }
   },

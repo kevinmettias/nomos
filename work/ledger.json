@@ -50018,6 +50018,56 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P36-STANDARDS-JSON-SCHEMA-DRIFT",
+      "title": "standards.json: migrate off code-standards' retired limits block and nested per-language naming",
+      "why": "code-standards (kevinmettias/code-standards) restructured its standards.json schema: file-size/parameter-count thresholds are now hardcoded per-check constants (matching our prior 500/1500/4 values exactly) rather than a configurable top-level limits block, and per-language overrides (languages.<lang>) are now a flat kind-to-case naming map rather than a naming-wrapped one. check doctor . now reports standards.json BROKEN: unknown field limits, so every threshold silently falls back to built-in defaults. Fixing this is required before any of the eight rust gate phases can be measured against real, intended calibration.",
+      "done_when": "check doctor . (kevinmettias/code-standards check.exe) reports no BROKEN line for standards.json, and the file still declares suppression, naming, telemetry, scripting, words, json_key_naming, data_format_contracts, standard_flags, projects, dependency_budget, tiers and conformance_workers with the same effective values as before",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "standards.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "./nomos.exe",
+          "work",
+          "validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "./nomos.exe",
+          "work",
+          "validate"
+        ],
+        "exit_code": 0,
+        "output_tail": "ledger is valid (schema 5, and this build understands 5)\n",
+        "verified_at": 1788581872,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6b1a6bdde54572e3083d2c0f90f5704ea7d445ca"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
