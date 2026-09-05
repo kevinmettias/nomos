@@ -52676,10 +52676,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-agt-001-correction",
+        "acquired_at": 1788592707,
+        "lease_expires_at": 1788599907
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -52959,6 +52963,187 @@
         },
         "revision": "a474ba29c96e9556e6ecf1fde6b2bc3df0b0b774"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P43-SCRIPT-RULES-CANNOT-FIRE",
+      "title": "Four registered rules judge scripts the walker never collects, so the gate reports them clean",
+      "why": "Measured 2026-09-05 against the built binary at 21e77900. Every walker in both hosts admits only .rs and .go (check/sources.rs, gate/sources.rs, correct/sources.rs and nomos-api sources.rs each carry the same literal). Four composed rules judge files that are neither: scripts-use-a-portable-shebang, a-script-declares-its-purpose and executed-scripts-set-nounset judge any file whose first line is a shebang, and declared-tooling-language-for-scripts judges a path ending in an extension this repository declares forbidden, which its own standards.json lists as .ps1 .psm1 .bat .cmd and .sh. The intersection of what those rules judge and what the walk collects is empty, so all four are unable to report anything. Demonstrated directly: a directory holding deploy.sh with a hardcoded interpreter shebang, asked for exactly that rule, answers 0 findings and exit 0. All four are advertised by gate plan, counted in Composed_Rules and asserted by the plan-run parity test, none of which observes reachability. Their unit tests are green because every fixture names scripts/check.sh or tooling/deploy.ps1, paths the product cannot produce, which is this repository's own a-test-that-cannot-find-its-corpus-passes hazard recurring at the rule and walk boundary. P27-SELFCHECK-RULES-JUDGING-NON-SCRIPTS narrowed these rules off Rust lib.rs files and promised no file that really is a script stops reporting; that held at the rule and was never checked at the composition. P41-WORKSPACE-DISCOVERY-SERVICE names the hardcoded extension list as a design defect and is gated behind platform directory enumeration; this item is the live false pass underneath it and does not wait for that refactor.",
+      "done_when": "A shebang script with a hardcoded interpreter path and a file with a forbidden extension, both under a walked root, are reported by the rules that exist to catch them, proven by a test that runs a real walk and judgement over a fixture tree containing both rather than over a hand-built SourceFile. The self-check finding delta from widening the walk is measured and stated before the change lands, so newly reachable text rules reporting on newly walked files is a counted outcome and not a surprise. No rule that judges Rust or Go changes what it reports.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/check/sources.rs",
+          "crates/host/nomos-cli/src/gate/sources.rs",
+          "crates/host/nomos-cli/src/correct/sources.rs",
+          "crates/host/nomos-api/src/sources.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P43-EMPTY-POPULATION-IS-NOT-CLEAN",
+      "title": "A rule that judged nothing reports exactly as a rule that judged clean",
+      "why": "The system reports honestly one layer down and not at this one. When a capability cannot be materialized the run says so: claim incomplete, ProviderUnavailable, and an Advisory finding naming the capability that went unanswered. When a rule runs against a subject population the walk never collected, the run says nothing at all, and the output is indistinguishable from that rule having judged the tree and found it clean. CheckOutcome::NoFacts covers exactly one instance of this shape, zero syntax facts, and its message is the whole principle stated out loud: a clean result here would mean only that the walk found nothing. Nothing generalizes it. P43-SCRIPT-RULES-CANNOT-FIRE is the first measured consequence and is a correction to one walker; the reason it was silent rather than loud is this gap, and a second instance arrives with every language or artifact kind added ahead of its discovery. P41-APPLICABILITY-IN-THE-PLAN answers a different question, which subjects a rule declines once a plan exists, and is gated behind the planner; this asks what a run owes a reader about a rule whose population was empty, which holds with or without a plan and needs deciding before either is built on it.",
+      "done_when": "A record states how a run distinguishes a rule that judged an empty population from one that judged clean, names where that verdict is computed and which existing outcome vocabulary it extends or replaces, says whether an empty population is Advisory the way ProviderUnavailable already is or a stronger disposition, and applies the test to the four rules P43-SCRIPT-RULES-CANNOT-FIRE names. No code moves under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md",
+          "crates/spec/nomos-spec-store/records/OD-ANALYSIS-012.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P43-CAPABILITY-008-TRIGGERS-FIRED",
+      "title": "Both of OD-CAPABILITY-008 revisit triggers have fired and the record still says neither has",
+      "why": "The record is at version 2, status open, and its Status section names two independent conditions for revisiting. Both are now met and the record says otherwise, so an agent consulting it is told to wait for circumstances that already exist. First, it asked to reopen the shape of Materialize when a fourth provider arrives with a third genuinely distinct capability granularity, and it guessed that granularity would be whole-repository rather than whole-workspace or per-file. That class now has six real members: the five repository policy providers plus nomos-lang-rust-deny. Within it the signature is identical rather than merely similar, Materialize_Workspace taking a root, a FactContext and one injected port and returning a Result of one PolicyFact, differing only in the error type, which is the real and checked agreement rather than an assumption bar the record itself set for building a trait. Second, it said a consumer holding providers polymorphically does not exist yet. That consumer is P41-RUN-PLANNER, which is Ready and whose own why calls the hand-written mapping the single change the rest of this critique depends on. The six items that already amend this record are all P13 and Done, so nothing on the board carries the update.",
+      "done_when": "The record records that both named triggers have fired, states what the whole-repository granularity class of six shows about the per-file and whole-workspace split it was written against, and either decides the trait question or names what still blocks it in terms a claimant of P41-RUN-PLANNER can act on rather than re-derive. Nothing is claimed about agreement that was not checked against the real signatures.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-008.record",
+          "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P43-AGENT-CANONICAL-SEAM",
+      "title": "Agent is the one verb family with no orchestration seam, so only the binary can reach it",
+      "why": "Work, spec, check, gate and workflow each have an orchestration crate that both hosts call, which is what makes the claim that a host owns no product semantics true for those five. Agent is the exception and nothing marks it as one. The whole family lives in nomos-cli agent.rs and its agent directory, 1135 lines that reach nomos-agent-executor-claude-code and nomos-model-package EffortLevel directly with no crate between, and nomos-api names neither dependency, so the second host cannot dispatch a task envelope, choose a backend or read a result at all. P40-CORRECTIONS-CANONICAL-SEAM records the identical hole for correction and was authored without noticing agent has it too; the two are the complete set of unseamed families, checked against the crate list and against nomos-api Cargo.toml rather than assumed. Every later consumer inherits it: P40-MCP-SURFACE, P40-API-TRANSPORT and P42-SECOND-HARNESS-EXECUTOR each need an agent seam that is not a CLI module, and P42-AGENT-STRUCTURED-WORKRESULT would otherwise land its canonical WorkResult inside the one host that cannot share it.",
+      "done_when": "Agent dispatch and result handling are reachable through an orchestration seam both hosts call, nomos-cli agent is a thin renderer over it the way the gate verbs already are, nomos-api exposes the same verbs, and the new crate carries its band declaration, README row and contract-test harness entries rather than leaving them stale.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-agent-orchestration/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P43-POLICY-PROVIDER-SCAFFOLDING-DUPLICATION",
+      "title": "Consolidating the policy crates relocates five copies of the same scaffolding rather than removing them",
+      "why": "Measured 2026-09-05 by diffing the five repository policy providers against each other. Across nomos-repo-standards, nomos-repo-limits, nomos-repo-scripting, nomos-repo-words and nomos-repo-goals, four of the six files are token-identical apart from the capability name and the error type: lib.rs, guarantee.rs, fact_context.rs and the XPolicyFactProduction strategy, roughly 330 lines each and about 1350 lines of five-way copy. Only reading.rs carries content that differs, and the one part already factored out, the standards.json read itself, is the smallest of them, sitting in nomos-repo-standards-document. P41-CRATE-BOUNDARY-REVIEW asks the right question about these crates but a different one, whether a crate buys independent versioning, isolation or installation, and P41-CAPABILITY-CRATE-CONSOLIDATION carries out its answer under a done_when that says no public type is renamed or removed by the move alone, which preserves every copy. Crate to module changes where the duplication lives and not that there is any, so the item that looks like it addresses this would close with all five copies intact. Kept separate because the two axes are independent: the duplication is worth removing whether or not any of these stays a crate, and removing it is a behaviour-preserving change reviewed on its own.",
+      "done_when": "The scaffolding the five providers share is written once and each provider supplies only what genuinely differs, its own reading and its own error type. What each capability declares stays independently stated rather than derived, so a provider that should declare a different guarantee or granularity still can, and the deliberate duplication OD-CAPABILITY-008 defends for Encode_Payload is not folded in by the same move. No provider changes the fact it materializes, proven by the existing per-provider tests passing unchanged.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-CRATE-BOUNDARY-REVIEW"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-standards",
+          "-p",
+          "nomos-repo-limits",
+          "-p",
+          "nomos-repo-scripting",
+          "-p",
+          "nomos-repo-words",
+          "-p",
+          "nomos-repo-goals"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
