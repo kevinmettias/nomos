@@ -50951,7 +50951,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory named crates/host/nomos-cli/src/correct/second_family.rs, a location P40-CORRECTIONS-CANONICAL-SEAM (08949b65) has since emptied of composition logic: nomos-cli/src/correct.rs is now a thin renderer, and the phantom-mirror family's own fix-producer (phantom_mirror.rs) moved to crates/orchestration/nomos-correction-orchestration. Building a second family under nomos-cli's correct/ would either duplicate that seam or bypass it, directly contradicting this item's own done_when: 'the two families are produced through one shared entry point rather than two bespoke ones'. Re-authoring as P40-CORRECTIONS-SECOND-FAMILY-2 with territory in nomos-correction-orchestration, where the shared entry point (Run_Correction) now actually lives."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -50967,9 +50971,18 @@
         "timeout_seconds": 2700
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "Releasing before decline: territory is stale post-P40-CORRECTIONS-CANONICAL-SEAM.",
+          "abandoned_at": 1788635241
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788635248
+      }
     },
     {
       "id": "P40-CORRECTIONS-CANONICAL-SEAM",
@@ -55181,6 +55194,124 @@
           "exit_code": 0
         },
         "revision": "7752ed5daefe75595cde439cc4283af275541c0e"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-CORRECTIONS-SECOND-FAMILY-2",
+      "title": "One correction family exists, so nothing has yet shown what generalizes",
+      "why": "The phantom-mirror vertical is a real end-to-end proof that a finding can reach a deterministic type-state lifecycle and a filesystem commit, and it deliberately handles only the first recognized finding and only one candidate per run. That narrowness means every generalization question is still unanswered by evidence: batching, ranking between competing candidates, and whether two families share a producer seam cannot be decided from a population of one. P40-CORRECTIONS-SECOND-FAMILY named this gap with territory under nomos-cli's own correct/ directory, written before P40-CORRECTIONS-CANONICAL-SEAM (08949b65) moved every real correction composition out of nomos-cli and into nomos-correction-orchestration, emptying that directory of the very logic a second family would extend -- declined and re-authored here with territory where the shared entry point (Run_Correction) now actually lives.",
+      "done_when": "A second correction family over a different rule (no-trailing-whitespace) reaches Preview, Stage, Validate and Commit through the same nomos-corrections lifecycle, both families are produced by trying each family's own claim-recognizer against one shared Judged() result and then running one shared seed/stage/validate/commit pipeline over whichever matched -- not two bespoke pipelines -- and what the pair demonstrates about batching (multiple lines in one file as one candidate) versus what it leaves undecided about ranking between competing families is recorded in the orchestration crate's own module doc rather than assumed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-correction-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/run.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/trailing_whitespace.rs",
+          "crates/host/nomos-cli/src/correct.rs",
+          "crates/host/nomos-api/src/correction.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Authored with an incomplete territory list (missing crates/orchestration/nomos-correction-orchestration/src/correction_outcome.rs); re-authoring as P40-CORRECTIONS-SECOND-FAMILY-3 with the complete list before any implementation began."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-correction-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "Territory list omitted correction_outcome.rs, which the shared-pipeline generalization also needs to touch (renaming the claimed field for family-neutral wording); re-adding with the complete list before implementing.",
+          "abandoned_at": 1788635404
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788635404
+      }
+    },
+    {
+      "id": "P40-CORRECTIONS-SECOND-FAMILY-3",
+      "title": "One correction family exists, so nothing has yet shown what generalizes",
+      "why": "The phantom-mirror vertical is a real end-to-end proof that a finding can reach a deterministic type-state lifecycle and a filesystem commit, and it deliberately handles only the first recognized finding and only one candidate per run. That narrowness means every generalization question is still unanswered by evidence: batching, ranking between competing candidates, and whether two families share a producer seam cannot be decided from a population of one. P40-CORRECTIONS-SECOND-FAMILY named this gap with territory under nomos-cli's own correct/ directory, written before P40-CORRECTIONS-CANONICAL-SEAM (08949b65) moved every real correction composition out of nomos-cli and into nomos-correction-orchestration, emptying that directory of the very logic a second family would extend. Re-authored once more as -3 after -2's own territory list omitted correction_outcome.rs, caught before any implementation began.",
+      "done_when": "A second correction family over a different rule (no-trailing-whitespace) reaches Preview, Stage, Validate and Commit through the same nomos-corrections lifecycle, both families are produced by trying each family's own claim-recognizer against one shared Judged() result and then running one shared seed/stage/validate/commit pipeline over whichever matched -- not two bespoke pipelines -- and what the pair demonstrates about batching (multiple lines in one file as one candidate) versus what it leaves undecided about ranking between competing families is recorded in the orchestration crate's own module doc rather than assumed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-correction-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/run.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/correction_outcome.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/trailing_whitespace.rs",
+          "crates/host/nomos-cli/src/correct.rs",
+          "crates/host/nomos-api/src/correction.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-correction-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-correction-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api"
+        ],
+        "exit_code": 0,
+        "output_tail": "rget\\debug\\deps\\freshness-e4557c0606e4abf1.exe)\n     Running tests\\gate_orchestration_seam.rs (target\\debug\\deps\\gate_orchestration_seam-328bb0598c1c7b6c.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-bfd0c2b1fa5df1ab.exe)\n     Running tests\\lang_go_seam.rs (target\\debug\\deps\\lang_go_seam-bf53941864ddfa10.exe)\n     Running tests\\lang_rust_seam.rs (target\\debug\\deps\\lang_rust_seam-e0cbecce4fe61a12.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-20222a499ae4b8c3.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-5a31cb7522a4b36b.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-9337851d1bbed496.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-295223eef8bed874.exe)\n     Running tests\\platform_std_seam.rs (target\\debug\\deps\\platform_std_seam-3467039f735358b3.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-89183af607965c62.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-db6271946833c1c4.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-1bc74e238433dc27.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-72e24e43d900c6fc.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-d08997153d69e463.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-455e753e1608a2e3.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-d44ec363ed228da3.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-b0588cd91797f543.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-163aed1350de6416.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_correction_orchestration-55c23401001aa237.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_correction_orchestration\n",
+        "verified_at": 1788635974,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "86f7ec740754a79bd11ce8e0fc20145dbdb36bb7"
       },
       "abandoned": [],
       "displaced": [],

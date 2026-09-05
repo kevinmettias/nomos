@@ -3,19 +3,22 @@
 use super::{CorrectCommand, Named_Value_From_String_Arguments, PathBuf};
 
 pub(super) const USAGE: &str = "usage: nomos correct phantom-mirrors [--root <path>] [--commit]\n\n\
-     Runs Check_Completeness_Mirrors over the tree. For the first real blocking Phantom \
-     finding it finds -- a doc comment claiming a check by name that does not exist -- \
-     builds a real CorrectionCandidate that strikes the false claim, stages and validates \
-     it against the file's own real content, and reports what it would do.\n\n\
+     Runs Check_Completeness_Mirrors and Check_No_Trailing_Whitespace over the tree. For \
+     the first real blocking claim either recognizes -- a doc comment claiming a check by \
+     name that does not exist, or a file carrying trailing whitespace -- builds a real \
+     CorrectionCandidate that fixes exactly that and nothing else, stages and validates it \
+     against the file's own real content, and reports what it would do. The verb name is \
+     historical: it named this command's first correction family, kept rather than \
+     renamed once a second joined it under the same lifecycle.\n\n\
      --commit actually applies it: commits the plan through nomos_corrections::\
      ValidatedPlan::Commit and writes the corrected file to disk. Without --commit nothing \
      on disk changes -- the run stops after staging and validating, which is real proof the \
      plan applies cleanly, not a promise about what committing it would do.\n\n\
-     Only a Phantom finding is ever corrected. An admitted gap (a universe that claims no \
-     mirror at all) is left alone: inventing a check name for one is a judgment this command \
-     does not make.\n\n\
+     Only a Phantom finding or trailing whitespace is ever corrected. An admitted gap (a \
+     universe that claims no mirror at all) is left alone: inventing a check name for one \
+     is a judgment this command does not make.\n\n\
      exit codes: 0 nothing to correct, or a correction was staged/validated/[committed] \
-     cleanly; 1 a real phantom was found but could not be safely corrected (its claim line \
+     cleanly; 1 a real claim was found but could not be safely corrected (its claim line \
      is not exactly once in the file, or the plan does not stage/validate against live \
      content); 2 usage; 5 unreadable tree; 6 nothing was judged";
 

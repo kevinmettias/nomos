@@ -60,11 +60,11 @@ pub enum CorrectionResponse
     },
     Staged
     {
-        path: String, claimed: String, preview: String,
+        path: String, summary: String, preview: String,
     },
     Committed
     {
-        path: String, claimed: String, preview: String, base: String, after: String,
+        path: String, summary: String, preview: String, base: String, after: String,
     },
 }
 
@@ -81,10 +81,10 @@ impl CorrectionResponse
             CorrectionOutcome::NoFactsMaterialized(files) => Self::NoFactsMaterialized { files },
             CorrectionOutcome::Clean => Self::Clean,
             CorrectionOutcome::Refused(reason) => Self::Refused { reason },
-            CorrectionOutcome::Staged { path, claimed, preview } => Self::Staged { path, claimed, preview: String::from_utf8_lossy(&preview).into_owned() },
-            CorrectionOutcome::Committed { path, claimed, preview, base, after_snapshot } => Self::Committed {
+            CorrectionOutcome::Staged { path, summary, preview } => Self::Staged { path, summary, preview: String::from_utf8_lossy(&preview).into_owned() },
+            CorrectionOutcome::Committed { path, summary, preview, base, after_snapshot } => Self::Committed {
                 path,
-                claimed,
+                summary,
                 preview: String::from_utf8_lossy(&preview).into_owned(),
                 base,
                 after: after_snapshot,
@@ -125,10 +125,10 @@ mod tests
         let _ignored = std::fs::remove_dir_all(&root);
         match &response
         {
-            CorrectionResponse::Staged { path, claimed, .. } =>
+            CorrectionResponse::Staged { path, summary, .. } =>
             {
                 assert_eq!(path, "a.rs");
-                assert_eq!(claimed, "Test_Api_Ghost");
+                assert!(summary.contains("Test_Api_Ghost"), "{summary}");
             }
             other => panic!("expected Staged, got {other:?}"),
         }

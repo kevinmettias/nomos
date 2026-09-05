@@ -24,6 +24,12 @@
 //! `nomos-check-orchestration` (which must stay generic over what a rule judges) should
 //! have to know about the other to express.
 //!
+//! [`trailing_whitespace`] is this crate's second correction family, over a different
+//! rule and a different fix shape -- `P40-CORRECTIONS-SECOND-FAMILY-3`'s own evidence that
+//! `phantom_mirror` was one instance of a pattern and not the pattern itself. See
+//! [`run`]'s own module doc for what trying two families through one shared pipeline
+//! proves about batching, and what it still leaves undecided about ranking.
+//!
 //! `nomos-cli`'s `correct` module and `nomos-api`'s own correction surface both call
 //! [`Run_Correction`] now; neither owns the composition any more.
 
@@ -33,6 +39,7 @@ mod correction_command;
 mod correction_outcome;
 mod phantom_mirror;
 mod run;
+mod trailing_whitespace;
 
 pub use correction_command::CorrectionCommand;
 pub use correction_outcome::CorrectionOutcome;

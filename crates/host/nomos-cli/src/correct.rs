@@ -172,7 +172,7 @@ fn Rendered(outcome: &CorrectionOutcome, root: &Path, stdout: &mut impl Write, s
         }
         CorrectionOutcome::Clean =>
         {
-            let _ = writeln!(stdout, "clean: no blocking phantom mirror claim under `{}`", root.display());
+            let _ = writeln!(stdout, "clean: no blocking correction claim under `{}`", root.display());
             ExitCode::Ok
         }
         CorrectionOutcome::Refused(reason) =>
@@ -180,16 +180,16 @@ fn Rendered(outcome: &CorrectionOutcome, root: &Path, stdout: &mut impl Write, s
             let _ = writeln!(stderr, "{reason}");
             ExitCode::Refused
         }
-        CorrectionOutcome::Staged { path, claimed, preview } =>
+        CorrectionOutcome::Staged { path, summary, preview } =>
         {
             let _ = writeln!(stdout, "{}", String::from_utf8_lossy(preview));
-            let _ = writeln!(stdout, "dry run: `{path}` no longer claims `{claimed}` in this preview. Pass --commit to apply it.");
+            let _ = writeln!(stdout, "dry run: `{path}`: {summary}. Pass --commit to apply it.");
             ExitCode::Ok
         }
-        CorrectionOutcome::Committed { path, claimed, preview, base, after_snapshot } =>
+        CorrectionOutcome::Committed { path, summary, preview, base, after_snapshot } =>
         {
             let _ = writeln!(stdout, "{}", String::from_utf8_lossy(preview));
-            let _ = writeln!(stdout, "committed: `{path}` no longer claims `{claimed}` ({base} -> {after_snapshot})");
+            let _ = writeln!(stdout, "committed: `{path}`: {summary} ({base} -> {after_snapshot})");
             ExitCode::Ok
         }
     };
