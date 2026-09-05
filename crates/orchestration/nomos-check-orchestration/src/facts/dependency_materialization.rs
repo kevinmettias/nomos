@@ -11,7 +11,7 @@ mod policy_materialization;
 pub use lint_materialization::LintMaterialization;
 pub use policy_materialization::PolicyMaterialization;
 
-use nomos_analysis::{Context, MaterializedFact, MemoryFactStore};
+use nomos_analysis::{Context, FactKey, FactStore, GuaranteeDigest, InputDigest, MaterializedFact, MemoryFactStore};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, ProviderId, RuleId};
 use nomos_lang_rust::{FactContext, Materialization};
 use nomos_platform::ProcessLauncher;
@@ -19,7 +19,9 @@ use nomos_rules::SourceFile;
 
 use std::path::Path;
 
-/// Produces one syntax fact per source and returns how many were written.
+/// Produces one syntax fact per source and returns how many were newly written -- not how
+/// many sources this run found a fact for, which [`Already_Current`] can now answer
+/// without materializing anything new.
 ///
 /// A file neither provider recognizes, or one its own recognized provider refuses to
 /// parse, materializes nothing and is not dropped silently: the count returned is the
@@ -32,6 +34,16 @@ use std::path::Path;
 /// `crate::run_context`'s own enrichment step narrows the read side to the same provider identity
 /// through the identical function, and the two must agree for `Key_From` to ever find what
 /// this function wrote.
+///
+/// # Skipping a subject the store already has current
+///
+/// `P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS`: before parsing, [`Already_Current`] builds
+/// the exact [`FactKey`] parsing `source` would produce -- from `source.text`'s own raw
+/// digest, never from a parse -- and asks `store` whether it already holds a live fact
+/// under it. A caller that reuses the same `store` (and therefore the same, monotonically
+/// advancing generation `crate::facts::Ingested_Workspace` reads off a reused `Workspace`)
+/// across two calls pays for a real parse only for a subject whose own bytes moved since
+/// the store last saw it.
 pub fn Materialize_Syntax(sources: &[SourceFile], context: &Context, store: &mut MemoryFactStore) -> usize
 {
     let rust_production = Rust_Production(context);
@@ -40,6 +52,11 @@ pub fn Materialize_Syntax(sources: &[SourceFile], context: &Context, store: &mut
 
     for source in sources
     {
+        if Already_Current(source, context, store)
+        {
+            continue;
+        }
+
         let Some(fact) = Materialized_Syntax_Fact(source, rust_production, go_production)
         else
         {
@@ -55,6 +72,65 @@ pub fn Materialize_Syntax(sources: &[SourceFile], context: &Context, store: &mut
     }
 
     return written;
+}
+
+/// Whether `store` already holds a live `nomos.cap.syntax.items` fact for `source` at
+/// `context.generation` -- `false` for a path neither provider recognizes, so an
+/// unrecognized source always falls through to [`Materialized_Syntax_Fact`]'s own,
+/// unchanged "not dropped silently" handling.
+///
+/// Built from the same public pieces `nomos_lang_rust`/`nomos_lang_go`'s own provider
+/// combines into a [`FactKey`] internally (`Capability`, `CONTRACT_VERSION`, `PROVIDER`,
+/// `Declared_Guarantee`), restated here rather than exposed as a shared constructor: this
+/// is the one caller outside either provider that ever needs to know what a fact it did
+/// not produce would be keyed under, and [`InputDigest::Of`] over `source.text`'s own
+/// bytes is a raw hash, not a parse -- the whole reason this check can run before one.
+fn Already_Current(source: &SourceFile, context: &Context, store: &MemoryFactStore) -> bool
+{
+    use crate::composition::Recognized_Syntax_Provider;
+
+    let Some(provider) = Recognized_Syntax_Provider(&source.path)
+    else
+    {
+        return false;
+    };
+    let Some(key) = Syntax_Fact_Key(source, &provider, context)
+    else
+    {
+        return false;
+    };
+
+    return store.Current(&key.At(context.generation), context.generation).is_some();
+}
+
+/// The [`FactKey`] a real materialization of `source` through `provider` would produce --
+/// `None` if `provider` is neither of the two this capability has.
+fn Syntax_Fact_Key(source: &SourceFile, provider: &ProviderId, context: &Context) -> Option<FactKey>
+{
+    let guarantee = if *provider == ProviderId::New(nomos_lang_rust::PROVIDER)
+    {
+        nomos_lang_rust::Declared_Guarantee()
+    }
+    else if *provider == ProviderId::New(nomos_lang_go::PROVIDER)
+    {
+        nomos_lang_go::Declared_Guarantee()
+    }
+    else
+    {
+        return None;
+    };
+
+    return Some(FactKey {
+        contract: nomos_cap_syntax::Capability(),
+        contract_version: nomos_cap_syntax::CONTRACT_VERSION,
+        subject: source.subject,
+        semantic_inputs: InputDigest::Of(&[source.text.as_bytes()]),
+        provider: provider.clone(),
+        provider_version: nomos_cap_syntax::CONTRACT_VERSION,
+        guarantee: GuaranteeDigest::Of(&guarantee),
+        variant: context.variant,
+        configuration: context.configuration,
+    });
 }
 
 /// The reading context as `nomos_lang_go`'s own provider takes it -- the identical fields
@@ -483,6 +559,36 @@ mod tests
         ];
     }
 
+    /// `P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS`'s own done_when: a second `Materialize_
+    /// Syntax` call over a reused `Workspace` and `MemoryFactStore` writes nothing new
+    /// for a subject whose bytes did not move, and exactly one new fact for the one that
+    /// did -- not two, which is what an unconditional re-materialization of both sources
+    /// on every call would report instead.
+    #[test]
+    fn Test_Materialize_Syntax_Should_Skip_An_Unchanged_Subject_On_A_Reused_Store_And_Workspace()
+    {
+        let unchanged = SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn One() {}\n".to_owned());
+        let changed_before = SourceFile::New("b.rs", nomos_model::Subject_Of_Path("b.rs"), "pub fn Two() {}\n".to_owned());
+        let changed_after = SourceFile::New("b.rs", nomos_model::Subject_Of_Path("b.rs"), "pub fn Two_Renamed() {}\n".to_owned());
+
+        let mut workspace = None;
+        let mut store = MemoryFactStore::New();
+
+        let first_sources = [unchanged.clone(), changed_before];
+        let first_context = Reused_Fixture_Context(&first_sources, &mut workspace);
+        let first_written = Materialize_Syntax(&first_sources, &first_context, &mut store);
+        assert_eq!(first_written, 2, "a fresh store must materialize both real sources");
+
+        let second_sources = [unchanged, changed_after];
+        let second_context = Reused_Fixture_Context(&second_sources, &mut workspace);
+        let second_written = Materialize_Syntax(&second_sources, &second_context, &mut store);
+
+        assert_eq!(
+            second_written, 1,
+            "the unchanged subject must be skipped and the changed one must still be materialized, on the same reused store and workspace"
+        );
+    }
+
     /// The identical shape [`Materialize_Syntax`]'s own first test proves, for
     /// `nomos.cap.controlflow.reachability`: one well-formed Rust source materializes
     /// exactly one fact.
@@ -601,5 +707,15 @@ mod tests
     {
         let registry = crate::composition::Registered().expect("fixture composition");
         return crate::facts::Ingested_Workspace(sources, &registry, Test_Variant(), &mut None).expect("the fixture is a valid tree");
+    }
+
+    /// [`Fixture_Context`]'s own composition, over a `workspace` the caller keeps and
+    /// passes again -- what a real second `Run` call reuses, so its own generation
+    /// advances only when `sources`' own content actually moved since the last call
+    /// ingested it.
+    fn Reused_Fixture_Context(sources: &[SourceFile], workspace: &mut Option<nomos_workspace::Workspace>) -> Context
+    {
+        let registry = crate::composition::Registered().expect("fixture composition");
+        return crate::facts::Ingested_Workspace(sources, &registry, Test_Variant(), workspace).expect("the fixture is a valid tree");
     }
 }

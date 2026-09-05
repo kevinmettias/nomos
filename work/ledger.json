@@ -50719,7 +50719,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -50732,7 +50732,27 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "erialize_Dependencies_Should_Return_Real_Workspace_Members ... ok\ntest tests::Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact ... ok\ntest tests::Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete ... ok\ntest tests::Test_Materialize_Lint_Should_Return_Real_Workspace_Members ... ok\ntest tests::Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor ... ok\n\ntest result: ok. 55 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.29s\n\n\nrunning 6 tests\ntest Test_Registered_Should_Offer_The_Clippy_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Declare_Every_Capability_Crates_Own_Real_Contract ... ok\ntest Test_Registered_Should_Offer_The_Reachability_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_Every_Dependency_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Deny_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_Every_Syntax_Providers_Own_Real_Offer ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List ... ok\ntest Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule ... ok\ntest Test_Run_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.45s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-b490f8ea84770ab5.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-64ecfdd75ebc30bd.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-c9e29199ba5db01b.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1788637601,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d99b689e3e3344d5d116357c4a616a37aea40202"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
