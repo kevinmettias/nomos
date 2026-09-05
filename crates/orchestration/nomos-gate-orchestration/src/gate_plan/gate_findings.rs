@@ -5,6 +5,7 @@ use nomos_contracts::Finding;
 /// A run's findings, grouped by why each one does or does not block the build -- named so a
 /// caller reads `findings.blocking_findings` and the rest by field rather than telling four
 /// same-shaped lists apart only by which struct they sat in.
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct GateFindings
 {
     /// Exactly the findings for which `Finding::Can_Fail_A_Build` is true and no

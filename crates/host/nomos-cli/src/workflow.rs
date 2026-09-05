@@ -29,11 +29,13 @@ use nomos_contracts::{
     Cacheability, CancellationBehavior, Compensation, DeterminismStrength, EvidenceClass, ReproducibilityScope, RetryPolicy, RuleId, SchemaId,
     Timeout, TraceEquivalence, WorkflowStep,
 };
+use nomos_gate_orchestration::{Fresh_Run_Id, GateCommand, RuleSelector};
 use nomos_ledger::Territory;
 use nomos_model_package::EffortLevel;
-use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
+use nomos_platform::Clock;
+use nomos_platform_std::{StdFileSystem, StdProcessLauncher, SystemClock};
 use nomos_rules::SourceFile;
-use nomos_workflow_orchestration::{Body, CheckBody, CorrectionBody, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
+use nomos_workflow_orchestration::{Body, CheckBody, CorrectionBody, GateBody, Platform, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
 use nomos_workspace::BuildVariant;
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -67,30 +69,32 @@ pub fn Command_From_String_Arguments(arguments: &[String]) -> Result<WorkflowCom
     };
 }
 
-/// `--check`'s, `--correct`'s, `--executor`'s or `--model-backend`'s own body -- exactly
-/// one of the four, the same "a call reaches exactly one" discipline `agent.rs`'s own
-/// `Backend_From_String_Arguments` already holds between the latter two, extended to a
-/// third and fourth family that share no trait with either.
+/// `--check`'s, `--correct`'s, `--gate`'s, `--executor`'s or `--model-backend`'s own body
+/// -- exactly one of the five, the same "a call reaches exactly one" discipline
+/// `agent.rs`'s own `Backend_From_String_Arguments` already holds between the latter two,
+/// extended to a third, fourth and fifth family that share no trait with any of the rest.
 ///
 /// # Errors
 ///
-/// Returns a message when none or more than one of the four is given, or when a value
+/// Returns a message when none or more than one of the five is given, or when a value
 /// naming a required flag is missing.
 fn Body_From_String_Arguments(arguments: &[String]) -> Result<Body, String>
 {
     let check = arguments.iter().any(|argument| return argument == "--check");
     let correct = arguments.iter().any(|argument| return argument == "--correct");
+    let gate = arguments.iter().any(|argument| return argument == "--gate");
     let executor = Named_Value_From_String_Arguments(arguments, "--executor");
     let model_backend = Named_Value_From_String_Arguments(arguments, "--model-backend");
 
     let named = usize::from(check)
         .saturating_add(usize::from(correct))
+        .saturating_add(usize::from(gate))
         .saturating_add(usize::from(executor.is_some()))
         .saturating_add(usize::from(model_backend.is_some()));
     if named > 1
     {
         return Err(format!(
-            "--check, --correct, --executor and --model-backend each name a different body; a step dispatches through exactly one, so pass at most one of them.\n\n{}",
+            "--check, --correct, --gate, --executor and --model-backend each name a different body; a step dispatches through exactly one, so pass at most one of them.\n\n{}",
             Usage_Text()
         ));
     }
@@ -102,6 +106,10 @@ fn Body_From_String_Arguments(arguments: &[String]) -> Result<Body, String>
     if correct
     {
         return Correction_Body_From_String_Arguments(arguments);
+    }
+    if gate
+    {
+        return Gate_Body_From_String_Arguments(arguments);
     }
     if let Some(text) = executor
     {
@@ -120,7 +128,7 @@ fn Body_From_String_Arguments(arguments: &[String]) -> Result<Body, String>
         };
     }
 
-    return Err(format!("one of --check, --correct, --executor or --model-backend is required.\n\n{}", Usage_Text()));
+    return Err(format!("one of --check, --correct, --gate, --executor or --model-backend is required.\n\n{}", Usage_Text()));
 }
 
 /// `--root`'s (default `.`) and every `--rule`'s value, as a [`CheckBody`] -- the walk
@@ -143,6 +151,18 @@ fn Correction_Body_From_String_Arguments(arguments: &[String]) -> Result<Body, S
     let commit = arguments.iter().any(|argument| return argument == "--commit");
 
     return Ok(Body::Correction(CorrectionBody::New(root, Vec::new(), commit)));
+}
+
+/// `--root`'s (default `.`) and every `--rule`'s value, as a [`GateBody`] -- the identical
+/// two flags [`Check_Body_From_String_Arguments`] already reads, since `Run_Gate` narrows
+/// by the same `root` and rule selection `nomos_check_orchestration::Run` does.
+fn Gate_Body_From_String_Arguments(arguments: &[String]) -> Result<Body, String>
+{
+    let root = Named_Value_From_String_Arguments(arguments, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from);
+    let include: Vec<RuleId> = Named_Values_From_String_Arguments(arguments, "--rule").iter().map(RuleId::New).collect();
+    let command = GateCommand { root, rules: RuleSelector { include }, ..GateCommand::default() };
+
+    return Ok(Body::Gate(GateBody::New(Vec::new(), command)));
 }
 
 /// `--goal`'s value, as a bare [`TaskEnvelope`] -- every other field empty or its own
@@ -198,11 +218,22 @@ pub fn Run(command: &WorkflowCommand, stdout: &mut impl Write, stderr: &mut impl
                 return ExitCode::Unavailable;
             }
         },
+        Body::Gate(gate) => match Walked_Gate(gate)
+        {
+            Some(walked) => Body::Gate(walked),
+            None =>
+            {
+                let _ = writeln!(stderr, "`{}` is not a directory", gate.command.root.display());
+                return ExitCode::Unavailable;
+            }
+        },
         other => other.clone(),
     };
 
     let plan = [WorkflowStepPlan { declaration: Coherent_Declaration(), body }];
-    let outcome = nomos_workflow_orchestration::Run(&plan, &StdProcessLauncher, &StdFileSystem, &Workflow_Variant());
+    let platform = Platform { launcher: &StdProcessLauncher, filesystem: &StdFileSystem };
+    let run = Fresh_Run_Id(SystemClock.Now());
+    let outcome = nomos_workflow_orchestration::Run(&plan, &platform, &Workflow_Variant(), run);
 
     return Rendered(&outcome, stdout, stderr);
 }
@@ -237,6 +268,21 @@ fn Walked_Correction(correction: &CorrectionBody) -> Option<CorrectionBody>
     let sources = Read_Sources(&correction.root);
 
     return Some(CorrectionBody::New(correction.root.clone(), sources, correction.commit));
+}
+
+/// `gate`, with its own `sources` replaced by a real walk of `gate.command.root` -- `None`
+/// if that root is not a directory, the identical guard [`Walked`] and [`Walked_Correction`]
+/// both already give.
+fn Walked_Gate(gate: &GateBody) -> Option<GateBody>
+{
+    if !gate.command.root.is_dir()
+    {
+        return None;
+    }
+
+    let sources = Read_Sources(&gate.command.root);
+
+    return Some(GateBody::New(sources, gate.command.clone()));
 }
 
 /// Every `.rs` or `.go` file under `root`, with its text and the subject its facts are
@@ -337,6 +383,11 @@ fn Rendered(outcome: &WorkflowOutcome, stdout: &mut impl Write, stderr: &mut imp
             let _ = writeln!(stderr, "the one step this command composed declared itself incoherent");
             ExitCode::Refused
         }
+        WorkflowOutcome::Failed { error: nomos_workflow_orchestration::DispatchError::Gate(result), .. } =>
+        {
+            let _ = writeln!(stderr, "the gate step failed: {} blocking finding(s)", result.findings.blocking_findings.len());
+            ExitCode::Refused
+        }
         WorkflowOutcome::Failed { error, .. } =>
         {
             let _ = writeln!(stderr, "the step's dispatch failed: {error:?}");
@@ -371,6 +422,7 @@ fn Rendered_Step(step: &StepOutcome, stdout: &mut impl Write, stderr: &mut impl 
         }
         StepOutcome::Check(check) => Rendered_Check(check, stdout, stderr),
         StepOutcome::Correction(correction) => Rendered_Correction(correction, stdout, stderr),
+        StepOutcome::Gate(result) => Rendered_Gate(result, stdout),
     };
 }
 
@@ -406,6 +458,33 @@ fn Rendered_Check(outcome: &nomos_check_orchestration::CheckOutcome, stdout: &mu
         {
             let _ = writeln!(stdout, "judged: {} finding(s)", findings.len());
             ExitCode::Ok
+        }
+    };
+}
+
+/// A `Body::Gate` step's own [`nomos_gate_orchestration::GateRunResult`], rendered.
+///
+/// `GateRunOutcome::Failed` is not rendered here: `Dispatch` reports a failing gate as
+/// `DispatchError::Gate` before this function ever sees a `StepOutcome::Gate` at all, so
+/// `Passed` and `Indeterminate` are the only two dispositions a caller can reach through
+/// this path. `Failed` is still matched, defensively, as `Vacuous` rather than assumed
+/// unreachable and panicked on -- a total function over every value the type can hold,
+/// the same discipline every other render in this module already keeps.
+fn Rendered_Gate(result: &nomos_gate_orchestration::GateRunResult, stdout: &mut impl Write) -> ExitCode
+{
+    use nomos_gate_orchestration::GateRunOutcome;
+
+    return match result.disposition
+    {
+        GateRunOutcome::Passed =>
+        {
+            let _ = writeln!(stdout, "gate passed: {} finding(s), none blocking", result.findings.blocking_findings.len());
+            ExitCode::Ok
+        }
+        GateRunOutcome::Indeterminate | GateRunOutcome::Failed =>
+        {
+            let _ = writeln!(stdout, "gate did not reach a judgment it could pass or fail");
+            ExitCode::Vacuous
         }
     };
 }
@@ -474,13 +553,14 @@ const USAGE_TEXT: &str = "usage: nomos workflow <command>\n\
         \n\
         \x20 run --check --root <path> [--rule <id>]...\n\
         \x20 run --correct --root <path> [--commit]\n\
+        \x20 run --gate --root <path> [--rule <id>]...\n\
         \x20 run --executor claude-code --goal <text>\n\
         \x20 run --model-backend ollama --goal <text>\n\
         \n\
         Dispatches the one step this command composes through `nomos-workflow-\
         orchestration::Run`, over a fixed, always-coherent WorkflowStep declaration -- a \
         thin renderer over that seam, not a second place workflow semantics live. Pass \
-        exactly one of --check, --correct, --executor or --model-backend; a step \
+        exactly one of --check, --correct, --gate, --executor or --model-backend; a step \
         dispatches through exactly one.\n\
         \n\
         --check walks --root (default the current directory) for `.rs` and `.go` source \
@@ -495,13 +575,19 @@ const USAGE_TEXT: &str = "usage: nomos workflow <command>\n\
         only with --commit, writing the fix back. The identical seam and the identical \
         --commit flag `nomos correct` already has.\n\
         \n\
+        --gate walks --root the identical way --check does and runs nomos-gate-\
+        orchestration::Run_Gate over it, narrowed to --rule the identical way --check is. \
+        Unlike every other body, a failing gate ends the workflow rather than merely \
+        completing as this step's own answer -- exit code 1, the same code an incoherent \
+        step's own refusal already carries.\n\
+        \n\
         --executor and --model-backend name which family of backend --goal dispatches \
         to, the identical two flags and the identical restriction `nomos agent execute` \
         already has.\n\
         \n\
-        exit codes: 0 ok, 1 the one step refused itself, 2 usage, 5 the named root, \
-        registry, executor or model backend could not be read, run, or answered at all, \
-        6 the check or correction step found nothing to judge";
+        exit codes: 0 ok, 1 the one step refused itself or a gate step failed, 2 usage, \
+        5 the named root, registry, executor or model backend could not be read, run, or \
+        answered at all, 6 the check, correction or gate step found nothing to judge";
 
 fn Usage_Text() -> String
 {
@@ -582,6 +668,17 @@ mod tests
         let command = Command_From_String_Arguments(&arguments).expect("parses");
 
         assert!(matches!(command.body, Body::Correction(ref correction) if correction.commit), "{command:?}");
+    }
+
+    #[test]
+    fn Test_Command_From_String_Arguments_Should_Parse_A_Gate_Run()
+    {
+        let arguments: Vec<String> =
+            ["run", "--gate", "--root", ".", "--rule", "naming-convention"].iter().map(|value| return (*value).to_owned()).collect();
+
+        let command = Command_From_String_Arguments(&arguments).expect("parses");
+
+        assert!(matches!(command.body, Body::Gate(ref gate) if gate.command.rules.include == vec![RuleId::New("naming-convention")]), "{command:?}");
     }
 
     #[test]
@@ -695,5 +792,49 @@ mod tests
         let _ignored = std::fs::remove_dir_all(&root);
         assert_eq!(code, ExitCode::Ok, "{}", String::from_utf8_lossy(&stderr));
         assert_eq!(corrected, "/// A list of things this crate owns.\npub const THINGS: &[&str] = &[\"a\"];\n");
+    }
+
+    #[test]
+    fn Test_Run_Should_Report_Ok_For_A_Passing_Gate()
+    {
+        let root = std::env::temp_dir().join("nomos-cli-workflow-gate-passing-root");
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("creates a directory");
+        std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("writable");
+        let command = WorkflowCommand {
+            body: Body::Gate(GateBody::New(
+                Vec::new(),
+                GateCommand { root: root.clone(), rules: RuleSelector { include: vec![RuleId::New(nomos_rules::PARAMETER_COUNT)] }, ..GateCommand::default() },
+            )),
+        };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Run(&command, &mut stdout, &mut stderr);
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        assert_eq!(code, ExitCode::Ok, "{}", String::from_utf8_lossy(&stderr));
+    }
+
+    #[test]
+    fn Test_Run_Should_Report_Refused_For_A_Failing_Gate()
+    {
+        let root = std::env::temp_dir().join("nomos-cli-workflow-gate-failing-root");
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("creates a directory");
+        std::fs::write(root.join("a.rs"), "pub fn Something(a: i32, b: i32, c: i32, d: i32, e: i32) {}\n").expect("writable");
+        let command = WorkflowCommand {
+            body: Body::Gate(GateBody::New(
+                Vec::new(),
+                GateCommand { root: root.clone(), rules: RuleSelector { include: vec![RuleId::New(nomos_rules::PARAMETER_COUNT)] }, ..GateCommand::default() },
+            )),
+        };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Run(&command, &mut stdout, &mut stderr);
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        assert_eq!(code, ExitCode::Refused, "{}", String::from_utf8_lossy(&stderr));
     }
 }

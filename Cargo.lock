@@ -1624,6 +1624,7 @@ dependencies = [
  "nomos-check-orchestration",
  "nomos-contracts",
  "nomos-correction-orchestration",
+ "nomos-gate-orchestration",
  "nomos-ledger",
  "nomos-model",
  "nomos-model-backend-ollama",

@@ -16,4 +16,7 @@ pub enum StepOutcome
     Check(nomos_check_orchestration::CheckOutcome),
     /// What `nomos-correction-orchestration::Run_Correction` reported.
     Correction(nomos_correction_orchestration::CorrectionOutcome),
+    /// What `nomos-gate-orchestration::Run_Gate` reported, for a run that did not fail --
+    /// see [`crate::DispatchError::Gate`] for the one that did.
+    Gate(nomos_gate_orchestration::GateRunResult),
 }

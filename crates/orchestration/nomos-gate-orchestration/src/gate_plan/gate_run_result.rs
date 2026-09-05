@@ -13,6 +13,7 @@ use super::GateFindings;
 /// choice `OD-COMPLETENESS-004` already made for `nomos check`'s own exit code -- so a
 /// caller that wants the finer detail behind `disposition` does not have to re-walk or
 /// re-judge anything to get it.
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct GateRunResult
 {
     /// The identity of this execution -- `OD-WORKFLOW-001`'s first real consumer for

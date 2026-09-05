@@ -4,16 +4,17 @@ use std::num::NonZeroU32;
 
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_contracts::{
-    Cacheability, CancellationBehavior, Compensation, DeterminismStrength, EvidenceClass, ReproducibilityScope, RetryPolicy, SchemaId,
-    Timeout, TraceEquivalence, WorkflowStep,
+    Cacheability, CancellationBehavior, Compensation, DeterminismStrength, EvidenceClass, ReproducibilityScope, RetryPolicy, RuleId, RunId,
+    SchemaId, Timeout, TraceEquivalence, WorkflowStep,
 };
+use nomos_gate_orchestration::{GateCommand, GateRunOutcome, RuleSelector};
 use nomos_ledger::Territory;
 use nomos_model_package::EffortLevel;
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+use nomos_platform::{Clock, Command, ExitOutcome, ProcessLauncher, ProcessOutput};
 use nomos_platform_std::StdFileSystem;
 use nomos_workspace::BuildVariant;
 
-use crate::{Body, CheckBody, CorrectionBody, DispatchError, Run, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
+use crate::{Body, CheckBody, CorrectionBody, DispatchError, GateBody, Platform, Run, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
 
 /// This process's own build variant is not what a workflow step should be judged as --
 /// `nomos_check_orchestration::Run`'s own doc says `variant` must come from the
@@ -23,6 +24,15 @@ use crate::{Body, CheckBody, CorrectionBody, DispatchError, Run, StepOutcome, Wo
 fn Test_Variant() -> BuildVariant
 {
     return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
+}
+
+/// A fresh `RunId`, for a test that dispatches a `Body::Gate` step -- `nomos_platform_std::
+/// SystemClock` is a real clock, not a fixture, but a `RunId`'s own identity is its
+/// uniqueness, not any particular timestamp, so reading the real clock once here costs
+/// this file nothing a fixed one would have bought.
+fn Test_Run_Id() -> RunId
+{
+    return nomos_gate_orchestration::Fresh_Run_Id(nomos_platform_std::SystemClock.Now());
 }
 
 fn Task(goal: &str) -> TaskEnvelope
@@ -135,7 +145,7 @@ fn Test_An_Empty_Plan_Completes_Vacuously()
 {
     let launcher = Scripted::Of(Vec::new());
 
-    let outcome = Run(&[], &launcher, &StdFileSystem, &Test_Variant());
+    let outcome = Run(&[], &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
 
     assert_eq!(outcome, WorkflowOutcome::Completed { completed: Vec::new() });
 }
@@ -146,7 +156,7 @@ fn Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes()
     let launcher = Scripted::Of(vec![Clean_Claude_Code_Response("PONG")]);
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("say PONG")) }];
 
-    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
@@ -164,7 +174,7 @@ fn Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes()
     let launcher = Scripted::Of(vec![Clean_Ollama_Response("PONG")]);
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("say PONG")) }];
 
-    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
@@ -185,7 +195,7 @@ fn Test_A_Two_Step_Sequence_Completes_In_Order()
         WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("second")) },
     ];
 
-    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
@@ -205,7 +215,7 @@ fn Test_An_Incoherent_Step_Is_Refused_Before_Dispatch()
     let launcher = Scripted::Of(Vec::new());
     let plan = [WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task("never runs")) }];
 
-    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
 
     assert_eq!(outcome, WorkflowOutcome::Refused { completed: Vec::new(), index: 0 });
 }
@@ -219,7 +229,7 @@ fn Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions()
         WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task("never runs")) },
     ];
 
-    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Refused { completed, index } = outcome
     else
@@ -238,7 +248,7 @@ fn Test_A_Failed_Dispatch_Stops_The_Run()
     let launcher = Scripted::Of(vec![Failing_Response("claude exited 1")]);
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("fails")) }];
 
-    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Failed { completed, index, error } = outcome
     else
@@ -275,7 +285,7 @@ fn Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonic
         WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("second")) },
     ];
 
-    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
@@ -305,7 +315,7 @@ fn Test_A_Failure_Prevents_A_Later_Step_From_Running()
         WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("never runs")) },
     ];
 
-    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Failed { completed, index, .. } = outcome
     else
@@ -349,7 +359,7 @@ fn Test_A_Correction_Step_Should_Commit_A_Real_Phantom_Claim()
     let launcher = Scripted::Of(Vec::new());
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Correction(CorrectionBody::New(root.clone(), sources, true)) }];
 
-    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
     let corrected = std::fs::read_to_string(&path).expect("still readable");
 
     let _ignored = std::fs::remove_dir_all(&root);
@@ -384,7 +394,7 @@ fn Test_A_Correction_Step_Should_Refuse_An_Ambiguous_Claim_Without_Committing()
     let launcher = Scripted::Of(Vec::new());
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Correction(CorrectionBody::New(root.clone(), sources, true)) }];
 
-    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
     let untouched = std::fs::read_to_string(&path).expect("still readable");
 
     let _ignored = std::fs::remove_dir_all(&root);
@@ -396,4 +406,61 @@ fn Test_A_Correction_Step_Should_Refuse_An_Ambiguous_Claim_Without_Committing()
     let first = completed.first().expect("one step ran");
     assert!(matches!(first, StepOutcome::Correction(nomos_correction_orchestration::CorrectionOutcome::Refused(_))), "{first:?}");
     assert_eq!(untouched, ambiguous, "a refused correction must not touch the file");
+}
+
+/// `parameter-count`, narrowed to alone so this test dispatches no subprocess-backed
+/// section (`GateCommand::default`'s own empty selection would otherwise also select
+/// `dependency-policy`, `lint-diagnostics` and `dependency-direction`, each of which
+/// launches a real `cargo` subprocess against a fixture tree that has no `Cargo.toml` at
+/// all).
+fn Narrowed_To_Parameter_Count() -> GateCommand
+{
+    return GateCommand { rules: RuleSelector { include: vec![RuleId::New(nomos_rules::PARAMETER_COUNT)] }, ..GateCommand::default() };
+}
+
+/// `P40-WORKFLOW-GATE-BODY`'s own `done_when`, the passing half: a gate step whose own
+/// disposition is `Passed` reports its full result through `StepOutcome::Gate`, and the
+/// workflow completes exactly as a check or correction step would.
+#[test]
+fn Test_A_Passing_Gate_Step_Completes_As_A_Step_Outcome()
+{
+    let sources = vec![nomos_rules::SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n".to_owned())];
+    let gate = GateBody::New(sources, Narrowed_To_Parameter_Count());
+    let launcher = Scripted::Of(Vec::new());
+    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Gate(gate) }];
+
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+
+    let WorkflowOutcome::Completed { completed } = outcome
+    else
+    {
+        panic!("expected Completed: {outcome:?}")
+    };
+    let first = completed.first().expect("one step ran");
+    assert!(matches!(first, StepOutcome::Gate(result) if result.disposition == GateRunOutcome::Passed), "{first:?}");
+}
+
+/// `P40-WORKFLOW-GATE-BODY`'s own `done_when`, the failing half: a gate step whose own
+/// disposition is `Failed` ends the workflow as a `DispatchError::Gate` rather than being
+/// reported as a step that merely ran -- the one dispatch target this crate composes
+/// where completing and failing are not the same shape of answer.
+#[test]
+fn Test_A_Failing_Gate_Step_Ends_The_Workflow_Rather_Than_Completing()
+{
+    let over_limit = "pub fn Something(a: i32, b: i32, c: i32, d: i32, e: i32) {}\n";
+    let sources = vec![nomos_rules::SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), over_limit.to_owned())];
+    let gate = GateBody::New(sources, Narrowed_To_Parameter_Count());
+    let launcher = Scripted::Of(Vec::new());
+    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Gate(gate) }];
+
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+
+    let WorkflowOutcome::Failed { completed, index, error } = outcome
+    else
+    {
+        panic!("expected Failed: {outcome:?}")
+    };
+    assert_eq!(index, 0);
+    assert!(completed.is_empty());
+    assert!(matches!(error, DispatchError::Gate(ref result) if result.disposition == GateRunOutcome::Failed), "{error:?}");
 }

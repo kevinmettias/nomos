@@ -3,9 +3,11 @@
 
 mod check_body;
 mod correction_body;
+mod gate_body;
 
 pub use check_body::CheckBody;
 pub use correction_body::CorrectionBody;
+pub use gate_body::GateBody;
 
 use nomos_agent_contracts::TaskEnvelope;
 
@@ -35,6 +37,15 @@ use nomos_agent_contracts::TaskEnvelope;
 /// crate can actually run. Sequenced after `Check` deliberately: the body seam should be
 /// shaped by more than one case before a mutating body uses it, per
 /// `P40-WORKFLOW-CORRECTION-BODY`'s own why.
+///
+/// `Gate` is the fifth, and the second half of Check then Correction then Validate then
+/// Gate: `nomos_gate_orchestration::Run_Gate` is the seam both hosts already call for the
+/// judgment this whole system exists to produce. Unlike every body above it, a failing
+/// gate run does not merely complete as a `StepOutcome::Gate` -- `crate::run::Dispatch`
+/// reports it as a [`crate::DispatchError::Gate`] instead, ending the workflow the same
+/// way a real dispatch failure already does, per `P40-WORKFLOW-GATE-BODY`'s own
+/// done_when: "a failing gate ends the workflow rather than being reported as a step that
+/// merely ran."
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Body
 {
@@ -46,4 +57,6 @@ pub enum Body
     Check(CheckBody),
     /// Dispatches through `nomos-correction-orchestration::Run_Correction`.
     Correction(CorrectionBody),
+    /// Dispatches through `nomos-gate-orchestration::Run_Gate`.
+    Gate(GateBody),
 }
