@@ -53,14 +53,15 @@ pub(crate) enum Group
     Gate,
     Agent,
     Correct,
+    Workflow,
 }
 
 #[cfg(test)]
 impl Group
 {
     /// Every group, for a test to walk without hand-maintaining a second list.
-    pub(crate) const ALL: [Self; 7] =
-        [Self::Work, Self::Spec, Self::Check, Self::Request, Self::Gate, Self::Agent, Self::Correct];
+    pub(crate) const ALL: [Self; 8] =
+        [Self::Work, Self::Spec, Self::Check, Self::Request, Self::Gate, Self::Agent, Self::Correct, Self::Workflow];
 }
 
 /// Every group's on-argv spelling, paired with the [`Group`] `Stance_Of` reads.
@@ -70,7 +71,7 @@ impl Group
 /// can route to it at all. That is what makes this module the entry point every group's
 /// dispatch actually passes through, and not merely a place a stance happens to be written
 /// down beside the code it describes.
-pub(crate) const NAMES: [(&str, Group); 7] = [
+pub(crate) const NAMES: [(&str, Group); 8] = [
     ("work", Group::Work),
     ("spec", Group::Spec),
     ("check", Group::Check),
@@ -78,6 +79,7 @@ pub(crate) const NAMES: [(&str, Group); 7] = [
     ("gate", Group::Gate),
     ("agent", Group::Agent),
     ("correct", Group::Correct),
+    ("workflow", Group::Workflow),
 ];
 
 /// The group named on argv, if [`NAMES`] spells it.
@@ -150,6 +152,9 @@ pub(crate) fn Stance_Of(group: Group) -> Stance
         },
         Group::Correct => Stance::Guarded {
             decided_in: "correct::sources::Walked / nomos_check_orchestration::Run",
+        },
+        Group::Workflow => Stance::Guarded {
+            decided_in: "workflow::Walked / nomos_check_orchestration::Run",
         },
     };
 }
@@ -309,5 +314,28 @@ mod tests
 
         assert_ne!(code.Value(), 0, "an empty tree must not report the same code as a clean run");
         assert_eq!(code, crate::correct::ExitCode::Vacuous);
+    }
+
+    /// `workflow run --check` walks a caller-chosen tree exactly as `check`, `gate run`
+    /// and `correct` do, so an empty one must not report `Ok` there either.
+    #[test]
+    fn Test_Workflow_Check_Should_Refuse_Ok_Over_An_Empty_Tree()
+    {
+        assert!(matches!(Stance_Of(Group::Workflow), Stance::Guarded { .. }));
+
+        let empty = std::env::temp_dir().join("nomos-cli-vacuity-guard-empty-workflow-tree");
+        let _ignored = std::fs::remove_dir_all(&empty);
+        std::fs::create_dir_all(&empty).expect("creates an empty directory");
+
+        let arguments = vec!["run".to_owned(), "--check".to_owned(), "--root".to_owned(), empty.display().to_string()];
+        let command = crate::workflow::Command_From_String_Arguments(&arguments).expect("parses");
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let code = crate::workflow::Run(&command, &mut stdout, &mut stderr);
+
+        let _ignored = std::fs::remove_dir_all(&empty);
+
+        assert_ne!(code.Value(), 0, "an empty tree must not report the same code as a clean run");
+        assert_eq!(code, crate::workflow::ExitCode::Vacuous);
     }
 }

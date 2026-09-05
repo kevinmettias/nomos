@@ -67,8 +67,8 @@ use crate::facts::{
 };
 use crate::CheckOutcome;
 
-mod rule_reassessment;
-pub use rule_reassessment::RuleReassessmentCache;
+mod rule_reassessment_cache;
+pub use rule_reassessment_cache::RuleReassessmentCache;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
@@ -195,8 +195,9 @@ pub fn Run_Reassessing<Launcher: ProcessLauncher, Fs: FileSystem>(
         changed.push(RequiredFact::SyntaxItems);
     }
 
-    let environment = RunEnvironment { root, launcher, filesystem, registry: &registry, context };
-    let findings = Judged_Over(sources, environment, store, selected, reassessment, &mut changed);
+    let environment = RunEnvironment { root, launcher, filesystem, registry: &registry, context, selected };
+    let mut state = RunState { store, reassessment, changed };
+    let findings = Judged_Over(sources, environment, &mut state);
 
     return Outcome_Of(sources.len(), facts, findings);
 }
@@ -229,9 +230,10 @@ fn Materialized_Syntax_Facts(sources: &[SourceFile], context: &Context, store: &
     return Some(facts);
 }
 
-/// [`Run`]'s own root, launcher, filesystem, registry and composed context -- everything
-/// [`Judged_Over`] needs beside the sources and store it is handed separately, grouped so
-/// that function's parameter list names one environment instead of five loose values.
+/// [`Run`]'s own root, launcher, filesystem, registry, composed context and rule
+/// selection -- everything [`Judged_Over`] needs beside the sources and mutable state it is
+/// handed separately, grouped so that function's parameter list names one environment
+/// instead of six loose values.
 struct RunEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem>
 {
     root: &'a Path,
@@ -239,30 +241,39 @@ struct RunEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem>
     filesystem: &'a Fs,
     registry: &'a Registry,
     context: Context,
+    selected: &'a [RuleId],
+}
+
+/// The store, the reassessment cache, and which capability families this call has changed
+/// so far -- every value [`Judged_Over`] mutates, grouped into one so that function and
+/// [`Run_Reassessing`] both stay within this crate's own parameter-count limit. `changed`
+/// starts already carrying whatever [`Run_Reassessing`] found before [`Judged_Over`] is
+/// ever called (the syntax family, from its own before/after [`MemoryFactStore::
+/// Materializations`] snapshot around [`Materialized_Syntax_Facts`]) and
+/// [`Materialize_Capabilities`] appends the other nine to it.
+struct RunState<'a>
+{
+    store: &'a mut MemoryFactStore,
+    reassessment: &'a mut RuleReassessmentCache,
+    changed: Vec<RequiredFact>,
 }
 
 /// Every capability [`Run`] can materialize, judged -- the two steps [`Run`] itself used to
 /// inline, composed here so its own body names one step instead of four.
-fn Judged_Over<Launcher: ProcessLauncher, Fs: FileSystem>(
-    sources: &[SourceFile],
-    environment: RunEnvironment<'_, Launcher, Fs>,
-    store: &mut MemoryFactStore,
-    selected: &[RuleId],
-    reassessment: &mut RuleReassessmentCache,
-    changed: &mut Vec<RequiredFact>,
-) -> Vec<Finding>
+fn Judged_Over<Launcher: ProcessLauncher, Fs: FileSystem>(sources: &[SourceFile], environment: RunEnvironment<'_, Launcher, Fs>, state: &mut RunState<'_>) -> Vec<Finding>
 {
     let mut materialization_environment = MaterializationEnvironment {
         root: environment.root,
         context: &environment.context,
-        store,
+        store: state.store,
         launcher: environment.launcher,
         filesystem: environment.filesystem,
     };
-    let capabilities = Materialize_Capabilities(sources, &mut materialization_environment, selected, changed);
+    let capabilities = Materialize_Capabilities(sources, &mut materialization_environment, environment.selected, &mut state.changed);
 
-    let judge_environment = JudgeEnvironment { store, registry: environment.registry, context: environment.context };
-    return Judged_Findings(sources, capabilities, judge_environment, selected, reassessment, changed);
+    let judge_environment = JudgeEnvironment { store: state.store, registry: environment.registry, context: environment.context };
+    let reassessment = Reassessment { selected: environment.selected, cache: state.reassessment, changed: &state.changed };
+    return Judged_Findings(sources, capabilities, judge_environment, reassessment);
 }
 
 /// The dependency-edges, lint-diagnostics, dependency-policy, reachability and
@@ -541,18 +552,11 @@ struct CapabilityMaterialization
 /// than judged) -- unconditionally, since each such finding already carries its own rule
 /// and a caller that did not select it would never have triggered the materialization
 /// that raises it.
-fn Judged_Findings(
-    sources: &[SourceFile],
-    capabilities: CapabilityMaterialization,
-    env: JudgeEnvironment<'_>,
-    selected: &[RuleId],
-    reassessment: &mut RuleReassessmentCache,
-    changed: &[RequiredFact],
-) -> Vec<Finding>
+fn Judged_Findings(sources: &[SourceFile], capabilities: CapabilityMaterialization, env: JudgeEnvironment<'_>, reassessment: Reassessment<'_>) -> Vec<Finding>
 {
     let mut reader = Reader::On(env.store, env.registry, env.context);
 
-    let mut findings = Rule_Findings(sources, &capabilities, &mut reader, selected, reassessment, changed);
+    let mut findings = Rule_Findings(sources, &capabilities, &mut reader, reassessment);
     findings.extend(Capability_Findings(capabilities));
 
     return findings;
@@ -566,6 +570,16 @@ struct JudgeEnvironment<'a>
     store: &'a MemoryFactStore,
     registry: &'a Registry,
     context: Context,
+}
+
+/// A rule's selection, its reassessment cache, and which capability families this call has
+/// changed -- grouped into one value so [`Judged_Findings`], [`Rule_Findings`] and
+/// [`Findings_For_Selected_Rules`] each take it as one parameter rather than three.
+struct Reassessment<'a>
+{
+    selected: &'a [RuleId],
+    cache: &'a mut RuleReassessmentCache,
+    changed: &'a [RequiredFact],
 }
 
 /// Every finding the completeness, naming-convention, dependency-direction,
@@ -602,32 +616,22 @@ struct JudgeEnvironment<'a>
 /// broken.rs`, deliberately-invalid corpus content) was fixed directly rather than composed
 /// around, since it cost one line. All five are composed below with their two already-wired
 /// siblings.
-fn Rule_Findings(
-    sources: &[SourceFile],
-    capabilities: &CapabilityMaterialization,
-    reader: &mut Reader<'_, '_>,
-    selected: &[RuleId],
-    reassessment: &mut RuleReassessmentCache,
-    changed: &[RequiredFact],
-) -> Vec<Finding>
+fn Rule_Findings(sources: &[SourceFile], capabilities: &CapabilityMaterialization, reader: &mut Reader<'_, '_>, reassessment: Reassessment<'_>) -> Vec<Finding>
 {
     return With_Composed_Rules(sources, capabilities, |rules| {
-        return Findings_For_Selected_Rules(rules, reader, selected, reassessment, changed);
+        return Findings_For_Selected_Rules(rules, reader, reassessment);
     });
 }
 
-/// Runs every `rules` entry `selected` names, in table order, and collects what each
-/// produces -- except one already recorded in `reassessment` whose own required families
-/// are all absent from `changed`, whose prior findings are reused instead of running its
-/// closure again. See `rule_reassessment`'s own module doc for which rules that is, today.
-fn Findings_For_Selected_Rules(
-    rules: [ComposedRule<'_>; RULE_COUNT],
-    reader: &mut Reader<'_, '_>,
-    selected: &[RuleId],
-    reassessment: &mut RuleReassessmentCache,
-    changed: &[RequiredFact],
-) -> Vec<Finding>
+/// Runs every `rules` entry `reassessment.selected` names, in table order, and collects
+/// what each produces -- except one already recorded in `reassessment.cache` whose own
+/// required families are all absent from `reassessment.changed`, whose prior findings are
+/// reused instead of running its closure again. See `rule_reassessment`'s own module doc
+/// for which rules that is, today.
+fn Findings_For_Selected_Rules(rules: [ComposedRule<'_>; RULE_COUNT], reader: &mut Reader<'_, '_>, reassessment: Reassessment<'_>) -> Vec<Finding>
 {
+    let Reassessment { selected, cache, changed } = reassessment;
+
     let mut findings = Vec::new();
     for rule in rules
     {
@@ -636,14 +640,14 @@ fn Findings_For_Selected_Rules(
             continue;
         }
 
-        if let Some(reused) = reassessment.Reusable(rule.id, changed)
+        if let Some(reused) = cache.Reusable(rule.id, changed)
         {
             findings.extend(reused.clone());
             continue;
         }
 
         let rule_findings = rule.check.Findings(reader);
-        reassessment.Record(rule.id, rule_findings.clone());
+        cache.Record(rule.id, rule_findings.clone());
         findings.extend(rule_findings);
     }
 

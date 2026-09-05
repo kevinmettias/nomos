@@ -51224,7 +51224,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P40-WORKFLOW-CHECK-BODY"
       ],
@@ -51241,7 +51241,29 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-workflow-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "ning tests\\freshness.rs (target\\debug\\deps\\freshness-9101df4f6424b1d5.exe)\n     Running tests\\gate_orchestration_seam.rs (target\\debug\\deps\\gate_orchestration_seam-b00344a648b37f17.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-a4b95bc6ed9c9ac7.exe)\n     Running tests\\lang_go_seam.rs (target\\debug\\deps\\lang_go_seam-c69cbafd7b3be313.exe)\n     Running tests\\lang_rust_seam.rs (target\\debug\\deps\\lang_rust_seam-d8d63148e44d94a4.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-66f8d52200f8d923.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-4ff927a633cb699a.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-2203f8257ea1336f.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-d8a50b598b17f232.exe)\n     Running tests\\platform_std_seam.rs (target\\debug\\deps\\platform_std_seam-884013cb91f328dd.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-7be385f98010827e.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-ff340f2f11de20c3.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-87437926b74cbd9c.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-ebf9c45a633baedb.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-4f6ff1b5d880259b.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-678a44b11a508f7f.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-96ee61ec80f275ca.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-00278d74598dd1b1.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-a0d980afc0307f0f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workflow_orchestration-f9c80e000f3da625.exe)\n   Doc-tests nomos_workflow_orchestration\n",
+        "verified_at": 1788644414,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0afaba0b7410f77d875f9ae3d04bee3df858d8c6"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -55645,6 +55667,59 @@
           "exit_code": 0
         },
         "revision": "5c252254e6c10f29c7bd1c672871079aab2f3856"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-REASSESSMENT-CACHE-GATE-VIOLATIONS",
+      "title": "Two real blocking gate findings shipped with the rule-reassessment cache",
+      "why": "P40-INCREMENTAL-SKIP-UNCHANGED-RULES shipped two real blocking gate violations, both in\ncrates/orchestration/nomos-check-orchestration/src/run_context.rs and the file it added:\nRuleReassessmentCache is public but lived in rule_reassessment.rs instead of\nrule_reassessment_cache.rs (file-name-matches-declared-type), and adding the reassessment\ncache and changed-families slice as direct parameters pushed Findings_For_Selected_Rules,\nJudged_Findings, Judged_Over and Rule_Findings to arity 5 or 6 against a configured cap of\n4 (parameter-count).\n\nNeither was caught at the time: that item's own predicate named only nomos-check-\norchestration and nomos-rules, which runs no naming-convention or parameter-count rule\nover its own source, and nothing in the loop re-ran the real workspace-wide gate (crates/\nhost/nomos-cli/src/check.rs's own real-tree integration test) until this session's next\nitem (P40-WORKFLOW-CLI-VERB) happened to depend on nomos-cli's own predicate reaching it.",
+      "done_when": "RuleReassessmentCache's own file is named rule_reassessment_cache.rs, every function whose\nown arity exceeded the configured parameter-count cap of 4 is at or under it (grouping the\nreassessment cache, the changed-families slice and the rule selection into named values the\nsame way this file already groups its other parameters), cargo test -p\nnomos-check-orchestration passes, and a real gate run over this workspace's own tree no\nlonger names either finding.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context/rule_reassessment_cache.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "st_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings ... ok\ntest tests::Test_Materialize_Lint_Should_Return_Real_Workspace_Members ... ok\ntest tests::Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact ... ok\ntest tests::Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete ... ok\ntest tests::Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor ... ok\n\ntest result: ok. 57 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.58s\n\n\nrunning 6 tests\ntest Test_Registered_Should_Offer_Every_Dependency_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_Every_Syntax_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Declare_Every_Capability_Crates_Own_Real_Contract ... ok\ntest Test_Registered_Should_Offer_The_Deny_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Reachability_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Clippy_Providers_Own_Real_Offer ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List ... ok\ntest Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule ... ok\ntest Test_Run_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.78s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.29s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-b490f8ea84770ab5.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-64ecfdd75ebc30bd.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-c9e29199ba5db01b.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1788644483,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0afaba0b7410f77d875f9ae3d04bee3df858d8c6"
       },
       "abandoned": [],
       "displaced": [],

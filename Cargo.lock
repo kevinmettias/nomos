@@ -1079,6 +1079,7 @@ dependencies = [
  "nomos-spec-project",
  "nomos-spec-store",
  "nomos-work-orchestration",
+ "nomos-workflow-orchestration",
  "nomos-workspace",
 ]
 

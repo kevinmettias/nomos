@@ -26,6 +26,7 @@ mod request;
 mod spec;
 mod vacuity;
 mod work;
+mod workflow;
 
 use std::path::PathBuf;
 
@@ -57,6 +58,7 @@ fn main() -> std::process::ExitCode
         Some((vacuity::Group::Gate, rest)) => Run_Gate_Group(rest),
         Some((vacuity::Group::Agent, rest)) => Run_Agent_Group(rest),
         Some((vacuity::Group::Correct, rest)) => Run_Correct_Group(rest),
+        Some((vacuity::Group::Workflow, rest)) => Run_Workflow_Group(rest),
         None => Usage(),
     };
 
@@ -172,18 +174,33 @@ fn Run_Correct_Group(rest: &[String]) -> i32
     return correct::Run(&command, &mut stdout, &mut stderr).Value();
 }
 
+/// The workflow group: dispatching one step of an ordered `WorkflowStep` sequence.
+fn Run_Workflow_Group(rest: &[String]) -> i32
+{
+    let mut stdout = std::io::stdout();
+    let mut stderr = std::io::stderr();
+    let Ok(command) = workflow::Command_From_String_Arguments(rest).inspect_err(|message| eprintln!("{message}"))
+    else
+    {
+        return workflow::ExitCode::Usage.Value();
+    };
+
+    return workflow::Run(&command, &mut stdout, &mut stderr).Value();
+}
+
 /// What the binary answers when it was not told which group it is being asked for.
 fn Usage() -> i32
 {
     eprintln!(
         "usage: nomos <group> <command>\n\n  \
-         work    coordinate concurrent work over this repository\n  \
-         spec    read the specification store and render its projections\n  \
-         check   run the rules over a tree and report what they find\n  \
-         request submit a feature request, design spec or feature result\n  \
-         gate    compose this gate's rule registry and report what it holds\n  \
-         agent   dispatch a task to the first real AgentExecutor\n  \
-         correct build and commit a real correction for one real finding"
+         work     coordinate concurrent work over this repository\n  \
+         spec     read the specification store and render its projections\n  \
+         check    run the rules over a tree and report what they find\n  \
+         request  submit a feature request, design spec or feature result\n  \
+         gate     compose this gate's rule registry and report what it holds\n  \
+         agent    dispatch a task to the first real AgentExecutor\n  \
+         correct  build and commit a real correction for one real finding\n  \
+         workflow dispatch one step of an ordered WorkflowStep sequence"
     );
 
     return work::ExitCode::Usage.Value();

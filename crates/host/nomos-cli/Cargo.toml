@@ -86,6 +86,10 @@ nomos-model-package = { workspace = true }
 # renders; this crate composes a real check run and the `nomos-corrections` lifecycle.
 # `P40-CORRECTIONS-CANONICAL-SEAM`.
 nomos-correction-orchestration = { workspace = true }
+# The seam for running an ordered sequence of WorkflowStep declarations against a real
+# dispatch target -- `workflow.rs` walks a check step's own tree and renders; this crate
+# composes and dispatches. `P40-WORKFLOW-CLI-VERB`.
+nomos-workflow-orchestration = { workspace = true }
 
 [dev-dependencies]
 # `check::sources::Read_Entry` and `gate::sources::Read_Entry` hardcode the `"go"`
