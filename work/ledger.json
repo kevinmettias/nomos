@@ -54994,6 +54994,135 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P55-RULES-CLOSURE-BOUNDS",
+      "title": "Nothing judges a closure bound that asks for more than the call site needs",
+      "why": "code-standards' check-closure-bounds (rules/language-specific/rust/closures/closure-bounds, judgment in closure_Bounds/closure_Bounds_Line) enforces two rule ids: closure-bounds-are-minimal.md (a bound widened with Send, Sync, or 'static past what the call site uses, and a public function's own Fn/FnMut/FnOnce choice as an unverifiable API contract) and boxed-closures-are-justified-and-off-hot-paths.md (Box/Arc/Rc of dyn Fn*, a heap allocation plus an indirect call). A pure line scanner over Noisy_Lines_Blanked, not tree-sitter backed, matching the class this crate has already ported successfully (parameters-borrow-unless-ownership-is-taken, lifetime-discipline). Measured against the real corpus rather than assumed: the real check.exe over crates/ reports 0 findings at the real path but 4 waived-by-suppressions.json findings revealed by re-running a byte-identical scratch copy, all Send-only widenings in nomos-ledger's interleaving.rs (lines 197, 198, 236, 237), each already carrying a longer explanatory comment several lines above its enclosing multi-line signature -- out of the small look-back window this crate's justification rules already use, and out of the original Go marker-scan's reach too, which is why suppressions.json rather than an in-code marker was carrying it there. The public-API case and the boxed-dyn case were each checked for vacuity with a hand-written positive fixture (both fire) rather than trusted on their real zero: the public case is vacuous by construction over this workspace's multi-line Allman-braced signatures, which never put pub fn and an inline Fn* bound on one physical line; the boxed case is a genuine zero, since nothing here boxes or shares a closure.",
+      "done_when": "nomos-rules exports Check_Closure_Bounds_Are_Minimal (covering the widened-bound and public-API shapes under closure-bounds-are-minimal) and Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths (boxed-closures-are-justified-and-off-hot-paths), both SourceText rules reading no facts, both accepting any adjacent explanatory comment as justification rather than the original's one marker spelling -- the same divergence lifetime_discipline.rs's static-bounds rule already made, and for the same reason: this workspace's four real instances each already carry a comment, just out of the small look-back window, and a literal port would report all four as unjustified with nowhere to say otherwise. Both rules exempt their own implementation file by path, the same way rust_text.rs's justification rules do, verified necessary by a real nomos gate run before the exemption existed. Composed into nomos-check-orchestration's Run, carry descriptors in rule_descriptor.rs, and the blessed public surface names all four new exports. interleaving.rs's four Send-bounded closure parameters each carry their own adjacent one-line reason so the ported rule reports the real population as justified rather than as four new findings. A real nomos gate run over this workspace reports zero blocking findings from either new rule, and the same binary reports findings against a hand-written positive fixture for every shape (widened bound, public API bound, boxed dyn). cargo test -p nomos-rules -p nomos-check-orchestration -p nomos-gate-orchestration -p nomos-contract-tests passes.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/closure_bounds.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/interleaving.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "predicate argv corrupted by a misplaced --timeout flag; superseded by P55-RULES-CLOSURE-BOUNDS-2"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--timeout",
+          "20m"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-code-session",
+          "reason": "authored with --timeout after the -- separator, which silently joined the predicate argv instead of setting nomos's own flag; re-adding as -2 with it placed correctly",
+          "abandoned_at": 1788628605
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-code-session",
+        "declined_at": 1788628605
+      }
+    },
+    {
+      "id": "P55-RULES-CLOSURE-BOUNDS-2",
+      "title": "Nothing judges a closure bound that asks for more than the call site needs",
+      "why": "code-standards' check-closure-bounds (rules/language-specific/rust/closures/closure-bounds, judgment in closure_Bounds/closure_Bounds_Line) enforces two rule ids: closure-bounds-are-minimal.md (a bound widened with Send, Sync, or 'static past what the call site uses, and a public function's own Fn/FnMut/FnOnce choice as an unverifiable API contract) and boxed-closures-are-justified-and-off-hot-paths.md (Box/Arc/Rc of dyn Fn*, a heap allocation plus an indirect call). A pure line scanner over Noisy_Lines_Blanked, not tree-sitter backed, matching the class this crate has already ported successfully (parameters-borrow-unless-ownership-is-taken, lifetime-discipline). Measured against the real corpus rather than assumed: the real check.exe over crates/ reports 0 findings at the real path but 4 waived-by-suppressions.json findings revealed by re-running a byte-identical scratch copy, all Send-only widenings in nomos-ledger's interleaving.rs (lines 197, 198, 236, 237), each already carrying a longer explanatory comment several lines above its enclosing multi-line signature -- out of the small look-back window this crate's justification rules already use, and out of the original Go marker-scan's reach too, which is why suppressions.json rather than an in-code marker was carrying it there. The public-API case and the boxed-dyn case were each checked for vacuity with a hand-written positive fixture (both fire) rather than trusted on their real zero: the public case is vacuous by construction over this workspace's multi-line Allman-braced signatures, which never put pub fn and an inline Fn* bound on one physical line; the boxed case is a genuine zero, since nothing here boxes or shares a closure.",
+      "done_when": "nomos-rules exports Check_Closure_Bounds_Are_Minimal (covering the widened-bound and public-API shapes under closure-bounds-are-minimal) and Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths (boxed-closures-are-justified-and-off-hot-paths), both SourceText rules reading no facts, both accepting any adjacent explanatory comment as justification rather than the original's one marker spelling -- the same divergence lifetime_discipline.rs's static-bounds rule already made, and for the same reason: this workspace's four real instances each already carry a comment, just out of the small look-back window, and a literal port would report all four as unjustified with nowhere to say otherwise. Both rules exempt their own implementation file by path, the same way rust_text.rs's justification rules do, verified necessary by a real nomos gate run before the exemption existed. Composed into nomos-check-orchestration's Run, carry descriptors in rule_descriptor.rs, and the blessed public surface names all four new exports. interleaving.rs's four Send-bounded closure parameters each carry their own adjacent one-line reason so the ported rule reports the real population as justified rather than as four new findings. A real nomos gate run over this workspace reports zero blocking findings from either new rule, and the same binary reports findings against a hand-written positive fixture for every shape (widened bound, public API bound, boxed dyn). cargo test -p nomos-rules -p nomos-check-orchestration -p nomos-gate-orchestration -p nomos-contract-tests passes.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/closure_bounds.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/interleaving.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "sts src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-b490f8ea84770ab5.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-64ecfdd75ebc30bd.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-c9e29199ba5db01b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-0b2ef4fd5e7c2d6c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-afe7a57dcea20e0d.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-4ad4f8b0f0df8c7d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fb67c7aca932349f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-576b255f0e5eeb09.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-138f392b3663534b.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-b9d0651de2dc653d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-a2017e263d5cbe6d.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-497e7a773c08fe38.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-af9eeac860a2912c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-3b4d3e3ba4aed231.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-81b14b47bafad117.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-0b6600445d60185a.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-0094cb2b5807a8bb.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788628670,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7752ed5daefe75595cde439cc4283af275541c0e"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

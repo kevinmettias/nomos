@@ -468,6 +468,8 @@ pub use checks::{
     Check_Lifetimes_Follow_The_Descriptive_Naming_Rule, Check_Static_Bounds_Are_Justified,
     LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, STATIC_BOUNDS_ARE_JUSTIFIED,
     Check_Prefer_Macro_Rules_Over_Procedural_Macros, PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS,
+    Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths, Check_Closure_Bounds_Are_Minimal,
+    BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, CLOSURE_BOUNDS_ARE_MINIMAL,
     Check_A_Package_Is_Named_After_Its_Directory, Check_No_Wildcard_Imports, A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
     NO_WILDCARD_IMPORTS,
     Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_Go_File_Size_Hard_Trigger,

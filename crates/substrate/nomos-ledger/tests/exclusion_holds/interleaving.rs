@@ -194,7 +194,9 @@ pub(crate) fn Ledger_Over<'shared>(
 pub(crate) fn Two_Writers(
     name: &str,
     items: Vec<LedgerItem>,
+    // Send: crosses onto Interleaved's spawned thread below.
     first: impl FnOnce(&mut InterleavedLedger<'_>) + Send,
+    // Send: crosses onto Interleaved's spawned thread below.
     second: impl FnOnce(&mut InterleavedLedger<'_>) + Send,
 ) -> LedgerDocument
 {
@@ -233,7 +235,9 @@ pub(crate) struct Harness<'a>
 // in-code marker still argues under this repository's safety-only policy).
 pub(crate) fn Interleaved(
     over: Harness<'_>,
+    // Send: std::thread::scope(..).spawn(..) below moves this closure onto its own thread.
     first: impl FnOnce(&mut InterleavedLedger<'_>) + Send,
+    // Send: std::thread::scope(..).spawn(..) below moves this closure onto its own thread.
     second: impl FnOnce(&mut InterleavedLedger<'_>) + Send,
 )
 {

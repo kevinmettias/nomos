@@ -242,6 +242,8 @@ pub const DESCRIPTORS: &[RuleDescriptor] = &[
     Described(crate::STATIC_BOUNDS_ARE_JUSTIFIED, SubjectKind::SourceText, &[]),
     Described(crate::PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS, SubjectKind::SourceText, &[]),
     Described(crate::NESTING_DEPTH, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy]),
+    Described(crate::CLOSURE_BOUNDS_ARE_MINIMAL, SubjectKind::SourceText, &[]),
+    Described(crate::BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, SubjectKind::SourceText, &[]),
 ];
 
 #[cfg(test)]

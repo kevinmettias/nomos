@@ -25,6 +25,7 @@ use nomos_rules::{
     Check_No_Orphan_Modules, Check_No_Single_Line_Function_Bodies,
     Check_Parameters_Borrow_Unless_Ownership_Is_Taken, Check_Prefer_Macro_Rules_Over_Procedural_Macros,
     Check_Static_Bounds_Are_Justified,
+    Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths, Check_Closure_Bounds_Are_Minimal,
     Check_No_Wildcard_Imports,
     Check_No_Trailing_Whitespace, Check_Parameter_Count, Check_Relaxed_Not_Used_When_Ordering_Matters,
     Check_Scripts_Use_A_Portable_Shebang, Check_Seqcst_Justified_Explicitly, Check_Shared_Interior_Mutability_Says_Why,
@@ -34,6 +35,7 @@ use nomos_rules::{
     A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, A_DISABLED_TEST_STATES_WHY, A_DISCARDED_ERROR_IS_EXPLAINED, A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
     A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, A_SCRIPT_DECLARES_ITS_PURPOSE, A_SECRET_DOES_NOT_TRAVEL_IN_A_URL,
     A_SKIPPED_TEST_STATES_WHY, AN_EXCLUDED_FILE_SAYS_WHY, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED,
+    BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, CLOSURE_BOUNDS_ARE_MINIMAL,
     CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, COMPLETENESS_MIRROR, CONSTANTS_SPLIT_BY_EXPORT,
     CROSS_LANGUAGE_CORRESPONDENCE, DATA_NAMES_STAY_LOWER_SNAKE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS,
     DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, DEPRECATION, EAGER_VS_LAZY_CONTEXT,
@@ -66,7 +68,7 @@ use crate::CheckOutcome;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 62;
+const RULE_COUNT: usize = 64;
 
 /// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
 /// through, the filesystem a repository-declared policy capability (`nomos.cap.naming.
@@ -769,6 +771,8 @@ fn With_Composed_Rules<Answer>(
         ComposedRule { id: STATIC_BOUNDS_ARE_JUSTIFIED, check: &|_reader: &mut Reader<'_, '_>| return Check_Static_Bounds_Are_Justified(sources) },
         ComposedRule { id: PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS, check: &|_reader: &mut Reader<'_, '_>| return Check_Prefer_Macro_Rules_Over_Procedural_Macros(sources) },
         ComposedRule { id: NESTING_DEPTH, check: &|reader: &mut Reader<'_, '_>| return Check_Nesting_Depth(sources, reader) },
+        ComposedRule { id: CLOSURE_BOUNDS_ARE_MINIMAL, check: &|_reader: &mut Reader<'_, '_>| return Check_Closure_Bounds_Are_Minimal(sources) },
+        ComposedRule { id: BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, check: &|_reader: &mut Reader<'_, '_>| return Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(sources) },
     ];
 
     return body(rules);

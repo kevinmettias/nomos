@@ -19,6 +19,7 @@
 //! [`test_support`] now states once.
 
 mod borrowed_container;
+mod closure_bounds;
 mod concurrency_text;
 mod constant_scope;
 mod crosslang;
@@ -56,6 +57,10 @@ use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
 
 pub use borrowed_container::{Check_Parameters_Borrow_Unless_Ownership_Is_Taken, PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN};
+pub use closure_bounds::{
+    Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths, Check_Closure_Bounds_Are_Minimal,
+    BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, CLOSURE_BOUNDS_ARE_MINIMAL,
+};
 pub use concurrency_text::{
     Check_Atomic_Ordering_Choices_Are_Justified, Check_Relaxed_Not_Used_When_Ordering_Matters,
     Check_Seqcst_Justified_Explicitly, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, RELAXED_NOT_USED_WHEN_ORDERING_MATTERS,
