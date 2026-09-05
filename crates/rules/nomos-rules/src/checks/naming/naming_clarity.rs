@@ -53,20 +53,65 @@ const DEFAULT_VAGUE_WORDS: &[&str] = &[
 #[must_use]
 pub fn Check_Naming_Clarity(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    let (additions, exempt) = Resolve_Vague_Lists(facts);
+    let VagueWordLists { additions, exempt } = Resolve_Vague_Lists(facts);
     let mut findings = Vec::new();
 
     for source in sources
     {
         match super::reading::Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Violations_In(&payload, &source.path, &additions, &exempt)),
+            Ok(payload) =>
+            {
+                let violations = Violations_In(&payload, &source.path, &additions, &exempt);
+                findings.extend(violations);
+            }
             Err(finding) => findings.push(Unread_As_This_Rule(finding)),
         }
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+/// A repository's own vague-word additions and exemptions, named rather than returned as a
+/// tuple: both fields are `Vec<String>`, and a caller that received them positionally could
+/// swap `additions` and `exempt` without the compiler ever objecting.
+struct VagueWordLists
+{
+    additions: Vec<String>,
+    exempt: Vec<String>,
+}
+
+/// Resolves a repository's own vague-word additions and exemptions — both empty on any
+/// `Require` failure, per `OD-CAPABILITY-004`/`OD-RULES-011`'s settled optional-read
+/// pattern: this capability is optional, and its absence must never surface as a `Finding`
+/// or this capability's own `Applicability`.
+fn Resolve_Vague_Lists(facts: &mut dyn FactReader) -> VagueWordLists
+{
+    let subject = nomos_model::Subject_Of_Path("");
+    let Ok(fact) =
+        facts.Require(&nomos_cap_words_policy::Capability(), &subject, InputDigest::Of(&[]), &Words_Policy_Requirement())
+    else
+    {
+        return VagueWordLists { additions: Vec::new(), exempt: Vec::new() };
+    };
+
+    let Ok(payload) = nomos_cap_words_policy::Parse_Payload(&fact.payload.bytes)
+    else
+    {
+        return VagueWordLists { additions: Vec::new(), exempt: Vec::new() };
+    };
+
+    return VagueWordLists { additions: payload.vague_additions, exempt: payload.vague_exempt };
+}
+
+/// This crate's own floor for `nomos.cap.words.policy` — the same floor
+/// `abbreviations.rs`'s own `Words_Policy_Requirement` states, duplicated per this crate's
+/// per-file convention rather than shared, since a second rule reading the same capability
+/// is exactly the shape every other `OD-RULES-011` rule already reads it through.
+fn Words_Policy_Requirement() -> nomos_capability::Requirement
+{
+    return nomos_capability::Requirement::New(nomos_cap_words_policy::Capability(), nomos_cap_words_policy::CONTRACT_VERSION, nomos_cap_words_policy::Ceiling());
 }
 
 fn Violations_In(payload: &SyntaxPayload, path: &str, additions: &[String], exempt: &[String]) -> Vec<Finding>
@@ -76,29 +121,35 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, additions: &[String], exem
 
     for item in &payload.items
     {
-        enclosing_trait_impl = Enclosing_Trait_Impl(item, enclosing_trait_impl);
-        if enclosing_trait_impl.as_ref().is_some_and(|block| return Is_Member_Of(item, block))
-        {
-            continue;
-        }
-
-        if item.kind == USE_BINDING
-        {
-            continue;
-        }
-
-        if let Some(word) = First_Vague_Word(item.Own_Name(), additions, exempt)
-        {
-            findings.push(Violation_Finding(path, item, item.Own_Name(), &word));
-        }
-
-        if item.kind == STRUCT
-        {
-            findings.extend(Field_Violations_In(path, item, additions, exempt));
-        }
+        let violations = Item_Violations_In(item, path, WordLists { additions, exempt }, &mut enclosing_trait_impl);
+        findings.extend(violations);
     }
 
     return findings;
+}
+
+/// One item's own violations: whether it is exempt as an unowned trait-member name or a
+/// `use` binding, then its own name and (for a struct) its fields, against the vocabulary.
+/// `enclosing_trait_impl` is carried and updated in place, the same "an `impl` block resets
+/// it" rule [`Enclosing_Trait_Impl`] states, so each item in call order sees the block its
+/// predecessor left behind.
+/// The vague-word vocabulary's two lists, grouped so [`Item_Violations_In`] stays under
+/// the parameter-count ceiling.
+struct WordLists<'a>
+{
+    additions: &'a [String],
+    exempt: &'a [String],
+}
+
+fn Item_Violations_In(item: &PayloadItem, path: &str, words: WordLists<'_>, enclosing_trait_impl: &mut Option<String>) -> Vec<Finding>
+{
+    *enclosing_trait_impl = Enclosing_Trait_Impl(item, enclosing_trait_impl.take());
+    if Is_Exempt(item, enclosing_trait_impl.as_deref())
+    {
+        return Vec::new();
+    }
+
+    return Own_And_Field_Violations(item, path, words.additions, words.exempt);
 }
 
 /// The qualified name of the trait-serving `impl` block whose members `item` and everything
@@ -121,9 +172,42 @@ fn Enclosing_Trait_Impl(item: &PayloadItem, previous: Option<String>) -> Option<
     return None;
 }
 
+/// Whether `item`'s own name is not this rule's to judge: a member of the trait `impl`
+/// block at `enclosing_trait_impl` (a name the trait fixed, not the author), or a `use`
+/// binding (a name chosen wherever the binding's target was declared).
+fn Is_Exempt(item: &PayloadItem, enclosing_trait_impl: Option<&str>) -> bool
+{
+    if enclosing_trait_impl.is_some_and(|block| return Is_Member_Of(item, block))
+    {
+        return true;
+    }
+
+    return item.kind == USE_BINDING;
+}
+
 fn Is_Member_Of(item: &PayloadItem, block: &str) -> bool
 {
     return item.qualified_name.starts_with(&format!("{block}::"));
+}
+
+/// `item`'s own name, and (for a struct) its fields, against the vocabulary.
+fn Own_And_Field_Violations(item: &PayloadItem, path: &str, additions: &[String], exempt: &[String]) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    if let Some(word) = First_Vague_Word(item.Own_Name(), additions, exempt)
+    {
+        let finding = Violation_Finding(path, item, item.Own_Name(), word);
+        findings.push(finding);
+    }
+
+    if item.kind == STRUCT
+    {
+        let field_violations = Field_Violations_In(path, item, additions, exempt);
+        findings.extend(field_violations);
+    }
+
+    return findings;
 }
 
 fn Field_Violations_In(path: &str, item: &PayloadItem, additions: &[String], exempt: &[String]) -> Vec<Finding>
@@ -134,9 +218,18 @@ fn Field_Violations_In(path: &str, item: &PayloadItem, additions: &[String], exe
         .iter()
         .filter_map(|(name, _type_name)| {
             let word = First_Vague_Word(name, additions, exempt)?;
-            return Some(Violation_Finding(path, item, name, &word));
+            return Some(Violation_Finding(path, item, name, word));
         })
         .collect();
+}
+
+fn Unread_As_This_Rule(mut finding: Finding) -> Finding
+{
+    finding.rule = RuleId::New(NAMING_CLARITY);
+    finding.summary = finding
+        .summary
+        .replace("this file's naming could not be judged", "this file's naming clarity could not be judged");
+    return finding;
 }
 
 /// The first vague word inside `name`, if any — code-standards' own `Vague_Word` reports
@@ -198,35 +291,7 @@ fn Is_All_Digits(field: &str) -> bool
     return !field.is_empty() && field.chars().all(|character| return character.is_ascii_digit());
 }
 
-/// This crate's own floor for `nomos.cap.words.policy` — the same floor
-/// `abbreviations.rs`'s own `Words_Policy_Requirement` states, duplicated per this crate's
-/// per-file convention rather than shared, since a second rule reading the same capability
-/// is exactly the shape every other `OD-RULES-011` rule already reads it through.
-fn Words_Policy_Requirement() -> nomos_capability::Requirement
-{
-    return nomos_capability::Requirement::New(nomos_cap_words_policy::Capability(), nomos_cap_words_policy::CONTRACT_VERSION, nomos_cap_words_policy::Ceiling());
-}
-
-/// Resolves a repository's own vague-word additions and exemptions — both empty on any
-/// `Require` failure, per `OD-CAPABILITY-004`/`OD-RULES-011`'s settled optional-read
-/// pattern: this capability is optional, and its absence must never surface as a `Finding`
-/// or this capability's own `Applicability`.
-fn Resolve_Vague_Lists(facts: &mut dyn FactReader) -> (Vec<String>, Vec<String>)
-{
-    let subject = nomos_model::Subject_Of_Path("");
-    let Ok(fact) =
-        facts.Require(&nomos_cap_words_policy::Capability(), &subject, InputDigest::Of(&[]), &Words_Policy_Requirement())
-    else
-    {
-        return (Vec::new(), Vec::new());
-    };
-
-    let Ok(payload) = nomos_cap_words_policy::Parse_Payload(&fact.payload.bytes) else { return (Vec::new(), Vec::new()) };
-
-    return (payload.vague_additions, payload.vague_exempt);
-}
-
-fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, word: &str) -> Finding
+fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, word: String) -> Finding
 {
     use nomos_model::Content_Digest;
 
@@ -242,15 +307,6 @@ fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, word: &str) -> 
         summary: format!("`{name}` contains vague word `{word}`; use a concrete responsibility name"),
         locations: vec![path.to_owned()],
     };
-}
-
-fn Unread_As_This_Rule(mut finding: Finding) -> Finding
-{
-    finding.rule = RuleId::New(NAMING_CLARITY);
-    finding.summary = finding
-        .summary
-        .replace("this file's naming could not be judged", "this file's naming clarity could not be judged");
-    return finding;
 }
 
 #[cfg(test)]

@@ -180,7 +180,7 @@ pub(super) fn Refuse_An_Unpublished_Amendment(
             });
         };
 
-        Refuse_A_Misspelled_Amendment(declared, &file)?;
+        Refuse_A_Misspelled_Amendment(AmendmentSpelling { declared, file: &file })?;
     }
 
     return Ok(());
@@ -225,8 +225,9 @@ fn Published_Counterpart(mine: &Territory, published: &Territory) -> Option<Stri
 /// and this function can never see anything to refuse. The plain fold still settles
 /// separators and case, so `Docs\Records\OD-LEDGER-006-x.md` is not called a misspelling of
 /// `docs/records/od-ledger-006-x.md`.
-fn Refuse_A_Misspelled_Amendment(declared: &str, file: &str) -> Result<(), AddRefusal>
+fn Refuse_A_Misspelled_Amendment(spelling: AmendmentSpelling<'_>) -> Result<(), AddRefusal>
 {
+    let AmendmentSpelling { declared, file } = spelling;
     let spelled = nomos_model::Normalize_Path(declared);
 
     if !spelled.ends_with(RECORD_FILE_SUFFIX) || spelled == nomos_model::Normalize_Path(file)
@@ -239,6 +240,17 @@ fn Refuse_A_Misspelled_Amendment(declared: &str, file: &str) -> Result<(), AddRe
         declared: declared.to_owned(),
         file: file.to_owned(),
     });
+}
+
+/// What an item declared as a record's filename, and the file it actually names -- paired
+/// so a caller cannot transpose which is which, since both are `&str` and the compiler
+/// cannot catch a swap between them on its own.
+struct AmendmentSpelling<'a>
+{
+    /// The path the item declared, as it was authored.
+    declared: &'a str,
+    /// The file this repository actually published the identifier as.
+    file: &'a str,
 }
 
 /// The folded record directory, with its separator, as [`Normalize_Path`] leaves it.

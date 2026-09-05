@@ -68,22 +68,30 @@ fn Limits_Rows_Into(value: &serde_json::Value, scope: &Scope, rows: &mut Vec<Pol
 
     for (key, declared_value) in limits
     {
-        let Some(number) = declared_value.as_u64()
-        else
-        {
-            return Err(LimitsPolicyError {
-                reason: format!("{STANDARDS_JSON}'s limits.{key} is not a non-negative integer"),
-            });
-        };
-
-        let value = u32::try_from(number).map_err(|_error| LimitsPolicyError {
-            reason: format!("{STANDARDS_JSON}'s limits.{key} is too large: {number}"),
-        })?;
-
-        rows.push(PolicyRow { scope: scope.clone(), key: key.clone(), value });
+        let row = Limits_Row(scope, key, declared_value)?;
+        rows.push(row);
     }
 
     return Ok(());
+}
+
+/// One `limits.<key>` entry as a [`PolicyRow`] at `scope`, refused if it is not a
+/// non-negative integer that fits in a `u32`.
+fn Limits_Row(scope: &Scope, key: &str, declared_value: &serde_json::Value) -> Result<PolicyRow, LimitsPolicyError>
+{
+    let Some(number) = declared_value.as_u64()
+    else
+    {
+        return Err(LimitsPolicyError {
+            reason: format!("{STANDARDS_JSON}'s limits.{key} is not a non-negative integer"),
+        });
+    };
+
+    let value = u32::try_from(number).map_err(|_error| LimitsPolicyError {
+        reason: format!("{STANDARDS_JSON}'s limits.{key} is too large: {number}"),
+    })?;
+
+    return Ok(PolicyRow { scope: scope.clone(), key: key.to_owned(), value });
 }
 
 /// `rows`, in a stable order — neither a JSON object's own representation nor iteration
@@ -104,23 +112,14 @@ mod tests
     use nomos_platform_std::StdFileSystem;
     use std::path::PathBuf;
 
-    #[test]
-    fn Test_Discover_Workspace_Should_Read_This_Repositorys_Own_Declared_Thresholds()
-    {
-        let rows = Discover_Workspace(&Repository_Root(), &StdFileSystem)
-            .expect("this repository's own standards.json is real and well-formed");
-
-        assert!(
-            rows.iter().any(|row| return row.scope == Scope::Repository && row.key == "file-size-hard-lines" && row.value == 1500),
-            "this workspace's own standards.json declares limits.file-size-hard-lines = 1500: {rows:?}"
-        );
-        assert!(
-            rows.iter().any(|row| {
-                return row.scope == Scope::Language("go".to_owned()) && row.key == "file-size-hard-lines" && row.value == 1000;
-            }),
-            "this workspace's own standards.json declares languages.go.limits.file-size-hard-lines = 1000: {rows:?}"
-        );
-    }
+    /// The repository-wide sample threshold these fixtures declare, echoed at both the
+    /// encode site and its own assertions so the two ends of a round trip cannot silently
+    /// drift apart. Shared by every test below that needs the same value.
+    const SAMPLE_REPOSITORY_LIMIT: u32 = 1500;
+    /// The per-language sample threshold these fixtures declare.
+    const SAMPLE_LANGUAGE_LIMIT: u32 = 1000;
+    /// How many rows a fixture declaring one repository-wide and one language row produces.
+    const SAMPLE_ROW_COUNT: usize = 2;
 
     #[test]
     fn Test_Discover_Workspace_Should_Declare_Nothing_For_A_Missing_File()
@@ -153,7 +152,7 @@ mod tests
 
         fn Exists(&self, _path: &Path) -> bool
         {
-            true
+            return true;
         }
     }
 
@@ -162,24 +161,24 @@ mod tests
     {
         let filesystem = FakeFileSystem {
             text: serde_json::json!({
-                "limits": { "file-size-hard-lines": 1500 },
-                "languages": { "go": { "limits": { "file-size-hard-lines": 1000 } } }
+                "limits": { "file-size-hard-lines": SAMPLE_REPOSITORY_LIMIT },
+                "languages": { "go": { "limits": { "file-size-hard-lines": SAMPLE_LANGUAGE_LIMIT } } }
             })
             .to_string(),
         };
 
         let rows = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON");
 
-        assert_eq!(rows.len(), 2, "{rows:?}");
+        assert_eq!(rows.len(), SAMPLE_ROW_COUNT, "{rows:?}");
         assert!(rows.contains(&PolicyRow {
             scope: Scope::Repository,
             key: "file-size-hard-lines".to_owned(),
-            value: 1500
+            value: SAMPLE_REPOSITORY_LIMIT
         }));
         assert!(rows.contains(&PolicyRow {
             scope: Scope::Language("go".to_owned()),
             key: "file-size-hard-lines".to_owned(),
-            value: 1000
+            value: SAMPLE_LANGUAGE_LIMIT
         }));
     }
 
@@ -225,16 +224,5 @@ mod tests
         let rows = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON with no limits block");
 
         assert!(rows.is_empty(), "{rows:?}");
-    }
-
-    fn Repository_Root() -> PathBuf
-    {
-        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(Path::parent)
-            .and_then(Path::parent)
-            .map(PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
     }
 }

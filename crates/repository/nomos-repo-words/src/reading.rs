@@ -94,6 +94,17 @@ mod tests
         );
     }
 
+    fn Repository_Root() -> PathBuf
+    {
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest
+            .parent()
+            .and_then(Path::parent)
+            .and_then(Path::parent)
+            .map(PathBuf::from)
+            .expect("this crate sits three levels below the workspace root");
+    }
+
     #[test]
     fn Test_Discover_Workspace_Should_Declare_Nothing_For_A_Missing_File()
     {
@@ -125,7 +136,7 @@ mod tests
 
         fn Exists(&self, _path: &Path) -> bool
         {
-            true
+            return true;
         }
     }
 
@@ -154,10 +165,14 @@ mod tests
         assert_eq!(payload.vague_exempt, vec!["info".to_owned()]);
     }
 
+    /// A value that is not a string, wherever a fixture needs one — its only meaning is
+    /// "not a string".
+    const NON_STRING_SENTINEL: i64 = 5;
+
     #[test]
     fn Test_Discover_Workspace_Should_Refuse_A_Non_String_Vague_Entry()
     {
-        let filesystem = FakeFileSystem { text: serde_json::json!({ "words": { "vague": [5] } }).to_string() };
+        let filesystem = FakeFileSystem { text: serde_json::json!({ "words": { "vague": [NON_STRING_SENTINEL] } }).to_string() };
 
         let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a non-string entry must be refused");
 
@@ -179,7 +194,7 @@ mod tests
     fn Test_Discover_Workspace_Should_Refuse_A_Non_String_Entry()
     {
         let filesystem = FakeFileSystem {
-            text: serde_json::json!({ "words": { "approved_abbreviations": [5] } }).to_string(),
+            text: serde_json::json!({ "words": { "approved_abbreviations": [NON_STRING_SENTINEL] } }).to_string(),
         };
 
         let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a non-string entry must be refused");
@@ -195,16 +210,5 @@ mod tests
         let payload = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON with no words block");
 
         assert_eq!(payload, WordsPolicyPayload::default());
-    }
-
-    fn Repository_Root() -> PathBuf
-    {
-        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(Path::parent)
-            .and_then(Path::parent)
-            .map(PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
     }
 }

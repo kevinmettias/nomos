@@ -154,12 +154,6 @@ fn Is_Segmented(name: &str, separator: char, segment_ok: fn(&str) -> bool) -> bo
     return name.split(separator).all(|segment| return !segment.is_empty() && segment_ok(segment));
 }
 
-fn Segment_Is_Lower(segment: &str) -> bool
-{
-    return !segment.is_empty()
-        && segment.chars().all(|character| return character.is_ascii_lowercase() || character.is_ascii_digit());
-}
-
 fn Segment_Is_Screaming(segment: &str) -> bool
 {
     return segment.chars().all(|character| return character.is_ascii_uppercase() || character.is_ascii_digit());
@@ -187,6 +181,18 @@ fn Is_Upper_Snake(name: &str) -> bool
     return segments.all(Segment_Opens_Upper_Or_Digit);
 }
 
+fn Segment_Opens_Upper_Letter(segment: &str) -> bool
+{
+    let mut characters = segment.chars();
+    let Some(first) = characters.next()
+    else
+    {
+        return false;
+    };
+
+    return first.is_ascii_uppercase() && characters.all(|character| return character.is_ascii_alphanumeric());
+}
+
 /// `^[a-z0-9]+(_[A-Za-z0-9]+)*$`: the first segment lower-or-digit only, every later
 /// segment alphanumeric with no case constraint of its own — `compute_Total`, the shape
 /// "lowercase only the leading word, keep the rest as written" needs.
@@ -207,16 +213,10 @@ fn Is_Mixed_Snake(name: &str) -> bool
     return segments.all(|segment| return !segment.is_empty() && segment.chars().all(|character| return character.is_ascii_alphanumeric()));
 }
 
-fn Segment_Opens_Upper_Letter(segment: &str) -> bool
+fn Segment_Is_Lower(segment: &str) -> bool
 {
-    let mut characters = segment.chars();
-    let Some(first) = characters.next()
-    else
-    {
-        return false;
-    };
-
-    return first.is_ascii_uppercase() && characters.all(|character| return character.is_ascii_alphanumeric());
+    return !segment.is_empty()
+        && segment.chars().all(|character| return character.is_ascii_lowercase() || character.is_ascii_digit());
 }
 
 fn Segment_Opens_Upper_Or_Digit(segment: &str) -> bool
@@ -236,21 +236,6 @@ fn Segment_Opens_Upper_Or_Digit(segment: &str) -> bool
 mod tests
 {
     use super::*;
-
-    /// One row per `case.go` worked example — the exact name each doc comment gives.
-    fn Worked_Examples() -> Vec<(Case, &'static str)>
-    {
-        return vec![
-            (Case::UpperCamel, "ComputeTotal"),
-            (Case::LowerCamel, "computeTotal"),
-            (Case::UnderscoreCamel, "_computeTotal"),
-            (Case::LowerSnake, "compute_total"),
-            (Case::UpperSnake, "Compute_Total"),
-            (Case::ScreamingSnake, "COMPUTE_TOTAL"),
-            (Case::MixedSnake, "compute_Total"),
-            (Case::LowerKebab, "compute-total"),
-        ];
-    }
 
     #[test]
     fn Test_Conforms_Should_Accept_Its_Own_Worked_Example()
@@ -385,5 +370,20 @@ mod tests
         assert_eq!(Case::From_Label("kebab-case"), None);
         assert_eq!(Case::From_Label("PascalCase"), None);
         assert_eq!(Case::From_Label(""), None);
+    }
+
+    /// One row per `case.go` worked example — the exact name each doc comment gives.
+    fn Worked_Examples() -> Vec<(Case, &'static str)>
+    {
+        return vec![
+            (Case::UpperCamel, "ComputeTotal"),
+            (Case::LowerCamel, "computeTotal"),
+            (Case::UnderscoreCamel, "_computeTotal"),
+            (Case::LowerSnake, "compute_total"),
+            (Case::UpperSnake, "Compute_Total"),
+            (Case::ScreamingSnake, "COMPUTE_TOTAL"),
+            (Case::MixedSnake, "compute_Total"),
+            (Case::LowerKebab, "compute-total"),
+        ];
     }
 }

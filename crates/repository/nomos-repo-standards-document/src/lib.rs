@@ -91,6 +91,17 @@ mod tests
         );
     }
 
+    fn Repository_Root() -> PathBuf
+    {
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest
+            .parent()
+            .and_then(Path::parent)
+            .and_then(Path::parent)
+            .map(PathBuf::from)
+            .expect("this crate sits three levels below the workspace root");
+    }
+
     #[test]
     fn Test_Read_Standards_Document_Should_Return_Null_For_A_Missing_File()
     {
@@ -121,7 +132,7 @@ mod tests
 
         fn Exists(&self, _path: &Path) -> bool
         {
-            true
+            return true;
         }
     }
 
@@ -146,16 +157,5 @@ mod tests
         let error = Read_Standards_Document(Path::new("."), &filesystem).expect_err("invalid JSON must be refused");
 
         assert!(error.reason.contains("not valid JSON"), "{}", error.reason);
-    }
-
-    fn Repository_Root() -> PathBuf
-    {
-        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(Path::parent)
-            .and_then(Path::parent)
-            .map(PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
     }
 }

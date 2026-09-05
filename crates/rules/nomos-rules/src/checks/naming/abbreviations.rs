@@ -86,13 +86,50 @@ pub fn Check_Abbreviations(sources: &[SourceFile], facts: &mut dyn FactReader) -
     {
         match super::reading::Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Violations_In(&payload, &source.path, &additions)),
+            Ok(payload) =>
+            {
+                let violations = Violations_In(&payload, &source.path, &additions);
+                findings.extend(violations);
+            }
             Err(finding) => findings.push(Unread_As_This_Rule(finding)),
         }
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+/// Resolves a repository's own additional approved words — empty on any `Require`
+/// failure, per `OD-CAPABILITY-004`/`OD-RULES-011`'s settled optional-read pattern: this
+/// capability is optional, and its absence must never surface as a `Finding` or this
+/// capability's own `Applicability`.
+fn Resolve_Approved_Additions(facts: &mut dyn FactReader) -> Vec<String>
+{
+    let subject = nomos_model::Subject_Of_Path("");
+    let Ok(fact) =
+        facts.Require(&nomos_cap_words_policy::Capability(), &subject, InputDigest::Of(&[]), &Words_Policy_Requirement())
+    else
+    {
+        return Vec::new();
+    };
+
+    let Ok(payload) = nomos_cap_words_policy::Parse_Payload(&fact.payload.bytes) else { return Vec::new() };
+
+    return payload.approved_additions;
+}
+
+/// This crate's own floor for `nomos.cap.words.policy` — stated at the capability's own
+/// ceiling since there is only one real provider today and no weaker answer this crate
+/// could honestly still act on. Mirrors `checks::naming::Naming_Policy_Requirement` and
+/// `checks::structure::Limits_Policy_Requirement` exactly, for the fourth sibling
+/// capability.
+fn Words_Policy_Requirement() -> nomos_capability::Requirement
+{
+    return nomos_capability::Requirement::New(
+        nomos_cap_words_policy::Capability(),
+        nomos_cap_words_policy::CONTRACT_VERSION,
+        nomos_cap_words_policy::Ceiling(),
+    );
 }
 
 fn Violations_In(payload: &SyntaxPayload, path: &str, additions: &[String]) -> Vec<Finding>
@@ -102,29 +139,32 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, additions: &[String]) -> V
 
     for item in &payload.items
     {
-        enclosing_trait_impl = Enclosing_Trait_Impl(item, enclosing_trait_impl);
-        if enclosing_trait_impl.as_ref().is_some_and(|block| return Is_Member_Of(item, block))
-        {
-            continue;
-        }
-
-        if item.kind == USE_BINDING
-        {
-            continue;
-        }
-
-        if let Some((word, reason)) = First_Abbreviation(item.Own_Name(), additions)
-        {
-            findings.push(Violation_Finding(path, item, item.Own_Name(), (&word, reason)));
-        }
-
-        if item.kind == STRUCT
-        {
-            findings.extend(Field_Violations_In(path, item, additions));
-        }
+        let violations = Item_Violations_In(item, path, additions, &mut enclosing_trait_impl);
+        findings.extend(violations);
     }
 
     return findings;
+}
+
+/// One item's own violations: whether it is exempt as an unowned trait-member name or a
+/// `use` binding, then its own name and (for a struct) its fields, against the vocabulary.
+/// `enclosing_trait_impl` is carried and updated in place, the same "an `impl` block resets
+/// it" rule [`Enclosing_Trait_Impl`] states, so each item in call order sees the block its
+/// predecessor left behind.
+fn Item_Violations_In(
+    item: &PayloadItem,
+    path: &str,
+    additions: &[String],
+    enclosing_trait_impl: &mut Option<String>,
+) -> Vec<Finding>
+{
+    *enclosing_trait_impl = Enclosing_Trait_Impl(item, enclosing_trait_impl.take());
+    if Is_Exempt(item, enclosing_trait_impl.as_deref())
+    {
+        return Vec::new();
+    }
+
+    return Own_And_Field_Violations(item, path, additions);
 }
 
 /// The qualified name of the trait-serving `impl` block whose members `item` and everything
@@ -150,6 +190,19 @@ fn Enclosing_Trait_Impl(item: &PayloadItem, previous: Option<String>) -> Option<
     return None;
 }
 
+/// Whether `item`'s own name is not this rule's to judge: a member of the trait `impl`
+/// block at `enclosing_trait_impl` (a name the trait fixed, not the author), or a `use`
+/// binding (a name chosen wherever the binding's target was declared).
+fn Is_Exempt(item: &PayloadItem, enclosing_trait_impl: Option<&str>) -> bool
+{
+    if enclosing_trait_impl.is_some_and(|block| return Is_Member_Of(item, block))
+    {
+        return true;
+    }
+
+    return item.kind == USE_BINDING;
+}
+
 /// Whether `item` is declared inside the `impl` block at `block`.
 ///
 /// Nesting is the only signal there is: the provider qualifies a member by the scope it
@@ -159,6 +212,26 @@ fn Enclosing_Trait_Impl(item: &PayloadItem, previous: Option<String>) -> Option<
 fn Is_Member_Of(item: &PayloadItem, block: &str) -> bool
 {
     return item.qualified_name.starts_with(&format!("{block}::"));
+}
+
+/// `item`'s own name, and (for a struct) its fields, against the vocabulary.
+fn Own_And_Field_Violations(item: &PayloadItem, path: &str, additions: &[String]) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    if let Some((word, reason)) = First_Abbreviation(item.Own_Name(), additions)
+    {
+        let finding = Violation_Finding(path, item, item.Own_Name(), (&word, reason));
+        findings.push(finding);
+    }
+
+    if item.kind == STRUCT
+    {
+        let field_violations = Field_Violations_In(path, item, additions);
+        findings.extend(field_violations);
+    }
+
+    return findings;
 }
 
 fn Field_Violations_In(path: &str, item: &PayloadItem, additions: &[String]) -> Vec<Finding>
@@ -172,6 +245,15 @@ fn Field_Violations_In(path: &str, item: &PayloadItem, additions: &[String]) -> 
             return Some(Violation_Finding(path, item, name, (&word, reason)));
         })
         .collect();
+}
+
+fn Unread_As_This_Rule(mut finding: Finding) -> Finding
+{
+    finding.rule = RuleId::New(ABBREVIATIONS);
+    finding.summary = finding
+        .summary
+        .replace("this file's naming could not be judged", "this file's abbreviations could not be judged");
+    return finding;
 }
 
 /// The first abbreviated word inside `name`, and why — code-standards' own `Name_
@@ -197,7 +279,7 @@ fn First_Abbreviation(name: &str, additions: &[String]) -> Option<(String, &'sta
 /// truncations nobody thought to list.
 fn Abbreviation_Reason(word: &str, additions: &[String]) -> Option<&'static str>
 {
-    if word.chars().count() < MINIMUM_JUDGED_WORD_LENGTH || Is_Approved(word, additions)
+    if Is_Too_Short_To_Judge(word) || Is_Approved(word, additions)
     {
         return None;
     }
@@ -207,12 +289,7 @@ fn Abbreviation_Reason(word: &str, additions: &[String]) -> Option<&'static str>
     }
     if Contains_Digit(word)
     {
-        let core = Letters_Only(word);
-        if core.chars().count() < MINIMUM_JUDGED_WORD_LENGTH || Is_Approved(&core, additions) || !Is_Vowelless(&core)
-        {
-            return None;
-        }
-        return Some("no vowels — an abbreviation; spell it out");
+        return Digit_Bearing_Abbreviation_Reason(word, additions);
     }
     if Is_Vowelless(word)
     {
@@ -220,6 +297,27 @@ fn Abbreviation_Reason(word: &str, additions: &[String]) -> Option<&'static str>
     }
 
     return None;
+}
+
+/// The reason a digit-bearing word is an abbreviation, judged on its letter core with the
+/// digits stripped: `utf8` is weighed as `utf`, `gp400` as `gp`.
+fn Digit_Bearing_Abbreviation_Reason(word: &str, additions: &[String]) -> Option<&'static str>
+{
+    let core = Letters_Only(word);
+    let core_is_not_a_flaggable_abbreviation = Is_Too_Short_To_Judge(&core) || Is_Approved(&core, additions) || !Is_Vowelless(&core);
+    if core_is_not_a_flaggable_abbreviation
+    {
+        return None;
+    }
+    return Some("no vowels — an abbreviation; spell it out");
+}
+
+/// Whether `word` is too short to judge for abbreviation at all — named so the length
+/// chain reads as a question, and so it can still sit inside a short-circuited `||` chain
+/// as a single call rather than an unconditionally-evaluated pipeline.
+fn Is_Too_Short_To_Judge(word: &str) -> bool
+{
+    return word.chars().count() < MINIMUM_JUDGED_WORD_LENGTH;
 }
 
 fn Is_Approved(word: &str, additions: &[String]) -> bool
@@ -287,39 +385,6 @@ fn Is_All_Digits(field: &str) -> bool
     return !field.is_empty() && field.chars().all(|character| return character.is_ascii_digit());
 }
 
-/// This crate's own floor for `nomos.cap.words.policy` — stated at the capability's own
-/// ceiling since there is only one real provider today and no weaker answer this crate
-/// could honestly still act on. Mirrors `checks::naming::Naming_Policy_Requirement` and
-/// `checks::structure::Limits_Policy_Requirement` exactly, for the fourth sibling
-/// capability.
-fn Words_Policy_Requirement() -> nomos_capability::Requirement
-{
-    return nomos_capability::Requirement::New(
-        nomos_cap_words_policy::Capability(),
-        nomos_cap_words_policy::CONTRACT_VERSION,
-        nomos_cap_words_policy::Ceiling(),
-    );
-}
-
-/// Resolves a repository's own additional approved words — empty on any `Require`
-/// failure, per `OD-CAPABILITY-004`/`OD-RULES-011`'s settled optional-read pattern: this
-/// capability is optional, and its absence must never surface as a `Finding` or this
-/// capability's own `Applicability`.
-fn Resolve_Approved_Additions(facts: &mut dyn FactReader) -> Vec<String>
-{
-    let subject = nomos_model::Subject_Of_Path("");
-    let Ok(fact) =
-        facts.Require(&nomos_cap_words_policy::Capability(), &subject, InputDigest::Of(&[]), &Words_Policy_Requirement())
-    else
-    {
-        return Vec::new();
-    };
-
-    let Ok(payload) = nomos_cap_words_policy::Parse_Payload(&fact.payload.bytes) else { return Vec::new() };
-
-    return payload.approved_additions;
-}
-
 fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, abbreviation: (&str, &str)) -> Finding
 {
     use nomos_model::Content_Digest;
@@ -337,15 +402,6 @@ fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, abbreviation: (
         summary: format!("`{name}` contains the word `{word}`, {reason}"),
         locations: vec![path.to_owned()],
     };
-}
-
-fn Unread_As_This_Rule(mut finding: Finding) -> Finding
-{
-    finding.rule = RuleId::New(ABBREVIATIONS);
-    finding.summary = finding
-        .summary
-        .replace("this file's naming could not be judged", "this file's abbreviations could not be judged");
-    return finding;
 }
 
 #[cfg(test)]

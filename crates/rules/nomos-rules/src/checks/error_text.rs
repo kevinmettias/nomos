@@ -61,6 +61,45 @@ pub fn Check_Error_Message_Starts_Lowercase(sources: &[SourceFile]) -> Vec<Findi
     });
 }
 
+/// A first word at least [`CAPITALIZED_WORD_MINIMUM`] characters long, starting with an
+/// uppercase letter, with every other character in that word NOT uppercase -- an acronym like
+/// `HTTP` or `TOML` has a later uppercase letter and is exempt, and a message opening with a
+/// `{}` placeholder is not judged at all since the interpolated value decides its own case.
+fn Is_Starting_Capitalized(text: &str) -> bool
+{
+    if text.starts_with('{')
+    {
+        return false;
+    }
+
+    let word = text.split_whitespace().next().unwrap_or("");
+    return Is_Capitalized_Non_Acronym_Word(word);
+}
+
+/// A capitalized word that is not itself an acronym: an uppercase first letter with no
+/// other uppercase letter behind it -- `HTTP` and `TOML` have one and are exempt.
+fn Is_Capitalized_Non_Acronym_Word(word: &str) -> bool
+{
+    if word.chars().count() < CAPITALIZED_WORD_MINIMUM
+    {
+        return false;
+    }
+
+    let mut chars = word.chars();
+    let Some(first) = chars.next()
+    else
+    {
+        return false;
+    };
+
+    if !first.is_uppercase()
+    {
+        return false;
+    }
+
+    return !chars.any(char::is_uppercase);
+}
+
 /// Reports a `#[error("...")]` message ending in `.`, `!` or `?` -- a chain walker joins
 /// messages with its own separator, so a terminal mark produces `failed to read.: No such
 /// file`.
@@ -70,6 +109,12 @@ pub fn Check_Error_Message_Has_No_Trailing_Punctuation(sources: &[SourceFile]) -
     return Error_Message_Findings(sources, NO_TRAILING_PUNCTUATION, |text| {
         return Trailing_Punctuation(text).map(|mark| return format!("this error message ends with `{mark}`; a chain walker joins messages with its own separator, so drop the trailing punctuation"));
     });
+}
+
+fn Trailing_Punctuation(text: &str) -> Option<&'static str>
+{
+    let trimmed = text.trim_end_matches(' ');
+    return ERROR_MESSAGE_TERMINALS.iter().find(|&&mark| return trimmed.ends_with(mark)).copied();
 }
 
 /// Reports a same-line `.With_Context(...)` call whose argument builds its value through one
@@ -92,6 +137,48 @@ pub fn Check_Eager_Vs_Lazy_Context(sources: &[SourceFile]) -> Vec<Finding>
     return findings;
 }
 
+fn Context_Laziness_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let lines: Vec<&str> = source.text.lines().collect();
+    let mut findings = Vec::new();
+
+    for (index, line) in lines.iter().enumerate()
+    {
+        if let Some(finding) = Context_Laziness_Finding_At(source, &lines, index, line)
+        {
+            findings.push(finding);
+        }
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+fn Context_Laziness_Finding_At(source: &SourceFile, lines: &[&str], index: usize, line: &str) -> Option<Finding>
+{
+    let code = Code_Prefix(line);
+    let call_start = code.find(EAGER_CONTEXT_CALL)?;
+
+    let argument = code.get(call_start.saturating_add(EAGER_CONTEXT_CALL.len())..).unwrap_or("");
+    let constructor = CONTEXT_LAZINESS_ALLOCATING.iter().find(|&&pattern| return argument.contains(pattern))?;
+
+    if Has_Marker_Reason(lines, index, CONTEXT_LAZINESS_MARKER)
+    {
+        return None;
+    }
+
+    let line_number = Line_Number(index);
+    let summary = format!(
+        "this `With_Context` builds its argument with `{constructor}`, which runs on every call including the successful ones; use `With_Context_Lazy(|| ...)` instead"
+    );
+    return Some(Finding_At(source, EAGER_VS_LAZY_CONTEXT, line_number, &summary));
+}
+
+fn Code_Prefix(line: &str) -> &str
+{
+    return line.split("//").next().unwrap_or(line);
+}
+
 fn Error_Message_Findings(sources: &[SourceFile], rule: &str, judge: impl Fn(&str) -> Option<String>) -> Vec<Finding>
 {
     let mut findings = Vec::new();
@@ -100,7 +187,8 @@ fn Error_Message_Findings(sources: &[SourceFile], rule: &str, judge: impl Fn(&st
     {
         if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
         {
-            findings.extend(Error_Attribute_Findings_In(source, rule, &judge));
+            let source_findings = Error_Attribute_Findings_In(source, rule, &judge);
+            findings.extend(source_findings);
         }
     }
 
@@ -115,16 +203,11 @@ fn Error_Attribute_Findings_In(source: &SourceFile, rule: &str, judge: &impl Fn(
 
     for (index, line) in lines.iter().enumerate()
     {
-        let Some(text) = Error_Attribute_Message(line)
+        let Some((text, line_number)) = Judgeable_Error_Message_At(&lines, index, line)
         else
         {
             continue;
         };
-
-        if text.is_empty() || Has_Marker_Reason(&lines, index, ERROR_MESSAGE_MARKER)
-        {
-            continue;
-        }
 
         let Some(reason) = judge(text)
         else
@@ -132,50 +215,24 @@ fn Error_Attribute_Findings_In(source: &SourceFile, rule: &str, judge: &impl Fn(
             continue;
         };
 
-        let line_number = Line_Number(index);
-        findings.push(Finding_At(source, rule, line_number, &reason));
+        let finding = Finding_At(source, rule, line_number, &reason);
+        findings.push(finding);
     }
 
     return findings;
 }
 
-fn Context_Laziness_Findings_In(source: &SourceFile) -> Vec<Finding>
+/// This line's `#[error("...")]` message and line number, if it has one worth judging: a
+/// non-empty message with no `error-message: allow` marker in scope.
+fn Judgeable_Error_Message_At<'a>(lines: &[&'a str], index: usize, line: &'a str) -> Option<(&'a str, usize)>
 {
-    let lines: Vec<&str> = source.text.lines().collect();
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
+    let text = Error_Attribute_Message(line)?;
+    if text.is_empty() || Has_Marker_Reason(lines, index, ERROR_MESSAGE_MARKER)
     {
-        let code = Code_Prefix(line);
-        let Some(call_start) = code.find(EAGER_CONTEXT_CALL)
-        else
-        {
-            continue;
-        };
-
-        let argument = code.get(call_start.saturating_add(EAGER_CONTEXT_CALL.len())..).unwrap_or("");
-        let Some(constructor) = CONTEXT_LAZINESS_ALLOCATING.iter().find(|&&pattern| return argument.contains(pattern))
-        else
-        {
-            continue;
-        };
-
-        if Has_Marker_Reason(&lines, index, CONTEXT_LAZINESS_MARKER)
-        {
-            continue;
-        }
-
-        let line_number = Line_Number(index);
-        findings.push(Finding_At(
-            source,
-            EAGER_VS_LAZY_CONTEXT,
-            line_number,
-            &format!("this `With_Context` builds its argument with `{constructor}`, which runs on every call including the successful ones; use `With_Context_Lazy(|| ...)` instead"),
-        ));
+        return None;
     }
 
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
+    return Some((text, Line_Number(index)));
 }
 
 fn Finding_At(source: &SourceFile, rule: &str, line_number: usize, summary: &str) -> Finding
@@ -209,11 +266,6 @@ fn Line_Number(index: usize) -> usize
     return index.saturating_add(1);
 }
 
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
-}
-
 /// The content of a same-line `#[error("...")]` attribute, or `None` when the line carries
 /// no such attribute. Mirrors `rust_text::Path_Attribute_Value`'s "first quote, second quote"
 /// shape: escaped quotes inside the message and attributes spanning multiple lines are both
@@ -228,44 +280,6 @@ fn Error_Attribute_Message(line: &str) -> Option<&str>
     return after_first_quote.get(..second_quote);
 }
 
-/// A first word at least [`CAPITALIZED_WORD_MINIMUM`] characters long, starting with an
-/// uppercase letter, with every other character in that word NOT uppercase -- an acronym like
-/// `HTTP` or `TOML` has a later uppercase letter and is exempt, and a message opening with a
-/// `{}` placeholder is not judged at all since the interpolated value decides its own case.
-fn Is_Starting_Capitalized(text: &str) -> bool
-{
-    if text.starts_with('{')
-    {
-        return false;
-    }
-
-    let word = text.split_whitespace().next().unwrap_or("");
-    if word.chars().count() < CAPITALIZED_WORD_MINIMUM
-    {
-        return false;
-    }
-
-    let mut chars = word.chars();
-    let Some(first) = chars.next()
-    else
-    {
-        return false;
-    };
-
-    if !first.is_uppercase()
-    {
-        return false;
-    }
-
-    return !chars.any(char::is_uppercase);
-}
-
-fn Trailing_Punctuation(text: &str) -> Option<&'static str>
-{
-    let trimmed = text.trim_end_matches(' ');
-    return ERROR_MESSAGE_TERMINALS.iter().find(|&&mark| return trimmed.ends_with(mark)).copied();
-}
-
 /// The current line's trailing comment, or a contiguous run of blank/comment/attribute lines
 /// walking upward from it, carries `marker` immediately after `//` with a non-empty trailing
 /// reason. The same shape `concurrency_text::Has_Marker_Reason` already established,
@@ -278,28 +292,32 @@ fn Has_Marker_Reason(lines: &[&str], index: usize, marker: &str) -> bool
         return true;
     }
 
+    return Marker_Reason_Above(lines, index, marker).unwrap_or(false);
+}
+
+/// Walks upward from `index` across a contiguous run of blank/comment/attribute lines,
+/// stopping at the first marker line found (its reason decides the verdict, `Some`) or the
+/// first line that is none of those (nothing above applies, `None`).
+fn Marker_Reason_Above(lines: &[&str], index: usize, marker: &str) -> Option<bool>
+{
     let mut cursor = index;
     while cursor > 0
     {
         cursor = cursor.saturating_sub(1);
-        let Some(line) = lines.get(cursor)
-        else
-        {
-            break;
-        };
+        let line = lines.get(cursor)?;
 
         if let Some(reason) = Marker_Reason_In(line, marker)
         {
-            return !reason.is_empty();
+            return Some(!reason.is_empty());
         }
 
         if !Is_Skippable_Above(line)
         {
-            break;
+            return None;
         }
     }
 
-    return false;
+    return None;
 }
 
 fn Is_Skippable_Above(line: &str) -> bool

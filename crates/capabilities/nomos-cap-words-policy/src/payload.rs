@@ -23,12 +23,9 @@ pub struct WordsPolicyPayload
     pub vague_exempt: Vec<String>,
 }
 
-/// A payload's bytes did not decode: not UTF-8, or a line with no tag.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Refusal
-{
-    pub reason: String,
-}
+mod refusal;
+
+pub use refusal::Refusal;
 
 const APPROVED_TAG: &str = "approved";
 const VAGUE_TAG: &str = "vague";
@@ -69,36 +66,65 @@ fn Encode_Tagged_Lines(encoded: &mut String, tag: &str, words: &[String])
 /// `approved`, `vague` or `vague_exempt`.
 pub fn Parse_Payload(bytes: &[u8]) -> Result<WordsPolicyPayload, Refusal>
 {
-    let text = core::str::from_utf8(bytes).map_err(|error| Refusal {
-        reason: format!("not UTF-8: {error}"),
-    })?;
+    let text = Decode_Utf8(bytes)?;
 
     let mut payload = WordsPolicyPayload::default();
     for line in text.lines()
     {
-        let Some((tag, value)) = line.split_once('\t')
-        else
-        {
-            return Err(Refusal {
-                reason: format!("line has no tag: {line:?}"),
-            });
-        };
-
-        match tag
-        {
-            APPROVED_TAG => payload.approved_additions.push(value.to_owned()),
-            VAGUE_TAG => payload.vague_additions.push(value.to_owned()),
-            VAGUE_EXEMPT_TAG => payload.vague_exempt.push(value.to_owned()),
-            _ =>
-            {
-                return Err(Refusal {
-                    reason: format!("line has an unrecognized tag: {line:?}"),
-                });
-            }
-        }
+        let (tag, value) = Tagged_Line(line)?;
+        Apply_Line(&mut payload, Tag(tag), value, SourceLine(line))?;
     }
 
     return Ok(payload);
+}
+
+/// Decodes `bytes` as UTF-8, or refuses.
+fn Decode_Utf8(bytes: &[u8]) -> Result<&str, Refusal>
+{
+    return core::str::from_utf8(bytes).map_err(|error| Refusal {
+        reason: format!("not UTF-8: {error}"),
+    });
+}
+
+/// `line` split into its tag and value, refused if it has no tag.
+fn Tagged_Line(line: &str) -> Result<(&str, &str), Refusal>
+{
+    let Some((tag, value)) = line.split_once('\t')
+    else
+    {
+        return Err(Refusal {
+            reason: format!("line has no tag: {line:?}"),
+        });
+    };
+
+    return Ok((tag, value));
+}
+
+/// One already-extracted tag, distinguished from the adjacent value and source line it
+/// travels beside so a caller cannot transpose them.
+struct Tag<'a>(&'a str);
+
+/// The whole row line a tag/value pair was parsed from, carried only for its own error
+/// message.
+struct SourceLine<'a>(&'a str);
+
+/// Applies one already-tagged line to `payload`.
+fn Apply_Line(payload: &mut WordsPolicyPayload, tag: Tag<'_>, value: &str, line: SourceLine<'_>) -> Result<(), Refusal>
+{
+    match tag.0
+    {
+        APPROVED_TAG => payload.approved_additions.push(value.to_owned()),
+        VAGUE_TAG => payload.vague_additions.push(value.to_owned()),
+        VAGUE_EXEMPT_TAG => payload.vague_exempt.push(value.to_owned()),
+        _ =>
+        {
+            return Err(Refusal {
+                reason: format!("line has an unrecognized tag: {:?}", line.0),
+            });
+        }
+    }
+
+    return Ok(());
 }
 
 #[cfg(test)]

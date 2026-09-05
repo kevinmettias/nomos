@@ -95,24 +95,165 @@ pub fn Check_Sleep_Is_Not_Synchronization(sources: &[SourceFile]) -> Vec<Finding
             continue;
         }
 
-        let vocabulary = if source.Is_Written_In(RUST_LANGUAGE)
-        {
-            RUST_SLEEP_CALLS
-        }
-        else if source.Is_Written_In(GO_LANGUAGE) && source.path.replace('\\', "/").ends_with("_test.go")
-        {
-            GO_SLEEP_CALLS
-        }
+        let Some(vocabulary) = Sleep_Vocabulary_For(source)
         else
         {
             continue;
         };
 
-        findings.extend(Sleep_Findings_In(source, vocabulary));
+        let source_findings = Sleep_Findings_In(source, vocabulary);
+        findings.extend(source_findings);
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+/// The sleep vocabulary `source` is judged against, or `None` if it is not in scope at all
+/// -- every Rust source, but only a Go source whose own filename already marks it a test.
+fn Sleep_Vocabulary_For(source: &SourceFile) -> Option<&'static [&'static str]>
+{
+    if source.Is_Written_In(RUST_LANGUAGE)
+    {
+        return Some(RUST_SLEEP_CALLS);
+    }
+
+    if source.Is_Written_In(GO_LANGUAGE) && Is_Go_Test_File(source)
+    {
+        return Some(GO_SLEEP_CALLS);
+    }
+
+    return None;
+}
+
+fn Sleep_Findings_In(source: &SourceFile, vocabulary: &[&str]) -> Vec<Finding>
+{
+    let lines: Vec<&str> = source.text.lines().collect();
+    let Some(scan_from) = Test_Scan_Start(source, &lines)
+    else
+    {
+        return Vec::new();
+    };
+
+    let mut findings = Vec::new();
+    for (index, line) in lines.iter().enumerate().skip(scan_from)
+    {
+        if let Some(finding) = Sleep_Finding_At(source, index, line, vocabulary)
+        {
+            findings.push(finding);
+        }
+    }
+
+    return findings;
+}
+
+/// The first in-scope line index, or [`None`] if nothing in this file is test scope.
+fn Test_Scan_Start(source: &SourceFile, lines: &[&str]) -> Option<usize>
+{
+    if super::Is_Test_Or_Example_Source(source) || Is_Go_Test_File(source)
+    {
+        return Some(0);
+    }
+
+    for (index, line) in lines.iter().enumerate()
+    {
+        let trimmed = line.trim();
+        if trimmed.starts_with("#[cfg(test)]") || trimmed == "#[test]"
+        {
+            return Some(index);
+        }
+    }
+
+    return None;
+}
+
+fn Sleep_Finding_At(source: &SourceFile, index: usize, line: &str, vocabulary: &[&str]) -> Option<Finding>
+{
+    let code = Code_Prefix(line);
+    let call = Sleep_Match_In(code, vocabulary)?;
+
+    if Has_Allow_Marker(line)
+    {
+        return None;
+    }
+
+    let line_number = Line_Number(index);
+    return Some(Finding {
+        rule: RuleId::New(SLEEP_BASED_SYNCHRONIZATION),
+        subject: source.subject,
+        subject_name: format!("{}:{line_number}", source.path),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary: format!("`{call}(...)` at {}:{line_number} is a sleep standing in for synchronization in a test", source.path),
+        locations: vec![format!("{}:{line_number}", source.path)],
+    });
+}
+
+/// The code before any `//` line comment -- this crate's established convention
+/// (`rust_text::Code_Prefix`), duplicated here per this crate's per-file helper convention.
+fn Code_Prefix(line: &str) -> &str
+{
+    return line.split("//").next().unwrap_or(line);
+}
+
+fn Sleep_Match_In<'a>(code: &str, vocabulary: &[&'a str]) -> Option<&'a str>
+{
+    let mut earliest: Option<(usize, &'a str)> = None;
+
+    for &call in vocabulary
+    {
+        if let Some(start) = Find_Sleep_Call(code, Call(call))
+            && earliest.is_none_or(|(earliest_start, _)| return start < earliest_start)
+        {
+            earliest = Some((start, call));
+        }
+    }
+
+    return earliest.map(|(_, call)| return call);
+}
+
+/// The literal sleep-call path [`Find_Sleep_Call`] searches for, wrapped so its parameter
+/// position cannot be transposed with `code` — the text being searched — with nothing to
+/// catch it.
+struct Call<'a>(&'a str);
+
+/// A path-suffix match: the byte before `call` must not be an identifier byte (so
+/// `worker_thread::sleep` does not match `thread::sleep`, while a wider qualification like
+/// `mything::thread::sleep` still does, matching `is_Sleep_Path`'s own segment-alignment
+/// semantics), and the first non-whitespace byte after it must be `(`.
+fn Find_Sleep_Call(code: &str, call: Call<'_>) -> Option<usize>
+{
+    let bytes = code.as_bytes();
+    let mut search_from = 0usize;
+
+    while let Some(offset) = code.get(search_from..).and_then(|rest| return rest.find(call.0))
+    {
+        let start = search_from.saturating_add(offset);
+        let end = start.saturating_add(call.0.len());
+        if Has_Left_Boundary(bytes, start) && Followed_By_A_Call_Paren(code, end)
+        {
+            return Some(start);
+        }
+        search_from = start.saturating_add(1);
+    }
+
+    return None;
+}
+
+fn Has_Left_Boundary(bytes: &[u8], start: usize) -> bool
+{
+    return start.checked_sub(1).and_then(|previous| return bytes.get(previous)).is_none_or(|&byte| return !Is_Ident_Byte(byte));
+}
+
+fn Is_Ident_Byte(byte: u8) -> bool
+{
+    return byte.is_ascii_alphanumeric() || byte == b'_';
+}
+
+fn Followed_By_A_Call_Paren(code: &str, end: usize) -> bool
+{
+    return code.get(end..).is_some_and(|rest| return rest.trim_start().starts_with('('));
 }
 
 /// Reports a test carrying a retry-until-green attribute -- `FAULT_RETRY_UNTIL_GREEN`.
@@ -133,46 +274,6 @@ pub fn Check_A_Test_Does_Not_Retry_Until_Green(sources: &[SourceFile]) -> Vec<Fi
     return findings;
 }
 
-fn Sleep_Findings_In(source: &SourceFile, vocabulary: &[&str]) -> Vec<Finding>
-{
-    let lines: Vec<&str> = source.text.lines().collect();
-    let Some(scan_from) = Test_Scan_Start(source, &lines)
-    else
-    {
-        return Vec::new();
-    };
-
-    let mut findings = Vec::new();
-    for (index, line) in lines.iter().enumerate().skip(scan_from)
-    {
-        let code = Code_Prefix(line);
-        let Some(call) = Sleep_Match_In(code, vocabulary)
-        else
-        {
-            continue;
-        };
-
-        if Has_Allow_Marker(line)
-        {
-            continue;
-        }
-
-        let line_number = Line_Number(index);
-        findings.push(Finding {
-            rule: RuleId::New(SLEEP_BASED_SYNCHRONIZATION),
-            subject: source.subject,
-            subject_name: format!("{}:{line_number}", source.path),
-            applicability: Applicability::Supported,
-            evidence: EvidenceClass::Derived,
-            gate: GateCategory::Blocking,
-            summary: format!("`{call}(...)` at {}:{line_number} is a sleep standing in for synchronization in a test", source.path),
-            locations: vec![format!("{}:{line_number}", source.path)],
-        });
-    }
-
-    return findings;
-}
-
 fn Retry_Findings_In(source: &SourceFile) -> Vec<Finding>
 {
     let lines: Vec<&str> = source.text.lines().collect();
@@ -180,115 +281,38 @@ fn Retry_Findings_In(source: &SourceFile) -> Vec<Finding>
 
     for (index, line) in lines.iter().enumerate()
     {
-        let Some(attribute) = Retry_Attribute_Name(line.trim())
-        else
+        if let Some(finding) = Retry_Finding_At(source, &lines, index, line)
         {
-            continue;
-        };
-
-        if Has_Allow_Marker(line) || !Decorates_A_Function(&lines, index)
-        {
-            continue;
+            findings.push(finding);
         }
-
-        let line_number = Line_Number(index);
-        findings.push(Finding {
-            rule: RuleId::New(ZERO_FLAKE_POLICY),
-            subject: source.subject,
-            subject_name: format!("{}:{line_number}", source.path),
-            applicability: Applicability::Supported,
-            evidence: EvidenceClass::Derived,
-            gate: GateCategory::Blocking,
-            summary: format!(
-                "`#[{attribute}]` at {}:{line_number} retries a test until it passes, which reports the best of N attempts rather than the truth",
-                source.path
-            ),
-            locations: vec![format!("{}:{line_number}", source.path)],
-        });
     }
 
     return findings;
 }
 
-/// The first in-scope line index, or [`None`] if nothing in this file is test scope.
-fn Test_Scan_Start(source: &SourceFile, lines: &[&str]) -> Option<usize>
+fn Retry_Finding_At(source: &SourceFile, lines: &[&str], index: usize, line: &str) -> Option<Finding>
 {
-    if super::Is_Test_Or_Example_Source(source) || source.path.replace('\\', "/").ends_with("_test.go")
+    let attribute = Retry_Attribute_Name(line.trim())?;
+
+    if Has_Allow_Marker(line) || !Decorates_A_Function(lines, index)
     {
-        return Some(0);
+        return None;
     }
 
-    for (index, line) in lines.iter().enumerate()
-    {
-        let trimmed = line.trim();
-        if trimmed.starts_with("#[cfg(test)]") || trimmed == "#[test]"
-        {
-            return Some(index);
-        }
-    }
-
-    return None;
-}
-
-fn Line_Number(index: usize) -> usize
-{
-    return index.saturating_add(1);
-}
-
-/// The code before any `//` line comment -- this crate's established convention
-/// (`rust_text::Code_Prefix`), duplicated here per this crate's per-file helper convention.
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
-}
-
-fn Sleep_Match_In<'a>(code: &str, vocabulary: &[&'a str]) -> Option<&'a str>
-{
-    let mut earliest: Option<(usize, &'a str)> = None;
-
-    for &call in vocabulary
-    {
-        if let Some(start) = Find_Sleep_Call(code, call)
-            && earliest.is_none_or(|(earliest_start, _)| return start < earliest_start)
-        {
-            earliest = Some((start, call));
-        }
-    }
-
-    return earliest.map(|(_, call)| return call);
-}
-
-/// A path-suffix match: the byte before `call` must not be an identifier byte (so
-/// `worker_thread::sleep` does not match `thread::sleep`, while a wider qualification like
-/// `mything::thread::sleep` still does, matching `is_Sleep_Path`'s own segment-alignment
-/// semantics), and the first non-whitespace byte after it must be `(`.
-fn Find_Sleep_Call(code: &str, call: &str) -> Option<usize>
-{
-    let bytes = code.as_bytes();
-    let mut search_from = 0usize;
-
-    while let Some(offset) = code.get(search_from..).and_then(|rest| return rest.find(call))
-    {
-        let start = search_from.saturating_add(offset);
-        let end = start.saturating_add(call.len());
-        if Has_Left_Boundary(bytes, start) && code.get(end..).is_some_and(|rest| return rest.trim_start().starts_with('('))
-        {
-            return Some(start);
-        }
-        search_from = start.saturating_add(1);
-    }
-
-    return None;
-}
-
-fn Has_Left_Boundary(bytes: &[u8], start: usize) -> bool
-{
-    return start.checked_sub(1).and_then(|previous| return bytes.get(previous)).is_none_or(|&byte| return !Is_Ident_Byte(byte));
-}
-
-fn Is_Ident_Byte(byte: u8) -> bool
-{
-    return byte.is_ascii_alphanumeric() || byte == b'_';
+    let line_number = Line_Number(index);
+    return Some(Finding {
+        rule: RuleId::New(ZERO_FLAKE_POLICY),
+        subject: source.subject,
+        subject_name: format!("{}:{line_number}", source.path),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary: format!(
+            "`#[{attribute}]` at {}:{line_number} retries a test until it passes, which reports the best of N attempts rather than the truth",
+            source.path
+        ),
+        locations: vec![format!("{}:{line_number}", source.path)],
+    });
 }
 
 /// A retry-vocabulary attribute name, stripped of its `#[...]` shell and any `(...)`/`=...`
@@ -321,6 +345,16 @@ fn Decorates_A_Function(lines: &[&str], attribute_index: usize) -> bool
     return false;
 }
 
+fn Is_Go_Test_File(source: &SourceFile) -> bool
+{
+    return source.path.replace('\\', "/").ends_with("_test.go");
+}
+
+fn Line_Number(index: usize) -> usize
+{
+    return index.saturating_add(1);
+}
+
 /// The marker must lead a `//` comment on the same line as the fault, matching
 /// `marker.Line_Has_Marker`'s own same-line-only reading -- no reason text required, unlike
 /// the atomic-ordering family's marker.
@@ -346,13 +380,6 @@ mod tests
     use super::*;
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
-
-    fn Source(path: &str, text: &str) -> SourceFile
-    {
-        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
-        source.language = crate::Recognized_Language_In_Tests(path);
-        return source;
-    }
 
     #[test]
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Report_A_Qualified_Sleep_In_An_Integration_Test()
@@ -456,5 +483,12 @@ mod tests
         );
         let findings = Check_A_Test_Does_Not_Retry_Until_Green(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    fn Source(path: &str, text: &str) -> SourceFile
+    {
+        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        source.language = crate::Recognized_Language_In_Tests(path);
+        return source;
     }
 }

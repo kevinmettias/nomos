@@ -86,13 +86,45 @@ mod tests
 {
     use super::*;
     use nomos_contracts::Digest128;
-    use nomos_platform_std::StdFileSystem;
+    use nomos_platform::FileSystemError;
+
+    /// The declared threshold this fixture's `standards.json` text carries.
+    const SAMPLE_LIMIT: u32 = 1500;
+
+    /// A [`FileSystem`] that hands back fixed text instead of reading a real path, the
+    /// boundary [`crate::reading`]'s own module doc names as the one place a caller
+    /// substitutes a real filesystem.
+    struct FakeFileSystem
+    {
+        text: String,
+    }
+
+    impl FileSystem for FakeFileSystem
+    {
+        fn Read_To_String(&self, _path: &Path) -> Result<String, FileSystemError>
+        {
+            return Ok(self.text.clone());
+        }
+
+        fn Replace_Atomically(&self, _path: &Path, _contents: &str) -> Result<(), FileSystemError>
+        {
+            unimplemented!("this reader never writes")
+        }
+
+        fn Exists(&self, _path: &Path) -> bool
+        {
+            return true;
+        }
+    }
 
     #[test]
-    fn Test_Materialize_Workspace_Should_Materialize_This_Repositorys_Own_Declared_Thresholds()
+    fn Test_Materialize_Workspace_Should_Materialize_Declared_Thresholds()
     {
-        let PolicyFact { subject, fact } = Materialize_Workspace(&Repository_Root(), Context(), &StdFileSystem)
-            .expect("this repository's own standards.json is real and well-formed");
+        let filesystem = FakeFileSystem {
+            text: serde_json::json!({ "limits": { "file-size-hard-lines": SAMPLE_LIMIT } }).to_string(),
+        };
+
+        let PolicyFact { subject, fact } = Materialize_Workspace(Path::new("."), Context(), &filesystem).expect("well-formed JSON");
 
         assert_eq!(subject, nomos_model::Subject_Of_Path(""));
         assert_eq!(fact.guarantee, Declared_Guarantee());
@@ -101,20 +133,9 @@ mod tests
 
         let decoded = nomos_cap_limits_policy::Parse_Payload(&fact.payload.bytes).expect("this crate's own encoding");
         assert!(
-            decoded.rows.iter().any(|row| return row.key == "file-size-hard-lines"),
-            "this workspace's own standards.json declares limits.file-size-hard-lines: {decoded:?}"
+            decoded.rows.iter().any(|row| return row.key == "file-size-hard-lines" && row.value == SAMPLE_LIMIT),
+            "the fixture declares limits.file-size-hard-lines = {SAMPLE_LIMIT}: {decoded:?}"
         );
-    }
-
-    fn Repository_Root() -> std::path::PathBuf
-    {
-        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(std::path::Path::parent)
-            .and_then(std::path::Path::parent)
-            .map(std::path::PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
     }
 
     #[test]

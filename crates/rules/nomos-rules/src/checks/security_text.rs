@@ -69,6 +69,88 @@ pub fn Check_A_Credential_Is_Not_Hardcoded_In_Source(sources: &[SourceFile]) -> 
     return findings;
 }
 
+fn Credential_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for (index, line) in source.text.lines().enumerate()
+    {
+        if let Some(matched) = Credential_Match_In(line)
+        {
+            let summary = format!("carries what looks like a live credential (`{matched}`) in source");
+            let finding = Finding_For_Line(source, A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, Line_Number(index), &summary);
+            findings.push(finding);
+        }
+    }
+
+    return findings;
+}
+
+fn Credential_Match_In(line: &str) -> Option<String>
+{
+    if line.contains("-----BEGIN") && line.contains("PRIVATE KEY-----")
+    {
+        return Some("PEM private-key block".to_owned());
+    }
+
+    for (prefix, minimum_trailing) in CREDENTIAL_PREFIXES
+    {
+        if let Some(matched) = Prefixed_Credential_In(line, Prefix(prefix), *minimum_trailing)
+        {
+            return Some(matched);
+        }
+    }
+
+    return None;
+}
+
+/// The literal credential prefix [`Prefixed_Credential_In`] searches for, wrapped so its
+/// parameter position cannot be transposed with `line` — the text being searched — with
+/// nothing to catch it.
+struct Prefix<'a>(&'a str);
+
+/// Searches `line` for every occurrence of `prefix`, returning the first match whose
+/// trailing alphanumeric run meets `minimum_trailing` and is not a documented example.
+fn Prefixed_Credential_In(line: &str, prefix: Prefix<'_>, minimum_trailing: usize) -> Option<String>
+{
+    let mut search_from = 0usize;
+
+    while let Some(offset) = line.get(search_from..).and_then(|rest| return rest.find(prefix.0))
+    {
+        let start = search_from.saturating_add(offset);
+
+        if let Some(matched) = Credential_At(line, start, prefix.0, minimum_trailing)
+        {
+            return Some(matched);
+        }
+
+        search_from = start.saturating_add(prefix.0.len());
+    }
+
+    return None;
+}
+
+/// The credential text at `start` if `prefix`'s trailing alphanumeric run there meets
+/// `minimum_trailing` and is not one of [`DOCUMENTED_EXAMPLE_CREDENTIALS`].
+fn Credential_At(line: &str, start: usize, prefix: &str, minimum_trailing: usize) -> Option<String>
+{
+    let after_prefix = line.get(start.saturating_add(prefix.len())..).unwrap_or("");
+    let trailing_run: usize = after_prefix.chars().take_while(|character| return character.is_ascii_alphanumeric()).count();
+    if trailing_run < minimum_trailing
+    {
+        return None;
+    }
+
+    let matched_len = prefix.len().saturating_add(trailing_run);
+    let matched = line.get(start..start.saturating_add(matched_len)).unwrap_or(prefix);
+    if DOCUMENTED_EXAMPLE_CREDENTIALS.contains(&matched)
+    {
+        return None;
+    }
+
+    return Some(matched.to_owned());
+}
+
 /// Reports a named sensitive parameter (`api_key`, `token`, `access_token`, `password`,
 /// `sig`, `signature`) woven into a URL's query string. Does not attempt to tell a
 /// deliberate, short-lived pre-signed URL from a hardcoded one — the standard names that
@@ -87,6 +169,45 @@ pub fn Check_A_Secret_Does_Not_Travel_In_A_Url(sources: &[SourceFile]) -> Vec<Fi
     }
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+fn Url_Secret_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for (index, line) in source.text.lines().enumerate()
+    {
+        if Has_Secret_In_Url(line)
+        {
+            let finding = Finding_For_Line(
+                source,
+                A_SECRET_DOES_NOT_TRAVEL_IN_A_URL,
+                Line_Number(index),
+                "weaves a named secret parameter into a URL's query string",
+            );
+            findings.push(finding);
+        }
+    }
+
+    return findings;
+}
+
+/// `?api_key=`/`&token=`-shaped: a query separator immediately followed by a named
+/// sensitive parameter and `=`, the exact join a real query string produces.
+fn Has_Secret_In_Url(line: &str) -> bool
+{
+    for parameter in SENSITIVE_URL_PARAMETERS
+    {
+        for separator in ['?', '&']
+        {
+            if line.contains(&format!("{separator}{parameter}=")) || line.contains(&format!("{separator}{parameter}%3D"))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 /// Reports a TLS/SSL client or server told, by a literal value, to skip verifying the
@@ -111,46 +232,6 @@ pub fn Check_Certificate_Verification_Is_Not_Disabled(sources: &[SourceFile]) ->
     return findings;
 }
 
-fn Credential_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let mut findings = Vec::new();
-
-    for (index, line) in source.text.lines().enumerate()
-    {
-        if let Some(matched) = Credential_Match_In(line)
-        {
-            findings.push(Finding_For_Line(
-                source,
-                A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE,
-                Line_Number(index),
-                &format!("carries what looks like a live credential (`{matched}`) in source"),
-            ));
-        }
-    }
-
-    return findings;
-}
-
-fn Url_Secret_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let mut findings = Vec::new();
-
-    for (index, line) in source.text.lines().enumerate()
-    {
-        if Has_Secret_In_Url(line)
-        {
-            findings.push(Finding_For_Line(
-                source,
-                A_SECRET_DOES_NOT_TRAVEL_IN_A_URL,
-                Line_Number(index),
-                "weaves a named secret parameter into a URL's query string",
-            ));
-        }
-    }
-
-    return findings;
-}
-
 fn Tls_Verification_Findings_In(source: &SourceFile) -> Vec<Finding>
 {
     let lines: Vec<&str> = source.text.lines().collect();
@@ -160,16 +241,69 @@ fn Tls_Verification_Findings_In(source: &SourceFile) -> Vec<Finding>
     {
         if Has_Disabled_Certificate_Verification(line) && !Has_Adjacent_Explanation(&lines, index)
         {
-            findings.push(Finding_For_Line(
+            let finding = Finding_For_Line(
                 source,
                 CERTIFICATE_VERIFICATION_IS_NOT_DISABLED,
                 Line_Number(index),
                 "disables TLS peer-certificate verification with no adjacent comment recording why",
-            ));
+            );
+            findings.push(finding);
         }
     }
 
     return findings;
+}
+
+fn Has_Disabled_Certificate_Verification(line: &str) -> bool
+{
+    let compact: String = line.chars().filter(|character| return !character.is_whitespace()).collect();
+
+    return compact.contains("InsecureSkipVerify:true")
+        || compact.contains("InsecureSkipVerify=true")
+        || line.contains(".danger_accept_invalid_certs(true)")
+        || line.contains("SslVerifyMode::NONE")
+        || compact.contains("verify=False")
+        || compact.contains("verify:False");
+}
+
+/// A trailing same-line comment with non-empty text, or a non-empty comment on the line
+/// immediately above — "the reasoned exception is recorded rather than hidden," the same
+/// adjacent-explanation shape `rust_text.rs`/`go_text.rs` already use, generalized to a
+/// third consumer.
+fn Has_Adjacent_Explanation(lines: &[&str], index: usize) -> bool
+{
+    if let Some(reason) = lines
+        .get(index)
+        .and_then(|line| return line.split_once("//").or_else(|| return line.split_once('#')).map(|(_, rest)| return rest))
+    {
+        if !reason.trim().is_empty()
+        {
+            return true;
+        }
+    }
+
+    if let Some(previous) = index.checked_sub(1)
+    {
+        if lines.get(previous).is_some_and(|line| return Comment_Text_Of(line).is_some_and(|c| return !c.trim().is_empty()))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+fn Comment_Text_Of(line: &str) -> Option<&str>
+{
+    let trimmed = line.trim_start();
+    for marker in ["//", "#"]
+    {
+        if let Some(comment) = trimmed.strip_prefix(marker)
+        {
+            return Some(comment.trim_start());
+        }
+    }
+    return None;
 }
 
 /// A path segment any of `tests/`, `/test/`, `testdata/`, `fixtures/`, `examples/`
@@ -211,109 +345,6 @@ fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 fn Line_Number(index: usize) -> usize
 {
     return index.saturating_add(1);
-}
-
-fn Credential_Match_In(line: &str) -> Option<String>
-{
-    if line.contains("-----BEGIN") && line.contains("PRIVATE KEY-----")
-    {
-        return Some("PEM private-key block".to_owned());
-    }
-
-    for (prefix, minimum_trailing) in CREDENTIAL_PREFIXES
-    {
-        let mut search_from = 0usize;
-        while let Some(offset) = line.get(search_from..).and_then(|rest| return rest.find(prefix))
-        {
-            let start = search_from.saturating_add(offset);
-            let after_prefix = line.get(start.saturating_add(prefix.len())..).unwrap_or("");
-            let trailing_run: usize = after_prefix.chars().take_while(|character| return character.is_ascii_alphanumeric()).count();
-
-            if trailing_run >= *minimum_trailing
-            {
-                let matched_len = prefix.len().saturating_add(trailing_run);
-                let matched = line.get(start..start.saturating_add(matched_len)).unwrap_or(prefix);
-                if !DOCUMENTED_EXAMPLE_CREDENTIALS.contains(&matched)
-                {
-                    return Some(matched.to_owned());
-                }
-            }
-
-            search_from = start.saturating_add(prefix.len());
-        }
-    }
-
-    return None;
-}
-
-/// `?api_key=`/`&token=`-shaped: a query separator immediately followed by a named
-/// sensitive parameter and `=`, the exact join a real query string produces.
-fn Has_Secret_In_Url(line: &str) -> bool
-{
-    for parameter in SENSITIVE_URL_PARAMETERS
-    {
-        for separator in ['?', '&']
-        {
-            if line.contains(&format!("{separator}{parameter}=")) || line.contains(&format!("{separator}{parameter}%3D"))
-            {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-fn Has_Disabled_Certificate_Verification(line: &str) -> bool
-{
-    let compact: String = line.chars().filter(|character| return !character.is_whitespace()).collect();
-
-    return compact.contains("InsecureSkipVerify:true")
-        || compact.contains("InsecureSkipVerify=true")
-        || line.contains(".danger_accept_invalid_certs(true)")
-        || line.contains("SslVerifyMode::NONE")
-        || compact.contains("verify=False")
-        || compact.contains("verify:False");
-}
-
-fn Comment_Text_Of(line: &str) -> Option<&str>
-{
-    let trimmed = line.trim_start();
-    for marker in ["//", "#"]
-    {
-        if let Some(comment) = trimmed.strip_prefix(marker)
-        {
-            return Some(comment.trim_start());
-        }
-    }
-    return None;
-}
-
-/// A trailing same-line comment with non-empty text, or a non-empty comment on the line
-/// immediately above — "the reasoned exception is recorded rather than hidden," the same
-/// adjacent-explanation shape `rust_text.rs`/`go_text.rs` already use, generalized to a
-/// third consumer.
-fn Has_Adjacent_Explanation(lines: &[&str], index: usize) -> bool
-{
-    if let Some(reason) = lines
-        .get(index)
-        .and_then(|line| return line.split_once("//").or_else(|| return line.split_once('#')).map(|(_, rest)| return rest))
-    {
-        if !reason.trim().is_empty()
-        {
-            return true;
-        }
-    }
-
-    if let Some(previous) = index.checked_sub(1)
-    {
-        if lines.get(previous).is_some_and(|line| return Comment_Text_Of(line).is_some_and(|c| return !c.trim().is_empty()))
-        {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 fn Finding_For_Line(source: &SourceFile, rule: &str, line_number: usize, because: &str) -> Finding

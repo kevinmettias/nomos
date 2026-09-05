@@ -73,16 +73,33 @@ pub(super) struct PhantomClaim<'a>
 #[must_use]
 pub(super) fn Phantom_Claim(finding: &Finding) -> Option<PhantomClaim<'_>>
 {
-    if finding.rule.As_Str() != nomos_rules::COMPLETENESS_MIRROR
-    {
-        return None;
-    }
-    if finding.gate != GateCategory::Blocking
+    if !Is_A_Blocking_Phantom(finding)
     {
         return None;
     }
 
-    let after_open_quote = finding.summary.strip_prefix('`')?;
+    let claimed = Claimed_Name(&finding.summary)?;
+    let path = Sole_Location(finding)?;
+
+    return Some(PhantomClaim {
+        finding,
+        path,
+        claimed: claimed.to_owned(),
+    });
+}
+
+/// Whether `finding` is even a candidate to parse: this rule's own identifier, at the
+/// Blocking gate a phantom is always raised at.
+fn Is_A_Blocking_Phantom(finding: &Finding) -> bool
+{
+    return finding.rule.As_Str() == nomos_rules::COMPLETENESS_MIRROR && finding.gate == GateCategory::Blocking;
+}
+
+/// The claimed name `summary` names, or `None` if the text does not match the one stable
+/// shape `Unresolved_Claim` ever produces for a phantom.
+fn Claimed_Name(summary: &str) -> Option<&str>
+{
+    let after_open_quote = summary.strip_prefix('`')?;
     let (claimed, rest) = after_open_quote.split_once('`')?;
     let rest = rest.strip_prefix(' ')?;
     if !rest.starts_with(PHANTOM_TAIL)
@@ -94,17 +111,20 @@ pub(super) fn Phantom_Claim(finding: &Finding) -> Option<PhantomClaim<'_>>
         return None;
     }
 
+    return Some(claimed);
+}
+
+/// The one location `finding` names, or `None` if it names zero locations or more than one
+/// -- this module refuses to guess which one a correction would apply to.
+fn Sole_Location(finding: &Finding) -> Option<&str>
+{
     let [path] = finding.locations.as_slice()
     else
     {
         return None;
     };
 
-    return Some(PhantomClaim {
-        finding,
-        path,
-        claimed: claimed.to_owned(),
-    });
+    return Some(path);
 }
 
 /// Why [`Candidate_For`] could not build a candidate for an otherwise-real phantom claim.
@@ -133,7 +153,7 @@ pub(super) enum ClaimError
 pub(super) fn Candidate_For(root: &std::path::Path, claim: &PhantomClaim<'_>) -> Result<(CorrectionCandidate, String, String), ClaimError>
 {
     let before = std::fs::read_to_string(root.join(claim.path)).map_err(ClaimError::Unreadable)?;
-    let after = Strike_Claim_Line(&before, &claim.claimed)?;
+    let after = Strike_Claim_Line(ClaimStrike { before: &before, claimed: &claim.claimed })?;
 
     let edit = Edit::New(claim.path, Some(before.clone()), Some(after.clone()));
     let description = format!(
@@ -147,10 +167,22 @@ pub(super) fn Candidate_For(root: &std::path::Path, claim: &PhantomClaim<'_>) ->
     return Ok((candidate, before, after));
 }
 
-/// `before` with the one line naming `claimed` removed, or a [`ClaimError::Ambiguous`] if
-/// that line does not appear exactly once.
-fn Strike_Claim_Line(before: &str, claimed: &str) -> Result<String, ClaimError>
+/// The text to strike a line from, and the name the line to strike must claim -- paired so
+/// a caller cannot transpose which is which, since both are `&str` and the compiler cannot
+/// catch a swap between them on its own.
+struct ClaimStrike<'a>
 {
+    /// The file's own text, before the strike.
+    before: &'a str,
+    /// The exact claimed name the one line to strike must name.
+    claimed: &'a str,
+}
+
+/// `strike.before` with the one line naming `strike.claimed` removed, or a
+/// [`ClaimError::Ambiguous`] if that line does not appear exactly once.
+fn Strike_Claim_Line(strike: ClaimStrike<'_>) -> Result<String, ClaimError>
+{
+    let ClaimStrike { before, claimed } = strike;
     let marker = format!("{MIRROR_MARKER}{claimed}`");
 
     let occurrences = before.split_inclusive('\n').filter(|line| return line.contains(&marker)).count();
@@ -190,8 +222,113 @@ mod tests
     use nomos_contracts::{Applicability, EvidenceClass, RuleId, SubjectId};
     use nomos_model::Content_Digest;
 
-    fn Phantom_Finding(claimed: &str, path: &str) -> Finding
+    #[test]
+    fn Test_A_Real_Phantom_Findings_Claim_Should_Be_Read()
     {
+        let finding = Phantom_Finding(PhantomFixture { claimed: "Test_Ghost", path: "a.rs" });
+
+        let claim = Phantom_Claim(&finding).expect("this is a real phantom");
+
+        assert_eq!(claim.claimed, "Test_Ghost");
+        assert_eq!(claim.path, "a.rs");
+    }
+
+    #[test]
+    fn Test_A_Findings_Claim_With_A_Shortfall_Suffix_Should_Still_Be_Read()
+    {
+        let mut finding = Phantom_Finding(PhantomFixture { claimed: "Test_Ghost", path: "a.rs" });
+        finding.summary.push_str(" — and the check index is short 1 subject(s), none of whose text spells `Test_Ghost`, so no reading of them could have declared it");
+
+        let claim = Phantom_Claim(&finding).expect("the tail is a prefix, not the whole summary");
+
+        assert_eq!(claim.claimed, "Test_Ghost");
+    }
+
+    #[test]
+    fn Test_An_Advisory_Finding_Should_Not_Be_Read_As_A_Phantom()
+    {
+        let mut finding = Phantom_Finding(PhantomFixture { claimed: "Test_Ghost", path: "a.rs" });
+        finding.gate = GateCategory::Advisory;
+
+        assert!(Phantom_Claim(&finding).is_none());
+    }
+
+    #[test]
+    fn Test_A_Finding_From_A_Different_Rule_Should_Not_Be_Read()
+    {
+        let mut finding = Phantom_Finding(PhantomFixture { claimed: "Test_Ghost", path: "a.rs" });
+        finding.rule = RuleId::New(nomos_rules::NAMING_CONVENTION);
+
+        assert!(Phantom_Claim(&finding).is_none());
+    }
+
+    #[test]
+    fn Test_An_Unrecognized_Summary_Shape_Should_Not_Be_Read()
+    {
+        let mut finding = Phantom_Finding(PhantomFixture { claimed: "Test_Ghost", path: "a.rs" });
+        finding.summary = "something else entirely".to_owned();
+
+        assert!(Phantom_Claim(&finding).is_none());
+    }
+
+    #[test]
+    fn Test_Striking_The_One_Real_Line_Should_Remove_Only_That_Line()
+    {
+        let before = "/// A list.\n/// Mirrored by `Test_Ghost`.\npub const TABLES: &[&str] = &[];\n";
+
+        let after = Strike_Claim_Line(ClaimStrike { before, claimed: "Test_Ghost" }).expect("the marker appears once");
+
+        assert_eq!(after, "/// A list.\npub const TABLES: &[&str] = &[];\n");
+    }
+
+    #[test]
+    fn Test_A_Missing_Marker_Should_Be_Ambiguous_Rather_Than_Silently_A_NoOp()
+    {
+        let before = "pub const TABLES: &[&str] = &[];\n";
+
+        let refusal = Strike_Claim_Line(ClaimStrike { before, claimed: "Test_Ghost" }).expect_err("nothing to strike");
+
+        assert!(matches!(refusal, ClaimError::Ambiguous { occurrences: 0 }));
+    }
+
+    #[test]
+    fn Test_Two_Identical_Markers_Should_Be_Ambiguous_Rather_Than_Guessed()
+    {
+        let before = "/// Mirrored by `Test_Ghost`.\npub const A: &[&str] = &[];\n/// Mirrored by `Test_Ghost`.\npub const B: &[&str] = &[];\n";
+
+        let refusal = Strike_Claim_Line(ClaimStrike { before, claimed: "Test_Ghost" }).expect_err("two lines both match");
+
+        assert!(matches!(refusal, ClaimError::Ambiguous { occurrences: TWO_IDENTICAL_MARKERS }));
+    }
+
+    #[test]
+    fn Test_A_Similar_But_Different_Claimed_Name_Should_Not_Match()
+    {
+        let before = "/// Mirrored by `Test_Ghosts`.\npub const TABLES: &[&str] = &[];\n";
+
+        let refusal = Strike_Claim_Line(ClaimStrike { before, claimed: "Test_Ghost" }).expect_err("the names differ");
+
+        assert!(matches!(refusal, ClaimError::Ambiguous { occurrences: 0 }));
+    }
+
+    /// How many lines two distinct declarations both claiming the same mirror name produce
+    /// -- named so [`Test_Two_Identical_Markers_Should_Be_Ambiguous_Rather_Than_Guessed`]'s
+    /// own assertion reads as "the fixture's own count" rather than an unexplained `2`.
+    const TWO_IDENTICAL_MARKERS: usize = 2;
+
+    /// The claimed name and the path a phantom fixture names, paired so a caller cannot
+    /// transpose which is which -- both are `&str` and the compiler cannot catch a swap
+    /// between them on its own.
+    struct PhantomFixture<'a>
+    {
+        claimed: &'a str,
+        path: &'a str,
+    }
+
+    fn Phantom_Finding(fixture: PhantomFixture<'_>) -> Finding
+    {
+        let PhantomFixture { claimed, path } = fixture;
+
         return Finding {
             rule: RuleId::New(nomos_rules::COMPLETENESS_MIRROR),
             subject: SubjectId::From_Digest(Content_Digest(path.as_bytes())),
@@ -203,94 +340,4 @@ mod tests
             locations: vec![path.to_owned()],
         };
     }
-
-    #[test]
-    fn Test_A_Real_Phantom_Findings_Claim_Should_Be_Read()
-    {
-        let finding = Phantom_Finding("Test_Ghost", "a.rs");
-
-        let claim = Phantom_Claim(&finding).expect("this is a real phantom");
-
-        assert_eq!(claim.claimed, "Test_Ghost");
-        assert_eq!(claim.path, "a.rs");
-    }
-
-    #[test]
-    fn Test_A_Findings_Claim_With_A_Shortfall_Suffix_Should_Still_Be_Read()
-    {
-        let mut finding = Phantom_Finding("Test_Ghost", "a.rs");
-        finding.summary.push_str(" — and the check index is short 1 subject(s), none of whose text spells `Test_Ghost`, so no reading of them could have declared it");
-
-        let claim = Phantom_Claim(&finding).expect("the tail is a prefix, not the whole summary");
-
-        assert_eq!(claim.claimed, "Test_Ghost");
-    }
-
-    #[test]
-    fn Test_An_Advisory_Finding_Should_Not_Be_Read_As_A_Phantom()
-    {
-        let mut finding = Phantom_Finding("Test_Ghost", "a.rs");
-        finding.gate = GateCategory::Advisory;
-
-        assert!(Phantom_Claim(&finding).is_none());
-    }
-
-    #[test]
-    fn Test_A_Finding_From_A_Different_Rule_Should_Not_Be_Read()
-    {
-        let mut finding = Phantom_Finding("Test_Ghost", "a.rs");
-        finding.rule = RuleId::New(nomos_rules::NAMING_CONVENTION);
-
-        assert!(Phantom_Claim(&finding).is_none());
-    }
-
-    #[test]
-    fn Test_An_Unrecognized_Summary_Shape_Should_Not_Be_Read()
-    {
-        let mut finding = Phantom_Finding("Test_Ghost", "a.rs");
-        finding.summary = "something else entirely".to_owned();
-
-        assert!(Phantom_Claim(&finding).is_none());
-    }
-
-    #[test]
-    fn Test_Striking_The_One_Real_Line_Should_Remove_Only_That_Line()
-    {
-        let before = "/// A list.\n/// Mirrored by `Test_Ghost`.\npub const TABLES: &[&str] = &[];\n";
-
-        let after = Strike_Claim_Line(before, "Test_Ghost").expect("the marker appears once");
-
-        assert_eq!(after, "/// A list.\npub const TABLES: &[&str] = &[];\n");
-    }
-
-    #[test]
-    fn Test_A_Missing_Marker_Should_Be_Ambiguous_Rather_Than_Silently_A_NoOp()
-    {
-        let before = "pub const TABLES: &[&str] = &[];\n";
-
-        let refusal = Strike_Claim_Line(before, "Test_Ghost").expect_err("nothing to strike");
-
-        assert!(matches!(refusal, ClaimError::Ambiguous { occurrences: 0 }));
-    }
-
-    #[test]
-    fn Test_Two_Identical_Markers_Should_Be_Ambiguous_Rather_Than_Guessed()
-    {
-        let before = "/// Mirrored by `Test_Ghost`.\npub const A: &[&str] = &[];\n/// Mirrored by `Test_Ghost`.\npub const B: &[&str] = &[];\n";
-
-        let refusal = Strike_Claim_Line(before, "Test_Ghost").expect_err("two lines both match");
-
-        assert!(matches!(refusal, ClaimError::Ambiguous { occurrences: 2 }));
-    }
-
-    #[test]
-    fn Test_A_Similar_But_Different_Claimed_Name_Should_Not_Match()
-    {
-        let before = "/// Mirrored by `Test_Ghosts`.\npub const TABLES: &[&str] = &[];\n";
-
-        let refusal = Strike_Claim_Line(before, "Test_Ghost").expect_err("the names differ");
-
-        assert!(matches!(refusal, ClaimError::Ambiguous { occurrences: 0 }));
-    }
-
 }

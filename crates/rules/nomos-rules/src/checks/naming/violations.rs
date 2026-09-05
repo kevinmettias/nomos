@@ -54,19 +54,6 @@ fn Is_Trait_Method(payload: &SyntaxPayload, ordinal: usize) -> bool
     return owner.kind == IMPLEMENTATION && owner.shape.Value() == Some(TRAIT);
 }
 
-/// Whether `name` conforms to `case`.
-///
-/// A single leading underscore is stripped first — Rust's own convention for "intentionally
-/// unused," orthogonal to whichever case a repository configures and not something
-/// `README.md`'s Conventions section speaks to.
-#[must_use]
-fn Conforms(case: Case, name: &str) -> bool
-{
-    let name = name.strip_prefix('_').unwrap_or(name);
-
-    return case.Conforms(name);
-}
-
 /// A finding for one function whose name does not conform.
 fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
 {
@@ -90,6 +77,19 @@ fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
         ),
         locations: vec![path.to_owned()],
     };
+}
+
+/// Whether `name` conforms to `case`.
+///
+/// A single leading underscore is stripped first — Rust's own convention for "intentionally
+/// unused," orthogonal to whichever case a repository configures and not something
+/// `README.md`'s Conventions section speaks to.
+#[must_use]
+fn Conforms(case: Case, name: &str) -> bool
+{
+    let name = name.strip_prefix('_').unwrap_or(name);
+
+    return case.Conforms(name);
 }
 
 #[cfg(test)]

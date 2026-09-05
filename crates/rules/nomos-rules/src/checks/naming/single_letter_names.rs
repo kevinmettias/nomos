@@ -47,7 +47,11 @@ pub fn Check_Single_Letter_Names(
     {
         match super::reading::Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Violations_In(&payload, &source.path)),
+            Ok(payload) =>
+            {
+                let violations = Violations_In(&payload, &source.path);
+                findings.extend(violations);
+            }
             Err(finding) => findings.push(Unread_As_This_Rule(finding)),
         }
     }
@@ -62,20 +66,35 @@ fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
 
     for item in &payload.items
     {
-        if item.kind == USE_BINDING
-        {
-            continue;
-        }
+        let violations = Item_Violations_In(path, item);
+        findings.extend(violations);
+    }
 
-        if Is_Single_Letter(item.Own_Name())
-        {
-            findings.push(Violation_Finding(path, item, item.Own_Name()));
-        }
+    return findings;
+}
 
-        if item.kind == STRUCT
-        {
-            findings.extend(Field_Violations_In(path, item));
-        }
+/// One item's own violations: skipped entirely if it is a `use` binding (a name chosen
+/// wherever the binding's target was declared, not here), otherwise its own name and (for a
+/// struct) its fields, against the single-letter rule.
+fn Item_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
+{
+    if item.kind == USE_BINDING
+    {
+        return Vec::new();
+    }
+
+    let mut findings = Vec::new();
+
+    if Is_Single_Letter(item.Own_Name())
+    {
+        let finding = Violation_Finding(path, item, item.Own_Name());
+        findings.push(finding);
+    }
+
+    if item.kind == STRUCT
+    {
+        let field_violations = Field_Violations_In(path, item);
+        findings.extend(field_violations);
     }
 
     return findings;
@@ -94,6 +113,15 @@ fn Field_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
         .filter(|(name, _type_name)| return Is_Single_Letter(name))
         .map(|(name, _type_name)| return Violation_Finding(path, item, name))
         .collect();
+}
+
+fn Unread_As_This_Rule(mut finding: Finding) -> Finding
+{
+    finding.rule = RuleId::New(SINGLE_LETTER_NAMES);
+    finding.summary = finding
+        .summary
+        .replace("this file's naming could not be judged", "this file's single-letter names could not be judged");
+    return finding;
 }
 
 /// `_` is exempt regardless of what declared it: `const _: () = assert!(...);` is Rust's own
@@ -121,15 +149,6 @@ fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
         summary: format!("`{name}` is a single-letter name outside the local-variable exception this payload can judge"),
         locations: vec![path.to_owned()],
     };
-}
-
-fn Unread_As_This_Rule(mut finding: Finding) -> Finding
-{
-    finding.rule = RuleId::New(SINGLE_LETTER_NAMES);
-    finding.summary = finding
-        .summary
-        .replace("this file's naming could not be judged", "this file's single-letter names could not be judged");
-    return finding;
 }
 
 #[cfg(test)]

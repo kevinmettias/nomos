@@ -17757,6 +17757,734 @@
       "reason": "checker false positive: nomos_rules is named only in a Cargo.toml comment explaining why nomos-cap-dependency (the actual dependency) is listed instead, and inside a doc comment in provider/package_fact.rs -- confirmed no nomos-rules line in [dependencies] and no use/path reference in src/",
       "owner": "@claude-p25-integration",
       "expires": "2026-11-29"
+    },
+    {
+      "check": "check-hardcoded-secret",
+      "path": "crates/rules/nomos-rules/src/checks/security_text.rs",
+      "fingerprint": "cc2c9d9a642fd06f",
+      "reason": "fake, deliberately-shaped credential fixtures inside #[cfg(test)] mod tests {} for nomos-rules' own Check_A_Credential_Is_Not_Hardcoded_In_Source rule (AKIA.../sk_live_.../PEM header with no key body); not real secrets, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-hardcoded-secret",
+      "path": "crates/rules/nomos-rules/src/checks/security_text.rs",
+      "fingerprint": "f69638e87920bbd3",
+      "reason": "fake, deliberately-shaped credential fixtures inside #[cfg(test)] mod tests {} for nomos-rules' own Check_A_Credential_Is_Not_Hardcoded_In_Source rule (AKIA.../sk_live_.../PEM header with no key body); not real secrets, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-hardcoded-secret",
+      "path": "crates/rules/nomos-rules/src/checks/security_text.rs",
+      "fingerprint": "1d528df49e1ae97c",
+      "reason": "fake, deliberately-shaped credential fixtures inside #[cfg(test)] mod tests {} for nomos-rules' own Check_A_Credential_Is_Not_Hardcoded_In_Source rule (AKIA.../sk_live_.../PEM header with no key body); not real secrets, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-hardcoded-secret",
+      "path": "crates/rules/nomos-rules/src/checks/security_text.rs",
+      "fingerprint": "b2b635e00f4988b7",
+      "reason": "fake, deliberately-shaped credential fixtures inside #[cfg(test)] mod tests {} for nomos-rules' own Check_A_Credential_Is_Not_Hardcoded_In_Source rule (AKIA.../sk_live_.../PEM header with no key body); not real secrets, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-hardcoded-secret",
+      "path": "crates/rules/nomos-rules/src/checks/security_text.rs",
+      "fingerprint": "16f4c070a6f0bb2a",
+      "reason": "fake, deliberately-shaped credential fixtures inside #[cfg(test)] mod tests {} for nomos-rules' own Check_A_Credential_Is_Not_Hardcoded_In_Source rule (AKIA.../sk_live_.../PEM header with no key body); not real secrets, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-secret-in-url",
+      "path": "crates/rules/nomos-rules/src/checks/security_text.rs",
+      "fingerprint": "585ebc436d3dcdc0",
+      "reason": "fake credential-in-URL fixtures inside #[cfg(test)] mod tests {} for nomos-rules' own Check_A_Secret_Does_Not_Travel_In_A_Url rule; not real secrets, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-secret-in-url",
+      "path": "crates/rules/nomos-rules/src/checks/security_text.rs",
+      "fingerprint": "1c8bb70e78970d68",
+      "reason": "fake credential-in-URL fixtures inside #[cfg(test)] mod tests {} for nomos-rules' own Check_A_Secret_Does_Not_Travel_In_A_Url rule; not real secrets, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/capabilities/nomos-cap-goals-policy/src/payload.rs",
+      "fingerprint": "df2307e7166e4683",
+      "reason": "test-only .expect()/.unwrap() building hand-written fixture input inside #[cfg(test)] mod tests {}; clippy.toml already permits unwrap() in test code repo-wide, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/capabilities/nomos-cap-goals-policy/src/payload.rs",
+      "fingerprint": "b1a4d9a16e3996d4",
+      "reason": "test-only .expect()/.unwrap() building hand-written fixture input inside #[cfg(test)] mod tests {}; clippy.toml already permits unwrap() in test code repo-wide, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/capabilities/nomos-cap-scripting-policy/src/payload.rs",
+      "fingerprint": "fdd4cee3bbb7d707",
+      "reason": "test-only .expect()/.unwrap() building hand-written fixture input inside #[cfg(test)] mod tests {}; clippy.toml already permits unwrap() in test code repo-wide, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+      "fingerprint": "9451cb17b8db8cbd",
+      "reason": "Materialize_Goals_Policy/Materialize_Limits_Policy/Materialize_Naming_Policy/Materialize_Scripting_Policy/Materialize_Words_Policy are five sibling fact-materializers, cross-documented with each other in this same file (each doc comment references its siblings above/below), and share one FactContext-shaped signature reading one repository-declared policy capability through nomos_platform::FileSystem; the Materialize_ prefix names a real, intentional module-level concept rather than an accidental collision -- the identical shape already waived for this file's sibling, dependency_materialization.rs. check-responsibility-extraction is not safety-critical, so responsibility: allow is not honoured under this repository's safety-only marker policy; this waives per OD-GATE-018's remedy for that gap.",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/correct/parsing.rs",
+      "fingerprint": "48504f420e9b06d9",
+      "reason": "test-only .expect(\"parses\")/.expect(\"writable\") building hand-written fixture input inside #[cfg(test)] mod tests {}; clippy.toml already permits unwrap() in test code repo-wide, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/correct/parsing.rs",
+      "fingerprint": "ac242409204279bf",
+      "reason": "test-only .expect(\"parses\")/.expect(\"writable\") building hand-written fixture input inside #[cfg(test)] mod tests {}; clippy.toml already permits unwrap() in test code repo-wide, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/correct/sources.rs",
+      "fingerprint": "d601f0a17a4f6c6d",
+      "reason": "test-only .expect(\"writable\") building hand-written fixture input inside #[cfg(test)] mod tests {}; clippy.toml already permits unwrap() in test code repo-wide, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/correct/sources.rs",
+      "fingerprint": "df8cbca79db71629",
+      "reason": "test-only .expect(\"writable\") building hand-written fixture input inside #[cfg(test)] mod tests {}; clippy.toml already permits unwrap() in test code repo-wide, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/correct/sources.rs",
+      "fingerprint": "954a814e01ff07a1",
+      "reason": "test-only .expect(\"writable\") building hand-written fixture input inside #[cfg(test)] mod tests {}; clippy.toml already permits unwrap() in test code repo-wide, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/platform/nomos-platform-std/src/std_file_system.rs",
+      "fingerprint": "1076bdc20fa685b7",
+      "reason": "test-only .unwrap() building hand-written fixture input inside #[cfg(test)] mod tests {}; clippy.toml already permits unwrap() in test code repo-wide, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/platform/nomos-platform-std/src/std_file_system.rs",
+      "fingerprint": "cc728ab14ed59e7a",
+      "reason": "test-only .unwrap() building hand-written fixture input inside #[cfg(test)] mod tests {}; clippy.toml already permits unwrap() in test code repo-wide, per OD-GATE-018's category-1 test-code exemption",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/correct/exit_code.rs",
+      "fingerprint": "7d0210d87148120e",
+      "reason": "enum discriminant literals, a confirmed check-literals checker front-end gap per OD-GATE-018 (see the identical waiver on crates/agent/nomos-agent-contracts/src/change_context.rs, fingerprint c22427a295df8b19); this exact Usage=2/Unreadable=5/Vacuous=6 shape is also the established, deliberate convention shared verbatim across check::ExitCode, gate::ExitCode, spec::ExitCode, agent::ExitCode, request::ExitCode and work::ExitCode in this same crate (none named as constants), documented in this module's own top doc as 'the meanings check and spec already gave them' -- naming only this one sibling's discriminants as constants would create an inconsistency the other five would still carry",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/correct/exit_code.rs",
+      "fingerprint": "8f8d807b4ce0162b",
+      "reason": "enum discriminant literals, a confirmed check-literals checker front-end gap per OD-GATE-018 (see the identical waiver on crates/agent/nomos-agent-contracts/src/change_context.rs, fingerprint c22427a295df8b19); this exact Usage=2/Unreadable=5/Vacuous=6 shape is also the established, deliberate convention shared verbatim across check::ExitCode, gate::ExitCode, spec::ExitCode, agent::ExitCode, request::ExitCode and work::ExitCode in this same crate (none named as constants), documented in this module's own top doc as 'the meanings check and spec already gave them' -- naming only this one sibling's discriminants as constants would create an inconsistency the other five would still carry",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/correct/exit_code.rs",
+      "fingerprint": "0dbdca23b1cdbf57",
+      "reason": "enum discriminant literals, a confirmed check-literals checker front-end gap per OD-GATE-018 (see the identical waiver on crates/agent/nomos-agent-contracts/src/change_context.rs, fingerprint c22427a295df8b19); this exact Usage=2/Unreadable=5/Vacuous=6 shape is also the established, deliberate convention shared verbatim across check::ExitCode, gate::ExitCode, spec::ExitCode, agent::ExitCode, request::ExitCode and work::ExitCode in this same crate (none named as constants), documented in this module's own top doc as 'the meanings check and spec already gave them' -- naming only this one sibling's discriminants as constants would create an inconsistency the other five would still carry",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+      "fingerprint": "b736a212a8f7f110",
+      "reason": "Materialize_Goals_Policy/Materialize_Limits_Policy/Materialize_Naming_Policy/Materialize_Scripting_Policy/Materialize_Words_Policy are five sibling fact-materializers, cross-documented with each other in this same file (each doc comment references its siblings above/below), and share one FactContext-shaped signature reading one repository-declared policy capability through nomos_platform::FileSystem; the Materialize_ prefix names a real, intentional module-level concept rather than an accidental collision -- the identical shape already waived for this file's sibling, dependency_materialization.rs. check-responsibility-extraction is not safety-critical, so responsibility: allow is not honoured under this repository's safety-only marker policy; this waives per OD-GATE-018's remedy for that gap. (Supersedes fingerprint 9451cb17b8db8cbd, which this file's own later usize-return edit -- also part of this same item -- moved off of.)",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/constant_scope.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/domain_type_alias.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/enum_shape.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/error_text.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/facade.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/flakiness_text.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/formatting.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/function_shape.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/go_text.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/placement.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/rust_text.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/scalar_range.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/security_text.rs",
+      "fingerprint": "328c17e3f282256c",
+      "reason": "every checks/*.rs file in this crate declares its own identical fn Source(path: \u0026str, text: \u0026str) test-fixture constructor inside #[cfg(test)] mod tests {}, used only to build inputs for that file's own Check_* tests; advisory-tier, test-only, low-value for a copy-pasted single-purpose helper -- see code-standards-checks-against-nomos memory for the pattern",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/constant_scope.rs",
+      "fingerprint": "6a7d342e55dc0022",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/enum_shape.rs",
+      "fingerprint": "6f0d46c1b0044dd9",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/facade.rs",
+      "fingerprint": "b6fcba39f8ee979e",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/formatting.rs",
+      "fingerprint": "72ebb67e4d0b916a",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/function_shape.rs",
+      "fingerprint": "ac5b8ec46fffe119",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/go_text.rs",
+      "fingerprint": "49f52f25cd966992",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/naming.rs",
+      "fingerprint": "de03b703928fbb25",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/rust_text.rs",
+      "fingerprint": "b79deae8d3c1196a",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/scalar_range.rs",
+      "fingerprint": "ba7c019934043e35",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+      "fingerprint": "c937e3be41aab220",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/security_text.rs",
+      "fingerprint": "9327e4113d58405e",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/structure.rs",
+      "fingerprint": "a656524731405b1f",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs",
+      "fingerprint": "6a961677eeafd2b2",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/lib.rs",
+      "fingerprint": "1ed28af623b7f9c1",
+      "reason": "this file is the crate's own architecture narrative (why a rule takes its subject as an argument, where each half of a rule's input comes from) followed by its module declarations and the re-exports every check-domain module needs; splitting the narrative from the modules it explains, or splitting the re-export list from the modules it re-exports, would separate documentation from the one place a reader looks for it",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/host/nomos-cli/src/work/report.rs",
+      "fingerprint": "a22f2e16f1c6dbae",
+      "reason": "this file pairs its production code with its own inline #[cfg(test)] module; check-test-coverage keys a test's companion unit off the exact file it is textually written in, so these tests cannot move to a sibling file without losing their attribution to every function this file declares (already stated in-code as a file-size marker, not honoured here because the check is not safety-critical under this repository's markers: safety-only policy)",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
+      "fingerprint": "f2d243a0982891f5",
+      "reason": "this file is the FileLedger struct, its two impl blocks -- one type's own surface, whose doc comments carry the why for OD-LEDGER-008/009/012/015/019/021 inline -- and that type's own per-method test suite; check-test-coverage keys a test's companion unit off the literal file it is textually written in, so these tests cannot move to a sibling file without losing their one-file address, and splitting either impl block would put one type's methods behind two module paths for no cohesion gained (already stated in-code as a file-size marker, not honoured here because the check is not safety-critical under this repository's markers: safety-only policy)",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+      "fingerprint": "d854aa5a3f2bb271",
+      "reason": "this file is the check run's own composition root: the RunContext/RunEnvironment/MaterializationEnvironment/JudgeEnvironment types, the capability-materialization pipeline that populates them, and the Composed_Rules table wiring every composed rule into one RuleCheck-closed-over Vec -- extracting any piece would separate a materialization step from the environment struct it populates, or the rule table from the trait its entries all close over",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+      "fingerprint": "5e62fab576a2e15f",
+      "reason": "the shared Check_ prefix names this file's own real module-level concept -- one check-domain file grouping its sibling Check_* rule implementations for the same inspection surface, the identical pattern already recognized for dependency_materialization.rs's Materialize_ prefix under OD-GATE-018 (see that waiver); splitting one rule's implementation out of its own domain file would fragment a concept this crate deliberately keeps colocated, not extract a hidden second module",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/facade.rs",
+      "fingerprint": "1187a1499f10f06b",
+      "reason": "the shared Check_ prefix names this file's own real module-level concept -- one check-domain file grouping its sibling Check_* rule implementations for the same inspection surface, the identical pattern already recognized for dependency_materialization.rs's Materialize_ prefix under OD-GATE-018 (see that waiver); splitting one rule's implementation out of its own domain file would fragment a concept this crate deliberately keeps colocated, not extract a hidden second module",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/formatting.rs",
+      "fingerprint": "811caa3afb5d7571",
+      "reason": "the shared Check_ prefix names this file's own real module-level concept -- one check-domain file grouping its sibling Check_* rule implementations for the same inspection surface, the identical pattern already recognized for dependency_materialization.rs's Materialize_ prefix under OD-GATE-018 (see that waiver); splitting one rule's implementation out of its own domain file would fragment a concept this crate deliberately keeps colocated, not extract a hidden second module",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/function_shape.rs",
+      "fingerprint": "ccaa164545aeacf4",
+      "reason": "the shared Check_ prefix names this file's own real module-level concept -- one check-domain file grouping its sibling Check_* rule implementations for the same inspection surface, the identical pattern already recognized for dependency_materialization.rs's Materialize_ prefix under OD-GATE-018 (see that waiver); splitting one rule's implementation out of its own domain file would fragment a concept this crate deliberately keeps colocated, not extract a hidden second module",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/go_text.rs",
+      "fingerprint": "d5b7446eb06a0a5e",
+      "reason": "the shared Check_ prefix names this file's own real module-level concept -- one check-domain file grouping its sibling Check_* rule implementations for the same inspection surface, the identical pattern already recognized for dependency_materialization.rs's Materialize_ prefix under OD-GATE-018 (see that waiver); splitting one rule's implementation out of its own domain file would fragment a concept this crate deliberately keeps colocated, not extract a hidden second module",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/rust_text.rs",
+      "fingerprint": "ed98c77fd1f1b4ba",
+      "reason": "the shared Check_ prefix names this file's own real module-level concept -- one check-domain file grouping its sibling Check_* rule implementations for the same inspection surface, the identical pattern already recognized for dependency_materialization.rs's Materialize_ prefix under OD-GATE-018 (see that waiver); splitting one rule's implementation out of its own domain file would fragment a concept this crate deliberately keeps colocated, not extract a hidden second module",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+      "fingerprint": "1154ac7161cb3c69",
+      "reason": "the shared Check_ prefix names this file's own real module-level concept -- one check-domain file grouping its sibling Check_* rule implementations for the same inspection surface, the identical pattern already recognized for dependency_materialization.rs's Materialize_ prefix under OD-GATE-018 (see that waiver); splitting one rule's implementation out of its own domain file would fragment a concept this crate deliberately keeps colocated, not extract a hidden second module",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/security_text.rs",
+      "fingerprint": "7ae1c4c63f22b659",
+      "reason": "the shared Check_ prefix names this file's own real module-level concept -- one check-domain file grouping its sibling Check_* rule implementations for the same inspection surface, the identical pattern already recognized for dependency_materialization.rs's Materialize_ prefix under OD-GATE-018 (see that waiver); splitting one rule's implementation out of its own domain file would fragment a concept this crate deliberately keeps colocated, not extract a hidden second module",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/structure.rs",
+      "fingerprint": "022409532047a733",
+      "reason": "the shared Check_ prefix names this file's own real module-level concept -- one check-domain file grouping its sibling Check_* rule implementations for the same inspection surface, the identical pattern already recognized for dependency_materialization.rs's Materialize_ prefix under OD-GATE-018 (see that waiver); splitting one rule's implementation out of its own domain file would fragment a concept this crate deliberately keeps colocated, not extract a hidden second module",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/constant_scope.rs",
+      "fingerprint": "4dc3a80093c0ca05",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/enum_shape.rs",
+      "fingerprint": "0f52096c1c9a8ff1",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/facade.rs",
+      "fingerprint": "efb9b5bf526c00f1",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/formatting.rs",
+      "fingerprint": "92df0650aca2665b",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/function_shape.rs",
+      "fingerprint": "3d79966c6bfd4d89",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/go_text.rs",
+      "fingerprint": "7b8e6a570b3fbe56",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/naming.rs",
+      "fingerprint": "51c62ac3a58102c3",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/rust_text.rs",
+      "fingerprint": "f322bd92a1b12201",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/scalar_range.rs",
+      "fingerprint": "a7e7b48b6f16a6c7",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+      "fingerprint": "ac358a99f81dedfa",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/security_text.rs",
+      "fingerprint": "de7cd544a250ae4f",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/structure.rs",
+      "fingerprint": "fc9040178e375d7b",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs",
+      "fingerprint": "5399a832e5ed2377",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/host/nomos-cli/src/work/report.rs",
+      "fingerprint": "d54cf3a47bc68920",
+      "reason": "this file pairs its production code with its own inline #[cfg(test)] module; check-test-coverage keys a test's companion unit off the exact file it is textually written in, so these tests cannot move to a sibling file without losing their attribution to every function this file declares (already stated in-code as a responsibility marker, not honoured here because the check is not safety-critical under this repository's markers: safety-only policy)",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
+      "fingerprint": "ca4d115445e70b9e",
+      "reason": "this file is the FileLedger struct, its two impl blocks -- one type's own surface, whose doc comments carry the why for OD-LEDGER-008/009/012/015/019/021 inline -- and that type's own per-method test suite; check-test-coverage keys a test's companion unit off the literal file it is textually written in, so these tests cannot move to a sibling file without losing their one-file address, and splitting either impl block would put one type's methods behind two module paths for no cohesion gained (already stated in-code as a file-size marker; responsibility-extraction shares the same reasoning, not honoured here because neither check is safety-critical under this repository's markers: safety-only policy)",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+      "fingerprint": "db1e533db17b216f",
+      "reason": "this file is the check run's own composition root: the RunContext/RunEnvironment/MaterializationEnvironment/JudgeEnvironment types, the capability-materialization pipeline that populates them, and the Composed_Rules table wiring every composed rule into one RuleCheck-closed-over Vec -- extracting any piece would separate a materialization step from the environment struct it populates, or the rule table from the trait its entries all close over",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-function-size",
+      "path": "crates/substrate/nomos-ledger/src/store/add_refusal.rs",
+      "fingerprint": "f2302254834a88f9",
+      "reason": "check-function-size's own message hedges: 'no obvious split -- confirm it is one cohesive algorithm'. Describe is a single match over AddRefusal's variants producing one line each; every arm is already as short as its own message construction allows, and splitting the match itself would just relocate the same dispatch behind an extra call with no cohesion gained",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-function-size",
+      "path": "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+      "fingerprint": "d458c2f7285a96aa",
+      "reason": "check-function-size's own message hedges: 'no obvious split -- confirm it is one cohesive algorithm'. With_Composed_Rules builds the fixed 56-entry ComposedRule table in one place because the table IS the function's output; splitting it would only relocate entries behind an arbitrary boundary with no shared sub-concept to name",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/substrate/nomos-ledger/src/store/add_refusal.rs",
+      "fingerprint": "e3e8a926a0288da0",
+      "reason": "phantom finding: this file's Describe() has backslash-continued string literals above line 203 (the multi-line format! arguments explaining RecordPublished/RecordReserved/AmendmentMisspelled), which desyncs the checker's own naive string-masking scanner per the documented check-allman-braces/check-closing-brace front-end gap (code-standards-checks-against-nomos memory); the flagged brace at line 203 (opening match error { ) is verified genuinely aligned with its return match error keyword line, both at column 8",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-explicit-return",
+      "path": "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+      "fingerprint": "418e8210d5017dde",
+      "reason": "explicit-return false positive: Unquoted_Hash_Index's tail loop { } never naturally completes -- every path exits via ? or an explicit return Some(at) -- so its type is ! and it already diverges; wrapping it in an outer return would be a compiler-visible no-op (confirmed against the documented diverging-match/loop false-positive shape in code-standards-checks-against-nomos memory, which already burned a --fix pass into a real unreachable_code warning once)",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+      "fingerprint": "a69d614f89bd1a56",
+      "reason": "phantom finding: this file's Step_In_Single (line 242) contains the byte char literal b'\\'', an escaped single-quote inside a char literal -- the same char-literal-awareness gap documented in nomos-text-scanners-need-char-literal-awareness memory, here hitting code-standards' own naive brace-column scanner rather than nomos's; the corruption propagates forward and resyncs 30 lines later at this brace. Verified against byte-identical unflagged siblings (function_shape.rs:164-165, scalar_range.rs:153-154) using the exact same let X = match Y / { on its own line at the let's own indent shape, both reporting zero findings -- confirming this brace is genuinely correctly aligned and the finding is the scanner artifact, not a real defect",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+      "fingerprint": "00d6019076901da8",
+      "reason": "phantom finding: this file's Step_In_Single (line 242) contains the byte char literal b'\\'', an escaped single-quote inside a char literal -- the same char-literal-awareness gap documented in nomos-text-scanners-need-char-literal-awareness memory, here hitting code-standards' own naive brace-column scanner rather than nomos's; the corruption propagates forward and resyncs 30 lines later at this brace. Verified against byte-identical unflagged siblings (function_shape.rs:164-165, scalar_range.rs:153-154) using the exact same let X = match Y / { on its own line at the let's own indent shape, both reporting zero findings -- confirming this brace is genuinely correctly aligned and the finding is the scanner artifact, not a real defect",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/rust_text.rs",
+      "fingerprint": "ea925ab22337966d",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/rust_text.rs",
+      "fingerprint": "7535e8834bdebcc2",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/structure.rs",
+      "fingerprint": "ddf940a241fac003",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/structure.rs",
+      "fingerprint": "5bf89e9d01ac8240",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/rules/nomos-rules/src/checks/formatting.rs",
+      "fingerprint": "8d6b431f62304673",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/rules/nomos-rules/src/checks/formatting.rs",
+      "fingerprint": "bbd499b1936d99f7",
+      "reason": "this file implements one check-domain's complete rule set end to end -- the check's own entry points, their shared parsing/traversal helpers, and their tests -- matching this crate's established one-file-per-check-domain layout (nomos-rules/src/checks/*.rs, one file per inspection surface); no natural seam separates a piece that makes sense apart from the rest, the judgment reached independently by every P37-CODESTANDARDS-RULES-* sweep agent for every nomos-rules file that crossed this threshold",
+      "owner": "@kmettias",
+      "expires": "2027-03-03"
     }
   ]
 }

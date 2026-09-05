@@ -28,37 +28,76 @@ pub fn Check_A_Package_Is_Named_After_Its_Directory(sources: &[SourceFile]) -> V
 
     for source in sources
     {
-        if !source.Is_Written_In(GO_LANGUAGE)
+        if let Some(finding) = Package_Mismatch_Finding(source)
         {
-            continue;
+            findings.push(finding);
         }
-
-        let Some(package) = Declared_Go_Package_Name(&source.text) else { continue };
-        if package == MAIN_PACKAGE
-        {
-            continue;
-        }
-
-        let Some(directory) = Normalized_Directory_Name(&source.path) else { continue };
-        if package == directory
-        {
-            continue;
-        }
-        if package.strip_suffix(TEST_PACKAGE_SUFFIX) == Some(directory.as_str())
-        {
-            continue;
-        }
-
-        findings.push(Finding_For_Line(
-            source,
-            A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
-            1,
-            &format!("declares `package {package}`, which does not match its directory `{directory}`"),
-        ));
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+/// The one finding a Go source contributes when its declared package does not match its
+/// directory, or `None` when the source is not Go, declares no package, is `package main`,
+/// already matches, or is an external test package matching its subject's directory.
+fn Package_Mismatch_Finding(source: &SourceFile) -> Option<Finding>
+{
+    if !source.Is_Written_In(GO_LANGUAGE)
+    {
+        return None;
+    }
+
+    let package = Non_Main_Package_Name(&source.text)?;
+    let directory = Normalized_Directory_Name(&source.path)?;
+    if Package_Matches_Directory(&package, Directory(&directory))
+    {
+        return None;
+    }
+
+    return Some(Finding_For_Line(
+        source,
+        A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
+        1,
+        &format!("declares `package {package}`, which does not match its directory `{directory}`"),
+    ));
+}
+
+/// The declared Go package name, or `None` if the source declares none or declares
+/// `package main` -- the directory names the command, not the package, so `main` is exempt.
+fn Non_Main_Package_Name(text: &str) -> Option<String>
+{
+    let package = Declared_Go_Package_Name(text)?;
+    if package == MAIN_PACKAGE
+    {
+        return None;
+    }
+
+    return Some(package);
+}
+
+/// `path`'s parent directory's base name, with every hyphen and underscore removed, the
+/// same normalization `a-package-is-named-after-its-directory` states for the comparison.
+fn Normalized_Directory_Name(path: &str) -> Option<String>
+{
+    let normalized = path.replace('\\', "/");
+    let (directory, _file) = normalized.rsplit_once('/')?;
+    let base = directory.rsplit('/').next()?;
+
+    return Some(base.chars().filter(|character| return *character != '-' && *character != '_').collect());
+}
+
+/// A normalized directory name, wrapped so it cannot be transposed with a package name at a
+/// call site: both are `&str`, but only one is what the package is checked against.
+struct Directory<'a>(&'a str);
+
+/// Whether `package` names `directory` -- exactly, or as the external test package
+/// `<directory>_test`.
+fn Package_Matches_Directory(package: &str, directory: Directory<'_>) -> bool
+{
+    let directory = directory.0;
+
+    return package == directory || package.strip_suffix(TEST_PACKAGE_SUFFIX) == Some(directory);
 }
 
 /// Reports a wildcard import in Rust (`use path::*;`) or Go (`import . "path"`). Two Rust
@@ -107,22 +146,58 @@ fn Rust_Wildcard_Findings_In(source: &SourceFile) -> Vec<Finding>
     let mut findings = Vec::new();
     for (index, line) in lines.iter().enumerate()
     {
-        if !Is_Rust_Wildcard_Use_Line(line)
+        let test_context = TestContext { whole_file_is_a_test_module, first_test_cfg_line };
+        let finding = Rust_Wildcard_Finding_For_Line(source, line, index, test_context);
+        if let Some(finding) = finding
         {
-            continue;
+            findings.push(finding);
         }
-
-        let exempt_test_idiom = whole_file_is_a_test_module
-            || (Is_Use_Super_Star(line) && first_test_cfg_line.is_some_and(|cfg_line| return index > cfg_line));
-        if exempt_test_idiom
-        {
-            continue;
-        }
-
-        findings.push(Finding_For_Line(source, NO_WILDCARD_IMPORTS, index.saturating_add(1), "is a wildcard import; name what it brings in"));
     }
 
     return findings;
+}
+
+/// Whether `index`'s line sits in a file or a region this rule already exempts as test
+/// idiom, packaged so its bare `bool` does not sit among [`Rust_Wildcard_Finding_For_Line`]'s
+/// other positional parameters.
+struct TestContext
+{
+    whole_file_is_a_test_module: bool,
+    first_test_cfg_line: Option<usize>,
+}
+
+fn Rust_Wildcard_Finding_For_Line(source: &SourceFile, line: &str, index: usize, test_context: TestContext) -> Option<Finding>
+{
+    if !Is_Rust_Wildcard_Use_Line(line)
+    {
+        return None;
+    }
+
+    let exempt_test_idiom = test_context.whole_file_is_a_test_module
+        || (Is_Use_Super_Star(line) && test_context.first_test_cfg_line.is_some_and(|cfg_line| return index > cfg_line));
+    if exempt_test_idiom
+    {
+        return None;
+    }
+
+    return Some(Finding_For_Line(source, NO_WILDCARD_IMPORTS, index.saturating_add(1), "is a wildcard import; name what it brings in"));
+}
+
+fn Is_Rust_Wildcard_Use_Line(line: &str) -> bool
+{
+    let trimmed = line.trim();
+    let after_visibility = trimmed
+        .strip_prefix("pub(crate) ")
+        .or_else(|| return trimmed.strip_prefix("pub(super) "))
+        .or_else(|| return trimmed.strip_prefix("pub "))
+        .unwrap_or(trimmed);
+
+    return after_visibility.starts_with("use ") && trimmed.ends_with("::*;");
+}
+
+fn Is_Use_Super_Star(line: &str) -> bool
+{
+    return line.trim() == "use super::*;";
 }
 
 fn Go_Wildcard_Findings_In(source: &SourceFile) -> Vec<Finding>
@@ -144,27 +219,11 @@ fn Go_Wildcard_Findings_In(source: &SourceFile) -> Vec<Finding>
             }
         }
 
-        findings.push(Finding_For_Line(source, NO_WILDCARD_IMPORTS, index.saturating_add(1), "is a wildcard (dot) import; name what it brings in"));
+        let finding = Finding_For_Line(source, NO_WILDCARD_IMPORTS, index.saturating_add(1), "is a wildcard (dot) import; name what it brings in");
+        findings.push(finding);
     }
 
     return findings;
-}
-
-fn Is_Rust_Wildcard_Use_Line(line: &str) -> bool
-{
-    let trimmed = line.trim();
-    let after_visibility = trimmed
-        .strip_prefix("pub(crate) ")
-        .or_else(|| return trimmed.strip_prefix("pub(super) "))
-        .or_else(|| return trimmed.strip_prefix("pub "))
-        .unwrap_or(trimmed);
-
-    return after_visibility.starts_with("use ") && trimmed.ends_with("::*;");
-}
-
-fn Is_Use_Super_Star(line: &str) -> bool
-{
-    return line.trim() == "use super::*;";
 }
 
 /// The path a Go dot-import line names, or `None` if `line` is not one — a bare `. "path"`
@@ -192,17 +251,6 @@ fn Declared_Go_Package_Name(text: &str) -> Option<String>
     }
 
     return None;
-}
-
-/// `path`'s parent directory's base name, with every hyphen and underscore removed, the
-/// same normalization `a-package-is-named-after-its-directory` states for the comparison.
-fn Normalized_Directory_Name(path: &str) -> Option<String>
-{
-    let normalized = path.replace('\\', "/");
-    let (directory, _file) = normalized.rsplit_once('/')?;
-    let base = directory.rsplit('/').next()?;
-
-    return Some(base.chars().filter(|character| return *character != '-' && *character != '_').collect());
 }
 
 fn Finding_For_Line(source: &SourceFile, rule: &str, line_number: usize, because: &str) -> Finding

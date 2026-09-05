@@ -55,18 +55,6 @@ pub const GOALS_AND_PARTS_LINE_UP: &str = "goals-and-parts-line-up";
 /// Where a finding about the declaration points, since the declaration is its whole subject.
 const DECLARATION_FILE: &str = "standards.json";
 
-/// This crate's own floor for `nomos.cap.goals.policy` — stated at the capability's own
-/// ceiling since there is only one real provider today and no weaker answer this rule could
-/// honestly still act on.
-fn Goals_Policy_Requirement() -> nomos_capability::Requirement
-{
-    return nomos_capability::Requirement::New(
-        nomos_cap_goals_policy::Capability(),
-        nomos_cap_goals_policy::CONTRACT_VERSION,
-        nomos_cap_goals_policy::Ceiling(),
-    );
-}
-
 /// Reports every way a repository's declared purposes and its declared parts fail to line
 /// up: a part serving an undeclared purpose, a declared purpose nothing serves, a part
 /// serving no purpose, and a purpose spread past its declared ceiling.
@@ -95,6 +83,18 @@ fn Declared_Policy(facts: &mut dyn FactReader) -> Option<GoalsPolicyPayload>
     return nomos_cap_goals_policy::Parse_Payload(&fact.payload.bytes).ok();
 }
 
+/// This crate's own floor for `nomos.cap.goals.policy` — stated at the capability's own
+/// ceiling since there is only one real provider today and no weaker answer this rule could
+/// honestly still act on.
+fn Goals_Policy_Requirement() -> nomos_capability::Requirement
+{
+    return nomos_capability::Requirement::New(
+        nomos_cap_goals_policy::Capability(),
+        nomos_cap_goals_policy::CONTRACT_VERSION,
+        nomos_cap_goals_policy::Ceiling(),
+    );
+}
+
 /// The audit itself, over a payload already in hand.
 ///
 /// Ported from code-standards' `AuditTraceability`, including its ordering: the subsystem
@@ -113,28 +113,27 @@ fn Findings_For(payload: &GoalsPolicyPayload) -> Vec<Finding>
     let mut findings = Vec::new();
     let mut served_by: Vec<(&str, Vec<&str>)> = payload.goals.iter().map(|goal| return (goal.as_str(), Vec::new())).collect();
 
-    for subsystem in &payload.subsystems
-    {
-        findings.extend(Subsystem_Findings(subsystem, &payload.goals, &mut served_by));
-    }
-
-    for (goal, servers) in &served_by
-    {
-        if servers.is_empty()
-        {
-            findings.push(Finding_For(Kind::OrphanedGoal, goal, ""));
-            continue;
-        }
-
-        let ceiling = payload.max_subsystems_per_goal;
-        if ceiling > 0 && servers.len() > ceiling as usize
-        {
-            findings.push(Finding_For(Kind::SmearedGoal, goal, &format!("{} {}", servers.len(), ceiling)));
-        }
-    }
+    Extend_With_Subsystem_Findings(&payload.subsystems, &payload.goals, &mut served_by, &mut findings);
+    Extend_With_Goal_Findings(&served_by, payload.max_subsystems_per_goal, &mut findings);
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+/// Judges every declared subsystem, appending to `findings` and recording, in `served_by`,
+/// which declared goals each one serves.
+fn Extend_With_Subsystem_Findings<'policy>(
+    subsystems: &'policy [SubsystemDeclaration],
+    declared: &[String],
+    served_by: &mut [(&'policy str, Vec<&'policy str>)],
+    findings: &mut Vec<Finding>,
+)
+{
+    for subsystem in subsystems
+    {
+        let subsystem_findings = Subsystem_Findings(subsystem, declared, served_by);
+        findings.extend(subsystem_findings);
+    }
 }
 
 /// Judges one part — purposeless when it names no goal, undeclared for any goal outside the
@@ -147,7 +146,7 @@ fn Subsystem_Findings<'policy>(
 {
     if subsystem.goals.is_empty()
     {
-        return vec![Finding_For(Kind::PurposelessSubsystem, &subsystem.name, "")];
+        return vec![Finding_For(Kind::PurposelessSubsystem, Subject(&subsystem.name), Detail(""))];
     }
 
     let mut findings = Vec::new();
@@ -155,7 +154,8 @@ fn Subsystem_Findings<'policy>(
     {
         if !declared.contains(goal)
         {
-            findings.push(Finding_For(Kind::UndeclaredGoal, &subsystem.name, goal));
+            let finding = Finding_For(Kind::UndeclaredGoal, Subject(&subsystem.name), Detail(goal));
+            findings.push(finding);
             continue;
         }
 
@@ -166,6 +166,27 @@ fn Subsystem_Findings<'policy>(
     }
 
     return findings;
+}
+
+/// Judges every declared goal against who serves it, appending an orphaned- or smeared-goal
+/// finding to `findings` as each disagreement is found.
+fn Extend_With_Goal_Findings(served_by: &[(&str, Vec<&str>)], ceiling: u32, findings: &mut Vec<Finding>)
+{
+    for (goal, servers) in served_by
+    {
+        if servers.is_empty()
+        {
+            let finding = Finding_For(Kind::OrphanedGoal, Subject(goal), Detail(""));
+            findings.push(finding);
+            continue;
+        }
+
+        if ceiling > 0 && servers.len() > ceiling as usize
+        {
+            let finding = Finding_For(Kind::SmearedGoal, Subject(goal), Detail(&format!("{} {}", servers.len(), ceiling)));
+            findings.push(finding);
+        }
+    }
 }
 
 /// The four disagreements, in the order they sort — the same order code-standards' own
@@ -181,37 +202,53 @@ enum Kind
 
 impl Kind
 {
+    const UNDECLARED_GOAL_RANK: u8 = 0;
+    const ORPHANED_GOAL_RANK: u8 = 1;
+    const PURPOSELESS_SUBSYSTEM_RANK: u8 = 2;
+    const SMEARED_GOAL_RANK: u8 = 3;
+
     /// The sort rank, kept out of the subject text so two kinds never interleave.
     const fn Rank(self) -> u8
     {
         return match self
         {
-            Self::UndeclaredGoal => 0,
-            Self::OrphanedGoal => 1,
-            Self::PurposelessSubsystem => 2,
-            Self::SmearedGoal => 3,
+            Self::UndeclaredGoal => Self::UNDECLARED_GOAL_RANK,
+            Self::OrphanedGoal => Self::ORPHANED_GOAL_RANK,
+            Self::PurposelessSubsystem => Self::PURPOSELESS_SUBSYSTEM_RANK,
+            Self::SmearedGoal => Self::SMEARED_GOAL_RANK,
         };
     }
 }
 
-/// One finding. `detail` is the related goal for an undeclared one, and the count and
-/// ceiling (space-separated) for a smeared one; the other two kinds carry none.
-fn Finding_For(kind: Kind, subject: &str, detail: &str) -> Finding
+/// The finding's own subject — a goal or subsystem name. Wrapped so it cannot be transposed
+/// with [`Detail`] at a call site: both wrap `&str`, but only one names the thing judged.
+struct Subject<'a>(&'a str);
+
+/// The finding's auxiliary text: the related goal for an undeclared one, and the count and
+/// ceiling (space-separated) for a smeared one; the other two kinds carry none. Wrapped for
+/// the same reason as [`Subject`].
+struct Detail<'a>(&'a str);
+
+/// One finding.
+fn Finding_For(kind: Kind, subject: Subject<'_>, detail: Detail<'_>) -> Finding
 {
     return Finding {
         rule: RuleId::New(GOALS_AND_PARTS_LINE_UP),
         subject: nomos_model::Subject_Of_Path(""),
-        subject_name: format!("{}:{}:{subject}", kind.Rank(), DECLARATION_FILE),
+        subject_name: format!("{}:{}:{}", kind.Rank(), DECLARATION_FILE, subject.0),
         applicability: Applicability::Supported,
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Blocking,
-        summary: Summary_For(kind, subject, detail),
+        summary: Summary_For(kind, Subject(subject.0), Detail(detail.0)),
         locations: vec![DECLARATION_FILE.to_owned()],
     };
 }
 
-fn Summary_For(kind: Kind, subject: &str, detail: &str) -> String
+fn Summary_For(kind: Kind, subject: Subject<'_>, detail: Detail<'_>) -> String
 {
+    let subject = subject.0;
+    let detail = detail.0;
+
     return match kind
     {
         Kind::UndeclaredGoal => format!(
@@ -246,9 +283,11 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Report_A_Subsystem_Serving_An_Undeclared_Goal()
     {
-        let findings = Findings_For(&Policy(&["render"], 0, &[("experimental", &["teleport"])]));
+        let policy = Policy(&["render"], 0, &[("experimental", &["teleport"])]);
+        let findings = Findings_For(&policy);
 
-        assert_eq!(findings.len(), 2, "the declared goal is also orphaned: {findings:?}");
+        const EXPECTED_FINDINGS: usize = 2;
+        assert_eq!(findings.len(), EXPECTED_FINDINGS, "the declared goal is also orphaned: {findings:?}");
         assert!(
             findings.iter().any(|finding| return finding.summary.contains("not in the declared goal set")),
             "{findings:?}"
@@ -258,7 +297,8 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Report_A_Goal_Nothing_Serves()
     {
-        let findings = Findings_For(&Policy(&["render", "unbuilt"], 0, &[("graphics", &["render"])]));
+        let policy = Policy(&["render", "unbuilt"], 0, &[("graphics", &["render"])]);
+        let findings = Findings_For(&policy);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let reported = findings.first().expect("asserted len 1 above");
@@ -270,7 +310,8 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Report_A_Part_Serving_No_Goal()
     {
-        let findings = Findings_For(&Policy(&["render"], 0, &[("graphics", &["render"]), ("utils", &[])]));
+        let policy = Policy(&["render"], 0, &[("graphics", &["render"]), ("utils", &[])]);
+        let findings = Findings_For(&policy);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert!(
@@ -282,7 +323,8 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Report_A_Goal_Spread_Past_Its_Ceiling()
     {
-        let findings = Findings_For(&Policy(&["simulate"], 1, &[("physics", &["simulate"]), ("audio", &["simulate"])]));
+        let policy = Policy(&["simulate"], 1, &[("physics", &["simulate"]), ("audio", &["simulate"])]);
+        let findings = Findings_For(&policy);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let reported = findings.first().expect("asserted len 1 above");
@@ -292,7 +334,7 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Report_All_Four_Disagreements_At_Once()
     {
-        let findings = Findings_For(&Policy(
+        let policy = Policy(
             &["render", "simulate", "unbuilt"],
             1,
             &[
@@ -302,20 +344,28 @@ mod tests
                 ("utils", &[]),
                 ("experimental", &["teleport"]),
             ],
-        ));
+        );
+        let findings = Findings_For(&policy);
 
-        assert_eq!(findings.len(), 4, "one of each, and nothing else: {findings:?}");
+        const EXPECTED_FINDINGS: usize = 4;
+        assert_eq!(findings.len(), EXPECTED_FINDINGS, "one of each, and nothing else: {findings:?}");
         let summaries: Vec<&str> = findings.iter().map(|finding| return finding.summary.as_str()).collect();
         assert!(summaries.first().is_some_and(|summary| return summary.contains("not in the declared goal set")), "{summaries:?}");
         assert!(summaries.get(1).is_some_and(|summary| return summary.contains("nothing was built for")), "{summaries:?}");
-        assert!(summaries.get(2).is_some_and(|summary| return summary.contains("serves no declared goal")), "{summaries:?}");
-        assert!(summaries.get(3).is_some_and(|summary| return summary.contains("over the ceiling of")), "{summaries:?}");
+        const PURPOSELESS_SUBSYSTEM_INDEX: usize = 2;
+        assert!(
+            summaries.get(PURPOSELESS_SUBSYSTEM_INDEX).is_some_and(|summary| return summary.contains("serves no declared goal")),
+            "{summaries:?}"
+        );
+        const SMEARED_GOAL_INDEX: usize = 3;
+        assert!(summaries.get(SMEARED_GOAL_INDEX).is_some_and(|summary| return summary.contains("over the ceiling of")), "{summaries:?}");
     }
 
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Judge_Nothing_When_No_Goal_Is_Declared()
     {
-        let findings = Findings_For(&Policy(&[], 1, &[("utils", &[]), ("experimental", &["teleport"])]));
+        let policy = Policy(&[], 1, &[("utils", &[]), ("experimental", &["teleport"])]);
+        let findings = Findings_For(&policy);
 
         assert!(findings.is_empty(), "a repository that declared no goals has not opted in: {findings:?}");
     }
@@ -323,11 +373,8 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Not_Judge_Spread_With_No_Ceiling()
     {
-        let findings = Findings_For(&Policy(
-            &["render"],
-            0,
-            &[("a", &["render"]), ("b", &["render"]), ("c", &["render"])],
-        ));
+        let policy = Policy(&["render"], 0, &[("a", &["render"]), ("b", &["render"]), ("c", &["render"])]);
+        let findings = Findings_For(&policy);
 
         assert!(findings.is_empty(), "a ceiling of zero drops only the spread bound: {findings:?}");
     }
@@ -335,7 +382,8 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Accept_A_Policy_That_Lines_Up()
     {
-        let findings = Findings_For(&Policy(&["render", "simulate"], 1, &[("graphics", &["render"]), ("physics", &["simulate"])]));
+        let policy = Policy(&["render", "simulate"], 1, &[("graphics", &["render"]), ("physics", &["simulate"])]);
+        let findings = Findings_For(&policy);
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -343,7 +391,8 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Count_A_Part_Serving_Two_Goals_Against_Both()
     {
-        let findings = Findings_For(&Policy(&["render", "simulate"], 0, &[("engine", &["render", "simulate"])]));
+        let policy = Policy(&["render", "simulate"], 0, &[("engine", &["render", "simulate"])]);
+        let findings = Findings_For(&policy);
 
         assert!(findings.is_empty(), "one part may serve two purposes: {findings:?}");
     }
@@ -351,7 +400,8 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Point_Every_Finding_At_The_Declaration()
     {
-        let findings = Findings_For(&Policy(&["unbuilt"], 0, &[]));
+        let policy = Policy(&["unbuilt"], 0, &[]);
+        let findings = Findings_For(&policy);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").locations, vec![DECLARATION_FILE.to_owned()]);

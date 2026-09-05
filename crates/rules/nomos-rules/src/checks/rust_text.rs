@@ -49,6 +49,59 @@ pub fn Check_Unwrap_Expect_Discipline(sources: &[SourceFile]) -> Vec<Finding>
     return findings;
 }
 
+fn Unwrap_Expect_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for (index, line) in source.text.lines().enumerate()
+    {
+        let code = Code_Prefix(line);
+        Push_Unwrap_Finding(source, code, index, &mut findings);
+        Push_Placeholder_Expect_Finding(source, code, index, &mut findings);
+    }
+
+    return findings;
+}
+
+fn Push_Unwrap_Finding(source: &SourceFile, code: &str, index: usize, findings: &mut Vec<Finding>)
+{
+    if code.contains(".unwrap()")
+    {
+        let finding = Finding_For_Line(source, UNWRAP_EXPECT_DISCIPLINE, Line_Number(index), "uses `unwrap()` outside tests/examples");
+        findings.push(finding);
+    }
+}
+
+fn Push_Placeholder_Expect_Finding(source: &SourceFile, code: &str, index: usize, findings: &mut Vec<Finding>)
+{
+    if Placeholder_Expect(code)
+    {
+        let finding = Finding_For_Line(
+            source,
+            UNWRAP_EXPECT_DISCIPLINE,
+            Line_Number(index),
+            "uses `expect(...)` without naming an invariant",
+        );
+        findings.push(finding);
+    }
+}
+
+fn Placeholder_Expect(code: &str) -> bool
+{
+    let Some(after_call) = code.split(".expect(").nth(1)
+    else
+    {
+        return false;
+    };
+
+    let lower = after_call.to_ascii_lowercase();
+    return lower.contains("\"should not happen\"")
+        || lower.contains("\"impossible\"")
+        || lower.contains("\"unreachable\"")
+        || lower.contains("\"todo\"")
+        || lower.contains("\"fixme\"");
+}
+
 /// Reports explicit panic primitives that do not carry a local panic/invariant note.
 #[must_use]
 pub fn Check_Panics_Are_Justified_Documented_And_Validated(sources: &[SourceFile]) -> Vec<Finding>
@@ -65,6 +118,16 @@ pub fn Check_Panics_Are_Justified_Documented_And_Validated(sources: &[SourceFile
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+fn Panic_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    return Unjustified_Construct_Findings_In(
+        source,
+        Rule(PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED),
+        Message("uses a panic primitive without a local panic or invariant note"),
+        Detector { has_construct: ConstructDetector(Has_Panic_Primitive), has_local_justification: JustificationDetector(Has_Local_Panic_Justification) },
+    );
 }
 
 /// Reports Rust `#[path = "..."]` attributes whose value is absolute or escapes upward.
@@ -85,6 +148,79 @@ pub fn Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources: &[SourceFile]) ->
     return findings;
 }
 
+fn Path_Attribute_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for (index, line) in source.text.lines().enumerate()
+    {
+        let code = Code_Prefix(line);
+        if let Some(value) = Path_Attribute_Value(code)
+        {
+            if Path_Is_Absolute_Or_Escaping(value)
+            {
+                let finding = Finding_For_Line(
+                    source,
+                    A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE,
+                    Line_Number(index),
+                    "`#[path]` leaves the declaring file subtree",
+                );
+                findings.push(finding);
+            }
+        }
+    }
+
+    return findings;
+}
+
+fn Path_Attribute_Value(code: &str) -> Option<&str>
+{
+    let attribute_start = code.find("#[path")?;
+    let after_attribute = code.get(attribute_start..)?;
+    let first_quote = after_attribute.find('"')?;
+    let after_first_quote = after_attribute.get(first_quote.saturating_add(1)..)?;
+    let second_quote = after_first_quote.find('"')?;
+    return after_first_quote.get(..second_quote);
+}
+
+fn Path_Is_Absolute_Or_Escaping(value: &str) -> bool
+{
+    let path = std::path::Path::new(value);
+    if path.is_absolute()
+    {
+        return true;
+    }
+
+    return Relative_Path_Escapes_Its_Own_Subtree(path);
+}
+
+/// Walks a relative path's components, tracking how many directories deep it has descended,
+/// and reports whether a `..` ever climbs back above the starting point.
+fn Relative_Path_Escapes_Its_Own_Subtree(path: &std::path::Path) -> bool
+{
+    let mut depth = 0usize;
+    for component in path.components()
+    {
+        match component
+        {
+            Component::ParentDir =>
+            {
+                let Some(next_depth) = depth.checked_sub(1)
+                else
+                {
+                    return true;
+                };
+                depth = next_depth;
+            }
+            Component::Normal(_) => depth = depth.saturating_add(1),
+            Component::CurDir => {}
+            Component::RootDir | Component::Prefix(_) => return true,
+        }
+    }
+
+    return false;
+}
+
 /// Reports shared `Rc`/`Arc` plus `RefCell` constructs that do not say why.
 #[must_use]
 pub fn Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
@@ -101,6 +237,16 @@ pub fn Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+fn Shared_Interior_Mutability_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    return Unjustified_Construct_Findings_In(
+        source,
+        Rule(SHARED_INTERIOR_MUTABILITY_SAYS_WHY),
+        Message("uses shared interior mutability without `smart-pointer: allow: <reason>`"),
+        Detector { has_construct: ConstructDetector(Has_Shared_RefCell_Construct), has_local_justification: JustificationDetector(Has_Local_Smart_Pointer_Reason) },
+    );
 }
 
 /// Reports `#[allow(...)]`/`#![allow(...)]` attributes with no adjacent explanatory comment.
@@ -120,9 +266,10 @@ pub fn Check_Every_Allow_Carries_A_Justification(sources: &[SourceFile]) -> Vec<
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE)
+        let is_judged_rust_source = source.Is_Written_In(RUST_LANGUAGE)
             && !super::Is_Test_Or_Example_Source(source)
-            && !Is_Own_Implementation_File(source)
+            && !Is_Own_Implementation_File(source);
+        if is_judged_rust_source
         {
             findings.extend(Allow_Findings_In(source));
         }
@@ -130,6 +277,16 @@ pub fn Check_Every_Allow_Carries_A_Justification(sources: &[SourceFile]) -> Vec<
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+fn Allow_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    return Unjustified_Construct_Findings_In(
+        source,
+        Rule(EVERY_ALLOW_CARRIES_A_JUSTIFICATION),
+        Message("carries an #[allow(...)] with no adjacent comment explaining why"),
+        Detector { has_construct: ConstructDetector(Has_Allow_Attribute), has_local_justification: JustificationDetector(Has_Local_Allow_Justification) },
+    );
 }
 
 /// Reports `unsafe` blocks, functions, impls and traits with no adjacent `// SAFETY:` comment.
@@ -150,6 +307,16 @@ pub fn Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Finding>
     return findings;
 }
 
+fn Unsafe_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    return Unjustified_Construct_Findings_In(
+        source,
+        Rule(UNSAFE_JUSTIFICATION),
+        Message("uses `unsafe` without an adjacent `// SAFETY:` comment"),
+        Detector { has_construct: ConstructDetector(Has_Unsafe_Construct), has_local_justification: JustificationDetector(Has_Local_Safety_Justification) },
+    );
+}
+
 /// Reports `#[inline(always)]` attributes with no adjacent explanatory comment.
 #[must_use]
 pub fn Check_Inline_Always_Justification(sources: &[SourceFile]) -> Vec<Finding>
@@ -166,6 +333,16 @@ pub fn Check_Inline_Always_Justification(sources: &[SourceFile]) -> Vec<Finding>
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+fn Inline_Always_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    return Unjustified_Construct_Findings_In(
+        source,
+        Rule(INLINE_ALWAYS_JUSTIFICATION),
+        Message("carries #[inline(always)] with no adjacent comment explaining why"),
+        Detector { has_construct: ConstructDetector(Has_Inline_Always_Attribute), has_local_justification: JustificationDetector(Has_Local_Inline_Always_Justification) },
+    );
 }
 
 /// Reports a bare `#[ignore]` on a Rust test with neither an inline `= "reason"` value nor
@@ -187,242 +364,14 @@ pub fn Check_A_Disabled_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
     return findings;
 }
 
-fn Unwrap_Expect_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let mut findings = Vec::new();
-
-    for (index, line) in source.text.lines().enumerate()
-    {
-        if Code_Prefix(line).contains(".unwrap()")
-        {
-            findings.push(Finding_For_Line(
-                source,
-                UNWRAP_EXPECT_DISCIPLINE,
-                Line_Number(index),
-                "uses `unwrap()` outside tests/examples",
-            ));
-        }
-
-        if Placeholder_Expect(Code_Prefix(line))
-        {
-            findings.push(Finding_For_Line(
-                source,
-                UNWRAP_EXPECT_DISCIPLINE,
-                Line_Number(index),
-                "uses `expect(...)` without naming an invariant",
-            ));
-        }
-    }
-
-    return findings;
-}
-
-fn Panic_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let lines = Lines_Of(source);
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
-    {
-        let code = Code_Prefix(line);
-        if Has_Panic_Primitive(code) && !Has_Local_Panic_Justification(&lines, index)
-        {
-            findings.push(Finding_For_Line(
-                source,
-                PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED,
-                Line_Number(index),
-                "uses a panic primitive without a local panic or invariant note",
-            ));
-        }
-    }
-
-    return findings;
-}
-
-fn Path_Attribute_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let mut findings = Vec::new();
-
-    for (index, line) in source.text.lines().enumerate()
-    {
-        let code = Code_Prefix(line);
-        if let Some(value) = Path_Attribute_Value(code)
-        {
-            if Path_Is_Absolute_Or_Escaping(value)
-            {
-                findings.push(Finding_For_Line(
-                    source,
-                    A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE,
-                    Line_Number(index),
-                    "`#[path]` leaves the declaring file subtree",
-                ));
-            }
-        }
-    }
-
-    return findings;
-}
-
-fn Shared_Interior_Mutability_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let lines = Lines_Of(source);
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
-    {
-        let code = Code_Prefix(line);
-        if Has_Shared_RefCell_Construct(code) && !Has_Local_Smart_Pointer_Reason(&lines, index)
-        {
-            findings.push(Finding_For_Line(
-                source,
-                SHARED_INTERIOR_MUTABILITY_SAYS_WHY,
-                Line_Number(index),
-                "uses shared interior mutability without `smart-pointer: allow: <reason>`",
-            ));
-        }
-    }
-
-    return findings;
-}
-
-fn Allow_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let lines = Lines_Of(source);
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
-    {
-        let code = Code_Prefix(line);
-        if Has_Allow_Attribute(code) && !Has_Local_Allow_Justification(&lines, index)
-        {
-            findings.push(Finding_For_Line(
-                source,
-                EVERY_ALLOW_CARRIES_A_JUSTIFICATION,
-                Line_Number(index),
-                "carries an #[allow(...)] with no adjacent comment explaining why",
-            ));
-        }
-    }
-
-    return findings;
-}
-
-fn Unsafe_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let lines = Lines_Of(source);
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
-    {
-        let code = Code_Prefix(line);
-        if Has_Unsafe_Construct(code) && !Has_Local_Safety_Justification(&lines, index)
-        {
-            findings.push(Finding_For_Line(
-                source,
-                UNSAFE_JUSTIFICATION,
-                Line_Number(index),
-                "uses `unsafe` without an adjacent `// SAFETY:` comment",
-            ));
-        }
-    }
-
-    return findings;
-}
-
-fn Inline_Always_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let lines = Lines_Of(source);
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
-    {
-        let code = Code_Prefix(line);
-        if Has_Inline_Always_Attribute(code) && !Has_Local_Inline_Always_Justification(&lines, index)
-        {
-            findings.push(Finding_For_Line(
-                source,
-                INLINE_ALWAYS_JUSTIFICATION,
-                Line_Number(index),
-                "carries #[inline(always)] with no adjacent comment explaining why",
-            ));
-        }
-    }
-
-    return findings;
-}
-
 fn Disabled_Test_Findings_In(source: &SourceFile) -> Vec<Finding>
 {
-    let lines = Lines_Of(source);
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
-    {
-        let code = Code_Prefix(line);
-        if Has_Bare_Ignore_Attribute(code) && !Has_Local_Ignore_Justification(&lines, index)
-        {
-            findings.push(Finding_For_Line(
-                source,
-                A_DISABLED_TEST_STATES_WHY,
-                Line_Number(index),
-                "disables a test with a bare #[ignore] and no reason",
-            ));
-        }
-    }
-
-    return findings;
-}
-
-/// This file's own path, checked with the same normalized-slash comparison
-/// [`super::Is_Test_Or_Example_Source`] already uses. Every rule in this file that reads a
-/// construct's own spelling (`unsafe {`, `#[allow(`, `Rc::new(RefCell::new(`, `#[path`)
-/// exempts this exact file: its own test fixtures and each rule's own detection-pattern
-/// string necessarily spell out the exact syntax the rule looks for, so this is the one
-/// file in the workspace guaranteed to look like a violation of every rule it implements,
-/// regardless of whether the match is a fixture or the pattern-matching code itself.
-/// `#![forbid(unsafe_code)]` at the crate root makes the `unsafe-justification` instance of
-/// this provably safe forever; the others are safe today (checked: no real `#[allow(...)]`/
-/// `Rc<RefCell<...>>`/escaping `#[path]` usage exists in this file outside its own fixtures
-/// and patterns), and trade a theoretical future in-file violation going unflagged for not
-/// building the per-line, string-literal-aware self-reference tracking this crate has so
-/// far declined to build — the same tradeoff every other path-based exemption here already
-/// makes.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/rust_text.rs";
-
-fn Is_Own_Implementation_File(source: &SourceFile) -> bool
-{
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
-}
-
-fn Lines_Of(source: &SourceFile) -> Vec<&str>
-{
-    return source.text.lines().collect();
-}
-
-fn Line_Number(index: usize) -> usize
-{
-    return index.saturating_add(1);
-}
-
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
-}
-
-fn Placeholder_Expect(code: &str) -> bool
-{
-    let Some(after_call) = code.split(".expect(").nth(1)
-    else
-    {
-        return false;
-    };
-
-    let lower = after_call.to_ascii_lowercase();
-    return lower.contains("\"should not happen\"")
-        || lower.contains("\"impossible\"")
-        || lower.contains("\"unreachable\"")
-        || lower.contains("\"todo\"")
-        || lower.contains("\"fixme\"");
+    return Unjustified_Construct_Findings_In(
+        source,
+        Rule(A_DISABLED_TEST_STATES_WHY),
+        Message("disables a test with a bare #[ignore] and no reason"),
+        Detector { has_construct: ConstructDetector(Has_Bare_Ignore_Attribute), has_local_justification: JustificationDetector(Has_Local_Ignore_Justification) },
+    );
 }
 
 fn Has_Panic_Primitive(code: &str) -> bool
@@ -458,47 +407,6 @@ fn Comment_Has_Panic_Reason(line: &str) -> bool
         || lower.contains("# panics");
 }
 
-fn Path_Attribute_Value(code: &str) -> Option<&str>
-{
-    let attribute_start = code.find("#[path")?;
-    let after_attribute = code.get(attribute_start..)?;
-    let first_quote = after_attribute.find('"')?;
-    let after_first_quote = after_attribute.get(first_quote.saturating_add(1)..)?;
-    let second_quote = after_first_quote.find('"')?;
-    return after_first_quote.get(..second_quote);
-}
-
-fn Path_Is_Absolute_Or_Escaping(value: &str) -> bool
-{
-    let path = std::path::Path::new(value);
-    if path.is_absolute()
-    {
-        return true;
-    }
-
-    let mut depth = 0usize;
-    for component in path.components()
-    {
-        match component
-        {
-            Component::ParentDir =>
-            {
-                let Some(next_depth) = depth.checked_sub(1)
-                else
-                {
-                    return true;
-                };
-                depth = next_depth;
-            }
-            Component::Normal(_) => depth = depth.saturating_add(1),
-            Component::CurDir => {}
-            Component::RootDir | Component::Prefix(_) => return true,
-        }
-    }
-
-    return false;
-}
-
 fn Has_Shared_RefCell_Construct(code: &str) -> bool
 {
     let compact = code
@@ -506,17 +414,24 @@ fn Has_Shared_RefCell_Construct(code: &str) -> bool
         .filter(|character| return !character.is_whitespace())
         .collect::<String>();
 
-    return Shared_Type_Contains_RefCell(&compact, "Rc")
-        || Shared_Type_Contains_RefCell(&compact, "Arc")
+    return Shared_Type_Contains_RefCell(CompactTypeText(&compact), WrapperName("Rc"))
+        || Shared_Type_Contains_RefCell(CompactTypeText(&compact), WrapperName("Arc"))
         || compact.contains("Rc::new(RefCell::new(")
         || compact.contains("Arc::new(RefCell::new(")
         || compact.contains("Rc::<RefCell<")
         || compact.contains("Arc::<RefCell<");
 }
 
-fn Shared_Type_Contains_RefCell(compact: &str, wrapper: &str) -> bool
+/// `compact` and `wrapper` are both `&str`; without a distinct type per position, a call
+/// site like `Shared_Type_Contains_RefCell(compact, wrapper)` reads as two interchangeable
+/// strings and a swap compiles silently.
+struct CompactTypeText<'a>(&'a str);
+struct WrapperName<'a>(&'a str);
+
+fn Shared_Type_Contains_RefCell(compact: CompactTypeText<'_>, wrapper: WrapperName<'_>) -> bool
 {
-    let pattern = format!("{wrapper}<");
+    let compact = compact.0;
+    let pattern = format!("{}<", wrapper.0);
     let Some(start) = compact.find(&pattern)
     else
     {
@@ -580,14 +495,6 @@ fn Has_Local_Allow_Justification(lines: &[&str], index: usize) -> bool
     }
 
     return Previous_Comment_Block_Has(lines, index, Comment_Is_Non_Empty);
-}
-
-/// `every-allow-carries-a-justification`'s own example is plain prose with no special
-/// marker, unlike the panic and smart-pointer rules' `panic:`/`smart-pointer: allow:`
-/// keywords — so any non-empty comment satisfies it.
-fn Comment_Is_Non_Empty(line: &str) -> bool
-{
-    return Comment_Text_Of(line).is_some_and(|comment| return !comment.trim().is_empty());
 }
 
 fn Has_Inline_Always_Attribute(code: &str) -> bool
@@ -659,36 +566,170 @@ fn Comment_Has_Safety_Reason(line: &str) -> bool
     return comment.to_ascii_lowercase().starts_with("safety:");
 }
 
+/// `rule` and `message` are both `&str`; without a distinct type per position, a call site
+/// like `Unjustified_Construct_Findings_In(source, rule, message, ...)` reads as two
+/// interchangeable strings and a swap compiles silently.
+struct Rule<'a>(&'a str);
+struct Message<'a>(&'a str);
+
+/// The shape [`Panic_Findings_In`], [`Shared_Interior_Mutability_Findings_In`],
+/// [`Allow_Findings_In`], [`Unsafe_Findings_In`], [`Inline_Always_Findings_In`] and
+/// [`Disabled_Test_Findings_In`] all reduce to: a construct-matching predicate, an
+/// unless-locally-justified predicate, and one finding message. This is the one place that
+/// shape is written down.
+/// Recognizes the construct this rule judges, named so it reads as a collaborator with one
+/// documented operation rather than a bare stored callable.
+struct ConstructDetector(fn(&str) -> bool);
+
+impl ConstructDetector
+{
+    fn Detects(&self, code: &str) -> bool
+    {
+        return (self.0)(code);
+    }
+}
+
+/// Recognizes a construct's local justification, named for the same reason as
+/// [`ConstructDetector`].
+struct JustificationDetector(fn(&[&str], usize) -> bool);
+
+impl JustificationDetector
+{
+    fn Detects(&self, lines: &[&str], index: usize) -> bool
+    {
+        return (self.0)(lines, index);
+    }
+}
+
+/// How to recognize the construct this rule judges and how to recognize its local
+/// justification, grouped so the six call sites above and this function stay under the
+/// parameter-count ceiling.
+struct Detector
+{
+    has_construct: ConstructDetector,
+    has_local_justification: JustificationDetector,
+}
+
+fn Unjustified_Construct_Findings_In(source: &SourceFile, rule: Rule<'_>, message: Message<'_>, detector: Detector) -> Vec<Finding>
+{
+    let lines = Lines_Of(source);
+    let mut findings = Vec::new();
+
+    for (index, line) in lines.iter().enumerate()
+    {
+        let code = Code_Prefix(line);
+        if detector.has_construct.Detects(code) && !detector.has_local_justification.Detects(&lines, index)
+        {
+            let finding = Finding_For_Line(source, rule.0, Line_Number(index), message.0);
+            findings.push(finding);
+        }
+    }
+
+    return findings;
+}
+
+/// This file's own path, checked with the same normalized-slash comparison
+/// [`super::Is_Test_Or_Example_Source`] already uses. Every rule in this file that reads a
+/// construct's own spelling (`unsafe {`, `#[allow(`, `Rc::new(RefCell::new(`, `#[path`)
+/// exempts this exact file: its own test fixtures and each rule's own detection-pattern
+/// string necessarily spell out the exact syntax the rule looks for, so this is the one
+/// file in the workspace guaranteed to look like a violation of every rule it implements,
+/// regardless of whether the match is a fixture or the pattern-matching code itself.
+/// `#![forbid(unsafe_code)]` at the crate root makes the `unsafe-justification` instance of
+/// this provably safe forever; the others are safe today (checked: no real `#[allow(...)]`/
+/// `Rc<RefCell<...>>`/escaping `#[path]` usage exists in this file outside its own fixtures
+/// and patterns), and trade a theoretical future in-file violation going unflagged for not
+/// building the per-line, string-literal-aware self-reference tracking this crate has so
+/// far declined to build — the same tradeoff every other path-based exemption here already
+/// makes.
+const OWN_IMPLEMENTATION_FILE: &str = "checks/rust_text.rs";
+
+fn Is_Own_Implementation_File(source: &SourceFile) -> bool
+{
+    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+}
+
+fn Lines_Of(source: &SourceFile) -> Vec<&str>
+{
+    return source.text.lines().collect();
+}
+
+fn Line_Number(index: usize) -> usize
+{
+    return index.saturating_add(1);
+}
+
+fn Code_Prefix(line: &str) -> &str
+{
+    return line.split("//").next().unwrap_or(line);
+}
+
+/// `every-allow-carries-a-justification`'s own example is plain prose with no special
+/// marker, unlike the panic and smart-pointer rules' `panic:`/`smart-pointer: allow:`
+/// keywords — so any non-empty comment satisfies it.
+fn Comment_Is_Non_Empty(line: &str) -> bool
+{
+    return Comment_Text_Of(line).is_some_and(|comment| return !comment.trim().is_empty());
+}
+
 fn Previous_Comment_Block_Has(lines: &[&str], index: usize, predicate: fn(&str) -> bool) -> bool
 {
     let mut cursor = index;
     while let Some(previous) = cursor.checked_sub(1)
     {
-        let Some(line) = lines.get(previous)
-        else
+        if let Some(verdict) = Comment_Block_Step(lines, previous, predicate)
         {
-            return false;
-        };
-        if line.trim().is_empty() || Is_Attribute_Line(line)
-        {
-            cursor = previous;
-            continue;
-        }
-
-        if !Is_Comment_Line(line)
-        {
-            return false;
-        }
-
-        if predicate(line)
-        {
-            return true;
+            return verdict;
         }
 
         cursor = previous;
     }
 
     return false;
+}
+
+/// One backward step through the comment block above a flagged line: `None` means keep
+/// walking upward, `Some(verdict)` means the walk has its answer (the block ended, or the
+/// predicate matched).
+fn Comment_Block_Step(lines: &[&str], previous: usize, predicate: fn(&str) -> bool) -> Option<bool>
+{
+    let Some(line) = lines.get(previous)
+    else
+    {
+        return Some(false);
+    };
+
+    if Is_Skippable_Block_Line(line)
+    {
+        return None;
+    }
+
+    return Comment_Line_Verdict(line, predicate);
+}
+
+/// A blank line or a bare attribute (`#[...]`) is not itself a comment, but sits inside the
+/// contiguous block the walk is scanning and does not end it.
+fn Is_Skippable_Block_Line(line: &str) -> bool
+{
+    let is_blank = line.trim().is_empty();
+    return is_blank || Is_Attribute_Line(line);
+}
+
+/// `None` means this comment line did not carry the reason and the walk should keep
+/// scanning upward through the rest of the block.
+fn Comment_Line_Verdict(line: &str, predicate: fn(&str) -> bool) -> Option<bool>
+{
+    if !Is_Comment_Line(line)
+    {
+        return Some(false);
+    }
+
+    if predicate(line)
+    {
+        return Some(true);
+    }
+
+    return None;
 }
 
 fn Is_Attribute_Line(line: &str) -> bool

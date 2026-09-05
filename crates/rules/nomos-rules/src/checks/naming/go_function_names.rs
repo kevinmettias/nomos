@@ -42,24 +42,11 @@ pub fn Check_Exported_Go_Functions_Use_Upper_Snake_Case(
 ) -> Vec<Finding>
 {
     let case = Resolve_Case(facts, Some("go"), "function.exported", Case::UpperSnake);
-    let mut findings = Vec::new();
-
-    for source in sources
-    {
-        if !source.Is_Written_In(GO_LANGUAGE)
-        {
-            continue;
-        }
-
-        match super::reading::Payload_Of(source, facts)
-        {
-            Ok(payload) => findings.extend(Violations_In(&payload, &source.path, case)),
-            Err(finding) => findings.push(Unread_As_This_Rule(finding)),
-        }
-    }
-
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
+    return Judged_Go_Function_Sources(
+        sources,
+        facts,
+        Judgment { case, judge: ViolationConstructor(Violations_In), unread: UnreadWrapper(Unread_As_This_Rule) },
+    );
 }
 
 /// Judges unexported Go function and method names against the same convention with only
@@ -72,26 +59,15 @@ pub fn Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(
 ) -> Vec<Finding>
 {
     let case = Resolve_Case(facts, Some("go"), "function.unexported", Case::MixedSnake);
-    let mut findings = Vec::new();
-
-    for source in sources
-    {
-        if !source.Is_Written_In(GO_LANGUAGE)
-        {
-            continue;
-        }
-
-        match super::reading::Payload_Of(source, facts)
-        {
-            Ok(payload) => findings.extend(Unexported_Violations_In(&payload, &source.path, case)),
-            Err(finding) => findings.push(Unread_As_Unexported_Rule(finding)),
-        }
-    }
-
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
+    return Judged_Go_Function_Sources(
+        sources,
+        facts,
+        Judgment { case, judge: ViolationConstructor(Unexported_Violations_In), unread: UnreadWrapper(Unread_As_Unexported_Rule) },
+    );
 }
 
+/// The shape both checks above share: skip a non-Go source, read each remaining source's
+/// own syntax fact, and fold either a real reading failure or `judge`'s own findings
 fn Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> Vec<Finding>
 {
     return payload
@@ -101,6 +77,18 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> Vec<Finding
         .filter(|item| return !case.Conforms(item.Own_Name()))
         .map(|item| return Violation_Finding(path, item))
         .collect();
+}
+
+fn Is_Exported_Go_Function(item: &PayloadItem) -> bool
+{
+    return item.kind == FUNCTION && item.Is_Public();
+}
+
+fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
+{
+    let name = item.Own_Name();
+    let summary = format!("exported Go function `{name}` is not Upper_Snake_Case");
+    return Function_Naming_Finding(EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, path, item, summary);
 }
 
 fn Unexported_Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> Vec<Finding>
@@ -114,52 +102,16 @@ fn Unexported_Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> 
         .collect();
 }
 
-fn Is_Exported_Go_Function(item: &PayloadItem) -> bool
-{
-    return item.kind == FUNCTION && item.Is_Public();
-}
-
 fn Is_Unexported_Go_Function(item: &PayloadItem) -> bool
 {
     return item.kind == FUNCTION && !item.Is_Public();
 }
 
-fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
-{
-    use nomos_model::Content_Digest;
-
-    let name = item.Own_Name();
-    let qualified = format!("{path}::{}", item.qualified_name);
-
-    return Finding {
-        rule: RuleId::New(EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: item.qualified_name.clone(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!("exported Go function `{name}` is not Upper_Snake_Case"),
-        locations: vec![path.to_owned()],
-    };
-}
-
 fn Unexported_Violation_Finding(path: &str, item: &PayloadItem) -> Finding
 {
-    use nomos_model::Content_Digest;
-
     let name = item.Own_Name();
-    let qualified = format!("{path}::{}", item.qualified_name);
-
-    return Finding {
-        rule: RuleId::New(UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: item.qualified_name.clone(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!("unexported Go function `{name}` lowercases more than its first letter from Upper_Snake_Case"),
-        locations: vec![path.to_owned()],
-    };
+    let summary = format!("unexported Go function `{name}` lowercases more than its first letter from Upper_Snake_Case");
+    return Function_Naming_Finding(UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, path, item, summary);
 }
 
 fn Unread_As_This_Rule(mut finding: Finding) -> Finding
@@ -178,6 +130,91 @@ fn Unread_As_Unexported_Rule(mut finding: Finding) -> Finding
         .summary
         .replace("this file's naming could not be judged", "this Go file's unexported function names could not be judged");
     return finding;
+}
+
+/// The shape both checks above share: skip a non-Go source, read each remaining source's
+/// own syntax fact, and fold either a real reading failure or `judge`'s own findings
+/// (against the already-resolved `case`) into one sorted list.
+/// Constructs the violations one payload's function names hold against an already-resolved
+/// case, named so it reads as a collaborator with one documented operation rather than a
+/// bare stored callable.
+struct ViolationConstructor(fn(&SyntaxPayload, &str, Case) -> Vec<Finding>);
+
+impl ViolationConstructor
+{
+    fn Violations(&self, payload: &SyntaxPayload, path: &str, case: Case) -> Vec<Finding>
+    {
+        return (self.0)(payload, path, case);
+    }
+}
+
+/// Wraps a reading failure into this rule's own finding, named for the same reason as
+/// [`ViolationConstructor`].
+struct UnreadWrapper(fn(Finding) -> Finding);
+
+impl UnreadWrapper
+{
+    fn Wrap(&self, finding: Finding) -> Finding
+    {
+        return (self.0)(finding);
+    }
+}
+
+/// How to judge one payload's function names: the already-resolved case a name must match,
+/// the violation constructor, and how to wrap a reading failure into its own finding.
+/// Grouped so the two callers above and this function stay under the parameter-count
+/// ceiling.
+struct Judgment
+{
+    case: Case,
+    judge: ViolationConstructor,
+    unread: UnreadWrapper,
+}
+
+fn Judged_Go_Function_Sources(sources: &[SourceFile], facts: &mut dyn FactReader, judgment: Judgment) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        if !source.Is_Written_In(GO_LANGUAGE)
+        {
+            continue;
+        }
+
+        match super::reading::Payload_Of(source, facts)
+        {
+            Ok(payload) =>
+            {
+                let violations = judgment.judge.Violations(&payload, &source.path, judgment.case);
+                findings.extend(violations);
+            }
+            Err(finding) => findings.push(judgment.unread.Wrap(finding)),
+        }
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+/// The `Finding` shape both violation constructors above share: only the rule id and the
+/// already-composed summary differ between an exported and an unexported Go function name.
+fn Function_Naming_Finding(rule: &'static str, path: &str, item: &PayloadItem, summary: String) -> Finding
+{
+    use nomos_model::Content_Digest;
+
+    let qualified = format!("{path}::{}", item.qualified_name);
+
+    return Finding {
+        rule: RuleId::New(rule),
+        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
+        subject_name: item.qualified_name.clone(),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary,
+        locations: vec![path.to_owned()],
+    };
 }
 
 #[cfg(test)]

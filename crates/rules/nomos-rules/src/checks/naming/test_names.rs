@@ -30,7 +30,11 @@ pub fn Check_Test_Names_Describe_Behavior(
     {
         match super::reading::Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Violations_In(&payload, &source.path)),
+            Ok(payload) =>
+            {
+                let violations = Violations_In(&payload, &source.path);
+                findings.extend(violations);
+            }
             Err(finding) => findings.push(Unread_As_This_Rule(finding)),
         }
     }
@@ -52,7 +56,8 @@ fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
 
         if !Names_Behavior(item.Own_Name())
         {
-            findings.push(Violation_Finding(path, item));
+            let finding = Violation_Finding(path, item);
+            findings.push(finding);
         }
     }
 

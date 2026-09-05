@@ -19,14 +19,9 @@ pub struct ScriptingPolicyPayload
     pub forbidden_extensions: Vec<String>,
 }
 
-/// A payload's bytes did not decode: not UTF-8, a line with the wrong shape, or a `language`
-/// line declaring an empty string (code-standards' own equivalence between an empty
-/// declaration and no declaration at all means a well-formed encoder never emits one).
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Refusal
-{
-    pub reason: String,
-}
+mod refusal;
+
+pub use refusal::Refusal;
 
 const LANGUAGE_TAG: &str = "language";
 const FORBIDDEN_TAG: &str = "forbidden";
@@ -68,48 +63,76 @@ pub fn Encode_Payload(payload: &ScriptingPolicyPayload) -> Vec<u8>
 /// present — one repository declares at most one tooling language.
 pub fn Parse_Payload(bytes: &[u8]) -> Result<ScriptingPolicyPayload, Refusal>
 {
-    let text = core::str::from_utf8(bytes).map_err(|error| Refusal {
-        reason: format!("not UTF-8: {error}"),
-    })?;
+    let text = Decode_Utf8(bytes)?;
 
-    let mut tooling_language = None;
-    let mut forbidden_extensions = Vec::new();
+    let mut payload = ScriptingPolicyPayload { tooling_language: None, forbidden_extensions: Vec::new() };
 
     for line in text.lines()
     {
-        let Some((tag, value)) = line.split_once('\t')
-        else
-        {
-            return Err(Refusal {
-                reason: format!("line has no tag: {line:?}"),
-            });
-        };
+        let (tag, value) = Tagged_Line(line)?;
+        Apply_Line(&mut payload, Tag(tag), value, SourceLine(line))?;
+    }
 
-        if value.is_empty()
-        {
+    return Ok(payload);
+}
+
+/// Decodes `bytes` as UTF-8, or refuses.
+fn Decode_Utf8(bytes: &[u8]) -> Result<&str, Refusal>
+{
+    return core::str::from_utf8(bytes).map_err(|error| Refusal {
+        reason: format!("not UTF-8: {error}"),
+    });
+}
+
+/// `line` split into its tag and value, refused if it has no tag or the value is empty.
+fn Tagged_Line(line: &str) -> Result<(&str, &str), Refusal>
+{
+    let Some((tag, value)) = line.split_once('\t')
+    else
+    {
+        return Err(Refusal {
+            reason: format!("line has no tag: {line:?}"),
+        });
+    };
+
+    if value.is_empty()
+    {
+        return Err(Refusal {
+            reason: format!("line {line:?} declares an empty value"),
+        });
+    }
+
+    return Ok((tag, value));
+}
+
+/// One already-extracted tag, distinguished from the adjacent value and source line it
+/// travels beside so a caller cannot transpose them.
+struct Tag<'a>(&'a str);
+
+/// The whole row line a tag/value pair was parsed from, carried only for its own error
+/// message.
+struct SourceLine<'a>(&'a str);
+
+/// Applies one already-tagged line to `payload`.
+fn Apply_Line(payload: &mut ScriptingPolicyPayload, tag: Tag<'_>, value: &str, line: SourceLine<'_>) -> Result<(), Refusal>
+{
+    match tag.0
+    {
+        LANGUAGE_TAG if payload.tooling_language.is_none() => payload.tooling_language = Some(value.to_owned()),
+        LANGUAGE_TAG => {
             return Err(Refusal {
-                reason: format!("line {line:?} declares an empty value"),
+                reason: format!("a second `language` line is not allowed: {:?}", line.0),
             });
         }
-
-        match tag
-        {
-            LANGUAGE_TAG if tooling_language.is_none() => tooling_language = Some(value.to_owned()),
-            LANGUAGE_TAG => {
-                return Err(Refusal {
-                    reason: format!("a second `language` line is not allowed: {line:?}"),
-                });
-            }
-            FORBIDDEN_TAG => forbidden_extensions.push(value.to_owned()),
-            _ => {
-                return Err(Refusal {
-                    reason: format!("line has an unrecognized tag: {line:?}"),
-                });
-            }
+        FORBIDDEN_TAG => payload.forbidden_extensions.push(value.to_owned()),
+        _ => {
+            return Err(Refusal {
+                reason: format!("line has an unrecognized tag: {:?}", line.0),
+            });
         }
     }
 
-    return Ok(ScriptingPolicyPayload { tooling_language, forbidden_extensions });
+    return Ok(());
 }
 
 #[cfg(test)]

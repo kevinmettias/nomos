@@ -88,6 +88,17 @@ pub fn Check_Named_Fields_Over_Positional_Variant_Payloads(sources: &[SourceFile
     return findings;
 }
 
+/// This file's own path. Every fixture below spells a real `enum`/tuple-variant shape
+/// inside a Rust string literal, which would otherwise self-match when this crate checks
+/// its own workspace — the same self-exemption every other `*_text.rs`-shaped rule here
+/// carries for the identical reason.
+const OWN_IMPLEMENTATION_FILE: &str = "checks/enum_shape.rs";
+
+fn Is_Own_Implementation_File(source: &SourceFile) -> bool
+{
+    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+}
+
 fn Variant_Findings_In(source: &SourceFile) -> Vec<Finding>
 {
     let lines: Vec<&str> = source.text.lines().collect();
@@ -95,92 +106,84 @@ fn Variant_Findings_In(source: &SourceFile) -> Vec<Finding>
 
     for variant in Tuple_Variants_In(&lines)
     {
-        if variant.members.len() < SMALLEST_AMBIGUOUS_PAYLOAD || Has_Marker_Reason(&lines, variant.line_index)
+        if let Some(finding) = Variant_Finding(source, &lines, &variant)
         {
-            continue;
+            findings.push(finding);
         }
-
-        let line_number = Line_Number(variant.line_index);
-        let site = format!("{}::{}", variant.enum_name, variant.variant_name);
-        let summary = if Has_Repeated_Type(&variant.members)
-        {
-            format!(
-                "`{site}` at {}:{line_number} carries an unnamed payload with a repeated type; the compiler cannot tell a correct ordering from a swapped one",
-                source.path
-            )
-        }
-        else
-        {
-            format!("`{site}` at {}:{line_number} carries an unnamed positional payload; a position is not a name", source.path)
-        };
-
-        findings.push(Finding {
-            rule: RuleId::New(NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS),
-            subject: source.subject,
-            subject_name: format!("{}:{line_number}", source.path),
-            applicability: Applicability::Supported,
-            evidence: EvidenceClass::Derived,
-            gate: GateCategory::Blocking,
-            summary,
-            locations: vec![format!("{}:{line_number}", source.path)],
-        });
     }
 
     return findings;
 }
 
-/// The whole-file brace-depth scan, ported from `rustVariantScan.consume`. `enum_open`
-/// carries `(depth_at_open, name)` once a `{` has actually arrived for a pending header;
-/// `pending` carries a header seen with no `{` yet.
+/// Threaded across [`Tuple_Variants_In`]'s one-pass scan. `enum_open` carries
+/// `(depth_at_open, name)` once a `{` has actually arrived for a pending header; `pending`
+/// carries a header seen with no `{` yet.
+struct EnumScan
+{
+    depth: usize,
+    enum_open: Option<(usize, String)>,
+    pending: Option<String>,
+}
+
+/// The whole-file brace-depth scan, ported from `rustVariantScan.consume`.
 fn Tuple_Variants_In(lines: &[&str]) -> Vec<Variant>
 {
     let mut found = Vec::new();
-    let mut depth = 0usize;
-    let mut enum_open: Option<(usize, String)> = None;
-    let mut pending: Option<String> = None;
+    let mut scan = EnumScan { depth: 0, enum_open: None, pending: None };
 
     for (index, line) in lines.iter().enumerate()
     {
-        let trimmed = line.trim();
-        if trimmed.starts_with("//") || trimmed.starts_with("#[")
+        if let Some(variant) = Tuple_Variant_At_Line(line, index, &mut scan)
         {
-            continue;
-        }
-
-        if enum_open.is_none() && pending.is_none()
-        {
-            pending = Enum_Header_Name(line).map(str::to_owned);
-        }
-        else if let Some((open_depth, enum_name)) = &enum_open
-            && depth == open_depth.saturating_add(1)
-            && let Some((variant_name, payload)) = Tuple_Variant_Match(trimmed)
-        {
-            found.push(Variant {
-                line_index: index,
-                enum_name: enum_name.clone(),
-                variant_name: variant_name.to_owned(),
-                members: Variant_Members(payload),
-            });
-        }
-
-        let opened = line.matches('{').count();
-        let closed = line.matches('}').count();
-
-        if let Some(name) = pending.take_if(|_| return opened > 0)
-        {
-            enum_open = Some((depth, name));
-        }
-
-        depth = depth.saturating_add(opened);
-        depth = depth.saturating_sub(closed);
-
-        if enum_open.as_ref().is_some_and(|(open_depth, _)| return depth <= *open_depth)
-        {
-            enum_open = None;
+            found.push(variant);
         }
     }
 
     return found;
+}
+
+/// Judges one line against the accumulated `scan` state, then advances that state past it —
+/// a comment or attribute line is judged and skipped without advancing the brace depth at
+/// all.
+fn Tuple_Variant_At_Line(line: &str, index: usize, scan: &mut EnumScan) -> Option<Variant>
+{
+    let trimmed = line.trim();
+    if trimmed.starts_with("//") || trimmed.starts_with("#[")
+    {
+        return None;
+    }
+
+    let variant = Variant_At_Line(line, index, scan);
+
+    Advance_Enum_Scan(line, scan);
+
+    return variant;
+}
+
+/// Either a new pending enum header is looked for (none is open or pending yet), or -- once
+/// one is open -- this line is tried as one of its direct-child tuple variants. Exactly one
+/// of the two applies to a given line, matching the real tool's own `if`/`else if`.
+fn Variant_At_Line(line: &str, index: usize, scan: &mut EnumScan) -> Option<Variant>
+{
+    if scan.enum_open.is_none() && scan.pending.is_none()
+    {
+        scan.pending = Enum_Header_Name(line).map(str::to_owned);
+        return None;
+    }
+
+    let (open_depth, enum_name) = scan.enum_open.as_ref()?;
+    if scan.depth != open_depth.saturating_add(1)
+    {
+        return None;
+    }
+
+    let (variant_name, payload) = Tuple_Variant_Match(line.trim())?;
+    return Some(Variant {
+        line_index: index,
+        enum_name: enum_name.clone(),
+        variant_name: variant_name.to_owned(),
+        members: Variant_Members(payload),
+    });
 }
 
 /// The name after a word-boundary `enum` followed by mandatory whitespace — `\benum\s+
@@ -196,22 +199,41 @@ fn Enum_Header_Name(line: &str) -> Option<&str>
         let start = search_from.saturating_add(offset);
         let end = start.saturating_add("enum".len());
 
-        if Has_Left_Boundary(bytes, start)
-            && let Some(after) = line.get(end..)
-            && after.starts_with(char::is_whitespace)
+        if let Some(name) = Enum_Name_After(line, bytes, start, end)
         {
-            let trimmed = after.trim_start();
-            let name_len = trimmed.find(|character: char| return !(character.is_alphanumeric() || character == '_')).unwrap_or(trimmed.len());
-            if name_len > 0
-            {
-                return trimmed.get(..name_len);
-            }
+            return Some(name);
         }
 
         search_from = start.saturating_add(1);
     }
 
     return None;
+}
+
+/// The identifier right after a candidate `enum` occurrence at `[start, end)`, if `start`
+/// sits at a word boundary and at least one whitespace character separates the keyword from
+/// a non-empty run of identifier characters.
+fn Enum_Name_After<'a>(line: &'a str, bytes: &[u8], start: usize, end: usize) -> Option<&'a str>
+{
+    if !Has_Left_Boundary(bytes, start)
+    {
+        return None;
+    }
+
+    let after = line.get(end..)?;
+    if !after.starts_with(char::is_whitespace)
+    {
+        return None;
+    }
+
+    let trimmed = after.trim_start();
+    let name_len = trimmed.find(|character: char| return !(character.is_alphanumeric() || character == '_')).unwrap_or(trimmed.len());
+    if name_len == 0
+    {
+        return None;
+    }
+
+    return trimmed.get(..name_len);
 }
 
 fn Has_Left_Boundary(bytes: &[u8], start: usize) -> bool
@@ -235,7 +257,7 @@ fn Tuple_Variant_Match(trimmed: &str) -> Option<(&str, &str)>
     let open = without_close.find('(')?;
     let name = without_close.get(..open)?.trim_end();
 
-    if name.is_empty() || !name.chars().all(|character| return character.is_alphanumeric() || character == '_')
+    if name.is_empty() || !Is_Valid_Identifier(name)
     {
         return None;
     }
@@ -249,6 +271,11 @@ fn Tuple_Variant_Match(trimmed: &str) -> Option<(&str, &str)>
     return Some((name, payload));
 }
 
+fn Is_Valid_Identifier(name: &str) -> bool
+{
+    return name.chars().all(Is_Ident_Char);
+}
+
 /// Splits a payload at depth zero across `<([`/`>)]` pairs, so a generic member
 /// (`HashMap<K, V>`) is one member and not a phantom extra one.
 fn Variant_Members(payload: &str) -> Vec<String>
@@ -258,6 +285,14 @@ fn Variant_Members(payload: &str) -> Vec<String>
         return Vec::new();
     }
 
+    return Split_At_Top_Level_Commas(payload);
+}
+
+/// Splits `payload` at commas sitting at bracket depth zero, ignoring one nested inside
+/// `<([`/`>)]` -- so a generic member (`HashMap<K, V>`) is one member and not a phantom
+/// extra one.
+fn Split_At_Top_Level_Commas(payload: &str) -> Vec<String>
+{
     let mut members = Vec::new();
     let mut depth: i32 = 0;
     let mut start = 0usize;
@@ -282,6 +317,112 @@ fn Variant_Members(payload: &str) -> Vec<String>
     return members;
 }
 
+fn Advance_Enum_Scan(line: &str, scan: &mut EnumScan)
+{
+    let opened = line.matches('{').count();
+    let closed = line.matches('}').count();
+
+    if let Some(name) = scan.pending.take_if(|_| return opened > 0)
+    {
+        scan.enum_open = Some((scan.depth, name));
+    }
+
+    scan.depth = scan.depth.saturating_add(opened);
+    scan.depth = scan.depth.saturating_sub(closed);
+
+    if scan.enum_open.as_ref().is_some_and(|(open_depth, _)| return scan.depth <= *open_depth)
+    {
+        scan.enum_open = None;
+    }
+}
+
+fn Variant_Finding(source: &SourceFile, lines: &[&str], variant: &Variant) -> Option<Finding>
+{
+    if variant.members.len() < SMALLEST_AMBIGUOUS_PAYLOAD || Has_Marker_Reason(lines, variant.line_index)
+    {
+        return None;
+    }
+
+    let line_number = Line_Number(variant.line_index);
+    let summary = Variant_Summary(source, variant, line_number);
+
+    return Some(Finding {
+        rule: RuleId::New(NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS),
+        subject: source.subject,
+        subject_name: format!("{}:{line_number}", source.path),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary,
+        locations: vec![format!("{}:{line_number}", source.path)],
+    });
+}
+
+/// The current line's trailing comment, or a contiguous run of blank/comment/attribute
+/// lines walking upward from it, carries the literal `tuple-variant: allow` marker with a
+/// non-empty trailing reason — the same shape `concurrency_text.rs`'s own `Has_Marker_
+/// Reason` already established for `atomic-ordering: allow`, duplicated per this crate's
+/// per-file convention.
+fn Has_Marker_Reason(lines: &[&str], index: usize) -> bool
+{
+    if lines.get(index).is_some_and(|line| return Marker_Reason_In(line).is_some())
+    {
+        return true;
+    }
+
+    return Marker_Reason_Above(lines, index).unwrap_or(false);
+}
+
+/// Walks upward from `index` across a contiguous run of blank/comment/attribute lines,
+/// stopping at the first marker line found (its reason decides the verdict, `Some`) or the
+/// first line that is none of those (nothing above applies, `None`).
+fn Marker_Reason_Above(lines: &[&str], index: usize) -> Option<bool>
+{
+    let mut cursor = index;
+    while cursor > 0
+    {
+        cursor = cursor.saturating_sub(1);
+        let line = lines.get(cursor)?;
+
+        if let Some(reason) = Marker_Reason_In(line)
+        {
+            return Some(!reason.is_empty());
+        }
+
+        if !Is_Skippable_Above(line)
+        {
+            return None;
+        }
+    }
+
+    return None;
+}
+
+fn Is_Skippable_Above(line: &str) -> bool
+{
+    let trimmed = line.trim();
+    return trimmed.is_empty() || trimmed.starts_with("//") || trimmed.starts_with("/*") || trimmed.starts_with('*') || trimmed.starts_with("#[");
+}
+
+fn Line_Number(index: usize) -> usize
+{
+    return index.saturating_add(1);
+}
+
+fn Variant_Summary(source: &SourceFile, variant: &Variant, line_number: usize) -> String
+{
+    let site = format!("{}::{}", variant.enum_name, variant.variant_name);
+    if Has_Repeated_Type(&variant.members)
+    {
+        return format!(
+            "`{site}` at {}:{line_number} carries an unnamed payload with a repeated type; the compiler cannot tell a correct ordering from a swapped one",
+            source.path
+        );
+    }
+
+    return format!("`{site}` at {}:{line_number} carries an unnamed positional payload; a position is not a name", source.path);
+}
+
 /// Whether the same normalized type spelling appears twice — changes only the finding's
 /// message, never whether it fires.
 fn Has_Repeated_Type(members: &[String]) -> bool
@@ -301,51 +442,9 @@ fn Has_Repeated_Type(members: &[String]) -> bool
     return false;
 }
 
-fn Line_Number(index: usize) -> usize
+fn Is_Ident_Char(character: char) -> bool
 {
-    return index.saturating_add(1);
-}
-
-/// The current line's trailing comment, or a contiguous run of blank/comment/attribute
-/// lines walking upward from it, carries the literal `tuple-variant: allow` marker with a
-/// non-empty trailing reason — the same shape `concurrency_text.rs`'s own `Has_Marker_
-/// Reason` already established for `atomic-ordering: allow`, duplicated per this crate's
-/// per-file convention.
-fn Has_Marker_Reason(lines: &[&str], index: usize) -> bool
-{
-    if lines.get(index).is_some_and(|line| return Marker_Reason_In(line).is_some())
-    {
-        return true;
-    }
-
-    let mut cursor = index;
-    while cursor > 0
-    {
-        cursor = cursor.saturating_sub(1);
-        let Some(line) = lines.get(cursor)
-        else
-        {
-            break;
-        };
-
-        if let Some(reason) = Marker_Reason_In(line)
-        {
-            return !reason.is_empty();
-        }
-
-        if !Is_Skippable_Above(line)
-        {
-            break;
-        }
-    }
-
-    return false;
-}
-
-fn Is_Skippable_Above(line: &str) -> bool
-{
-    let trimmed = line.trim();
-    return trimmed.is_empty() || trimmed.starts_with("//") || trimmed.starts_with("/*") || trimmed.starts_with('*') || trimmed.starts_with("#[");
+    return character.is_alphanumeric() || character == '_';
 }
 
 fn Marker_Reason_In(line: &str) -> Option<&str>
@@ -356,30 +455,12 @@ fn Marker_Reason_In(line: &str) -> Option<&str>
     return Some(reason.trim());
 }
 
-/// This file's own path. Every fixture below spells a real `enum`/tuple-variant shape
-/// inside a Rust string literal, which would otherwise self-match when this crate checks
-/// its own workspace — the same self-exemption every other `*_text.rs`-shaped rule here
-/// carries for the identical reason.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/enum_shape.rs";
-
-fn Is_Own_Implementation_File(source: &SourceFile) -> bool
-{
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
-}
-
 #[cfg(test)]
 mod tests
 {
     use super::*;
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
-
-    fn Source(path: &str, text: &str) -> SourceFile
-    {
-        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
-        source.language = crate::Recognized_Language_In_Tests(path);
-        return source;
-    }
 
     #[test]
     fn Test_Check_Named_Fields_Over_Positional_Variant_Payloads_Should_Report_A_Two_Member_Tuple_Variant()
@@ -491,5 +572,12 @@ mod tests
     fn Test_Variant_Members_Should_Return_Nothing_For_An_Empty_Payload()
     {
         assert_eq!(Variant_Members(""), Vec::<String>::new());
+    }
+
+    fn Source(path: &str, text: &str) -> SourceFile
+    {
+        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        source.language = crate::Recognized_Language_In_Tests(path);
+        return source;
     }
 }

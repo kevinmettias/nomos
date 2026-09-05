@@ -50142,14 +50142,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-standards-sweep",
-        "acquired_at": 1788582954,
-        "lease_expires_at": 1788601435
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -50159,7 +50155,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "he_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 496 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Blocking waiting for file lock on build directory\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.66s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788590846,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "32f94f7506b6ad39b0b64c703e7efef3fbdd2952"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -50185,14 +50201,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-standards-sweep",
-        "acquired_at": 1788582955,
-        "lease_expires_at": 1788601435
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -50202,7 +50214,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 496 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788590857,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "32f94f7506b6ad39b0b64c703e7efef3fbdd2952"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -50232,14 +50264,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-standards-sweep",
-        "acquired_at": 1788582955,
-        "lease_expires_at": 1788601435
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -50249,7 +50277,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 496 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788590867,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "32f94f7506b6ad39b0b64c703e7efef3fbdd2952"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -50328,14 +50376,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-standards-sweep",
-        "acquired_at": 1788583368,
-        "lease_expires_at": 1788601435
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -50365,7 +50409,47 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-goals-policy",
+          "-p",
+          "nomos-cap-limits-policy",
+          "-p",
+          "nomos-cap-naming-policy",
+          "-p",
+          "nomos-cap-scripting-policy",
+          "-p",
+          "nomos-cap-words-policy",
+          "-p",
+          "nomos-repo-goals",
+          "-p",
+          "nomos-repo-limits",
+          "-p",
+          "nomos-repo-scripting",
+          "-p",
+          "nomos-repo-standards-document",
+          "-p",
+          "nomos-repo-standards",
+          "-p",
+          "nomos-repo-words"
+        ],
+        "exit_code": 0,
+        "output_tail": "iled; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_goals_policy-45c1f31f9812e693.exe)\n     Running tests\\contract.rs (target\\debug\\deps\\contract-9c49a4792c9cd9cf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_limits_policy-39db8fd789712d0b.exe)\n     Running tests\\contract.rs (target\\debug\\deps\\contract-bf4512684b27d653.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_naming_policy-3ed727668a08edee.exe)\n     Running tests\\contract.rs (target\\debug\\deps\\contract-2d78541ed031c8d3.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_scripting_policy-33af46cb761c87c7.exe)\n     Running tests\\contract.rs (target\\debug\\deps\\contract-140c64d31ccfaf7d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_words_policy-7f0dc572fab94f63.exe)\n     Running tests\\contract.rs (target\\debug\\deps\\contract-9bf150136a5ebb37.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_repo_goals-92fb2653e153f5e7.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_repo_limits-0a0f8371f11427c2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_repo_scripting-c82d7facc344f8b2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_repo_standards-53f088bc4ece8e32.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_repo_standards_document-d0a9eee2dbd4841a.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_repo_words-ba1b256de5ba20d0.exe)\n   Doc-tests nomos_cap_goals_policy\n   Doc-tests nomos_cap_limits_policy\n   Doc-tests nomos_cap_naming_policy\n   Doc-tests nomos_cap_scripting_policy\n   Doc-tests nomos_cap_words_policy\n   Doc-tests nomos_repo_goals\n   Doc-tests nomos_repo_limits\n   Doc-tests nomos_repo_scripting\n   Doc-tests nomos_repo_standards\n   Doc-tests nomos_repo_standards_document\n   Doc-tests nomos_repo_words\n",
+        "verified_at": 1788590878,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "32f94f7506b6ad39b0b64c703e7efef3fbdd2952"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -50398,14 +50482,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-standards-sweep",
-        "acquired_at": 1788583394,
-        "lease_expires_at": 1788601435
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -50423,7 +50503,35 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "ing tests\\read_surface.rs (target\\debug\\deps\\read_surface-b67defd50471eb7e.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-6890940048029030.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-021b418858abf7cf.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-e76dd1fdd673d3e1.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-23752075fab25eca.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-c9520b2b9f713073.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-556b0ed144291349.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-a71f603125956511.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-9e74d885eb945c47.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-586d423645de518f.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-7503d032cb85f7a5.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-2f8be4ca8cef4018.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-db94f2bceb9df25a.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-b6c01a4f38948f78.exe)\n     Running tests\\scope_verification_integration.rs (target\\debug\\deps\\scope_verification_integration-83d8efca96653ce8.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_platform_std-82f6535a7ee5b072.exe)\n     Running tests\\implements_the_platform_ports.rs (target\\debug\\deps\\implements_the_platform_ports-fb796556340da2db.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workflow_orchestration-6f8aad93887d77d9.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_ledger\n   Doc-tests nomos_platform_std\n   Doc-tests nomos_workflow_orchestration\n",
+        "verified_at": 1788590932,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "32f94f7506b6ad39b0b64c703e7efef3fbdd2952"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -51399,7 +51507,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Its done_when required the descriptors to become the only place rule requirements are written, which means deleting the hand-written mapping in nomos-check-orchestration run_context.rs. That file is not in this item territory and is explicitly P41-RUN-STOPS-NAMING-EVERY-RULE work, so the item could not be finished honestly inside what it reserved. Re-added as -2 with the migration left where it belongs and a mechanical parity test added against the already-exported Composed_Rules set."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -51413,9 +51525,18 @@
         "timeout_seconds": 2700
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-opus-session",
+          "reason": "Mis-scoped as authored; abandoning the claim so the item can be declined and re-added with a done_when its territory can actually satisfy.",
+          "abandoned_at": 1788590977
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-opus-session",
+        "declined_at": 1788590977
+      }
     },
     {
       "id": "P41-RUN-PLANNER",
@@ -52554,6 +52675,45 @@
           "nomos-contract-tests"
         ],
         "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-RULE-DECLARES-ITS-REQUIREMENTS-2",
+      "title": "A rule is a bare function, so the engine has to learn each one individually",
+      "why": "A rule today is a function the composition root names, plus a RuleId, plus membership in a hand-written mapping from rule to the capability materialization it needs. Nothing about a rule declares its own subjects or its required facts, so that knowledge lives centrally and grows once per rule: 56 composed entries, and nine separate selection predicates deciding which capability families to materialize. The package specification says applicability is derived from canonical capability requirements rather than duplicated support information, which is the opposite of what the code does. A descriptor is the prerequisite for the planner, because a planner with nothing to plan from would only relocate the same table. This item delivers the descriptors and proves them complete; deleting the central mapping is P41-RUN-STOPS-NAMING-EVERY-RULE, where both sides of that edit are in one territory.",
+      "done_when": "Every composed rule has a descriptor declaring its identifier, the subject kind it judges, and the capability facts it requires; a contract test proves the descriptor identifier set equals the Composed_Rules set nomos-check-orchestration already exports, so a rule added on either side without the other fails; and the declared capability requirements are stated to match the nine existing selection predicates, which the migration item then makes mechanical.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "tests/contract/tests/rule_descriptors.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-opus-session",
+        "acquired_at": 1788590977,
+        "lease_expires_at": 1788598177
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
       },
       "verified": null,
       "abandoned": [],

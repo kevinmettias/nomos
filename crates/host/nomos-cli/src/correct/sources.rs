@@ -99,14 +99,6 @@ mod tests
 {
     use super::*;
 
-    fn Fresh_Root(name: &str) -> PathBuf
-    {
-        let root = std::env::temp_dir().join(name);
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-        return root;
-    }
-
     #[test]
     fn Test_A_Go_File_Should_Be_Discovered_Alongside_A_Rust_One()
     {
@@ -131,5 +123,13 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&root);
         assert!(sources.is_empty(), "{sources:?}");
+    }
+
+    fn Fresh_Root(name: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(name);
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+        return root;
     }
 }

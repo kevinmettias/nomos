@@ -1,29 +1,10 @@
 //! What running a `WorkflowStepPlan` sequence produced.
 
-/// What one dispatched step reported — naming each backend's own outcome type directly,
-/// the same no-shared-trait shape [`crate::Body`] already uses, because the two crates'
-/// outcome shapes are not interchangeable: `nomos-agent-executor-claude-code`'s carries
-/// `denied_tool_uses`, `is_error`, `cost_usd` and `duration_ms` that
-/// `nomos-model-backend-ollama`'s honestly does not have.
-#[derive(Clone, Debug, PartialEq)]
-pub enum StepOutcome
-{
-    /// What `nomos-agent-executor-claude-code::Execute_Task` reported.
-    ClaudeCode(nomos_agent_executor_claude_code::AgentExecutionOutcome),
-    /// What `nomos-model-backend-ollama::Execute_Task` reported.
-    Ollama(nomos_model_backend_ollama::AgentExecutionOutcome),
-}
+mod dispatch_error;
+mod step_outcome;
 
-/// Why a step's dispatch failed — naming each backend's own error type directly, the
-/// same reason [`StepOutcome`] does.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum DispatchError
-{
-    /// Why `nomos-agent-executor-claude-code::Execute_Task` could not answer.
-    ClaudeCode(nomos_agent_executor_claude_code::AgentExecutionError),
-    /// Why `nomos-model-backend-ollama::Execute_Task` could not answer.
-    Ollama(nomos_model_backend_ollama::AgentExecutionError),
-}
+pub use dispatch_error::DispatchError;
+pub use step_outcome::StepOutcome;
 
 /// What one [`crate::Run`] produced.
 #[derive(Clone, Debug, PartialEq)]

@@ -65,26 +65,34 @@ fn Naming_Rows_Into(value: &serde_json::Value, scope: &Scope, rows: &mut Vec<Pol
 
     for (symbol, declared_case) in naming
     {
-        let Some(label) = declared_case.as_str()
-        else
-        {
-            return Err(NamingPolicyError {
-                reason: format!("{STANDARDS_JSON}'s naming.{symbol} is not a string"),
-            });
-        };
-
-        let Some(case) = Case::From_Label(label)
-        else
-        {
-            return Err(NamingPolicyError {
-                reason: format!("{STANDARDS_JSON}'s naming.{symbol} names an unrecognized case {label:?}"),
-            });
-        };
-
-        rows.push(PolicyRow { scope: scope.clone(), symbol: symbol.clone(), case });
+        let row = Naming_Row(scope, symbol, declared_case)?;
+        rows.push(row);
     }
 
     return Ok(());
+}
+
+/// One `naming.<symbol>` entry as a [`PolicyRow`] at `scope`, refused if it is not a string
+/// or names a case outside [`Case`]'s closed set.
+fn Naming_Row(scope: &Scope, symbol: &str, declared_case: &serde_json::Value) -> Result<PolicyRow, NamingPolicyError>
+{
+    let Some(label) = declared_case.as_str()
+    else
+    {
+        return Err(NamingPolicyError {
+            reason: format!("{STANDARDS_JSON}'s naming.{symbol} is not a string"),
+        });
+    };
+
+    let Some(case) = Case::From_Label(label)
+    else
+    {
+        return Err(NamingPolicyError {
+            reason: format!("{STANDARDS_JSON}'s naming.{symbol} names an unrecognized case {label:?}"),
+        });
+    };
+
+    return Ok(PolicyRow { scope: scope.clone(), symbol: symbol.to_owned(), case });
 }
 
 /// `rows`, in a stable order — neither a JSON object's own representation nor iteration
@@ -123,6 +131,17 @@ mod tests
         );
     }
 
+    fn Repository_Root() -> PathBuf
+    {
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest
+            .parent()
+            .and_then(Path::parent)
+            .and_then(Path::parent)
+            .map(PathBuf::from)
+            .expect("this crate sits three levels below the workspace root");
+    }
+
     #[test]
     fn Test_Discover_Workspace_Should_Declare_Nothing_For_A_Missing_File()
     {
@@ -154,9 +173,12 @@ mod tests
 
         fn Exists(&self, _path: &Path) -> bool
         {
-            true
+            return true;
         }
     }
+
+    /// How many rows a fixture declaring one repository-wide and one language row produces.
+    const SAMPLE_ROW_COUNT: usize = 2;
 
     #[test]
     fn Test_Discover_Workspace_Should_Read_A_Repository_Wide_And_A_Language_Row()
@@ -171,7 +193,7 @@ mod tests
 
         let rows = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON");
 
-        assert_eq!(rows.len(), 2, "{rows:?}");
+        assert_eq!(rows.len(), SAMPLE_ROW_COUNT, "{rows:?}");
         assert!(rows.contains(&PolicyRow { scope: Scope::Repository, symbol: "function".to_owned(), case: Case::UpperSnake }));
         assert!(rows.contains(&PolicyRow {
             scope: Scope::Language("go".to_owned()),
@@ -202,11 +224,15 @@ mod tests
         assert!(error.reason.contains("unrecognized case"), "{}", error.reason);
     }
 
+    /// A value that is not a string, wherever a fixture needs one — its only meaning is
+    /// "not a string".
+    const NON_STRING_SENTINEL: i64 = 5;
+
     #[test]
     fn Test_Discover_Workspace_Should_Refuse_A_Non_String_Case_Value()
     {
         let filesystem = FakeFileSystem {
-            text: serde_json::json!({ "naming": { "function": 5 } }).to_string(),
+            text: serde_json::json!({ "naming": { "function": NON_STRING_SENTINEL } }).to_string(),
         };
 
         let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a non-string case value must be refused");
@@ -222,16 +248,5 @@ mod tests
         let rows = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON with no naming block");
 
         assert!(rows.is_empty(), "{rows:?}");
-    }
-
-    fn Repository_Root() -> PathBuf
-    {
-        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(Path::parent)
-            .and_then(Path::parent)
-            .map(PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
     }
 }

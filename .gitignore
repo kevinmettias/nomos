@@ -2,6 +2,10 @@
 **/*.rs.bk
 *.pdb
 
+# The fresh-build-and-recopy step AGENTS.md's own loop calls for leaves a binary here; it
+# is a build artifact of that workflow, never a source the workflow reads.
+/nomos.exe
+
 # Scratch build roots for generated projections. A projection is a rebuild artifact and
 # most of them stay one: nothing here is a canonical source, and a registration may only
 # name a record under docs/records, so a generated file cannot become one by accident.

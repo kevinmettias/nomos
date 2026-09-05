@@ -88,6 +88,38 @@ pub const NAMING_CONVENTION: &str = "function-naming-convention";
 /// The code-standards identifier for this workspace's function naming convention.
 pub const PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str = "project-owned-function-names-use-upper-snake-case";
 
+/// Resolves the case `symbol` must take: a repository's own declared `nomos.cap.naming.
+/// policy`, most-specific key first (`language`'s own override, then the repository-wide
+/// default), falling back to `default` when neither is declared.
+///
+/// `OD-CAPABILITY-004` and `OD-RULES-011` settle how an absent read is treated here: this
+/// capability is optional, every caller already has a complete answer without it, so
+/// `facts.Require` failing for any reason is exactly "no override" — never a `Finding`,
+/// never this capability's own `Applicability` surfacing anywhere.
+pub(super) fn Resolve_Case(facts: &mut dyn FactReader, language: Option<&str>, symbol: &str, default: Case) -> Case
+{
+    let Some(payload) = Naming_Policy_Payload(facts)
+    else
+    {
+        return default;
+    };
+
+    return Case_For_Symbol(&payload, language, symbol, default);
+}
+
+/// Reads and decodes this repository's own `nomos.cap.naming.policy` fact, folding every
+/// way the read can come back empty (absent, refused, malformed) into `None` — `Resolve_
+/// Case`'s caller already has a complete default for that case, per `OD-CAPABILITY-004`.
+fn Naming_Policy_Payload(facts: &mut dyn FactReader) -> Option<nomos_cap_naming_policy::NamingPolicyPayload>
+{
+    let subject = nomos_model::Subject_Of_Path("");
+    let fact = facts
+        .Require(&nomos_cap_naming_policy::Capability(), &subject, InputDigest::Of(&[]), &Naming_Policy_Requirement())
+        .ok()?;
+
+    return nomos_cap_naming_policy::Parse_Payload(&fact.payload.bytes).ok();
+}
+
 /// This crate's own floor for `nomos.cap.naming.policy` — stated at the capability's own
 /// ceiling since there is only one real provider today and no weaker answer this crate
 /// could honestly still act on.
@@ -100,30 +132,10 @@ fn Naming_Policy_Requirement() -> nomos_capability::Requirement
     );
 }
 
-/// Resolves the case `symbol` must take: a repository's own declared `nomos.cap.naming.
-/// policy`, most-specific key first (`language`'s own override, then the repository-wide
-/// default), falling back to `default` when neither is declared.
-///
-/// `OD-CAPABILITY-004` and `OD-RULES-011` settle how an absent read is treated here: this
-/// capability is optional, every caller already has a complete answer without it, so
-/// `facts.Require` failing for any reason is exactly "no override" — never a `Finding`,
-/// never this capability's own `Applicability` surfacing anywhere.
-pub(super) fn Resolve_Case(facts: &mut dyn FactReader, language: Option<&str>, symbol: &str, default: Case) -> Case
+/// The case `payload` declares for `symbol`, most-specific key first (`language`'s own
+/// override, then the repository-wide default), or `default` when neither row exists.
+fn Case_For_Symbol(payload: &nomos_cap_naming_policy::NamingPolicyPayload, language: Option<&str>, symbol: &str, default: Case) -> Case
 {
-    let subject = nomos_model::Subject_Of_Path("");
-    let Ok(fact) =
-        facts.Require(&nomos_cap_naming_policy::Capability(), &subject, InputDigest::Of(&[]), &Naming_Policy_Requirement())
-    else
-    {
-        return default;
-    };
-
-    let Ok(payload) = nomos_cap_naming_policy::Parse_Payload(&fact.payload.bytes)
-    else
-    {
-        return default;
-    };
-
     if let Some(language) = language
     {
         let scope = Scope::Language(language.to_owned());
@@ -215,17 +227,12 @@ mod tests
     #[test]
     fn Test_Payload_Of_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("src/lib.rs"), Text("fn bad_name() {}"));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
+        let findings = Findings_From(
+            Path("src/lib.rs"),
+            Text("fn bad_name() {}"),
             "unexpanded\t0\nitem\t0\tFunction\tPublic\tbad_name\t.\t+fn/0\n",
+            Check_Naming_Convention,
         );
-
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Naming_Convention(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "bad_name");
@@ -240,12 +247,6 @@ mod tests
 
     #[derive(Clone, Copy)]
     struct Text<'a>(&'a str);
-
-    fn Materialize_Syntax_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &str)
-    {
-        let inputs = InputDigest::Of(&[source.text.as_bytes()]);
-        test_support::Materialize(store, source.subject, offer, inputs, nomos_cap_syntax::Payload_Schema(), payload.as_bytes().to_vec());
-    }
 
     #[test]
     fn Test_Check_Naming_Convention_Should_Report_A_Subject_With_No_Fact_Rather_Than_Silently_Clean()
@@ -266,17 +267,12 @@ mod tests
     #[test]
     fn Test_Check_Project_Owned_Function_Names_Use_Upper_Snake_Case_Should_Report_Under_The_Code_Standards_Id()
     {
-        let source = Source_File(Path("src/lib.rs"), Text("fn bad_name() {}"));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
+        let findings = Findings_From(
+            Path("src/lib.rs"),
+            Text("fn bad_name() {}"),
             "unexpanded\t0\nitem\t0\tFunction\tPublic\tbad_name\t.\t+fn/0\n",
+            Check_Project_Owned_Function_Names_Use_Upper_Snake_Case,
         );
-
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Project_Owned_Function_Names_Use_Upper_Snake_Case(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
@@ -287,17 +283,12 @@ mod tests
     #[test]
     fn Test_Check_Test_Names_Describe_Behavior_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("src/lib.rs"), Text("#[test]\nfn Test_Insert_Works() {}"));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
+        let findings = Findings_From(
+            Path("src/lib.rs"),
+            Text("#[test]\nfn Test_Insert_Works() {}"),
             "unexpanded\t0\nitem\t0\tFunction\tPrivate\tTest_Insert_Works\t.\t+fn/0\n",
+            Check_Test_Names_Describe_Behavior,
         );
-
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Test_Names_Describe_Behavior(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "Test_Insert_Works");
@@ -306,17 +297,12 @@ mod tests
     #[test]
     fn Test_Check_Data_Names_Stay_Lower_Snake_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("src/lib.rs"), Text("mod BadModule {}"));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
+        let findings = Findings_From(
+            Path("src/lib.rs"),
+            Text("mod BadModule {}"),
             "unexpanded\t0\nitem\t0\tModule\tPrivate\tBadModule\t.\t.\n",
+            Check_Data_Names_Stay_Lower_Snake,
         );
-
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Data_Names_Stay_Lower_Snake(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "BadModule");
@@ -325,17 +311,12 @@ mod tests
     #[test]
     fn Test_Check_File_Name_Matches_Declared_Type_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("src/orders.rs"), Text("pub struct OrderBook;"));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
+        let findings = Findings_From(
+            Path("src/orders.rs"),
+            Text("pub struct OrderBook;"),
             "unexpanded\t0\nitem\t0\tStruct\tPublic\tOrderBook\t.\t.\n",
+            Check_File_Name_Matches_Declared_Type,
         );
-
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_File_Name_Matches_Declared_Type(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "OrderBook");
@@ -344,38 +325,29 @@ mod tests
     #[test]
     fn Test_Check_One_Public_Type_Per_File_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("src/order.rs"), Text("pub struct Order; pub enum OrderKind {}"));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
+        let findings = Findings_From(
+            Path("src/order.rs"),
+            Text("pub struct Order; pub enum OrderKind {}"),
             "unexpanded\t0\n\
              item\t0\tStruct\tPublic\tOrder\t.\t.\n\
              item\t1\tEnum\tPublic\tOrderKind\t.\t.\n",
+            Check_One_Public_Type_Per_File,
         );
 
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_One_Public_Type_Per_File(&[source], &mut reader);
-
-        assert_eq!(findings.len(), 2, "{findings:?}");
+        const EXPECTED_PUBLIC_TYPE_COUNT: usize = 2;
+        assert_eq!(findings.len(), EXPECTED_PUBLIC_TYPE_COUNT, "{findings:?}");
         assert!(findings.iter().all(|finding| return finding.rule == nomos_contracts::RuleId::New(ONE_PUBLIC_TYPE_PER_FILE)));
     }
 
     #[test]
     fn Test_Check_Single_Letter_Names_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("src/point.rs"), Text("pub struct Point { x: f64 }"));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
+        let findings = Findings_From(
+            Path("src/point.rs"),
+            Text("pub struct Point { x: f64 }"),
             "unexpanded\t0\nitem\t0\tStruct\tPublic\tPoint\t.\t+fields\\nx\\tf64\n",
+            Check_Single_Letter_Names,
         );
-
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Single_Letter_Names(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "x");
@@ -384,17 +356,12 @@ mod tests
     #[test]
     fn Test_Check_Boolean_Predicates_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("src/flag.rs"), Text("pub struct Flag { ready: bool }"));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
+        let findings = Findings_From(
+            Path("src/flag.rs"),
+            Text("pub struct Flag { ready: bool }"),
             "unexpanded\t0\nitem\t0\tStruct\tPublic\tFlag\t.\t+fields\\nready\\tbool\n",
+            Check_Boolean_Predicates,
         );
-
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Boolean_Predicates(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "ready");
@@ -403,17 +370,12 @@ mod tests
     #[test]
     fn Test_Check_Go_Type_Names_Use_Camel_Case_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("types.go"), Text("type order_book struct{}"));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
+        let findings = Findings_From(
+            Path("types.go"),
+            Text("type order_book struct{}"),
             "unexpanded\t0\nitem\t0\tStruct\tPrivate\torder_book\t.\t.\n",
+            Check_Go_Type_Names_Use_Camel_Case,
         );
-
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Go_Type_Names_Use_Camel_Case(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
@@ -424,17 +386,12 @@ mod tests
     #[test]
     fn Test_Check_Exported_Go_Functions_Use_Upper_Snake_Case_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("main.go"), Text("func run_With_Backend() {}"));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
+        let findings = Findings_From(
+            Path("main.go"),
+            Text("func run_With_Backend() {}"),
             "unexpanded\t0\nitem\t0\tFunction\tPublic\trun_With_Backend\t.\t+fn/0\n",
+            Check_Exported_Go_Functions_Use_Upper_Snake_Case,
         );
-
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Exported_Go_Functions_Use_Upper_Snake_Case(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
@@ -445,17 +402,12 @@ mod tests
     #[test]
     fn Test_Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("main.go"), Text("func rowBreaches() {}"));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
+        let findings = Findings_From(
+            Path("main.go"),
+            Text("func rowBreaches() {}"),
             "unexpanded\t0\nitem\t0\tFunction\tPrivate\trowBreaches\t.\t+fn/0\n",
+            Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter,
         );
-
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
@@ -466,17 +418,12 @@ mod tests
     #[test]
     fn Test_Check_Go_Constants_Split_By_Export_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("kinds.go"), Text("const KindRule = \"rule\""));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
+        let findings = Findings_From(
+            Path("kinds.go"),
+            Text("const KindRule = \"rule\""),
             "unexpanded\t0\nitem\t0\tConstant\tPublic\tKindRule\t.\t.\n",
+            Check_Go_Constants_Split_By_Export,
         );
-
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Go_Constants_Split_By_Export(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
@@ -487,22 +434,41 @@ mod tests
     #[test]
     fn Test_Check_Go_Variables_Use_Lower_Snake_Case_Should_Read_And_Judge_A_Real_Fact()
     {
-        let source = Source_File(Path("state.go"), Text("var entityID int"));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
+        let findings = Findings_From(
+            Path("state.go"),
+            Text("var entityID int"),
             "unexpanded\t0\nitem\t0\tVariable\tPrivate\tentityID\t.\t.\n",
+            Check_Go_Variables_Use_Lower_Snake_Case,
         );
-
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Go_Variables_Use_Lower_Snake_Case(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
         assert_eq!(found.rule, nomos_contracts::RuleId::New(GO_VARIABLES_USE_LOWER_SNAKE_CASE));
         assert_eq!(found.subject_name, "entityID");
+    }
+
+    /// Builds `path`/`text` into a source, materializes `payload` as its syntax fact, and
+    /// returns what `check` finds — the shared shape every fact-backed test in this module
+    /// repeats up to its own assertions.
+    fn Findings_From(
+        path: Path<'_>,
+        text: Text<'_>,
+        payload: &str,
+        check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>,
+    ) -> Vec<Finding>
+    {
+        let source = Source_File(path, text);
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(&mut store, &source, &offer, payload);
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        return check(&[source], &mut reader);
+    }
+
+    fn Materialize_Syntax_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &str)
+    {
+        let inputs = InputDigest::Of(&[source.text.as_bytes()]);
+        test_support::Materialize(store, source.subject, offer, inputs, nomos_cap_syntax::Payload_Schema(), payload.as_bytes().to_vec());
     }
 
     fn Guarantee_At_Floor() -> Guarantee

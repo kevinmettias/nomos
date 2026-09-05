@@ -89,61 +89,6 @@ pub fn Check_Go_Helpers_Package_Five_Inputs(
     );
 }
 
-/// This crate's own floor for `nomos.cap.limits.policy` — stated at the capability's own
-/// ceiling since there is only one real provider today and no weaker answer this crate
-/// could honestly still act on. Mirrors `checks::naming::Naming_Policy_Requirement` and
-/// `checks::structure::Limits_Policy_Requirement` exactly, for the identical capability.
-fn Limits_Policy_Requirement() -> nomos_capability::Requirement
-{
-    return nomos_capability::Requirement::New(
-        nomos_cap_limits_policy::Capability(),
-        nomos_cap_limits_policy::CONTRACT_VERSION,
-        nomos_cap_limits_policy::Ceiling(),
-    );
-}
-
-/// Resolves the numeric ceiling `key` must take: a repository's own declared `nomos.cap.
-/// limits.policy`, most-specific key first (`language`'s own override, then the
-/// repository-wide default), falling back to `default` when neither is declared.
-///
-/// `OD-CAPABILITY-004` and `OD-RULES-011` settle how an absent read is treated here,
-/// mirroring `checks::structure::Resolve_Limit` exactly: this capability is optional,
-/// every caller already has a complete answer without it, so `facts.Require` failing for
-/// any reason is exactly "no override" — never a `Finding`, never this capability's own
-/// `Applicability` surfacing anywhere.
-fn Resolve_Limit(facts: &mut dyn FactReader, language: Option<&str>, key: &str, default: u32) -> u32
-{
-    let subject = nomos_model::Subject_Of_Path("");
-    let Ok(fact) =
-        facts.Require(&nomos_cap_limits_policy::Capability(), &subject, InputDigest::Of(&[]), &Limits_Policy_Requirement())
-    else
-    {
-        return default;
-    };
-
-    let Ok(payload) = nomos_cap_limits_policy::Parse_Payload(&fact.payload.bytes)
-    else
-    {
-        return default;
-    };
-
-    if let Some(language) = language
-    {
-        let scope = Scope::Language(language.to_owned());
-        if let Some(row) = payload.rows.iter().find(|row| return row.scope == scope && row.key == key)
-        {
-            return row.value;
-        }
-    }
-
-    if let Some(row) = payload.rows.iter().find(|row| return row.scope == Scope::Repository && row.key == key)
-    {
-        return row.value;
-    }
-
-    return default;
-}
-
 /// Reports functions that violate a caller-supplied arity policy.
 ///
 /// A test or example source is not judged. An arity cap is a claim about code somebody has
@@ -169,15 +114,37 @@ pub fn Check_Function_Arity_Policy(
             continue;
         }
 
-        match crate::checks::naming::reading::Payload_Of(source, facts)
-        {
-            Ok(payload) => findings.extend(Violations_In(policy, &payload, &source.path)),
-            Err(finding) => findings.push(Unread_As_Rule(finding, policy.rule)),
-        }
+        let source_findings = Findings_For_Source(policy, facts, source);
+        findings.extend(source_findings);
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+fn Policy_Accepts_Source(policy: FunctionArityPolicy, source: &SourceFile) -> bool
+{
+    return match policy.source
+    {
+        FunctionAritySource::All => true,
+        FunctionAritySource::Language(expected) => source.Is_Written_In(expected),
+    };
+}
+
+/// One source's findings under `policy`: its function-arity violations when its syntax
+/// payload reads, or the payload's own unreadable-source finding relabeled under `policy`'s
+/// rule id otherwise.
+fn Findings_For_Source(policy: FunctionArityPolicy, facts: &mut dyn FactReader, source: &SourceFile) -> Vec<Finding>
+{
+    return match crate::checks::naming::reading::Payload_Of(source, facts)
+    {
+        Ok(payload) => Violations_In(policy, &payload, &source.path),
+        Err(finding) =>
+        {
+            let unread = Unread_As_Rule(finding, policy.rule);
+            vec![unread]
+        }
+    };
 }
 
 fn Violations_In(policy: FunctionArityPolicy, payload: &SyntaxPayload, path: &str) -> Vec<Finding>
@@ -190,15 +157,6 @@ fn Violations_In(policy: FunctionArityPolicy, payload: &SyntaxPayload, path: &st
         .filter(|(item, arity)| return Definitely_Too_Many_Value_Parameters(policy, item, *arity))
         .map(|(item, arity)| return Violation_Finding(policy, path, item, arity))
         .collect();
-}
-
-fn Policy_Accepts_Source(policy: FunctionArityPolicy, source: &SourceFile) -> bool
-{
-    return match policy.source
-    {
-        FunctionAritySource::All => true,
-        FunctionAritySource::Language(expected) => source.Is_Written_In(expected),
-    };
 }
 
 fn Definitely_Too_Many_Value_Parameters(policy: FunctionArityPolicy, item: &PayloadItem, arity: u32) -> bool
@@ -243,6 +201,66 @@ fn Unread_As_Rule(mut finding: Finding, rule: &'static str) -> Finding
         .summary
         .replace("this file's naming could not be judged", "this file's parameter counts could not be judged");
     return finding;
+}
+
+/// This crate's own floor for `nomos.cap.limits.policy` — stated at the capability's own
+/// ceiling since there is only one real provider today and no weaker answer this crate
+/// could honestly still act on. Mirrors `checks::naming::Naming_Policy_Requirement` and
+/// `checks::structure::Limits_Policy_Requirement` exactly, for the identical capability.
+fn Limits_Policy_Requirement() -> nomos_capability::Requirement
+{
+    return nomos_capability::Requirement::New(
+        nomos_cap_limits_policy::Capability(),
+        nomos_cap_limits_policy::CONTRACT_VERSION,
+        nomos_cap_limits_policy::Ceiling(),
+    );
+}
+
+/// Resolves the numeric ceiling `key` must take: a repository's own declared `nomos.cap.
+/// limits.policy`, most-specific key first (`language`'s own override, then the
+/// repository-wide default), falling back to `default` when neither is declared.
+///
+/// `OD-CAPABILITY-004` and `OD-RULES-011` settle how an absent read is treated here,
+/// mirroring `checks::structure::Resolve_Limit` exactly: this capability is optional,
+/// every caller already has a complete answer without it, so `facts.Require` failing for
+/// any reason is exactly "no override" — never a `Finding`, never this capability's own
+/// `Applicability` surfacing anywhere.
+fn Resolve_Limit(facts: &mut dyn FactReader, language: Option<&str>, key: &str, default: u32) -> u32
+{
+    let Some(payload) = Limits_Policy_Payload(facts)
+    else
+    {
+        return default;
+    };
+
+    if let Some(language) = language
+    {
+        let scope = Scope::Language(language.to_owned());
+        if let Some(value) = Scoped_Row_Value(&payload, &scope, key)
+        {
+            return value;
+        }
+    }
+
+    return Scoped_Row_Value(&payload, &Scope::Repository, key).unwrap_or(default);
+}
+
+/// Reads and parses this crate's own `nomos.cap.limits.policy` fact, collapsing every
+/// failure reason (the capability is unread, or its payload does not parse) into `None` —
+/// the caller's fallback-to-default is identical either way.
+fn Limits_Policy_Payload(facts: &mut dyn FactReader) -> Option<nomos_cap_limits_policy::LimitsPolicyPayload>
+{
+    let subject = nomos_model::Subject_Of_Path("");
+    let fact = facts
+        .Require(&nomos_cap_limits_policy::Capability(), &subject, InputDigest::Of(&[]), &Limits_Policy_Requirement())
+        .ok()?;
+    return nomos_cap_limits_policy::Parse_Payload(&fact.payload.bytes).ok();
+}
+
+/// The value of the first row in `payload` matching both `scope` and `key`, if one exists.
+fn Scoped_Row_Value(payload: &nomos_cap_limits_policy::LimitsPolicyPayload, scope: &Scope, key: &str) -> Option<u32>
+{
+    return payload.rows.iter().find(|row| return row.scope == *scope && row.key == key).map(|row| return row.value);
 }
 
 #[cfg(test)]
@@ -298,8 +316,9 @@ mod tests
     #[test]
     fn Test_Violations_In_Should_Use_The_Configured_Rule_Id_Threshold_And_Gate()
     {
+        const CAP: u32 = 2;
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tBuild\t.\t+fn/3\n");
-        let policy = FunctionArityPolicy::New("custom-three-parameter-cap", 2)
+        let policy = FunctionArityPolicy::New("custom-three-parameter-cap", CAP)
             .With_Gate(GateCategory::Advisory);
 
         let findings = Violations_In(policy, &payload, "src/lib.rs");
@@ -314,9 +333,10 @@ mod tests
     #[test]
     fn Test_Check_Function_Arity_Policy_Should_Filter_By_Configured_Source_Extension()
     {
+        const CAP: u32 = 2;
         let source = Source("src/lib.rs", "pub fn Build(a: A, b: B, c: C) {}");
         let TestOffering { store, registry, .. } = Offering();
-        let policy = FunctionArityPolicy::New("custom-go-only-cap", 2).For_Language(GO_LANGUAGE);
+        let policy = FunctionArityPolicy::New("custom-go-only-cap", CAP).For_Language(GO_LANGUAGE);
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Function_Arity_Policy(&[source], &mut reader, policy);
@@ -327,14 +347,14 @@ mod tests
     #[test]
     fn Test_Violations_In_Should_Apply_Receiver_Allowance_Only_When_Configured()
     {
+        const CAP: u32 = 4;
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tBuilder::Build\t.\t+fn/5\n");
 
-        let strict = Violations_In(FunctionArityPolicy::New("strict-cap", 4), &payload, "src/lib.rs");
-        let receiver_aware = Violations_In(
-            FunctionArityPolicy::New("receiver-aware-cap", 4).Allow_One_Receiver_For_Qualified_Functions(),
-            &payload,
-            "src/lib.rs",
-        );
+        let strict_policy = FunctionArityPolicy::New("strict-cap", CAP);
+        let strict = Violations_In(strict_policy, &payload, "src/lib.rs");
+        let receiver_aware_policy =
+            FunctionArityPolicy::New("receiver-aware-cap", CAP).Allow_One_Receiver_For_Qualified_Functions();
+        let receiver_aware = Violations_In(receiver_aware_policy, &payload, "src/lib.rs");
 
         assert_eq!(strict.len(), 1, "{strict:?}");
         assert!(receiver_aware.is_empty(), "{receiver_aware:?}");
@@ -429,6 +449,7 @@ mod tests
     #[test]
     fn Test_Resolve_Limit_Should_Prefer_The_Repository_Wide_Row_Over_The_Default()
     {
+        const REPOSITORY_MAX: u32 = 6;
         let TestOffering { mut store, registry, offer } = Limits_Offering();
         Materialize_Limits_Fact(
             &mut store,
@@ -436,19 +457,21 @@ mod tests
             vec![nomos_cap_limits_policy::PolicyRow {
                 scope: Scope::Repository,
                 key: PARAMETER_COUNT_MAX_KEY.to_owned(),
-                value: 6,
+                value: REPOSITORY_MAX,
             }],
         );
         let mut facts = Reader::On(&store, &registry, Test_Context());
 
         let resolved = Resolve_Limit(&mut facts, None, PARAMETER_COUNT_MAX_KEY, MAX_VALUE_PARAMETERS);
 
-        assert_eq!(resolved, 6);
+        assert_eq!(resolved, REPOSITORY_MAX);
     }
 
     #[test]
     fn Test_Resolve_Limit_Should_Prefer_The_Language_Row_Over_The_Repository_Wide_Row()
     {
+        const REPOSITORY_MAX: u32 = 4;
+        const GO_MAX: u32 = 6;
         let TestOffering { mut store, registry, offer } = Limits_Offering();
         Materialize_Limits_Fact(
             &mut store,
@@ -457,12 +480,12 @@ mod tests
                 nomos_cap_limits_policy::PolicyRow {
                     scope: Scope::Repository,
                     key: PARAMETER_COUNT_MAX_KEY.to_owned(),
-                    value: 4,
+                    value: REPOSITORY_MAX,
                 },
                 nomos_cap_limits_policy::PolicyRow {
                     scope: Scope::Language(GO.to_owned()),
                     key: PARAMETER_COUNT_MAX_KEY.to_owned(),
-                    value: 6,
+                    value: GO_MAX,
                 },
             ],
         );
@@ -470,7 +493,7 @@ mod tests
 
         let resolved = Resolve_Limit(&mut facts, Some(GO), PARAMETER_COUNT_MAX_KEY, MAX_VALUE_PARAMETERS);
 
-        assert_eq!(resolved, 6);
+        assert_eq!(resolved, GO_MAX);
     }
 
     fn Limits_Offering() -> TestOffering
@@ -522,12 +545,13 @@ mod tests
 
     fn Offering() -> TestOffering
     {
+        let guarantee = Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
         return test_support::Offering(
             nomos_cap_syntax::Capability_Contract(),
             nomos_cap_syntax::Capability(),
             nomos_cap_syntax::CONTRACT_VERSION,
             "nomos.test.parameter-count.parses",
-            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
+            guarantee,
         );
     }
 

@@ -363,6 +363,11 @@ mod tests
 {
     use super::*;
 
+    /// How many `Declare` calls [`Registered`]'s own body wires: syntax, dependency,
+    /// controlflow, lint, dependency-policy, and all five of `OD-RULES-011`'s families --
+    /// naming, limits, scripting, goals and words.
+    const DECLARED_CAPABILITY_COUNT: usize = 10;
+
     /// The composition this crate ships must not be self-contradictory, and it must
     /// declare exactly the ten capabilities [`Registered`]'s own body wires: syntax,
     /// dependency, controlflow, lint, dependency-policy, and all five of `OD-RULES-011`'s
@@ -374,7 +379,7 @@ mod tests
 
         assert_eq!(
             registry.Declared().count(),
-            10,
+            DECLARED_CAPABILITY_COUNT,
             "Registered() wires ten Declare calls; a changed count here means the two drifted"
         );
     }

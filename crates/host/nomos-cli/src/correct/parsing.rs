@@ -56,11 +56,6 @@ mod tests
 {
     use super::*;
 
-    fn Arguments(text: &str) -> Vec<String>
-    {
-        return text.split_whitespace().map(str::to_owned).collect();
-    }
-
     #[test]
     fn Test_The_Bare_Verb_Defaults_Root_And_Commit()
     {
@@ -101,5 +96,10 @@ mod tests
         let error = Parse(&Arguments("phantom-mirrors --wat")).expect_err("must refuse");
 
         assert!(error.contains("--wat"));
+    }
+
+    fn Arguments(text: &str) -> Vec<String>
+    {
+        return text.split_whitespace().map(str::to_owned).collect();
     }
 }

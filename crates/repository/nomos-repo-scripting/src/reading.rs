@@ -118,6 +118,17 @@ mod tests
         );
     }
 
+    fn Repository_Root() -> PathBuf
+    {
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest
+            .parent()
+            .and_then(Path::parent)
+            .and_then(Path::parent)
+            .map(PathBuf::from)
+            .expect("this crate sits three levels below the workspace root");
+    }
+
     #[test]
     fn Test_Discover_Workspace_Should_Declare_Nothing_For_A_Missing_File()
     {
@@ -149,7 +160,7 @@ mod tests
 
         fn Exists(&self, _path: &Path) -> bool
         {
-            true
+            return true;
         }
     }
 
@@ -191,11 +202,15 @@ mod tests
         assert!(error.reason.contains("not valid JSON"), "{}", error.reason);
     }
 
+    /// A value that is not a string, wherever a fixture needs one — its only meaning is
+    /// "not a string".
+    const NON_STRING_SENTINEL: i64 = 5;
+
     #[test]
     fn Test_Discover_Workspace_Should_Refuse_A_Non_String_Tooling_Language()
     {
         let filesystem = FakeFileSystem {
-            text: serde_json::json!({ "scripting": { "tooling_language": 5 } }).to_string(),
+            text: serde_json::json!({ "scripting": { "tooling_language": NON_STRING_SENTINEL } }).to_string(),
         };
 
         let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a non-string language must be refused");
@@ -207,7 +222,7 @@ mod tests
     fn Test_Discover_Workspace_Should_Refuse_A_Non_String_Forbidden_Extension()
     {
         let filesystem = FakeFileSystem {
-            text: serde_json::json!({ "scripting": { "forbidden_extensions": [5] } }).to_string(),
+            text: serde_json::json!({ "scripting": { "forbidden_extensions": [NON_STRING_SENTINEL] } }).to_string(),
         };
 
         let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a non-string entry must be refused");
@@ -223,16 +238,5 @@ mod tests
         let payload = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON with no scripting block");
 
         assert_eq!(payload, ScriptingPolicyPayload::default());
-    }
-
-    fn Repository_Root() -> PathBuf
-    {
-        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(Path::parent)
-            .and_then(Path::parent)
-            .map(PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
     }
 }

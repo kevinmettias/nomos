@@ -45,28 +45,26 @@ pub const DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS: &str = "declared-tooling-langua
 #[must_use]
 pub fn Check_Scripts_Use_A_Portable_Shebang(sources: &[SourceFile]) -> Vec<Finding>
 {
-    let mut findings = Vec::new();
-
-    for source in sources
-    {
-        let Some(interpreter) = Shebang_Interpreter(source)
-        else
-        {
-            continue;
-        };
-
-        if !interpreter.starts_with("/usr/bin/env ")
-        {
-            findings.push(Finding_For_Source(
-                source,
-                SCRIPTS_USE_A_PORTABLE_SHEBANG,
-                "has a hardcoded shebang; use `#!/usr/bin/env <interpreter>`",
-            ));
-        }
-    }
+    let mut findings: Vec<Finding> = sources.iter().filter_map(Portable_Shebang_Finding_For).collect();
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+fn Portable_Shebang_Finding_For(source: &SourceFile) -> Option<Finding>
+{
+    let interpreter = Shebang_Interpreter(source)?;
+    if interpreter.starts_with("/usr/bin/env ")
+    {
+        return None;
+    }
+
+    let finding = Finding_For_Source(
+        source,
+        Rule(SCRIPTS_USE_A_PORTABLE_SHEBANG),
+        Because("has a hardcoded shebang; use `#!/usr/bin/env <interpreter>`"),
+    );
+    return Some(finding);
 }
 
 /// Reports shebang scripts whose first nonblank line after the shebang is not a comment.
@@ -84,16 +82,27 @@ pub fn Check_A_Script_Declares_Its_Purpose(sources: &[SourceFile]) -> Vec<Findin
 
         if !Has_Purpose_Comment(source)
         {
-            findings.push(Finding_For_Source(
+            let finding = Finding_For_Source(
                 source,
-                A_SCRIPT_DECLARES_ITS_PURPOSE,
-                "does not declare its purpose in the first nonblank line after the shebang",
-            ));
+                Rule(A_SCRIPT_DECLARES_ITS_PURPOSE),
+                Because("does not declare its purpose in the first nonblank line after the shebang"),
+            );
+            findings.push(finding);
         }
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+fn Has_Purpose_Comment(source: &SourceFile) -> bool
+{
+    return source
+        .text
+        .lines()
+        .skip(1)
+        .find(|line| return !line.trim().is_empty())
+        .is_some_and(|line| return line.trim_start().starts_with('#'));
 }
 
 /// Reports executed shebang scripts that never enable nounset, excusing a sourced library
@@ -103,31 +112,395 @@ pub fn Check_A_Script_Declares_Its_Purpose(sources: &[SourceFile]) -> Vec<Findin
 #[must_use]
 pub fn Check_Executed_Scripts_Set_Nounset(sources: &[SourceFile]) -> Vec<Finding>
 {
-    let mut findings = Vec::new();
-
-    for source in sources
-    {
-        if !Is_Shebang_Script(source)
-        {
-            continue;
-        }
-
-        let lines: Vec<&str> = source.text.split('\n').collect();
-        if Is_Sourced_Library(&source.text) || Has_Nounset(&lines)
-        {
-            continue;
-        }
-
-        findings.push(Finding_For_Source(
-            source,
-            EXECUTED_SCRIPTS_SET_NOUNSET,
-            "must `set -u` (nounset), so a misspelled variable name stops it instead of expanding to nothing; that is the \
-             difference between an error and a launcher silently operating on the wrong path",
-        ));
-    }
+    let mut findings: Vec<Finding> = sources.iter().filter_map(Nounset_Finding_For).collect();
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+/// `Some` when `source` is an executed shebang script that never enables nounset -- `None`
+/// for a non-script, a sourced library (exempted above), or a script that already does.
+fn Nounset_Finding_For(source: &SourceFile) -> Option<Finding>
+{
+    if !Is_Shebang_Script(source)
+    {
+        return None;
+    }
+
+    let lines: Vec<&str> = source.text.split('\n').collect();
+    if Is_Sourced_Library(&source.text) || Has_Nounset(&lines)
+    {
+        return None;
+    }
+
+    let finding = Finding_For_Source(
+        source,
+        Rule(EXECUTED_SCRIPTS_SET_NOUNSET),
+        Because(
+            "must `set -u` (nounset), so a misspelled variable name stops it instead of expanding to nothing; that is the \
+             difference between an error and a launcher silently operating on the wrong path",
+        ),
+    );
+    return Some(finding);
+}
+
+/// A file meant to be *sourced* rather than executed: one whose body only defines —
+/// functions and constants — and never *does*. The signal is the absence of any top-level
+/// (column-zero) statement that runs something; the first one flips the file from library
+/// to executed and ends the scan early.
+fn Is_Sourced_Library(source: &str) -> bool
+{
+    let mut saw_definition = false;
+    let mut inside = QuoteState::None;
+
+    for raw in source.split('\n')
+    {
+        let continuation = inside != QuoteState::None;
+        inside = Quote_State_After(raw, inside);
+        if continuation
+        {
+            // Inside a literal that opened on an earlier line: never a top-level statement.
+            continue;
+        }
+
+        match Top_Level_Line_Verdict(raw)
+        {
+            TopLevelLine::NotStatement => continue,
+            TopLevelLine::Definition => saw_definition = true,
+            TopLevelLine::Statement => return false,
+        }
+    }
+
+    return saw_definition;
+}
+
+/// Which kind of string literal, if any, is still open at the end of a line. A closed set
+/// rather than two bools, because "inside single" and "inside double" are mutually
+/// exclusive and two bools admit a fourth state that cannot exist.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum QuoteState
+{
+    /// No literal is open; the next line begins in code.
+    None,
+    /// A `'...'` literal is open. Shell gives single quotes no escape at all, so only the
+    /// next `'` can close one.
+    Single,
+    /// A `"..."` literal is open. Backslash escapes inside these, so a `\"` does not close it.
+    Double,
+}
+
+/// A `\x` escape consumes the backslash and the character after it -- two bytes, neither of
+/// which can close or open a literal.
+const ESCAPE_SEQUENCE_BYTES: usize = 2;
+
+/// One step of [`Quote_State_After`]'s scan: either keep going from a new state and index, or
+/// the line's unquoted `#` comment marker was found and the state at that point is final.
+enum StepOutcome
+{
+    Continue { state: QuoteState, next_index: usize },
+    StopAt(QuoteState),
+}
+
+/// Which literal, if any, is still open once `line` has been read, given whichever was open
+/// when it began. Stops at an unquoted `#`, because the rest of the line is a comment and a
+/// comment's contents are not code — without that, an ordinary apostrophe in prose
+/// (`# don't do this`) would open a single-quoted string that never closes.
+fn Quote_State_After(line: &str, opening: QuoteState) -> QuoteState
+{
+    let bytes = line.as_bytes();
+    let mut state = opening;
+    let mut index = 0usize;
+
+    while let Some(&character) = bytes.get(index)
+    {
+        match Step(line, character, index, state)
+        {
+            StepOutcome::Continue { state: next_state, next_index } =>
+            {
+                state = next_state;
+                index = next_index;
+            }
+            StepOutcome::StopAt(final_state) => return final_state,
+        }
+    }
+
+    return state;
+}
+
+fn Step(line: &str, character: u8, index: usize, state: QuoteState) -> StepOutcome
+{
+    return match state
+    {
+        QuoteState::Single => Step_In_Single(character, index),
+        QuoteState::Double => Step_In_Double(character, index),
+        QuoteState::None => Step_In_Code(line, character, index),
+    };
+}
+
+fn Step_In_Single(character: u8, index: usize) -> StepOutcome
+{
+    let next_state = if character == b'\'' { QuoteState::None } else { QuoteState::Single };
+    return StepOutcome::Continue { state: next_state, next_index: index.saturating_add(1) };
+}
+
+fn Step_In_Double(character: u8, index: usize) -> StepOutcome
+{
+    if character == b'\\'
+    {
+        // the escaped character cannot close anything
+        return StepOutcome::Continue { state: QuoteState::Double, next_index: index.saturating_add(ESCAPE_SEQUENCE_BYTES) };
+    }
+
+    let next_state = if character == b'"' { QuoteState::None } else { QuoteState::Double };
+    return StepOutcome::Continue { state: next_state, next_index: index.saturating_add(1) };
+}
+
+fn Step_In_Code(line: &str, character: u8, index: usize) -> StepOutcome
+{
+    if character == b'\\'
+    {
+        // escapes the next character, quote or not
+        return StepOutcome::Continue { state: QuoteState::None, next_index: index.saturating_add(ESCAPE_SEQUENCE_BYTES) };
+    }
+    if character == b'#' && Begins_A_Word(line, index)
+    {
+        // a comment: nothing after it is code
+        return StepOutcome::StopAt(QuoteState::None);
+    }
+
+    let next_state = match character
+    {
+        b'\'' => QuoteState::Single,
+        b'"' => QuoteState::Double,
+        _ => QuoteState::None,
+    };
+    return StepOutcome::Continue { state: next_state, next_index: index.saturating_add(1) };
+}
+
+/// Whether the byte at `index` starts a word — it is first on the line, or the character
+/// before it is a space or a tab. Shell only treats `#` as a comment there.
+fn Begins_A_Word(line: &str, index: usize) -> bool
+{
+    if index == 0
+    {
+        return true;
+    }
+    return line
+        .as_bytes()
+        .get(index.saturating_sub(1))
+        .is_some_and(|&byte| return byte == b' ' || byte == b'\t');
+}
+
+/// What a candidate top-level (column-zero, non-continuation) line amounts to: nothing worth
+/// judging, a definition, or a real statement that flips the file from library to executed.
+enum TopLevelLine
+{
+    NotStatement,
+    Definition,
+    Statement,
+}
+
+fn Top_Level_Line_Verdict(raw: &str) -> TopLevelLine
+{
+    if raw.starts_with(' ') || raw.starts_with('\t')
+    {
+        // Indented: a function body, a heredoc, or a nested block.
+        return TopLevelLine::NotStatement;
+    }
+
+    let code = Code_On(raw).trim();
+    return Code_Verdict(code);
+}
+
+/// What a top-level line's code (comment stripped, whitespace trimmed) amounts to, once the
+/// caller already knows the line was not indented.
+fn Code_Verdict(code: &str) -> TopLevelLine
+{
+    if code.is_empty()
+    {
+        return TopLevelLine::NotStatement;
+    }
+
+    let is_standalone_brace_or_paren = code == "{" || code == "}" || code == "(" || code == ")";
+    if is_standalone_brace_or_paren
+    {
+        // A function body's braces, or a multi-line array's parentheses, standing alone.
+        return TopLevelLine::NotStatement;
+    }
+
+    if Is_Function_Header(code) || Is_Declaration(code)
+    {
+        return TopLevelLine::Definition;
+    }
+
+    return TopLevelLine::Statement;
+}
+
+/// A top-level line that defines a function rather than runs a command: `name() {`, the
+/// bare `name()`, or the `function name` spelling.
+fn Is_Function_Header(code: &str) -> bool
+{
+    if code.starts_with("function ")
+    {
+        return true;
+    }
+
+    return Is_Bare_Function_Header(code);
+}
+
+/// `name() {` or the bare `name()`: no `function` keyword, just an identifier immediately
+/// followed by an empty parameter list.
+fn Is_Bare_Function_Header(code: &str) -> bool
+{
+    let Some(paren) = code.find('(')
+    else
+    {
+        return false;
+    };
+    if paren == 0
+    {
+        return false;
+    }
+
+    let name = &code[..paren];
+    if !Is_Valid_Function_Name(name)
+    {
+        return false;
+    }
+
+    return code[paren..].starts_with("()");
+}
+
+/// `name` carries no whitespace before `(` (a call or a subshell would) and is made only of
+/// the characters a shell function name allows.
+fn Is_Valid_Function_Name(name: &str) -> bool
+{
+    if name.trim() != name
+    {
+        // Whitespace before `(`: a call or a subshell, not a definition header.
+        return false;
+    }
+
+    return name.chars().all(|symbol| return symbol.is_ascii_alphanumeric() || symbol == '_' || symbol == '-');
+}
+
+/// A top-level line that introduces a name without running anything: a `readonly`,
+/// `declare`, `typeset`, `export` or `local` keyword, or a bare `NAME=value` (including
+/// `NAME+=` and `NAME[i]=`).
+fn Is_Declaration(code: &str) -> bool
+{
+    const KEYWORDS: [&str; 5] = ["readonly ", "declare ", "typeset ", "export ", "local "];
+    if KEYWORDS.iter().any(|keyword| return code.starts_with(*keyword))
+    {
+        return true;
+    }
+
+    return Is_Bare_Assignment(code);
+}
+
+/// `NAME=value` (including `NAME+=` and `NAME[i]=`), with no keyword in front of it.
+fn Is_Bare_Assignment(code: &str) -> bool
+{
+    let Some(equals) = code.find('=')
+    else
+    {
+        return false;
+    };
+    if equals == 0
+    {
+        return false;
+    }
+
+    let name = Assigned_Name(&code[..equals]);
+    if name.is_empty()
+    {
+        return false;
+    }
+
+    return Is_Valid_Variable_Name(name);
+}
+
+/// The bare variable name an assignment's left side names, once a trailing `+` (`NAME+=`)
+/// and an index or key (`NAME[i]=`) are stripped off.
+fn Assigned_Name(before_equals: &str) -> &str
+{
+    let mut name = before_equals.strip_suffix('+').unwrap_or(before_equals);
+    if let Some(index) = name.find('[')
+    {
+        name = &name[..index];
+    }
+    return name;
+}
+
+/// A shell variable name: a leading letter or underscore, then letters, digits or
+/// underscores.
+fn Is_Valid_Variable_Name(name: &str) -> bool
+{
+    for (position, symbol) in name.chars().enumerate()
+    {
+        let letter = symbol.is_ascii_alphabetic();
+        let is_invalid_leading_symbol = position == 0 && !(letter || symbol == '_');
+        if is_invalid_leading_symbol
+        {
+            return false;
+        }
+
+        let is_invalid_symbol = !(letter || symbol == '_' || symbol.is_ascii_digit());
+        if is_invalid_symbol
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/// Whether any line enables nounset, in any spelling bash accepts: `set -u`, a combined
+/// group such as `set -euo pipefail`, or the long `set -o nounset`. A `set +u`, which turns
+/// the option *off*, is deliberately not a match — it begins with `+`, not `-`.
+fn Has_Nounset(lines: &[&str]) -> bool
+{
+    const KEYWORD_AND_ONE_FLAG: usize = 2;
+
+    for raw in lines
+    {
+        let code = Code_On(raw);
+        let fields: Vec<&str> = code.split_whitespace().collect();
+        if fields.len() < KEYWORD_AND_ONE_FLAG || fields.first() != Some(&"set")
+        {
+            continue;
+        }
+
+        if Fields_Enable_Nounset(&fields)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/// Whether `fields` (a `set ...` line's whitespace-split words) enables nounset in any
+/// spelling: the long `-o nounset`, or a short-flag group that contains `u`.
+fn Fields_Enable_Nounset(fields: &[&str]) -> bool
+{
+    for (index, field) in fields.iter().enumerate().skip(1)
+    {
+        if *field == "-o" && fields.get(index.saturating_add(1)) == Some(&"nounset")
+        {
+            return true;
+        }
+
+        // A short-flag group (`-u`, `-eu`, `-euo`). `-o` introduces a long name and is
+        // handled above; `+u` begins with `+` and never reaches this branch.
+        let is_short_flag_group_with_u = field.starts_with('-') && !field.starts_with("-o") && field.contains('u');
+        if is_short_flag_group_with_u
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /// Reports files whose path ends in an extension the repository has declared forbidden,
@@ -148,21 +521,24 @@ pub fn Check_Declared_Tooling_Language_For_Scripts(sources: &[SourceFile], facts
         return Vec::new();
     };
 
-    let mut findings = Vec::new();
-    for source in sources
-    {
-        if Is_Forbidden_Extension(&source.path, &policy.forbidden_extensions)
-        {
-            findings.push(Finding_For_Source(
-                source,
-                DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS,
-                &format!("is written in a language this repository's declared tooling language ({language}) does not use"),
-            ));
-        }
-    }
+    let mut findings = Forbidden_Extension_Findings(sources, &policy, language);
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+/// Resolves a repository's own declared scripting policy — `None` on any `Require`
+/// failure, per `OD-CAPABILITY-004`/`OD-RULES-011`'s settled optional-read pattern: this
+/// capability is optional, and its absence must never surface as a `Finding` or this
+/// capability's own `Applicability`.
+fn Resolve_Scripting_Policy(facts: &mut dyn FactReader) -> Option<ScriptingPolicyPayload>
+{
+    let subject = nomos_model::Subject_Of_Path("");
+    let fact = facts
+        .Require(&nomos_cap_scripting_policy::Capability(), &subject, InputDigest::Of(&[]), &Scripting_Policy_Requirement())
+        .ok()?;
+
+    return nomos_cap_scripting_policy::Parse_Payload(&fact.payload.bytes).ok();
 }
 
 /// This crate's own floor for `nomos.cap.scripting.policy` — stated at the capability's
@@ -179,18 +555,21 @@ fn Scripting_Policy_Requirement() -> nomos_capability::Requirement
     );
 }
 
-/// Resolves a repository's own declared scripting policy — `None` on any `Require`
-/// failure, per `OD-CAPABILITY-004`/`OD-RULES-011`'s settled optional-read pattern: this
-/// capability is optional, and its absence must never surface as a `Finding` or this
-/// capability's own `Applicability`.
-fn Resolve_Scripting_Policy(facts: &mut dyn FactReader) -> Option<ScriptingPolicyPayload>
+fn Forbidden_Extension_Findings(sources: &[SourceFile], policy: &ScriptingPolicyPayload, language: &str) -> Vec<Finding>
 {
-    let subject = nomos_model::Subject_Of_Path("");
-    let fact = facts
-        .Require(&nomos_cap_scripting_policy::Capability(), &subject, InputDigest::Of(&[]), &Scripting_Policy_Requirement())
-        .ok()?;
+    let mut findings = Vec::new();
 
-    return nomos_cap_scripting_policy::Parse_Payload(&fact.payload.bytes).ok();
+    for source in sources
+    {
+        if Is_Forbidden_Extension(&source.path, &policy.forbidden_extensions)
+        {
+            let because = format!("is written in a language this repository's declared tooling language ({language}) does not use");
+            let finding = Finding_For_Source(source, Rule(DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS), Because(&because));
+            findings.push(finding);
+        }
+    }
+
+    return findings;
 }
 
 fn Is_Forbidden_Extension(path: &str, forbidden_extensions: &[String]) -> bool
@@ -232,291 +611,35 @@ fn Is_Shebang_Script(source: &SourceFile) -> bool
     return Shebang_Interpreter(source).is_some();
 }
 
-fn Has_Purpose_Comment(source: &SourceFile) -> bool
-{
-    return source
-        .text
-        .lines()
-        .skip(1)
-        .find(|line| return !line.trim().is_empty())
-        .is_some_and(|line| return line.trim_start().starts_with('#'));
-}
-
-/// Whether any line enables nounset, in any spelling bash accepts: `set -u`, a combined
-/// group such as `set -euo pipefail`, or the long `set -o nounset`. A `set +u`, which turns
-/// the option *off*, is deliberately not a match — it begins with `+`, not `-`.
-fn Has_Nounset(lines: &[&str]) -> bool
-{
-    const KEYWORD_AND_ONE_FLAG: usize = 2;
-
-    for raw in lines
-    {
-        let code = Code_On(raw);
-        let fields: Vec<&str> = code.split_whitespace().collect();
-        if fields.len() < KEYWORD_AND_ONE_FLAG || fields.first() != Some(&"set")
-        {
-            continue;
-        }
-
-        for (index, field) in fields.iter().enumerate().skip(1)
-        {
-            if *field == "-o" && fields.get(index.saturating_add(1)) == Some(&"nounset")
-            {
-                return true;
-            }
-            // A short-flag group (`-u`, `-eu`, `-euo`). `-o` introduces a long name and is
-            // handled above; `+u` begins with `+` and never reaches this branch.
-            if field.starts_with('-') && !field.starts_with("-o") && field.contains('u')
-            {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-/// A file meant to be *sourced* rather than executed: one whose body only defines —
-/// functions and constants — and never *does*. The signal is the absence of any top-level
-/// (column-zero) statement that runs something; the first one flips the file from library
-/// to executed and ends the scan early.
-fn Is_Sourced_Library(source: &str) -> bool
-{
-    let mut saw_definition = false;
-    let mut inside = QuoteState::None;
-
-    for raw in source.split('\n')
-    {
-        let continuation = inside != QuoteState::None;
-        inside = Quote_State_After(raw, inside);
-        if continuation
-        {
-            // Inside a literal that opened on an earlier line: never a top-level statement.
-            continue;
-        }
-
-        if raw.starts_with(' ') || raw.starts_with('\t')
-        {
-            // Indented: a function body, a heredoc, or a nested block.
-            continue;
-        }
-
-        let code = Code_On(raw).trim();
-        if code.is_empty()
-        {
-            continue;
-        }
-        if code == "{" || code == "}" || code == "(" || code == ")"
-        {
-            // A function body's braces, or a multi-line array's parentheses, standing alone.
-            continue;
-        }
-        if Is_Function_Header(code) || Is_Declaration(code)
-        {
-            saw_definition = true;
-            continue;
-        }
-
-        return false;
-    }
-
-    return saw_definition;
-}
-
-/// A top-level line that defines a function rather than runs a command: `name() {`, the
-/// bare `name()`, or the `function name` spelling.
-fn Is_Function_Header(code: &str) -> bool
-{
-    if code.starts_with("function ")
-    {
-        return true;
-    }
-
-    let Some(paren) = code.find('(')
-    else
-    {
-        return false;
-    };
-    if paren == 0
-    {
-        return false;
-    }
-
-    let name = &code[..paren];
-    if name.trim() != name
-    {
-        // Whitespace before `(`: a call or a subshell, not a definition header.
-        return false;
-    }
-    if !name.chars().all(|symbol| return symbol.is_ascii_alphanumeric() || symbol == '_' || symbol == '-')
-    {
-        return false;
-    }
-
-    return code[paren..].starts_with("()");
-}
-
-/// A top-level line that introduces a name without running anything: a `readonly`,
-/// `declare`, `typeset`, `export` or `local` keyword, or a bare `NAME=value` (including
-/// `NAME+=` and `NAME[i]=`).
-fn Is_Declaration(code: &str) -> bool
-{
-    const KEYWORDS: [&str; 5] = ["readonly ", "declare ", "typeset ", "export ", "local "];
-    if KEYWORDS.iter().any(|keyword| return code.starts_with(*keyword))
-    {
-        return true;
-    }
-
-    let Some(equals) = code.find('=')
-    else
-    {
-        return false;
-    };
-    if equals == 0
-    {
-        return false;
-    }
-
-    let before_equals = &code[..equals];
-    let mut name = before_equals.strip_suffix('+').unwrap_or(before_equals);
-    if let Some(index) = name.find('[')
-    {
-        name = &name[..index];
-    }
-    if name.is_empty()
-    {
-        return false;
-    }
-
-    for (position, symbol) in name.chars().enumerate()
-    {
-        let letter = symbol.is_ascii_alphabetic();
-        if position == 0 && !(letter || symbol == '_')
-        {
-            return false;
-        }
-        if !(letter || symbol == '_' || symbol.is_ascii_digit())
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-/// Which kind of string literal, if any, is still open at the end of a line. A closed set
-/// rather than two bools, because "inside single" and "inside double" are mutually
-/// exclusive and two bools admit a fourth state that cannot exist.
-#[derive(Clone, Copy, PartialEq, Eq)]
-enum QuoteState
-{
-    /// No literal is open; the next line begins in code.
-    None,
-    /// A `'...'` literal is open. Shell gives single quotes no escape at all, so only the
-    /// next `'` can close one.
-    Single,
-    /// A `"..."` literal is open. Backslash escapes inside these, so a `\"` does not close it.
-    Double,
-}
-
-/// Which literal, if any, is still open once `line` has been read, given whichever was open
-/// when it began. Stops at an unquoted `#`, because the rest of the line is a comment and a
-/// comment's contents are not code — without that, an ordinary apostrophe in prose
-/// (`# don't do this`) would open a single-quoted string that never closes.
-fn Quote_State_After(line: &str, opening: QuoteState) -> QuoteState
-{
-    let bytes = line.as_bytes();
-    let mut state = opening;
-    let mut index = 0usize;
-
-    while let Some(&character) = bytes.get(index)
-    {
-        match state
-        {
-            QuoteState::Single =>
-            {
-                if character == b'\''
-                {
-                    state = QuoteState::None;
-                }
-                index = index.saturating_add(1);
-            }
-            QuoteState::Double =>
-            {
-                if character == b'\\'
-                {
-                    index = index.saturating_add(2); // the escaped character cannot close anything
-                    continue;
-                }
-                if character == b'"'
-                {
-                    state = QuoteState::None;
-                }
-                index = index.saturating_add(1);
-            }
-            QuoteState::None =>
-            {
-                if character == b'\\'
-                {
-                    index = index.saturating_add(2); // escapes the next character, quote or not
-                    continue;
-                }
-                else if character == b'#' && Begins_A_Word(line, index)
-                {
-                    return state; // a comment: nothing after it is code
-                }
-                else if character == b'\''
-                {
-                    state = QuoteState::Single;
-                }
-                else if character == b'"'
-                {
-                    state = QuoteState::Double;
-                }
-                index = index.saturating_add(1);
-            }
-        }
-    }
-
-    return state;
-}
-
-/// Whether the byte at `index` starts a word — it is first on the line, or the character
-/// before it is a space or a tab. Shell only treats `#` as a comment there.
-fn Begins_A_Word(line: &str, index: usize) -> bool
-{
-    if index == 0
-    {
-        return true;
-    }
-    return line
-        .as_bytes()
-        .get(index.saturating_sub(1))
-        .is_some_and(|&byte| return byte == b' ' || byte == b'\t');
-}
-
 /// A line with its trailing `#...` comment stripped, when that `#` starts a word and sits
 /// outside a double-quoted literal opened and closed on this same line.
 fn Code_On(line: &str) -> &str
 {
-    match Unquoted_Hash_Index(line)
+    return match Unquoted_Hash_Index(line)
     {
         Some(index) => &line[..index],
         None => line,
-    }
+    };
 }
 
 /// The index of the first `#` in `line` that is not inside a double-quoted literal, or
 /// `None` if every occurrence is. An odd count of `"` before a position means one literal is
 /// still open there.
+///
+/// The `loop` below is this function's tail expression, but it never completes normally --
+/// every reachable path already leaves through the `?` operator or the `return Some(at)`
+/// inside it, so the loop's own type is `!` and it is deliberately not wrapped in a second,
+/// outer `return`: doing so would sit around an already-diverging construct.
 fn Unquoted_Hash_Index(line: &str) -> Option<usize>
 {
+    const QUOTES_PER_PAIR: usize = 2;
+
     let mut offset = 0usize;
     loop
     {
         let found = line.get(offset..)?.find('#')?;
         let at = offset.saturating_add(found);
-        if line.get(..at)?.matches('"').count() % 2 == 0
+        if line.get(..at)?.matches('"').count() % QUOTES_PER_PAIR == 0
         {
             return Some(at);
         }
@@ -524,16 +647,22 @@ fn Unquoted_Hash_Index(line: &str) -> Option<usize>
     }
 }
 
-fn Finding_For_Source(source: &SourceFile, rule: &str, because: &str) -> Finding
+/// `rule` and `because` are both `&str`; without a distinct type per position, a call site
+/// like `Finding_For_Source(source, rule, because)` reads as two interchangeable strings and
+/// a swap compiles silently.
+struct Rule<'a>(&'a str);
+struct Because<'a>(&'a str);
+
+fn Finding_For_Source(source: &SourceFile, rule: Rule<'_>, because: Because<'_>) -> Finding
 {
     return Finding {
-        rule: RuleId::New(rule),
+        rule: RuleId::New(rule.0),
         subject: source.subject,
         subject_name: source.path.clone(),
         applicability: Applicability::Supported,
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Blocking,
-        summary: format!("{} {because}", source.path),
+        summary: format!("{} {}", source.path, because.0),
         locations: vec![source.path.clone()],
     };
 }

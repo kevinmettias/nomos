@@ -27,7 +27,11 @@ pub fn Check_Boolean_Predicates(
     {
         match super::reading::Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Violations_In(&payload, &source.path)),
+            Ok(payload) =>
+            {
+                let violations = Violations_In(&payload, &source.path);
+                findings.extend(violations);
+            }
             Err(finding) => findings.push(Unread_As_This_Rule(finding)),
         }
     }
@@ -44,7 +48,8 @@ fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
     {
         if item.kind == STRUCT
         {
-            findings.extend(Field_Violations_In(path, item));
+            let field_violations = Field_Violations_In(path, item);
+            findings.extend(field_violations);
         }
     }
 

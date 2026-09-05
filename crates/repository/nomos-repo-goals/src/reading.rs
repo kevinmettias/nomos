@@ -22,6 +22,11 @@ const CEILING_KEY: &str = "max_subsystems_per_goal";
 const SUBSYSTEMS_KEY: &str = "subsystems";
 const SUBSYSTEM_NAME_KEY: &str = "subsystem";
 
+/// Where a [`String_List_At`] value is named in a refusal — a newtype rather than a second
+/// adjacent `&str`, so a caller cannot transpose it with `key` and have the compiler stay
+/// silent about it.
+struct WhereNamed<'a>(&'a str);
+
 /// `standards.json` could not be read as this reader expects.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct GoalsPolicyError
@@ -66,7 +71,7 @@ pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Resul
 
 fn Goals_In(value: &serde_json::Value) -> Result<Vec<String>, GoalsPolicyError>
 {
-    return String_List_At(value, GOALS_KEY, GOALS_KEY);
+    return String_List_At(value, GOALS_KEY, WhereNamed(GOALS_KEY));
 }
 
 /// The declared ceiling, with anything at or below zero read as unbounded — code-standards'
@@ -110,36 +115,57 @@ fn Subsystems_In(value: &serde_json::Value) -> Result<Vec<SubsystemDeclaration>,
     let mut subsystems: Vec<SubsystemDeclaration> = Vec::new();
     for entry in entries
     {
-        let Some(name) = entry.get(SUBSYSTEM_NAME_KEY).and_then(serde_json::Value::as_str)
-        else
-        {
-            continue;
-        };
-        if name.is_empty()
-        {
-            continue;
-        }
-
-        if subsystems.iter().any(|declared_already| return declared_already.name == name)
-        {
-            return Err(GoalsPolicyError {
-                reason: format!("{STANDARDS_JSON} declares subsystem {name:?} twice"),
-            });
-        }
-
-        subsystems.push(SubsystemDeclaration {
-            name: name.to_owned(),
-            goals: String_List_At(entry, GOALS_KEY, &format!("{SUBSYSTEMS_KEY}[{name}].{GOALS_KEY}"))?,
-        });
+        Push_Subsystem_Entry(entry, &mut subsystems)?;
     }
 
     return Ok(subsystems);
 }
 
+/// Reads one `subsystems` array entry into `subsystems`, skipping an entry with no name or
+/// an empty name — matching code-standards' own `Goal_Subsystems`, which drops it rather
+/// than refusing the file for an unnamed part it has nothing to say about.
+fn Push_Subsystem_Entry(entry: &serde_json::Value, subsystems: &mut Vec<SubsystemDeclaration>) -> Result<(), GoalsPolicyError>
+{
+    let Some(name) = entry.get(SUBSYSTEM_NAME_KEY).and_then(serde_json::Value::as_str)
+    else
+    {
+        return Ok(());
+    };
+    if name.is_empty()
+    {
+        return Ok(());
+    }
+
+    let declaration = Declared_Subsystem(entry, name, subsystems)?;
+    subsystems.push(declaration);
+
+    return Ok(());
+}
+
+/// Builds one named entry's own declaration, refusing a name `subsystems` already declares.
+fn Declared_Subsystem(
+    entry: &serde_json::Value,
+    name: &str,
+    subsystems: &[SubsystemDeclaration],
+) -> Result<SubsystemDeclaration, GoalsPolicyError>
+{
+    if subsystems.iter().any(|declared_already| return declared_already.name == name)
+    {
+        return Err(GoalsPolicyError {
+            reason: format!("{STANDARDS_JSON} declares subsystem {name:?} twice"),
+        });
+    }
+
+    return Ok(SubsystemDeclaration {
+        name: name.to_owned(),
+        goals: String_List_At(entry, GOALS_KEY, WhereNamed(&format!("{SUBSYSTEMS_KEY}[{name}].{GOALS_KEY}")))?,
+    });
+}
+
 /// The list of strings at `key`, or empty when the key is absent. `where_named` is how the
 /// location is spelled in a refusal, since the same key appears at the top level and inside
 /// each subsystem and a reader of the error needs to know which one it was.
-fn String_List_At(value: &serde_json::Value, key: &str, where_named: &str) -> Result<Vec<String>, GoalsPolicyError>
+fn String_List_At(value: &serde_json::Value, key: &str, where_named: WhereNamed<'_>) -> Result<Vec<String>, GoalsPolicyError>
 {
     let Some(declared) = value.get(key)
     else
@@ -151,10 +177,17 @@ fn String_List_At(value: &serde_json::Value, key: &str, where_named: &str) -> Re
     else
     {
         return Err(GoalsPolicyError {
-            reason: format!("{STANDARDS_JSON}'s {where_named} is not an array"),
+            reason: format!("{STANDARDS_JSON}'s {} is not an array", where_named.0),
         });
     };
 
+    return Strings_Of(entries, where_named);
+}
+
+/// Each entry of `entries` as an owned string, or a refusal naming `where_named` if one
+/// entry is not a string.
+fn Strings_Of(entries: &[serde_json::Value], where_named: WhereNamed<'_>) -> Result<Vec<String>, GoalsPolicyError>
+{
     let mut listed = Vec::new();
     for entry in entries
     {
@@ -162,7 +195,7 @@ fn String_List_At(value: &serde_json::Value, key: &str, where_named: &str) -> Re
         else
         {
             return Err(GoalsPolicyError {
-                reason: format!("{STANDARDS_JSON}'s {where_named} has a non-string entry"),
+                reason: format!("{STANDARDS_JSON}'s {} has a non-string entry", where_named.0),
             });
         };
         listed.push(text.to_owned());
@@ -190,6 +223,17 @@ mod tests
             GoalsPolicyPayload::default(),
             "this workspace has not taken goal traceability on, and the reader must say so rather than invent it"
         );
+    }
+
+    fn Repository_Root() -> PathBuf
+    {
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest
+            .parent()
+            .and_then(Path::parent)
+            .and_then(Path::parent)
+            .map(PathBuf::from)
+            .expect("this crate sits three levels below the workspace root");
     }
 
     #[test]
@@ -223,21 +267,22 @@ mod tests
 
         fn Exists(&self, _path: &Path) -> bool
         {
-            true
+            return true;
         }
     }
 
-    fn Declaring(value: &serde_json::Value) -> FakeFileSystem
-    {
-        return FakeFileSystem { text: value.to_string() };
-    }
+    /// The ceiling this fixture declares, echoed at both the encode site and its own
+    /// assertion so the two ends of the round trip cannot silently drift apart.
+    const SAMPLE_CEILING: u32 = 2;
+    /// How many subsystems this fixture declares, echoed likewise.
+    const SAMPLE_SUBSYSTEM_COUNT: usize = 2;
 
     #[test]
     fn Test_Discover_Workspace_Should_Read_Goals_A_Ceiling_And_The_Subsystem_Mapping()
     {
         let filesystem = Declaring(&serde_json::json!({
             "goals": ["render", "simulate"],
-            "max_subsystems_per_goal": 2,
+            "max_subsystems_per_goal": SAMPLE_CEILING,
             "subsystems": [
                 { "subsystem": "graphics", "paths": ["src/graphics"], "goals": ["render"] },
                 { "subsystem": "utils", "paths": ["src/utils"] }
@@ -247,8 +292,8 @@ mod tests
         let payload = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON");
 
         assert_eq!(payload.goals, vec!["render".to_owned(), "simulate".to_owned()]);
-        assert_eq!(payload.max_subsystems_per_goal, 2);
-        assert_eq!(payload.subsystems.len(), 2, "{payload:?}");
+        assert_eq!(payload.max_subsystems_per_goal, SAMPLE_CEILING);
+        assert_eq!(payload.subsystems.len(), SAMPLE_SUBSYSTEM_COUNT, "{payload:?}");
         let graphics = payload.subsystems.first().expect("asserted len 2 above");
         assert_eq!(graphics.name, "graphics");
         assert_eq!(graphics.goals, vec!["render".to_owned()]);
@@ -309,10 +354,14 @@ mod tests
         assert!(error.reason.contains("goals is not an array"), "{}", error.reason);
     }
 
+    /// A value that is not a string, wherever a fixture needs one — its only meaning is
+    /// "not a string".
+    const NON_STRING_SENTINEL: i64 = 5;
+
     #[test]
     fn Test_Discover_Workspace_Should_Refuse_A_Non_String_Goal()
     {
-        let filesystem = Declaring(&serde_json::json!({ "goals": [5] }));
+        let filesystem = Declaring(&serde_json::json!({ "goals": [NON_STRING_SENTINEL] }));
 
         let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a goal is a name");
 
@@ -323,7 +372,7 @@ mod tests
     fn Test_Discover_Workspace_Should_Name_Which_Goals_List_Was_Malformed()
     {
         let filesystem = Declaring(&serde_json::json!({
-            "subsystems": [{ "subsystem": "graphics", "goals": [5] }]
+            "subsystems": [{ "subsystem": "graphics", "goals": [NON_STRING_SENTINEL] }]
         }));
 
         let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a goal is a name here too");
@@ -377,14 +426,8 @@ mod tests
         assert_eq!(payload, GoalsPolicyPayload::default());
     }
 
-    fn Repository_Root() -> PathBuf
+    fn Declaring(value: &serde_json::Value) -> FakeFileSystem
     {
-        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(Path::parent)
-            .and_then(Path::parent)
-            .map(PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
+        return FakeFileSystem { text: value.to_string() };
     }
 }

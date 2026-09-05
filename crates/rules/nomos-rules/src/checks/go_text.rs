@@ -43,6 +43,42 @@ pub fn Check_A_Discarded_Error_Is_Explained(sources: &[SourceFile]) -> Vec<Findi
     return findings;
 }
 
+fn Discarded_Error_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let lines = Lines_Of(source);
+    let mut findings = Vec::new();
+
+    for (index, line) in lines.iter().enumerate()
+    {
+        let code = Code_Prefix(line);
+        if Is_Discarded_Call(code) && !Has_Adjacent_Explanation(&lines, index)
+        {
+            let finding = Finding_For_Line(
+                source,
+                A_DISCARDED_ERROR_IS_EXPLAINED,
+                Line_Number(index),
+                "discards an error with `_ =` and no comment saying why it cannot matter",
+            );
+            findings.push(finding);
+        }
+    }
+
+    return findings;
+}
+
+/// `_ = <call>(` — the exact syntactic form the standard names; not a bare `_ = value`
+/// with no call, which this rule does not judge.
+fn Is_Discarded_Call(code: &str) -> bool
+{
+    let trimmed = code.trim_start();
+    let Some(rest) = trimmed.strip_prefix("_ = ")
+    else
+    {
+        return false;
+    };
+    return rest.contains('(');
+}
+
 /// Reports `t.Skip()`/`t.Skipf()` with an empty argument list, and `t.SkipNow()` (which
 /// cannot carry an argument at all) with no adjacent comment.
 #[must_use]
@@ -58,6 +94,66 @@ pub fn Check_A_Skipped_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
     }
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+fn Skip_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let lines = Lines_Of(source);
+    let mut findings = Vec::new();
+
+    for (index, line) in lines.iter().enumerate()
+    {
+        if let Some(finding) = Skip_Finding_For(source, &lines, index, line)
+        {
+            findings.push(finding);
+        }
+    }
+
+    return findings;
+}
+
+fn Skip_Finding_For(source: &SourceFile, lines: &[&str], index: usize, line: &str) -> Option<Finding>
+{
+    let code = Code_Prefix(line);
+
+    if Has_Empty_Skip_Call(CodeText(code), CallName("t.Skip(")) || Has_Empty_Skip_Call(CodeText(code), CallName("t.Skipf("))
+    {
+        let finding = Finding_For_Line(source, A_SKIPPED_TEST_STATES_WHY, Line_Number(index), "calls t.Skip/t.Skipf with no explanatory message");
+        return Some(finding);
+    }
+
+    if code.contains("t.SkipNow()") && !Has_Adjacent_Explanation(lines, index)
+    {
+        let finding = Finding_For_Line(
+            source,
+            A_SKIPPED_TEST_STATES_WHY,
+            Line_Number(index),
+            "calls t.SkipNow(), which takes no message, with no adjacent comment saying why",
+        );
+        return Some(finding);
+    }
+
+    return None;
+}
+
+/// `code` and `call` are both `&str`; without a distinct type per position, a call site
+/// like `Has_Empty_Skip_Call(code, call)` reads as two interchangeable strings and a swap
+/// compiles silently.
+struct CodeText<'a>(&'a str);
+struct CallName<'a>(&'a str);
+
+fn Has_Empty_Skip_Call(code: CodeText<'_>, call: CallName<'_>) -> bool
+{
+    let code = code.0;
+    let call = call.0;
+    let Some(start) = code.find(call)
+    else
+    {
+        return false;
+    };
+    let after = &code[start.saturating_add(call.len())..];
+    let close = after.find(')').unwrap_or(after.len());
+    return after[..close].trim().is_empty();
 }
 
 /// Reports `//go:build ignore` with no adjacent comment explaining the exclusion.
@@ -76,6 +172,42 @@ pub fn Check_An_Excluded_File_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
     return findings;
 }
 
+fn Build_Ignore_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let lines = Lines_Of(source);
+    let mut findings = Vec::new();
+
+    for (index, line) in lines.iter().enumerate()
+    {
+        if line.trim() == "//go:build ignore" && !Has_Build_Ignore_Explanation(&lines, index)
+        {
+            let finding = Finding_For_Line(
+                source,
+                AN_EXCLUDED_FILE_SAYS_WHY,
+                Line_Number(index),
+                "excludes the file with `//go:build ignore` and no adjacent comment explaining why",
+            );
+            findings.push(finding);
+        }
+    }
+
+    return findings;
+}
+
+fn Has_Build_Ignore_Explanation(lines: &[&str], index: usize) -> bool
+{
+    let Is_Non_Empty_Comment = |maybe_index: Option<usize>| -> bool {
+        let Some(candidate) = maybe_index
+        else
+        {
+            return false;
+        };
+        return lines.get(candidate).is_some_and(|line| return Comment_Text_Of(line).is_some_and(|c| return !c.trim().is_empty()));
+    };
+
+    return Is_Non_Empty_Comment(index.checked_sub(1)) || Is_Non_Empty_Comment(index.checked_add(1));
+}
+
 /// Reports a bare `//nolint` or `//nolint:linter` with no trailing text after it.
 #[must_use]
 pub fn Check_Suppression_Directives_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
@@ -92,97 +224,6 @@ pub fn Check_Suppression_Directives_Carry_A_Reason(sources: &[SourceFile]) -> Ve
     return findings;
 }
 
-/// Reports a `// <marker>: allow[-<word>]` comment with no trailing reason.
-#[must_use]
-pub fn Check_Workspace_Markers_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
-{
-    let mut findings = Vec::new();
-    for source in sources
-    {
-        if source.Is_Written_In(GO_LANGUAGE)
-        {
-            findings.extend(Workspace_Marker_Findings_In(source));
-        }
-    }
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
-}
-
-fn Discarded_Error_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let lines = Lines_Of(source);
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
-    {
-        let code = Code_Prefix(line);
-        if Is_Discarded_Call(code) && !Has_Adjacent_Explanation(&lines, index)
-        {
-            findings.push(Finding_For_Line(
-                source,
-                A_DISCARDED_ERROR_IS_EXPLAINED,
-                Line_Number(index),
-                "discards an error with `_ =` and no comment saying why it cannot matter",
-            ));
-        }
-    }
-
-    return findings;
-}
-
-fn Skip_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let lines = Lines_Of(source);
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
-    {
-        let code = Code_Prefix(line);
-
-        if Has_Empty_Skip_Call(code, "t.Skip(") || Has_Empty_Skip_Call(code, "t.Skipf(")
-        {
-            findings.push(Finding_For_Line(
-                source,
-                A_SKIPPED_TEST_STATES_WHY,
-                Line_Number(index),
-                "calls t.Skip/t.Skipf with no explanatory message",
-            ));
-        }
-        else if code.contains("t.SkipNow()") && !Has_Adjacent_Explanation(&lines, index)
-        {
-            findings.push(Finding_For_Line(
-                source,
-                A_SKIPPED_TEST_STATES_WHY,
-                Line_Number(index),
-                "calls t.SkipNow(), which takes no message, with no adjacent comment saying why",
-            ));
-        }
-    }
-
-    return findings;
-}
-
-fn Build_Ignore_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let lines = Lines_Of(source);
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
-    {
-        if line.trim() == "//go:build ignore" && !Has_Build_Ignore_Explanation(&lines, index)
-        {
-            findings.push(Finding_For_Line(
-                source,
-                AN_EXCLUDED_FILE_SAYS_WHY,
-                Line_Number(index),
-                "excludes the file with `//go:build ignore` and no adjacent comment explaining why",
-            ));
-        }
-    }
-
-    return findings;
-}
-
 fn Nolint_Findings_In(source: &SourceFile) -> Vec<Finding>
 {
     let mut findings = Vec::new();
@@ -191,127 +232,17 @@ fn Nolint_Findings_In(source: &SourceFile) -> Vec<Finding>
     {
         if Has_Nolint_Directive(line) && !Nolint_Has_Reason(line)
         {
-            findings.push(Finding_For_Line(
+            let finding = Finding_For_Line(
                 source,
                 SUPPRESSION_DIRECTIVES_CARRY_A_REASON,
                 Line_Number(index),
                 "carries `//nolint` with no trailing text explaining why",
-            ));
+            );
+            findings.push(finding);
         }
     }
 
     return findings;
-}
-
-fn Workspace_Marker_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let mut findings = Vec::new();
-
-    for (index, line) in source.text.lines().enumerate()
-    {
-        let Some(comment) = Comment_Text_Of(line)
-        else
-        {
-            continue;
-        };
-
-        if Is_Bare_Workspace_Marker(comment)
-        {
-            findings.push(Finding_For_Line(
-                source,
-                WORKSPACE_MARKERS_CARRY_A_REASON,
-                Line_Number(index),
-                "carries a workspace opt-out marker with no trailing reason",
-            ));
-        }
-    }
-
-    return findings;
-}
-
-fn Lines_Of(source: &SourceFile) -> Vec<&str>
-{
-    return source.text.lines().collect();
-}
-
-fn Line_Number(index: usize) -> usize
-{
-    return index.saturating_add(1);
-}
-
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
-}
-
-fn Comment_Text_Of(line: &str) -> Option<&str>
-{
-    let trimmed = line.trim_start();
-    let comment = trimmed.strip_prefix("//")?;
-    return Some(comment.trim_start());
-}
-
-/// `_ = <call>(` — the exact syntactic form the standard names; not a bare `_ = value`
-/// with no call, which this rule does not judge.
-fn Is_Discarded_Call(code: &str) -> bool
-{
-    let trimmed = code.trim_start();
-    let Some(rest) = trimmed.strip_prefix("_ = ")
-    else
-    {
-        return false;
-    };
-    return rest.contains('(');
-}
-
-fn Has_Empty_Skip_Call(code: &str, call: &str) -> bool
-{
-    let Some(start) = code.find(call)
-    else
-    {
-        return false;
-    };
-    let after = &code[start.saturating_add(call.len())..];
-    let close = after.find(')').unwrap_or(after.len());
-    return after[..close].trim().is_empty();
-}
-
-/// A trailing same-line comment with non-empty text, or a non-empty comment on the line
-/// immediately above — the two shapes `a-discarded-error-is-explained` and `a-skipped-
-/// test-states-why` (for `SkipNow`) both accept.
-fn Has_Adjacent_Explanation(lines: &[&str], index: usize) -> bool
-{
-    if let Some(reason) = lines.get(index).and_then(|line| return line.split_once("//").map(|(_, rest)| return rest))
-    {
-        if !reason.trim().is_empty()
-        {
-            return true;
-        }
-    }
-
-    if let Some(previous) = index.checked_sub(1)
-    {
-        if lines.get(previous).is_some_and(|line| return Comment_Text_Of(line).is_some_and(|c| return !c.trim().is_empty()))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-fn Has_Build_Ignore_Explanation(lines: &[&str], index: usize) -> bool
-{
-    let Is_Non_Empty_Comment = |maybe_index: Option<usize>| -> bool {
-        let Some(candidate) = maybe_index
-        else
-        {
-            return false;
-        };
-        return lines.get(candidate).is_some_and(|line| return Comment_Text_Of(line).is_some_and(|c| return !c.trim().is_empty()));
-    };
-
-    return Is_Non_Empty_Comment(index.checked_sub(1)) || Is_Non_Empty_Comment(index.checked_add(1));
 }
 
 fn Has_Nolint_Directive(line: &str) -> bool
@@ -339,6 +270,54 @@ fn Nolint_Has_Reason(line: &str) -> bool
     return !rest.trim().is_empty();
 }
 
+/// Reports a `// <marker>: allow[-<word>]` comment with no trailing reason.
+#[must_use]
+pub fn Check_Workspace_Markers_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+    for source in sources
+    {
+        if source.Is_Written_In(GO_LANGUAGE)
+        {
+            findings.extend(Workspace_Marker_Findings_In(source));
+        }
+    }
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+fn Workspace_Marker_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for (index, line) in source.text.lines().enumerate()
+    {
+        if let Some(finding) = Workspace_Marker_Finding_For(source, index, line)
+        {
+            findings.push(finding);
+        }
+    }
+
+    return findings;
+}
+
+fn Workspace_Marker_Finding_For(source: &SourceFile, index: usize, line: &str) -> Option<Finding>
+{
+    let comment = Comment_Text_Of(line)?;
+    if !Is_Bare_Workspace_Marker(comment)
+    {
+        return None;
+    }
+
+    let finding = Finding_For_Line(
+        source,
+        WORKSPACE_MARKERS_CARRY_A_REASON,
+        Line_Number(index),
+        "carries a workspace opt-out marker with no trailing reason",
+    );
+    return Some(finding);
+}
+
 /// `// <marker>: allow` or `// <marker>: allow-<word>`, matched only as real comment
 /// syntax on the annotated line — a marker inside a string literal or elsewhere in the
 /// file is not this function's concern, since it is only ever handed real comment text.
@@ -355,6 +334,52 @@ fn Is_Bare_Workspace_Marker(comment: &str) -> bool
     });
 
     return after_suffix.trim().is_empty();
+}
+
+fn Lines_Of(source: &SourceFile) -> Vec<&str>
+{
+    return source.text.lines().collect();
+}
+
+fn Line_Number(index: usize) -> usize
+{
+    return index.saturating_add(1);
+}
+
+fn Code_Prefix(line: &str) -> &str
+{
+    return line.split("//").next().unwrap_or(line);
+}
+
+fn Comment_Text_Of(line: &str) -> Option<&str>
+{
+    let trimmed = line.trim_start();
+    let comment = trimmed.strip_prefix("//")?;
+    return Some(comment.trim_start());
+}
+
+/// A trailing same-line comment with non-empty text, or a non-empty comment on the line
+/// immediately above — the two shapes `a-discarded-error-is-explained` and `a-skipped-
+/// test-states-why` (for `SkipNow`) both accept.
+fn Has_Adjacent_Explanation(lines: &[&str], index: usize) -> bool
+{
+    if let Some(reason) = lines.get(index).and_then(|line| return line.split_once("//").map(|(_, rest)| return rest))
+    {
+        if !reason.trim().is_empty()
+        {
+            return true;
+        }
+    }
+
+    if let Some(previous) = index.checked_sub(1)
+    {
+        if lines.get(previous).is_some_and(|line| return Comment_Text_Of(line).is_some_and(|c| return !c.trim().is_empty()))
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 fn Finding_For_Line(source: &SourceFile, rule: &str, line_number: usize, because: &str) -> Finding

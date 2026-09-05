@@ -28,48 +28,14 @@ const VARIABLE: &str = "Variable";
 #[must_use]
 pub fn Check_Go_Constants_Split_By_Export(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    let mut findings = Vec::new();
-
-    for source in sources
-    {
-        if !source.Is_Written_In(GO_LANGUAGE)
-        {
-            continue;
-        }
-
-        match super::reading::Payload_Of(source, facts)
-        {
-            Ok(payload) => findings.extend(Constant_Violations_In(&payload, &source.path)),
-            Err(finding) => findings.push(Unread_As_Constant_Rule(finding)),
-        }
-    }
-
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
+    return Judged_Go_Sources(sources, facts, Constant_Violations_In, Unread_As_Constant_Rule);
 }
 
 /// Judges top-level Go `var` declarations against `lower_snake_case`.
 #[must_use]
 pub fn Check_Go_Variables_Use_Lower_Snake_Case(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    let mut findings = Vec::new();
-
-    for source in sources
-    {
-        if !source.Is_Written_In(GO_LANGUAGE)
-        {
-            continue;
-        }
-
-        match super::reading::Payload_Of(source, facts)
-        {
-            Ok(payload) => findings.extend(Variable_Violations_In(&payload, &source.path)),
-            Err(finding) => findings.push(Unread_As_Variable_Rule(finding)),
-        }
-    }
-
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
+    return Judged_Go_Sources(sources, facts, Variable_Violations_In, Unread_As_Variable_Rule);
 }
 
 fn Constant_Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
@@ -80,17 +46,6 @@ fn Constant_Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
         .filter(|item| return item.kind == CONSTANT)
         .filter(|item| return !Has_Constant_Case(item))
         .map(|item| return Constant_Violation_Finding(path, item))
-        .collect();
-}
-
-fn Variable_Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
-{
-    return payload
-        .items
-        .iter()
-        .filter(|item| return item.kind == VARIABLE)
-        .filter(|item| return !Is_Lower_Snake_Case(item.Own_Name()))
-        .map(|item| return Variable_Violation_Finding(path, item))
         .collect();
 }
 
@@ -106,7 +61,7 @@ fn Has_Constant_Case(item: &PayloadItem) -> bool
 
 fn Is_Screaming_Snake_Case(name: &str) -> bool
 {
-    if name.is_empty() || name.starts_with('_') || name.ends_with('_') || name.contains("__")
+    if Has_Malformed_Snake_Boundary(name)
     {
         return false;
     }
@@ -114,18 +69,6 @@ fn Is_Screaming_Snake_Case(name: &str) -> bool
     return name
         .chars()
         .all(|character| return character.is_ascii_uppercase() || character.is_ascii_digit() || character == '_');
-}
-
-fn Is_Lower_Snake_Case(name: &str) -> bool
-{
-    if name.is_empty() || name.starts_with('_') || name.ends_with('_') || name.contains("__")
-    {
-        return false;
-    }
-
-    return name
-        .chars()
-        .all(|character| return character.is_ascii_lowercase() || character.is_ascii_digit() || character == '_');
 }
 
 fn Constant_Violation_Finding(path: &str, item: &PayloadItem) -> Finding
@@ -146,6 +89,17 @@ fn Constant_Violation_Finding(path: &str, item: &PayloadItem) -> Finding
         summary: format!("Go constant `{name}` is not {expected}"),
         locations: vec![path.to_owned()],
     };
+}
+
+fn Variable_Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
+{
+    return payload
+        .items
+        .iter()
+        .filter(|item| return item.kind == VARIABLE)
+        .filter(|item| return !Is_Lower_Snake_Case(item.Own_Name()))
+        .map(|item| return Variable_Violation_Finding(path, item))
+        .collect();
 }
 
 fn Variable_Violation_Finding(path: &str, item: &PayloadItem) -> Finding
@@ -183,6 +137,59 @@ fn Unread_As_Variable_Rule(mut finding: Finding) -> Finding
         .summary
         .replace("this file's naming could not be judged", "this Go file's variable names could not be judged");
     return finding;
+}
+
+/// The shape both checks above share: skip a non-Go source, read each remaining source's
+/// own syntax fact, and fold either a real reading failure or `judge`'s own findings into
+/// one sorted list.
+fn Judged_Go_Sources(
+    sources: &[SourceFile],
+    facts: &mut dyn FactReader,
+    judge: fn(&SyntaxPayload, &str) -> Vec<Finding>,
+    unread: fn(Finding) -> Finding,
+) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        if !source.Is_Written_In(GO_LANGUAGE)
+        {
+            continue;
+        }
+
+        match super::reading::Payload_Of(source, facts)
+        {
+            Ok(payload) =>
+            {
+                let violations = judge(&payload, &source.path);
+                findings.extend(violations);
+            }
+            Err(finding) => findings.push(unread(finding)),
+        }
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+fn Is_Lower_Snake_Case(name: &str) -> bool
+{
+    if Has_Malformed_Snake_Boundary(name)
+    {
+        return false;
+    }
+
+    return name
+        .chars()
+        .all(|character| return character.is_ascii_lowercase() || character.is_ascii_digit() || character == '_');
+}
+
+/// Whether `name` breaks snake-case shape before its casing is even judged: empty, a
+/// leading or trailing underscore, or a doubled one.
+fn Has_Malformed_Snake_Boundary(name: &str) -> bool
+{
+    return name.is_empty() || name.starts_with('_') || name.ends_with('_') || name.contains("__");
 }
 
 #[cfg(test)]

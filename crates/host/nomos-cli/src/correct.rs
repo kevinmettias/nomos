@@ -49,7 +49,7 @@ use crate::arguments::Named_Value_From_String_Arguments;
 use candidate::{Candidate_For, ClaimError, Finding_Reference, Phantom_Claim, PhantomClaim};
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{ConfigurationId, EvidenceClass, Finding, ProviderId, RuleId};
-use nomos_corrections::{CorrectionPlan, ValidatedPlan};
+use nomos_corrections::{CommittedPlan, CorrectionPlan, ValidatedPlan};
 use nomos_model::{Content_Digest, Evidence, Subject_Of_Path};
 use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
 use nomos_rules::SourceFile;
@@ -71,61 +71,60 @@ pub(crate) struct CorrectCommand
 /// Runs the correction and renders what it did.
 pub fn Run(command: &CorrectCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
-    let sources = match Walked(&command.root)
-    {
-        None =>
-        {
-            let _ = writeln!(stderr, "`{}` is not a directory", command.root.display());
-            return ExitCode::Unreadable;
-        }
-        Some(sources) if sources.is_empty() =>
-        {
-            let _ = writeln!(stderr, "no `.rs` or `.go` source found under `{}`", command.root.display());
-            return ExitCode::Vacuous;
-        }
-        Some(sources) => sources,
-    };
+    return Attempted_Correction(command, stdout, stderr).unwrap_or_else(|code| return code);
+}
 
-    let findings = match Judged_Findings(&sources, &command.root, stderr)
-    {
-        Ok(findings) => findings,
-        Err(code) => return code,
-    };
+/// The whole correction attempt: walking source, judging it, finding the one claim to
+/// correct, planning the fix, previewing it, seeding a workspace to stage it against,
+/// staging and validating it, and either reporting the dry run or committing it -- nine
+/// distinct decisions, each with the name of the helper that makes it, chained with `?` so
+/// this function's own body reads as one line per decision rather than one `match` per
+/// decision.
+fn Attempted_Correction(command: &CorrectCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> Result<ExitCode, ExitCode>
+{
+    let sources = Walked_Or_Reported(&command.root, stderr)?;
+    let findings = Judged_Findings(&sources, &command.root, stderr)?;
 
-    let Some(claim) = findings.iter().find_map(Phantom_Claim)
+    let Some(claim) = Claimed_Or_Reported(&findings, &command.root, stdout)
     else
     {
-        let _ = writeln!(stdout, "clean: no blocking phantom mirror claim under `{}`", command.root.display());
-        return ExitCode::Ok;
+        return Ok(ExitCode::Ok);
     };
 
-    let (plan, before, after) = match Planned(&command.root, &claim, stderr)
-    {
-        Ok(triple) => triple,
-        Err(code) => return code,
-    };
+    let (plan, before, after) = Planned(&command.root, &claim, stderr)?;
+    Rendered_Preview(&plan, stdout);
 
-    let _ = writeln!(stdout, "{}", String::from_utf8_lossy(plan.Preview().Rendered()));
-
-    let mut workspace = Seeded_Workspace(&command.root, claim.path, &before);
-
-    let validated = match Staged_And_Validated(&plan, &workspace, stderr)
-    {
-        Ok(validated) => validated,
-        Err(code) => return code,
-    };
+    let mut workspace = Seeded_Workspace(&command.root, SeedContent { path: claim.path, content: &before }, stderr);
+    let validated = Staged_And_Validated(&plan, &workspace, stderr)?;
 
     if !command.commit
     {
-        let _ = writeln!(
-            stdout,
-            "dry run: `{}` no longer claims `{}` in this preview. Pass --commit to apply it.",
-            claim.path, claim.claimed
-        );
-        return ExitCode::Ok;
+        Reported_Dry_Run(&claim, stdout);
+        return Ok(ExitCode::Ok);
     }
 
-    return Committed((&command.root, &claim), (&after, validated), &mut workspace, (stdout, stderr));
+    return Ok(Committed((&command.root, &claim), (&after, validated), &mut workspace, (stdout, stderr)));
+}
+
+/// Walks `root` for source, or reports why there is none to walk and the [`ExitCode`] that
+/// already decides -- [`Run`]'s own first section, factored out so a reader sees the walk
+/// and its vacuity guard as one call rather than an inline match.
+fn Walked_Or_Reported(root: &Path, stderr: &mut impl Write) -> Result<Vec<SourceFile>, ExitCode>
+{
+    return match Walked(root)
+    {
+        None =>
+        {
+            let _ = writeln!(stderr, "`{}` is not a directory", root.display());
+            Err(ExitCode::Unreadable)
+        }
+        Some(sources) if sources.is_empty() =>
+        {
+            let _ = writeln!(stderr, "no `.rs` or `.go` source found under `{}`", root.display());
+            Err(ExitCode::Vacuous)
+        }
+        Some(sources) => Ok(sources),
+    };
 }
 
 /// Runs `Check_Completeness_Mirrors` over `sources` and returns its findings, or the
@@ -172,6 +171,20 @@ fn Judged_Findings(sources: &[SourceFile], root: &Path, stderr: &mut impl Write)
     };
 }
 
+/// The first blocking phantom claim `findings` names, or `None` once a clean run has
+/// already been reported.
+fn Claimed_Or_Reported<'a>(findings: &'a [Finding], root: &Path, stdout: &mut impl Write) -> Option<PhantomClaim<'a>>
+{
+    let Some(claim) = findings.iter().find_map(Phantom_Claim)
+    else
+    {
+        let _ = writeln!(stdout, "clean: no blocking phantom mirror claim under `{}`", root.display());
+        return None;
+    };
+
+    return Some(claim);
+}
+
 /// Builds the one real candidate for `claim` and the single-candidate plan around it, or
 /// the [`ExitCode`] a refusal already decides.
 fn Planned(root: &Path, claim: &PhantomClaim<'_>, stderr: &mut impl Write) -> Result<(CorrectionPlan, String, String), ExitCode>
@@ -206,6 +219,48 @@ fn Planned(root: &Path, claim: &PhantomClaim<'_>, stderr: &mut impl Write) -> Re
     };
 }
 
+/// Prints the plan's own preview, verbatim.
+fn Rendered_Preview(plan: &CorrectionPlan, stdout: &mut impl Write)
+{
+    let _ = writeln!(stdout, "{}", String::from_utf8_lossy(plan.Preview().Rendered()));
+}
+
+/// The file a [`Workspace`] is seeded with: where it lives and what it holds, paired so a
+/// caller cannot transpose which is which -- both are `&str` and the compiler cannot catch
+/// a swap between them on its own.
+struct SeedContent<'a>
+{
+    /// The path the content lives at, as a real [`Finding`] named it.
+    path: &'a str,
+    /// The content itself, as this run actually read it from disk.
+    content: &'a str,
+}
+
+/// A fresh local [`Workspace`], holding exactly the one file this run may correct, at the
+/// content it actually read from disk — the same content [`Candidate_For`]'s `Edit` declares
+/// as `before`, so staging's own staleness check is checking this run's own read against
+/// itself, not against a second, independent read that could disagree with it.
+fn Seeded_Workspace(root: &Path, seed: SeedContent<'_>, stderr: &mut impl Write) -> Workspace
+{
+    let configuration = ConfigurationId::From_Digest(Content_Digest(root.display().to_string().as_bytes()));
+    let mut workspace = Workspace::Empty(Correction_Variant(), configuration);
+
+    let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present(seed.path, seed.content.to_owned());
+    if let Err(error) = workspace.Apply(&initial)
+    {
+        // A one-member, non-empty change set applied to a fresh empty workspace cannot be
+        // `Vacuous` or `Conflicting`, and `claim.path` is a real location a real Finding named
+        // rather than caller-typed text, so `Unnamed` does not apply either -- this branch
+        // should be unreachable. Reported rather than silently discarded, but still not fatal:
+        // leaving `workspace` unseeded is still honest either way, because `Stage` would then
+        // see no content at `path` and refuse the plan as stale, rather than this function
+        // papering over a real refusal by pretending the seed succeeded.
+        let _ = writeln!(stderr, "internal: seeding the correction workspace unexpectedly refused: {error}");
+    }
+
+    return workspace;
+}
+
 /// Stages `plan` against `workspace` and validates it again immediately, or the
 /// [`ExitCode`] a refusal at either step already decides.
 fn Staged_And_Validated(plan: &CorrectionPlan, workspace: &Workspace, stderr: &mut impl Write) -> Result<ValidatedPlan, ExitCode>
@@ -219,6 +274,17 @@ fn Staged_And_Validated(plan: &CorrectionPlan, workspace: &Workspace, stderr: &m
         let _ = writeln!(stderr, "{error}");
         return ExitCode::Refused;
     });
+}
+
+/// Reports what committing this claim would do, for a run that staged and validated
+/// cleanly but was not asked to `--commit`.
+fn Reported_Dry_Run(claim: &PhantomClaim<'_>, stdout: &mut impl Write)
+{
+    let _ = writeln!(
+        stdout,
+        "dry run: `{}` no longer claims `{}` in this preview. Pass --commit to apply it.",
+        claim.path, claim.claimed
+    );
 }
 
 /// Commits `validated` through the workspace's one door and writes the corrected file to
@@ -235,28 +301,52 @@ fn Committed(
     let (after, validated) = commit;
     let (stdout, stderr) = output;
 
+    let committed = match Committed_Through_The_Workspace(validated, workspace, claim, stderr)
+    {
+        Ok(committed) => committed,
+        Err(code) => return code,
+    };
+
+    if let Err(code) = Written_To_Disk(root, claim, after, stderr)
+    {
+        return code;
+    }
+
+    Reported_Commit(claim, &committed, stdout);
+    return ExitCode::Ok;
+}
+
+/// Commits `validated` through the workspace's one door, carrying `claim` as the evidence a
+/// real commit records, or reports why it refused.
+fn Committed_Through_The_Workspace(
+    validated: ValidatedPlan, workspace: &mut Workspace, claim: &PhantomClaim<'_>, stderr: &mut impl Write,
+) -> Result<CommittedPlan, ExitCode>
+{
     let evidence = Evidence {
         class: EvidenceClass::Derived,
         producer: ProviderId::New("nomos-cli-correct-phantom-mirrors"),
         supporting: vec![Finding_Reference(claim)],
     };
 
-    let committed = match validated.Commit(workspace, evidence)
-    {
-        Ok(committed) => committed,
-        Err(error) =>
-        {
-            let _ = writeln!(stderr, "{error}");
-            return ExitCode::Refused;
-        }
-    };
+    return validated.Commit(workspace, evidence).map_err(|error| {
+        let _ = writeln!(stderr, "{error}");
+        return ExitCode::Refused;
+    });
+}
 
-    if let Err(error) = std::fs::write(root.join(claim.path), after)
-    {
+/// Writes the corrected file to disk, once the workspace model already carries the commit,
+/// or reports why the write failed.
+fn Written_To_Disk(root: &Path, claim: &PhantomClaim<'_>, after: &str, stderr: &mut impl Write) -> Result<(), ExitCode>
+{
+    return std::fs::write(root.join(claim.path), after).map_err(|error| {
         let _ = writeln!(stderr, "committed to the workspace model but could not write `{}`: {error}", claim.path);
         return ExitCode::Refused;
-    }
+    });
+}
 
+/// Reports what was committed.
+fn Reported_Commit(claim: &PhantomClaim<'_>, committed: &CommittedPlan, stdout: &mut impl Write)
+{
     let _ = writeln!(
         stdout,
         "committed: `{}` no longer claims `{}` ({} -> {})",
@@ -265,29 +355,6 @@ fn Committed(
         committed.Base(),
         committed.After()
     );
-
-    return ExitCode::Ok;
-}
-
-/// A fresh local [`Workspace`], holding exactly the one file this run may correct, at the
-/// content it actually read from disk — the same content [`Candidate_For`]'s `Edit` declares
-/// as `before`, so staging's own staleness check is checking this run's own read against
-/// itself, not against a second, independent read that could disagree with it.
-fn Seeded_Workspace(root: &Path, path: &str, content: &str) -> Workspace
-{
-    let configuration = ConfigurationId::From_Digest(Content_Digest(root.display().to_string().as_bytes()));
-    let mut workspace = Workspace::Empty(Correction_Variant(), configuration);
-
-    let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present(path, content.to_owned());
-    // A one-member, non-empty change set applied to a fresh empty workspace cannot be
-    // `Vacuous` or `Conflicting`, and `claim.path` is a real location a real Finding named
-    // rather than caller-typed text, so `Unnamed` does not apply either. If this ever
-    // refused anyway, leaving `workspace` unseeded is still honest: `Stage` would then see
-    // no content at `path` and refuse the plan as stale, rather than this function
-    // papering over a real refusal by pretending the seed succeeded.
-    let _ = workspace.Apply(&initial);
-
-    return workspace;
 }
 
 /// The build variant this binary was compiled as. A near-duplicate of `check::composition::

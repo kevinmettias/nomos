@@ -129,31 +129,48 @@ use std::path::{Path, PathBuf};
 /// Runs the rules and renders what they say.
 pub fn Run(command: &CheckCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
-    use sources::Walked_Sources;
-    use composition::Host_Variant;
     use report::Render_Outcome;
-    use nomos_check_orchestration::CheckOutcome;
-    use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
 
-    let outcome = match Walked_Sources(&command.root)
+    let outcome = Outcome_For(&command.root);
+
+    return Render_Outcome(&command.root, &outcome, stdout, stderr);
+}
+
+/// Walks `root` and judges what it finds, or reports why nothing was judged -- the walk and
+/// the vacuity guard, factored out of [`Run`] so that function's own body reads as one line
+/// per section rather than the two decisions run together.
+fn Outcome_For(root: &Path) -> nomos_check_orchestration::CheckOutcome
+{
+    use sources::Walked_Sources;
+    use nomos_check_orchestration::CheckOutcome;
+
+    return match Walked_Sources(root)
     {
         None => CheckOutcome::Unreadable,
         Some(sources) if sources.is_empty() => CheckOutcome::NoSource,
-        Some(sources) => nomos_check_orchestration::Run(
-            &sources,
-            nomos_check_orchestration::RunContext {
-                variant: Host_Variant(),
-                root: &command.root,
-                launcher: &StdProcessLauncher,
-                filesystem: &StdFileSystem,
-                workspace: &mut None,
-                store: &mut nomos_analysis::MemoryFactStore::New(),
-            },
-            &[],
-        ),
+        Some(sources) => Judged_Sources(root, &sources),
     };
+}
 
-    return Render_Outcome(&command.root, &outcome, stdout, stderr);
+/// Composes the registry this run needs and runs the rules over `sources`, already walked
+/// from `root`.
+fn Judged_Sources(root: &Path, sources: &[SourceFile]) -> nomos_check_orchestration::CheckOutcome
+{
+    use composition::Host_Variant;
+    use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
+
+    return nomos_check_orchestration::Run(
+        sources,
+        nomos_check_orchestration::RunContext {
+            variant: Host_Variant(),
+            root,
+            launcher: &StdProcessLauncher,
+            filesystem: &StdFileSystem,
+            workspace: &mut None,
+            store: &mut nomos_analysis::MemoryFactStore::New(),
+        },
+        &[],
+    );
 }
 
 #[cfg(test)]

@@ -81,42 +81,51 @@ pub fn Check_Domain_Values_Are_Distinct_Types(sources: &[SourceFile]) -> Vec<Fin
             continue;
         }
 
-        if source.Is_Written_In(RUST_LANGUAGE)
-        {
-            findings.extend(Alias_Findings_In(source, &Rust_Aliases_In(&source.text.lines().collect::<Vec<_>>())));
-        }
-        else if source.Is_Written_In(GO_LANGUAGE)
-        {
-            findings.extend(Alias_Findings_In(source, &Go_Aliases_In(&source.text.lines().collect::<Vec<_>>())));
-        }
+        let source_findings = Alias_Findings_For_Source(source);
+        findings.extend(source_findings);
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
 }
 
-fn Alias_Findings_In(source: &SourceFile, aliases: &[Alias]) -> Vec<Finding>
+/// This file's own path. Every fixture below spells a real alias/impl/trait shape inside a
+/// Rust string literal, which would otherwise self-match when this crate checks its own
+/// workspace — the same self-exemption every other `*_text.rs`-shaped rule here carries for
+/// the identical reason.
+const OWN_IMPLEMENTATION_FILE: &str = "checks/domain_type_alias.rs";
+
+fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    return aliases
-        .iter()
-        .filter(|alias| return !alias.contract_bound)
-        .map(|alias| {
-            let line_number = Line_Number(alias.line_index);
-            return Finding {
-                rule: RuleId::New(DOMAIN_VALUES_ARE_DISTINCT_TYPES),
-                subject: source.subject,
-                subject_name: format!("{}:{line_number}", source.path),
-                applicability: Applicability::Supported,
-                evidence: EvidenceClass::Derived,
-                gate: GateCategory::Blocking,
-                summary: format!(
-                    "the type alias at {}:{line_number} names a domain value but does not type it; give it a distinct type instead",
-                    source.path
-                ),
-                locations: vec![format!("{}:{line_number}", source.path)],
-            };
-        })
-        .collect();
+    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+}
+
+fn Alias_Findings_For_Source(source: &SourceFile) -> Vec<Finding>
+{
+    let lines: Vec<&str> = source.text.lines().collect();
+
+    if source.Is_Written_In(RUST_LANGUAGE)
+    {
+        let aliases = Rust_Aliases_In(&lines);
+        return Alias_Findings_In(source, &aliases);
+    }
+
+    if source.Is_Written_In(GO_LANGUAGE)
+    {
+        let aliases = Go_Aliases_In(&lines);
+        return Alias_Findings_In(source, &aliases);
+    }
+
+    return Vec::new();
+}
+
+/// Threaded across [`Rust_Aliases_In`]'s one-pass scan: how deep into nested braces the
+/// current line sits, and whether that depth is inside a still-open `impl`/`trait` body.
+struct RustAliasScan
+{
+    depth: usize,
+    contract_open: Option<usize>,
+    pending_contract: bool,
 }
 
 /// Rust needs the whole-file scan: an alias is judged everywhere it appears, including
@@ -125,75 +134,49 @@ fn Alias_Findings_In(source: &SourceFile, aliases: &[Alias]) -> Vec<Finding>
 fn Rust_Aliases_In(lines: &[&str]) -> Vec<Alias>
 {
     let mut found = Vec::new();
-    let mut depth = 0usize;
-    let mut contract_open: Option<usize> = None;
-    let mut pending_contract = false;
+    let mut scan = RustAliasScan { depth: 0, contract_open: None, pending_contract: false };
 
     for (index, line) in lines.iter().enumerate()
     {
-        let trimmed = line.trim();
-        if trimmed.starts_with("//") || trimmed.starts_with("#[")
+        if let Some(alias) = Rust_Alias_At_Line(line, index, &mut scan)
         {
-            continue;
-        }
-
-        if contract_open.is_none() && !pending_contract && Is_Contract_Header(line)
-        {
-            pending_contract = true;
-        }
-
-        if Rust_Type_Alias_Match(trimmed).is_some_and(|aliased| return Is_Primitive(aliased, RUST_PRIMITIVE_ALIASES))
-        {
-            found.push(Alias { line_index: index, contract_bound: contract_open.is_some() });
-        }
-
-        let opened = line.matches('{').count();
-        let closed = line.matches('}').count();
-
-        if pending_contract && opened > 0
-        {
-            contract_open = Some(depth);
-            pending_contract = false;
-        }
-
-        depth = depth.saturating_add(opened);
-        depth = depth.saturating_sub(closed);
-
-        if contract_open.is_some_and(|open_depth| return depth <= open_depth)
-        {
-            contract_open = None;
+            found.push(alias);
         }
     }
 
     return found;
 }
 
-/// Go never sets `contract_bound` — the language has no associated-type construct, so an
-/// alias inside a function body or a generic constraint is still the author's own choice.
-fn Go_Aliases_In(lines: &[&str]) -> Vec<Alias>
+/// Judges one line against the accumulated `scan` state, then advances that state past it —
+/// a comment or attribute line is judged and skipped without advancing the brace depth at
+/// all, matching this module's "no struct-body boundary tracking" simplification.
+fn Rust_Alias_At_Line(line: &str, index: usize, scan: &mut RustAliasScan) -> Option<Alias>
 {
-    let mut found = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
+    let trimmed = line.trim();
+    if trimmed.starts_with("//") || trimmed.starts_with("#[")
     {
-        let trimmed = line.trim();
-        if trimmed.starts_with("//")
-        {
-            continue;
-        }
-
-        if Go_Type_Alias_Match(trimmed).is_some_and(|aliased| return Is_Primitive(aliased, GO_PRIMITIVE_ALIASES))
-        {
-            found.push(Alias { line_index: index, contract_bound: false });
-        }
+        return None;
     }
 
-    return found;
+    if Starts_A_New_Contract_Header(scan, line)
+    {
+        scan.pending_contract = true;
+    }
+
+    let alias = Rust_Type_Alias_Match(trimmed)
+        .filter(|aliased| return Is_Primitive(aliased, RUST_PRIMITIVE_ALIASES))
+        .map(|_| return Alias { line_index: index, contract_bound: scan.contract_open.is_some() });
+
+    Advance_Rust_Alias_Scan(line, scan);
+
+    return alias;
 }
 
-fn Is_Primitive(aliased: &str, vocabulary: &[&str]) -> bool
+/// This line opens a new `impl`/`trait` body worth tracking: none is already open or about
+/// to open, and this line is itself the header.
+fn Starts_A_New_Contract_Header(scan: &RustAliasScan, line: &str) -> bool
 {
-    return vocabulary.contains(&aliased);
+    return scan.contract_open.is_none() && !scan.pending_contract && Is_Contract_Header(line);
 }
 
 /// Whether `impl` or `trait` appears as a whole word on this line — a Rust `impl`/`trait`
@@ -201,20 +184,24 @@ fn Is_Primitive(aliased: &str, vocabulary: &[&str]) -> bool
 /// the keyword, not parse the rest.
 fn Is_Contract_Header(line: &str) -> bool
 {
-    return Contains_Word(line, "impl") || Contains_Word(line, "trait");
+    return Contains_Word(line, Word("impl")) || Contains_Word(line, Word("trait"));
 }
 
-fn Contains_Word(line: &str, word: &str) -> bool
+/// The literal word [`Contains_Word`] searches for, wrapped so its parameter position
+/// cannot be transposed with `line` — the text being searched — with nothing to catch it.
+struct Word<'a>(&'a str);
+
+fn Contains_Word(line: &str, word: Word<'_>) -> bool
 {
     let bytes = line.as_bytes();
     let mut search_from = 0usize;
 
-    while let Some(offset) = line.get(search_from..).and_then(|rest| return rest.find(word))
+    while let Some(offset) = line.get(search_from..).and_then(|rest| return rest.find(word.0))
     {
         let start = search_from.saturating_add(offset);
-        let end = start.saturating_add(word.len());
+        let end = start.saturating_add(word.0.len());
 
-        if Has_Left_Boundary(bytes, start) && line.get(end..).is_none_or(|rest| return !rest.starts_with(Is_Ident_Char))
+        if Has_Left_Boundary(bytes, start) && Right_Boundary_Ends_The_Word(line, end)
         {
             return true;
         }
@@ -235,9 +222,11 @@ fn Is_Ident_Byte(byte: u8) -> bool
     return byte.is_ascii_alphanumeric() || byte == b'_';
 }
 
-fn Is_Ident_Char(character: char) -> bool
+/// Whether `end` (the byte offset just past a candidate word match) sits at a word boundary
+/// — the line runs out there, or the next character does not continue an identifier.
+fn Right_Boundary_Ends_The_Word(line: &str, end: usize) -> bool
 {
-    return character.is_alphanumeric() || character == '_';
+    return line.get(end..).is_none_or(|rest| return !rest.starts_with(Is_Ident_Char));
 }
 
 /// `type Name = Aliased;` (optionally `pub`/`pub(...)`-qualified), single line, ported as a
@@ -252,7 +241,7 @@ fn Rust_Type_Alias_Match(trimmed: &str) -> Option<&str>
     let (name_and_generics, rest) = after_type.split_once('=')?;
 
     let name = name_and_generics.trim_end().split('<').next().unwrap_or("");
-    if name.is_empty() || !name.chars().all(Is_Ident_Char)
+    if name.is_empty() || !Is_Valid_Identifier(name)
     {
         return None;
     }
@@ -279,6 +268,78 @@ fn Strip_Rust_Visibility(code: &str) -> &str
     return after_pub.trim_start();
 }
 
+fn Advance_Rust_Alias_Scan(line: &str, scan: &mut RustAliasScan)
+{
+    let opened = line.matches('{').count();
+    let closed = line.matches('}').count();
+
+    if scan.pending_contract && opened > 0
+    {
+        scan.contract_open = Some(scan.depth);
+        scan.pending_contract = false;
+    }
+
+    scan.depth = scan.depth.saturating_add(opened);
+    scan.depth = scan.depth.saturating_sub(closed);
+
+    if scan.contract_open.is_some_and(|open_depth| return scan.depth <= open_depth)
+    {
+        scan.contract_open = None;
+    }
+}
+
+fn Alias_Findings_In(source: &SourceFile, aliases: &[Alias]) -> Vec<Finding>
+{
+    return aliases
+        .iter()
+        .filter(|alias| return !alias.contract_bound)
+        .map(|alias| {
+            let line_number = Line_Number(alias.line_index);
+            return Finding {
+                rule: RuleId::New(DOMAIN_VALUES_ARE_DISTINCT_TYPES),
+                subject: source.subject,
+                subject_name: format!("{}:{line_number}", source.path),
+                applicability: Applicability::Supported,
+                evidence: EvidenceClass::Derived,
+                gate: GateCategory::Blocking,
+                summary: format!(
+                    "the type alias at {}:{line_number} names a domain value but does not type it; give it a distinct type instead",
+                    source.path
+                ),
+                locations: vec![format!("{}:{line_number}", source.path)],
+            };
+        })
+        .collect();
+}
+
+fn Line_Number(index: usize) -> usize
+{
+    return index.saturating_add(1);
+}
+
+/// Go never sets `contract_bound` — the language has no associated-type construct, so an
+/// alias inside a function body or a generic constraint is still the author's own choice.
+fn Go_Aliases_In(lines: &[&str]) -> Vec<Alias>
+{
+    let mut found = Vec::new();
+
+    for (index, line) in lines.iter().enumerate()
+    {
+        let trimmed = line.trim();
+        if trimmed.starts_with("//")
+        {
+            continue;
+        }
+
+        if Go_Type_Alias_Match(trimmed).is_some_and(|aliased| return Is_Primitive(aliased, GO_PRIMITIVE_ALIASES))
+        {
+            found.push(Alias { line_index: index, contract_bound: false });
+        }
+    }
+
+    return found;
+}
+
 /// `type Name = Aliased` — Go never terminates a declaration with a semicolon, and the
 /// presence of the `=` is the whole distinction from a defined type (`type Name Aliased`,
 /// which never matches here at all).
@@ -288,13 +349,14 @@ fn Go_Type_Alias_Match(trimmed: &str) -> Option<&str>
     let after_type = code.strip_prefix("type ")?.trim_start();
     let (name, rest) = after_type.split_once('=')?;
 
-    if name.trim().is_empty() || !name.trim().chars().all(Is_Ident_Char)
+    let name = name.trim();
+    if name.is_empty() || !Is_Valid_Identifier(name)
     {
         return None;
     }
 
     let aliased = rest.trim();
-    if aliased.is_empty() || !aliased.chars().all(Is_Ident_Char)
+    if aliased.is_empty() || !Is_Valid_Identifier(aliased)
     {
         return None;
     }
@@ -302,20 +364,19 @@ fn Go_Type_Alias_Match(trimmed: &str) -> Option<&str>
     return Some(aliased);
 }
 
-fn Line_Number(index: usize) -> usize
+fn Is_Ident_Char(character: char) -> bool
 {
-    return index.saturating_add(1);
+    return character.is_alphanumeric() || character == '_';
 }
 
-/// This file's own path. Every fixture below spells a real alias/impl/trait shape inside a
-/// Rust string literal, which would otherwise self-match when this crate checks its own
-/// workspace — the same self-exemption every other `*_text.rs`-shaped rule here carries for
-/// the identical reason.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/domain_type_alias.rs";
-
-fn Is_Own_Implementation_File(source: &SourceFile) -> bool
+fn Is_Primitive(aliased: &str, vocabulary: &[&str]) -> bool
 {
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+    return vocabulary.contains(&aliased);
+}
+
+fn Is_Valid_Identifier(name: &str) -> bool
+{
+    return name.chars().all(Is_Ident_Char);
 }
 
 #[cfg(test)]
@@ -324,13 +385,6 @@ mod tests
     use super::*;
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
-
-    fn Source(path: &str, text: &str) -> SourceFile
-    {
-        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
-        source.language = crate::Recognized_Language_In_Tests(path);
-        return source;
-    }
 
     #[test]
     fn Test_Check_Domain_Values_Are_Distinct_Types_Should_Report_A_Rust_Primitive_Alias()
@@ -400,5 +454,12 @@ mod tests
         let findings = Check_Domain_Values_Are_Distinct_Types(&[source]);
 
         assert!(findings.is_empty(), "no equals sign means this is the remedy, not the defect: {findings:?}");
+    }
+
+    fn Source(path: &str, text: &str) -> SourceFile
+    {
+        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        source.language = crate::Recognized_Language_In_Tests(path);
+        return source;
     }
 }

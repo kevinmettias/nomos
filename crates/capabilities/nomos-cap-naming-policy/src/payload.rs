@@ -75,7 +75,7 @@ fn Row_Line(line: &str) -> Result<PolicyRow, Refusal>
 {
     let rest = Row_Body(line)?;
     let [scope, symbol, case] = Row_Fields(line, rest)?;
-    let case = Parse_Case(line, case)?;
+    let case = Parse_Case(SourceLine(line), case)?;
 
     return Ok(PolicyRow { scope: Scope::From_Label(scope), symbol: symbol.to_owned(), case });
 }
@@ -109,13 +109,16 @@ fn Row_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; ROW_FIELDS], Re
     return Ok([*scope, *symbol, *case]);
 }
 
-fn Parse_Case(line: &str, label: &str) -> Result<Case, Refusal>
+/// The whole row line a case was parsed from, carried only for its own error message.
+struct SourceLine<'a>(&'a str);
+
+fn Parse_Case(line: SourceLine<'_>, label: &str) -> Result<Case, Refusal>
 {
     let Some(case) = Case::From_Label(label)
     else
     {
         return Err(Refusal {
-            reason: format!("unrecognized case {label:?} in row line: {line:?}"),
+            reason: format!("unrecognized case {label:?} in row line: {:?}", line.0),
         });
     };
 

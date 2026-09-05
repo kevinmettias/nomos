@@ -321,8 +321,9 @@ fn Materialize_Reachability_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
 }
 
 /// The naming-policy section: [`Materialize_Naming_Policy`] when `selected` feeds on it --
-/// writes into `env.store` directly and produces no return value of its own, the same shape
-/// [`Materialize_Reachability_Section`] already has.
+/// writes into `env.store` directly. `Materialize_Naming_Policy` returns how many facts
+/// landed; this section does not need that count, the same "written but not captured" shape
+/// [`Materialize_Reachability_Section`] already has for the count its own call returns.
 ///
 /// Gated on the five naming-convention rules this crate composes today that read `nomos.cap.
 /// naming.policy` through their own `Resolve_Case`; `PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_
@@ -524,155 +525,20 @@ fn Rule_Findings(
     });
 }
 
-/// One entry of the rule table: the identifier a caller selects by, and the check that
-/// identifier runs.
-///
-/// Named because the table is now written down in three places -- built in
-/// [`With_Composed_Rules`], read by [`Composed_Rules`], and run by
-/// [`Findings_For_Selected_Rules`] -- and a type spelled out three times is three places
-/// for one of them to drift.
-type ComposedRule<'a> = (&'a str, &'a dyn Fn(&mut Reader<'_, '_>) -> Vec<Finding>);
-
-/// Every rule [`Run`] composes, in the order it runs them.
-///
-/// This is the authority `nomos-gate-orchestration::composition::Registered` derives from.
-/// `OD-GATE-020` measured that registry offering eight rules against the fifty-six composed
-/// here, found the declared parity between the two had gone false silently twice, and named
-/// why closing it by hand again would not fix the shape: `OD-GATE-011`'s legitimate-exception
-/// test asks that both sides of a duplicated answer derive from one named authority outside
-/// either artifact, and this crate exported none for a second list to derive from. It does
-/// now, and it is not a second copy of the table -- [`With_Composed_Rules`] builds the one
-/// array literal [`Rule_Findings`] runs, and the identifiers below are read straight off it,
-/// so a rule composed into that table appears here with no second edit and none can be
-/// composed without appearing.
-///
-/// The empty source slice and [`Nothing_Materialized`] are not a pretend run. Every
-/// identifier in that table is a `&'static str` constant that closes over neither input; the
-/// two arguments exist only because each identifier is paired there with the closure that
-/// would run it, and no closure is called on this path.
-#[must_use]
-pub fn Composed_Rules() -> Vec<RuleId>
-{
-    let capabilities = Nothing_Materialized();
-
-    return With_Composed_Rules(&[], &capabilities, |rules| {
-        return rules.iter().map(|(rule, _check)| return RuleId::New(*rule)).collect();
-    });
-}
-
-/// A materialization holding nothing, for [`Composed_Rules`]' read of the rule table.
-///
-/// Named rather than spelled inline so the six empty lists read as one deliberate absence
-/// rather than six oversights.
-fn Nothing_Materialized() -> CapabilityMaterialization
-{
-    return CapabilityMaterialization {
-        dependency_sources: Vec::new(),
-        dependency_findings: Vec::new(),
-        lint_sources: Vec::new(),
-        lint_findings: Vec::new(),
-        policy_sources: Vec::new(),
-        policy_findings: Vec::new(),
-    };
-}
-
-/// Builds the rule table and hands it to `body`, which is the only way anything reads it.
-///
-/// The table cannot be returned: each entry pairs an identifier with a `&dyn Fn` borrowed
-/// from a closure local to this function, so a signature handing the array back would be
-/// handing back references to temporaries that die at the brace. Passing a `body` in keeps
-/// the borrow alive for exactly as long as somebody is reading, which is what lets
-/// [`Rule_Findings`] and [`Composed_Rules`] share one literal instead of maintaining two.
-fn With_Composed_Rules<Answer>(
-    sources: &[SourceFile],
-    capabilities: &CapabilityMaterialization,
-    body: impl FnOnce([ComposedRule<'_>; RULE_COUNT]) -> Answer,
-) -> Answer
-{
-    // Boxed as `dyn Fn` because the closures below close over different captures
-    // (`sources`, `capabilities.dependency_sources`, `capabilities.lint_sources`, ...) and so
-    // are distinct anonymous types -- an array needs one common element type, and `dyn
-    // Fn` is that common type where `impl Fn` cannot be.
-    let rules: [ComposedRule<'_>; RULE_COUNT] = [
-        (COMPLETENESS_MIRROR, &|reader| return Check_Completeness_Mirrors(sources, reader)),
-        (NAMING_CONVENTION, &|reader| return Check_Naming_Convention(sources, reader)),
-        (DEPENDENCY_DIRECTION, &|reader| return Check_Dependency_Direction(&capabilities.dependency_sources, reader)),
-        (DEPENDENCY_COMPLETENESS, &|reader| return Check_Every_Member_Declares_A_Band(&capabilities.dependency_sources, reader)),
-        (LINT_DIAGNOSTICS, &|reader| return Check_Lint_Diagnostics(&capabilities.lint_sources, reader)),
-        (DEPENDENCY_POLICY, &|reader| return Check_Dependency_Policy(&capabilities.policy_sources, reader)),
-        (UNREAD_REACHES_FINDING, &|reader| return Check_Unread_Reaches_A_Finding(sources, reader)),
-        (CROSS_LANGUAGE_CORRESPONDENCE, &|reader| return Check_Cross_Language_Correspondence(sources, reader)),
-        (NO_TRAILING_WHITESPACE, &|_reader| return Check_No_Trailing_Whitespace(sources)),
-        (TODO_FORMAT, &|_reader| return Check_Todo_Format(sources)),
-        (DEPRECATION, &|_reader| return Check_Deprecation_Carries_A_Reason(sources)),
-        (A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, &|_reader| return Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources)),
-        (SHARED_INTERIOR_MUTABILITY_SAYS_WHY, &|_reader| return Check_Shared_Interior_Mutability_Says_Why(sources)),
-        (EVERY_ALLOW_CARRIES_A_JUSTIFICATION, &|_reader| return Check_Every_Allow_Carries_A_Justification(sources)),
-        (UNSAFE_JUSTIFICATION, &|_reader| return Check_Unsafe_Justification(sources)),
-        (SCRIPTS_USE_A_PORTABLE_SHEBANG, &|_reader| return Check_Scripts_Use_A_Portable_Shebang(sources)),
-        (A_SCRIPT_DECLARES_ITS_PURPOSE, &|_reader| return Check_A_Script_Declares_Its_Purpose(sources)),
-        (EXECUTED_SCRIPTS_SET_NOUNSET, &|_reader| return Check_Executed_Scripts_Set_Nounset(sources)),
-        (SLEEP_BASED_SYNCHRONIZATION, &|_reader| return Check_Sleep_Is_Not_Synchronization(sources)),
-        (ZERO_FLAKE_POLICY, &|_reader| return Check_A_Test_Does_Not_Retry_Until_Green(sources)),
-        (NO_MOD_RS_FILES, &|_reader| return Check_No_Mod_Rs_Files(sources)),
-        (A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, &|_reader| return Check_A_Credential_Is_Not_Hardcoded_In_Source(sources)),
-        (A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, &|_reader| return Check_A_Secret_Does_Not_Travel_In_A_Url(sources)),
-        (CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, &|_reader| return Check_Certificate_Verification_Is_Not_Disabled(sources)),
-        (A_DISCARDED_ERROR_IS_EXPLAINED, &|_reader| return Check_A_Discarded_Error_Is_Explained(sources)),
-        (A_SKIPPED_TEST_STATES_WHY, &|_reader| return Check_A_Skipped_Test_States_Why(sources)),
-        (AN_EXCLUDED_FILE_SAYS_WHY, &|_reader| return Check_An_Excluded_File_Says_Why(sources)),
-        (SUPPRESSION_DIRECTIVES_CARRY_A_REASON, &|_reader| return Check_Suppression_Directives_Carry_A_Reason(sources)),
-        (WORKSPACE_MARKERS_CARRY_A_REASON, &|_reader| return Check_Workspace_Markers_Carry_A_Reason(sources)),
-        (A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY, &|_reader| return Check_A_Package_Is_Named_After_Its_Directory(sources)),
-        (ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, &|_reader| return Check_Atomic_Ordering_Choices_Are_Justified(sources)),
-        (SEQCST_JUSTIFIED_EXPLICITLY, &|_reader| return Check_Seqcst_Justified_Explicitly(sources)),
-        (RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, &|_reader| return Check_Relaxed_Not_Used_When_Ordering_Matters(sources)),
-        (DATA_NAMES_STAY_LOWER_SNAKE, &|reader| return Check_Data_Names_Stay_Lower_Snake(sources, reader)),
-        (FILE_NAME_MATCHES_DECLARED_TYPE, &|reader| return Check_File_Name_Matches_Declared_Type(sources, reader)),
-        (CONSTANTS_SPLIT_BY_EXPORT, &|reader| return Check_Go_Constants_Split_By_Export(sources, reader)),
-        (GO_VARIABLES_USE_LOWER_SNAKE_CASE, &|reader| return Check_Go_Variables_Use_Lower_Snake_Case(sources, reader)),
-        (EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, &|reader| return Check_Exported_Go_Functions_Use_Upper_Snake_Case(sources, reader)),
-        (UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, &|reader| return Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(sources, reader)),
-        (TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, &|reader| return Check_Go_Type_Names_Use_Camel_Case(sources, reader)),
-        (PARAMETER_COUNT, &|reader| return Check_Parameter_Count(sources, reader)),
-        (GO_HELPERS_PACKAGE_FIVE_INPUTS, &|reader| return Check_Go_Helpers_Package_Five_Inputs(sources, reader)),
-        (DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, &|reader| return Check_Declared_Tooling_Language_For_Scripts(sources, reader)),
-        (FILE_SIZE_JUSTIFICATION_TRIGGER, &|reader| return Check_File_Size_Justification_Trigger(sources, reader)),
-        (ONE_THOUSAND_LINE_HARD_TRIGGER, &|reader| return Check_Go_File_Size_Hard_Trigger(sources, reader)),
-        (FIVE_HUNDRED_LINE_REVIEW_TRIGGER, &|reader| return Check_Go_File_Size_Review_Trigger(sources, reader)),
-        (LOWERCASE_FIRST_LETTER, &|_reader| return Check_Error_Message_Starts_Lowercase(sources)),
-        (NO_TRAILING_PUNCTUATION, &|_reader| return Check_Error_Message_Has_No_Trailing_Punctuation(sources)),
-        (EAGER_VS_LAZY_CONTEXT, &|_reader| return Check_Eager_Vs_Lazy_Context(sources)),
-        // The one composed rule that takes no sources: its whole subject is the repository's
-        // own declaration, which arrives through the reader.
-        (GOALS_AND_PARTS_LINE_UP, &|reader| return Check_Goals_And_Parts_Line_Up(reader)),
-        (ABBREVIATIONS, &|reader| return Check_Abbreviations(sources, reader)),
-        (SINGLE_LETTER_NAMES, &|reader| return Check_Single_Letter_Names(sources, reader)),
-        (A_DISABLED_TEST_STATES_WHY, &|_reader| return Check_A_Disabled_Test_States_Why(sources)),
-        (INLINE_ALWAYS_JUSTIFICATION, &|_reader| return Check_Inline_Always_Justification(sources)),
-        (NO_WILDCARD_IMPORTS, &|_reader| return Check_No_Wildcard_Imports(sources)),
-        (NO_SINGLE_LINE_FUNCTION_BODIES, &|_reader| return Check_No_Single_Line_Function_Bodies(sources)),
-    ];
-
-    return body(rules);
-}
-
 /// Runs every `rules` entry `selected` names, in table order, and collects what each
 /// produces.
 fn Findings_For_Selected_Rules(
-    // `dyn Fn` matches the array element type `Rule_Findings` builds, above: eight distinct
-    // closures need one common type, and `dyn Fn` is that type where `impl Fn` cannot be.
     rules: [ComposedRule<'_>; RULE_COUNT],
     reader: &mut Reader<'_, '_>,
     selected: &[RuleId],
 ) -> Vec<Finding>
 {
     let mut findings = Vec::new();
-    for (rule, check) in rules
+    for rule in rules
     {
-        if Is_Rule_Selected(selected, rule)
+        if Is_Rule_Selected(selected, rule.id)
         {
-            let rule_findings = check(reader);
+            let rule_findings = rule.check.Findings(reader);
             findings.extend(rule_findings);
         }
     }
@@ -705,6 +571,49 @@ fn Outcome_Of(files: usize, facts: usize, findings: Vec<Finding>) -> CheckOutcom
     return CheckOutcome::Judged { findings, examined, claim };
 }
 
+/// Every rule [`Run`] composes, in the order it runs them.
+///
+/// This is the authority `nomos-gate-orchestration::composition::Registered` derives from.
+/// `OD-GATE-020` measured that registry offering eight rules against the fifty-six composed
+/// here, found the declared parity between the two had gone false silently twice, and named
+/// why closing it by hand again would not fix the shape: `OD-GATE-011`'s legitimate-exception
+/// test asks that both sides of a duplicated answer derive from one named authority outside
+/// either artifact, and this crate exported none for a second list to derive from. It does
+/// now, and it is not a second copy of the table -- [`With_Composed_Rules`] builds the one
+/// array literal [`Rule_Findings`] runs, and the identifiers below are read straight off it,
+/// so a rule composed into that table appears here with no second edit and none can be
+/// composed without appearing.
+///
+/// The empty source slice and [`Nothing_Materialized`] are not a pretend run. Every
+/// identifier in that table is a `&'static str` constant that closes over neither input; the
+/// two arguments exist only because each identifier is paired there with the closure that
+/// would run it, and no closure is called on this path.
+#[must_use]
+pub fn Composed_Rules() -> Vec<RuleId>
+{
+    let capabilities = Nothing_Materialized();
+
+    return With_Composed_Rules(&[], &capabilities, |rules| {
+        return rules.iter().map(|rule| return RuleId::New(rule.id)).collect();
+    });
+}
+
+/// A materialization holding nothing, for [`Composed_Rules`]' read of the rule table.
+///
+/// Named rather than spelled inline so the six empty lists read as one deliberate absence
+/// rather than six oversights.
+fn Nothing_Materialized() -> CapabilityMaterialization
+{
+    return CapabilityMaterialization {
+        dependency_sources: Vec::new(),
+        dependency_findings: Vec::new(),
+        lint_sources: Vec::new(),
+        lint_findings: Vec::new(),
+        policy_sources: Vec::new(),
+        policy_findings: Vec::new(),
+    };
+}
+
 /// `sources`, each carrying its own resolved [`nomos_rules::SourceFile::preferred_syntax_provider`]
 /// -- `OD-CAPABILITY-009`'s corrected fix, computed once here because this composition root
 /// is the one place in the call chain allowed to know `nomos_lang_rust` and `nomos_lang_go`
@@ -729,6 +638,126 @@ pub(crate) fn Recognized_Sources(sources: &[SourceFile]) -> Vec<SourceFile>
             return source;
         })
         .collect();
+}
+
+/// A composed rule's own check, run against whatever the [`Reader`] can answer -- a named
+/// operation a [`ComposedRule`] holds behind `&dyn RuleCheck` rather than a bare `&dyn Fn`,
+/// so a stored callable reads as a documented collaborator (something invoked later, at a
+/// time this module cannot see, that may be swapped for a test double) rather than as an
+/// anonymous lambda with no contract of its own.
+trait RuleCheck
+{
+    /// Runs this rule's own check and returns whatever it found.
+    fn Findings(&self, reader: &mut Reader<'_, '_>) -> Vec<Finding>;
+}
+
+/// Every closure shaped like a rule's check already satisfies [`RuleCheck`] through this
+/// blanket impl, so [`With_Composed_Rules`]' own table below still writes each entry as a
+/// plain closure rather than a hand-built implementor.
+impl<CheckFn> RuleCheck for CheckFn
+where
+    CheckFn: Fn(&mut Reader<'_, '_>) -> Vec<Finding>,
+{
+    fn Findings(&self, reader: &mut Reader<'_, '_>) -> Vec<Finding>
+    {
+        return self(reader);
+    }
+}
+
+/// One entry of the rule table: the identifier a caller selects by, and the check that
+/// identifier runs.
+///
+/// Named because the table is now written down in three places -- built in
+/// [`With_Composed_Rules`], read by [`Composed_Rules`], and run by
+/// [`Findings_For_Selected_Rules`] -- and a type spelled out three times is three places
+/// for one of them to drift.
+struct ComposedRule<'a>
+{
+    /// The identifier a caller selects this rule by.
+    id: &'a str,
+    /// The check that identifier runs.
+    check: &'a dyn RuleCheck,
+}
+
+/// Builds the rule table and hands it to `body`, which is the only way anything reads it.
+///
+/// The table cannot be returned: each entry pairs an identifier with a `&dyn RuleCheck`
+/// borrowed from a closure local to this function, so a signature handing the array back
+/// would be handing back references to temporaries that die at the brace. Passing a `body`
+/// in keeps the borrow alive for exactly as long as somebody is reading, which is what lets
+/// [`Rule_Findings`] and [`Composed_Rules`] share one literal instead of maintaining two.
+fn With_Composed_Rules<Answer>(
+    sources: &[SourceFile],
+    capabilities: &CapabilityMaterialization,
+    body: impl FnOnce([ComposedRule<'_>; RULE_COUNT]) -> Answer,
+) -> Answer
+{
+    // Boxed as `dyn RuleCheck` because the closures below close over different captures
+    // (`sources`, `capabilities.dependency_sources`, `capabilities.lint_sources`, ...) and so
+    // are distinct anonymous types -- an array needs one common element type, and `dyn
+    // RuleCheck` is that common type where `impl RuleCheck` cannot be.
+    let rules: [ComposedRule<'_>; RULE_COUNT] = [
+        ComposedRule { id: COMPLETENESS_MIRROR, check: &|reader: &mut Reader<'_, '_>| return Check_Completeness_Mirrors(sources, reader) },
+        ComposedRule { id: NAMING_CONVENTION, check: &|reader: &mut Reader<'_, '_>| return Check_Naming_Convention(sources, reader) },
+        ComposedRule { id: DEPENDENCY_DIRECTION, check: &|reader: &mut Reader<'_, '_>| return Check_Dependency_Direction(&capabilities.dependency_sources, reader) },
+        ComposedRule { id: DEPENDENCY_COMPLETENESS, check: &|reader: &mut Reader<'_, '_>| return Check_Every_Member_Declares_A_Band(&capabilities.dependency_sources, reader) },
+        ComposedRule { id: LINT_DIAGNOSTICS, check: &|reader: &mut Reader<'_, '_>| return Check_Lint_Diagnostics(&capabilities.lint_sources, reader) },
+        ComposedRule { id: DEPENDENCY_POLICY, check: &|reader: &mut Reader<'_, '_>| return Check_Dependency_Policy(&capabilities.policy_sources, reader) },
+        ComposedRule { id: UNREAD_REACHES_FINDING, check: &|reader: &mut Reader<'_, '_>| return Check_Unread_Reaches_A_Finding(sources, reader) },
+        ComposedRule { id: CROSS_LANGUAGE_CORRESPONDENCE, check: &|reader: &mut Reader<'_, '_>| return Check_Cross_Language_Correspondence(sources, reader) },
+        ComposedRule { id: NO_TRAILING_WHITESPACE, check: &|_reader: &mut Reader<'_, '_>| return Check_No_Trailing_Whitespace(sources) },
+        ComposedRule { id: TODO_FORMAT, check: &|_reader: &mut Reader<'_, '_>| return Check_Todo_Format(sources) },
+        ComposedRule { id: DEPRECATION, check: &|_reader: &mut Reader<'_, '_>| return Check_Deprecation_Carries_A_Reason(sources) },
+        ComposedRule { id: A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, check: &|_reader: &mut Reader<'_, '_>| return Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources) },
+        ComposedRule { id: SHARED_INTERIOR_MUTABILITY_SAYS_WHY, check: &|_reader: &mut Reader<'_, '_>| return Check_Shared_Interior_Mutability_Says_Why(sources) },
+        ComposedRule { id: EVERY_ALLOW_CARRIES_A_JUSTIFICATION, check: &|_reader: &mut Reader<'_, '_>| return Check_Every_Allow_Carries_A_Justification(sources) },
+        ComposedRule { id: UNSAFE_JUSTIFICATION, check: &|_reader: &mut Reader<'_, '_>| return Check_Unsafe_Justification(sources) },
+        ComposedRule { id: SCRIPTS_USE_A_PORTABLE_SHEBANG, check: &|_reader: &mut Reader<'_, '_>| return Check_Scripts_Use_A_Portable_Shebang(sources) },
+        ComposedRule { id: A_SCRIPT_DECLARES_ITS_PURPOSE, check: &|_reader: &mut Reader<'_, '_>| return Check_A_Script_Declares_Its_Purpose(sources) },
+        ComposedRule { id: EXECUTED_SCRIPTS_SET_NOUNSET, check: &|_reader: &mut Reader<'_, '_>| return Check_Executed_Scripts_Set_Nounset(sources) },
+        ComposedRule { id: SLEEP_BASED_SYNCHRONIZATION, check: &|_reader: &mut Reader<'_, '_>| return Check_Sleep_Is_Not_Synchronization(sources) },
+        ComposedRule { id: ZERO_FLAKE_POLICY, check: &|_reader: &mut Reader<'_, '_>| return Check_A_Test_Does_Not_Retry_Until_Green(sources) },
+        ComposedRule { id: NO_MOD_RS_FILES, check: &|_reader: &mut Reader<'_, '_>| return Check_No_Mod_Rs_Files(sources) },
+        ComposedRule { id: A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, check: &|_reader: &mut Reader<'_, '_>| return Check_A_Credential_Is_Not_Hardcoded_In_Source(sources) },
+        ComposedRule { id: A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, check: &|_reader: &mut Reader<'_, '_>| return Check_A_Secret_Does_Not_Travel_In_A_Url(sources) },
+        ComposedRule { id: CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, check: &|_reader: &mut Reader<'_, '_>| return Check_Certificate_Verification_Is_Not_Disabled(sources) },
+        ComposedRule { id: A_DISCARDED_ERROR_IS_EXPLAINED, check: &|_reader: &mut Reader<'_, '_>| return Check_A_Discarded_Error_Is_Explained(sources) },
+        ComposedRule { id: A_SKIPPED_TEST_STATES_WHY, check: &|_reader: &mut Reader<'_, '_>| return Check_A_Skipped_Test_States_Why(sources) },
+        ComposedRule { id: AN_EXCLUDED_FILE_SAYS_WHY, check: &|_reader: &mut Reader<'_, '_>| return Check_An_Excluded_File_Says_Why(sources) },
+        ComposedRule { id: SUPPRESSION_DIRECTIVES_CARRY_A_REASON, check: &|_reader: &mut Reader<'_, '_>| return Check_Suppression_Directives_Carry_A_Reason(sources) },
+        ComposedRule { id: WORKSPACE_MARKERS_CARRY_A_REASON, check: &|_reader: &mut Reader<'_, '_>| return Check_Workspace_Markers_Carry_A_Reason(sources) },
+        ComposedRule { id: A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY, check: &|_reader: &mut Reader<'_, '_>| return Check_A_Package_Is_Named_After_Its_Directory(sources) },
+        ComposedRule { id: ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, check: &|_reader: &mut Reader<'_, '_>| return Check_Atomic_Ordering_Choices_Are_Justified(sources) },
+        ComposedRule { id: SEQCST_JUSTIFIED_EXPLICITLY, check: &|_reader: &mut Reader<'_, '_>| return Check_Seqcst_Justified_Explicitly(sources) },
+        ComposedRule { id: RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, check: &|_reader: &mut Reader<'_, '_>| return Check_Relaxed_Not_Used_When_Ordering_Matters(sources) },
+        ComposedRule { id: DATA_NAMES_STAY_LOWER_SNAKE, check: &|reader: &mut Reader<'_, '_>| return Check_Data_Names_Stay_Lower_Snake(sources, reader) },
+        ComposedRule { id: FILE_NAME_MATCHES_DECLARED_TYPE, check: &|reader: &mut Reader<'_, '_>| return Check_File_Name_Matches_Declared_Type(sources, reader) },
+        ComposedRule { id: CONSTANTS_SPLIT_BY_EXPORT, check: &|reader: &mut Reader<'_, '_>| return Check_Go_Constants_Split_By_Export(sources, reader) },
+        ComposedRule { id: GO_VARIABLES_USE_LOWER_SNAKE_CASE, check: &|reader: &mut Reader<'_, '_>| return Check_Go_Variables_Use_Lower_Snake_Case(sources, reader) },
+        ComposedRule { id: EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, check: &|reader: &mut Reader<'_, '_>| return Check_Exported_Go_Functions_Use_Upper_Snake_Case(sources, reader) },
+        ComposedRule { id: UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, check: &|reader: &mut Reader<'_, '_>| return Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(sources, reader) },
+        ComposedRule { id: TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, check: &|reader: &mut Reader<'_, '_>| return Check_Go_Type_Names_Use_Camel_Case(sources, reader) },
+        ComposedRule { id: PARAMETER_COUNT, check: &|reader: &mut Reader<'_, '_>| return Check_Parameter_Count(sources, reader) },
+        ComposedRule { id: GO_HELPERS_PACKAGE_FIVE_INPUTS, check: &|reader: &mut Reader<'_, '_>| return Check_Go_Helpers_Package_Five_Inputs(sources, reader) },
+        ComposedRule { id: DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, check: &|reader: &mut Reader<'_, '_>| return Check_Declared_Tooling_Language_For_Scripts(sources, reader) },
+        ComposedRule { id: FILE_SIZE_JUSTIFICATION_TRIGGER, check: &|reader: &mut Reader<'_, '_>| return Check_File_Size_Justification_Trigger(sources, reader) },
+        ComposedRule { id: ONE_THOUSAND_LINE_HARD_TRIGGER, check: &|reader: &mut Reader<'_, '_>| return Check_Go_File_Size_Hard_Trigger(sources, reader) },
+        ComposedRule { id: FIVE_HUNDRED_LINE_REVIEW_TRIGGER, check: &|reader: &mut Reader<'_, '_>| return Check_Go_File_Size_Review_Trigger(sources, reader) },
+        ComposedRule { id: LOWERCASE_FIRST_LETTER, check: &|_reader: &mut Reader<'_, '_>| return Check_Error_Message_Starts_Lowercase(sources) },
+        ComposedRule { id: NO_TRAILING_PUNCTUATION, check: &|_reader: &mut Reader<'_, '_>| return Check_Error_Message_Has_No_Trailing_Punctuation(sources) },
+        ComposedRule { id: EAGER_VS_LAZY_CONTEXT, check: &|_reader: &mut Reader<'_, '_>| return Check_Eager_Vs_Lazy_Context(sources) },
+        // The one composed rule that takes no sources: its whole subject is the repository's
+        // own declaration, which arrives through the reader.
+        ComposedRule { id: GOALS_AND_PARTS_LINE_UP, check: &|reader: &mut Reader<'_, '_>| return Check_Goals_And_Parts_Line_Up(reader) },
+        ComposedRule { id: ABBREVIATIONS, check: &|reader: &mut Reader<'_, '_>| return Check_Abbreviations(sources, reader) },
+        ComposedRule { id: SINGLE_LETTER_NAMES, check: &|reader: &mut Reader<'_, '_>| return Check_Single_Letter_Names(sources, reader) },
+        ComposedRule { id: A_DISABLED_TEST_STATES_WHY, check: &|_reader: &mut Reader<'_, '_>| return Check_A_Disabled_Test_States_Why(sources) },
+        ComposedRule { id: INLINE_ALWAYS_JUSTIFICATION, check: &|_reader: &mut Reader<'_, '_>| return Check_Inline_Always_Justification(sources) },
+        ComposedRule { id: NO_WILDCARD_IMPORTS, check: &|_reader: &mut Reader<'_, '_>| return Check_No_Wildcard_Imports(sources) },
+        ComposedRule { id: NO_SINGLE_LINE_FUNCTION_BODIES, check: &|_reader: &mut Reader<'_, '_>| return Check_No_Single_Line_Function_Bodies(sources) },
+    ];
+
+    return body(rules);
 }
 
 /// Whether `rule` is one `selected` asks for -- every rule when `selected` is empty, the same

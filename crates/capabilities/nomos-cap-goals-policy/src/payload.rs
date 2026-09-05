@@ -1,18 +1,10 @@
 //! The wire shape of a `nomos.goals.policy.v1` payload, and its canonical encoding.
 
-/// One declared part of a system and the purposes it claims to serve.
-///
-/// A subsystem with an empty `goals` is the interesting case rather than a degenerate one:
-/// it is exactly what `check-goal-traceability` calls a purposeless part, so the encoding
-/// has to be able to say "this part is declared and serves nothing" distinctly from "this
-/// part was never declared". That is why a subsystem gets a line of its own rather than
-/// being implied by the goals it serves.
-#[derive(Clone, Debug, PartialEq, Eq, Default)]
-pub struct SubsystemDeclaration
-{
-    pub name: String,
-    pub goals: Vec<String>,
-}
+mod refusal;
+mod subsystem_declaration;
+
+pub use refusal::Refusal;
+pub use subsystem_declaration::SubsystemDeclaration;
 
 /// A repository's whole declared goal policy.
 ///
@@ -40,15 +32,6 @@ pub struct GoalsPolicyPayload
     pub goals: Vec<String>,
     pub max_subsystems_per_goal: u32,
     pub subsystems: Vec<SubsystemDeclaration>,
-}
-
-/// A payload's bytes did not decode: not UTF-8, a line with the wrong shape, a line with an
-/// empty field, a second `ceiling` line, a `ceiling` that is not a number, or a `serves`
-/// line naming a subsystem no `subsystem` line declared.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Refusal
-{
-    pub reason: String,
 }
 
 const GOAL_TAG: &str = "goal";
@@ -109,80 +92,130 @@ fn Push_Row(encoded: &mut String, fields: &[&str])
 /// report a part the repository never declared.
 pub fn Parse_Payload(bytes: &[u8]) -> Result<GoalsPolicyPayload, Refusal>
 {
-    let text = core::str::from_utf8(bytes).map_err(|error| Refusal {
-        reason: format!("not UTF-8: {error}"),
-    })?;
+    let text = Decode_Utf8(bytes)?;
 
     let mut payload = GoalsPolicyPayload::default();
     let mut ceiling_seen = false;
 
     for line in text.lines()
     {
-        let fields: Vec<&str> = line.split('\t').collect();
-        if fields.iter().any(|field| return field.is_empty())
-        {
-            return Err(Refusal {
-                reason: format!("line {line:?} has an empty field"),
-            });
-        }
-
-        match fields.as_slice()
-        {
-            [GOAL_TAG, goal] => payload.goals.push((*goal).to_owned()),
-            [CEILING_TAG, ceiling] =>
-            {
-                if ceiling_seen
-                {
-                    return Err(Refusal {
-                        reason: format!("a second `ceiling` line is not allowed: {line:?}"),
-                    });
-                }
-                payload.max_subsystems_per_goal = ceiling.parse().map_err(|_error| Refusal {
-                    reason: format!("`ceiling` value is not a number: {line:?}"),
-                })?;
-                ceiling_seen = true;
-            }
-            [SUBSYSTEM_TAG, name] =>
-            {
-                if Position_Of(&payload.subsystems, name).is_some()
-                {
-                    return Err(Refusal {
-                        reason: format!("subsystem {name:?} is declared twice"),
-                    });
-                }
-                payload.subsystems.push(SubsystemDeclaration {
-                    name: (*name).to_owned(),
-                    goals: Vec::new(),
-                });
-            }
-            [SERVES_TAG, name, goal] =>
-            {
-                let Some(position) = Position_Of(&payload.subsystems, name)
-                else
-                {
-                    return Err(Refusal {
-                        reason: format!("`serves` names a subsystem that was never declared: {line:?}"),
-                    });
-                };
-                let Some(subsystem) = payload.subsystems.get_mut(position)
-                else
-                {
-                    return Err(Refusal {
-                        reason: format!("`serves` names a subsystem that was never declared: {line:?}"),
-                    });
-                };
-                subsystem.goals.push((*goal).to_owned());
-            }
-            _ =>
-            {
-                return Err(Refusal {
-                    reason: format!("line has an unrecognized tag or field count: {line:?}"),
-                });
-            }
-        }
+        let fields = Split_Fields(line)?;
+        Apply_Line(&mut payload, &fields, line, &mut ceiling_seen)?;
     }
 
     return Ok(payload);
+}
+
+/// Decodes `bytes` as UTF-8, or refuses.
+fn Decode_Utf8(bytes: &[u8]) -> Result<&str, Refusal>
+{
+    return core::str::from_utf8(bytes).map_err(|error| Refusal {
+        reason: format!("not UTF-8: {error}"),
+    });
+}
+
+/// `line` split on tabs, refused if any field is empty.
+fn Split_Fields(line: &str) -> Result<Vec<&str>, Refusal>
+{
+    let fields: Vec<&str> = line.split('\t').collect();
+    if fields.iter().any(|field| return field.is_empty())
+    {
+        return Err(Refusal {
+            reason: format!("line {line:?} has an empty field"),
+        });
+    }
+
+    return Ok(fields);
+}
+
+/// Applies one line's already-split `fields` to `payload`, tracking whether a `ceiling`
+/// line has already been seen so a second one can be refused.
+fn Apply_Line(payload: &mut GoalsPolicyPayload, fields: &[&str], line: &str, ceiling_seen: &mut bool) -> Result<(), Refusal>
+{
+    match fields
+    {
+        [GOAL_TAG, goal] => payload.goals.push((*goal).to_owned()),
+        [CEILING_TAG, ceiling] => Apply_Ceiling_Line(payload, *ceiling, SourceLine(line), ceiling_seen)?,
+        [SUBSYSTEM_TAG, name] => Apply_Subsystem_Line(payload, *name)?,
+        [SERVES_TAG, name, goal] => Apply_Serves_Line(payload, Name(name), Goal(goal), SourceLine(line))?,
+        _ =>
+        {
+            return Err(Refusal {
+                reason: format!("line has an unrecognized tag or field count: {line:?}"),
+            });
+        }
+    }
+
+    return Ok(());
+}
+
+/// The whole row line a tagged value was parsed from, carried only for its own error
+/// message.
+struct SourceLine<'a>(&'a str);
+
+/// A `ceiling` line's own handling: refuse a second one, otherwise record it.
+fn Apply_Ceiling_Line(payload: &mut GoalsPolicyPayload, ceiling: &str, line: SourceLine<'_>, ceiling_seen: &mut bool) -> Result<(), Refusal>
+{
+    if *ceiling_seen
+    {
+        return Err(Refusal {
+            reason: format!("a second `ceiling` line is not allowed: {:?}", line.0),
+        });
+    }
+    payload.max_subsystems_per_goal = ceiling.parse().map_err(|_error| Refusal {
+        reason: format!("`ceiling` value is not a number: {:?}", line.0),
+    })?;
+    *ceiling_seen = true;
+
+    return Ok(());
+}
+
+/// A `subsystem` line's own handling: refuse a name declared twice, otherwise declare it.
+fn Apply_Subsystem_Line(payload: &mut GoalsPolicyPayload, name: &str) -> Result<(), Refusal>
+{
+    if Position_Of(&payload.subsystems, name).is_some()
+    {
+        return Err(Refusal {
+            reason: format!("subsystem {name:?} is declared twice"),
+        });
+    }
+    payload.subsystems.push(SubsystemDeclaration {
+        name: name.to_owned(),
+        goals: Vec::new(),
+    });
+
+    return Ok(());
+}
+
+/// A subsystem's own declared name, distinguished from the adjacent goal name and source
+/// line it travels beside so a caller cannot transpose them.
+struct Name<'a>(&'a str);
+
+/// A goal a subsystem serves, distinguished from the adjacent subsystem name it travels
+/// beside so a caller cannot transpose them.
+struct Goal<'a>(&'a str);
+
+/// A `serves` line's own handling: refuse a subsystem no `subsystem` line declared,
+/// otherwise record the goal it serves.
+fn Apply_Serves_Line(payload: &mut GoalsPolicyPayload, name: Name<'_>, goal: Goal<'_>, line: SourceLine<'_>) -> Result<(), Refusal>
+{
+    let Some(position) = Position_Of(&payload.subsystems, name.0)
+    else
+    {
+        return Err(Refusal {
+            reason: format!("`serves` names a subsystem that was never declared: {:?}", line.0),
+        });
+    };
+    let Some(subsystem) = payload.subsystems.get_mut(position)
+    else
+    {
+        return Err(Refusal {
+            reason: format!("`serves` names a subsystem that was never declared: {:?}", line.0),
+        });
+    };
+    subsystem.goals.push(goal.0.to_owned());
+
+    return Ok(());
 }
 
 fn Position_Of(subsystems: &[SubsystemDeclaration], name: &str) -> Option<usize>

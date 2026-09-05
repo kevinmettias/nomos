@@ -75,7 +75,7 @@ fn Row_Line(line: &str) -> Result<PolicyRow, Refusal>
 {
     let rest = Row_Body(line)?;
     let [scope, key, value] = Row_Fields(line, rest)?;
-    let value = Parse_Value(line, value)?;
+    let value = Parse_Value(SourceLine(line), value)?;
 
     return Ok(PolicyRow { scope: Scope::From_Label(scope), key: key.to_owned(), value });
 }
@@ -109,10 +109,13 @@ fn Row_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; ROW_FIELDS], Re
     return Ok([*scope, *key, *value]);
 }
 
-fn Parse_Value(line: &str, text: &str) -> Result<u32, Refusal>
+/// The whole row line a value was parsed from, carried only for its own error message.
+struct SourceLine<'a>(&'a str);
+
+fn Parse_Value(line: SourceLine<'_>, text: &str) -> Result<u32, Refusal>
 {
     return text.parse::<u32>().map_err(|error| Refusal {
-        reason: format!("value {text:?} is not a non-negative integer in row line {line:?}: {error}"),
+        reason: format!("value {text:?} is not a non-negative integer in row line {:?}: {error}", line.0),
     });
 }
 
@@ -191,12 +194,18 @@ mod tests
         assert!(error.reason.contains("is not a row"), "{}", error.reason);
     }
 
+    /// The repository-wide sample threshold `Sample()` declares, echoed at both the encode
+    /// site and its own assertion so the two ends of a round trip cannot silently drift.
+    const SAMPLE_REPOSITORY_LIMIT: u32 = 1500;
+    /// The per-language sample threshold `Sample()` declares.
+    const SAMPLE_LANGUAGE_LIMIT: u32 = 1000;
+
     fn Sample() -> LimitsPolicyPayload
     {
         return LimitsPolicyPayload {
             rows: vec![
-                PolicyRow { scope: Scope::Repository, key: "file-size-hard-lines".to_owned(), value: 1500 },
-                PolicyRow { scope: Scope::Language("go".to_owned()), key: "file-size-hard-lines".to_owned(), value: 1000 },
+                PolicyRow { scope: Scope::Repository, key: "file-size-hard-lines".to_owned(), value: SAMPLE_REPOSITORY_LIMIT },
+                PolicyRow { scope: Scope::Language("go".to_owned()), key: "file-size-hard-lines".to_owned(), value: SAMPLE_LANGUAGE_LIMIT },
             ],
         };
     }

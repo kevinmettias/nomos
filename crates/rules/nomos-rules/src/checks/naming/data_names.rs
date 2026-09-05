@@ -35,7 +35,11 @@ pub fn Check_Data_Names_Stay_Lower_Snake(
     {
         match super::reading::Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Violations_In(&payload, &source.path, module_case, field_case)),
+            Ok(payload) =>
+            {
+                let violations = Violations_In(&payload, &source.path, module_case, field_case);
+                findings.extend(violations);
+            }
             Err(finding) => findings.push(Unread_As_This_Rule(finding)),
         }
     }
@@ -52,12 +56,14 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, module_case: Case, field_c
     {
         if item.kind == MODULE && !module_case.Conforms(Unescaped(item.Own_Name()))
         {
-            findings.push(Violation_Finding(path, item, item.Own_Name()));
+            let finding = Violation_Finding(path, item, item.Own_Name());
+            findings.push(finding);
         }
 
         if item.kind == STRUCT
         {
-            findings.extend(Field_Violations_In(path, item, field_case));
+            let field_violations = Field_Violations_In(path, item, field_case);
+            findings.extend(field_violations);
         }
     }
 
@@ -77,6 +83,15 @@ fn Field_Violations_In(path: &str, item: &PayloadItem, field_case: Case) -> Vec<
         .filter(|(name, _type_name)| return !field_case.Conforms(Unescaped(name)))
         .map(|(name, _type_name)| return Violation_Finding(path, item, name))
         .collect();
+}
+
+fn Unread_As_This_Rule(mut finding: Finding) -> Finding
+{
+    finding.rule = RuleId::New(DATA_NAMES_STAY_LOWER_SNAKE);
+    finding.summary = finding
+        .summary
+        .replace("this file's naming could not be judged", "this file's data names could not be judged");
+    return finding;
 }
 
 /// The name a raw identifier escapes.
@@ -114,15 +129,6 @@ fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
         summary: format!("`{name}` is a data name that is not lower snake case"),
         locations: vec![path.to_owned()],
     };
-}
-
-fn Unread_As_This_Rule(mut finding: Finding) -> Finding
-{
-    finding.rule = RuleId::New(DATA_NAMES_STAY_LOWER_SNAKE);
-    finding.summary = finding
-        .summary
-        .replace("this file's naming could not be judged", "this file's data names could not be judged");
-    return finding;
 }
 
 #[cfg(test)]

@@ -104,26 +104,46 @@ pub fn Check_A_Known_Range_Picks_Its_Type(sources: &[SourceFile]) -> Vec<Finding
     });
 }
 
+fn Is_Ident_Char(character: char) -> bool
+{
+    return character.is_alphanumeric() || character == '_';
+}
+
 fn Findings_For(sources: &[SourceFile], rule: &str, matches: fn(&Bound) -> bool) -> Vec<Finding>
 {
     let mut findings = Vec::new();
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
+        if !source.Is_Written_In(RUST_LANGUAGE) || Is_Own_Implementation_File(source)
         {
-            let lines: Vec<&str> = source.text.lines().collect();
-            for bound in Bounded_Fields_In(&lines)
-            {
-                if matches(&bound)
-                {
-                    findings.push(Bound_Finding(source, rule, &bound));
-                }
-            }
+            continue;
         }
+
+        let source_findings = Findings_For_Source(source, rule, matches);
+        findings.extend(source_findings);
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+fn Findings_For_Source(source: &SourceFile, rule: &str, matches: fn(&Bound) -> bool) -> Vec<Finding>
+{
+    let lines: Vec<&str> = source.text.lines().collect();
+    let mut findings = Vec::new();
+
+    for bound in Bounded_Fields_In(&lines)
+    {
+        if !matches(&bound)
+        {
+            continue;
+        }
+
+        let finding = Bound_Finding(source, rule, &bound);
+        findings.push(finding);
+    }
+
     return findings;
 }
 
@@ -175,7 +195,7 @@ fn Narrowest_That_Holds(min: i64, max: i64) -> Option<(&'static str, u32, bool)>
 
     for &(spelling, bits, signed) in RUST_REMEDIES
     {
-        if !Can_Hold_Range(bits, signed, min, max)
+        if !Can_Hold_Range(bits, Signedness::From_Bool(signed), min, max)
         {
             continue;
         }
@@ -183,7 +203,11 @@ fn Narrowest_That_Holds(min: i64, max: i64) -> Option<(&'static str, u32, bool)>
         best = match best
         {
             None => Some((spelling, bits, signed)),
-            Some((_, best_bits, best_signed)) if bits < best_bits || (bits == best_bits && !signed && best_signed) => Some((spelling, bits, signed)),
+            Some((_, best_bits, best_signed))
+                if Is_Cheaper(bits, Signedness::From_Bool(signed), best_bits, Signedness::From_Bool(best_signed)) =>
+            {
+                Some((spelling, bits, signed))
+            }
             keep => keep,
         };
     }
@@ -191,29 +215,67 @@ fn Narrowest_That_Holds(min: i64, max: i64) -> Option<(&'static str, u32, bool)>
     return best;
 }
 
+/// Whether an integer representation can hold values below zero — named so `Can_Hold_Range`
+/// takes no bare `bool`, which a call site could pass in the wrong position with nothing to
+/// catch it.
+enum Signedness
+{
+    Signed,
+    Unsigned,
+}
+
+impl Signedness
+{
+    fn From_Bool(signed: bool) -> Self
+    {
+        return if signed { Signedness::Signed } else { Signedness::Unsigned };
+    }
+
+    fn Is_Signed(self) -> bool
+    {
+        return matches!(self, Signedness::Signed);
+    }
+}
+
+/// A candidate beats the current best when it is narrower, or equally wide but unsigned
+/// where the current best is signed.
+fn Is_Cheaper(bits: u32, signedness: Signedness, best_bits: u32, best_signedness: Signedness) -> bool
+{
+    return bits < best_bits || (bits == best_bits && !signedness.Is_Signed() && best_signedness.Is_Signed());
+}
+
 /// Ported from `can_Hold_Range`, using `i128` intermediates so the ceiling computation
 /// never overflows for any width up to [`MAX_SCALAR_BITS`].
-fn Can_Hold_Range(bits: u32, signed: bool, min: i64, max: i64) -> bool
+fn Can_Hold_Range(bits: u32, signedness: Signedness, min: i64, max: i64) -> bool
 {
     if bits == 0 || bits > MAX_SCALAR_BITS
     {
         return false;
     }
 
-    if !signed
+    return match signedness
     {
-        if min < 0
-        {
-            return false;
-        }
-        if bits == MAX_SCALAR_BITS
-        {
-            return true;
-        }
-        let ceiling: i128 = (1i128 << bits).saturating_sub(1);
-        return i128::from(max) <= ceiling;
-    }
+        Signedness::Unsigned => Fits_Unsigned(bits, min, max),
+        Signedness::Signed => Fits_Signed(bits, min, max),
+    };
+}
 
+fn Fits_Unsigned(bits: u32, min: i64, max: i64) -> bool
+{
+    if min < 0
+    {
+        return false;
+    }
+    if bits == MAX_SCALAR_BITS
+    {
+        return true;
+    }
+    let ceiling: i128 = (1i128 << bits).saturating_sub(1);
+    return i128::from(max) <= ceiling;
+}
+
+fn Fits_Signed(bits: u32, min: i64, max: i64) -> bool
+{
     if bits == MAX_SCALAR_BITS
     {
         return true;
@@ -232,44 +294,61 @@ fn Bounded_Fields_In(lines: &[&str]) -> Vec<Bound>
 
     for (index, line) in lines.iter().enumerate()
     {
-        let trimmed = line.trim();
-        if trimmed.is_empty()
+        if let Some(bound) = Bound_At_Line(line, index, &mut pending)
         {
-            continue;
-        }
-
-        if trimmed.starts_with("#[")
-        {
-            if let Some(range) = Range_Attribute(trimmed)
-            {
-                pending = Some(range);
-            }
-            continue;
-        }
-
-        let Some((min, max)) = pending.take()
-        else
-        {
-            continue;
-        };
-
-        if let Some((name, declared_type)) = Field_Declaration(trimmed)
-            && let Some(&(spelling, bits, signed, is_float)) = RUST_DECLARED_SCALARS.iter().find(|&&(candidate, ..)| return candidate == declared_type)
-            && !is_float
-        {
-            found.push(Bound {
-                line_index: index,
-                member: name.to_owned(),
-                declared_spelling: spelling,
-                declared_bits: bits,
-                declared_signed: signed,
-                min,
-                max,
-            });
+            found.push(bound);
         }
     }
 
     return found;
+}
+
+/// Processes one line of the linear attribute-then-field scan, threading `pending` (the
+/// most recently accumulated `#[validate(range(...))]` bound, not yet consumed) across
+/// calls: records a new bound on an attribute line, and consumes one — whether or not it
+/// pairs with a real field — on the next non-attribute, non-blank line.
+fn Bound_At_Line(line: &str, index: usize, pending: &mut Option<(Option<i64>, Option<i64>)>) -> Option<Bound>
+{
+    let trimmed = line.trim();
+    if trimmed.is_empty()
+    {
+        return None;
+    }
+
+    if trimmed.starts_with("#[")
+    {
+        if let Some(range) = Range_Attribute(trimmed)
+        {
+            *pending = Some(range);
+        }
+        return None;
+    }
+
+    let (min, max) = pending.take()?;
+    return Declared_Scalar_Bound(trimmed, index, min, max);
+}
+
+/// The declared-scalar `Bound` for `trimmed`, if it names a non-float field from
+/// [`RUST_DECLARED_SCALARS`] — `None` for a line that does not pair with the accumulated
+/// attribute after all (a non-field line, most often).
+fn Declared_Scalar_Bound(trimmed: &str, index: usize, min: Option<i64>, max: Option<i64>) -> Option<Bound>
+{
+    let (name, declared_type) = Field_Declaration(trimmed)?;
+    let &(spelling, bits, signed, is_float) = RUST_DECLARED_SCALARS.iter().find(|&&(candidate, ..)| return candidate == declared_type)?;
+    if is_float
+    {
+        return None;
+    }
+
+    return Some(Bound {
+        line_index: index,
+        member: name.to_owned(),
+        declared_spelling: spelling,
+        declared_bits: bits,
+        declared_signed: signed,
+        min,
+        max,
+    });
 }
 
 /// `#[validate(range(min = N, max = M))]` — reads the bound out of an attribute line,
@@ -284,18 +363,18 @@ fn Range_Attribute(line: &str) -> Option<(Option<i64>, Option<i64>)>
     }
 
     let inside = Clause_Body(line, "range")?;
-    let (min, max) = Min_Max(inside);
-    if min.is_none() && max.is_none()
+    let bound = Min_Max(inside);
+    if bound.min.is_none() && bound.max.is_none()
     {
         return None;
     }
-    if let (Some(min_value), Some(max_value)) = (min, max)
+    if let (Some(min_value), Some(max_value)) = (bound.min, bound.max)
         && min_value > max_value
     {
         return None;
     }
 
-    return Some((min, max));
+    return Some((bound.min, bound.max));
 }
 
 /// What sits inside `name(...)`, matching the closing paren at the same nesting depth
@@ -308,6 +387,15 @@ fn Clause_Body<'a>(text: &'a str, name: &str) -> Option<&'a str>
     let start = opening.saturating_add(prefix.len());
     let rest = text.get(start..)?;
 
+    let close = Matching_Close_Paren_Offset(rest)?;
+    return rest.get(..close);
+}
+
+/// The byte offset of the `)` that closes the already-open (depth 1) parenthesis run
+/// starting at `rest`, tracking nested parens rather than stopping at the first `)` —
+/// `range(min = 0, max = 255)` sits nested inside `validate(...)`.
+fn Matching_Close_Paren_Offset(rest: &str) -> Option<usize>
+{
     let mut depth: i32 = 1;
     for (offset, character) in rest.char_indices()
     {
@@ -319,7 +407,7 @@ fn Clause_Body<'a>(text: &'a str, name: &str) -> Option<&'a str>
                 depth = depth.saturating_sub(1);
                 if depth == 0
                 {
-                    return rest.get(..offset);
+                    return Some(offset);
                 }
             }
             _ =>
@@ -330,34 +418,49 @@ fn Clause_Body<'a>(text: &'a str, name: &str) -> Option<&'a str>
     return None;
 }
 
-fn Min_Max(inside: &str) -> (Option<i64>, Option<i64>)
+/// `Min_Max`'s result, named so its two same-typed members cannot be swapped at a call site
+/// without the compiler noticing.
+struct MinMax
+{
+    min: Option<i64>,
+    max: Option<i64>,
+}
+
+fn Min_Max(inside: &str) -> MinMax
 {
     let mut min = None;
     let mut max = None;
 
     for clause in inside.split(',')
     {
-        let Some((key, value)) = clause.split_once('=')
-        else
-        {
-            continue;
-        };
-        let Ok(parsed) = value.trim().parse::<i64>()
-        else
-        {
-            continue;
-        };
-
-        match key.trim()
-        {
-            "min" => min = Some(parsed),
-            "max" => max = Some(parsed),
-            _ =>
-            {}
-        }
+        Apply_Clause(clause, &mut min, &mut max);
     }
 
-    return (min, max);
+    return MinMax { min, max };
+}
+
+/// Parses one `key = value` clause and, if `key` is `min`/`max` and `value` parses as a
+/// plain base-ten integer, records it into the matching output.
+fn Apply_Clause(clause: &str, min: &mut Option<i64>, max: &mut Option<i64>)
+{
+    let Some((key, value)) = clause.split_once('=')
+    else
+    {
+        return;
+    };
+    let Ok(parsed) = value.trim().parse::<i64>()
+    else
+    {
+        return;
+    };
+
+    match key.trim()
+    {
+        "min" => *min = Some(parsed),
+        "max" => *max = Some(parsed),
+        _ =>
+        {}
+    }
 }
 
 /// `name: Type` (optionally `pub`/`pub(...)`-qualified, trailing comma optional).
@@ -370,7 +473,7 @@ fn Field_Declaration(trimmed: &str) -> Option<(&str, &str)>
     let name = name.trim();
     let declared_type = declared_type.trim();
 
-    if name.is_empty() || !name.chars().all(|character| return character.is_alphanumeric() || character == '_')
+    if name.is_empty() || !Is_Valid_Identifier(name)
     {
         return None;
     }
@@ -380,6 +483,11 @@ fn Field_Declaration(trimmed: &str) -> Option<(&str, &str)>
     }
 
     return Some((name, declared_type));
+}
+
+fn Is_Valid_Identifier(name: &str) -> bool
+{
+    return name.chars().all(Is_Ident_Char);
 }
 
 fn Strip_Rust_Visibility(code: &str) -> &str
@@ -416,13 +524,6 @@ mod tests
 {
     use super::*;
     use nomos_contracts::SubjectId;
-
-    fn Source(path: &str, text: &str) -> SourceFile
-    {
-        let mut source = SourceFile::New(path, SubjectId::From_Digest(nomos_model::Content_Digest(path.as_bytes())), text);
-        source.language = crate::Recognized_Language_In_Tests(path);
-        return source;
-    }
 
     #[test]
     fn Test_Check_Nonnegative_Storage_Is_Unsigned_Should_Report_A_Signed_Field_With_A_Nonnegative_Minimum()
@@ -499,5 +600,12 @@ mod tests
         let findings = Check_A_Known_Range_Picks_Its_Type(&[source]);
 
         assert_eq!(findings.len(), 1, "the range clause is the second attribute, not the first: {findings:?}");
+    }
+
+    fn Source(path: &str, text: &str) -> SourceFile
+    {
+        let mut source = SourceFile::New(path, SubjectId::From_Digest(nomos_model::Content_Digest(path.as_bytes())), text);
+        source.language = crate::Recognized_Language_In_Tests(path);
+        return source;
     }
 }

@@ -106,6 +106,17 @@ mod tests
         );
     }
 
+    fn Repository_Root() -> std::path::PathBuf
+    {
+        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest
+            .parent()
+            .and_then(std::path::Path::parent)
+            .and_then(std::path::Path::parent)
+            .map(std::path::PathBuf::from)
+            .expect("this crate sits three levels below the workspace root");
+    }
+
     #[test]
     fn Test_A_Fact_Key_Should_Depend_On_The_Guarantee()
     {
@@ -125,17 +136,6 @@ mod tests
             weak_key.Digest(),
             "two offers of the same subject at different guarantees must file apart"
         );
-    }
-
-    fn Repository_Root() -> std::path::PathBuf
-    {
-        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(std::path::Path::parent)
-            .and_then(std::path::Path::parent)
-            .map(std::path::PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
     }
 
     /// Fill bytes distinct enough that `Context()`'s three digests differ from one another;

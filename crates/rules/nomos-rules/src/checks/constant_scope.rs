@@ -66,43 +66,42 @@ pub fn Check_Constants_Are_The_Exception_To_Function_Scope_Use(sources: &[Source
             continue;
         }
 
-        let lines: Vec<&str> = source.text.lines().collect();
-        let constants = if source.Is_Written_In(RUST_LANGUAGE)
-        {
-            Rust_Function_Constants_In(&lines)
-        }
-        else if source.Is_Written_In(GO_LANGUAGE)
-        {
-            Go_Function_Constants_In(&lines)
-        }
-        else
-        {
-            continue;
-        };
-
-        findings.extend(constants.into_iter().map(|constant| return Constant_Finding(source, &constant)));
+        let source_findings = Constant_Findings_For_Source(source);
+        findings.extend(source_findings);
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
 }
 
-fn Constant_Finding(source: &SourceFile, constant: &Constant) -> Finding
+/// This file's own path. Every fixture below spells a real const/fn/impl shape inside a
+/// Rust string literal, which would otherwise self-match when this crate checks its own
+/// workspace — the same self-exemption every other `*_text.rs`-shaped rule here carries for
+/// the identical reason.
+const OWN_IMPLEMENTATION_FILE: &str = "checks/constant_scope.rs";
+
+fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    let line_number = Line_Number(constant.line_index);
-    return Finding {
-        rule: RuleId::New(CONSTANTS_ARE_THE_EXCEPTION_TO_FUNCTION_SCOPE_USE),
-        subject: source.subject,
-        subject_name: format!("{}:{line_number}", source.path),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!(
-            "the constant at {}:{line_number} is declared inside `{}`, which claims the value belongs to that function; lift it to module scope",
-            source.path, constant.function
-        ),
-        locations: vec![format!("{}:{line_number}", source.path)],
+    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+}
+
+fn Constant_Findings_For_Source(source: &SourceFile) -> Vec<Finding>
+{
+    let lines: Vec<&str> = source.text.lines().collect();
+    let constants = if source.Is_Written_In(RUST_LANGUAGE)
+    {
+        Rust_Function_Constants_In(&lines)
+    }
+    else if source.Is_Written_In(GO_LANGUAGE)
+    {
+        Go_Function_Constants_In(&lines)
+    }
+    else
+    {
+        return Vec::new();
     };
+
+    return constants.into_iter().map(|constant| return Constant_Finding(source, &constant)).collect();
 }
 
 /// A stack frame for one open Rust function: the depth it opened at, and its name.
@@ -112,115 +111,56 @@ struct FunctionFrame
     name: String,
 }
 
+/// Threaded across [`Rust_Function_Constants_In`]'s one-pass scan: how deep into nested
+/// braces the current line sits, the stack of still-open function frames, and a function
+/// header seen but not yet committed (its brace has not arrived).
+struct RustConstantScan
+{
+    depth: usize,
+    stack: Vec<FunctionFrame>,
+    pending: Option<String>,
+}
+
 fn Rust_Function_Constants_In(lines: &[&str]) -> Vec<Constant>
 {
     let mut found = Vec::new();
-    let mut depth = 0usize;
-    let mut stack: Vec<FunctionFrame> = Vec::new();
-    let mut pending: Option<String> = None;
+    let mut scan = RustConstantScan { depth: 0, stack: Vec::new(), pending: None };
 
     for (index, line) in lines.iter().enumerate()
     {
-        let trimmed = line.trim();
-        if trimmed.starts_with("//") || trimmed.starts_with("#[")
+        if let Some(constant) = Rust_Constant_At_Line(line, index, &mut scan)
         {
-            continue;
-        }
-
-        if pending.is_none()
-        {
-            pending = Fn_Header_Name(line);
-        }
-
-        if let Some(function) = stack.last()
-            && Rust_Const_Name(trimmed).is_some()
-        {
-            found.push(Constant { line_index: index, function: function.name.clone() });
-        }
-
-        let opened = line.matches('{').count();
-        let closed = line.matches('}').count();
-
-        if let Some(name) = pending.take_if(|_| return opened > 0)
-        {
-            stack.push(FunctionFrame { open_depth: depth, name });
-        }
-
-        depth = depth.saturating_add(opened);
-        depth = depth.saturating_sub(closed);
-
-        while stack.last().is_some_and(|frame| return depth <= frame.open_depth)
-        {
-            stack.pop();
+            found.push(constant);
         }
     }
 
     return found;
 }
 
-fn Go_Function_Constants_In(lines: &[&str]) -> Vec<Constant>
+/// Judges one line against the accumulated `scan` state, then advances that state past it.
+fn Rust_Constant_At_Line(line: &str, index: usize, scan: &mut RustConstantScan) -> Option<Constant>
 {
-    let mut found = Vec::new();
-    let mut depth = 0usize;
-    let mut open: Option<(usize, String)> = None;
-    let mut pending: Option<String> = None;
-    let mut in_const_block = false;
-
-    for (index, line) in lines.iter().enumerate()
+    let trimmed = line.trim();
+    if trimmed.starts_with("//") || trimmed.starts_with("#[")
     {
-        let trimmed = line.trim();
-        if trimmed.starts_with("//")
-        {
-            continue;
-        }
-
-        if open.is_none() && pending.is_none() && depth == 0
-        {
-            pending = Go_Func_Header_Name(line);
-        }
-
-        if let Some((_, function)) = &open
-        {
-            if in_const_block
-            {
-                if trimmed == ")"
-                {
-                    in_const_block = false;
-                }
-                else if !trimmed.is_empty()
-                {
-                    found.push(Constant { line_index: index, function: function.clone() });
-                }
-            }
-            else if trimmed == "const ("
-            {
-                in_const_block = true;
-            }
-            else if Go_Const_Name(trimmed).is_some()
-            {
-                found.push(Constant { line_index: index, function: function.clone() });
-            }
-        }
-
-        let opened = line.matches('{').count();
-        let closed = line.matches('}').count();
-
-        if let Some(name) = pending.take_if(|_| return opened > 0)
-        {
-            open = Some((depth, name));
-        }
-
-        depth = depth.saturating_add(opened);
-        depth = depth.saturating_sub(closed);
-
-        if open.as_ref().is_some_and(|(open_depth, _)| return depth <= *open_depth)
-        {
-            open = None;
-            in_const_block = false;
-        }
+        return None;
     }
 
-    return found;
+    if scan.pending.is_none()
+    {
+        scan.pending = Fn_Header_Name(line);
+    }
+
+    let mut constant = None;
+    if let Some(function) = scan.stack.last()
+        && Rust_Const_Name(trimmed).is_some()
+    {
+        constant = Some(Constant { line_index: index, function: function.name.clone() });
+    }
+
+    Advance_Rust_Constant_Scan(line, scan);
+
+    return constant;
 }
 
 /// `\bfn\s+(\w+)` ported as a hand search — the same left-boundary-plus-mandatory-
@@ -228,58 +168,7 @@ fn Go_Function_Constants_In(lines: &[&str]) -> Vec<Constant>
 /// pointer type (`fn(i32) -> i32`, no whitespace before `(`) never matches.
 fn Fn_Header_Name(line: &str) -> Option<String>
 {
-    Keyword_Header_Name(line, "fn")
-}
-
-/// `\bfunc\s+(\w+)` — Go's own function keyword is spelled differently but the shape is
-/// identical; a func literal (`func(x int) { ... }`) has no name between the keyword and
-/// `(`, so it never matches and never opens a new scope.
-fn Go_Func_Header_Name(line: &str) -> Option<String>
-{
-    Keyword_Header_Name(line, "func")
-}
-
-fn Keyword_Header_Name(line: &str, keyword: &str) -> Option<String>
-{
-    let bytes = line.as_bytes();
-    let mut search_from = 0usize;
-
-    while let Some(offset) = line.get(search_from..).and_then(|rest| return rest.find(keyword))
-    {
-        let start = search_from.saturating_add(offset);
-        let end = start.saturating_add(keyword.len());
-
-        if Has_Left_Boundary(bytes, start)
-            && let Some(after) = line.get(end..)
-            && after.starts_with(char::is_whitespace)
-        {
-            let trimmed = after.trim_start();
-            let name_len = trimmed.find(|character: char| return !(character.is_alphanumeric() || character == '_')).unwrap_or(trimmed.len());
-            if name_len > 0
-            {
-                return trimmed.get(..name_len).map(str::to_owned);
-            }
-        }
-
-        search_from = start.saturating_add(1);
-    }
-
-    return None;
-}
-
-fn Has_Left_Boundary(bytes: &[u8], start: usize) -> bool
-{
-    return start.checked_sub(1).and_then(|previous| return bytes.get(previous)).is_none_or(|&byte| return !Is_Ident_Byte(byte));
-}
-
-fn Is_Ident_Byte(byte: u8) -> bool
-{
-    return byte.is_ascii_alphanumeric() || byte == b'_';
-}
-
-fn Is_Ident_Char(character: char) -> bool
-{
-    return character.is_alphanumeric() || character == '_';
+    return Keyword_Header_Name(line, Keyword("fn"));
 }
 
 /// A Rust `const NAME: Type = ...;` declaration, ported as a hand match: the token right
@@ -320,6 +209,130 @@ fn Strip_Rust_Visibility(code: &str) -> &str
     return after_pub.trim_start();
 }
 
+fn Advance_Rust_Constant_Scan(line: &str, scan: &mut RustConstantScan)
+{
+    let opened = line.matches('{').count();
+    let closed = line.matches('}').count();
+
+    if let Some(name) = scan.pending.take_if(|_| return opened > 0)
+    {
+        scan.stack.push(FunctionFrame { open_depth: scan.depth, name });
+    }
+
+    scan.depth = scan.depth.saturating_add(opened);
+    scan.depth = scan.depth.saturating_sub(closed);
+
+    while scan.stack.last().is_some_and(|frame| return scan.depth <= frame.open_depth)
+    {
+        scan.stack.pop();
+    }
+}
+
+/// Threaded across [`Go_Function_Constants_In`]'s one-pass scan.
+struct GoConstantScan
+{
+    depth: usize,
+    open: Option<(usize, String)>,
+    pending: Option<String>,
+    in_const_block: bool,
+}
+
+fn Go_Function_Constants_In(lines: &[&str]) -> Vec<Constant>
+{
+    let mut found = Vec::new();
+    let mut scan = GoConstantScan { depth: 0, open: None, pending: None, in_const_block: false };
+
+    for (index, line) in lines.iter().enumerate()
+    {
+        if let Some(constant) = Go_Constant_At_Line(line, index, &mut scan)
+        {
+            found.push(constant);
+        }
+    }
+
+    return found;
+}
+
+/// Judges one line against the accumulated `scan` state, then advances that state past it.
+fn Go_Constant_At_Line(line: &str, index: usize, scan: &mut GoConstantScan) -> Option<Constant>
+{
+    let trimmed = line.trim();
+    if trimmed.starts_with("//")
+    {
+        return None;
+    }
+
+    if Ready_For_A_New_Go_Function(scan)
+    {
+        scan.pending = Go_Func_Header_Name(line);
+    }
+
+    let constant = Go_Constant_In_Open_Function(trimmed, index, scan);
+
+    Advance_Go_Constant_Scan(line, scan);
+
+    return constant;
+}
+
+/// No function is currently open or about to open, and the scan sits at the file's own top
+/// level — the only place a new Go function header is looked for.
+fn Ready_For_A_New_Go_Function(scan: &GoConstantScan) -> bool
+{
+    return scan.open.is_none() && scan.pending.is_none() && scan.depth == 0;
+}
+
+/// `\bfunc\s+(\w+)` — Go's own function keyword is spelled differently but the shape is
+/// identical; a func literal (`func(x int) { ... }`) has no name between the keyword and
+/// `(`, so it never matches and never opens a new scope.
+fn Go_Func_Header_Name(line: &str) -> Option<String>
+{
+    return Keyword_Header_Name(line, Keyword("func"));
+}
+
+/// `trimmed`'s constant, if `scan` is inside an open function and this line declares one —
+/// guard clauses throughout, since each case here is its own reason to stop, not a nested
+/// refinement of the one before it.
+fn Go_Constant_In_Open_Function(trimmed: &str, index: usize, scan: &mut GoConstantScan) -> Option<Constant>
+{
+    let (_, function) = scan.open.as_ref()?;
+    let function = function.clone();
+
+    if scan.in_const_block
+    {
+        return Go_Constant_In_Const_Block(trimmed, index, scan, function);
+    }
+
+    if trimmed == "const ("
+    {
+        scan.in_const_block = true;
+        return None;
+    }
+
+    if Go_Const_Name(trimmed).is_some()
+    {
+        return Some(Constant { line_index: index, function });
+    }
+
+    return None;
+}
+
+/// One member line inside an already-open `const ( ... )` block: the block's own close,
+/// a blank line, or a member that carries no `const` keyword of its own.
+fn Go_Constant_In_Const_Block(trimmed: &str, index: usize, scan: &mut GoConstantScan, function: String) -> Option<Constant>
+{
+    if trimmed == ")"
+    {
+        scan.in_const_block = false;
+        return None;
+    }
+    if trimmed.is_empty()
+    {
+        return None;
+    }
+
+    return Some(Constant { line_index: index, function });
+}
+
 /// A Go single-line `const name = value` or `const name Type = value` declaration (the
 /// parenthesized block form is handled separately by the scan's own `in_const_block`
 /// state, since each member line inside it carries no `const` keyword of its own).
@@ -342,20 +355,114 @@ fn Go_Const_Name(trimmed: &str) -> Option<&str>
     return Some(name);
 }
 
+fn Advance_Go_Constant_Scan(line: &str, scan: &mut GoConstantScan)
+{
+    let opened = line.matches('{').count();
+    let closed = line.matches('}').count();
+
+    if let Some(name) = scan.pending.take_if(|_| return opened > 0)
+    {
+        scan.open = Some((scan.depth, name));
+    }
+
+    scan.depth = scan.depth.saturating_add(opened);
+    scan.depth = scan.depth.saturating_sub(closed);
+
+    if scan.open.as_ref().is_some_and(|(open_depth, _)| return scan.depth <= *open_depth)
+    {
+        scan.open = None;
+        scan.in_const_block = false;
+    }
+}
+
+fn Constant_Finding(source: &SourceFile, constant: &Constant) -> Finding
+{
+    let line_number = Line_Number(constant.line_index);
+    return Finding {
+        rule: RuleId::New(CONSTANTS_ARE_THE_EXCEPTION_TO_FUNCTION_SCOPE_USE),
+        subject: source.subject,
+        subject_name: format!("{}:{line_number}", source.path),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary: format!(
+            "the constant at {}:{line_number} is declared inside `{}`, which claims the value belongs to that function; lift it to module scope",
+            source.path, constant.function
+        ),
+        locations: vec![format!("{}:{line_number}", source.path)],
+    };
+}
+
 fn Line_Number(index: usize) -> usize
 {
     return index.saturating_add(1);
 }
 
-/// This file's own path. Every fixture below spells a real const/fn/impl shape inside a
-/// Rust string literal, which would otherwise self-match when this crate checks its own
-/// workspace — the same self-exemption every other `*_text.rs`-shaped rule here carries for
-/// the identical reason.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/constant_scope.rs";
+/// The literal keyword [`Keyword_Header_Name`] searches for, wrapped so its parameter
+/// position cannot be transposed with `line` — the text being searched — with nothing to
+/// catch it.
+struct Keyword<'a>(&'a str);
 
-fn Is_Own_Implementation_File(source: &SourceFile) -> bool
+fn Keyword_Header_Name(line: &str, keyword: Keyword<'_>) -> Option<String>
 {
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+    let bytes = line.as_bytes();
+    let mut search_from = 0usize;
+
+    while let Some(offset) = line.get(search_from..).and_then(|rest| return rest.find(keyword.0))
+    {
+        let start = search_from.saturating_add(offset);
+        let end = start.saturating_add(keyword.0.len());
+
+        if let Some(name) = Header_Name_After(line, bytes, start, end)
+        {
+            return Some(name);
+        }
+
+        search_from = start.saturating_add(1);
+    }
+
+    return None;
+}
+
+/// The identifier right after a candidate keyword occurrence at `[start, end)`, if `start`
+/// sits at a word boundary and at least one whitespace character separates the keyword from
+/// a non-empty run of identifier characters.
+fn Header_Name_After(line: &str, bytes: &[u8], start: usize, end: usize) -> Option<String>
+{
+    if !Has_Left_Boundary(bytes, start)
+    {
+        return None;
+    }
+
+    let after = line.get(end..)?;
+    if !after.starts_with(char::is_whitespace)
+    {
+        return None;
+    }
+
+    let trimmed = after.trim_start();
+    let name_len = trimmed.find(|character: char| return !(character.is_alphanumeric() || character == '_')).unwrap_or(trimmed.len());
+    if name_len == 0
+    {
+        return None;
+    }
+
+    return trimmed.get(..name_len).map(str::to_owned);
+}
+
+fn Has_Left_Boundary(bytes: &[u8], start: usize) -> bool
+{
+    return start.checked_sub(1).and_then(|previous| return bytes.get(previous)).is_none_or(|&byte| return !Is_Ident_Byte(byte));
+}
+
+fn Is_Ident_Byte(byte: u8) -> bool
+{
+    return byte.is_ascii_alphanumeric() || byte == b'_';
+}
+
+fn Is_Ident_Char(character: char) -> bool
+{
+    return character.is_alphanumeric() || character == '_';
 }
 
 #[cfg(test)]
@@ -364,13 +471,6 @@ mod tests
     use super::*;
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
-
-    fn Source(path: &str, text: &str) -> SourceFile
-    {
-        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
-        source.language = crate::Recognized_Language_In_Tests(path);
-        return source;
-    }
 
     #[test]
     fn Test_Check_Constants_Are_The_Exception_To_Function_Scope_Use_Should_Report_A_Rust_Const_Inside_A_Function()
@@ -442,9 +542,17 @@ mod tests
     #[test]
     fn Test_Check_Constants_Are_The_Exception_To_Function_Scope_Use_Should_Report_A_Go_Const_Block_Inside_A_Function()
     {
+        const EXPECTED_CONSTANTS: usize = 2;
         let source = Source("timer.go", "func Tick() {\n\tconst (\n\t\tframeIntervalMs = 16\n\t\tmaxFrames = 60\n\t)\n}\n");
         let findings = Check_Constants_Are_The_Exception_To_Function_Scope_Use(&[source]);
 
-        assert_eq!(findings.len(), 2, "{findings:?}");
+        assert_eq!(findings.len(), EXPECTED_CONSTANTS, "{findings:?}");
+    }
+
+    fn Source(path: &str, text: &str) -> SourceFile
+    {
+        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        source.language = crate::Recognized_Language_In_Tests(path);
+        return source;
     }
 }

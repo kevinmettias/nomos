@@ -76,9 +76,12 @@ fn Findings_For(sources: &[SourceFile], rule: &str, matches_partition: fn(&str) 
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !super::Is_Test_Or_Example_Source(source) && !Is_Own_Implementation_File(source)
+        let is_judged_rust_source =
+            source.Is_Written_In(RUST_LANGUAGE) && !super::Is_Test_Or_Example_Source(source) && !Is_Own_Implementation_File(source);
+        if is_judged_rust_source
         {
-            findings.extend(Ordering_Findings_In(source, rule, matches_partition));
+            let ordering_findings = Ordering_Findings_In(source, rule, matches_partition);
+            findings.extend(ordering_findings);
         }
     }
 
@@ -91,39 +94,61 @@ fn Ordering_Findings_In(source: &SourceFile, rule: &str, matches_partition: fn(&
     let lines: Vec<&str> = source.text.lines().collect();
     let mut findings = Vec::new();
 
-    for (index, line) in lines.iter().enumerate()
+    for index in 0..lines.len()
     {
-        let code = Code_Prefix(line);
-        if Is_Import_Line(code)
+        let finding = Ordering_Finding_For_Line(RuleContext { source, rule }, matches_partition, &lines, index);
+        if let Some(finding) = finding
         {
-            continue;
+            findings.push(finding);
         }
-
-        let Some(variant) = Ordering_Match_In(code)
-        else
-        {
-            continue;
-        };
-
-        if !matches_partition(variant) || Has_Marker_Reason(&lines, index)
-        {
-            continue;
-        }
-
-        let line_number = Line_Number(index);
-        findings.push(Finding {
-            rule: RuleId::New(rule),
-            subject: source.subject,
-            subject_name: format!("{}:{line_number}", source.path),
-            applicability: Applicability::Supported,
-            evidence: EvidenceClass::Derived,
-            gate: GateCategory::Blocking,
-            summary: format!("`Ordering::{variant}` at {}:{line_number} carries no adjacent `atomic-ordering: allow` reason", source.path),
-            locations: vec![format!("{}:{line_number}", source.path)],
-        });
     }
 
     return findings;
+}
+
+/// `source` and `rule` always travel together to the one finding they describe; grouped so
+/// the functions that pass both along stay under the parameter-count ceiling.
+struct RuleContext<'a>
+{
+    source: &'a SourceFile,
+    rule: &'a str,
+}
+
+fn Ordering_Finding_For_Line(context: RuleContext<'_>, matches_partition: fn(&str) -> bool, lines: &[&str], index: usize) -> Option<Finding>
+{
+    let code = Code_Prefix(lines.get(index).copied().unwrap_or_default());
+    if Is_Import_Line(code)
+    {
+        return None;
+    }
+
+    let variant = Ordering_Match_In(code)?;
+    if !matches_partition(variant) || Has_Marker_Reason(lines, index)
+    {
+        return None;
+    }
+
+    return Some(Ordering_Finding(context, Variant(variant), index));
+}
+
+/// One reported ordering finding. `rule` and `variant` are both wrapped only where they sit
+/// adjacent to another string of the same shape ([`Variant`] here); `rule` alone needs none.
+fn Ordering_Finding(context: RuleContext<'_>, variant: Variant<'_>, index: usize) -> Finding
+{
+    let RuleContext { source, rule } = context;
+    let line_number = Line_Number(index);
+    let variant = variant.0;
+
+    return Finding {
+        rule: RuleId::New(rule),
+        subject: source.subject,
+        subject_name: format!("{}:{line_number}", source.path),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary: format!("`Ordering::{variant}` at {}:{line_number} carries no adjacent `atomic-ordering: allow` reason", source.path),
+        locations: vec![format!("{}:{line_number}", source.path)],
+    };
 }
 
 /// This file's own path. All three rules here exempt their own implementing file, the same
@@ -170,7 +195,7 @@ fn Ordering_Match_In(code: &str) -> Option<&'static str>
 
     for &variant in ORDERING_VARIANTS
     {
-        if let Some(start) = Find_Ordering_Variant(code, variant)
+        if let Some(start) = Find_Ordering_Variant(code, Variant(variant))
         {
             if earliest.is_none_or(|(earliest_start, _)| return start < earliest_start)
             {
@@ -182,7 +207,13 @@ fn Ordering_Match_In(code: &str) -> Option<&'static str>
     return earliest.map(|(_, variant)| return variant);
 }
 
-fn Find_Ordering_Variant(code: &str, variant: &str) -> Option<usize>
+/// One of the five `Ordering` variant names, wrapped so it cannot be transposed with a plain
+/// `&str` haystack argument at a call site -- both are the same underlying type, but only
+/// one names the thing searched for.
+#[derive(Clone, Copy)]
+struct Variant<'a>(&'a str);
+
+fn Find_Ordering_Variant(code: &str, variant: Variant<'_>) -> Option<usize>
 {
     let bytes = code.as_bytes();
     let mut search_from = 0usize;
@@ -212,7 +243,7 @@ fn Is_Ident_Byte(byte: u8) -> bool
 
 /// `rest` is everything after `"Ordering"`; this expects optional whitespace, `::`, optional
 /// whitespace, the variant name, then a non-identifier character or end of input.
-fn Match_Qualified_Variant(rest: &str, variant: &str) -> bool
+fn Match_Qualified_Variant(rest: &str, variant: Variant<'_>) -> bool
 {
     let after_ws = rest.trim_start();
     let Some(after_colons) = after_ws.strip_prefix("::")
@@ -221,7 +252,7 @@ fn Match_Qualified_Variant(rest: &str, variant: &str) -> bool
         return false;
     };
     let after_ws_2 = after_colons.trim_start();
-    let Some(after_variant) = after_ws_2.strip_prefix(variant)
+    let Some(after_variant) = after_ws_2.strip_prefix(variant.0)
     else
     {
         return false;
@@ -242,6 +273,14 @@ fn Has_Marker_Reason(lines: &[&str], index: usize) -> bool
         return true;
     }
 
+    return Marker_Reason_Found_Above(lines, index);
+}
+
+/// Walks upward from `index` (exclusive) over a contiguous run of blank/comment/attribute
+/// lines, stopping at the first line that is not skippable -- returning whether a marker
+/// reason was found with a non-empty reason before that happened.
+fn Marker_Reason_Found_Above(lines: &[&str], index: usize) -> bool
+{
     let mut cursor = index;
     while cursor > 0
     {

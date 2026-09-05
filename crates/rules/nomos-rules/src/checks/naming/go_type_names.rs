@@ -30,6 +30,17 @@ pub fn Check_Go_Type_Names_Use_Camel_Case(
 {
     let exported_case = Resolve_Case(facts, Some("go"), "type.exported", Case::UpperCamel);
     let unexported_case = Resolve_Case(facts, Some("go"), "type.unexported", Case::LowerCamel);
+
+    return Judged_Go_Type_Sources(sources, facts, exported_case, unexported_case);
+}
+
+fn Judged_Go_Type_Sources(
+    sources: &[SourceFile],
+    facts: &mut dyn FactReader,
+    exported_case: Case,
+    unexported_case: Case,
+) -> Vec<Finding>
+{
     let mut findings = Vec::new();
 
     for source in sources
@@ -41,7 +52,11 @@ pub fn Check_Go_Type_Names_Use_Camel_Case(
 
         match super::reading::Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Violations_In(&payload, &source.path, exported_case, unexported_case)),
+            Ok(payload) =>
+            {
+                let violations = Violations_In(&payload, &source.path, exported_case, unexported_case);
+                findings.extend(violations);
+            }
             Err(finding) => findings.push(Unread_As_This_Rule(finding)),
         }
     }
@@ -83,14 +98,7 @@ fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
     use nomos_model::Content_Digest;
 
     let name = item.Own_Name();
-    let expected = if item.Is_Public()
-    {
-        "UpperCamelCase"
-    }
-    else
-    {
-        "lowerCamelCase"
-    };
+    let expected = Expected_Case_Label(item);
     let qualified = format!("{path}::{}", item.qualified_name);
 
     return Finding {
@@ -103,6 +111,16 @@ fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
         summary: format!("Go type `{name}` is not {expected}"),
         locations: vec![path.to_owned()],
     };
+}
+
+fn Expected_Case_Label(item: &PayloadItem) -> &'static str
+{
+    if item.Is_Public()
+    {
+        return "UpperCamelCase";
+    }
+
+    return "lowerCamelCase";
 }
 
 fn Unread_As_This_Rule(mut finding: Finding) -> Finding

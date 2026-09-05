@@ -97,6 +97,10 @@ mod tests
         return Command::New(argv, Duration::from_secs(5));
     }
 
+    /// How often this test's own wait loop re-checks a drain, distinct from
+    /// `std_process_launcher`'s real `POLL_INTERVAL`, which this module does not depend on.
+    const TEST_POLL_INTERVAL: Duration = Duration::from_millis(10);
+
     /// Waits until a drain has finished, or panics -- the reader thread is asynchronous.
     fn Awaited(drain: Option<&Drain>)
     {
@@ -104,7 +108,7 @@ mod tests
         while drain.is_some_and(|drain| return !drain.Is_Finished())
         {
             assert!(started.elapsed() < Duration::from_secs(5), "the drain never finished");
-            std::thread::sleep(Duration::from_millis(10)); // flakiness: allow: same poll wait.rs's real Launcher uses
+            std::thread::sleep(TEST_POLL_INTERVAL); // flakiness: allow: same poll wait.rs's real Launcher uses
         }
     }
 }

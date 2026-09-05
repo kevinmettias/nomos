@@ -47,24 +47,7 @@ pub fn Check_File_Name_Matches_Declared_Type(
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    let mut findings = Vec::new();
-
-    for source in sources
-    {
-        if crate::checks::Is_Test_Or_Example_Source(source)
-        {
-            continue;
-        }
-
-        match super::reading::Payload_Of(source, facts)
-        {
-            Ok(payload) => findings.extend(Violations_In(&payload, &source.path)),
-            Err(finding) => findings.push(Unread_As_This_Rule(finding)),
-        }
-    }
-
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
+    return Judged_Sources(sources, facts, Violations_In, Unread_As_This_Rule);
 }
 
 /// Reports files with more than one top-level public type-like declaration.
@@ -74,24 +57,7 @@ pub fn Check_One_Public_Type_Per_File(
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    let mut findings = Vec::new();
-
-    for source in sources
-    {
-        if crate::checks::Is_Test_Or_Example_Source(source)
-        {
-            continue;
-        }
-
-        match super::reading::Payload_Of(source, facts)
-        {
-            Ok(payload) => findings.extend(One_Public_Type_Violations_In(&payload, &source.path)),
-            Err(finding) => findings.push(Unread_As_One_Public_Type_Rule(finding)),
-        }
-    }
-
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
+    return Judged_Sources(sources, facts, One_Public_Type_Violations_In, Unread_As_One_Public_Type_Rule);
 }
 
 fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
@@ -115,7 +81,21 @@ fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
         return Vec::new();
     }
 
-    return public_types.into_iter().map(|item| return Violation_Finding(path, &stem, item)).collect();
+    return public_types.into_iter().map(|item| return Violation_Finding(path, item, &stem)).collect();
+}
+
+fn Comparable_Stem(path: &str) -> Option<String>
+{
+    let normalized = path.replace('\\', "/");
+    let file_name = normalized.rsplit('/').next().unwrap_or(&normalized);
+    let stem = file_name.split('.').next().unwrap_or(file_name);
+
+    if matches!(stem, "lib" | "main" | "mod")
+    {
+        return None;
+    }
+
+    return Some(stem.to_owned());
 }
 
 // A file naming one of the types it declares satisfies this rule for all of them, which
@@ -152,12 +132,24 @@ fn Declares_A_Public_Operation(payload: &SyntaxPayload) -> bool
         .any(|item| return item.Is_Public() && item.kind == FUNCTION && Is_Top_Level(item));
 }
 
-fn Is_Type_Like(item: &PayloadItem) -> bool
+fn Violation_Finding(path: &str, item: &PayloadItem, stem: &str) -> Finding
 {
-    return matches!(
-        item.kind.as_str(),
-        ENUM | INTERFACE | STRUCT | TRAIT | TRAIT_ALIAS | TYPE_ALIAS | TYPE_DEFINITION | UNION
-    );
+    use nomos_model::Content_Digest;
+
+    let type_name = item.Own_Name();
+    let expected = To_Snake_Case(type_name);
+    let qualified = format!("{path}::{}", item.qualified_name);
+
+    return Finding {
+        rule: RuleId::New(FILE_NAME_MATCHES_DECLARED_TYPE),
+        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
+        subject_name: type_name.to_owned(),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary: format!("`{type_name}` is public but {path} has stem `{stem}` instead of `{expected}`"),
+        locations: vec![path.to_owned()],
+    };
 }
 
 fn One_Public_Type_Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
@@ -179,23 +171,90 @@ fn One_Public_Type_Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Fin
         .collect();
 }
 
+fn One_Public_Type_Finding(path: &str, item: &PayloadItem) -> Finding
+{
+    use nomos_model::Content_Digest;
+
+    let type_name = item.Own_Name();
+    let qualified = format!("{path}::{}", item.qualified_name);
+
+    return Finding {
+        rule: RuleId::New(ONE_PUBLIC_TYPE_PER_FILE),
+        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
+        subject_name: type_name.to_owned(),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary: format!("{path} declares more than one top-level public type; `{type_name}` needs its own file"),
+        locations: vec![path.to_owned()],
+    };
+}
+
+fn Unread_As_This_Rule(mut finding: Finding) -> Finding
+{
+    finding.rule = RuleId::New(FILE_NAME_MATCHES_DECLARED_TYPE);
+    finding.summary = finding
+        .summary
+        .replace("this file's naming could not be judged", "this file's declared public types could not be judged");
+    return finding;
+}
+
+fn Unread_As_One_Public_Type_Rule(mut finding: Finding) -> Finding
+{
+    finding.rule = RuleId::New(ONE_PUBLIC_TYPE_PER_FILE);
+    finding.summary = finding.summary.replace(
+        "this file's naming could not be judged",
+        "this file's public type count could not be judged",
+    );
+    return finding;
+}
+
+/// The shape both checks above share: skip a test or example source, read each remaining
+/// source's own syntax fact, and fold either a real reading failure or `judge`'s own
+/// findings into one sorted list. `judge` and `unread` are each rule's own way of turning a
+/// decoded payload, or an unread source, into that rule's `Finding`s.
+fn Judged_Sources(
+    sources: &[SourceFile],
+    facts: &mut dyn FactReader,
+    judge: fn(&SyntaxPayload, &str) -> Vec<Finding>,
+    unread: fn(Finding) -> Finding,
+) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        if crate::checks::Is_Test_Or_Example_Source(source)
+        {
+            continue;
+        }
+
+        match super::reading::Payload_Of(source, facts)
+        {
+            Ok(payload) =>
+            {
+                let violations = judge(&payload, &source.path);
+                findings.extend(violations);
+            }
+            Err(finding) => findings.push(unread(finding)),
+        }
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+fn Is_Type_Like(item: &PayloadItem) -> bool
+{
+    return matches!(
+        item.kind.as_str(),
+        ENUM | INTERFACE | STRUCT | TRAIT | TRAIT_ALIAS | TYPE_ALIAS | TYPE_DEFINITION | UNION
+    );
+}
+
 fn Is_Top_Level(item: &PayloadItem) -> bool
 {
     return !item.qualified_name.contains("::");
-}
-
-fn Comparable_Stem(path: &str) -> Option<String>
-{
-    let normalized = path.replace('\\', "/");
-    let file_name = normalized.rsplit('/').next().unwrap_or(&normalized);
-    let stem = file_name.split('.').next().unwrap_or(file_name);
-
-    if matches!(stem, "lib" | "main" | "mod")
-    {
-        return None;
-    }
-
-    return Some(stem.to_owned());
 }
 
 fn To_Snake_Case(name: &str) -> String
@@ -223,64 +282,6 @@ fn To_Snake_Case(name: &str) -> String
     return snake;
 }
 
-fn Violation_Finding(path: &str, stem: &str, item: &PayloadItem) -> Finding
-{
-    use nomos_model::Content_Digest;
-
-    let type_name = item.Own_Name();
-    let expected = To_Snake_Case(type_name);
-    let qualified = format!("{path}::{}", item.qualified_name);
-
-    return Finding {
-        rule: RuleId::New(FILE_NAME_MATCHES_DECLARED_TYPE),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: type_name.to_owned(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!("`{type_name}` is public but {path} has stem `{stem}` instead of `{expected}`"),
-        locations: vec![path.to_owned()],
-    };
-}
-
-fn Unread_As_This_Rule(mut finding: Finding) -> Finding
-{
-    finding.rule = RuleId::New(FILE_NAME_MATCHES_DECLARED_TYPE);
-    finding.summary = finding
-        .summary
-        .replace("this file's naming could not be judged", "this file's declared public types could not be judged");
-    return finding;
-}
-
-fn One_Public_Type_Finding(path: &str, item: &PayloadItem) -> Finding
-{
-    use nomos_model::Content_Digest;
-
-    let type_name = item.Own_Name();
-    let qualified = format!("{path}::{}", item.qualified_name);
-
-    return Finding {
-        rule: RuleId::New(ONE_PUBLIC_TYPE_PER_FILE),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: type_name.to_owned(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!("{path} declares more than one top-level public type; `{type_name}` needs its own file"),
-        locations: vec![path.to_owned()],
-    };
-}
-
-fn Unread_As_One_Public_Type_Rule(mut finding: Finding) -> Finding
-{
-    finding.rule = RuleId::New(ONE_PUBLIC_TYPE_PER_FILE);
-    finding.summary = finding.summary.replace(
-        "this file's naming could not be judged",
-        "this file's public type count could not be judged",
-    );
-    return finding;
-}
-
 #[cfg(test)]
 mod tests
 {
@@ -305,12 +306,13 @@ mod tests
         let path = "tests/corpus/analysis/alpha/one.rs";
         let source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), "pub struct Anchor;
 ");
+        let guarantee = Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
         let TestOffering { mut store, registry, offer } = test_support::Offering(
             nomos_cap_syntax::Capability_Contract(),
             nomos_cap_syntax::Capability(),
             nomos_cap_syntax::CONTRACT_VERSION,
             PARSER,
-            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
+            guarantee,
         );
         test_support::Materialize(
             &mut store,
@@ -367,7 +369,8 @@ item	0	Struct	Public	Anchor	.	.
 
         let findings = Violations_In(&payload, "src/effort_mapping.rs");
 
-        assert_eq!(findings.len(), 2, "{findings:?}");
+        const EXPECTED_UNMATCHED_TYPE_COUNT: usize = 2;
+        assert_eq!(findings.len(), EXPECTED_UNMATCHED_TYPE_COUNT, "{findings:?}");
     }
 
     #[test]
@@ -445,7 +448,8 @@ item	0	Struct	Public	Anchor	.	.
 
         let findings = One_Public_Type_Violations_In(&payload, "src/order.rs");
 
-        assert_eq!(findings.len(), 2, "{findings:?}");
+        const EXPECTED_TOP_LEVEL_PUBLIC_TYPE_COUNT: usize = 2;
+        assert_eq!(findings.len(), EXPECTED_TOP_LEVEL_PUBLIC_TYPE_COUNT, "{findings:?}");
         assert!(findings.iter().all(|finding| return finding.rule == RuleId::New(ONE_PUBLIC_TYPE_PER_FILE)));
     }
 
