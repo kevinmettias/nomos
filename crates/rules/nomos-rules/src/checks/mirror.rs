@@ -23,9 +23,13 @@
 //! says so about enforcers — a phantom is "worse than declaring no enforcer at all:
 //! nothing runs, nothing can fail, and the declaration says the rule is covered so no
 //! reader looks twice" — and the same asymmetry is why this rule blocks on one and
-//! reports on the other. It is also what keeps the check green today: this workspace has
-//! twelve unmirrored universes, and a gate that can never be green is a gate everybody
-//! learns to ignore.
+//! reports on the other. It is also what keeps the check green today: this workspace still has
+//! unmirrored universes, and a gate that can never be green is a gate everybody learns to
+//! ignore. How many is deliberately not restated here:
+//! `tests/contract/tests/completeness_universes/table.rs` declares the count as
+//! `UNMIRRORED_TOTAL` and checks it against the table beside it, and a number copied into this
+//! comment would be an unchecked second copy of that one — which is exactly how this
+//! sentence came to say twelve long after the real figure had fallen to three.
 //!
 //! There is a third outcome above both, added by `OD-RULES-001`: **the rule saying it
 //! could not answer.** A subject whose syntax fact could not be read leaves the check

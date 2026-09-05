@@ -164,11 +164,14 @@ fn Declared_By(
 /// three instances `OD-COMPLETENESS-001` analyses were all public lists consumed from
 /// somewhere else, which is what let each of them go wrong unnoticed for months.
 ///
-/// Widening to private lists takes the workspace from twelve unmirrored universes to
-/// forty, every one of which needs a human to say what would go wrong — that is somebody's
-/// next item, not a side effect of this one. Both figures were measured on 2026-08-09;
-/// `OD-COMPLETENESS-002` records that an earlier sentence said thirty-four, which no longer
-/// matched anything measurable.
+/// Widening to private lists multiplies the holes by roughly an order of magnitude, and every
+/// one of them needs a human to say what would go wrong — that is somebody's next item, not
+/// a side effect of this one. The pair measured on 2026-08-09 was twelve unmirrored universes
+/// widening to forty; both halves have moved since, and the public figure is now the
+/// `UNMIRRORED_TOTAL` that `tests/contract/tests/completeness_universes/table.rs` declares and
+/// checks, so read those two numbers as the dated measurement they were rather than as the
+/// count today. `OD-COMPLETENESS-002` records that an earlier sentence said thirty-four, which
+/// no longer matched anything measurable; this one went the same way.
 fn Constant_Universe(path: &str, item: &PayloadItem) -> Option<DeclaredUniverse>
 {
     if !Is_Constant_Universe_Declaration(item)

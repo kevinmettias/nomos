@@ -50468,6 +50468,59 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P39-MIRROR-DOC-STATES-A-STALE-UNMIRRORED-COUNT",
+      "title": "checks/mirror states as current a twelve-universe count that is now three",
+      "why": "The mirror module doc asserts in present tense that this workspace has twelve unmirrored universes, and leans on that number to argue the rule can stay green today. Three independent authorities all say three: tests/contract/tests/completeness_universes/table.rs declares UNMIRRORED_TOTAL = 3 and names FILLER_PATTERNS plus the two KNOWN_PROVIDERS; a live gate run over this workspace reports exactly those three completeness-mirror findings and no others; and an independent scan of every non-test slice constant in crates finds the same three. universe_kind.rs carries the same twelve inside a paired figure, though that one at least dates itself to 2026-08-09. OD-COMPLETENESS-002 exists because an earlier sentence in this same area said thirty-four and stopped matching anything measurable, so this is a recurrence of a defect this repository has already recorded and paid for once. Writing three in place of twelve would drift again the moment somebody mirrors a universe, so the durable fix is to route the claim to the authority that already declares and checks the number.",
+      "done_when": "The mirror module doc no longer states a bare unmirrored-universe count as current fact and instead names the authority that declares and checks it; universe_kind.rs no longer lets its dated 2026-08-09 pair read as the present count; no live source comment in nomos-rules asserts that the workspace has twelve unmirrored universes; and cargo test -p nomos-rules passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/mirror.rs",
+          "crates/rules/nomos-rules/src/universe_kind.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": ":\\repos\\nomos\\crates\\capabilities\\nomos-cap-naming-policy)\n   Compiling nomos-cap-limits-policy v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-limits-policy)\n   Compiling nomos-cap-words-policy v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-words-policy)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\nwarning: type `Compact_Type_Text` should have an upper camel case name\n   --> crates\\rules\\nomos-rules\\src\\checks\\rust_text.rs:434:8\n    |\n434 | struct Compact_Type_Text<'a>(&'a str);\n    |        ^^^^^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `CompactTypeText`\n    |\n    = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: type `Wrapper_Name` should have an upper camel case name\n   --> crates\\rules\\nomos-rules\\src\\checks\\rust_text.rs:435:8\n    |\n435 | struct Wrapper_Name<'a>(&'a str);\n    |        ^^^^^^^^^^^^ help: convert the identifier to upper camel case: `WrapperName`\n\nwarning: `nomos-rules` (lib) generated 2 warnings\nwarning: `nomos-rules` (lib test) generated 2 warnings (2 duplicates)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.01s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_rules\nwarning: type `Compact_Type_Text` should have an upper camel case name\n   --> crates\\rules\\nomos-rules\\src\\checks\\rust_text.rs:434:8\n    |\n434 | struct Compact_Type_Text<'a>(&'a str);\n    |        ^^^^^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `CompactTypeText`\n    |\n    = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: type `Wrapper_Name` should have an upper camel case name\n   --> crates\\rules\\nomos-rules\\src\\checks\\rust_text.rs:435:8\n    |\n435 | struct Wrapper_Name<'a>(&'a str);\n    |        ^^^^^^^^^^^^ help: convert the identifier to upper camel case: `WrapperName`\n\nwarning: 2 warnings emitted\n\n",
+        "verified_at": 1788584162,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "805f1bfe3eccddb59869c5a61da0eefc786405de"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
