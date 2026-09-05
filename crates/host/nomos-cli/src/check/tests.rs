@@ -215,7 +215,7 @@ fn Test_A_Run_That_Materialized_Facts_Should_Judge_Rather_Than_Refuse()
     std::fs::create_dir_all(&root).expect("the temporary root is creatable");
     std::fs::write(
         root.join("a.rs"),
-        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Renamed_Away`.\npub const TABLE: &[&str] = &[];\n",
     )
     .expect("writable");
 
@@ -311,7 +311,7 @@ fn Broken_Provider_Run() -> (ExitCode, String)
     let root = std::env::temp_dir().join("nomos-check-coverage-debt-beside-clean");
     let _ignored = std::fs::remove_dir_all(&root);
     std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-    std::fs::write(root.join("a.rs"), "pub fn ok() {}\n").expect("writable");
+    std::fs::write(root.join("a.rs"), "pub fn ok()\n{\n}\n").expect("writable");
     std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("writable");
 
     let mut stdout = Vec::new();
@@ -336,7 +336,7 @@ fn Clean_Run() -> (ExitCode, String)
     let root = std::env::temp_dir().join("nomos-check-clean-only");
     let _ignored = std::fs::remove_dir_all(&root);
     std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-    std::fs::write(root.join("a.rs"), "pub fn ok() {}\n").expect("writable");
+    std::fs::write(root.join("a.rs"), "pub fn ok()\n{\n}\n").expect("writable");
     std::fs::write(
         root.join("Cargo.toml"),
         "[package]\nname = \"nomos-check-clean-only-fixture\"\nversion = \"0.0.0\"\nedition = \"2021\"\n",
@@ -363,7 +363,7 @@ fn A_Tree_With_A_Phantom_Beside_A_Refusal() -> PathBuf
     std::fs::create_dir_all(&root).expect("the temporary root is creatable");
     std::fs::write(
         root.join("a.rs"),
-        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Renamed_Away`.\npub const TABLE: &[&str] = &[];\n",
     )
     .expect("writable");
     std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("writable");
