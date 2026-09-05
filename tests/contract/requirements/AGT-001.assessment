@@ -12,21 +12,26 @@
 # so that clause does not bind this registry and is left out of this verdict rather than
 # forced NotBinding for the whole requirement.
 #
-# Of the remaining six, two are real today: `LedgerItem` is exactly the goal (`title`/`why`)
-# and scope (`territory`) an agent is handed before claiming and working an item, the
-# concrete shape a task already takes here. 'Applicable rules' has a real analog one layer
-# up, in a gate run's `RuleSelector`/`ScopeSelector` -- but nothing wires either onto a
-# per-task envelope. No single typed envelope bundles any of this into one artifact.
+# The remaining six are what `TaskEnvelope` (`nomos-agent-contracts`, since
+# P13-AGT-001-002-TASK-ENVELOPE-WORK-RESULT) bundles into exactly one typed,
+# Serialize/Deserialize artifact: `goal`, `scope`, `applicable_rules`, `prohibited_changes`,
+# `available_tools` and `expected_output_schema`, reusing `Territory` at two different
+# membership senses for the two scope-shaped fields and a real `SchemaId` rather than prose
+# for the output schema. This is not merely declared and unused: `nomos-cli`'s `agent
+# execute` and `agent judge-role` verbs each construct a real `TaskEnvelope` --
+# `dispatch.rs::Execute_Task` and `judge_role.rs::Judgment_Task` -- and hand it to a real
+# `AgentExecutor` (`nomos_agent_executor_claude_code::Execute_Task`) before that agent work
+# runs, which is this requirement's own "before agent work" clause.
 #
-# 'Prohibited changes', 'available tools', and an actual output-schema type (not prose) have
-# no real site: `Claim` carries only who holds an item and when the lease lapses, nothing
-# about what tools that holder may use. `WorkflowStep` does carry a typed `SchemaId`-shaped
-# output schema, but for a workflow step, not a ledger item or an agent task -- nothing
-# connects the two.
-verdict: Partial
-site: crates/substrate/nomos-ledger/src/item/ledger_item.rs#LedgerItem
-site: crates/substrate/nomos-scope-verification/src/territory.rs#Territory
-site: crates/orchestration/nomos-gate-orchestration/src/policy/rule_selector.rs#RuleSelector
-site: crates/orchestration/nomos-gate-orchestration/src/policy/scope_selector.rs#ScopeSelector
-gap: crates/substrate/nomos-ledger/src/claim.rs#Claim
-gap: crates/contracts/nomos-contracts/src/workflow_step.rs#WorkflowStep
+# What is not yet true is a separate, stronger property this requirement does not itself
+# ask for: today's real construction sites populate `scope`/`prohibited_changes`/
+# `available_tools` with empty values because neither CLI verb has a configuration surface
+# to source real ones from yet, and nothing downstream constrains the run by what the
+# envelope declares -- `P42-AGENT-ENVELOPE-ENFORCEMENT` is the open item for that. AGT-001
+# asks only that Nomos produce the typed envelope, not that its fields already bind the
+# run, so that gap does not weaken this verdict.
+verdict: Met
+site: crates/agent/nomos-agent-contracts/src/task_envelope.rs#TaskEnvelope
+site: crates/host/nomos-cli/src/agent/dispatch.rs#Execute_Task
+site: crates/host/nomos-cli/src/agent/judge_role.rs#Judgment_Task
+site: crates/agent/nomos-agent-executor-claude-code/src/lib.rs#Execute_Task
