@@ -36,6 +36,7 @@ mod go_text;
 mod lint;
 mod mirror;
 mod naming;
+mod nesting_depth;
 mod orphan_modules;
 mod placement;
 mod policy;
@@ -118,6 +119,7 @@ pub use lifetime_discipline::{
     Check_Lifetimes_Follow_The_Descriptive_Naming_Rule, Check_Static_Bounds_Are_Justified,
     LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, STATIC_BOUNDS_ARE_JUSTIFIED,
 };
+pub use nesting_depth::{Check_Nesting_Depth, NESTING_DEPTH};
 pub use orphan_modules::{Check_No_Orphan_Modules, NO_ORPHAN_MODULES};
 pub use procedural_macro::{Check_Prefer_Macro_Rules_Over_Procedural_Macros, PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS};
 pub use placement::{

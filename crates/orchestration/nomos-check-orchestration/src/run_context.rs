@@ -20,7 +20,8 @@ use nomos_rules::{
     Check_Go_File_Size_Review_Trigger, Check_Go_Helpers_Package_Five_Inputs, Check_Go_Type_Names_Use_Camel_Case,
     Check_Abbreviations, Check_Go_Variables_Use_Lower_Snake_Case, Check_Goals_And_Parts_Line_Up, Check_Lint_Diagnostics,
     Check_Single_Letter_Names,
-    Check_Lifetimes_Follow_The_Descriptive_Naming_Rule, Check_Naming_Convention, Check_No_Mod_Rs_Files,
+    Check_Lifetimes_Follow_The_Descriptive_Naming_Rule, Check_Naming_Convention, Check_Nesting_Depth,
+    Check_No_Mod_Rs_Files,
     Check_No_Orphan_Modules, Check_No_Single_Line_Function_Bodies,
     Check_Parameters_Borrow_Unless_Ownership_Is_Taken, Check_Prefer_Macro_Rules_Over_Procedural_Macros,
     Check_Static_Bounds_Are_Justified,
@@ -41,7 +42,7 @@ use nomos_rules::{
     FILE_SIZE_JUSTIFICATION_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
     GO_HELPERS_PACKAGE_FIVE_INPUTS, GO_VARIABLES_USE_LOWER_SNAKE_CASE, INLINE_ALWAYS_JUSTIFICATION, LINT_DIAGNOSTICS,
     LOWERCASE_FIRST_LETTER,
-    LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE,
+    LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, NESTING_DEPTH,
     NAMING_CONVENTION, NO_MOD_RS_FILES, NO_ORPHAN_MODULES, NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_PUNCTUATION, NO_TRAILING_WHITESPACE, NO_WILDCARD_IMPORTS,
     PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN, PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS,
     STATIC_BOUNDS_ARE_JUSTIFIED,
@@ -65,7 +66,7 @@ use crate::CheckOutcome;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 61;
+const RULE_COUNT: usize = 62;
 
 /// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
 /// through, the filesystem a repository-declared policy capability (`nomos.cap.naming.
@@ -767,6 +768,7 @@ fn With_Composed_Rules<Answer>(
         ComposedRule { id: LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, check: &|_reader: &mut Reader<'_, '_>| return Check_Lifetimes_Follow_The_Descriptive_Naming_Rule(sources) },
         ComposedRule { id: STATIC_BOUNDS_ARE_JUSTIFIED, check: &|_reader: &mut Reader<'_, '_>| return Check_Static_Bounds_Are_Justified(sources) },
         ComposedRule { id: PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS, check: &|_reader: &mut Reader<'_, '_>| return Check_Prefer_Macro_Rules_Over_Procedural_Macros(sources) },
+        ComposedRule { id: NESTING_DEPTH, check: &|reader: &mut Reader<'_, '_>| return Check_Nesting_Depth(sources, reader) },
     ];
 
     return body(rules);

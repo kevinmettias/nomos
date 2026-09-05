@@ -171,7 +171,7 @@ fn Limits_Policy_Requirement() -> nomos_capability::Requirement
 /// caller already has a complete answer without it, so `facts.Require` failing for any
 /// reason is exactly "no override" — never a `Finding`, never this capability's own
 /// `Applicability` surfacing anywhere.
-fn Resolve_Limit(facts: &mut dyn FactReader, language: Option<&str>, key: &str, default: usize) -> usize
+pub(super) fn Resolve_Limit(facts: &mut dyn FactReader, language: Option<&str>, key: &str, default: usize) -> usize
 {
     let Some(payload) = Materialized_Limits_Payload(facts)
     else

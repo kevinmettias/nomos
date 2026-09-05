@@ -397,7 +397,7 @@ fn Single_Line_Body_Findings_In(source: &SourceFile) -> Vec<Finding>
 /// one takes exactly that many `#` after the `"`, which a bare "am I in a string" bool cannot
 /// carry.
 #[derive(Clone, Copy, PartialEq, Eq)]
-enum RustLiteralState
+pub(super) enum RustLiteralState
 {
     /// No literal is open; the next line begins in code.
     None,
@@ -413,7 +413,7 @@ enum RustLiteralState
 
 /// Scans one `line`, advancing `state` in place and returning its code bytes — the single
 /// call site [`Code_Only`] has, so its own result never needs unpacking anywhere else.
-fn Advance_Literal_State(line: &str, state: &mut RustLiteralState) -> Vec<u8>
+pub(super) fn Advance_Literal_State(line: &str, state: &mut RustLiteralState) -> Vec<u8>
 {
     let result = Code_Only(line, *state);
     *state = result.next_state;

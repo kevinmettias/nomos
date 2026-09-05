@@ -61,6 +61,7 @@ pub const nomos_rules::LOWERCASE_FIRST_LETTER: &str
 pub const nomos_rules::NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS: &str
 pub const nomos_rules::NAMING_CLARITY: &str
 pub const nomos_rules::NAMING_CONVENTION: &str
+pub const nomos_rules::NESTING_DEPTH: &str
 pub const nomos_rules::NONNEGATIVE_STORAGE_IS_UNSIGNED: &str
 pub const nomos_rules::NO_DECORATIVE_SECTION_DIVIDERS: &str
 pub const nomos_rules::NO_MOD_RS_FILES: &str
@@ -177,6 +178,7 @@ pub fn nomos_rules::Check_Lint_Diagnostics(sources: &[SourceFile], facts: &mut d
 pub fn nomos_rules::Check_Named_Fields_Over_Positional_Variant_Payloads(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Naming_Clarity(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Naming_Convention( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Nesting_Depth(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Decorative_Section_Dividers(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Mod_Rs_Files(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Orphan_Modules(sources: &[SourceFile]) -> Vec<Finding>
