@@ -53,6 +53,7 @@ pub const nomos_rules::GO_HELPERS_PACKAGE_FIVE_INPUTS: &str
 pub const nomos_rules::GO_LANGUAGE: &str
 pub const nomos_rules::GO_VARIABLES_USE_LOWER_SNAKE_CASE: &str
 pub const nomos_rules::INLINE_ALWAYS_JUSTIFICATION: &str
+pub const nomos_rules::LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE: &str
 pub const nomos_rules::LINT_CONTRACT_RECORD: &str
 pub const nomos_rules::LINT_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::LINT_DIAGNOSTICS: &str
@@ -71,7 +72,9 @@ pub const nomos_rules::NO_WILDCARD_IMPORTS: &str
 pub const nomos_rules::ONE_PUBLIC_TYPE_PER_FILE: &str
 pub const nomos_rules::ONE_THOUSAND_LINE_HARD_TRIGGER: &str
 pub const nomos_rules::PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED: &str
+pub const nomos_rules::PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN: &str
 pub const nomos_rules::PARAMETER_COUNT: &str
+pub const nomos_rules::PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS: &str
 pub const nomos_rules::PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str
 pub const nomos_rules::RELAXED_NOT_USED_WHEN_ORDERING_MATTERS: &str
 pub const nomos_rules::RUST_LANGUAGE: &str
@@ -80,6 +83,7 @@ pub const nomos_rules::SEQCST_JUSTIFIED_EXPLICITLY: &str
 pub const nomos_rules::SHARED_INTERIOR_MUTABILITY_SAYS_WHY: &str
 pub const nomos_rules::SINGLE_LETTER_NAMES: &str
 pub const nomos_rules::SLEEP_BASED_SYNCHRONIZATION: &str
+pub const nomos_rules::STATIC_BOUNDS_ARE_JUSTIFIED: &str
 pub const nomos_rules::SUPPRESSION_DIRECTIVES_CARRY_A_REASON: &str
 pub const nomos_rules::TEST_NAME_DESCRIBES_BEHAVIOR: &str
 pub const nomos_rules::TODO_FORMAT: &str
@@ -168,6 +172,7 @@ pub fn nomos_rules::Check_Go_Type_Names_Use_Camel_Case( sources: &[SourceFile], 
 pub fn nomos_rules::Check_Go_Variables_Use_Lower_Snake_Case(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Goals_And_Parts_Line_Up(facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Inline_Always_Justification(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Lifetimes_Follow_The_Descriptive_Naming_Rule(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Lint_Diagnostics(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Named_Fields_Over_Positional_Variant_Payloads(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Naming_Clarity(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
@@ -182,6 +187,8 @@ pub fn nomos_rules::Check_Nonnegative_Storage_Is_Unsigned(sources: &[SourceFile]
 pub fn nomos_rules::Check_One_Public_Type_Per_File( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Panics_Are_Justified_Documented_And_Validated(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Parameter_Count( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Parameters_Borrow_Unless_Ownership_Is_Taken(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Prefer_Macro_Rules_Over_Procedural_Macros(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Project_Owned_Function_Names_Use_Upper_Snake_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Relaxed_Not_Used_When_Ordering_Matters(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Scripts_Use_A_Portable_Shebang(sources: &[SourceFile]) -> Vec<Finding>
@@ -189,6 +196,7 @@ pub fn nomos_rules::Check_Seqcst_Justified_Explicitly(sources: &[SourceFile]) ->
 pub fn nomos_rules::Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Single_Letter_Names( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Sleep_Is_Not_Synchronization(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Static_Bounds_Are_Justified(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Suppression_Directives_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Test_Names_Describe_Behavior( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Todo_Format(sources: &[SourceFile]) -> Vec<Finding>

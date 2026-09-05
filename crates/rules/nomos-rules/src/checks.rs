@@ -18,6 +18,7 @@
 //! test module was separately rebuilding the registry/store/fact scaffolding
 //! [`test_support`] now states once.
 
+mod borrowed_container;
 mod concurrency_text;
 mod constant_scope;
 mod crosslang;
@@ -30,6 +31,7 @@ mod flakiness_text;
 mod formatting;
 mod goals;
 mod function_shape;
+mod lifetime_discipline;
 mod go_text;
 mod lint;
 mod mirror;
@@ -37,6 +39,7 @@ mod naming;
 mod orphan_modules;
 mod placement;
 mod policy;
+mod procedural_macro;
 mod reachability;
 mod role_surface_pair;
 mod rust_text;
@@ -51,6 +54,7 @@ use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
 
+pub use borrowed_container::{Check_Parameters_Borrow_Unless_Ownership_Is_Taken, PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN};
 pub use concurrency_text::{
     Check_Atomic_Ordering_Choices_Are_Justified, Check_Relaxed_Not_Used_When_Ordering_Matters,
     Check_Seqcst_Justified_Explicitly, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, RELAXED_NOT_USED_WHEN_ORDERING_MATTERS,
@@ -110,7 +114,12 @@ pub use naming::{
     TEST_NAME_DESCRIBES_BEHAVIOR, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
     UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,
 };
+pub use lifetime_discipline::{
+    Check_Lifetimes_Follow_The_Descriptive_Naming_Rule, Check_Static_Bounds_Are_Justified,
+    LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, STATIC_BOUNDS_ARE_JUSTIFIED,
+};
 pub use orphan_modules::{Check_No_Orphan_Modules, NO_ORPHAN_MODULES};
+pub use procedural_macro::{Check_Prefer_Macro_Rules_Over_Procedural_Macros, PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS};
 pub use placement::{
     Check_A_Package_Is_Named_After_Its_Directory, Check_No_Wildcard_Imports, A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
     NO_WILDCARD_IMPORTS,

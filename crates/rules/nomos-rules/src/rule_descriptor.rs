@@ -165,6 +165,10 @@ pub const DESCRIPTORS: &[RuleDescriptor] = &[
     Described(crate::NO_WILDCARD_IMPORTS, SubjectKind::SourceText, &[]),
     Described(crate::NO_SINGLE_LINE_FUNCTION_BODIES, SubjectKind::SourceText, &[]),
     Described(crate::NO_ORPHAN_MODULES, SubjectKind::SourceText, &[]),
+    Described(crate::PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN, SubjectKind::SourceText, &[]),
+    Described(crate::LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, SubjectKind::SourceText, &[]),
+    Described(crate::STATIC_BOUNDS_ARE_JUSTIFIED, SubjectKind::SourceText, &[]),
+    Described(crate::PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS, SubjectKind::SourceText, &[]),
 ];
 
 #[cfg(test)]
