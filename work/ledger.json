@@ -54026,14 +54026,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-opus5-session-rulepkg",
-        "acquired_at": 1788599919,
-        "lease_expires_at": 1788610719
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -54045,7 +54041,29 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "exit_code": 0,
+        "output_tail": "No_Table_Should_Store_No_Rows ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-spec-ingest v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-ingest)\n   Compiling nomos-spec-bundle v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-bundle)\n   Compiling nomos-spec-project v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-project)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.50s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-90ace1b899f038c8.exe)\n     Running tests\\determinism_contract.rs (target\\debug\\deps\\determinism_contract-fa8857180da95591.exe)\n     Running tests\\projections\\main.rs (target\\debug\\deps\\projections-91a00061d9a9372a.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-2049d200876e17c5.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-664bcf5196b763d4.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-b77bfff260f58dcf.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-5768e840765d1bfc.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-55bd8f919d9bc0a0.exe)\n   Doc-tests nomos_spec_project\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788600498,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d57c437a3ca024151d0ee7ab5d8f1d840878c948"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

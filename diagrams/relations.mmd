@@ -601,6 +601,7 @@ graph LR
     od_gate_017 -->|"relates-to"| od_roadmap_002
     od_gate_017 -->|"relates-to"| od_rules_008
     od_gate_017 -->|"relates-to"| od_rules_009
+    od_gate_017 -->|"relates-to"| od_rules_022["OD-RULES-022"]
     od_gate_018 -->|"relates-to"| od_contracts_001
     od_gate_020 -->|"relates-to"| od_capability_010
     od_gate_020 -->|"relates-to"| od_gate_011
@@ -641,6 +642,7 @@ graph LR
     od_host_004 -->|"relates-to"| od_rules_009
     od_host_004 -->|"relates-to"| od_rules_010
     od_host_004 -->|"relates-to"| od_rules_014
+    od_host_004 -->|"relates-to"| od_rules_022
     od_host_005 -->|"relates-to"| od_host_001
     od_host_005 -->|"relates-to"| od_host_002
     od_host_006 -->|"relates-to"| arc_ecosystem_001
@@ -978,6 +980,7 @@ graph LR
     od_package_008 -->|"relates-to"| od_rules_003
     od_package_008 -->|"relates-to"| od_rules_008
     od_package_008 -->|"relates-to"| od_rules_011
+    od_package_008 -->|"relates-to"| od_rules_022
     od_package_009 -->|"affects"| od_package_001
     od_package_009 -->|"relates-to"| od_ledger_008
     od_package_009 -->|"relates-to"| od_package_007
@@ -1049,6 +1052,7 @@ graph LR
     od_roadmap_001 -->|"relates-to"| od_package_011
     od_roadmap_001 -->|"relates-to"| od_package_012
     od_roadmap_001 -->|"relates-to"| od_roadmap_002
+    od_roadmap_001 -->|"relates-to"| od_rules_022
     od_roadmap_001 -->|"relates-to"| od_workflow_005
     od_roadmap_002 -->|"affects"| od_roadmap_001
     od_roadmap_002 -->|"relates-to"| arc_roadmap_001
@@ -1098,6 +1102,7 @@ graph LR
     od_rules_004 -->|"relates-to"| od_rules_006
     od_rules_004 -->|"relates-to"| od_rules_007
     od_rules_004 -->|"relates-to"| od_rules_010
+    od_rules_004 -->|"relates-to"| od_rules_022
     od_rules_005 -->|"relates-to"| d_135
     od_rules_005 -->|"relates-to"| od_capability_007
     od_rules_005 -->|"relates-to"| od_gate_020
@@ -1187,6 +1192,11 @@ graph LR
     od_rules_019 -->|"relates-to"| od_rules_006
     od_rules_019 -->|"relates-to"| od_rules_009
     od_rules_019 -->|"relates-to"| od_rules_011
+    od_rules_022 -->|"relates-to"| od_gate_017
+    od_rules_022 -->|"relates-to"| od_host_004
+    od_rules_022 -->|"relates-to"| od_package_008
+    od_rules_022 -->|"relates-to"| od_roadmap_001
+    od_rules_022 -->|"relates-to"| od_rules_004
     od_spec_001 -->|"affects"| arc_specdb_001
     od_spec_001 -->|"relates-to"| d_133
     od_spec_002 -->|"affected_by"| d_132
@@ -1508,6 +1518,7 @@ graph LR
     od_rules_017
     od_rules_018
     od_rules_019
+    od_rules_022
     od_spec_001
     od_spec_002
     od_spec_004

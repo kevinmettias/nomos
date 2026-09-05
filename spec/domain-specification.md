@@ -171,6 +171,7 @@ profile: domain-specification
 | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md@authored | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md | authored | 21 | 6 | sha256:ecd850bb6c29efe9ac6e25ef920c7e6492a59d5e6fe177709d05c01a8bbef25f |
 | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md@authored | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md | authored | 16 | 6 | sha256:be774faf1f653161ca537fca09f49287c8b993c75d9f1cc9385f73849c3136ae |
 | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md@authored | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md | authored | 16 | 6 | sha256:2021593cf5f8734035d023e39e1f1fc3fabf8ee21b2ddd4dd7322195e9ff483f |
+| docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md@authored | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md | authored | 30 | 6 | sha256:ee25e5bafb0ab46ae96890e572a96aa4a970f0f854957c7e2474998c6a5949ad |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1521,6 +1522,12 @@ profile: domain-specification
 | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#10 | authored | 2 | Decision |
 | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#13 | authored | 2 | What This Record Does Not Decide |
 | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#15 | authored | 2 | Status |
+| docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#1 | authored | 1 | Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired |
+| docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#15 | authored | 2 | The Decision |
+| docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#22 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#28 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -45000,6 +45007,282 @@ Accepted. The five repo-policy providers stay five capability contracts and five
 file-acquisition mechanism beneath them is decided to warrant one shared crate, not built here.
 Revisit if the migration, once attempted, finds the five providers' semantic extraction more
 entangled with the raw read than this record's measurement assumed.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#1
+
+*revision: authored · kind: heading · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired · hash: sha256:a052680ffe856dcf650573a0fe2b45601a6820fec4e970c8e12098d934c1ec20*
+
+# Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#2
+
+*revision: authored · kind: heading · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#3
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / Question · hash: sha256:ee8b6a68e6b2707c2f5f1d0fb002e03740f02cb4bcd56e841e137183575a3ab2*
+
+`OD-HOST-004` decided that `Run()` stays hand-written "for as long as every rule it calls runs
+unconditionally, on every invocation", and did not leave that open-ended. It named the exact
+event that ends it: "`Run` flips the first time a rule (or a group of rules) is meant to run for
+*some* check invocations and not others — selected by something the request states, rather than
+by whether the crate happens to know about it." It went further and said what must not happen at
+that moment: "adding the choice as a hand-written `if`/`match` naming rules by branch is exactly
+the accretion this record exists to head off."
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#4
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / Question · hash: sha256:4f9f3419cd609c7a04fcab8587c62ae1b63425b6d56aedb548cba1090ee1b9d5*
+
+`OD-RULES-004` then split the question in two, and its split is the one this record works
+inside. Registration — how a rule becomes a nameable thing at all — was answered with a
+`RuleId`-carrying offer type and a registry. Selection — which rules run on this invocation —
+was left to `OD-HOST-004`, with one sentence pointing forward: "The moment a registered rule's
+participation is meant to vary by request — the criterion `OD-HOST-004` already names — `Run()`
+still needs the selection mechanism that record describes, and this record does not build it."
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#5
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / Question · hash: sha256:5a185f453aba0d5bab150280f852fdb3c8d18af25ddde039e1d718c363fbfaef*
+
+That moment has passed, unremarked. The question is what composition should be now that it has,
+and whether the manifest format this workspace already built for exactly this content is the
+answer or a coincidence.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#6
+
+*revision: authored · kind: heading · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#7
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What Was Measured · hash: sha256:fe4ce34c96a09b18e7d214bda71d1b0f31d16bf8d0e103d67bed8f8460680565*
+
+Every count below was taken from the tree at `e9b9363f` on 2026-09-05.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#8
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What Was Measured · hash: sha256:2cb2c3932bf0494de0a11e74d7ba15b11cad0051e8766446aaaa53a6cf44a68b*
+
+**The trigger fired, and the answer given at the time was a filter over an array.**
+`nomos_check_orchestration::Run` takes `selected: &[RuleId]`. `OD-GATE-017` made a non-empty
+selection narrow what `Run` computes at all rather than merely filtering its output, and
+`nomos gate run --rule <id>` reaches it from a command line. A rule's participation now varies by
+request, which is `OD-HOST-004`'s stated criterion word for word. What it did not get is the
+declared selection mechanism that record asked for. `run_context.rs` carries
+`const RULE_COUNT: usize = 57` and builds a fixed `[ComposedRule; RULE_COUNT]` array, and its own
+doc describes the structure beside it as "a fixed, hand-written mapping from `RuleId` to the
+fact(s) it needs". A declaration doing registry work inside a function body is the shape
+`OD-HOST-004` refused; it arrived as a table rather than as a `match`, which is why nothing
+caught it.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#9
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What Was Measured · hash: sha256:58b2315406d76e1ca1c815f952b2094fb96a2cce9e67899d2c170ba3e6dfe83f*
+
+**Composing one rule costs five registration sites in three crates, and three of them are
+hand-maintained tables that must agree.** Measured against `no-orphan-modules`, the most recent
+rule to land: `nomos-rules/src/checks.rs` declares the module, `nomos-rules/src/lib.rs`
+re-exports the function and its `RuleId` constant, `nomos-rules/src/rule_descriptor.rs` adds a
+`DESCRIPTORS` row, `nomos-check-orchestration/src/run_context.rs` raises `RULE_COUNT` and adds
+both a `ComposedRule` entry and a row to the capability mapping, and
+`nomos-gate-orchestration/src/composition.rs` adds an `OFFERINGS` row carrying the contract
+citation. The first two are ordinary Rust plumbing. The last three are declarations of the same
+rule, written three times, in three crates, that nothing but a test holds together.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#10
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What Was Measured · hash: sha256:82cd2dc8b29fb4b040adc118ca8c6aaaa03b894b444910fd5f68dd3256199991*
+
+**The agreement is enforced by tests, and it broke while this record was being written.** At
+`e9b9363f` both `Test_Registered_Should_Offer_Every_Composed_Rule` and
+`Test_Registered_Should_Compose_Every_Rule_A_Check_Run_Composes` failed: `no-orphan-modules` was
+added to the composed array without an `OFFERINGS` row, so `Run` judged by a rule the registry
+did not offer and `nomos gate plan` described a smaller gate than `nomos gate run` performed. It
+was fixed one commit later by `8be7904a`, whose own message names the cause exactly: the item's
+verification predicate covered four of the five sites, so `work finish` exited zero over a tree
+where the fifth was never built.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#11
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What Was Measured · hash: sha256:0a8540943ecb1855ec04c74cdaf44c3003cd2c75dfa57a6bfe3842a272abe267*
+
+That sequence is the argument for this record, not an anecdote beside it. The tests did their
+job. What a test cannot do is stop the drift, because three declarations of one rule that must
+be edited together will be edited apart, and a predicate is scoped to the crates an author
+remembers. This is not evidence of carelessness — it is what a duplicated declaration costs at
+57 entries, found within hours of reaching them.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#12
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What Was Measured · hash: sha256:a7348e839a237474dc68f6fd6c9cdc1291164e8e6128574d64207c5987522cfa*
+
+**The gap between exported and composed is invisible for the same reason.** 75 exported against
+57 composed leaves 18 rules that are built, tested, documented and exported, and judge nothing.
+`P46-UNCOMPOSED-RULES-ARE-COUNTED` had to establish that number by hand-diffing two lists,
+because there is no declaration for the array to be compared against.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#13
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What Was Measured · hash: sha256:5e3fcd9b928186bb7ac252f911b5c5e6b8aff5e1c6f1a1e2114abbc3d425ff77*
+
+**The format that carries all of this already exists and has no consumer.**
+`nomos-rule-package` parses a manifest whose fields are `rule_id`, `contract`,
+`required_capabilities`, `applicability`, `evidence_schema`, `title`, plus the correction,
+diagnostic-mapping, fixture and agent-guidance fields `ARCH-002` names. Those are, field for
+field, what the three tables above hold between them. `OD-PACKAGE-008` measured the format
+against four real rules rather than inventing it from corpus text. Grepped at `e9b9363f`, no
+crate in this workspace depends on it: its only appearances outside its own directory are two
+band-table rows and one doc comment in `nomos-contracts`.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#14
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What Was Measured · hash: sha256:8d3c7d240a14ccdcde34c8e0a308e2024ddb57564a40ff43b872644bc87e18ee*
+
+**The population this is aimed at is not 57.** The Go predecessor
+(`github.com/kevinmettias/nomos-proto`, checked out as `code-standards`) declares 1,143 rules —
+1,127 in `kernel/rules/corpus` and 16 in `metacorpus`. Its own `rulespec/rule.go` states that
+728 of them are decided by a model rather than by a parser. A hand-written array with a parallel
+hand-written contract table is not a structure that holds either number.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#15
+
+*revision: authored · kind: heading · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#16
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / The Decision · hash: sha256:a38ffda544e87abcff9e14e5788bbf5a4a2b9ec7f6463cde095dc729a91333c2*
+
+**Rule composition resolves a declared rule package against a linked implementation.** The
+declaration and the implementation are different artifacts owned by different layers, and
+composition's job is to match them and to refuse when it cannot.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#17
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / The Decision · hash: sha256:bbce8a9b437a8600e29f8c172d47facf1b46d62cc7566c7daa40a4dbd7d83d13*
+
+A **declaration** is a `RulePackage`: identity, contract citation, required capabilities,
+applicability semantics, evidence class, presentation metadata, and the judgment clause below.
+It is data. It is what `nomos gate plan` reports, what a registry offers, and what a future
+projection renders into documentation — the one canonical definition the migration plan calls for.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#18
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / The Decision · hash: sha256:1c5611dd0cada5bd3e1fb81a894a2b87bacb1926b73ff0fc1a4b27d61e61c164*
+
+An **implementation** is linked Rust code: a function of the shape `nomos-rules` already
+establishes. A manifest cannot conjure a function, and this record does not pretend otherwise.
+This is the same division `KnownProviders` already draws for providers — a package names a
+`ProviderId`, the provider crate exports its own `PROVIDER` constant, and the allowlist is
+checked rather than trusted — and it is why that shape is the precedent here rather than an
+analogy.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#19
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / The Decision · hash: sha256:1e6726505295b10ffa2a6022b97de3de875e44735701b3d55a6e9ed81c384755*
+
+**A declaration states its own judgment, and that is what makes the resolution total.** A
+declaration is either *mechanical*, in which case an implementation must exist and resolution
+fails if it does not, or *model-judged*, in which case there is no implementation to resolve and
+the rule contributes nothing to a deterministic run. Without this clause the resolution rule
+would have to refuse every one of the predecessor's 728 model-judged rules or admit them as
+implementations that silently judge clean, and `OD-GATE-001` already names the second of those as
+the defect the gate exists to prevent. A model-judged declaration is a rule this system states
+and does not yet enforce, which is a truthful thing to be and a different thing from a rule that
+ran and found nothing.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#20
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / The Decision · hash: sha256:ec1d1ac9feb19f7894866e06e83c185145ea6705a54df65d5fc1cd1c06eb0079*
+
+**Resolution is refused in both directions.** A declaration naming no implementation, when it
+claims to be mechanical, is a rule the gate would report and cannot perform. An implementation
+with no declaration is the 18 exported-but-uncomposed rules, which read to any reader of the
+crate as though they are in force. Neither is a state composition may enter silently, and a
+refusal names which of the two it found.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#21
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / The Decision · hash: sha256:3db8580c733f4155b022963f38a7c6e9ebadbd286fbe3596a0366c819b7983f6*
+
+**This does not weaken `OD-RULES-004`'s split; it completes it.** Registration answered how a
+rule becomes nameable and built the registry to hold it. This answers what the registry's
+entries are made of and where they come from, which that record explicitly left to a follow-on.
+Selection stays exactly what `OD-HOST-004` described — a request-carried property resolved
+against a declaration — and gains the declaration it was missing.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#22
+
+*revision: authored · kind: heading · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#23
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What This Record Does Not Do · hash: sha256:2ab6e58768b6005be8d7c55fc51f860d46715e70672160a50a2690d086c3073b*
+
+It does not build any of it. The manifest crate, the resolution step, the refusal type, the
+migration of the 57 composed rules from array rows to declarations, and the judgment field
+`nomos-rule-package` does not yet carry are each their own item, and each has to keep the gate
+green while it lands.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#24
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What This Record Does Not Do · hash: sha256:4c8c7cbf67e50a5b48c899467e54053e54920e3d667abcdab6dd4bbd31bbc5b3*
+
+It does not group rules into packages. The plan names aggregates like `nomos.rules.core-naming`
+and `nomos.rules.standard-engineering`, and `nomos-rule-package`'s shipped shape is one rule per
+package (`rule_id`, singular). Which of those is right is a question with a real answer that this
+record does not have, because nothing has yet needed a group.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#25
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What This Record Does Not Do · hash: sha256:89e39d421687ad6a17862f92061a2a1257a7fe22995495025ba0e6925b9bcb7a*
+
+It does not amend `OD-HOST-004`. That record still reads as though its trigger is ahead of it,
+and correcting a record whose stated condition has passed is the work of an item that holds it —
+the same shape `P43-CAPABILITY-008-TRIGGERS-FIRED` and `P44-HOST-007-TRANSPORT-NOW-EXISTS` take
+for their own records.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#26
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What This Record Does Not Do · hash: sha256:4cc7e5061b5b57e0d8f3c0b78e8582bd548ed31050e26cb549983e57b4e772db*
+
+It does not decide how many of the predecessor's 1,143 rules come across, or in what order. It
+decides the shape they land in when they do.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#27
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / What This Record Does Not Do · hash: sha256:dc2a2985bc1090b0f1cdbae9116f4bb6f870b5615487b9a2e92b7825a6d5965d*
+
+It does not fix the drift it measured, and did not need to: the session that composed
+`no-orphan-modules` landed the missing row itself as `P47-ORPHAN-MODULES-HAS-NO-OFFERINGS-ROW`
+while this record was being written.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#28
+
+*revision: authored · kind: heading · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#29
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
+
+### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#30
+
+*revision: authored · kind: prose · heading: Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired / Status · hash: sha256:04974558409f067ce90206c89490601a10e5d565eb3b51af5803a58c3c371b2d*
+
+Revisit if the resolution step, once built, finds a rule whose declaration cannot state
+something the array said — which would be evidence the manifest was measured against four rules
+and generalized past what they showed, rather than a reason to keep a second table beside it.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

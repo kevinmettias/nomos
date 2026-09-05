@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:c3f736e868a43d2ece6029d9b1f8c4d7abbed9091683784976071bdd649fc352",
-  "inputs_digest": "sha256:b59e8e7777a890048531b3e3ae8a6564eca83c257050ff882bd61c9e6cdf4376",
+  "content_digest": "sha256:c82e2a3c234bd723de238b2ae669b022bd6028cf20599bcead04e93e5579cb62",
+  "inputs_digest": "sha256:c3f216f06236925a1dff7cc56ca01b2872cda6693fde3923a38a9ccf1276d447",
   "sections": [
     [
       "Documents",
-      188
+      189
     ],
     [
       "Sections",
-      1560
+      1566
     ],
     [
       "Source blocks",
-      5454
+      5484
     ]
   ],
   "inputs": [
@@ -824,6 +824,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md@authored",
       "hash": "sha256:2021593cf5f8734035d023e39e1f1fc3fabf8ee21b2ddd4dd7322195e9ff483f"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md@authored",
+      "hash": "sha256:ee25e5bafb0ab46ae96890e572a96aa4a970f0f854957c7e2474998c6a5949ad"
     },
     {
       "content": "documents",
@@ -7549,6 +7554,36 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#15",
       "hash": "sha256:eba929b6e6bacad9bf424b38174d2bbbc66a44bad0368d3a492b8c55fa935529"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#1",
+      "hash": "sha256:edbe0dc6df822980128d10dfec3f98995b3863735095c50aaa6391a7e292f9b3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#2",
+      "hash": "sha256:31fc31a35f1b27a09449cb2454b1656486ce437ea064f275ee26fc1ea09caffd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#6",
+      "hash": "sha256:2058e71de10f043fab22c7ade92649ccf34573d173ace46778571b285b404437"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#15",
+      "hash": "sha256:d7263a87f4bc8ef5f7a0ed0fd6418cb447fb280729ee26c4d2e6e9ad09d00c44"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#22",
+      "hash": "sha256:119069633472a0857acc1d0cbae33fc5fd81d3b5f02aa36481ee58124b1aff59"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#28",
+      "hash": "sha256:28d176532a1cb77c91dc9ec612de79255f0d85963fd3076a3d0ce9774b1a5c55"
     },
     {
       "content": "headings",
@@ -32064,6 +32099,156 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md#16",
       "hash": "sha256:92e54c5372dd330db6893e106d30f5f2d6d51587b2ef33f14cad970de4c0db02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#1",
+      "hash": "sha256:a052680ffe856dcf650573a0fe2b45601a6820fec4e970c8e12098d934c1ec20"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#3",
+      "hash": "sha256:ee8b6a68e6b2707c2f5f1d0fb002e03740f02cb4bcd56e841e137183575a3ab2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#4",
+      "hash": "sha256:4f9f3419cd609c7a04fcab8587c62ae1b63425b6d56aedb548cba1090ee1b9d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#5",
+      "hash": "sha256:5a185f453aba0d5bab150280f852fdb3c8d18af25ddde039e1d718c363fbfaef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#7",
+      "hash": "sha256:fe4ce34c96a09b18e7d214bda71d1b0f31d16bf8d0e103d67bed8f8460680565"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#8",
+      "hash": "sha256:2cb2c3932bf0494de0a11e74d7ba15b11cad0051e8766446aaaa53a6cf44a68b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#9",
+      "hash": "sha256:58b2315406d76e1ca1c815f952b2094fb96a2cce9e67899d2c170ba3e6dfe83f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#10",
+      "hash": "sha256:82cd2dc8b29fb4b040adc118ca8c6aaaa03b894b444910fd5f68dd3256199991"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#11",
+      "hash": "sha256:0a8540943ecb1855ec04c74cdaf44c3003cd2c75dfa57a6bfe3842a272abe267"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#12",
+      "hash": "sha256:a7348e839a237474dc68f6fd6c9cdc1291164e8e6128574d64207c5987522cfa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#13",
+      "hash": "sha256:5e3fcd9b928186bb7ac252f911b5c5e6b8aff5e1c6f1a1e2114abbc3d425ff77"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#14",
+      "hash": "sha256:8d3c7d240a14ccdcde34c8e0a308e2024ddb57564a40ff43b872644bc87e18ee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#15",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#16",
+      "hash": "sha256:a38ffda544e87abcff9e14e5788bbf5a4a2b9ec7f6463cde095dc729a91333c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#17",
+      "hash": "sha256:bbce8a9b437a8600e29f8c172d47facf1b46d62cc7566c7daa40a4dbd7d83d13"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#18",
+      "hash": "sha256:1c5611dd0cada5bd3e1fb81a894a2b87bacb1926b73ff0fc1a4b27d61e61c164"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#19",
+      "hash": "sha256:1e6726505295b10ffa2a6022b97de3de875e44735701b3d55a6e9ed81c384755"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#20",
+      "hash": "sha256:ec1d1ac9feb19f7894866e06e83c185145ea6705a54df65d5fc1cd1c06eb0079"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#21",
+      "hash": "sha256:3db8580c733f4155b022963f38a7c6e9ebadbd286fbe3596a0366c819b7983f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#22",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#23",
+      "hash": "sha256:2ab6e58768b6005be8d7c55fc51f860d46715e70672160a50a2690d086c3073b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#24",
+      "hash": "sha256:4c8c7cbf67e50a5b48c899467e54053e54920e3d667abcdab6dd4bbd31bbc5b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#25",
+      "hash": "sha256:89e39d421687ad6a17862f92061a2a1257a7fe22995495025ba0e6925b9bcb7a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#26",
+      "hash": "sha256:4cc7e5061b5b57e0d8f3c0b78e8582bd548ed31050e26cb549983e57b4e772db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#27",
+      "hash": "sha256:dc2a2985bc1090b0f1cdbae9116f4bb6f870b5615487b9a2e92b7825a6d5965d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#28",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#29",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#30",
+      "hash": "sha256:04974558409f067ce90206c89490601a10e5d565eb3b51af5803a58c3c371b2d"
     },
     {
       "content": "blocks",
