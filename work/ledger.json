@@ -53846,6 +53846,104 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P47-TOOLPROVIDER-HAS-NO-PACKAGE",
+      "title": "ToolProvider is a declared package kind with two real instances and no manifest crate",
+      "why": "Measured 2026-09-05. PackageKind declares ToolProvider as an external analysis or transformation tool wrapped behind a capability. Two real ones exist and OD-RULES-010 names them in exactly those words: nomos-lang-rust-clippy is called the first real ToolProvider and nomos-lang-rust-deny the second. Neither can be declared by any manifest, because every other populated package kind has a manifest crate and this one does not: LanguagePackage has two, RulePackage has nomos-rule-package, and the model and agent-executor kinds share nomos-model-package. The consequence lands on OD-PACKAGE-014, which decided a package's activation semantics are the conformance claim that its declared providers match what the registry actually offers. A Rust LanguagePackage cannot carry clippy without contradicting its own stated meaning, recognition and canonical mapping for one language, so the allowlist admitting only the two syntax providers is correct rather than stale. What is missing is the kind that should carry them. Until it exists the conformance claim can never cover a linter or a dependency-policy tool, which are the two providers most likely to drift, since each shells out to an external binary whose version is exactly what ProviderRegistration's tool_version field was designed to record. The other unpopulated kinds, MetricProvider, RepositoryProvider and RuntimeProvider, have no instances and no case; this one has two.",
+      "done_when": "A ToolProvider manifest crate exists as a peer of nomos-rule-package and nomos-model-package, wrapping nomos-package's generic core rather than depending on a sibling package crate, and admits the two real ToolProviders this workspace has by their own provider identities. It settles, and states, which side of the line a dependency reader falls on: nomos-lang-rust-cargo shells out to cargo metadata while nomos-lang-go-modules reads go.mod text directly, and only one of those looks like an external tool, so the answer decides whether Go's own language package should have admitted its modules reader all along. The crate carries its band declaration, README row and contract-test harness entries.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-tool-package",
+          "tests/contract/surface/nomos-tool-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-tool-package"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P47-PACKAGE-014-CONFORMANCE-CHECK",
+      "title": "OD-PACKAGE-014 decided what a package manifest is for and nothing has ever read one",
+      "why": "OD-PACKAGE-014 decided that a language package's activation semantics are the conformance claim that its declared providers match what nomos_capability::Registry actually offers for each one's capability, checked and reported, never enacted. It measured at the time that nothing outside the package crates calls Parse_Manifest or Read_Manifest, and that is still true on 2026-09-05: no crate in this workspace depends on nomos-lang-rust-package or nomos-lang-go-package at all. So the one thing a manifest is for has never been done, and four manifest formats now exist that nobody reads. Every input the check needs is already present. ProviderRegistration carries the provider identity and the tool version, Registry::Offers answers for any capability exactly which providers are registered, and OD-RULES-003 already designed this composition for architecture, declared data compared against an observed reality and judged into a Finding, with P14-RULES-DEPENDENCY-COMPLETENESS applying the same shape a second time. This is that shape a third time. Note what it must not become: OD-HOST-004 forecloses a manifest that causes composition to add or omit an offer, and D-091 puts the installer and materializer mechanism on the other side of the ecosystem seam, so the answer is a report and never an action.",
+      "done_when": "A manifest's declared providers are compared against what the registry actually offers, and a mismatch in either direction is reported: a package claiming a provider that is not registered, and a registered provider that no read manifest claims. The comparison runs from a real caller rather than a test, over the manifests a caller names, and reports rather than changes what composes. A run with no manifest to read says so instead of reporting agreement, since nothing read is not the same as nothing wrong.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/package_conformance.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P47-WHETHER-AN-LSP-IS-A-PROVIDER",
+      "title": "A language server answers the semantic questions no fact family has, and nothing says whether it may",
+      "why": "P42-SEMANTIC-FACT-FAMILY says every fact family is syntactic, so no rule can ask a question that needs resolved semantics, and P40-COMPILER-BACKED-PROVIDER says no provider uses a real compiler semantic API. Both are open and both assume the answer is a compiler integration per language. A language server is the other candidate and nothing has weighed it. The shape fits what a provider already is: a subprocess behind a capability, which nomos-lang-rust-cargo, nomos-lang-rust-clippy and nomos-lang-rust-deny all are today. What it answers is exactly what is missing, type at a position, definition of a symbol, references to it, the symbol hierarchy of a file. And unlike a compiler front end it is one interface rather than one integration per language, since rust-analyzer, gopls, the Roslyn server and pyright all speak it, so a single adapter shape would reach every language this system ever adds rather than one. Two existing records bear on this and neither settles it. OD-ANALYSIS-010 declined embedding rustc, rust-analyzer, Roslyn, Clang or any LSP server for one fact, control-flow reachability, and was explicit that it forecloses nothing for a future rule whose subject genuinely needs a compiler front end. P42-LSP-PROJECTION is the opposite direction, Nomos serving an editor rather than consuming one, and says nothing about this. The question is worth deciding before either open semantic item is claimed, because the two would be built differently.",
+      "done_when": "A record decides whether a language server may be a provider, and if so what it is a provider of: which capability contracts a language-server-backed fact would answer, what guarantee it may honestly declare given that a server answers from its own index rather than from a compilation this system controls, and what IncrementalGranularity it sits at given that a server is long-lived where every provider today is a one-shot subprocess. It states the relationship to OD-ANALYSIS-010's decline, which covered one fact rather than the class, and says whether P40-COMPILER-BACKED-PROVIDER is satisfied by this route or remains separate. No provider is built under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-012.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
