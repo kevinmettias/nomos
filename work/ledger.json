@@ -51457,7 +51457,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Investigated before claiming and found the territory does not reach what done_when asks\nfor, plus two precedent landmines a same-shaped attempt would likely hit blind.\n\nTerritory is one existing file (model_execution_profile.rs). done_when needs: a Catalog\ntype to resolve a profile against, a resolver, a real dispatch call site that uses it\ninstead of a hard-coded choice, and edits to the four MODEL-ROUTE-{001,010,015,016}.\nassessment files -- none of the last five are reachable from one file's territory, and\nthis crate's own one-file-per-type convention means two of those (a resolver's supporting\ntypes) would need their own new files regardless.\n\nTwo things already decided in this exact territory would be easy to contradict without\nreading them first. MODEL-ROUTE-005.assessment states ResolvedModelExecution \"does not\nexist anywhere in this workspace -- deliberately: MODEL-ROUTE-029's own\nModelInputAssemblyIdentity type already established that record stays unbuilt until every\nrequirement naming one of its fields is accounted for.\" Building it now, even as a small\npart of closing 001/010/015/016, would reverse that deferral without the accounting it was\nconditioned on. And MODEL-ROUTE-037.assessment shows a Catalog already exists --\nModelSelection::Catalog, raw unresolved strings, OD-PACKAGE-010's own deliberate first\nmaturity -- so \"resolve a profile against the catalog\" is not inventing a catalog type,\nit is deciding what a resolver reads instead, which this item's own text never says.\n\nAlso unresolved: which crate hosts \"a real model dispatch\" in the done_when sense.\nnomos-workflow-orchestration::Body already hard-codes ClaudeCode vs Ollama per step, band\n40, four bands above this territory's own crate -- wiring a resolver in without touching\nthat file is not what \"rather than by a hard-coded choice\" can honestly mean.\n\nLeft on the board rather than re-authored in the same pass: the right shape (what a\nresolver reads given ResolvedModelExecution stays deferred, and whether the dispatch\nwiring belongs in this item or a follow-on) needs a decision this investigation surfaced\nbut did not make."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -51475,7 +51479,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788641687
+      }
     },
     {
       "id": "P40-FACT-STORE-PERSISTENCE",
