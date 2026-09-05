@@ -239,4 +239,13 @@ pub(crate) const UNIVERSES: &[Universe] = &[
                    from nomos-lang-go's own PROVIDER constant rather than retyped",
         },
     },
+    // ---- what an external surface over nomos-api may serve ----
+    Universe {
+        path: "crates/host/nomos-api-transport/src/served_method.rs",
+        name: "REGISTRY",
+        kind: UniverseKind::Constant,
+        standing: Standing::Mirrored {
+            by: "Test_The_Transport_Should_Name_No_Repo_Tooling_Handler",
+        },
+    },
 ];

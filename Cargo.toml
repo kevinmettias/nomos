@@ -289,6 +289,13 @@ members = [
     # for a caller-given commit range. Bin-only, like nomos-cli.
     "crates/host/nomos-surface-provenance",
 
+    # Band 92 — host. The transport nomos-api deliberately does not wire: JSON-RPC 2.0
+    # over a TCP socket, one object per line. Above nomos-api because it depends on it,
+    # and a crate may depend only on a crate in a strictly lower band. Serves the three
+    # Gate verbs OD-HOST-007 admits and none of the twenty-one repo-tooling handlers that
+    # record excludes. `P40-API-TRANSPORT-2`.
+    "crates/host/nomos-api-transport",
+
     # Assertions about the workspace itself: dependency bands, the contracts
     # allowlist, and module reachability.
     "tests/contract",
@@ -364,6 +371,7 @@ nomos-check-orchestration = { path = "crates/orchestration/nomos-check-orchestra
 nomos-spec-orchestration = { path = "crates/orchestration/nomos-spec-orchestration" }
 nomos-workflow-orchestration = { path = "crates/orchestration/nomos-workflow-orchestration" }
 nomos-gate-orchestration = { path = "crates/orchestration/nomos-gate-orchestration" }
+nomos-api = { path = "crates/host/nomos-api" }
 nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }

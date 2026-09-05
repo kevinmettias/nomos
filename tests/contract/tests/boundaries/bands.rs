@@ -222,6 +222,13 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // nomos-platform-std like any other host-band binary, not because anything below
     // it may name it.
     ("nomos-surface-provenance", 91),
+    // The transport nomos-api deliberately does not wire -- JSON-RPC 2.0 over a TCP
+    // socket, serving the three Gate verbs OD-HOST-007 admits. Above nomos-api rather
+    // than beside it, because it depends on nomos-api and a band may not depend on its
+    // own band; OD-HOST-007 measured that directly and named band 90 as unable to hold
+    // it. Above nomos-surface-provenance for no relationship between the two: 91 was
+    // taken, and neither names the other. `OD-HOST-001`, `OD-HOST-007`.
+    ("nomos-api-transport", 92),
     // The contract tests sit at the top: they observe the workspace and nothing
     // observes them.
     ("nomos-contract-tests", 100),

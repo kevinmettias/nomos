@@ -434,6 +434,12 @@
       ]
     },
     {
+      "tier": "band-92",
+      "paths": [
+        "crates/host/nomos-api-transport"
+      ]
+    },
+    {
       "tier": "band-100",
       "paths": [
         "tests/contract",
