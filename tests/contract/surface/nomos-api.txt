@@ -49,12 +49,12 @@ pub enum variant nomos_api::CommitResponse::StoreRefused { preview: CommittedPre
 pub enum variant nomos_api::CommitResponse::Unreadable { path: String, cause: String, }
 pub enum variant nomos_api::CommitResponse::Unwritable { preview: CommittedPreviewResponse, report: CommitReportResponse, path: String, cause: String, }
 pub enum variant nomos_api::CorrectionResponse::Clean
-pub enum variant nomos_api::CorrectionResponse::Committed { path: String, claimed: String, preview: String, base: String, after: String, }
+pub enum variant nomos_api::CorrectionResponse::Committed { path: String, summary: String, preview: String, base: String, after: String, }
 pub enum variant nomos_api::CorrectionResponse::ContradictoryRegistry { reason: String, }
 pub enum variant nomos_api::CorrectionResponse::NoFactsMaterialized { files: usize, }
 pub enum variant nomos_api::CorrectionResponse::NoSourceFound
 pub enum variant nomos_api::CorrectionResponse::Refused { reason: String, }
-pub enum variant nomos_api::CorrectionResponse::Staged { path: String, claimed: String, preview: String, }
+pub enum variant nomos_api::CorrectionResponse::Staged { path: String, summary: String, preview: String, }
 pub enum variant nomos_api::CorrectionResponse::UnreadableRoot
 pub enum variant nomos_api::CorrectionResponse::UnreadableWorkspaceState
 pub enum variant nomos_api::DeclineResponse::Declined

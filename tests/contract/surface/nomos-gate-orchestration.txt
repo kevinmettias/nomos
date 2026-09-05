@@ -1,5 +1,6 @@
 pub enum nomos_gate_orchestration::CoveragePolicy
 pub enum nomos_gate_orchestration::Explanation
+pub enum nomos_gate_orchestration::FindingDisposition
 pub enum nomos_gate_orchestration::GateOutcome
 pub enum nomos_gate_orchestration::GateRunOutcome
 pub enum nomos_gate_orchestration::RuleCompositionError
@@ -8,6 +9,10 @@ pub enum variant nomos_gate_orchestration::CoveragePolicy::RequireCompleteness
 pub enum variant nomos_gate_orchestration::CoveragePolicy::Unset
 pub enum variant nomos_gate_orchestration::Explanation::Found { finding: Box<Finding>, would_block: bool, calibrated_by: Option<RuleCalibration>, suppressed_by: Option<Suppression>, baselined_by: Option<BaselineDebt>, contract: Option<(String, u32)>, }
 pub enum variant nomos_gate_orchestration::Explanation::NotFound
+pub enum variant nomos_gate_orchestration::FindingDisposition::Baselined
+pub enum variant nomos_gate_orchestration::FindingDisposition::Blocking
+pub enum variant nomos_gate_orchestration::FindingDisposition::Calibrated
+pub enum variant nomos_gate_orchestration::FindingDisposition::Suppressed
 pub enum variant nomos_gate_orchestration::GateOutcome::Contradictory(RuleCompositionError)
 pub enum variant nomos_gate_orchestration::GateOutcome::Planned(GatePlan)
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Failed
@@ -24,6 +29,7 @@ pub enum variant nomos_gate_orchestration::SuppressionDisposition::TemporaryWaiv
 pub fn nomos_gate_orchestration::AdoptionPolicy::Calibrating<'a>(&'a self, finding: &Finding) -> Option<&'a RuleCalibration>
 pub fn nomos_gate_orchestration::BaselineDebt::Is_Applicable_To(&self, finding: &Finding) -> bool
 pub fn nomos_gate_orchestration::BaselinePolicy::Tolerating<'a>(&'a self, finding: &Finding) -> Option<&'a BaselineDebt>
+pub fn nomos_gate_orchestration::Compare_Gate_Runs(baseline: &GateRunResult, candidate: &GateRunResult) -> GateCompareResult
 pub fn nomos_gate_orchestration::Disposition_Of_Findings(findings: &[Finding]) -> GateRunOutcome
 pub fn nomos_gate_orchestration::Explain_Gate<Launcher: ProcessLauncher, Fs: FileSystem>( walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, Launcher, Fs>, command: &GateCommand, query: &FindingQuery, ) -> GateExplainResult
 pub fn nomos_gate_orchestration::Fresh_Run_Id(now: Timestamp) -> RunId
@@ -44,6 +50,11 @@ pub struct field nomos_gate_orchestration::BaselineDebt::rationale: String
 pub struct field nomos_gate_orchestration::BaselineDebt::rule: RuleId
 pub struct field nomos_gate_orchestration::BaselineDebt::subject: SubjectId
 pub struct field nomos_gate_orchestration::BaselinePolicy::debt: Vec<BaselineDebt>
+pub struct field nomos_gate_orchestration::DispositionChange::after: FindingDisposition
+pub struct field nomos_gate_orchestration::DispositionChange::before: FindingDisposition
+pub struct field nomos_gate_orchestration::DispositionChange::rule: RuleId
+pub struct field nomos_gate_orchestration::DispositionChange::subject: SubjectId
+pub struct field nomos_gate_orchestration::DispositionChange::subject_name: String
 pub struct field nomos_gate_orchestration::FindingQuery::location: String
 pub struct field nomos_gate_orchestration::FindingQuery::rule: RuleId
 pub struct field nomos_gate_orchestration::GateCommand::adoption: AdoptionPolicy
@@ -54,6 +65,11 @@ pub struct field nomos_gate_orchestration::GateCommand::root: PathBuf
 pub struct field nomos_gate_orchestration::GateCommand::rules: RuleSelector
 pub struct field nomos_gate_orchestration::GateCommand::scope: ScopeSelector
 pub struct field nomos_gate_orchestration::GateCommand::suppressions: SuppressionPolicy
+pub struct field nomos_gate_orchestration::GateCompareResult::added: Vec<Finding>
+pub struct field nomos_gate_orchestration::GateCompareResult::baseline: RunId
+pub struct field nomos_gate_orchestration::GateCompareResult::candidate: RunId
+pub struct field nomos_gate_orchestration::GateCompareResult::changed: Vec<DispositionChange>
+pub struct field nomos_gate_orchestration::GateCompareResult::removed: Vec<Finding>
 pub struct field nomos_gate_orchestration::GateEnvironment::filesystem: &'a Fs
 pub struct field nomos_gate_orchestration::GateEnvironment::launcher: &'a Launcher
 pub struct field nomos_gate_orchestration::GateEnvironment::variant: BuildVariant
@@ -84,8 +100,10 @@ pub struct field nomos_gate_orchestration::SuppressionPolicy::suppressions: Vec<
 pub struct nomos_gate_orchestration::AdoptionPolicy
 pub struct nomos_gate_orchestration::BaselineDebt
 pub struct nomos_gate_orchestration::BaselinePolicy
+pub struct nomos_gate_orchestration::DispositionChange
 pub struct nomos_gate_orchestration::FindingQuery
 pub struct nomos_gate_orchestration::GateCommand
+pub struct nomos_gate_orchestration::GateCompareResult
 pub struct nomos_gate_orchestration::GateEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem>
 pub struct nomos_gate_orchestration::GateExplainResult
 pub struct nomos_gate_orchestration::GateFindings

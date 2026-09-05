@@ -86,6 +86,8 @@ pub fn nomos_corrections::CommittedPlan::Rollback(self, live: &mut Workspace) ->
 pub fn nomos_corrections::CorrectionCandidate::Description(&self) -> &str
 pub fn nomos_corrections::CorrectionCandidate::Labels(&self) -> &[CandidateLabel]
 pub fn nomos_corrections::CorrectionCandidate::New( description: impl Into<String>, change: ChangeSet, class: CorrectionClass, labels: Vec<CandidateLabel>, ) -> Self
+pub fn nomos_corrections::CorrectionCandidate::Read_Write(&self) -> &[ReadWriteSet]
+pub fn nomos_corrections::CorrectionCandidate::With_Read_Write(mut self, set: ReadWriteSet) -> Self
 pub fn nomos_corrections::CorrectionChoice::New(selected: CorrectionId, record: ChoiceRecord) -> Self
 pub fn nomos_corrections::CorrectionChoice::Objective_Weights(&self) -> &[(RankingCriterion, u32)]
 pub fn nomos_corrections::CorrectionChoice::Predicted_Side_Effects(&self) -> &[String]

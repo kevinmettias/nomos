@@ -1,11 +1,11 @@
 pub enum nomos_correction_orchestration::CorrectionOutcome
 pub enum variant nomos_correction_orchestration::CorrectionOutcome::Clean
-pub enum variant nomos_correction_orchestration::CorrectionOutcome::Committed { path: String, claimed: String, preview: Vec<u8>, base: String, after_snapshot: String, }
+pub enum variant nomos_correction_orchestration::CorrectionOutcome::Committed { path: String, summary: String, preview: Vec<u8>, base: String, after_snapshot: String, }
 pub enum variant nomos_correction_orchestration::CorrectionOutcome::ContradictoryRegistry(String)
 pub enum variant nomos_correction_orchestration::CorrectionOutcome::NoFactsMaterialized(usize)
 pub enum variant nomos_correction_orchestration::CorrectionOutcome::NoSourceFound
 pub enum variant nomos_correction_orchestration::CorrectionOutcome::Refused(String)
-pub enum variant nomos_correction_orchestration::CorrectionOutcome::Staged { path: String, claimed: String, preview: Vec<u8>, }
+pub enum variant nomos_correction_orchestration::CorrectionOutcome::Staged { path: String, summary: String, preview: Vec<u8>, }
 pub enum variant nomos_correction_orchestration::CorrectionOutcome::UnreadableRoot
 pub enum variant nomos_correction_orchestration::CorrectionOutcome::UnreadableWorkspaceState
 pub fn nomos_correction_orchestration::Run_Correction<Launcher: ProcessLauncher, Fs: FileSystem>(walked: Option<Vec<SourceFile>>, environment: CorrectionEnvironment<'_, Launcher, Fs>, command: &CorrectionCommand) -> CorrectionOutcome
