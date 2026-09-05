@@ -54797,6 +54797,40 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P53-GATE-020-SHARED-DERIVATION-EXISTS",
+      "title": "OD-GATE-020 names a shared-derivation export as its revisit condition, and one was built",
+      "why": "OD-GATE-020 measured eight rules offered against fifty-six composed, decided the two-field RuleOffer shape was sufficient, and named the fix it deliberately did not build: nomos-check-orchestration would need to export its composed rule-id set for nomos-gate-orchestration to derive from, turning two hand-typed lists checked by eye into one hand-typed list and one comparison. Its stated revisit condition is that a shared-derivation export gets built and its own analysis of what would satisfy OD-GATE-011 needs checking against it. That has now happened twice. P35-GATE-020-COMPOSED-RULES-EXPORT built Composed_Rules, and 81f13bb6 went further than the record anticipated: the contract citation it called knowledge no export carries now lives on RuleDescriptor, OFFERINGS is deleted, and Registered derives from that one table rather than restating it. The record still describes a gap of eight against fifty-six and a fix nobody has built.",
+      "done_when": "OD-GATE-020 records what became of the revisit condition it named: that the shared-derivation export exists, that the hand-typed table it analysed is gone rather than merely compared against, and whether its own what-would-satisfy-OD-GATE-011 analysis held up against the thing that was actually built. Its measurement and reasoning are not rewritten as though they had always said this, since both were right when taken. Both required projections are re-rendered from the record set the commit publishes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
