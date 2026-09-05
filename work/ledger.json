@@ -54622,7 +54622,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P52-COMPOSED-RULES-BECOME-DECLARATIONS-2, which is this item without a done_when clause it could not honestly satisfy. The defect is unchanged and still open. Never claimed for work and never published."
+        }
+      },
       "depends_on": [
         "P50-RULE-PACKAGE-RESOLUTION-STEP"
       ],
@@ -54646,6 +54650,150 @@
         "timeout_seconds": 2700
       },
       "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-opus5-session-rulepkg",
+          "reason": "Authored with a done_when clause this item cannot reach. It asks that a rule exported and judged by nothing be either declared or reported, which is P46-UNCOMPOSED-RULES-ARE-COUNTED closed from the declaration side. That comparison is between the Check functions nomos-rules exports and the declared set, and the exported half is a source-level fact only a contract test reading the blessed surface snapshot can enumerate. That file is tests/contract/tests/rule_composition.rs, which P46 reserves and this item does not. Re-authored as -2 without the clause.",
+          "abandoned_at": 1788605593
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-opus5-session-rulepkg",
+        "declined_at": 1788605593
+      }
+    },
+    {
+      "id": "P52-COMPOSED-RULES-BECOME-DECLARATIONS-2",
+      "title": "A rule contract citation is hand-typed in a second crate because no export carries it",
+      "why": "OD-RULES-022 decided composition resolves a declared rule package against a linked implementation, and 6b35e202 built Resolve_Rules, which nothing calls. The duplication that decision measured is still there. nomos-gate-orchestration composition.rs says why in its own module doc: this is not yet a shared derivation, the rows below are still authored, because a rule contract citation is knowledge no export carries. OD-GATE-020 named the same thing as the fix it did not build, and its stated revisit condition is a shared-derivation export being built. DESCRIPTORS in nomos-rules already carries every rule identity and what it reads, and a contract citation is the one field it lacks that OFFERINGS exists to hold. With that field, OFFERINGS derives instead of being typed a second time, and the two parity tests that went red on 2026-09-05 within hours of the table reaching fifty-seven entries are comparing a derivation against its source rather than one hand-typed list against another.",
+      "done_when": "A rule declaration carries its contract citation, so nomos-gate-orchestration derives its registry from that declaration rather than from a hand-typed table of its own, and one of the three hand-maintained declarations OD-RULES-022 measured is gone rather than relocated. Run reaches the rules it judges by through Resolve_Rules over that declared set, and a disagreement between declaration and implementation is a named outcome rather than a silent divergence. What a run judges does not change: nomos gate run over this workspace reports the same finding count and the same blocking count as before the change. It settles and states where a declaration lives, since OD-RULES-022 deliberately did not decide the carriage, and records that decision if it outlives the item. The predicate names nomos-gate-orchestration alongside nomos-check-orchestration and nomos-rules.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/packages/nomos-rule-package",
+          "tests/contract/surface",
+          "tests/contract/tests/rule_descriptors.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P52-COMPOSED-RULES-BECOME-DECLARATIONS-3, which is this item with the resolution placed where a refusal already has a named outcome both hosts render. Same subject, unchanged defect, never published."
+        }
+      },
+      "depends_on": [
+        "P50-RULE-PACKAGE-RESOLUTION-STEP"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rule-package",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-opus5-session-rulepkg",
+          "reason": "Its placement clause is wrong and was measured wrong, not merely mis-worded. It asks Run to reach its rules through Resolve_Rules and to make a disagreement a named outcome. Run returns CheckOutcome, whose variants are matched exhaustively by nomos-cli and nomos-api, and neither crate is in this territory, so no variant can be added for a resolution refusal. The two existing near-fits both lie: Contradictory carries nomos_capability::RegistryError, a band-21 type this item also does not own, and NoSource or NoFacts would report a composition defect as an empty tree. Registered() in nomos-gate-orchestration already returns a Result whose refusal surfaces as GateOutcome::Contradictory and is already rendered by both hosts, so that is where a refusal is a named outcome rather than an invented one. Re-authored as -3 with the resolution placed there.",
+          "abandoned_at": 1788605701
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-opus5-session-rulepkg",
+        "declined_at": 1788605701
+      }
+    },
+    {
+      "id": "P52-COMPOSED-RULES-BECOME-DECLARATIONS-3",
+      "title": "A rule contract citation is hand-typed in a second crate because no export carries it",
+      "why": "OD-RULES-022 decided composition resolves a declared rule package against a linked implementation, and 6b35e202 built Resolve_Rules, which nothing calls. nomos-gate-orchestration composition.rs states the blocker in its own module doc: this is not yet a shared derivation, the rows below are still authored, because a rule contract citation is knowledge no export carries. OD-GATE-020 named the same export as the fix it deliberately did not build, and its stated revisit condition is that a shared-derivation export gets built. DESCRIPTORS in nomos-rules already carries every rule identity and what it reads, and the contract citation is the one field it lacks that OFFERINGS exists to hold. With that field OFFERINGS derives instead of being typed a second time, and the two parity tests that went red within hours of the table reaching fifty-seven entries compare a derivation against its source rather than one hand-typed list against another.",
+      "done_when": "A rule declaration carries its contract citation, and nomos-gate-orchestration derives its registry from that declaration through Resolve_Rules rather than from a hand-typed table of its own, so one of the three hand-maintained declarations OD-RULES-022 measured is gone rather than relocated. A disagreement between declaration and implementation refuses through the Result Registered already returns, surfacing as the GateOutcome::Contradictory both hosts already render, rather than through a new outcome variant in a vocabulary this territory does not own. What a run judges does not change: nomos gate run over this workspace reports the same finding count and the same blocking count as before. It settles and states where a declaration lives, since OD-RULES-022 deliberately did not decide the carriage, and records a decision that outlives the item. The predicate names nomos-rules and both orchestration crates.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/packages/nomos-rule-package",
+          "tests/contract/surface",
+          "tests/contract/tests/rule_descriptors.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [
+        "P50-RULE-PACKAGE-RESOLUTION-STEP"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rule-package",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rule-package",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ts\\run_seam.rs (target\\debug\\deps\\run_seam-c9e29199ba5db01b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-0b2ef4fd5e7c2d6c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-afe7a57dcea20e0d.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-4ad4f8b0f0df8c7d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fb67c7aca932349f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-576b255f0e5eeb09.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-138f392b3663534b.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-b9d0651de2dc653d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-a2017e263d5cbe6d.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-497e7a773c08fe38.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-af9eeac860a2912c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-3b4d3e3ba4aed231.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-81b14b47bafad117.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-0b6600445d60185a.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-0094cb2b5807a8bb.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rule_package-44a7f2bcd1f1445a.exe)\n     Running tests\\manifest.rs (target\\debug\\deps\\manifest-d621e40d0574f94a.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n   Doc-tests nomos_rule_package\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788608108,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d9dff5a55947f6037881eb8c8d80f3f38a2294af"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

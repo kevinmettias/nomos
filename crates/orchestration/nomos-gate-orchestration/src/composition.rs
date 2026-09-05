@@ -63,164 +63,9 @@
 //! beside the rule, where whoever amends the record is already reading, and
 //! `tests/contract/tests/rule_contract_citation.rs` checks both halves against the records'
 //! own front matter.
-use nomos_contracts::RuleId;
-use nomos_rules::{
-    ABBREVIATIONS, AN_EXCLUDED_FILE_SAYS_WHY, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED,
-    A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, A_DISABLED_TEST_STATES_WHY, A_DISCARDED_ERROR_IS_EXPLAINED,
-    A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY, A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE,
-    A_SCRIPT_DECLARES_ITS_PURPOSE, A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, A_SKIPPED_TEST_STATES_WHY,
-    CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, COMPLETENESS_MIRROR, CONSTANTS_SPLIT_BY_EXPORT,
-    CONTRACT_RECORD, CONTRACT_RECORD_VERSION, CROSS_LANGUAGE_CONTRACT_RECORD,
-    CROSS_LANGUAGE_CONTRACT_RECORD_VERSION, CROSS_LANGUAGE_CORRESPONDENCE, DATA_NAMES_STAY_LOWER_SNAKE,
-    DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
-    DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY,
-    DEPENDENCY_POLICY_CONTRACT_RECORD, DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION, DEPRECATION,
-    EAGER_VS_LAZY_CONTEXT, EVERY_ALLOW_CARRIES_A_JUSTIFICATION, EXECUTED_SCRIPTS_SET_NOUNSET,
-    EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE,
-    FILE_SIZE_JUSTIFICATION_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER, GOALS_AND_PARTS_LINE_UP,
-    GO_HELPERS_PACKAGE_FIVE_INPUTS, GO_VARIABLES_USE_LOWER_SNAKE_CASE, INLINE_ALWAYS_JUSTIFICATION,
-    LINT_CONTRACT_RECORD, LINT_CONTRACT_RECORD_VERSION, LINT_DIAGNOSTICS, LOWERCASE_FIRST_LETTER,
-    LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, NESTING_DEPTH,
-    NAMING_CONVENTION, NO_MOD_RS_FILES, NO_ORPHAN_MODULES, NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_PUNCTUATION,
-    PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN, PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS,
-    STATIC_BOUNDS_ARE_JUSTIFIED,
-    NO_TRAILING_WHITESPACE, NO_WILDCARD_IMPORTS, ONE_THOUSAND_LINE_HARD_TRIGGER, PARAMETER_COUNT,
-    RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, RuleOffer, RuleRegistry, RuleRegistryError,
-    SCRIPTS_USE_A_PORTABLE_SHEBANG, SEQCST_JUSTIFIED_EXPLICITLY, SHARED_INTERIOR_MUTABILITY_SAYS_WHY,
-    SINGLE_LETTER_NAMES, SLEEP_BASED_SYNCHRONIZATION, SUPPRESSION_DIRECTIVES_CARRY_A_REASON, TODO_FORMAT,
-    TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,
-    UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
-    UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION, UNSAFE_JUSTIFICATION, WORKSPACE_MARKERS_CARRY_A_REASON,
-    ZERO_FLAKE_POLICY,
-};
+use crate::RuleCompositionError;
+use nomos_rules::{RuleOffer, RuleRegistry};
 
-/// The authority a rule ported from code-standards cites: the standard itself.
-///
-/// Every rule carrying this is one whose own module doc opens "code-standards' `<rule-id>`
-/// rule", and the rule id in the same offer is the document's identity within that standard,
-/// so the pair names the contract exactly. Distinct from [`WORKSPACE_CONVENTIONS`] because
-/// the two are different documents: nothing in this repository's `README.md` states what
-/// `atomic-ordering-choices-are-justified` requires.
-const PORTED_STANDARD: &str = "code-standards";
-
-/// The authority `Check_Naming_Convention` cites: `README.md`'s Conventions section.
-///
-/// `naming.rs`'s own "# Why this has no `CONTRACT_RECORD`" section says this in full, and
-/// says why no record was manufactured to replace it -- "a record authored only to give this
-/// rule something to cite would be the record standing in for the check, not the other way
-/// around."
-const WORKSPACE_CONVENTIONS: &str = "README.md";
-
-/// The version a prose contract is at: none.
-///
-/// Zero marks the absence, not version zero of something. `OD-GATE-020` accepted this
-/// sentinel as the general pattern for a record-less rule after `Offer_Naming_Convention`
-/// introduced it for one, on the ground that forty-eight more instances of the same two
-/// shapes are the second-and-onward case `OD-RULES-005` and `OD-RULES-006` asked for before
-/// extending `RuleOffer` -- and that they take a shape the ninth rule had already proved out
-/// rather than a new one.
-const NO_VERSIONED_RECORD: u32 = 0;
-
-/// Every rule this workspace ships: its identifier, the authority its implementation cites,
-/// and the version of that authority it was written against.
-///
-/// In the order `nomos_check_orchestration` composes them, so a reader comparing the two
-/// lists reads them the same way round. The seven versioned citations lead, because they
-/// were here first and because they are the rows whose middle column a reader has to check
-/// against a record; the rest follow grouped by the module that implements them.
-const OFFERINGS: &[(&str, &str, u32)] = &[
-    (COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION),
-    (NAMING_CONVENTION, WORKSPACE_CONVENTIONS, NO_VERSIONED_RECORD),
-    (DEPENDENCY_DIRECTION, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION),
-    (DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION),
-    (LINT_DIAGNOSTICS, LINT_CONTRACT_RECORD, LINT_CONTRACT_RECORD_VERSION),
-    (DEPENDENCY_POLICY, DEPENDENCY_POLICY_CONTRACT_RECORD, DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION),
-    (UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD, UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION),
-    (CROSS_LANGUAGE_CORRESPONDENCE, CROSS_LANGUAGE_CONTRACT_RECORD, CROSS_LANGUAGE_CONTRACT_RECORD_VERSION),
-    // formatting.rs
-    (NO_TRAILING_WHITESPACE, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (TODO_FORMAT, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (DEPRECATION, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // rust_text.rs
-    (A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (SHARED_INTERIOR_MUTABILITY_SAYS_WHY, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (EVERY_ALLOW_CARRIES_A_JUSTIFICATION, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (UNSAFE_JUSTIFICATION, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // script_discipline.rs
-    (SCRIPTS_USE_A_PORTABLE_SHEBANG, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (A_SCRIPT_DECLARES_ITS_PURPOSE, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (EXECUTED_SCRIPTS_SET_NOUNSET, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // flakiness_text.rs
-    (SLEEP_BASED_SYNCHRONIZATION, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (ZERO_FLAKE_POLICY, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // structure.rs
-    (NO_MOD_RS_FILES, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // security_text.rs
-    (A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // go_text.rs
-    (A_DISCARDED_ERROR_IS_EXPLAINED, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (A_SKIPPED_TEST_STATES_WHY, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (AN_EXCLUDED_FILE_SAYS_WHY, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (SUPPRESSION_DIRECTIVES_CARRY_A_REASON, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (WORKSPACE_MARKERS_CARRY_A_REASON, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // placement.rs
-    (A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // concurrency_text.rs
-    (ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (SEQCST_JUSTIFIED_EXPLICITLY, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // data_names.rs
-    (DATA_NAMES_STAY_LOWER_SNAKE, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // file_names.rs
-    (FILE_NAME_MATCHES_DECLARED_TYPE, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // go_data_names.rs
-    (CONSTANTS_SPLIT_BY_EXPORT, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (GO_VARIABLES_USE_LOWER_SNAKE_CASE, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // go_function_names.rs
-    (EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // go_type_names.rs
-    (TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // function_shape.rs
-    (PARAMETER_COUNT, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (GO_HELPERS_PACKAGE_FIVE_INPUTS, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // script_discipline.rs
-    (DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // structure.rs
-    (FILE_SIZE_JUSTIFICATION_TRIGGER, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (ONE_THOUSAND_LINE_HARD_TRIGGER, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (FIVE_HUNDRED_LINE_REVIEW_TRIGGER, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // error_text.rs
-    (LOWERCASE_FIRST_LETTER, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (NO_TRAILING_PUNCTUATION, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (EAGER_VS_LAZY_CONTEXT, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // goals.rs
-    (GOALS_AND_PARTS_LINE_UP, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // abbreviations.rs
-    (ABBREVIATIONS, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // single_letter_names.rs
-    (SINGLE_LETTER_NAMES, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // rust_text.rs
-    (A_DISABLED_TEST_STATES_WHY, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (INLINE_ALWAYS_JUSTIFICATION, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // placement.rs
-    (NO_WILDCARD_IMPORTS, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // formatting.rs
-    (NO_SINGLE_LINE_FUNCTION_BODIES, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // orphan_modules.rs
-    (NO_ORPHAN_MODULES, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // borrowed_container.rs
-    (PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // lifetime_discipline.rs
-    (LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    (STATIC_BOUNDS_ARE_JUSTIFIED, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // procedural_macro.rs
-    (PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS, PORTED_STANDARD, NO_VERSIONED_RECORD),
-    // nesting_depth.rs
-    (NESTING_DEPTH, PORTED_STANDARD, NO_VERSIONED_RECORD),
-];
 
 /// Registers every rule `nomos-check-orchestration::Run` composes and hands back the
 /// registry.
@@ -232,22 +77,31 @@ const OFFERINGS: &[(&str, &str, u32)] = &[
 ///
 /// # Errors
 ///
-/// [`RuleRegistryError::AlreadyOffered`] if the same [`RuleId`] appeared twice in
-/// [`OFFERINGS`]. Not reachable today -- `Test_Registered_Should_Offer_Every_Composed_Rule`
-/// would fail first, and `Composed_Rules`' own uniqueness test one crate away would fail
-/// before that -- but returned rather than unwound for the same reason
+/// [`RuleCompositionError::Resolution`] when what this build declares and what it composes are
+/// not the same set, and [`RuleCompositionError::Registration`] if one [`RuleId`] is described
+/// twice. Neither is reachable today -- `Declared_Rules` is derived from the same
+/// `nomos_rules::DESCRIPTORS` this function registers from, and that table's own uniqueness
+/// test would fail first -- but both are returned rather than unwound for the same reason
 /// `nomos_check_orchestration::Registered` returns its own `RegistryError`: a composition
 /// root's own defect must be representable, not panicked past.
-pub fn Registered() -> Result<RuleRegistry, RuleRegistryError>
+///
+/// The resolution runs before the registry is built, so a disagreement refuses instead of
+/// producing a plan the run would not honour.
+pub fn Registered() -> Result<RuleRegistry, RuleCompositionError>
 {
+    nomos_check_orchestration::Resolve_Rules(
+        &nomos_check_orchestration::Declared_Rules(),
+        &nomos_check_orchestration::Composed_Rules(),
+    )?;
+
     let mut registry = RuleRegistry::New();
 
-    for (rule, contract_record, contract_record_version) in OFFERINGS
+    for descriptor in nomos_rules::DESCRIPTORS
     {
         registry.Offer(RuleOffer {
-            rule: RuleId::New(*rule),
-            contract_record: (*contract_record).to_owned(),
-            contract_record_version: *contract_record_version,
+            rule: descriptor.Rule(),
+            contract_record: descriptor.contract_record.to_owned(),
+            contract_record_version: descriptor.contract_record_version,
         })?;
     }
 
@@ -257,7 +111,7 @@ pub fn Registered() -> Result<RuleRegistry, RuleRegistryError>
 #[cfg(test)]
 mod tests
 {
-    use super::{Registered, NO_VERSIONED_RECORD, OFFERINGS, PORTED_STANDARD, WORKSPACE_CONVENTIONS};
+    use super::Registered;
     use nomos_contracts::RuleId;
 
     /// The assertion this whole file is arranged around: what is offered is what is run.
@@ -281,43 +135,9 @@ mod tests
 
         assert_eq!(
             offered, composed,
-            "every rule nomos-check-orchestration::Run composes needs a row in OFFERINGS, and \
+            "every rule nomos-check-orchestration::Run composes needs a descriptor, and \
              a row here that Run does not compose is a rule this registry claims and nothing \
              enforces"
         );
-    }
-
-    /// Each row cites either a versioned record or a named prose authority, never a bare
-    /// literal.
-    ///
-    /// A row is authored, so a row can be authored wrong. This is the shape a wrong one takes
-    /// that the comparison above cannot see: a correct identifier beside an invented contract
-    /// string, or a prose authority handed a version number it cannot have. `nomos gate
-    /// explain` prints this pair straight to a person asking what a finding is grounded in.
-    #[test]
-    fn Test_Every_Offering_Should_Cite_A_Real_Authority()
-    {
-        for (rule, record, version) in OFFERINGS
-        {
-            assert!(!record.is_empty(), "{rule} cites an empty contract record");
-
-            let is_prose = *record == PORTED_STANDARD || *record == WORKSPACE_CONVENTIONS;
-            if is_prose
-            {
-                assert_eq!(
-                    *version, NO_VERSIONED_RECORD,
-                    "{rule} cites the prose authority {record} at version {version}, but prose \
-                     carries no version for a citation to be right or wrong about"
-                );
-            }
-            else
-            {
-                assert!(
-                    *version > NO_VERSIONED_RECORD,
-                    "{rule} cites the record {record} at the no-version sentinel; a record has \
-                     front matter, and tests/contract/tests/rule_contract_citation.rs checks it"
-                );
-            }
-        }
     }
 }

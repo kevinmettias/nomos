@@ -13,6 +13,7 @@ pub enum variant nomos_check_orchestration::RuleResolutionError::NothingDeclared
 pub fn nomos_check_orchestration::Claim::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_check_orchestration::Claim_Of(findings: &[Finding]) -> Claim
 pub fn nomos_check_orchestration::Composed_Rules() -> Vec<RuleId>
+pub fn nomos_check_orchestration::Declared_Rules() -> Vec<RulePackage>
 pub fn nomos_check_orchestration::Registered() -> Result<Registry, RegistryError>
 pub fn nomos_check_orchestration::Resolve_Rules(declared: &[RulePackage], registered: &[RuleId]) -> Result<RuleResolution, RuleResolutionError>
 pub fn nomos_check_orchestration::Resolved_Configuration(registry: &Registry) -> ConfigurationId

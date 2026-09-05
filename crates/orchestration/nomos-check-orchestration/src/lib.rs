@@ -37,6 +37,7 @@
 #![forbid(unsafe_code)]
 
 mod check_command;
+mod declared_rules;
 mod composition;
 mod examined;
 mod facts;
@@ -48,6 +49,7 @@ mod run_context;
 mod tests;
 
 pub use check_command::CheckCommand;
+pub use declared_rules::Declared_Rules;
 pub use composition::{Registered, Resolved_Configuration};
 pub use examined::{Claim, Claim_Of, CheckOutcome, Examined};
 pub use rule_resolution::{Resolve_Rules, RuleResolution};

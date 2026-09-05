@@ -1,6 +1,6 @@
 //! What a `nomos gate` run produced.
 
-use nomos_rules::RuleRegistryError;
+use crate::RuleCompositionError;
 
 use crate::gate_plan::GatePlan;
 
@@ -12,5 +12,5 @@ pub enum GateOutcome
     /// This crate's own rule composition is self-contradictory -- a defect in the
     /// composition, not in anything a caller supplied. Not reachable today; see
     /// [`crate::composition::Registered`]'s own doc.
-    Contradictory(RuleRegistryError),
+    Contradictory(RuleCompositionError),
 }

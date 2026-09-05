@@ -78,6 +78,22 @@ pub struct RuleDescriptor
     pub subject: SubjectKind,
     /// The capability families this rule needs materialized, in declaration order.
     pub requires: &'static [RequiredFact],
+    /// The authority this rule's implementation cites.
+    ///
+    /// A versioned governing record identifier for the seven rules whose contract a record
+    /// decides, [`PORTED_STANDARD`] for a rule ported from code-standards, or
+    /// [`WORKSPACE_CONVENTIONS`] for the one rule whose contract is this repository's own
+    /// prose. `OD-GATE-020` measured that population and confirmed the two-field shape
+    /// carries it.
+    ///
+    /// Here rather than in `nomos-gate-orchestration`'s own table because that crate's
+    /// module doc named the absence directly: "a rule's contract citation is knowledge no
+    /// export carries". `OD-RULES-022` decided a declaration carries it, and this is the
+    /// export it named.
+    pub contract_record: &'static str,
+    /// The version of [`Self::contract_record`], or [`NO_VERSIONED_RECORD`] when the
+    /// authority is prose and has no version a citation could be right or wrong about.
+    pub contract_record_version: u32,
 }
 
 impl RuleDescriptor
@@ -88,12 +104,68 @@ impl RuleDescriptor
     {
         return RuleId::New(self.id);
     }
+
+    /// Whether this descriptor's authority carries a version a citation could be wrong about.
+    ///
+    /// A predicate rather than a comparison against [`NO_VERSIONED_RECORD`] at every call
+    /// site: that constant is a sentinel meaning absence, and a caller writing `== 0` is a
+    /// caller who has to know that. `OD-GATE-020` accepted the sentinel and said what it
+    /// means; this is where it is read.
+    #[must_use]
+    pub const fn Cites_A_Versioned_Record(&self) -> bool
+    {
+        return self.contract_record_version != NO_VERSIONED_RECORD;
+    }
+
+    /// The same descriptor, citing `record` at `version` instead of the ported standard.
+    ///
+    /// A builder rather than a fifth parameter on [`Described`]: this workspace's own
+    /// `parameter-count` rule caps a function at four value parameters, and a rule that
+    /// declares its own limits should not be the first thing to exceed them.
+    #[must_use]
+    pub const fn Citing(self, record: &'static str, version: u32) -> Self
+    {
+        return Self { contract_record: record, contract_record_version: version, ..self };
+    }
 }
 
+/// The authority a rule ported from code-standards cites: the standard itself.
+///
+/// Every rule carrying this is one whose own module doc opens "code-standards' `<rule-id>`
+/// rule", and the rule id in the same descriptor is the document's identity within that
+/// standard, so the pair names the contract exactly. Distinct from [`WORKSPACE_CONVENTIONS`]
+/// because the two are different documents: nothing in this repository's `README.md` states
+/// what `atomic-ordering-choices-are-justified` requires.
+pub const PORTED_STANDARD: &str = "code-standards";
+
+/// The authority `Check_Naming_Convention` cites: `README.md`'s Conventions section.
+///
+/// `naming.rs`'s own "# Why this has no `CONTRACT_RECORD`" section says this in full, and says
+/// why no record was manufactured to replace it -- "a record authored only to give this rule
+/// something to cite would be the record standing in for the check, not the other way around."
+pub const WORKSPACE_CONVENTIONS: &str = "README.md";
+
+/// The version a prose contract is at: none.
+///
+/// Zero marks the absence, not version zero of something. `OD-GATE-020` accepted this
+/// sentinel as the general pattern for a record-less rule rather than a one-off awaiting its
+/// own type.
+pub const NO_VERSIONED_RECORD: u32 = 0;
+
 /// One descriptor, named so the table below reads as one line per rule.
+///
+/// Cites [`PORTED_STANDARD`] at [`NO_VERSIONED_RECORD`], which is what all but eight rules in
+/// the table cite. The eight that cite something else say so with [`RuleDescriptor::Citing`],
+/// so the common case stays one line and the exceptions are visible as exceptions.
 const fn Described(id: &'static str, subject: SubjectKind, requires: &'static [RequiredFact]) -> RuleDescriptor
 {
-    return RuleDescriptor { id, subject, requires };
+    return RuleDescriptor {
+        id,
+        subject,
+        requires,
+        contract_record: PORTED_STANDARD,
+        contract_record_version: NO_VERSIONED_RECORD,
+    };
 }
 
 /// Every rule this crate offers, with what it reads.
@@ -108,14 +180,14 @@ const fn Described(id: &'static str, subject: SubjectKind, requires: &'static [R
 /// list against `nomos_check_orchestration::Composed_Rules` in both directions from
 /// `tests/contract/tests/rule_descriptors.rs` -- the only crate above both.
 pub const DESCRIPTORS: &[RuleDescriptor] = &[
-    Described(crate::COMPLETENESS_MIRROR, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems]),
-    Described(crate::NAMING_CONVENTION, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy]),
-    Described(crate::DEPENDENCY_DIRECTION, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges]),
-    Described(crate::DEPENDENCY_COMPLETENESS, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges]),
-    Described(crate::LINT_DIAGNOSTICS, SubjectKind::SourceFacts, &[RequiredFact::LintDiagnostics]),
-    Described(crate::DEPENDENCY_POLICY, SubjectKind::SourceFacts, &[RequiredFact::DependencyPolicy]),
-    Described(crate::UNREAD_REACHES_FINDING, SubjectKind::SourceFacts, &[RequiredFact::Reachability]),
-    Described(crate::CROSS_LANGUAGE_CORRESPONDENCE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems]),
+    Described(crate::COMPLETENESS_MIRROR, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems]).Citing(crate::CONTRACT_RECORD, crate::CONTRACT_RECORD_VERSION),
+    Described(crate::NAMING_CONVENTION, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy]).Citing(WORKSPACE_CONVENTIONS, NO_VERSIONED_RECORD),
+    Described(crate::DEPENDENCY_DIRECTION, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges]).Citing(crate::DEPENDENCY_CONTRACT_RECORD, crate::DEPENDENCY_CONTRACT_RECORD_VERSION),
+    Described(crate::DEPENDENCY_COMPLETENESS, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges]).Citing(crate::DEPENDENCY_CONTRACT_RECORD, crate::DEPENDENCY_CONTRACT_RECORD_VERSION),
+    Described(crate::LINT_DIAGNOSTICS, SubjectKind::SourceFacts, &[RequiredFact::LintDiagnostics]).Citing(crate::LINT_CONTRACT_RECORD, crate::LINT_CONTRACT_RECORD_VERSION),
+    Described(crate::DEPENDENCY_POLICY, SubjectKind::SourceFacts, &[RequiredFact::DependencyPolicy]).Citing(crate::DEPENDENCY_POLICY_CONTRACT_RECORD, crate::DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION),
+    Described(crate::UNREAD_REACHES_FINDING, SubjectKind::SourceFacts, &[RequiredFact::Reachability]).Citing(crate::UNREAD_REACHES_FINDING_CONTRACT_RECORD, crate::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION),
+    Described(crate::CROSS_LANGUAGE_CORRESPONDENCE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems]).Citing(crate::CROSS_LANGUAGE_CONTRACT_RECORD, crate::CROSS_LANGUAGE_CONTRACT_RECORD_VERSION),
     Described(crate::NO_TRAILING_WHITESPACE, SubjectKind::SourceText, &[]),
     Described(crate::TODO_FORMAT, SubjectKind::SourceText, &[]),
     Described(crate::DEPRECATION, SubjectKind::SourceText, &[]),
@@ -177,6 +249,31 @@ mod descriptor_tests
 {
     use super::*;
     use std::collections::BTreeSet;
+
+    /// Every descriptor cites either a versioned record or a named prose authority, never a
+    /// bare literal and never a prose authority wearing a version.
+    ///
+    /// Relocated here by `P52` from `nomos-gate-orchestration`'s own `OFFERINGS` table, which
+    /// this field replaced. The invariant is about the citation, and the citation now lives
+    /// here, which is also the only module where the two prose authorities are in scope.
+    #[test]
+    fn Test_Every_Descriptor_Should_Cite_A_Real_Authority()
+    {
+        for descriptor in DESCRIPTORS
+        {
+            assert!(!descriptor.contract_record.is_empty(), "{} cites an empty contract record", descriptor.id);
+
+            let is_prose = descriptor.contract_record == PORTED_STANDARD || descriptor.contract_record == WORKSPACE_CONVENTIONS;
+            assert_eq!(
+                is_prose,
+                !descriptor.Cites_A_Versioned_Record(),
+                "{} cites {} at version {}: a prose authority carries no version for a citation                  to be right or wrong about, and a record always has one",
+                descriptor.id,
+                descriptor.contract_record,
+                descriptor.contract_record_version
+            );
+        }
+    }
 
     #[test]
     fn Test_No_Rule_Should_Be_Described_Twice()

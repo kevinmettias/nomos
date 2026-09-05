@@ -2,16 +2,19 @@ pub enum nomos_gate_orchestration::CoveragePolicy
 pub enum nomos_gate_orchestration::Explanation
 pub enum nomos_gate_orchestration::GateOutcome
 pub enum nomos_gate_orchestration::GateRunOutcome
+pub enum nomos_gate_orchestration::RuleCompositionError
 pub enum nomos_gate_orchestration::SuppressionDisposition
 pub enum variant nomos_gate_orchestration::CoveragePolicy::RequireCompleteness
 pub enum variant nomos_gate_orchestration::CoveragePolicy::Unset
 pub enum variant nomos_gate_orchestration::Explanation::Found { finding: Box<Finding>, would_block: bool, calibrated_by: Option<RuleCalibration>, suppressed_by: Option<Suppression>, baselined_by: Option<BaselineDebt>, contract: Option<(String, u32)>, }
 pub enum variant nomos_gate_orchestration::Explanation::NotFound
-pub enum variant nomos_gate_orchestration::GateOutcome::Contradictory(RuleRegistryError)
+pub enum variant nomos_gate_orchestration::GateOutcome::Contradictory(RuleCompositionError)
 pub enum variant nomos_gate_orchestration::GateOutcome::Planned(GatePlan)
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Failed
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Indeterminate
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Passed
+pub enum variant nomos_gate_orchestration::RuleCompositionError::Registration(RuleRegistryError)
+pub enum variant nomos_gate_orchestration::RuleCompositionError::Resolution(RuleResolutionError)
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::AcceptedBaselineDebt
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::FalsePositiveDisposition
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::FormalRiskAcceptance
@@ -24,14 +27,18 @@ pub fn nomos_gate_orchestration::BaselinePolicy::Tolerating<'a>(&'a self, findin
 pub fn nomos_gate_orchestration::Disposition_Of_Findings(findings: &[Finding]) -> GateRunOutcome
 pub fn nomos_gate_orchestration::Explain_Gate<Launcher: ProcessLauncher, Fs: FileSystem>( walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, Launcher, Fs>, command: &GateCommand, query: &FindingQuery, ) -> GateExplainResult
 pub fn nomos_gate_orchestration::Fresh_Run_Id(now: Timestamp) -> RunId
-pub fn nomos_gate_orchestration::Registered() -> Result<RuleRegistry, RuleRegistryError>
+pub fn nomos_gate_orchestration::Registered() -> Result<RuleRegistry, RuleCompositionError>
 pub fn nomos_gate_orchestration::RuleCalibration::Is_Applicable_To(&self, finding: &Finding) -> bool
+pub fn nomos_gate_orchestration::RuleCompositionError::from(error: RuleRegistryError) -> Self
+pub fn nomos_gate_orchestration::RuleCompositionError::from(error: RuleResolutionError) -> Self
 pub fn nomos_gate_orchestration::RuleSelector::Is_Included(&self, rule: &RuleId) -> bool
 pub fn nomos_gate_orchestration::Run(_command: &GateCommand) -> GateOutcome
 pub fn nomos_gate_orchestration::Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem>( walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, Launcher, Fs>, command: &GateCommand, run: RunId, ) -> GateRunResult
 pub fn nomos_gate_orchestration::ScopeSelector::Is_In_Scope(&self, path: &str) -> bool
 pub fn nomos_gate_orchestration::Suppression::Is_Applicable_To(&self, finding: &Finding) -> bool
 pub fn nomos_gate_orchestration::SuppressionPolicy::Suppressing<'a>(&'a self, finding: &Finding) -> Option<&'a Suppression>
+pub impl nomos_gate_orchestration::RuleCompositionError implements From<RuleRegistryError>
+pub impl nomos_gate_orchestration::RuleCompositionError implements From<RuleResolutionError>
 pub struct field nomos_gate_orchestration::AdoptionPolicy::calibrated: Vec<RuleCalibration>
 pub struct field nomos_gate_orchestration::BaselineDebt::rationale: String
 pub struct field nomos_gate_orchestration::BaselineDebt::rule: RuleId

@@ -146,6 +146,7 @@
 #![forbid(unsafe_code)]
 
 mod composition;
+mod rule_composition_error;
 mod finding_query;
 mod gate_command;
 mod gate_environment;
@@ -157,6 +158,7 @@ mod run_id;
 #[cfg(test)]
 mod tests;
 
+pub use rule_composition_error::RuleCompositionError;
 pub use composition::Registered;
 pub use finding_query::{Explain_Gate, Explanation, FindingQuery, GateExplainResult};
 pub use gate_command::GateCommand;
