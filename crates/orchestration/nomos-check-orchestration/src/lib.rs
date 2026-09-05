@@ -40,6 +40,8 @@ mod check_command;
 mod composition;
 mod examined;
 mod facts;
+mod rule_resolution;
+mod rule_resolution_error;
 mod run_context;
 
 #[cfg(test)]
@@ -48,4 +50,6 @@ mod tests;
 pub use check_command::CheckCommand;
 pub use composition::{Registered, Resolved_Configuration};
 pub use examined::{Claim, Claim_Of, CheckOutcome, Examined};
+pub use rule_resolution::{Resolve_Rules, RuleResolution};
+pub use rule_resolution_error::RuleResolutionError;
 pub use run_context::{Composed_Rules, Run, RunContext};

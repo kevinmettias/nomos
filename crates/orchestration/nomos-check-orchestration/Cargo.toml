@@ -35,6 +35,7 @@ nomos-repo-limits = { workspace = true }
 nomos-repo-scripting = { workspace = true }
 nomos-repo-goals = { workspace = true }
 nomos-repo-words = { workspace = true }
+nomos-rule-package = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-workspace = { workspace = true }
 
