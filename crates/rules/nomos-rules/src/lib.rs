@@ -395,6 +395,7 @@ mod declared_universe;
 mod facts;
 mod reading;
 mod registry;
+mod rule_descriptor;
 mod universe_kind;
 
 use nomos_cap_syntax::Language;
@@ -471,6 +472,7 @@ pub use checks::{
 pub use declared_universe::DeclaredUniverse;
 pub use reading::Reading;
 pub use registry::{RuleOffer, RuleRegistry, RuleRegistryError};
+pub use rule_descriptor::{RequiredFact, RuleDescriptor, SubjectKind, DESCRIPTORS};
 pub use universe_kind::{UniverseKind, Universes_In};
 
 /// What this crate needs from a syntax provider before it will believe an answer.

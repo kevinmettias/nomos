@@ -22,6 +22,12 @@ nomos-lang-rust = { workspace = true }
 serde_json = { workspace = true }
 
 [dev-dependencies]
+# `nomos-check-orchestration` for `tests/rule_descriptors.rs` alone: it owns
+# `Composed_Rules`, and this crate is the only one above both it and `nomos-rules`, so it
+# is the only place the descriptor table and the composed table can be compared. A dev
+# dependency rather than a real one, because nothing this crate publishes needs it.
+nomos-check-orchestration = { workspace = true }
+nomos-contracts = { workspace = true }
 # The ledger crate is used only by integration tests that check the agent contract
 # and toolchain-floor workflow derivation.
 nomos-ledger = { workspace = true }

@@ -57,6 +57,15 @@ pub(crate) const UNMIRRORED_TOTAL: usize = 3;
 /// [`super::hole_size::Test_The_Three_Instances_Should_Have_Failed_This_Check`] removes their
 /// confirm each would have been caught here as originally written.
 pub(crate) const UNIVERSES: &[Universe] = &[
+    // ---- the rule population, mirrored against what a run actually composes ----
+    Universe {
+        path: "crates/rules/nomos-rules/src/rule_descriptor.rs",
+        name: "DESCRIPTORS",
+        kind: UniverseKind::Constant,
+        standing: Standing::Mirrored {
+            by: "Test_Every_Composed_Rule_Should_Have_A_Descriptor",
+        },
+    },
     // ---- the three instances, now mirrored ----
     Universe {
         path: "crates/spec/nomos-spec-store/src/table.rs",
