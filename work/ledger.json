@@ -53862,7 +53862,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Authored before the Go predecessor's kernel/toolspec was read, and its done_when asks a question that package now answers differently. It asks which side of a line a dependency reader falls on, cargo metadata shelling out against the go.mod reader not, which treats delivery as the dividing axis. The predecessor divides by family, what kind of question a tool answers, and makes delivery an orthogonal in-process against external axis, under which that question does not arise. Building a ToolProvider manifest against the delivery axis would bake in the split this workspace should probably not have. Re-added as P47-TOOLPROVIDER-HAS-NO-PACKAGE-2, same subject and territory, depending on P54-TOOL-FAMILY-TAXONOMY so the axis is decided before the crate is written."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -53878,7 +53882,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-toolspec-review",
+        "declined_at": 1788627047
+      }
     },
     {
       "id": "P47-PACKAGE-014-CONFORMANCE-CHECK",
@@ -54850,6 +54857,140 @@
         },
         "revision": "7ec4362b02b00ba93b5758b1a1379cf6ee069f57"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P54-TOOL-FAMILY-TAXONOMY",
+      "title": "A rule names a capability but nothing names the kind of tool that answers it",
+      "why": "Read out of the Go predecessor at C:/Users/kmett/source/repos/kevinmettias/code-standards on 2026-09-05. Its kernel/toolspec package carries a three-name model this workspace has two thirds of: FAMILY is what a check asks for, a type checker for TypeScript; TOOL is what can answer it, tsc or Roslyn or go/types or cargo or clippy; SELECTION is which one this repository chose. Its governing rule is that a check may name a family and must never name a tool, and it states why the family set is closed while a tool id is a plain string: the families are the engine's vocabulary and the tools are the world's. Twelve families are declared there, parser, semantic model, compiler, linter, type checker, formatter, language server, refactoring engine, indexer, test runner, documentation generator and package manager, with delivery a separate axis of in-process against external. That separation is what this workspace does not have, and the cost is visible in an item already on this board. P47-TOOLPROVIDER-HAS-NO-PACKAGE asks which side of a line a dependency reader falls on, since cargo metadata shells out to a subprocess and the go.mod reader does not, and under the predecessor's model that question does not arise: both are tools, their family is what they answer and their delivery is where they run. This workspace currently splits LanguagePackage from ToolProvider along delivery, which is the axis that does not matter, and has no name at all for the axis that does. A capability contract is not the same thing as a family and does not replace one: nomos.cap.lint.diagnostics is one fact shape, LINTER is a kind of tool that could answer several.",
+      "done_when": "A record decides whether this workspace adopts a closed tool-family vocabulary above its capability contracts, and if so which families it declares and what a rule is allowed to name. It states the relationship between a family and a capability rather than conflating them, since a capability is a fact shape and a family is a kind of answering tool. It states whether delivery, in-process against external, becomes an explicit axis or stays implied by which crate a provider lives in. It applies the answer by name to the seven provider identities this workspace has today. No provider or package moves under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-013.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P54-A-REPOSITORY-CANNOT-CHOOSE-ITS-TOOLS",
+      "title": "The engine picks every provider and the repository being judged has no say, so an absent tool and an unwanted one read alike",
+      "why": "OD-HOST-004 v2 decided that Registered never needs a selection mechanism at any count, because the registry ranks offers against whatever Requirement a caller states. That is correct and this item does not reopen it: the caller there is the composition root, and the record is right that a second Offer call is composition rather than choice. P50-HOST-004-TRIGGER-HAS-FIRED closed the record's own named trigger, which was about a rule's participation varying with the request. Neither answers a different question the record never asks: whether the repository being judged may express a preference or an exclusion. Today it may not. There is nowhere for a repository to say use clippy rather than cargo check, or this repository has no dotnet so do not try. The Go predecessor built exactly that and wrote down what its absence cost, in kernel/toolspec's own package doc: the engine's answer to an absent tool is correct, an honest gap, but it is the engine's answer and not the repository's decision, and the two look identical in a report. This workspace has that defect now. A ProviderUnavailable line cannot distinguish a tool that is missing from a tool nobody wanted, and a repository that deliberately runs no dotnet reads as a repository whose analysis silently degraded. The mechanism a decision would reach for already exists here rather than needing invention: OD-RULES-011 established that a repository's own configuration reaches a rule as a capability fact, and five providers already read standards.json that way, so a declared tool selection has a home and a precedent.",
+      "done_when": "A record decides whether the repository under analysis may declare which tool answers a given family, and whether it may exclude one outright. If it may, the record states where that declaration lives and whether it travels as a capability fact the way the five existing policy families do. It states how a report distinguishes the three cases that look alike today: a tool absent from the machine, a tool the repository declined, and a tool that ran and found nothing. It states what OD-HOST-004 continues to own, so the composition-root question that record settled is not reopened by this one. No selection mechanism is built under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-009.record",
+          "docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P54-AN-UNMET-CAPABILITY-CARRIES-NO-REMEDY",
+      "title": "A refusal says what is missing and never what to do about it",
+      "why": "nomos_capability::Unmet is a closed set of typed variants, NoProvider, Undeclared, BelowRequirement with the closest offer, and VersionMismatch with what was offered. That is better than the bool the Go predecessor started with and this item keeps it. What it carries is what is wrong. What no path out of this crate carries is what a person could do about it. The predecessor arrived at the distinction the hard way and states it in kernel/toolspec's own package doc: every path out of that package that means no analysis happened carries a reason and a remedy, and they are separate fields on purpose, because the dotnet runtime is not on PATH is what is wrong while install dotnet 10 then run dotnet build in tools/cs-semantic is what to do, and a message that merges them tends to be neither. Its own reasoning ends on the part that matters here, that the remedy is the only half a user can act on. Its provider adapters carry this at the point of refusal rather than at the call site: cargoanalyzer's availability probe returns Absent_Because with the sentence naming cargo, chained to Fixed_By naming rustup. This workspace instead invents a sentence at each call site, which is the same failure that record names, and the sentence a user needs is the one nobody writes. Related to but distinct from P43-EMPTY-POPULATION-IS-NOT-CLEAN and its OD-ANALYSIS-012 record: that asks whether a gap is reported at all, this asks what a reported gap has to carry to be worth reading.",
+      "done_when": "An unmet or refused capability carries a remedy alongside what is wrong, structured rather than prose, so a caller renders both without composing a sentence of its own. The existing typed variants survive; a remedy is added to them rather than replacing them with a string. A provider that can only be answered by installing or building something states that at the point it refuses, not at the point a report is rendered. Every existing caller that today invents its own sentence is changed to render the carried one, so a second wording of the same refusal does not survive this item.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-capability/src/resolution/unmet.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-capability"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P47-TOOLPROVIDER-HAS-NO-PACKAGE-2",
+      "title": "ToolProvider is a declared package kind with two real instances and no manifest crate",
+      "why": "PackageKind declares ToolProvider as an external analysis or transformation tool wrapped behind a capability. Two real ones exist and OD-RULES-010 names them in exactly those words: nomos-lang-rust-clippy is the first real ToolProvider and nomos-lang-rust-deny the second. Neither can be declared by any manifest, because ToolProvider is the one populated package kind with no manifest crate: LanguagePackage has two, RulePackage has nomos-rule-package, and the model and agent-executor kinds share nomos-model-package. The consequence lands on OD-PACKAGE-014, which decided a package's activation semantics are the conformance claim that its declared providers match what the registry actually offers. A Rust LanguagePackage cannot carry clippy without contradicting its own stated meaning, recognition and canonical mapping for one language, so its allowlist admitting only the two syntax providers is correct rather than stale. What is missing is the kind that should carry them. Until it exists the conformance claim can never cover a linter or a dependency-policy tool, which are the two providers most likely to drift since each shells out to an external binary whose version is exactly what ProviderRegistration's tool_version field records. This supersedes P47-TOOLPROVIDER-HAS-NO-PACKAGE, whose done_when asked which side of a delivery line a dependency reader falls on. P54-TOOL-FAMILY-TAXONOMY may answer that the axis is family rather than delivery, in which case what this crate admits and how it is named both change, so it waits on that record rather than guessing.",
+      "done_when": "A ToolProvider manifest crate exists as a peer of nomos-rule-package and nomos-model-package, wrapping nomos-package's generic core rather than depending on a sibling package crate, and admits the two real ToolProviders this workspace has by their own provider identities. Its shape follows whatever P54-TOOL-FAMILY-TAXONOMY decided rather than re-deciding it: if a family vocabulary was adopted, a registration carries its family, and the crate admits providers by family rather than by whether they launch a subprocess. The crate carries its band declaration, README row and contract-test harness entries.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-tool-package",
+          "tests/contract/surface/nomos-tool-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P54-TOOL-FAMILY-TAXONOMY"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-tool-package"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
