@@ -51187,7 +51187,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P40-WORKFLOW-CHECK-BODY",
         "P40-CORRECTIONS-CANONICAL-SEAM"
@@ -51205,7 +51205,29 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-corrections"
+        ],
+        "exit_code": 0,
+        "output_tail": "inished in 0.00s\n\n\nrunning 15 tests\ntest body::check_body::tests::Test_Bodies_With_Equal_Content_Should_Be_Equal ... ok\ntest body::check_body::tests::Test_A_Different_Selection_Should_Change_Equality ... ok\ntest body::correction_body::tests::Test_A_Different_Commit_Flag_Should_Change_Equality ... ok\ntest body::correction_body::tests::Test_Bodies_With_Equal_Content_Should_Be_Equal ... ok\ntest tests::Test_An_Empty_Plan_Completes_Vacuously ... ok\ntest tests::Test_An_Incoherent_Step_Is_Refused_Before_Dispatch ... ok\ntest tests::Test_A_Failed_Dispatch_Stops_The_Run ... ok\ntest tests::Test_A_Failure_Prevents_A_Later_Step_From_Running ... ok\ntest tests::Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions ... ok\ntest tests::Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes ... ok\ntest tests::Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes ... ok\ntest tests::Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonical_Seam ... ok\ntest tests::Test_A_Two_Step_Sequence_Completes_In_Order ... ok\ntest tests::Test_A_Correction_Step_Should_Refuse_An_Ambiguous_Claim_Without_Committing ... ok\ntest tests::Test_A_Correction_Step_Should_Commit_A_Real_Phantom_Claim ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.25s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_corrections-7d247378ba98bd04.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-0b2ef12570e29376.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workflow_orchestration-b909ac8bcac41fb9.exe)\n   Doc-tests nomos_corrections\n   Doc-tests nomos_workflow_orchestration\n",
+        "verified_at": 1788645506,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "385cf534291e9f1e76b0d065a1459c1f9a57ff95"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

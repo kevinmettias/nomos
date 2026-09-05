@@ -261,12 +261,6 @@ members = [
     # from choosing a platform or rendering the answer. `OD-HOST-002`.
     "crates/orchestration/nomos-spec-orchestration",
 
-    # Band 40 — orchestration. The workflow tier's first real execution increment:
-    # running an ordered sequence of `WorkflowStep` declarations, each dispatched to
-    # one of this workspace's two real backends, apart from choosing a platform or
-    # rendering the answer. `OD-WORKFLOW-005`.
-    "crates/orchestration/nomos-workflow-orchestration",
-
     # Band 40 — orchestration. The seam for the first-class Gate object
     # `ARC-ROADMAP-001` names, starting with `Plan`: a real rule registry, reported
     # back whole, apart from selecting scope, choosing a platform or rendering the
@@ -281,6 +275,15 @@ members = [
     # nomos-gate-orchestration sits at 41 rather than beside either.
     # `P40-CORRECTIONS-CANONICAL-SEAM`.
     "crates/orchestration/nomos-correction-orchestration",
+
+    # Band 42 — orchestration. The workflow tier's first real execution increment:
+    # running an ordered sequence of `WorkflowStep` declarations, each dispatched to
+    # one of this workspace's four real dispatch targets, apart from choosing a
+    # platform or rendering the answer. One band above nomos-check-orchestration (40)
+    # and nomos-correction-orchestration (41), the identical reason each of those
+    # already sits above the band it depends on. `OD-WORKFLOW-005`,
+    # `P40-WORKFLOW-CHECK-BODY`, `P40-WORKFLOW-CORRECTION-BODY`.
+    "crates/orchestration/nomos-workflow-orchestration",
 
     # Band 1 — the specification system. Reaches the product only through a
     # KnowledgeCapability, never directly.

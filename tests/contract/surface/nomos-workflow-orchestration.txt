@@ -4,21 +4,28 @@ pub enum nomos_workflow_orchestration::StepOutcome
 pub enum nomos_workflow_orchestration::WorkflowOutcome
 pub enum variant nomos_workflow_orchestration::Body::Check(CheckBody)
 pub enum variant nomos_workflow_orchestration::Body::ClaudeCode(TaskEnvelope)
+pub enum variant nomos_workflow_orchestration::Body::Correction(CorrectionBody)
 pub enum variant nomos_workflow_orchestration::Body::Ollama(TaskEnvelope)
 pub enum variant nomos_workflow_orchestration::DispatchError::ClaudeCode(nomos_agent_executor_claude_code::AgentExecutionError)
 pub enum variant nomos_workflow_orchestration::DispatchError::Ollama(nomos_model_backend_ollama::AgentExecutionError)
 pub enum variant nomos_workflow_orchestration::StepOutcome::Check(nomos_check_orchestration::CheckOutcome)
 pub enum variant nomos_workflow_orchestration::StepOutcome::ClaudeCode(nomos_agent_executor_claude_code::AgentExecutionOutcome)
+pub enum variant nomos_workflow_orchestration::StepOutcome::Correction(nomos_correction_orchestration::CorrectionOutcome)
 pub enum variant nomos_workflow_orchestration::StepOutcome::Ollama(nomos_model_backend_ollama::AgentExecutionOutcome)
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Completed { completed: Vec<StepOutcome>, }
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Failed { completed: Vec<StepOutcome>, index: usize, error: DispatchError, }
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Refused { completed: Vec<StepOutcome>, index: usize, }
 pub fn nomos_workflow_orchestration::CheckBody::New(root: PathBuf, sources: Vec<SourceFile>, selected: Vec<RuleId>) -> Self
+pub fn nomos_workflow_orchestration::CorrectionBody::New(root: PathBuf, sources: Vec<SourceFile>, commit: bool) -> Self
 pub fn nomos_workflow_orchestration::Run<P: ProcessLauncher, Fs: FileSystem>(plan: &[WorkflowStepPlan], launcher: &P, filesystem: &Fs, variant: &BuildVariant) -> WorkflowOutcome
 pub struct field nomos_workflow_orchestration::CheckBody::root: PathBuf
 pub struct field nomos_workflow_orchestration::CheckBody::selected: Vec<RuleId>
 pub struct field nomos_workflow_orchestration::CheckBody::sources: Vec<SourceFile>
+pub struct field nomos_workflow_orchestration::CorrectionBody::commit: bool
+pub struct field nomos_workflow_orchestration::CorrectionBody::root: PathBuf
+pub struct field nomos_workflow_orchestration::CorrectionBody::sources: Vec<SourceFile>
 pub struct field nomos_workflow_orchestration::WorkflowStepPlan::body: Body
 pub struct field nomos_workflow_orchestration::WorkflowStepPlan::declaration: WorkflowStep
 pub struct nomos_workflow_orchestration::CheckBody
+pub struct nomos_workflow_orchestration::CorrectionBody
 pub struct nomos_workflow_orchestration::WorkflowStepPlan

@@ -13,7 +13,7 @@ use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
 use nomos_platform_std::StdFileSystem;
 use nomos_workspace::BuildVariant;
 
-use crate::{Body, CheckBody, DispatchError, Run, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
+use crate::{Body, CheckBody, CorrectionBody, DispatchError, Run, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
 
 /// This process's own build variant is not what a workflow step should be judged as --
 /// `nomos_check_orchestration::Run`'s own doc says `variant` must come from the
@@ -314,4 +314,86 @@ fn Test_A_Failure_Prevents_A_Later_Step_From_Running()
     };
     assert_eq!(index, 0);
     assert!(completed.is_empty());
+}
+
+/// A real phantom-mirror claim: a declared universe with no test naming it as its mirror.
+/// The identical fixture `nomos-correction-orchestration::run`'s own tests use.
+const PHANTOM_FIXTURE: &str = "/// A list of things this crate owns.\n\
+    /// Mirrored by `Test_Nonexistent_Check_That_Does_Not_Exist`.\n\
+    pub const THINGS: &[&str] = &[\"a\"];\n";
+
+/// Removes and recreates `name` under the system temp directory, so a test starts from a
+/// clean, empty tree regardless of what an earlier run left behind -- `Body::Correction`
+/// can write to disk, so unlike `Body::Check`'s own tests this one needs a real,
+/// disposable root rather than an in-memory source list alone.
+fn Fresh_Root(name: &str) -> std::path::PathBuf
+{
+    let root = std::env::temp_dir().join(name);
+    let _ignored = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+
+    return root;
+}
+
+/// `P40-WORKFLOW-CORRECTION-BODY`'s own `done_when`, the committed half: a workflow step
+/// whose body is a correction reaches Preview, Stage, Validate and Commit through
+/// `nomos-correction-orchestration::Run_Correction`, and its outcome is carried in the
+/// same `StepOutcome` shape the other three bodies already use.
+#[test]
+fn Test_A_Correction_Step_Should_Commit_A_Real_Phantom_Claim()
+{
+    let root = Fresh_Root("nomos-workflow-orchestration-correction-body-commit");
+    let path = root.join("a.rs");
+    std::fs::write(&path, PHANTOM_FIXTURE).expect("writable");
+    let sources = vec![nomos_rules::SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), PHANTOM_FIXTURE.to_owned())];
+    let launcher = Scripted::Of(Vec::new());
+    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Correction(CorrectionBody::New(root.clone(), sources, true)) }];
+
+    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
+    let corrected = std::fs::read_to_string(&path).expect("still readable");
+
+    let _ignored = std::fs::remove_dir_all(&root);
+    let WorkflowOutcome::Completed { completed } = outcome
+    else
+    {
+        panic!("expected Completed: {outcome:?}")
+    };
+    let first = completed.first().expect("one step ran");
+    match first
+    {
+        StepOutcome::Correction(nomos_correction_orchestration::CorrectionOutcome::Committed { path: committed_path, .. }) =>
+        {
+            assert_eq!(committed_path, "a.rs");
+        }
+        other => panic!("expected Committed: {other:?}"),
+    }
+    assert_eq!(corrected, "/// A list of things this crate owns.\npub const THINGS: &[&str] = &[\"a\"];\n");
+}
+
+/// `P40-WORKFLOW-CORRECTION-BODY`'s own `done_when`, the refused half: a claimed
+/// declaration named twice in one file is ambiguous, and the step ends without
+/// committing anything rather than guessing which line is the real one.
+#[test]
+fn Test_A_Correction_Step_Should_Refuse_An_Ambiguous_Claim_Without_Committing()
+{
+    let root = Fresh_Root("nomos-workflow-orchestration-correction-body-refused");
+    let path = root.join("a.rs");
+    let ambiguous = format!("{PHANTOM_FIXTURE}\n{PHANTOM_FIXTURE}");
+    std::fs::write(&path, &ambiguous).expect("writable");
+    let sources = vec![nomos_rules::SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), ambiguous.clone())];
+    let launcher = Scripted::Of(Vec::new());
+    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Correction(CorrectionBody::New(root.clone(), sources, true)) }];
+
+    let outcome = Run(&plan, &launcher, &StdFileSystem, &Test_Variant());
+    let untouched = std::fs::read_to_string(&path).expect("still readable");
+
+    let _ignored = std::fs::remove_dir_all(&root);
+    let WorkflowOutcome::Completed { completed } = outcome
+    else
+    {
+        panic!("expected Completed: {outcome:?}")
+    };
+    let first = completed.first().expect("one step ran");
+    assert!(matches!(first, StepOutcome::Correction(nomos_correction_orchestration::CorrectionOutcome::Refused(_))), "{first:?}");
+    assert_eq!(untouched, ambiguous, "a refused correction must not touch the file");
 }

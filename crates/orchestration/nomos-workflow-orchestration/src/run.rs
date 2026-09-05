@@ -1,8 +1,10 @@
 //! Running an ordered sequence of `WorkflowStepPlan` declarations against a real
-//! `AgentExecutor`, `ModelBackend`, or `nomos-check-orchestration::Run`.
+//! `AgentExecutor`, `ModelBackend`, `nomos-check-orchestration::Run`, or
+//! `nomos-correction-orchestration::Run_Correction`.
 
 use nomos_analysis::MemoryFactStore;
 use nomos_check_orchestration::RunContext;
+use nomos_correction_orchestration::{CorrectionCommand, CorrectionEnvironment, Run_Correction};
 use nomos_platform::{FileSystem, ProcessLauncher};
 use nomos_workspace::BuildVariant;
 
@@ -51,11 +53,11 @@ pub fn Run<P: ProcessLauncher, Fs: FileSystem>(plan: &[WorkflowStepPlan], launch
 /// one answered. The entire dispatch, not a stand-in for a shared trait — the same
 /// restraint `nomos_cli::agent::Dispatch` already holds for a person's own single call.
 ///
-/// `Body::Check` never produces a [`DispatchError`]: `nomos_check_orchestration::Run`
-/// folds its own failure taxonomy (an unreadable tree, a contradictory registry, no
-/// facts) into `CheckOutcome` itself rather than a separate error type, so there is
-/// nothing here for `DispatchError` to name that `StepOutcome::Check` does not already
-/// carry.
+/// `Body::Check` and `Body::Correction` never produce a [`DispatchError`]: both seams fold
+/// their own failure taxonomy (an unreadable tree, a contradictory registry, no facts, a
+/// refused correction) into their own outcome type rather than a separate error type, so
+/// there is nothing here for `DispatchError` to name that `StepOutcome::Check` or
+/// `StepOutcome::Correction` does not already carry.
 fn Dispatch<P: ProcessLauncher, Fs: FileSystem>(body: &Body, launcher: &P, filesystem: &Fs, variant: &BuildVariant) -> Result<StepOutcome, DispatchError>
 {
     return match body
@@ -71,6 +73,7 @@ fn Dispatch<P: ProcessLauncher, Fs: FileSystem>(body: &Body, launcher: &P, files
             Err(error) => Err(DispatchError::Ollama(error)),
         },
         Body::Check(check) => Ok(StepOutcome::Check(Dispatched_Check(check, launcher, filesystem, variant))),
+        Body::Correction(correction) => Ok(StepOutcome::Correction(Dispatched_Correction(correction, launcher, filesystem, variant))),
     };
 }
 
@@ -94,4 +97,19 @@ fn Dispatched_Check<P: ProcessLauncher, Fs: FileSystem>(
         },
         &check.selected,
     );
+}
+
+/// A [`Body::Correction`]'s own dispatch: `correction.sources` is always `Some`, never
+/// `None` -- this crate walks nothing itself, so `Run_Correction`'s own `UnreadableRoot`
+/// case (its answer to a walk that never happened at all) is not reachable from a body a
+/// caller already built with real, already-walked source, the same "already walked"
+/// contract [`Dispatched_Check`] holds for `Body::Check`.
+fn Dispatched_Correction<P: ProcessLauncher, Fs: FileSystem>(
+    correction: &crate::CorrectionBody, launcher: &P, filesystem: &Fs, variant: &BuildVariant,
+) -> nomos_correction_orchestration::CorrectionOutcome
+{
+    let command = CorrectionCommand { root: correction.root.clone(), commit: correction.commit };
+    let environment = CorrectionEnvironment { variant: variant.clone(), launcher, filesystem };
+
+    return Run_Correction(Some(correction.sources.clone()), environment, &command);
 }

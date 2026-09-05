@@ -212,11 +212,13 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // beside either -- a band may not depend on its own band. `P40-CORRECTIONS-CANONICAL-SEAM`.
     ("nomos-correction-orchestration", 41),
     // The workflow tier's first real execution increment: runs an ordered sequence of
-    // `WorkflowStep` declarations, each dispatched to one of this workspace's three real
-    // dispatch targets. `Body::Check` reaches `nomos-check-orchestration` (40), one band
-    // below, the identical reason its two siblings above sit at 41 rather than beside it
-    // -- a band may not depend on its own band. `OD-WORKFLOW-005`, `P40-WORKFLOW-CHECK-BODY`.
-    ("nomos-workflow-orchestration", 41),
+    // `WorkflowStep` declarations, each dispatched to one of this workspace's four real
+    // dispatch targets. `Body::Check` reaches `nomos-check-orchestration` (40) and
+    // `Body::Correction` reaches `nomos-correction-orchestration` (41), one band below
+    // each, the identical reason both siblings above sit above the band they depend on
+    // -- a band may not depend on its own band. `OD-WORKFLOW-005`, `P40-WORKFLOW-CHECK-BODY`,
+    // `P40-WORKFLOW-CORRECTION-BODY`.
+    ("nomos-workflow-orchestration", 42),
     ("nomos-cli", 90),
     // A second real caller of `nomos-gate-orchestration`'s `Run_Gate`: walks a tree,
     // judges it exactly as `nomos gate run` would, and hands back a JSON-serializable

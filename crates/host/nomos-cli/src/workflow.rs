@@ -33,7 +33,7 @@ use nomos_ledger::Territory;
 use nomos_model_package::EffortLevel;
 use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
 use nomos_rules::SourceFile;
-use nomos_workflow_orchestration::{Body, CheckBody, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
+use nomos_workflow_orchestration::{Body, CheckBody, CorrectionBody, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
 use nomos_workspace::BuildVariant;
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -67,26 +67,30 @@ pub fn Command_From_String_Arguments(arguments: &[String]) -> Result<WorkflowCom
     };
 }
 
-/// `--check`'s, `--executor`'s or `--model-backend`'s own body -- exactly one of the three,
-/// the same "a call reaches exactly one" discipline `agent.rs`'s own `Backend_From_String_
-/// Arguments` already holds between the latter two, extended to a third family that shares
-/// no trait with either.
+/// `--check`'s, `--correct`'s, `--executor`'s or `--model-backend`'s own body -- exactly
+/// one of the four, the same "a call reaches exactly one" discipline `agent.rs`'s own
+/// `Backend_From_String_Arguments` already holds between the latter two, extended to a
+/// third and fourth family that share no trait with either.
 ///
 /// # Errors
 ///
-/// Returns a message when none or more than one of the three is given, or when a value
+/// Returns a message when none or more than one of the four is given, or when a value
 /// naming a required flag is missing.
 fn Body_From_String_Arguments(arguments: &[String]) -> Result<Body, String>
 {
     let check = arguments.iter().any(|argument| return argument == "--check");
+    let correct = arguments.iter().any(|argument| return argument == "--correct");
     let executor = Named_Value_From_String_Arguments(arguments, "--executor");
     let model_backend = Named_Value_From_String_Arguments(arguments, "--model-backend");
 
-    let named = usize::from(check).saturating_add(usize::from(executor.is_some())).saturating_add(usize::from(model_backend.is_some()));
+    let named = usize::from(check)
+        .saturating_add(usize::from(correct))
+        .saturating_add(usize::from(executor.is_some()))
+        .saturating_add(usize::from(model_backend.is_some()));
     if named > 1
     {
         return Err(format!(
-            "--check, --executor and --model-backend each name a different body; a step dispatches through exactly one, so pass at most one of them.\n\n{}",
+            "--check, --correct, --executor and --model-backend each name a different body; a step dispatches through exactly one, so pass at most one of them.\n\n{}",
             Usage_Text()
         ));
     }
@@ -94,6 +98,10 @@ fn Body_From_String_Arguments(arguments: &[String]) -> Result<Body, String>
     if check
     {
         return Check_Body_From_String_Arguments(arguments);
+    }
+    if correct
+    {
+        return Correction_Body_From_String_Arguments(arguments);
     }
     if let Some(text) = executor
     {
@@ -112,7 +120,7 @@ fn Body_From_String_Arguments(arguments: &[String]) -> Result<Body, String>
         };
     }
 
-    return Err(format!("one of --check, --executor or --model-backend is required.\n\n{}", Usage_Text()));
+    return Err(format!("one of --check, --correct, --executor or --model-backend is required.\n\n{}", Usage_Text()));
 }
 
 /// `--root`'s (default `.`) and every `--rule`'s value, as a [`CheckBody`] -- the walk
@@ -124,6 +132,17 @@ fn Check_Body_From_String_Arguments(arguments: &[String]) -> Result<Body, String
     let selected: Vec<RuleId> = Named_Values_From_String_Arguments(arguments, "--rule").iter().map(RuleId::New).collect();
 
     return Ok(Body::Check(CheckBody::New(root, Vec::new(), selected)));
+}
+
+/// `--root`'s (default `.`) and `--commit`'s presence, as a [`CorrectionBody`] -- the walk
+/// itself deferred to [`Run`], the identical division [`Check_Body_From_String_Arguments`]
+/// already keeps.
+fn Correction_Body_From_String_Arguments(arguments: &[String]) -> Result<Body, String>
+{
+    let root = Named_Value_From_String_Arguments(arguments, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from);
+    let commit = arguments.iter().any(|argument| return argument == "--commit");
+
+    return Ok(Body::Correction(CorrectionBody::New(root, Vec::new(), commit)));
 }
 
 /// `--goal`'s value, as a bare [`TaskEnvelope`] -- every other field empty or its own
@@ -169,6 +188,16 @@ pub fn Run(command: &WorkflowCommand, stdout: &mut impl Write, stderr: &mut impl
                 return ExitCode::Unavailable;
             }
         },
+        Body::Correction(correction) => match Walked_Correction(correction)
+        {
+            Some(walked) => Body::Correction(walked),
+            None =>
+            {
+                let CorrectionBody { root, .. } = correction;
+                let _ = writeln!(stderr, "`{}` is not a directory", root.display());
+                return ExitCode::Unavailable;
+            }
+        },
         other => other.clone(),
     };
 
@@ -191,6 +220,23 @@ fn Walked(check: &CheckBody) -> Option<CheckBody>
     let sources = Read_Sources(&check.root);
 
     return Some(CheckBody::New(check.root.clone(), sources, check.selected.clone()));
+}
+
+/// `correction`, with its own `sources` replaced by a real walk of its `root` -- `None` if
+/// `root` is not a directory, the identical guard [`Walked`] gives `Body::Check`.
+/// `Run_Correction` itself already reports `NoSourceFound` for an empty, but real, walk,
+/// so there is no second empty-source guard to duplicate here the way [`Run`] keeps for
+/// `Body::Check`.
+fn Walked_Correction(correction: &CorrectionBody) -> Option<CorrectionBody>
+{
+    if !correction.root.is_dir()
+    {
+        return None;
+    }
+
+    let sources = Read_Sources(&correction.root);
+
+    return Some(CorrectionBody::New(correction.root.clone(), sources, correction.commit));
 }
 
 /// Every `.rs` or `.go` file under `root`, with its text and the subject its facts are
@@ -324,6 +370,7 @@ fn Rendered_Step(step: &StepOutcome, stdout: &mut impl Write, stderr: &mut impl 
             ExitCode::Ok
         }
         StepOutcome::Check(check) => Rendered_Check(check, stdout, stderr),
+        StepOutcome::Correction(correction) => Rendered_Correction(correction, stdout, stderr),
     };
 }
 
@@ -363,18 +410,78 @@ fn Rendered_Check(outcome: &nomos_check_orchestration::CheckOutcome, stdout: &mu
     };
 }
 
+/// A `Body::Correction` step's own [`nomos_correction_orchestration::CorrectionOutcome`],
+/// rendered -- the identical mapping `correct.rs`'s own render already uses, since this
+/// verb reports the same seam's own outcome rather than a second reading of it.
+fn Rendered_Correction(outcome: &nomos_correction_orchestration::CorrectionOutcome, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+{
+    use nomos_correction_orchestration::CorrectionOutcome;
+
+    return match outcome
+    {
+        CorrectionOutcome::UnreadableRoot =>
+        {
+            let _ = writeln!(stderr, "the named root is not a directory");
+            ExitCode::Unavailable
+        }
+        CorrectionOutcome::NoSourceFound =>
+        {
+            let _ = writeln!(stderr, "no `.rs` or `.go` source found under the named root");
+            ExitCode::Vacuous
+        }
+        CorrectionOutcome::UnreadableWorkspaceState =>
+        {
+            let _ = writeln!(stderr, "the tree could not be read as a workspace state");
+            ExitCode::Unavailable
+        }
+        CorrectionOutcome::ContradictoryRegistry(error) =>
+        {
+            let _ = writeln!(stderr, "this build's own capability registry is self-contradictory: {error:?}");
+            ExitCode::Unavailable
+        }
+        CorrectionOutcome::NoFactsMaterialized(files) =>
+        {
+            let _ = writeln!(stderr, "{files} file(s) were read but no syntax fact was materialized for any of them");
+            ExitCode::Vacuous
+        }
+        CorrectionOutcome::Clean =>
+        {
+            let _ = writeln!(stdout, "clean: no blocking correction claim under the named root");
+            ExitCode::Ok
+        }
+        CorrectionOutcome::Refused(reason) =>
+        {
+            let _ = writeln!(stderr, "{reason}");
+            ExitCode::Refused
+        }
+        CorrectionOutcome::Staged { path, summary, preview } =>
+        {
+            let _ = writeln!(stdout, "{}", String::from_utf8_lossy(preview));
+            let _ = writeln!(stdout, "dry run: `{path}`: {summary}. Pass --commit to apply it.");
+            ExitCode::Ok
+        }
+        CorrectionOutcome::Committed { path, summary, preview, base, after_snapshot } =>
+        {
+            let _ = writeln!(stdout, "{}", String::from_utf8_lossy(preview));
+            let _ = writeln!(stdout, "committed: `{path}`: {summary} ({base} -> {after_snapshot})");
+            ExitCode::Ok
+        }
+    };
+}
+
 /// [`Usage_Text`]'s content.
 const USAGE_TEXT: &str = "usage: nomos workflow <command>\n\
         \n\
         \x20 run --check --root <path> [--rule <id>]...\n\
+        \x20 run --correct --root <path> [--commit]\n\
         \x20 run --executor claude-code --goal <text>\n\
         \x20 run --model-backend ollama --goal <text>\n\
         \n\
         Dispatches the one step this command composes through `nomos-workflow-\
         orchestration::Run`, over a fixed, always-coherent WorkflowStep declaration -- a \
         thin renderer over that seam, not a second place workflow semantics live. Pass \
-        exactly one of --check, --executor or --model-backend; a step dispatches through \
-        exactly one.\n\
+        exactly one of --check, --correct, --executor or --model-backend; a step \
+        dispatches through exactly one.\n\
         \n\
         --check walks --root (default the current directory) for `.rs` and `.go` source \
         and runs nomos-check-orchestration::Run over it, narrowed to --rule if given \
@@ -382,13 +489,19 @@ const USAGE_TEXT: &str = "usage: nomos workflow <command>\n\
         outcome regardless of its findings -- run `nomos gate run` for a pass/fail \
         reading.\n\
         \n\
+        --correct walks --root (default the current directory) the identical way \
+        --check does and runs nomos-correction-orchestration::Run_Correction over it, \
+        staging and validating a real blocking claim from either correction family and, \
+        only with --commit, writing the fix back. The identical seam and the identical \
+        --commit flag `nomos correct` already has.\n\
+        \n\
         --executor and --model-backend name which family of backend --goal dispatches \
         to, the identical two flags and the identical restriction `nomos agent execute` \
         already has.\n\
         \n\
         exit codes: 0 ok, 1 the one step refused itself, 2 usage, 5 the named root, \
         registry, executor or model backend could not be read, run, or answered at all, \
-        6 the check step found nothing to judge";
+        6 the check or correction step found nothing to judge";
 
 fn Usage_Text() -> String
 {
@@ -459,6 +572,16 @@ mod tests
         let command = Command_From_String_Arguments(&arguments).expect("parses");
 
         assert!(matches!(command.body, Body::Check(_)), "{command:?}");
+    }
+
+    #[test]
+    fn Test_Command_From_String_Arguments_Should_Parse_A_Correct_Run()
+    {
+        let arguments: Vec<String> = ["run", "--correct", "--root", ".", "--commit"].iter().map(|value| return (*value).to_owned()).collect();
+
+        let command = Command_From_String_Arguments(&arguments).expect("parses");
+
+        assert!(matches!(command.body, Body::Correction(ref correction) if correction.commit), "{command:?}");
     }
 
     #[test]
@@ -550,5 +673,27 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&root);
         assert_eq!(code, ExitCode::Ok, "{}", String::from_utf8_lossy(&stderr));
+    }
+
+    #[test]
+    fn Test_Run_Should_Commit_A_Real_Phantom_Claim_Through_Correct()
+    {
+        const PHANTOM_FIXTURE: &str = "/// A list of things this crate owns.\n\
+            /// Mirrored by `Test_Nonexistent_Check_That_Does_Not_Exist`.\n\
+            pub const THINGS: &[&str] = &[\"a\"];\n";
+        let root = std::env::temp_dir().join("nomos-cli-workflow-correct-commit-root");
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("creates a directory");
+        std::fs::write(root.join("a.rs"), PHANTOM_FIXTURE).expect("writable");
+        let command = WorkflowCommand { body: Body::Correction(CorrectionBody::New(root.clone(), Vec::new(), true)) };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Run(&command, &mut stdout, &mut stderr);
+        let corrected = std::fs::read_to_string(root.join("a.rs")).expect("still readable");
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        assert_eq!(code, ExitCode::Ok, "{}", String::from_utf8_lossy(&stderr));
+        assert_eq!(corrected, "/// A list of things this crate owns.\npub const THINGS: &[&str] = &[\"a\"];\n");
     }
 }

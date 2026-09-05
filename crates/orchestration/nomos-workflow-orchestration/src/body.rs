@@ -2,8 +2,10 @@
 //! through.
 
 mod check_body;
+mod correction_body;
 
 pub use check_body::CheckBody;
+pub use correction_body::CorrectionBody;
 
 use nomos_agent_contracts::TaskEnvelope;
 
@@ -25,6 +27,14 @@ use nomos_agent_contracts::TaskEnvelope;
 /// through a shape built for the other two. `OD-WORKFLOW-005` named this the real, heavier
 /// next step and declined to build it in that increment; `P40-WORKFLOW-CHECK-BODY` is that
 /// step.
+///
+/// `Correction` is the fourth, and the first that can change the tree rather than only
+/// report on it: `nomos_correction_orchestration::Run_Correction` judges, plans, stages,
+/// validates and -- only when its own body asks for it -- commits a fix, which is what
+/// turns Check then Correction then Validate then Gate from a diagram into something this
+/// crate can actually run. Sequenced after `Check` deliberately: the body seam should be
+/// shaped by more than one case before a mutating body uses it, per
+/// `P40-WORKFLOW-CORRECTION-BODY`'s own why.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Body
 {
@@ -34,4 +44,6 @@ pub enum Body
     Ollama(TaskEnvelope),
     /// Dispatches through `nomos-check-orchestration::Run`.
     Check(CheckBody),
+    /// Dispatches through `nomos-correction-orchestration::Run_Correction`.
+    Correction(CorrectionBody),
 }

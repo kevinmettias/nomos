@@ -70,7 +70,7 @@ pub(super) const BANDS: &[(&str, u32)] = &[
     ("nomos-spec-orchestration", 40),
     ("nomos-gate-orchestration", 41),
     ("nomos-correction-orchestration", 41),
-    ("nomos-workflow-orchestration", 41),
+    ("nomos-workflow-orchestration", 42),
     ("nomos-cli", 90),
     ("nomos-api", 90),
     ("nomos-surface-provenance", 91),

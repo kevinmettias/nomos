@@ -14,4 +14,6 @@ pub enum StepOutcome
     Ollama(nomos_model_backend_ollama::AgentExecutionOutcome),
     /// What `nomos-check-orchestration::Run` reported.
     Check(nomos_check_orchestration::CheckOutcome),
+    /// What `nomos-correction-orchestration::Run_Correction` reported.
+    Correction(nomos_correction_orchestration::CorrectionOutcome),
 }
