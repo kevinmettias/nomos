@@ -221,6 +221,7 @@ graph LR
     od_agent_001 -->|"relates-to"| od_project_001
     od_agent_002 -->|"relates-to"| od_agent_001
     od_agent_002 -->|"relates-to"| od_ledger_001
+    od_agent_002 -->|"relates-to"| od_release_001["OD-RELEASE-001"]
     od_agent_003 -->|"relates-to"| od_agent_001
     od_agent_003 -->|"relates-to"| od_ledger_023
     od_analysis_001 -->|"affects"| d_129
@@ -547,6 +548,7 @@ graph LR
     od_gate_005 -->|"relates-to"| od_project_001
     od_gate_005 -->|"relates-to"| od_project_002
     od_gate_005 -->|"relates-to"| od_project_003["OD-PROJECT-003"]
+    od_gate_005 -->|"relates-to"| od_release_001
     od_gate_006 -->|"affects"| d_130
     od_gate_006 -->|"relates-to"| od_determinism_001
     od_gate_006 -->|"relates-to"| od_gate_001
@@ -1042,6 +1044,8 @@ graph LR
     od_project_002 -->|"relates-to"| od_spec_005
     od_project_003 -->|"relates-to"| od_gate_005
     od_project_003 -->|"relates-to"| od_project_002
+    od_release_001 -->|"relates-to"| od_agent_002
+    od_release_001 -->|"relates-to"| od_gate_005
     od_roadmap_001 -->|"affected_by"| od_roadmap_002
     od_roadmap_001 -->|"relates-to"| arc_roadmap_001
     od_roadmap_001 -->|"relates-to"| od_analysis_009
@@ -1499,6 +1503,7 @@ graph LR
     od_project_001
     od_project_002
     od_project_003
+    od_release_001
     od_roadmap_001
     od_roadmap_002
     od_rules_001

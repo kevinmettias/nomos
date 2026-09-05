@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:59bd0d914891d1862db6020f22f65abf7939eb02344933f0926e6dbc6694a626",
-  "inputs_digest": "sha256:797a7d35c5eadedf6fde90d298f00b6738b46f6947177499cda4c1bd92816541",
+  "content_digest": "sha256:c11e6880bd93b6a46d83eb83fb76bb78bf9693c82e384bacb6489c34ce7e8b33",
+  "inputs_digest": "sha256:4d216f322775255db3ac5e10451f75008b86307d7d2ff5d94326c0dfd2d5fe51",
   "sections": [
     [
       "Relations",
-      1360
+      1364
     ],
     [
       "Decisions",
-      181
+      182
     ]
   ],
   "inputs": [
@@ -1105,6 +1105,11 @@
       "content": "relations",
       "identity": "OD-AGENT-002 relates-to OD-LEDGER-001",
       "hash": "sha256:d42285802c3d32b17447c4ece8fe367fd7bf137587ced7e44a785adcc47b226d"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-AGENT-002 relates-to OD-RELEASE-001",
+      "hash": "sha256:2de47b00f910c1b5ceb597ff4427a859a8df946a8430429863104a00b60b9c15"
     },
     {
       "content": "relations",
@@ -2735,6 +2740,11 @@
       "content": "relations",
       "identity": "OD-GATE-005 relates-to OD-PROJECT-003",
       "hash": "sha256:9b850c0bc962579f8c604d7d0c2968692cc382808a32f453fd6bf5c1e42ac4aa"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-005 relates-to OD-RELEASE-001",
+      "hash": "sha256:cf46a89951b6470729814436a49e858df6006d576a78cf745b2d41cfbab0ed64"
     },
     {
       "content": "relations",
@@ -5213,6 +5223,16 @@
     },
     {
       "content": "relations",
+      "identity": "OD-RELEASE-001 relates-to OD-AGENT-002",
+      "hash": "sha256:5080ab55a37eb70bd441750caea3101fb650f69806f3378adb6cd7d5a89bc87b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RELEASE-001 relates-to OD-GATE-005",
+      "hash": "sha256:4a8277e10401e155da6d9d4185d9bf5f92819408b9d6c41cf858470c864d1dc5"
+    },
+    {
+      "content": "relations",
       "identity": "OD-ROADMAP-001 affected_by OD-ROADMAP-002",
       "hash": "sha256:e214f0212d753d3f5cd24d0a58ddfdfb9e10d0ed0f783fa749437f71ff24a77f"
     },
@@ -7485,6 +7505,11 @@
       "content": "nodes",
       "identity": "OD-PROJECT-003",
       "hash": "sha256:45e38d8e8a3c290797ca69dcea5e81c99e87e4e9e991ba30b6b8126cd92b5b9b"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-RELEASE-001",
+      "hash": "sha256:b2fca5ca1961202b8082a30bbe6742c2f4e1c2a36c822672704b8a7e46a31a62"
     },
     {
       "content": "nodes",

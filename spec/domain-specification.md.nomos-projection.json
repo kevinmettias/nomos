@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:422c56ecb28997afa5d5fcbbe89466e3b9061eb32bf70890de2c91c04899b1d0",
-  "inputs_digest": "sha256:0639a90e4685df71ebe422e9da8cf6989aefa84a85a0544b6ecd87b39b6e5b27",
+  "content_digest": "sha256:6d09b5d5cb7168894f07de34df57a62829021dc965f205e7f44a42f901bd662d",
+  "inputs_digest": "sha256:74d3b9751f6b57ca92fd6df30cdcabc9250facfda12637bd6cbc6a87c8e1a109",
   "sections": [
     [
       "Documents",
-      189
+      190
     ],
     [
       "Sections",
-      1567
+      1574
     ],
     [
       "Source blocks",
-      5495
+      5513
     ]
   ],
   "inputs": [
@@ -729,6 +729,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored",
       "hash": "sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md@authored",
+      "hash": "sha256:d7ded9695bea187461bbce38e7d13e4470b49e330f74983a92294a61ed9be415"
     },
     {
       "content": "documents",
@@ -6844,6 +6849,41 @@
       "content": "headings",
       "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#19",
       "hash": "sha256:0c15becafecf9dfc14bcd8f9f1efd465d4a0cd6591f55067d8e0d33a6931200d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1",
+      "hash": "sha256:bac3317dfb343a2d4721d13db4f1aafc6d868ab307128e6a0260cbf2dc357f96"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#2",
+      "hash": "sha256:46cd3d222e6c67a0108fb0cdef14479208a29245bff86daabc96d50ebafba709"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#5",
+      "hash": "sha256:221e94539c0f7dcd090f55d784f893e4013a8f0cc2a4fecc03afe4e8df3ef5c0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#7",
+      "hash": "sha256:a2196a1d599823a854acabdb1de205557e9e9762722507bf7e00bfbff4d02d5a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#11",
+      "hash": "sha256:7452007ad6bf98c5f6c801fecdd0de778cf19c701cdb2aa46a4111a2a1c64b88"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#13",
+      "hash": "sha256:f9ed4334b6a92e0b78babfb17a486e1cb09cd0098c9637e16a94257a2c330c6d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#17",
+      "hash": "sha256:be8b3bedf40729c30efb0898b93cb49a36fc606773f5c453447ae07b5d6d5813"
     },
     {
       "content": "headings",
@@ -29524,6 +29564,96 @@
       "content": "blocks",
       "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#20",
       "hash": "sha256:2cb3594275cf5ca2fa68984d266641af0139aeb888caf6649eca8a73c73fdc55"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1",
+      "hash": "sha256:f4f6a218878ef17be9759ceaa4eb9347fd1ce9a14a065d36b33434c8b5f86856"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#3",
+      "hash": "sha256:f7c515c3ef54e2801d68d032761c5c0e02a9d349271080d5de4b73f981ced92b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#4",
+      "hash": "sha256:78e690b8e32a52c188d96e4cf23985e766a00c31e1af6a31c43e86b5ac11016d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#5",
+      "hash": "sha256:3bccdc0f124eb8a6a371b02c387c73342d83bac9bd26a2e37e1af0d79bce52d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#6",
+      "hash": "sha256:817254315564d1d86e7ab3fb61bdf4d4d102ff33fe180b7b1ba50e9d3845cb15"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#7",
+      "hash": "sha256:88f61fce90d43f933e3a0eecafdc5746a739286ef159f4e0a2699d5124ef51b9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#8",
+      "hash": "sha256:2746c557420989015516d018a5f4fbfc90c1c9cd424d7fb3c2c964bb1415b034"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#9",
+      "hash": "sha256:23af35cd36029246c35eb5473c0bd58e82d1cfac0bd413fda5b36de3751c6576"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#10",
+      "hash": "sha256:0ded11a26035d55bf6984b9aaedbccf04afe6e7989c46839beaadc924b9d2e03"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#11",
+      "hash": "sha256:10defa1870d6a20c79273d19d9b6869623ae7100b0c0f9612ffcde4fcfd78b51"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#12",
+      "hash": "sha256:b6f43e50690bb2c2b4a5870b2be9aa65aac43692e36201f056033b0dba0d8428"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#13",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#14",
+      "hash": "sha256:aa8b6e71994e425242a1451973ba0adf83b2fb142efb079405ee13bd71bab32f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#15",
+      "hash": "sha256:bc924a12fd37d9eb73dc17f045543f9146b1d8b2463046d49408ce566409aa7a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#16",
+      "hash": "sha256:3d16bc7c61772be4314896305a3f91a1073fe1c53b8545bf21f0c7175de8ebd7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#17",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#18",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
     },
     {
       "content": "blocks",
