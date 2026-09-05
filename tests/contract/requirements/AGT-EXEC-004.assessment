@@ -19,14 +19,22 @@
 # evidence from the corresponding trusted capability, exactly as the requirement asks,
 # for every claim this session made about a ledger item's tests passing this session.
 #
-# The gap: this is real for ledger-item completion claims specifically, not a general
-# requirement every agent claim in this workspace is held to. `nomos-corrections`'
-# `ValidatedPlan::Commit` takes no evidence parameter and records none -- a correction may
-# be committed with no attached tool evidence at all, and nothing downgrades an
-# unsubstantiated claim about it to `AgentJudged` the way `work finish` already does for a
-# ledger item's own predicate.
+# `nomos-corrections` also has a real, if narrower, positive site: `ValidatedPlan::Commit`
+# requires an attached `Evidence` value (`OD-CORRECTIONS-002`, since 446e2d8f, before this
+# entry was first written) and `CommittedPlan` carries it forward -- a correction cannot be
+# committed with no evidence at all, the same "attached tool evidence" shape `work finish`
+# already gives ledger items. The gap is narrower than "no evidence parameter": that record
+# states plainly Commit "does not gate on the evidence's strength," so an `AgentJudged`
+# (i.e. unsupported) claim is attached and honestly labeled rather than either rejected or
+# silently upgraded -- the second sentence of this requirement, "unsupported claims remain
+# AgentJudged," rather than the first. What is not general is that every agent claim in
+# this workspace is held to it: `AgentExecutionOutcome.response`, the one real
+# `AgentExecutor`'s own claim about what it did, is a free-text `String` with no attached
+# evidence and no `EvidenceClass` at all -- only ledger-item completion and correction
+# commits carry any evidence requirement today.
 verdict: Partial
 site: crates/substrate/nomos-ledger/src/verification.rs#VerificationRecord
 site: crates/substrate/nomos-ledger/src/finish/running.rs#Ran_To_Completion
 site: crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs#AgentJudged
-gap: crates/corrections/nomos-corrections/src/validated_plan.rs#Commit
+site: crates/corrections/nomos-corrections/src/validated_plan.rs#Commit
+gap: crates/agent/nomos-agent-executor-claude-code/src/agent_execution_outcome.rs#response

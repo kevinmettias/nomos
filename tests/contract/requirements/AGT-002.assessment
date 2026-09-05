@@ -6,25 +6,27 @@
 # AGT-002: "Agents shall return structured plans, changes, claims, tests, requested
 # verification, assumptions, and unresolved questions." Seven named return-shape elements.
 #
-# Five of the seven have real, independently-built typed analogs, scattered across separate
-# crates rather than unified in one agent-response type: plans and changes are
-# `CorrectionPlan`/`ChangeSet` in `nomos-corrections`; a claim's evidentiary strength is
-# `Finding`/`EvidenceClass` in `nomos-contracts`; tests and requested verification are
-# `VerificationPredicate` (`nomos-scope-verification`, reused by `nomos-ledger`) and
-# `VerificationRecord` (`nomos-ledger`), real and tested (a claimed item's own predicate,
-# actually run to completion, not an agent's word).
+# `WorkResult` (`nomos-agent-contracts`, since P13-AGT-001-002-TASK-ENVELOPE-WORK-RESULT)
+# is a real, tested type bundling six fields that cover all seven named elements: `plan`
+# and `changes` are one artifact because a `CorrectionPlan`'s own candidates each carry
+# their `ChangeSet`; `claims` is `Vec<Finding>`; `tests` and `requested_verification` reuse
+# `VerificationPredicate`; `assumptions` and `unresolved_questions` are the two genuinely
+# new pieces its own doc comment says no existing type covered. Its own tests construct
+# both a full response and a judgment-only one (`plan: None`, per `OD-CONTRACTS-003`) that
+# proposes no change.
 #
-# 'Assumptions' and 'unresolved questions' have zero real grounding -- a workspace-wide
-# search finds neither concept in any real type. `CorrectionCandidate` already carries a
-# proposed change's free-text `description` and carries neither; `LedgerItem` already
-# carries free-text `why`/`done_when` and carries neither either. Nothing anywhere returns
-# all seven elements together as one structured response.
+# What is not yet true: nothing returns one through a real agent run.
+# `nomos-agent-executor-claude-code`'s own module doc states plainly it "does not assemble a
+# `nomos_agent_contracts::WorkResult`" -- the one real `AgentExecutor` still hands back a
+# free-text response this crate does not attempt to map onto `claims`/`assumptions`/
+# `unresolved_questions`, because no honest general mapping from prose to those fields
+# exists. `P42-AGENT-STRUCTURED-WORKRESULT` is the open item for that gap. So the type this
+# requirement's "structured response" describes is real and bundles what it must, but
+# "Agents shall return" it is not yet true of any agent run in this workspace.
 verdict: Partial
+site: crates/agent/nomos-agent-contracts/src/work_result.rs#WorkResult
 site: crates/corrections/nomos-corrections/src/correction_plan.rs#CorrectionPlan
 site: crates/corrections/nomos-corrections/src/change_set.rs#ChangeSet
 site: crates/contracts/nomos-contracts/src/reporting/finding.rs#Finding
-site: crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs#EvidenceClass
 site: crates/substrate/nomos-scope-verification/src/verification_predicate.rs#VerificationPredicate
-site: crates/substrate/nomos-ledger/src/verification.rs#VerificationRecord
-gap: crates/corrections/nomos-corrections/src/correction_id/correction_candidate.rs#CorrectionCandidate
-gap: crates/substrate/nomos-ledger/src/item/ledger_item.rs#LedgerItem
+gap: crates/agent/nomos-agent-executor-claude-code/src/lib.rs#does not assemble a

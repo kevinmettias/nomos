@@ -19,16 +19,21 @@
 # assessable: 'permitted scope' maps to `Territory`, the real, tested unit of
 # mutual-exclusion scope a claimed item is bound to; 'required verification' maps to
 # `LedgerItem`'s own `VerificationPredicate` field, distinct from the prose `done_when`;
-# 'approved capabilities' has a real analog in `nomos_capability::Registry`. 'Prohibited
-# actions' and 'task-envelope inputs' have no real grounding anywhere. The KWB half
-# (architecture context, claims, decisions, examples, contradictions, historical evidence)
-# is unreachable: `KnowledgeReferenceId` exists (D-137) but, by that record's own text,
-# "nothing yet produces or consumes one." Even if every ingredient existed, nothing stitches
-# them into one operation exposed via CLI/API/MCP together -- `nomos-api` explicitly
-# declines MCP.
+# 'approved capabilities' has a real analog in `nomos_capability::Registry`. 'Task-envelope
+# inputs' now has a real site too: `TaskEnvelope` (`nomos-agent-contracts`, since
+# P13-AGT-001-002-TASK-ENVELOPE-WORK-RESULT) is exactly that -- a real, tested type
+# genuinely constructed by `nomos-cli`'s `agent execute`/`agent judge-role` verbs before
+# real agent work, confirmed Met against `AGT-001`. 'Prohibited actions' still has no real
+# grounding beyond the same type's own `prohibited_changes` field, which nothing yet
+# enforces (`P42-AGENT-ENVELOPE-ENFORCEMENT`). The KWB half (architecture context, claims,
+# decisions, examples, contradictions, historical evidence) is unreachable:
+# `KnowledgeReferenceId` exists (D-137) but, by that record's own text, "nothing yet
+# produces or consumes one." Even if every ingredient existed, nothing stitches them into
+# one operation exposed via CLI/API/MCP together -- `nomos-api` explicitly declines MCP.
 verdict: Partial
 site: crates/substrate/nomos-scope-verification/src/territory.rs#Territory
 site: crates/substrate/nomos-ledger/src/item/ledger_item.rs#LedgerItem
 site: crates/substrate/nomos-capability/src/registry.rs#Registry
+site: crates/agent/nomos-agent-contracts/src/task_envelope.rs#TaskEnvelope
 gap: crates/host/nomos-api/src/lib.rs#Handle_Gate_Run
 gap: crates/contracts/nomos-contracts/src/digest128.rs#KnowledgeReferenceId
