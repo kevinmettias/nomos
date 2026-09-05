@@ -53000,7 +53000,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -53016,7 +53016,30 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": ".exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-de4dcdbeca5b35ca.exe)\n     Running tests\\lang_go_seam.rs (target\\debug\\deps\\lang_go_seam-d245dfb7abba7f95.exe)\n     Running tests\\lang_rust_seam.rs (target\\debug\\deps\\lang_rust_seam-874b0c5db3ee1f72.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-45913e6e9e467271.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-7ccd4a19cb011d37.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-caea39f9f2aa7492.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-11e82bdeabfcf83b.exe)\n     Running tests\\platform_std_seam.rs (target\\debug\\deps\\platform_std_seam-0166c9139901919e.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-b67defd50471eb7e.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-6890940048029030.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-021b418858abf7cf.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-e76dd1fdd673d3e1.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-23752075fab25eca.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-c9520b2b9f713073.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-556b0ed144291349.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-a71f603125956511.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-9e74d885eb945c47.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-49fee70777d5f9b1.exe)\n     Running tests\\analysis_slice\\main.rs (target\\debug\\deps\\analysis_slice-8e8cef6a8606eca7.exe)\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-0bc79bb292fda5ab.exe)\n   Doc-tests nomos_integration_tests\n",
+        "verified_at": 1788594009,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1c6357a91e8053f140351046331c8d942eabffc3"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

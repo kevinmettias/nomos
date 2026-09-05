@@ -33,6 +33,23 @@ mod tests
         assert!(sources.is_empty(), "{sources:?}");
     }
 
+    /// The population `check-script-discipline`'s own rules judge -- a shebang script and a
+    /// `standards.json`-forbidden extension -- must actually reach a walk, or those rules
+    /// report clean regardless of what either file does.
+    #[test]
+    fn Test_Read_Sources_Should_Discover_A_Shebang_Script_And_A_Forbidden_Script_Extension()
+    {
+        let root = Fresh_Root("nomos-cli-check-sources-script-discovery");
+        std::fs::write(root.join("deploy.sh"), "#!/bin/bash\n# deploys\nset -euo pipefail\n").expect("writable");
+        std::fs::write(root.join("tool.ps1"), "Write-Host 'hi'\n").expect("writable");
+
+        let sources = Read_Sources(&root);
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        let paths: Vec<&str> = sources.iter().map(|source| return source.path.as_str()).collect();
+        assert_eq!(paths, vec!["deploy.sh", "tool.ps1"], "{paths:?}");
+    }
+
     /// `Walked_Sources` wraps `Read_Sources` with one guard of its own: a root that is not a
     /// directory at all reports `None` rather than an empty list, so a caller can tell "there
     /// was nothing to read" from "there was nowhere to read".
@@ -158,7 +175,7 @@ pub(super) fn Read_Sources(root: &Path) -> Vec<SourceFile>
 }
 
 /// One entry of a walked directory: queued if it is a directory worth descending into,
-/// read if it is a `.rs` or `.go` file, and ignored otherwise.
+/// read if it is a recognized source or script file, and ignored otherwise.
 ///
 /// The extension check is a literal, the same as `nomos_lang_rust::RUST_EXTENSION` and
 /// `nomos_lang_go::GO_EXTENSION` already state, rather than a dependency on either crate:
@@ -187,12 +204,26 @@ pub(super) fn Read_Entry(
         return;
     }
 
-    if path.extension().is_some_and(|extension| return extension == "rs" || extension == "go")
-        && let Ok(text) = std::fs::read_to_string(&path)
+    if path.extension().is_some_and(Is_Recognized_Extension) && let Ok(text) = std::fs::read_to_string(&path)
     {
         let source = Read_Source(root, &path, text);
         sources.push(source);
     }
+}
+
+/// Rust, Go, or one of `check-script-discipline`'s own script languages -- `standards.json`'s
+/// `forbidden_extensions` (`.ps1`, `.psm1`, `.bat`, `.cmd`, `.sh`), the same set a real
+/// shebang script in this repository would carry. Without these five, `scripts-use-a-
+/// portable-shebang`, `a-script-declares-its-purpose`, `executed-scripts-set-nounset` and
+/// `declared-tooling-language-for-scripts` judge a population this walk never collects, so
+/// all four report clean regardless of what a script under the tree actually does.
+fn Is_Recognized_Extension(extension: &std::ffi::OsStr) -> bool
+{
+    const SCRIPT_EXTENSIONS: [&str; 5] = ["sh", "ps1", "psm1", "bat", "cmd"];
+
+    return extension == "rs"
+        || extension == "go"
+        || extension.to_str().is_some_and(|extension| return SCRIPT_EXTENSIONS.contains(&extension));
 }
 
 /// One source file as the rule takes it.

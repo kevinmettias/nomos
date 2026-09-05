@@ -67,12 +67,26 @@ fn Read_Entry(
         return;
     }
 
-    if path.extension().is_some_and(|extension| return extension == "rs" || extension == "go")
-        && let Ok(text) = std::fs::read_to_string(&path)
+    if path.extension().is_some_and(Is_Recognized_Extension) && let Ok(text) = std::fs::read_to_string(&path)
     {
         let source = Read_Source(root, &path, text);
         sources.push(source);
     }
+}
+
+/// Rust, Go, or one of `check-script-discipline`'s own script languages -- `standards.json`'s
+/// `forbidden_extensions` (`.ps1`, `.psm1`, `.bat`, `.cmd`, `.sh`), the same set a real
+/// shebang script in this repository would carry. Without these five, `scripts-use-a-
+/// portable-shebang`, `a-script-declares-its-purpose`, `executed-scripts-set-nounset` and
+/// `declared-tooling-language-for-scripts` judge a population this walk never collects, so
+/// all four report clean regardless of what a script under the tree actually does.
+fn Is_Recognized_Extension(extension: &std::ffi::OsStr) -> bool
+{
+    const SCRIPT_EXTENSIONS: [&str; 5] = ["sh", "ps1", "psm1", "bat", "cmd"];
+
+    return extension == "rs"
+        || extension == "go"
+        || extension.to_str().is_some_and(|extension| return SCRIPT_EXTENSIONS.contains(&extension));
 }
 
 fn Read_Source(root: &Path, path: &Path, text: String) -> SourceFile
@@ -123,6 +137,23 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&root);
         assert!(sources.is_empty(), "{sources:?}");
+    }
+
+    /// The population `check-script-discipline`'s own rules judge -- a shebang script and a
+    /// `standards.json`-forbidden extension -- must actually reach a walk, or those rules
+    /// report clean regardless of what either file does.
+    #[test]
+    fn Test_Read_Sources_Should_Discover_A_Shebang_Script_And_A_Forbidden_Script_Extension()
+    {
+        let root = Fresh_Root("nomos-cli-correct-sources-script-discovery");
+        std::fs::write(root.join("deploy.sh"), "#!/bin/bash\n# deploys\nset -euo pipefail\n").expect("writable");
+        std::fs::write(root.join("tool.ps1"), "Write-Host 'hi'\n").expect("writable");
+
+        let sources = Read_Sources(&root);
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        let paths: Vec<&str> = sources.iter().map(|source| return source.path.as_str()).collect();
+        assert_eq!(paths, vec!["deploy.sh", "tool.ps1"], "{paths:?}");
     }
 
     fn Fresh_Root(name: &str) -> PathBuf
