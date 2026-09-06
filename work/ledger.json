@@ -51870,7 +51870,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "OD-GATE-023. The only one of the five whose dependency on P41-RUN-PLANNER was load-bearing: it asks that applicability be resolved as part of the plan and read afterward by coverage, and its own territory is applicability_plan.rs. There is no version of it that does not need the plan OD-RULES-009 declines, so a decline is the honest terminal state rather than an indefinite stranding. It revives on that record's own named triggers."
+        }
+      },
       "depends_on": [
         "P41-RUN-PLANNER"
       ],
@@ -51888,7 +51892,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-review8",
+        "declined_at": 1788721163
+      }
     },
     {
       "id": "P41-RUN-STOPS-NAMING-EVERY-RULE",
@@ -51905,7 +51912,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "OD-GATE-023. The complaint is intact, run_context.rs still writes out seventy ComposedRule entries and Composed_Rules derives from that array rather than from DESCRIPTORS, but the question it raises now belongs to P74-RUN-ARRAY-DERIVATION-DISPOSITION: whether Run can follow the derivation composition::Registered already made, or whether needing each entry's capability slice makes that derivation the planner OD-RULES-009 declines. An item cannot both pose a question and be the work following from either answer. That decision authors the implementation item if the derivation turns out to be available."
+        }
+      },
       "depends_on": [
         "P41-RUN-PLANNER"
       ],
@@ -51925,7 +51936,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-review8",
+        "declined_at": 1788721238
+      }
     },
     {
       "id": "P41-GATE-SELECTION-COLLAPSE",
@@ -51943,7 +51957,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "OD-GATE-023. The defect this names, a rule executed and then discarded, stopped being true at OD-GATE-017: Judged_Sources passes command.rules.include to nomos_check_orchestration::Run, so a selected-out rule never materializes. What survives is Reduced_Findings re-applying the same include list to findings Run already restricted, which is redundant rather than two mechanisms disagreeing, and RuleSelector carries no exclude so the two cannot diverge. The done_when asks a gate to compile its policy into a run plan, which is the planner OD-RULES-009 declines."
+        }
+      },
       "depends_on": [
         "P41-RUN-PLANNER"
       ],
@@ -51963,7 +51981,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-review8",
+        "declined_at": 1788721163
+      }
     },
     {
       "id": "P41-GATE-PLAN-IS-A-PLAN",
@@ -51979,7 +52000,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "OD-GATE-023. Re-authored as P41-GATE-PLAN-IS-A-PLAN-2 without the planner dependency: the claim is verified still true at cff9df40, GatePlan holds only rules: Vec<RuleOffer> and its own doc says it does not vary by root, scope or rules, but making it vary needs only the ScopeSelector and RuleSelector that already exist and that Run_Gate already consults. The dependency was inherited from P41-GATE-SELECTION-COLLAPSE, not required by the work."
+        }
+      },
       "depends_on": [
         "P41-GATE-SELECTION-COLLAPSE"
       ],
@@ -51997,7 +52022,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-review8",
+        "declined_at": 1788721172
+      }
     },
     {
       "id": "P41-PLATFORM-DIRECTORY-ENUMERATION",
@@ -52486,7 +52514,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "OD-GATE-023. No superseded reachable mechanism is found in nomos-gate-orchestration; the one candidate, the post-hoc rule filter, is redundant rather than superseded. The half of its done_when that is real, module documentation describing history rather than the current design, is now governed by OD-AGENT-004, which decided it on a measured population of fifteen stale sites."
+        }
+      },
       "depends_on": [
         "P41-GATE-SELECTION-COLLAPSE"
       ],
@@ -52504,7 +52536,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-review8",
+        "declined_at": 1788721163
+      }
     },
     {
       "id": "P41-SEAM-FIRST-SEQUENCING",
@@ -52575,7 +52610,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Stranded behind P41-GATE-SELECTION-COLLAPSE, which is itself stranded behind the declined P41-RUN-PLANNER. That dependency is inherited rather than load-bearing, confirmed with nomos-dd who held the OD-RULES-009 recheck: constructing a non-empty suppression, baseline, adoption or coverage policy needs a readable configuration source and a resolver, and neither needs a resolved analysis DAG. The original sequencing note said policy authoring should be written against one resolved run plan rather than the transitional two-selection design, but OD-RULES-009 declines the planner across eight rounds, so waiting for it means waiting forever. Re-added as -3 with no dependency. Territory also corrected. The original reserved gate_command.rs and policy.rs only, which cannot satisfy its own done_when: the four no-constructor doc claims are spread across gate_command.rs and the four policy type files, Run_Gate lives in gate_environment.rs, an end-to-end exercise belongs in tests.rs, a file shape needs serde in the crate manifest and a new module, the public surface snapshot must be re-blessed, and nomos-api-transport gate_parameters.rs carries a doc that names this very item as the reason it omits four wire fields."
+        }
+      },
       "depends_on": [
         "P41-GATE-SELECTION-COLLAPSE"
       ],
@@ -52593,7 +52632,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-ae",
+        "declined_at": 1788721174
+      }
     },
     {
       "id": "P40-GATE-PHASES-APPROVALS-2",
@@ -52609,7 +52651,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "OD-GATE-023. Re-authored as P40-GATE-PHASES-APPROVALS-3 without the planner dependency. The item stated its own sequencing reason: a phase partitions the selected rule set, and partitioning a set resolved in two places would inherit that ambiguity. OD-GATE-017 resolved selection in one place, so the condition this item set for itself is met."
+        }
+      },
       "depends_on": [
         "P41-GATE-SELECTION-COLLAPSE"
       ],
@@ -52627,7 +52673,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-review8",
+        "declined_at": 1788721172
+      }
     },
     {
       "id": "P42-AGENT-ENVELOPE-ENFORCEMENT",
@@ -60083,10 +60132,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-lspfam",
+        "acquired_at": 1788721019,
+        "lease_expires_at": 1788728219
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -60395,6 +60448,173 @@
           "nomos-spec-store"
         ],
         "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P75-GATE-CLUSTER-DISPOSITION",
+      "title": "Dispose the five items stranded behind the declined planner, each on its own measured claim",
+      "why": "Declining P41-RUN-PLANNER stranded seven items, and leaving them stranded answers nothing. Each was measured against the tree at cff9df40 rather than assumed from its dependency edge, and they do not share an answer. P41-GATE-SELECTION-COLLAPSE says a rule can be executed and then discarded; that stopped being true at OD-GATE-017, which made RuleSelector include the same list Judged_Sources passes to Run, and the surviving post-hoc filter re-applies an include list Run already honored. P41-GATE-PLAN-IS-A-PLAN is verified still true, GatePlan holds only the registry and its own doc says it does not vary by root, scope or rules, and fixing it needs the selectors that already exist rather than a demand planner. P41-COLLAPSE-TRANSITIONAL-LAYERS finds no superseded reachable mechanism in the gate crate, and its surviving half, module docs narrating history, is now governed by OD-AGENT-004. P40-GATE-PHASES-APPROVALS-2 gave its own sequencing reason as selection being resolved in two places, which OD-GATE-017 already fixed. P41-APPLICABILITY-IN-THE-PLAN genuinely needs the plan and is the only one whose dependency was load-bearing.",
+      "done_when": "A governing record states the disposition of each of the five and the evidence for it. P41-APPLICABILITY-IN-THE-PLAN, P41-GATE-SELECTION-COLLAPSE and P41-COLLAPSE-TRANSITIONAL-LAYERS are declined with reasons citing it. P41-GATE-PLAN-IS-A-PLAN and P40-GATE-PHASES-APPROVALS-2 are re-authored without the planner dependency, each carrying the measurement that freed it. No item remains stranded behind P41-RUN-PLANNER.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 15 tests\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788721307,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "cff9df4092c037b1a477ca04ecdcfd618b324218"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-GATE-PLAN-IS-A-PLAN-2",
+      "title": "gate plan describes the registry and does not vary with scope, rules or policy",
+      "why": "The plan verb is the one place a person can ask what a gate would do before it does it, and it answers the same way regardless of root, scope, selected rules, suppressions, baseline or adoption. That is registry introspection wearing the name of a plan. GatePlan holds exactly one field, rules: Vec<RuleOffer>, and its own doc states it does not vary by GateCommand::root, scope or rules. Re-authored from P41-GATE-PLAN-IS-A-PLAN, which OD-GATE-023 measured and freed: the original waited on P41-GATE-SELECTION-COLLAPSE and through it on the declined planner, but making the plan vary needs only ScopeSelector and RuleSelector, both of which already exist and are already consulted by Run_Gate. The dependency was inherited from a sibling rather than required by the work.",
+      "done_when": "Two gate plan invocations differing only in scope or selected rules produce different plans, and a test pins that correspondence. This does not require the plan to be the same resolved object a run executes, which was the original item's planner-shaped half and is not carried forward.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-GATE-PHASES-APPROVALS-3",
+      "title": "Declared phases, thresholds and approvals are named as unbuilt WF-001 gate semantics",
+      "why": "A gate today is one undifferentiated pass over every selected rule: no way to say one group of checks must pass before another is attempted, no numeric threshold a run is judged against, no approval a human or agent supplies to let a run proceed despite a finding. These turn a gate from a single verdict into a policy a team can adopt incrementally. Re-authored from P40-GATE-PHASES-APPROVALS-2, which stated its own sequencing reason: a phase partitions the selected rule set, and partitioning a set resolved in two places would inherit that ambiguity. OD-GATE-023 measured that OD-GATE-017 already resolved selection in one place, so the condition the item set for itself is met and the planner dependency it inherited is gone.",
+      "done_when": "A gate run can declare ordered phases whose later phases do not run when an earlier one fails, judge a numeric threshold, and record an approval that changes a disposition, each covered by a test and each reachable from the gate orchestration seam.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_phase.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-GATE-POLICY-AUTHORING-3",
+      "title": "Nothing constructs a non-empty suppression, baseline, adoption or coverage policy",
+      "why": "The internal semantics of suppressions, baselines, adoption and calibration, and coverage are real and tested, but GateCommand documents four times over that nothing builds a non-empty one. Measured at cff9df40: SuppressionPolicy, BaselinePolicy and AdoptionPolicy are constructed non-empty only inside nomos-gate-orchestration's own tests.rs, and CoveragePolicy has no non-default construction anywhere, including tests. A policy that only ever arrives empty is a policy nobody can use, and the tests exercising it are exercising a shape no caller can reach. nomos-api-transport gate_parameters.rs omits all four wire fields deliberately and names this item as the reason, on the grounds that a wire field a caller can set that changes no outcome is a promise the transport cannot keep. What is missing is the authoring and configuration surface: a declared, readable source a real run resolves these four policies from, so that suppressing a finding, adopting a baseline, or demanding a coverage floor is something a person can express rather than something only a unit test constructs. Two facts make this buildable now. Run_Gate already takes a FileSystem port and the root, so resolving there serves every caller at once rather than once per surface. And nomos_model::Subject_Of_Path is the kernel's canonical path-to-subject mapping that every real walker already uses, so a person can name a file path and the resolver can compute the SubjectId that suppression and baseline match on -- which is what makes a human-authorable file possible at all, since those two match on a digest nobody can write by hand.",
+      "done_when": "A real gate run resolves all four policies from a declared configuration source rather than from defaults, a non-default coverage floor and at least one suppression and one baseline entry are exercised end to end, an absent source leaves every existing caller's behavior unchanged, a malformed source refuses rather than silently passing, GateCommand and the four policy types no longer document that nothing constructs a non-empty one, the transport doc that cites this item is corrected, and the public surface snapshot is re-blessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_command.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/coverage_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/baseline_debt/baseline_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/rule_calibration/adoption_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/Cargo.toml",
+          "crates/host/nomos-api-transport/src/gate_parameters.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-ae",
+        "acquired_at": 1788721202,
+        "lease_expires_at": 1788732002
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api-transport"
+        ],
+        "timeout_seconds": 7200
       },
       "verified": null,
       "abandoned": [],

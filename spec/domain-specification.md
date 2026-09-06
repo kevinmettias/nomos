@@ -100,6 +100,7 @@ profile: domain-specification
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md | authored | 20 | 6 | sha256:c69ceac45b63a2a7fdbf575e0aae4e6917ff2f5e7d2ef0497149ca8d811344da |
 | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md@authored | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md | authored | 24 | 6 | sha256:a1950bc3193e80ab3048937686ee5af16afe5f70f160c318aa0fad2915067313 |
 | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md@authored | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md | authored | 21 | 6 | sha256:5e4ffc056879a2325a78cf957dd7e176cd0a0ebc73c27b1b2a8d90553bd65891 |
+| docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md@authored | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md | authored | 23 | 7 | sha256:7ffcec3773752326a5ba599808f3454e1385db25737f73d58c74cbc762307665 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -928,6 +929,13 @@ profile: domain-specification
 | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#12 | authored | 2 | The decision |
 | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#15 | authored | 2 | What this record does not do |
 | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#20 | authored | 2 | Status |
+| docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#1 | authored | 1 | The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim |
+| docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#13 | authored | 2 | The Decision |
+| docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#18 | authored | 2 | What This Says About Declining A Root |
+| docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#20 | authored | 2 | What Would Decide It Differently |
+| docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#22 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -24424,6 +24432,214 @@ first real caller: two same-process walks of `Run_Gate`, over two roots, two rev
 two policies, produce the two `GateRunResult`s it already takes. Cross-process comparison
 against a run a prior invocation produced remains a real, separate, deferred question, with
 `RunId` already in place as the key a future store would use if one is built.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#1
+
+*revision: authored · kind: heading · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim · hash: sha256:da29f024e08056e924a274dd4a65436c48110beb44b1e9b094daeadc35111ae2*
+
+# The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#2
+
+*revision: authored · kind: heading · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#3
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / Question · hash: sha256:93c654199f9c45684fa836e91c235c581048d3423a60cc71164f9e766c644fe7*
+
+`P41-RUN-PLANNER` was declined under `OD-RULES-009`, which has refused the generalized
+analysis planner across eight rounds of the same external review. The decline stranded seven
+items in one write. Five of them are the gate cluster: `P41-APPLICABILITY-IN-THE-PLAN`,
+`P41-GATE-SELECTION-COLLAPSE`, and behind that last one `P41-GATE-PLAN-IS-A-PLAN`,
+`P41-COLLAPSE-TRANSITIONAL-LAYERS` and `P40-GATE-PHASES-APPROVALS-2`.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#4
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / Question · hash: sha256:dff9ca9eddb5799084bc1f055f7e486060ac1c944cb5ea9788e70148c532c03c*
+
+Leaving them stranded answers nothing, and declining them wholesale would assume the
+dependency edge was load-bearing in every case. Whether each item actually needs a planner
+was unmeasured, and a dependency edge is not evidence — it is what somebody believed when the
+item was written, which for this cluster was before `OD-GATE-014`'s selectors and
+`OD-GATE-017` existed.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#5
+
+*revision: authored · kind: heading · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#6
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / What Was Measured · hash: sha256:8ab0cc757e485df815d709b1427116ec9e230f93a8da45beb87ccf3dbc1d93a4*
+
+Each item's own stated claim, checked against the tree at `cff9df40`.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#7
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / What Was Measured · hash: sha256:5130e0af9c87c9960980d9ee09e4af52a5fef6e7b6bc360f284af46d7192067f*
+
+**`P41-GATE-SELECTION-COLLAPSE` — overtaken.** Its claim is that "a rule can be executed and
+then discarded" because gate and check each decide what runs. That stopped being true at
+`OD-GATE-017`. `gate_environment::Judged_Sources` is now called with
+`selected: &command.rules.include`, so the gate's own selection is what
+`nomos_check_orchestration::Run` computes; a selected-out rule's materialization does not run
+and its finding never exists. `RuleSelector`'s own documentation states this. What survives is
+`Reduced_Findings` re-applying `Is_Included` to findings that `Run` already restricted to the
+same list — a redundant second application of one include list, not two mechanisms disagreeing.
+`RuleSelector` carries no `exclude`, so there is no path by which the two can diverge.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#8
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / What Was Measured · hash: sha256:75a995e3926301d22443643c6f2704ec099500102235e2a065ce3edb2676eb0d*
+
+Its `done_when` is the deciding half: it requires that "a gate compiles its policy into a run
+plan plus a result policy." That is the planner, named differently.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#9
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / What Was Measured · hash: sha256:ba786b9515e3bb0cfa24a551219d5baee52ed4a9cf980927452116ace5417fe3*
+
+**`P41-GATE-PLAN-IS-A-PLAN` — still true, and planner-independent.** `GatePlan` holds exactly
+one field, `rules: Vec<RuleOffer>`, and its own doc says it "does not vary by
+`GateCommand::root`, `scope` or `rules`." So the verb still reports the registry while wearing
+the name of a plan, exactly as the item says. But making it vary needs no demand resolution:
+`ScopeSelector` and `RuleSelector` both already exist and `Run_Gate` already consults them.
+The dependency was inherited from a sibling, not required by the work.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#10
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / What Was Measured · hash: sha256:ebdd590d336bf8eacc9f2acc3610a3bb12238856fbe6de32c103140f484a2f9a*
+
+**`P41-COLLAPSE-TRANSITIONAL-LAYERS` — mostly unevidenced, and its remainder is governed
+elsewhere.** Its claim is that an old mechanism, a transitional one and a current one are all
+present and reachable in the gate crate. Searching that crate's root for superseded or
+unreachable mechanisms finds none; the one candidate was the post-hoc filter above, which is
+redundant rather than superseded. What is real is the other half of its `done_when` — module
+documentation describing history rather than the current design — and that is now
+`OD-AGENT-004`'s subject, decided there on a measured population.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#11
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / What Was Measured · hash: sha256:1f32202e9ba5e2141bb4d0c518668ed0f6fa52d1c5b0fdd3a8399b40ae3086a1*
+
+**`P40-GATE-PHASES-APPROVALS-2` — its own sequencing reason is satisfied.** The item states
+why it waits: "a phase is a partition of the selected rule set and partitioning a set that is
+resolved in two places would inherit that ambiguity." Selection is resolved in one place as of
+`OD-GATE-017`. The condition the item set for itself is met.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#12
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / What Was Measured · hash: sha256:7e86a488b89f549cc6e241ae7df1f319f625fa2d50f6cf8f4e7b4d12351171e6*
+
+**`P41-APPLICABILITY-IN-THE-PLAN` — load-bearing, and the only one.** It asks that
+applicability be "resolved as part of the plan rather than during judgment," driving execution
+and coverage from one resolution. Its territory is a file named `applicability_plan.rs`. There
+is no version of this that does not need the plan, and `OD-RULES-009` declines the plan.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#13
+
+*revision: authored · kind: heading · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#14
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / The Decision · hash: sha256:aeba5497714d156b32d4af6a6e46d9788d1ce2524291350110ebbb5c7f0e2bb9*
+
+**Each item is disposed on its own claim, not on the edge it inherited.**
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#15
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / The Decision · hash: sha256:68d256fe3d278d233885622ceadc5ed49e7c391af43b2915964932c418ea75d4*
+
+- **`P41-GATE-SELECTION-COLLAPSE` is declined.** Its defect was fixed by `OD-GATE-017` and its
+  `done_when` asks for the artifact `OD-RULES-009` refuses.
+- **`P41-COLLAPSE-TRANSITIONAL-LAYERS` is declined**, superseded by `OD-AGENT-004` for the
+  half that is real and unevidenced for the half that is not.
+- **`P41-APPLICABILITY-IN-THE-PLAN` is declined.** Its dependency was genuinely load-bearing,
+  so a decline is the honest terminal state rather than a stranding. It revives with the
+  planner or not at all, and `OD-RULES-009`'s "What Would Decide It" already names what would
+  do that.
+- **`P41-GATE-PLAN-IS-A-PLAN` is re-authored without the planner dependency**, carrying the
+  measurement that freed it.
+- **`P40-GATE-PHASES-APPROVALS-2` is re-authored without it too**, on its own stated condition
+  having been met.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#16
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / The Decision · hash: sha256:809ec1bc097fd1603e918a21b40726b54739bc5ce44707188326d03d852416fb*
+
+**A sixth item, outside the gate cluster, is declined for a different reason.**
+`P41-RUN-STOPS-NAMING-EVERY-RULE` was the seventh stranded item and its complaint is intact —
+`run_context.rs` still writes out seventy `ComposedRule` entries, and `Composed_Rules()`
+derives from that array rather than from `DESCRIPTORS`. It is declined not because the
+complaint is stale but because the *question* it raises now belongs to
+`P74-RUN-ARRAY-DERIVATION-DISPOSITION`: whether `Run` can follow the derivation
+`composition::Registered` already made, or whether needing each entry's capability slice makes
+that derivation the planner. An item cannot both pose a question and be the work that follows
+from either answer. If that decision says the derivation is available, it authors the
+implementation item; if it says the derivation is the planner, nothing should have been on the
+board at all.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#17
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / The Decision · hash: sha256:8ba2709da7a304b5d7d6635745c08abc75088b58a836adf87ea74320a28324eb*
+
+**The redundant post-hoc filter is not made an item.** Re-applying an include list that `Run`
+already honored costs one pass over a finding vector and cannot produce a wrong answer while
+`RuleSelector` has no `exclude`. Filing it would be tidying, and the same restraint
+`OD-RULES-009` applies to the planner applies to its leftovers.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#18
+
+*revision: authored · kind: heading · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / What This Says About Declining A Root · hash: sha256:701d8abaf3ea716ade87a566de4ecc1dd630a9456155fe78228ae4799ce13f98*
+
+## What This Says About Declining A Root
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#19
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / What This Says About Declining A Root · hash: sha256:9b3d6ebdcf06b2823055f00ee667d82c416adff8a7fe04f0ff18c9395179a16d*
+
+A decline propagates to every dependent at once, and the dependents do not share an answer:
+of five here, one edge was load-bearing, one item was already fixed, one was superseded by a
+different record, and two were waiting on nothing.
+`P73-DECISION-BEFORE-CODE-STRANDS-ITS-DEPENDENTS-2`, still open at this record's writing,
+names the mirror shape — an item ended honestly while leaving others unreachable — and this
+cluster is its second instance from the other direction. **A decline of a root owes the same
+measurement a claim does: each dependent checked against the tree, not against the edge.**
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#20
+
+*revision: authored · kind: heading · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / What Would Decide It Differently · hash: sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429*
+
+## What Would Decide It Differently
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#21
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / What Would Decide It Differently · hash: sha256:26be76b601f0633ac5461890c38feda9c83ccafe04bb03647623643fa21ddf1b*
+
+- **`RuleSelector` gaining an `exclude`.** The two selections could then disagree, and
+  `P41-GATE-SELECTION-COLLAPSE`'s original defect would be real again rather than redundant.
+- **The planner arriving** on any of `OD-RULES-009`'s named triggers, which revives
+  `P41-APPLICABILITY-IN-THE-PLAN` on its own terms.
+- **A superseded mechanism actually found reachable** in the gate crate, which would restore
+  `P41-COLLAPSE-TRANSITIONAL-LAYERS`'s code half.
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#22
+
+*revision: authored · kind: heading · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#23
+
+*revision: authored · kind: prose · heading: The gate cluster's dependency on the planner was mostly inherited, and each item is disposed on its own measured claim / Status · hash: sha256:d9b5049b60b2c4619cc25677dfabfb6dfbfc3ea82b8055536efb5f6938b36744*
+
+Accepted. Five items measured individually at `cff9df40`; three declined, two re-authored free
+of an inherited edge, and nothing left stranded behind `P41-RUN-PLANNER`.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

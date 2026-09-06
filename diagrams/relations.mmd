@@ -236,6 +236,7 @@ graph LR
     od_agent_003 -->|"relates-to"| od_ledger_023
     od_agent_004 -->|"relates-to"| od_agent_001
     od_agent_004 -->|"relates-to"| od_gate_011["OD-GATE-011"]
+    od_agent_004 -->|"relates-to"| od_gate_023["OD-GATE-023"]
     od_agent_004 -->|"relates-to"| od_host_001["OD-HOST-001"]
     od_agent_004 -->|"relates-to"| od_platform_002["OD-PLATFORM-002"]
     od_agent_004 -->|"relates-to"| od_rules_009
@@ -652,6 +653,7 @@ graph LR
     od_gate_014 -->|"relates-to"| od_gate_015
     od_gate_014 -->|"relates-to"| od_gate_016
     od_gate_014 -->|"relates-to"| od_gate_017
+    od_gate_014 -->|"relates-to"| od_gate_023
     od_gate_014 -->|"relates-to"| od_host_004
     od_gate_014 -->|"relates-to"| od_rules_008
     od_gate_014 -->|"relates-to"| od_rules_009
@@ -668,6 +670,7 @@ graph LR
     od_gate_016 -->|"relates-to"| od_rules_009
     od_gate_017 -->|"relates-to"| arc_roadmap_001
     od_gate_017 -->|"relates-to"| od_gate_014
+    od_gate_017 -->|"relates-to"| od_gate_023
     od_gate_017 -->|"relates-to"| od_host_004
     od_gate_017 -->|"relates-to"| od_roadmap_002
     od_gate_017 -->|"relates-to"| od_rules_008
@@ -688,6 +691,10 @@ graph LR
     od_gate_022 -->|"relates-to"| od_host_002
     od_gate_022 -->|"relates-to"| od_host_007
     od_gate_022 -->|"relates-to"| od_workflow_001
+    od_gate_023 -->|"relates-to"| od_agent_004
+    od_gate_023 -->|"relates-to"| od_gate_014
+    od_gate_023 -->|"relates-to"| od_gate_017
+    od_gate_023 -->|"relates-to"| od_rules_009
     od_host_001 -->|"relates-to"| od_agent_004
     od_host_001 -->|"relates-to"| od_host_002
     od_host_001 -->|"relates-to"| od_host_003
@@ -1277,6 +1284,7 @@ graph LR
     od_rules_009 -->|"relates-to"| od_gate_016
     od_rules_009 -->|"relates-to"| od_gate_017
     od_rules_009 -->|"relates-to"| od_gate_020
+    od_rules_009 -->|"relates-to"| od_gate_023
     od_rules_009 -->|"relates-to"| od_host_004
     od_rules_009 -->|"relates-to"| od_host_011
     od_rules_009 -->|"relates-to"| od_rules_007
@@ -1611,6 +1619,7 @@ graph LR
     od_gate_018
     od_gate_020
     od_gate_022
+    od_gate_023
     od_host_001
     od_host_002
     od_host_003

@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:4d9dd7cb1a5dfa5546b2ab7e75e2f0f8bd32a3f9e0dc8d454a899558d82f4a21",
-  "inputs_digest": "sha256:dbd6ca0844f46e0327c779c7ad291743b6bbaebc312b99c33a6d7758e522f092",
+  "content_digest": "sha256:ba947b5eaa20d11a28d3e3de380f468c7055f097a5ff8058a42a4f23a159b69b",
+  "inputs_digest": "sha256:1c04c699ec7de866d5a581a587b516e6d2d75368a34b84058a4ca797d4d40586",
   "sections": [
     [
       "Documents",
-      215
+      216
     ],
     [
       "Sections",
-      1742
+      1749
     ],
     [
       "Source blocks",
-      6034
+      6057
     ]
   ],
   "inputs": [
@@ -469,6 +469,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md@authored",
       "hash": "sha256:5e4ffc056879a2325a78cf957dd7e176cd0a0ebc73c27b1b2a8d90553bd65891"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md@authored",
+      "hash": "sha256:7ffcec3773752326a5ba599808f3454e1385db25737f73d58c74cbc762307665"
     },
     {
       "content": "documents",
@@ -4584,6 +4589,41 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#20",
       "hash": "sha256:cfab2cac2d85d1f03b7b249f55f22ab1fc3c1e587667d2d0f0843173964fb081"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#1",
+      "hash": "sha256:4f7eaee4cd7b57cd7ebe16ceb310c9966e8184f059f319d090b4ce782044b77d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#2",
+      "hash": "sha256:18d900f4f57649fe6c0df2908e24207f3cc79c69f89a40887dafe03f4b559fce"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#5",
+      "hash": "sha256:17dbb01c0e919d28cdfb279205c13cdcc1ebf3485f26cde6c3deea67f86017cc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#13",
+      "hash": "sha256:9650dddd0e0b563d97df25442f55272660b7c6165729bb60d6b31efc88656f99"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#18",
+      "hash": "sha256:7be91f53e00b4ad0b280664083d92a0bbed8bec8d8514c1809138eb9ca46198e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#20",
+      "hash": "sha256:b5ad40430fd174e685ed25a9d62b26971d9e1ff18d8e9fb547871a0b7f3cad1b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#22",
+      "hash": "sha256:cffafdb49306d89be150d1f858d87925a79f7b06524d71c213b204b6c40a2e74"
     },
     {
       "content": "headings",
@@ -21659,6 +21699,121 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#21",
       "hash": "sha256:9fa99bed561b7fb9f9d137680b7802965af34353fa42cfc2e4b5119970633453"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#1",
+      "hash": "sha256:da29f024e08056e924a274dd4a65436c48110beb44b1e9b094daeadc35111ae2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#3",
+      "hash": "sha256:93c654199f9c45684fa836e91c235c581048d3423a60cc71164f9e766c644fe7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#4",
+      "hash": "sha256:dff9ca9eddb5799084bc1f055f7e486060ac1c944cb5ea9788e70148c532c03c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#6",
+      "hash": "sha256:8ab0cc757e485df815d709b1427116ec9e230f93a8da45beb87ccf3dbc1d93a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#7",
+      "hash": "sha256:5130e0af9c87c9960980d9ee09e4af52a5fef6e7b6bc360f284af46d7192067f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#8",
+      "hash": "sha256:75a995e3926301d22443643c6f2704ec099500102235e2a065ce3edb2676eb0d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#9",
+      "hash": "sha256:ba786b9515e3bb0cfa24a551219d5baee52ed4a9cf980927452116ace5417fe3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#10",
+      "hash": "sha256:ebdd590d336bf8eacc9f2acc3610a3bb12238856fbe6de32c103140f484a2f9a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#11",
+      "hash": "sha256:1f32202e9ba5e2141bb4d0c518668ed0f6fa52d1c5b0fdd3a8399b40ae3086a1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#12",
+      "hash": "sha256:7e86a488b89f549cc6e241ae7df1f319f625fa2d50f6cf8f4e7b4d12351171e6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#13",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#14",
+      "hash": "sha256:aeba5497714d156b32d4af6a6e46d9788d1ce2524291350110ebbb5c7f0e2bb9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#15",
+      "hash": "sha256:68d256fe3d278d233885622ceadc5ed49e7c391af43b2915964932c418ea75d4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#16",
+      "hash": "sha256:809ec1bc097fd1603e918a21b40726b54739bc5ce44707188326d03d852416fb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#17",
+      "hash": "sha256:8ba2709da7a304b5d7d6635745c08abc75088b58a836adf87ea74320a28324eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#18",
+      "hash": "sha256:701d8abaf3ea716ade87a566de4ecc1dd630a9456155fe78228ae4799ce13f98"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#19",
+      "hash": "sha256:9b3d6ebdcf06b2823055f00ee667d82c416adff8a7fe04f0ff18c9395179a16d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#20",
+      "hash": "sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#21",
+      "hash": "sha256:26be76b601f0633ac5461890c38feda9c83ccafe04bb03647623643fa21ddf1b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#22",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#23",
+      "hash": "sha256:d9b5049b60b2c4619cc25677dfabfb6dfbfc3ea82b8055536efb5f6938b36744"
     },
     {
       "content": "blocks",
