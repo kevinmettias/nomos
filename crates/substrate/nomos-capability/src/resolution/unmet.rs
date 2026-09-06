@@ -66,6 +66,51 @@ impl Unmet
             }
         };
     }
+
+    /// What a caller can do about this, alongside [`Self::Describe`]'s account of what is
+    /// wrong.
+    ///
+    /// `P54-AN-UNMET-CAPABILITY-CARRIES-NO-REMEDY`: the Go predecessor's `kernel/toolspec`
+    /// package states this split in its own words -- "the dotnet runtime is not on PATH" is
+    /// what is wrong, "install dotnet 10 then run dotnet build" is what to do, and a message
+    /// that merges them tends to be neither. `Remedy` is that second half, structured rather
+    /// than prose so a caller renders both without composing a sentence of its own.
+    #[must_use]
+    pub fn Remedy(&self) -> Remedy
+    {
+        return match self
+        {
+            Self::Undeclared => Remedy::DeclareTheContract,
+            Self::NoProvider => Remedy::RegisterAProvider,
+            Self::VersionMismatch { offered } => Remedy::AgreeOnAVersion { offered: *offered },
+            Self::BelowRequirement { closest } => Remedy::StrengthenTheClosestOffer { closest: closest.clone() },
+        };
+    }
+}
+
+/// What closes the gap a matching [`Unmet`] variant names -- the only half of the pair a
+/// caller can act on, structured so it survives being rendered more than one way rather than
+/// fixed as one sentence.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Remedy
+{
+    /// Author a capability contract naming this capability, then declare it against a
+    /// [`crate::Registry`].
+    DeclareTheContract,
+    /// The contract is declared; register a provider offer against it.
+    RegisterAProvider,
+    /// Offered at a version this caller cannot read; either side moving to a version the
+    /// other can read closes the gap.
+    AgreeOnAVersion
+    {
+        offered: ContractVersion,
+    },
+    /// The closest offer does not reach the required guarantee; strengthen it, or register
+    /// a new offer that does.
+    StrengthenTheClosestOffer
+    {
+        closest: ProviderId,
+    },
 }
 
 #[cfg(test)]
@@ -102,6 +147,21 @@ mod tests
             Unmet::BelowRequirement { closest: ProviderId::New("nomos.test.closest") }
                 .Describe()
                 .contains("nomos.test.closest")
+        );
+    }
+
+    #[test]
+    fn Test_Remedy_Should_Name_What_Closes_Each_Gap()
+    {
+        assert_eq!(Unmet::Undeclared.Remedy(), Remedy::DeclareTheContract);
+        assert_eq!(Unmet::NoProvider.Remedy(), Remedy::RegisterAProvider);
+        assert_eq!(
+            Unmet::VersionMismatch { offered: ContractVersion::New(2, 0) }.Remedy(),
+            Remedy::AgreeOnAVersion { offered: ContractVersion::New(2, 0) }
+        );
+        assert_eq!(
+            Unmet::BelowRequirement { closest: ProviderId::New("nomos.test.closest") }.Remedy(),
+            Remedy::StrengthenTheClosestOffer { closest: ProviderId::New("nomos.test.closest") }
         );
     }
 }

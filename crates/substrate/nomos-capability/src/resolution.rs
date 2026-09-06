@@ -8,7 +8,7 @@ mod unmet;
 
 pub use selection::Selection;
 pub use standing::Standing;
-pub use unmet::Unmet;
+pub use unmet::{Remedy, Unmet};
 
 use crate::ProviderOffer;
 use nomos_contracts::CapabilityId;

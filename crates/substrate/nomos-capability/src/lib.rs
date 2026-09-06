@@ -30,4 +30,4 @@ pub use offer_refusal::OfferRefusal;
 pub use provider_offer::ProviderOffer;
 pub use registry::{Registry, RegistryError, RegistryErrorKind, RequiredResolution, RequiredUnmet};
 pub use requirement::Requirement;
-pub use resolution::{Resolution, Selection, Standing, Unmet};
+pub use resolution::{Remedy, Resolution, Selection, Standing, Unmet};

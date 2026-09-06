@@ -55666,7 +55666,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -55679,7 +55679,27 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-capability"
+        ],
+        "exit_code": 0,
+        "output_tail": "_No_Provider_Should_Say_So ... ok\ntest Test_A_Provider_Below_The_Requirement_Should_Not_Satisfy_It ... ok\ntest Test_A_Provider_That_Meets_The_Requirement_Should_Satisfy_It ... ok\ntest Test_An_Offer_Above_The_Contract_Ceiling_Should_Be_Refused ... ok\ntest Test_An_Unreadable_Contract_Version_Should_Be_Refused ... ok\ntest Test_No_Unmet_Reason_Should_Ever_Map_To_A_Judgment ... ok\ntest Test_An_Unhonoured_Preference_Should_Read_As_Fallback ... ok\ntest Test_Provider_Selection_Should_Not_Depend_On_Registration_Order ... ok\ntest Test_Two_Contracts_For_One_Capability_Should_Be_Refused ... ok\ntest Test_An_Undeclared_Capability_Should_Be_Coverage_Debt_And_Not_Not_Applicable ... ok\ntest Test_An_Offer_Against_No_Contract_Should_Be_Refused ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 7 tests\ntest Test_Every_Usable_Offer_Should_Be_Reachable_From_The_Selection ... ok\ntest Test_An_Offer_Below_The_Floor_Should_Not_Appear_As_An_Alternative ... ok\ntest Test_Offers_The_Guarantee_Cannot_Rank_Should_Be_Reported_As_Undecided ... ok\ntest Test_An_Honoured_Preference_Should_Report_What_It_Passed_Over ... ok\ntest Test_Renaming_A_Provider_Should_Not_Change_Which_Offer_Answers ... ok\ntest Test_The_Strongest_Usable_Offer_Should_Answer ... ok\ntest Test_Two_Equal_Offers_Should_Be_Equivalent_Rather_Than_Incomparable ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_capability-12789463b7316368.exe)\n     Running tests\\resolution_never_says_no.rs (target\\debug\\deps\\resolution_never_says_no-d102e83a2cd81962.exe)\n     Running tests\\selection_is_decided.rs (target\\debug\\deps\\selection_is_decided-58a5d925e73702fc.exe)\n   Doc-tests nomos_capability\n",
+        "verified_at": 1788709852,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "bf51fe21b829572a55349b8fcf6f9e9dc1c15ad2"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
