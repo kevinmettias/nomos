@@ -48,9 +48,10 @@
 //! The reasoning, not deferred: a rendered projection's body and its sidecar are two
 //! single-file operations at paths this crate already knows before it opens either one --
 //! exactly [`nomos_platform::FileSystem`]'s shape (read, atomically-replace, exists), and
-//! nothing like the directory listing that port deliberately does not cover (why
-//! [`corpus::Assemble_Corpus`]'s own walk and `nomos-cli::work::Published_Records` both stay
-//! client-side instead). Going through it is also a strict improvement, not a neutral
+//! nothing like a recursive directory walk, which `OD-PLATFORM-002`'s one-level
+//! `Read_Directory` deliberately is not (why [`corpus::Assemble_Corpus`]'s own walk and
+//! `nomos-cli::work::Published_Records` both stay client-side instead). Going through it is
+//! also a strict improvement, not a neutral
 //! rewrite: the code it replaces wrote with `std::fs::write` after `std::fs::create_dir_all`,
 //! a truncating write with a window in which the file is empty or half-written --
 //! [`nomos_platform::FileSystem::Replace_Atomically`]'s own documentation names that as

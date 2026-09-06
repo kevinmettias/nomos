@@ -21,8 +21,10 @@
 //! only to construct the [`work_command::WorkCommand`] its own transport carries. And the
 //! directory walk that finds this repository's already-published records — what
 //! [`work_command::WorkCommand::Add`] needs to decide whether a declared amendment is honest —
-//! stays with the composition root too: [`nomos_platform::FileSystem`] is read,
-//! atomically-replace and exists, not a directory listing, and a general exclusion ledger
+//! stays with the composition root too: what this crate needs is a recursive walk, and
+//! [`nomos_platform::FileSystem`]'s `Read_Directory` is one level by `OD-PLATFORM-002`'s own
+//! floor; a general exclusion ledger that learned to walk a source tree would be answering a
+//! question about this
 //! that learned to walk a source tree would be answering a question about this
 //! repository's conventions rather than the platform's. `Run`'s `published` argument is
 //! where that value arrives from outside.

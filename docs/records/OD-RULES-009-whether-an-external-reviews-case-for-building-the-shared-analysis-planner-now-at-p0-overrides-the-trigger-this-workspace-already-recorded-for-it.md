@@ -482,14 +482,129 @@ where growth actually happened — trigger 1's gap by generic derivation scoped 
 trigger 3 by a decision that independent parsing is fine — never by the standing abstraction the
 review keeps proposing ahead of a trigger that asks for it.
 
+## Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident
+
+An eighth round of the same external review restates this record's central recommendation once
+more -- build the generalized analysis planner at P0, ahead of further rule work -- and adds
+four adjacent claims: that `RulePackage` ownership is inverted, that workflow dispatch is
+vendor-coupled, that the capability-contract crates are over-fragmented, and that the project
+should stop feature work for a consolidation phase. It also raises three questions this record
+does not reach, which became `OD-HOST-011`, `OD-HOST-012` and `OD-AGENT-004` rather than
+amendments here.
+
+### The seventh amendment made a measurement error, and this one corrects it
+
+The seventh amendment stated, under trigger 2: "no second selection axis exists anywhere in
+`nomos-check-orchestration` or `nomos-rules` -- no `ScopeSelector`, no per-request parameter
+beyond the one `OD-GATE-017` built."
+
+**The parenthetical was false when it was written.**
+`crates/orchestration/nomos-gate-orchestration/src/policy/scope_selector.rs` exists, is a real
+`ScopeSelector` with `include`/`exclude` prefix lists and an `Is_In_Scope` predicate, is a field
+on `GateCommand`, and its file was last touched on 2026-08-30 by `P24-REGRESSION-ORCHESTRATION`
+-- a week before the seventh amendment was committed on 2026-09-06. `gate_plan.rs` dates it
+further back still, to `P13-GATE-014-SCOPE-RULE-`. It was not absent; it was not looked for
+outside the two crates the sentence named.
+
+**And it is reached by real callers narrowing real work, not carried and ignored.**
+`nomos-cli::gate::parsing` turns repeated `--include`/`--exclude` arguments straight into
+`ScopeSelector`'s two lists; `nomos-api-transport::gate_parameters` parses the same selector off
+the wire. `crates/host/nomos-cli/tests/gate_orchestration_seam.rs` pins the ordering that
+matters: `Run_Gate` "scopes the walk before ever calling `nomos_check_orchestration::Run`", and
+a scope admitting nothing reports the same `ExitCode::Vacuous` an empty walk does. So the work
+removed is removed ahead of the judging seam rather than filtered out of its results afterward.
+
+**The trigger it was supporting is nevertheless still unfired, for a better reason than the one
+given.** `ScopeSelector` narrows *sources*, not rules: `gate_environment::Scoped_Sources`
+filters a `Vec<SourceFile>` before `Run` is ever called, and every selected rule still runs
+over every source that survives. No rule runs for some invocations and not others, which is
+trigger 2's actual wording ("a rule meant to run for *some* check invocations and not others").
+The narrow claim -- that no second axis exists *inside* `nomos-check-orchestration` -- is true.
+The bare claim that no `ScopeSelector` exists was not.
+
+This cuts the way this record already goes, and more sharply than the sentence it replaces. A
+real second selection axis was added to this workspace, by a real caller, and it was
+implemented as one `filter` over a vector ahead of the judging seam. That is a second axis
+arriving *without* a planner underneath it, which is stronger evidence for this record's
+standing decline than the absence the seventh amendment claimed.
+
+### The other three triggers, measured at this round
+
+**Trigger 1 (selection creating unread work)** fired once and was answered narrowly by
+`OD-GATE-017`; unchanged. The registry-versus-`Run` divergence the sixth amendment found is
+still closed by derivation from `DESCRIPTORS`.
+
+**Trigger 3 (a materialization step costing real wasted work)** is decided, not tracked:
+`P33-RULES-019-RECORD` declined a shared `standards.json` read, and independent parsing is the
+accepted cost.
+
+**Trigger 4 (a diverging capability population)** moved by exactly one, and the seventh
+amendment's count of it is now stale. `crates/capabilities/` holds **eleven** crates, not the
+ten it recorded: `nomos-cap-requirement-trace` joined via
+`P42-REQUIREMENT-TRACE-STALENESS-RULE-2`. One crate in a family of ten is not divergence
+resuming, and `OD-PACKAGE-015` already governs whether that family's boundaries are earned at
+all.
+
+**The population absorbed better again.** `nomos-rules` exports **eighty-six** `Check_*`
+functions against `DESCRIPTORS`, `Declared_Rules`, `Registered` and `Composed_Rules` holding
+together at **seventy** -- `run_context.rs`'s `RULE_COUNT` reads 70, against the 66 the seventh
+amendment measured. Sixteen of eighty-six sit additive and unwired, down from nineteen of
+eighty-five. Four rules were composed in since the last round, and the four synchronized
+authorities stayed synchronized without anything being hand-maintained into agreement.
+
+### What this round's five overlapping claims are worth
+
+All five are restatements. The planner case is this record's own subject, eight rounds running.
+The `RulePackage` claim describes `declared_rules.rs` accurately -- one `PackageVersion` for the
+set, `AlwaysSupported` across the board, `NO_STATED_FLOOR` capability requirements -- but reads
+as concealment what that module states in its own doc comments as deliberate, each with its
+reason and one with an openly named gap (`OD-PACKAGE-008`'s structurally-partial rule, for which
+`RuleDescriptor` carries no field). The vendor-coupling claim describes `Body` accurately and is
+answered at the site by `OD-EXECUTOR-001`, `OD-EXECUTOR-004` and `OD-PACKAGE-013`, whose shared
+trigger -- a second instance of either role -- has not fired: the population is one
+`AgentExecutor` and one `ModelBackend`. The crate-granularity claim proposes a boundary test
+`OD-PACKAGE-015` already states, including the isolation clause the review presents as missing.
+The consolidation freeze is the recommendation `OD-ROADMAP-001` has now declined five times.
+
+### What the round actually produced, which was not an architectural argument
+
+Its sixth point asserted that source-tree walking is duplicated between `nomos-cli` and
+`nomos-api` because "the platform port does not expose directory enumeration", and advised
+against adding a listing operation to `nomos-platform`.
+
+**The duplication is real and the stated reason was false.** `OD-PLATFORM-002` gave `FileSystem`
+a `Read_Directory` on 2026-09-05, one day before the review. The reviewer did not invent the
+premise: it was read out of this workspace's own module documentation, which had restated it at
+fifteen sites across eight crates and one test crate, plus `OD-HOST-001`, `OD-HOST-002` and
+`OD-LEDGER-025`, none of which had been updated. `nomos-surface-provenance::discovery` quoted
+the false sentence out of another module as its own stated authority. Two sites enumerated the
+port's operations by name and were wrong about its shape rather than about one operation.
+
+So the eighth round's contribution to this workspace was to act as an unintentional detector for
+`OD-GATE-011`'s defect class, and to demonstrate its cost in the most legible form available: an
+outside reader, reasoning carefully from committed documentation, reached a recommendation that
+was wrong because the documentation was. `P72-STALE-PLATFORM-DIRECTORY-CLAIM` and its two
+follow-ups corrected all fifteen sites and all three records. `OD-AGENT-004` takes up whether
+restating a reason rather than routing to it is the underlying defect.
+
+**Neither the round's proposal nor its evidence fires a trigger this record does not already
+track.** Eight rounds in, the pattern holds without exception: what this workspace finds under
+the review's banner gets fixed at the site where the problem actually is -- a stale clause, a
+divergent registry, a duplicated parse -- and never by the standing abstraction the review keeps
+proposing ahead of a trigger asking for it. The decline stands.
+
 ## Status
 
 Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`; the fourth
 fired once, via `Check_Cross_Language_Correspondence`, arguing against the planner on its own
 terms. The third trigger fired once, narrowly, via the repo-policy family's duplicated
 `standards.json` reads, and is now decided: `P33-RULES-019-RECORD` declined a shared read,
-leaving independent parsing as the accepted cost. The second remains unfired through seven
-rounds. The registry-versus-`Run` divergence `OD-GATE-020` measured is closed, not merely decided
+leaving independent parsing as the accepted cost. The second remains unfired through eight
+rounds, but not for the reason the seventh amendment gave: a real `ScopeSelector` has existed in
+`nomos-gate-orchestration` since well before that amendment denied one, and narrows *sources*
+ahead of `Run` rather than varying which rules participate — a second axis that arrived without
+a planner underneath it, which the eighth amendment corrects and reads as evidence for this
+decline rather than against it. The registry-versus-`Run` divergence `OD-GATE-020` measured is closed, not merely decided
 narrowly: `nomos-gate-orchestration::composition::Registered` derives from `nomos_rules::
 DESCRIPTORS` directly and is pinned against `Composed_Rules` by a real test, the same shape
 `Declared_Rules()` already used against `Composed_Rules()` on the `nomos-check-orchestration`

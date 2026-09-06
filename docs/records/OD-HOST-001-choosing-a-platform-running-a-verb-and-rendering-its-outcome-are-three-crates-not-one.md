@@ -117,3 +117,38 @@ a rendering decision leaking into `WorkOutcome`'s shape (a variant that exists t
 printed rather than to report what happened), or a platform-specific type leaking into its
 signature (an `impl` bound that only `nomos-platform-std` satisfies). Either would be the
 same defect this record fixed, one layer up.
+
+## Amendment: The Port Gained Directory Enumeration, And This Record's Stated Reason Did Not Survive It
+
+"What stayed out, and why" states that `nomos_platform::FileSystem` "is read,
+atomically-replace and exists; it has no directory-listing operation, so this cannot be
+expressed generically without widening a port that has exactly one other consumer".
+`OD-PLATFORM-002` widened it. `FileSystem::Read_Directory` exists,
+`nomos-platform-std::StdFileSystem` implements it over `std::fs::read_dir`, and both landed on
+2026-09-05 in `P41-PLATFORM-DIRECTORY-ENUMERATION-3` (`093a0e4e`) -- one day after this
+amendment's own occasion.
+
+**The decision stands and only this clause is overtaken.** `Published_Records` stays in the
+composition root, and the reason that survives is the second half of that sentence rather than
+the first: what `WorkCommand::Add` needs is a recursive walk over this repository's own
+conventions, and `Read_Directory` is deliberately one level. `OD-PLATFORM-002` set the port's
+floor at a primitive rather than a traversal, so a caller that needs to descend still composes
+its own recursion, and `Run`'s `published` parameter is still where that crosses the seam.
+Nothing about the three-crate split this record decided depended on the port's absence.
+
+**What the stale clause cost, measured rather than asserted.** It was restated rather than
+routed to, at fifteen sites across eight crates and one test crate, plus this record,
+`OD-HOST-002` and `OD-LEDGER-025`. Every one of them still asserted the port's absence a day
+after the port gained the operation. `nomos-surface-provenance::discovery` was the worst
+instance: it quoted the sentence out of another module as its own stated authority, so a false
+claim propagated by citation rather than by copying. Two further sites enumerated the port's
+operations by name and were wrong about its shape rather than about one operation, having also
+never learned about `Remove_File`.
+
+Then an eighth-round external architecture review read one of those sites, reported the walk
+duplication between `nomos-cli` and `nomos-api` as a live architectural gap, and specifically
+recommended *against* adding directory enumeration to the platform port -- a wrong
+recommendation produced directly by this record's stale clause, and the cleanest demonstration
+this repository has of what `OD-GATE-011`'s defect class actually costs.
+`P72-STALE-PLATFORM-DIRECTORY-CLAIM` and its two follow-ups corrected all fifteen sites;
+`OD-AGENT-004` weighs whether restating a reason instead of routing to it is itself the defect.

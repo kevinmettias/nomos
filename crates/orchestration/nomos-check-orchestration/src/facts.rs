@@ -1,8 +1,8 @@
 //! Getting from already-walked source to the facts a rule can read.
 //!
 //! Moved from `nomos-cli::check::facts`, minus the walk itself (`Walked` stays in
-//! `nomos-cli::check::sources` -- no [`nomos_platform::FileSystem`] directory-listing
-//! operation exists, the same reason `nomos-cli::work::Published_Records` stayed put) and
+//! `nomos-cli::check::sources`, whose own `Walked_Sources` doc states why a recursive walk is
+//! not the one-level `Read_Directory` `OD-PLATFORM-002` put on the port) and
 //! minus the registry composition (`Composed` -- `crate::Run` calls
 //! [`crate::composition::Registered`] directly and turns its own error into
 //! [`crate::CheckOutcome::Contradictory`], so there is no longer an intermediate `ExitCode`

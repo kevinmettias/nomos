@@ -17,8 +17,8 @@
 //! were both band 40 and a band may not depend on its own band
 //! (`tests/contract/tests/boundaries/graph.rs`); `nomos-gate-orchestration` moved to band 41
 //! to depend on it instead. What stays here is exactly what `check.rs` also keeps for the
-//! same reason: the directory walk ([`sources::Walked_Sources`] -- no
-//! [`nomos_platform::FileSystem`] directory-listing port exists) and the host build variant
+//! same reason: the directory walk ([`sources::Walked_Sources`] -- recursive, where
+//! `OD-PLATFORM-002`'s `Read_Directory` is one level) and the host build variant
 //! ([`composition::Host_Variant`] -- `env!` resolves against the crate that calls it). Both
 //! cross into `Run_Gate` as arguments; nothing about judging or reducing lives in this crate
 //! any more.

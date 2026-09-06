@@ -31,6 +31,7 @@ profile: domain-specification
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md@authored | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md | authored | 25 | 7 | sha256:df7c81eebf78e5affa6d79c9cad7dcc1cdd53f098c2877d29349fa98e78e7c20 |
 | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md@authored | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md | authored | 21 | 7 | sha256:8810daf833c1feccd5957668eeff0785f8149ba4bae604c0601bf7829fc91f81 |
 | docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md@authored | docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md | authored | 15 | 5 | sha256:9f320881faa41b945d440f86e3851dad8c56f5564b27d481fa52b9a4c8fd84aa |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md@authored | docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md | authored | 21 | 6 | sha256:4c1a7d4d9fd912f4d715f4e634da7039d2ed6a5dc82be4a2f46ca2bccffb12ff |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md@authored | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md | authored | 28 | 8 | sha256:233727e11f1527ac6f184ca58502da78c2b49fc046da967d3aa1bcfc5e461fe9 |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md | authored | 29 | 8 | sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561 |
 | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md@authored | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md | authored | 26 | 8 | sha256:d3ae25e96ff37b5a8bee583bbfff827ddd125845ee968619d863300a96185557 |
@@ -99,8 +100,8 @@ profile: domain-specification
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md | authored | 20 | 6 | sha256:c69ceac45b63a2a7fdbf575e0aae4e6917ff2f5e7d2ef0497149ca8d811344da |
 | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md@authored | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md | authored | 24 | 6 | sha256:a1950bc3193e80ab3048937686ee5af16afe5f70f160c318aa0fad2915067313 |
 | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md@authored | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md | authored | 21 | 6 | sha256:5e4ffc056879a2325a78cf957dd7e176cd0a0ebc73c27b1b2a8d90553bd65891 |
-| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
-| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 36 | 8 | sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 21 | 6 | sha256:f15f1623bf65a26c9d0362552ef27a8f675a8a796a842d76ad48583d354f6066 |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md | authored | 15 | 5 | sha256:0cb15b83d0fb7a58f4a2afda083ac512ba0ac344d15ca0556f3446736cbd7ea9 |
@@ -108,6 +109,8 @@ profile: domain-specification
 | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md@authored | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md | authored | 25 | 6 | sha256:3e1ca21fa30a1ca546fe40667181bda7de5ca80622a019656889537e6a72d206 |
 | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md@authored | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md | authored | 19 | 6 | sha256:69f98af14b7a83532a14a4e3d604fdd9c7070616899302a48f5a09e1ec771a72 |
 | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md@authored | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md | authored | 23 | 7 | sha256:68d1d753054542c6d8e57a0ce6d40c300f5bc598959791a06ca99ec7514b97e8 |
+| docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md@authored | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md | authored | 19 | 7 | sha256:361139ee1bbe26b54f84f93988dbf0ccf3488045465fa4f1558161c02d48ba8b |
+| docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md@authored | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md | authored | 18 | 6 | sha256:1f5a1bfd574bfb0b43f9b1b360bd932f8c620d390cb1eb9a0931804fbc9d76db |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -132,7 +135,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md@authored | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md | authored | 29 | 8 | sha256:9e909d1fed72c0982d9536dd083e4d5d490520c52bc98a51c0fd50d121680f79 |
 | docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md@authored | docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md | authored | 24 | 11 | sha256:62bf063f758eb9add016cf3720f2a90cf662d3a26d740a08e474837ca3d46dea |
 | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md@authored | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md | authored | 42 | 11 | sha256:d34cb4980991f1dea453392a7c9146606771d68470cbb42fa3be7af96b5872c7 |
-| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md | authored | 39 | 12 | sha256:eb130f220e8857ef4f36ac411db06e950f6210ff703608149af6925e7fc60640 |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md | authored | 43 | 13 | sha256:912850b32803e66cc7c192ad341c167ffdb7000ec320965300d3ddd027f230c8 |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md@authored | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md | authored | 32 | 8 | sha256:93069409178928d99992914e407a904ac6fb92889b77e22260bae978c2d59556 |
 | docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md@authored | docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md | authored | 31 | 10 | sha256:0f75915bb0a6e047768f8b26509aa5e946b77f20b68f07298aacb082d7709cfa |
 | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md@authored | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md | authored | 19 | 8 | sha256:409f9c166337da0afc4471e4c50cd9431117d100ddbc5527846feeb8d7048533 |
@@ -179,7 +182,7 @@ profile: domain-specification
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 18 | 6 | sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c |
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 19 | 6 | sha256:7f6c05ffa09f693ecfe8e7c14699257a1fe01da3a07c0614b09f227fd5be986b |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 56 | 12 | sha256:defa3294df3aba7c74ba108ccbf6d69ba6788c0e13cf9b908c1f490c06743a46 |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 76 | 17 | sha256:bb390d2976a56fcf195f29cd1e73ab108464ff25aab02fac64daa3d9b736bb24 |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 23 | 6 | sha256:841b1c5bb58bd645f7b84a43c5f4433923df78193de6b7e6e3ffecc92de628c9 |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md@authored | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md | authored | 38 | 10 | sha256:740a2ca81a0ba769b2370b32a0b5af4aeb3647f2c9a141f1ebaf058f08f9f6c1 |
@@ -378,6 +381,12 @@ profile: domain-specification
 | docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#6 | authored | 2 | The Decision |
 | docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#10 | authored | 2 | What Is Guarded, And What Is Not |
 | docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#14 | authored | 2 | Status |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#1 | authored | 1 | A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#2 | authored | 2 | Question |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#12 | authored | 2 | The Decision |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#18 | authored | 2 | What Would Decide It Differently |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#20 | authored | 2 | Status |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#1 | authored | 1 | The snapshot in a fact key is a third answer, and it defeats the other two |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#2 | authored | 2 | Question |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#4 | authored | 2 | What Was Found |
@@ -924,6 +933,7 @@ profile: domain-specification
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#12 | authored | 2 | What this costs |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#15 | authored | 2 | What would make this wrong |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#17 | authored | 2 | Amendment: The Port Gained Directory Enumeration, And This Record's Stated Reason Did Not Survive It |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1 | authored | 1 | A surface holds no state its canonical services cannot reconstruct |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#9 | authored | 2 | The state families this applies to |
@@ -932,6 +942,7 @@ profile: domain-specification
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#27 | authored | 2 | Amendment: SpecCommand's Seam Closed; request::Command Is the One Gap Family 9 Still Names |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#30 | authored | 2 | Amendment: GateCommand's `run` Verb Is a Closed Seam Family 9 Never Named |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#34 | authored | 2 | Amendment: `PackageKind` Has One Real Consumer Now |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#37 | authored | 2 | Amendment: Family 3's Directory-Listing Clause Was Overtaken By OD-PLATFORM-002 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1 | authored | 1 | An editor surface is a client of the canonical services, not a parser of the CLI's rendered output |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#4 | authored | 2 | What an editor surface is |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#7 | authored | 2 | What a diagnostic carries |
@@ -974,6 +985,19 @@ profile: domain-specification
 | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#16 | authored | 2 | What this record does not do |
 | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#20 | authored | 2 | Follow-up territory, once either gap is decided |
 | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#22 | authored | 2 | Status |
+| docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#1 | authored | 1 | A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it |
+| docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#10 | authored | 2 | The Decision |
+| docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#14 | authored | 2 | What Would Decide It Differently |
+| docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#16 | authored | 2 | What This Does Not Decide |
+| docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#18 | authored | 2 | Status |
+| docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#1 | authored | 1 | The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone |
+| docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#10 | authored | 2 | The Decision |
+| docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#15 | authored | 2 | What Would Decide It Differently |
+| docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#17 | authored | 2 | Status |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -1237,7 +1261,8 @@ profile: domain-specification
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#26 | authored | 3 | 5. `ExitCode::Conflict`, not `Usage` |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#29 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#34 | authored | 2 | What Holds It |
-| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#38 | authored | 2 | Status |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#38 | authored | 2 | Amendment: The Rejection Stands, But Not On The Clause It Cites |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#42 | authored | 2 | Status |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#1 | authored | 1 | An amendment and an allocation both reserve a record, and only the item can say which |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#6 | authored | 2 | What Was Measured |
@@ -1605,7 +1630,12 @@ profile: domain-specification
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34 | authored | 2 | Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#40 | authored | 2 | Amendment: A Sixth Round, Checked Against A Registry That Stopped Absorbing And A Materialization Step That Stopped Being Free |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#47 | authored | 2 | Amendment: A Seventh Round, Naming The Same Mapping OD-GATE-017 Already Named And Finding The Registry Gap Closed Rather Than Open |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#55 | authored | 2 | Status |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#55 | authored | 2 | Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#57 | authored | 3 | The seventh amendment made a measurement error, and this one corrects it |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#63 | authored | 3 | The other three triggers, measured at this round |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#68 | authored | 3 | What this round's five overlapping claims are worth |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#70 | authored | 3 | What the round actually produced, which was not an architectural argument |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#75 | authored | 2 | Status |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1 | authored | 1 | A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#4 | authored | 2 | What Was Measured |
@@ -6623,6 +6653,187 @@ stays true once made, not that a citation should have been made in the first pla
 *revision: authored · kind: prose · heading: A skill routes to a contract step or cites it where a citation is checked / Status · hash: sha256:88a5dfc67c9731d184b4ee4ddf8f58fbe5ed1fa4b0fbc6ff5a6b4873317abbbd*
 
 Closed by `P11-SKILL-AGREEMENT`.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#1
+
+*revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose · hash: sha256:26cb8e26e2b493bcb2b5a49b1bbf65b56b472429332f05d4b30b7f632888474e*
+
+# A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#2
+
+*revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#3
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Question · hash: sha256:a8ba93f95f0c4d4e719264a9a7587c8c5da7b334afc7ab2206dd236e582beaa3*
+
+An eighth-round external architecture review named documentation volume as a form of bloat:
+`Cargo.toml` carrying architectural essays per member, `README.md` carrying crate and zone
+tables, module roots carrying chronological narratives of which item added which increment,
+and the same architectural fact therefore standing in a governing record, a README table, a
+manifest comment, a module doc and a commit message at once. It recommended compacting the
+prose and generating the dependency and package tables from one machine-readable declaration.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#4
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Question · hash: sha256:220269da81f012ae1777795214e188e1f891a4ea1a2777b29e5f1edb453c6338*
+
+`OD-AGENT-001` already decided this shape for agent instruction files: an unchecked copy of a
+checked file is a defect, and an instruction file routes to authority rather than restating it.
+Whether that principle extends past `AGENTS.md` to manifest comments and module-root prose was
+undecided.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#5
+
+*revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#6
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / What Was Measured · hash: sha256:34b6ac8cb8b656b6812402f08bc6894f26cbf6cb3b920583890e05672e0f552a*
+
+**The volumes the review cites are accurate.** `Cargo.toml` is 30,191 bytes, of which 276 of
+502 lines are comments -- 55 percent prose. `README.md` is 41,559 bytes. Module roots do carry
+per-item narratives.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#7
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / What Was Measured · hash: sha256:b0cbf3ad9e0314a97c45adbbf70ab3c7d63058597e5940415e8e920364427d17*
+
+**But volume did not predict staleness, and a natural experiment settled it.** On 2026-09-05,
+`OD-PLATFORM-002` gave `nomos_platform::FileSystem` a `Read_Directory` operation
+(`P41-PLATFORM-DIRECTORY-ENUMERATION-3`, `093a0e4e`). The next day, the claim that no such
+operation exists was still standing at **fifteen sites across eight crates and one test crate**,
+plus `OD-HOST-001`, `OD-HOST-002` and `OD-LEDGER-025`.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#8
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / What Was Measured · hash: sha256:070853ef9d2a7321f63268422f02f57e21fbb47a921a6b1092e486fc6b7dcc55*
+
+**Every one of those fifteen was in a module doc comment. None was in `README.md`. None was in
+`Cargo.toml`.**
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#9
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / What Was Measured · hash: sha256:1da835ba759d01bfe9cdf5ad072b3f12d1a417d48d3891445bd9e205add76e3d*
+
+That is the finding. The two artifacts the review names as bloated are the two that stayed
+correct, and they stayed correct for a reason that is already in this repository:
+`tests/contract/tests/boundaries/readme.rs` and `manifest_bands.rs` assert the README's tables
+and the manifest's band assignments against the real workspace, both directions. The prose that
+went stale was the prose nothing checks.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#10
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / What Was Measured · hash: sha256:c7aa82a80afdbee86d6667cdf064300a9e376b53f9cee82ecfdc90775b4e125a*
+
+**The failure had a propagating form, which volume also does not explain.**
+`nomos-surface-provenance::discovery` did not restate the claim independently -- it quoted the
+sentence out of another module as its own stated authority. A false claim spread by citation.
+Two further sites enumerated the port's operations by name and were wrong about the port's
+shape rather than about one operation, having also never learned about `Remove_File`.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#11
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / What Was Measured · hash: sha256:951173f53afe3d1216ecc10c1783e8fd767d9782ac5df93b6e74bed091c59d8c*
+
+**The cost was paid outside the repository.** An external reviewer, reasoning carefully from
+committed documentation, read one of the fifteen and recommended against adding directory
+enumeration to a port that had gained it the day before. `OD-GATE-011` names this defect class;
+this is the first instance where its cost is legible as a wrong answer given to a real reader
+rather than as maintenance burden.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#12
+
+*revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#13
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / The Decision · hash: sha256:00e5af89c95477277b19e0ce05830726904cc9f00af16f1adfa78d1cfced9103*
+
+**`OD-AGENT-001`'s rule extends, and it extends on the checked/unchecked axis rather than the
+volume axis: prose must route to an authority for any fact that a mechanical check already
+holds, and may state a fact freely where it is the authority.**
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#14
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / The Decision · hash: sha256:014fce5b03e3f16ac63503bb98c9a2767027e4623f6e5ed85452fbbda28e1ba9*
+
+Concretely, in a module doc comment:
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#15
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / The Decision · hash: sha256:353cdb0ab792f29067632043d6b6a5b68c72869135ddc3274fe4416483256677*
+
+- **A fact another artifact checks is routed to, never restated.** Band membership, crate
+  ownership, a port's operation set, a record's decision. The doc names the authority; it does
+  not reproduce its content.
+- **A fact this module is the authority for is stated fully, and length is not a defect.** Why
+  this type has these variants, what a function refuses and why, what a decision cost here.
+  `nomos-cli::check::sources::Walked_Sources` is the worked example: it holds the real reason a
+  recursive walk is not the port's one-level primitive, and it was the one site in the whole
+  population that was correct, because it was the authority rather than a copy of one.
+- **Quoting another module's prose as your own stated authority is refused outright.** It
+  creates a citation edge with no mechanical backing, which is how a false claim propagated
+  here. Route to the record, or state your own reason.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#16
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / The Decision · hash: sha256:89476f5b0635763ab03da43dce7c8c7fd5aba603b2d3e170d53383f1371705f1*
+
+**The review's two specific recommendations are declined, on this record's own evidence.**
+Compacting `Cargo.toml` and generating the README tables would spend effort on the two
+artifacts that demonstrably did not fail, and generating the README tables would remove the
+contract tests' subject -- the tables are checked *because* they are authored, and a generated
+table asserts nothing about a hand-maintained fourth copy the way `manifest_bands.rs` does
+today.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#17
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / The Decision · hash: sha256:1bbac67404d23dddf6dd4e3d14913943238a89eea9f37eaa3e4fa26a76c9fd72*
+
+**No new gate step is added by this record.** A rule that detects a restated-rather-than-routed
+fact would need to know which facts have mechanical authorities elsewhere, which is not
+derivable from text. This record governs how the prose is written; it does not claim a checker
+exists for it.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#18
+
+*revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / What Would Decide It Differently · hash: sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429*
+
+## What Would Decide It Differently
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#19
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / What Would Decide It Differently · hash: sha256:c07f35a8d05149fe83363ea3e9ab93fe191fc44a297988d2f2c2df60d9428611*
+
+- **A second staleness population found in `README.md` or `Cargo.toml`.** Would falsify this
+  record's central measurement and reopen the volume argument.
+- **A mechanical way to detect a restated fact.** Would turn this from a writing rule into a
+  checkable one, and is the increment worth wanting.
+- **A checked artifact going stale anyway**, which would mean the checks are narrower than the
+  facts they appear to cover.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#20
+
+*revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#21
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Status · hash: sha256:c0ac4ea0ebfaa46a73db63d6b3359f0c7832218c78ef1b0435be71cfcd084192*
+
+Accepted. Decided on a natural experiment rather than on a principle: one port change on
+2026-09-05, fifteen stale restatements the next day, all fifteen in unchecked module prose and
+none in the two artifacts the review called bloated. The remedy is routing what is checked
+elsewhere, not writing less.
 
 ### docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#1
 
@@ -24380,6 +24591,61 @@ printed rather than to report what happened), or a platform-specific type leakin
 signature (an `impl` bound that only `nomos-platform-std` satisfies). Either would be the
 same defect this record fixed, one layer up.
 
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#17
+
+*revision: authored · kind: heading · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / Amendment: The Port Gained Directory Enumeration, And This Record's Stated Reason Did Not Survive It · hash: sha256:7042fa8dbf13528baceac7627a349605c69a52c236d3e4c1e224dd7f0a70c88a*
+
+## Amendment: The Port Gained Directory Enumeration, And This Record's Stated Reason Did Not Survive It
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#18
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / Amendment: The Port Gained Directory Enumeration, And This Record's Stated Reason Did Not Survive It · hash: sha256:f36d000f95db74af4a58d5b547ab14fa04e8b023c80c3031027451c63840b5ed*
+
+"What stayed out, and why" states that `nomos_platform::FileSystem` "is read,
+atomically-replace and exists; it has no directory-listing operation, so this cannot be
+expressed generically without widening a port that has exactly one other consumer".
+`OD-PLATFORM-002` widened it. `FileSystem::Read_Directory` exists,
+`nomos-platform-std::StdFileSystem` implements it over `std::fs::read_dir`, and both landed on
+2026-09-05 in `P41-PLATFORM-DIRECTORY-ENUMERATION-3` (`093a0e4e`) -- one day after this
+amendment's own occasion.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#19
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / Amendment: The Port Gained Directory Enumeration, And This Record's Stated Reason Did Not Survive It · hash: sha256:60cf5ad7fdc870ca0a833151896133c32e55e67b8cb8d81155f42989a378fe99*
+
+**The decision stands and only this clause is overtaken.** `Published_Records` stays in the
+composition root, and the reason that survives is the second half of that sentence rather than
+the first: what `WorkCommand::Add` needs is a recursive walk over this repository's own
+conventions, and `Read_Directory` is deliberately one level. `OD-PLATFORM-002` set the port's
+floor at a primitive rather than a traversal, so a caller that needs to descend still composes
+its own recursion, and `Run`'s `published` parameter is still where that crosses the seam.
+Nothing about the three-crate split this record decided depended on the port's absence.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#20
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / Amendment: The Port Gained Directory Enumeration, And This Record's Stated Reason Did Not Survive It · hash: sha256:fb817b245ea8a60f59c78c26bce1800eae1a7483a459835a8cbbb20ec414fb8b*
+
+**What the stale clause cost, measured rather than asserted.** It was restated rather than
+routed to, at fifteen sites across eight crates and one test crate, plus this record,
+`OD-HOST-002` and `OD-LEDGER-025`. Every one of them still asserted the port's absence a day
+after the port gained the operation. `nomos-surface-provenance::discovery` was the worst
+instance: it quoted the sentence out of another module as its own stated authority, so a false
+claim propagated by citation rather than by copying. Two further sites enumerated the port's
+operations by name and were wrong about its shape rather than about one operation, having also
+never learned about `Remove_File`.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#21
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / Amendment: The Port Gained Directory Enumeration, And This Record's Stated Reason Did Not Survive It · hash: sha256:f2f758564d15e77791dc5c15ac6e96d52e4bffaef79b3a02b9df7287d054aa32*
+
+Then an eighth-round external architecture review read one of those sites, reported the walk
+duplication between `nomos-cli` and `nomos-api` as a live architectural gap, and specifically
+recommended *against* adding directory enumeration to the platform port -- a wrong
+recommendation produced directly by this record's stale clause, and the cleanest demonstration
+this repository has of what `OD-GATE-011`'s defect class actually costs.
+`P72-STALE-PLATFORM-DIRECTORY-CLAIM` and its two follow-ups corrected all fifteen sites;
+`OD-AGENT-004` weighs whether restating a reason instead of routing to it is itself the defect.
+
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1
 
 *revision: authored · kind: heading · heading: A surface holds no state its canonical services cannot reconstruct · hash: sha256:ff96854272e6fbdd3589108df8cac6977db4f8054761d6152cdb0341047b380c*
@@ -24769,6 +25035,40 @@ gains its consumer the way `LanguagePackage` did: something reads a declared man
 that kind and refuses one it cannot resolve. Until then, family 6's original point holds
 for those fifteen unchanged — package state is reconstructed through that reader once it
 exists, not accumulated inside whichever surface implements resolution first.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#37
+
+*revision: authored · kind: heading · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: Family 3's Directory-Listing Clause Was Overtaken By OD-PLATFORM-002 · hash: sha256:b2e902a2ff9e056fef45496205c02335d249f61836fb8877ee3c0fadee8af2f8*
+
+## Amendment: Family 3's Directory-Listing Clause Was Overtaken By OD-PLATFORM-002
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#38
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: Family 3's Directory-Listing Clause Was Overtaken By OD-PLATFORM-002 · hash: sha256:fc876b0ea110531422d41d7ee62b9e2406250fb31dd6a6fd407269c8a38dd4e5*
+
+State family 3 says the walk "stays a composition-root concern
+(`nomos-cli::check::sources::Walked`), the same exception `nomos-cli::work::Published_Records`
+already has for a directory listing `nomos_platform::FileSystem` has no port for". The port has
+one: `OD-PLATFORM-002` added `FileSystem::Read_Directory` on 2026-09-05
+(`P41-PLATFORM-DIRECTORY-ENUMERATION-3`, `093a0e4e`).
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#39
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: Family 3's Directory-Listing Clause Was Overtaken By OD-PLATFORM-002 · hash: sha256:7d579ab34e1e0eddad3c047b80a4cc5dbcc9a704f3f1223770d545277c2b6dc9*
+
+**The family's own claim is unaffected.** What family 3 asserts is that a `CheckOutcome` is
+reconstructable by any client that walks the same tree, and that the walk is a composition-root
+concern. Both are still true, and the surviving reason is that `Read_Directory` is one level by
+`OD-PLATFORM-002`'s own floor while a source walk is recursive -- not that no operation exists.
+`nomos-cli::check::sources::Walked_Sources` carries that reason at the site.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#40
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: Family 3's Directory-Listing Clause Was Overtaken By OD-PLATFORM-002 · hash: sha256:028ac6da5f2650232c948cc9152701d3e71ceb94de48515082f62c394fd45bc8*
+
+Corrected under `P72-STALE-PLATFORM-DIRECTORY-CLAIM-2`, alongside fourteen other sites and two
+other records carrying the same overtaken clause. `OD-HOST-001`'s own amendment has the
+measured population and what the staleness cost.
 
 ### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1
 
@@ -26291,6 +26591,323 @@ finding bears on, are `OD-HOST-003`'s own two named gaps from before this seam e
 neither has closed since: both need a real capability or cross-reference decided first, named
 here with the follow-up territory each would claim, not built by improvisation inside this
 item's own single-file territory.
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#1
+
+*revision: authored · kind: heading · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it · hash: sha256:8dcf8794cf3170eccd40314322dc0122cd4545401c54734be3cec040e4efb0e8*
+
+# A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#2
+
+*revision: authored · kind: heading · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#3
+
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / Question · hash: sha256:00c18de92099a66f33baa9fc42f90263af19d3464d286217712b49513fdfb279*
+
+An eighth-round external architecture review named `nomos-api`'s response types as schema
+proliferation, describing a trend toward "domain type, orchestration outcome, API twin,
+JSON-RPC twin, MCP twin" and recommending one canonical serializable application-contract
+layer -- either its own crate, or serialization moved onto the orchestration outcome types
+themselves.
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#4
+
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / Question · hash: sha256:f86a07d8de19e3799ce3f1c3810ee0c58ca092e77a17acdc3d59af74b2855335*
+
+The crate's own module documentation supplies the review's evidence: it describes response
+families as deliberate twins of orchestration outcomes, built because the underlying domain
+objects do not serialize. Whether the twin is an accepted cost or a defect was never decided,
+and `OD-HOST-002` governs what a surface may *hold* rather than what shape a canonical service
+*returns*.
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#5
+
+*revision: authored · kind: heading · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#6
+
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / What Was Measured · hash: sha256:b35755513647548c909918bb2d9079453b0a4667a29c66be5f38fa96f192929e*
+
+**The population, counted rather than characterized.** `nomos-api` is 7,826 lines across
+thirteen modules and declares sixty-nine `Response` types, with 182 mentions of `Serialize`.
+Twenty-nine `pub fn Handle_*` entry points. Ten response types live in a dedicated
+`response/` module and the rest sit beside the handler family they serve.
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#7
+
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / What Was Measured · hash: sha256:2009ff2601ac0c76b5291b8a00a3817353956686861476262c29dca983133ad7*
+
+**The review's five-layer chain does not exist.** It predicts `domain type → orchestration
+outcome → API twin → JSON-RPC twin → MCP twin`. The actual chain is three:
+`nomos-api-transport::dispatch` serializes `nomos_api` handler results directly with no
+envelope type of its own beyond `WireResponse`, and `nomos-mcp` projects the same values
+rather than re-typing them. Two of the five predicted layers are not there. The observed
+duplication is one twin per orchestration outcome, not a stack.
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#8
+
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / What Was Measured · hash: sha256:6bd5a5ff097547430ae5934e2cc8f2d929bd20625e7687420a7dce724973c6eb*
+
+**The twin buys a real property, and the alternative spends it.** The orchestration crates
+carry no `serde` dependency. Moving `Serialize` onto the orchestration outcome types would put
+a wire-format concern into the crates that decide judgments -- and a derived `Serialize` makes
+every public field's name and shape a compatibility surface, so a field rename inside an
+orchestration crate would become a wire break. The twin is what currently keeps those two
+questions separable.
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#9
+
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / What Was Measured · hash: sha256:db60453bcd1b1438a978ea86cf731dd6ca70525a12374a0d4a849e9d94c87396*
+
+**One transport consumes the surface today, and it consumes a seventh of it.**
+`nomos-api-transport::ServedMethod` is a closed enum of four variants -- `GatePlan`,
+`GateRun`, `GateExplain`, `Correction` -- against `nomos-api`'s twenty-nine handlers. A shared
+contract layer's whole value is agreement among several consumers; there is one, and it does
+not use most of what exists.
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#10
+
+*revision: authored · kind: heading · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#11
+
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / The Decision · hash: sha256:1410a1c21c0335787fa09e85316f3acdd6944ad31d962dd4dfe9815650d2f7e7*
+
+**The response twin stays, and is the accepted cost of keeping `serde` out of the
+orchestration band.** No `nomos-application-contracts` crate is created. No `Serialize` is
+added to an orchestration outcome type.
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#12
+
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / The Decision · hash: sha256:9f99e4dfec3b9d3f975cff1827aaded850be0ba4fcd30ea258dedd2cfd5e93e3*
+
+This is `OD-GATE-011`'s tracked-duplication shape rather than an unaccountable one: the twin's
+reason is stated at the site in each module's own documentation, and the twin is mechanical
+rather than interpretive -- it renames nothing and restructures nothing, so a reader comparing
+the pair can see the correspondence.
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#13
+
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / The Decision · hash: sha256:1012d75279e21433864c2cb625648ed6699618ebad483a3a8634690e294b425c*
+
+**`OD-PACKAGE-015`'s test governs the crate question and answers it in the negative today.**
+That record asks whether a crate is versioned independently, enforces an isolation boundary a
+module could not, or has a consumer that does not also depend on its current siblings. A
+contracts crate extracted now would have exactly one consumer, `nomos-api-transport`, which
+already depends on `nomos-api` -- failing all three clauses, and the review's own point 5
+argues for exactly this test in the same document.
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#14
+
+*revision: authored · kind: heading · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / What Would Decide It Differently · hash: sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429*
+
+## What Would Decide It Differently
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#15
+
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / What Would Decide It Differently · hash: sha256:a17a4ea5698273ac69c39abdab33b264cfa8041eec3ed3e9cbe1ddf3d427e398*
+
+- **A second transport that needs the same response shapes and does not want the handlers.**
+  An MCP or LSP projection depending on a contracts crate without depending on `nomos-api`
+  fires `OD-PACKAGE-015`'s third clause directly.
+- **A twin that stops being mechanical.** A response type that renames a field, flattens a
+  structure, or drops information the orchestration outcome carried is no longer a
+  transcription and no longer qualifies for `OD-GATE-011`'s legitimate-exception treatment.
+  This is the failure mode worth watching, and it is not detected by counting types.
+- **A wire break traced to an orchestration rename.** Would prove the separation the twin is
+  bought for was not actually held.
+- **`nomos-api` growing a second consumer of its own response types inside this workspace.**
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#16
+
+*revision: authored · kind: heading · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / What This Does Not Decide · hash: sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569*
+
+## What This Does Not Decide
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#17
+
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / What This Does Not Decide · hash: sha256:6c13cf1cc643c9b760e16ff5e26e35cc3cca9ea3b655acf607b56a69c8516a9c*
+
+Whether `nomos-api` should hold twenty-nine handlers at all -- `OD-HOST-012` takes that up.
+Whether the transport's four-method surface should grow. Neither depends on this answer.
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#18
+
+*revision: authored · kind: heading · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#19
+
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / Status · hash: sha256:f50b703cf0b53f3d515bb23503a88feb804a944925aec865f3b44eb7fea3a9dd*
+
+Accepted. Measured against a one-transport, four-method reality; the review's five-layer chain
+was checked and two of its layers do not exist. Revisit on a second transport that would depend
+on a contracts crate without depending on `nomos-api`, or on the first twin that stops being a
+mechanical transcription.
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#1
+
+*revision: authored · kind: heading · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone · hash: sha256:82d25b1f61f26587c70ebc55a18e6533ee759671ceb4c75c654b6e9d914d4dc3*
+
+# The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#2
+
+*revision: authored · kind: heading · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#3
+
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / Question · hash: sha256:f7e233bcdb0e346c1b42e733d1608101e4135d798b963f86fcb62bf28d25710f*
+
+An eighth-round external architecture review observed that `nomos-api` exports the `work` and
+`spec` handler families alongside `check`, `gate`, `correction`, `workflow` and `agent`, while
+`nomos-api-transport` keeps `work` and `spec` off the wire through a closed `ServedMethod`
+allowlist with tests that specifically reject `nomos.work.list` and `nomos.spec.commit`. It
+read this as logical separation achieved by downstream refusal rather than by ownership, and
+argued the need for such a test is itself evidence the dependency boundary is too broad.
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#4
+
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / Question · hash: sha256:8150928a83cc2ffc441879bb1400e6275f40aeaf95909cb219d784c7e76c88df*
+
+`OD-LEDGER-036` already holds that the work ledger is repository bootstrap machinery rather
+than a product workflow target, and `OD-HOST-006` already carries that record's trigger for the
+spec half. Neither decides where the handlers live.
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#5
+
+*revision: authored · kind: heading · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#6
+
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / What Was Measured · hash: sha256:a81c79b3fe299fb8e8ec7e6fb2d572034bb9706f2b82231d96d2ebec3ad2f5a6*
+
+**The split, counted.** `nomos-api` declares twenty-nine `pub fn Handle_*` entry points.
+Twenty-one are repo tooling -- eleven `Work` verbs and ten `Spec` verbs -- against eight
+product handlers: `Check_Run`, `Correction_Run`, three `Gate` verbs, `Workflow_Run`, and two
+`Agent` verbs. The crate is 72 percent repo tooling by handler count. The review's
+characterization is if anything understated.
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#7
+
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / What Was Measured · hash: sha256:b0a56eb2520a8a8b100f28e8dd0cb512a56621f74d7359025d02c554f02ba842*
+
+**The review's central inference is wrong, checked directly.** It reads the allowlist as a
+repo-tooling containment mechanism. `ServedMethod` has four variants: `GatePlan`, `GateRun`,
+`GateExplain` and `Correction`. It excludes `work` and `spec` -- and it also excludes
+`Check_Run`, `Workflow_Run`, `Agent_Execute` and `Agent_Judge_Role`, which are product
+handlers by any reading. The allowlist is not drawing the repo-tooling line. It is the
+frontier of what has been deliberately projected so far, exactly as `OD-HOST-007` describes,
+and `work`/`spec` are outside it along with four product verbs.
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#8
+
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / What Was Measured · hash: sha256:902cf0f3a40c609de3f2f7af1fbe567a2363f216328199d32add9da02018c024*
+
+**So the tests prove something narrower than the review claims.** A test rejecting
+`nomos.work.list` does not exist because a repo-tooling handler leaked into a product
+dependency. It exists because `ServedMethod` is a closed set and `OD-LEDGER-036` names these
+two families as ones that should never join it -- a permanent exclusion pinned by a test,
+inside a surface that is incremental for everything else.
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#9
+
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / What Was Measured · hash: sha256:e60701228eb59995c5e073955bd4db27c48b75f7c90072f2240d0440e5e4b5e2*
+
+**`OD-PACKAGE-015`'s test, applied.** A `nomos-repo-tooling-api` crate today would be depended
+on by `nomos-cli` alone. `nomos-cli` also depends on `nomos-api` for the product half, so no
+consumer would depend on one without the other. No independent versioning, no isolation
+boundary a module could not draw. All three clauses fail.
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#10
+
+*revision: authored · kind: heading · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#11
+
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / The Decision · hash: sha256:f154e2078094fc86350b175e1969612b8f45e73a4c97e39a635ae9b0d2eafc88*
+
+**The repo-tooling handlers stay in `nomos-api` for now, and the allowlist tests are
+reclassified rather than removed.**
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#12
+
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / The Decision · hash: sha256:3c58c69b3dc6005df7c67729baf9a9aeeea70979c38ea9d997f81bbcfecf50ac*
+
+The tests stand, and their stated meaning changes: they pin `OD-LEDGER-036`'s permanent
+exclusion, not a containment of leakage. A test asserting that `nomos.work.list` is unserved is
+asserting a decision about the product's boundary, which is worth pinning regardless of which
+crate the handler lives in.
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#13
+
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / The Decision · hash: sha256:15994f973081a96f5895f0c6bc3683d42a3537de231bc2aae66314988d1c9d2f*
+
+**The move is licensed the moment a second host wants the product half alone.** This is a
+`OD-PACKAGE-015` third-clause question and nothing else: when a consumer exists that needs
+`check`/`gate`/`correction`/`workflow`/`agent` and does not want twenty-one ledger and
+specification verbs compiled into it, the boundary is earned and the split should happen then.
+`nomos-mcp` and `nomos-lsp` are the two plausible candidates and neither is that consumer
+today, because both reach the product surface through `nomos-api-transport` rather than
+`nomos-api` directly.
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#14
+
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / The Decision · hash: sha256:6457e68240f27469be595144abb399c8921896b6f25139a97cbd02eee0b76b89*
+
+**What is refused explicitly.** Moving repo tooling to CLI-only, the review's third option, is
+refused on `OD-HOST-002`'s ground: a surface holds no state its canonical services cannot
+reconstruct, and `nomos work` and `nomos spec` have real orchestration seams whose whole point
+is that a host is not the only thing that can reach them. Deleting the API-side reach would
+re-privilege the CLI for a family that has already been de-privileged.
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#15
+
+*revision: authored · kind: heading · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / What Would Decide It Differently · hash: sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429*
+
+## What Would Decide It Differently
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#16
+
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / What Would Decide It Differently · hash: sha256:4a8b40e275798f41d72a139d76e26f015d6a13d141b4cc81203ce2a74b3dc697*
+
+- **A host depending on the product handlers alone**, which fires `OD-PACKAGE-015`'s third
+  clause and makes the split correct rather than speculative.
+- **A repo-tooling handler reaching the wire.** Would mean the exclusion failed and the
+  ownership boundary, not the allowlist, is what is needed.
+- **`ServedMethod` closing.** If the four product families outside the allowlist are all
+  projected and the surface stops being a frontier, the allowlist becomes a pure
+  repo-tooling boundary and the review's original reading becomes the correct one.
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#17
+
+*revision: authored · kind: heading · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#18
+
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / Status · hash: sha256:c5598213284e5cddc4540ee21dc2d670ba21897d2cda66ff08446fc40083e664*
+
+Accepted. The review identified a real asymmetry and misattributed its cause; the correction is
+that `ServedMethod` is an incremental frontier excluding four product verbs alongside the two
+repo-tooling families, not a containment line. Revisit on a second host wanting the product
+half alone.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 
@@ -34738,11 +35355,45 @@ proved by its own tests rather than by what it happens to catch today.
 
 ### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#38
 
+*revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / Amendment: The Rejection Stands, But Not On The Clause It Cites · hash: sha256:111bf0194295c9cc1b8a4430065c99b1caec20541c31de71d453337d421499a5*
+
+## Amendment: The Rejection Stands, But Not On The Clause It Cites
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#39
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / Amendment: The Rejection Stands, But Not On The Clause It Cites · hash: sha256:3fb44bd7d78286c1d5b3d1c4684f8854d44f09da546c365c0e020470edbee109*
+
+"What Was Considered And Rejected" rejects enumerating `docs/records` inside the store partly
+because "`FileSystem` has no directory listing to do it with -- `Read_To_String`,
+`Replace_Atomically` and `Exists` are the whole port". That sentence is now wrong twice. The
+port also has `Remove_File`, and `OD-PLATFORM-002` added `FileSystem::Read_Directory` on
+2026-09-05 (`P41-PLATFORM-DIRECTORY-ENUMERATION-3`, `093a0e4e`).
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#40
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / Amendment: The Rejection Stands, But Not On The Clause It Cites · hash: sha256:6d4e4d232d793bd6ad48d92893d8f818a035934cf450f74b01460600b66bd6f6*
+
+**The rejection is undisturbed, because this record already said the clause was not carrying
+it.** The same paragraph states the real ground explicitly: "the reason not to is not that it
+was out of this item's territory: it is decision 2's, that a general ledger should not become a
+repository scanner." That ground is untouched by the port gaining an operation. Had the
+directory-listing clause been load-bearing, this amendment would have had to reopen the
+rejection rather than merely correct it.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#41
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / Amendment: The Rejection Stands, But Not On The Clause It Cites · hash: sha256:1e0d7027ca270feaba2e7d96813311b14d2c7e75aa2d177966c752920fa431e4*
+
+Corrected under `P72-STALE-PLATFORM-DIRECTORY-CLAIM-2`. `OD-HOST-001`'s own amendment carries
+the measured population of the same overtaken clause and what it cost.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#42
+
 *revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#39
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#43
 
 *revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / Status · hash: sha256:42d4b0a0041e4a0ac6551f9c770da781419017924bbfd605f33824f93e2a6f55*
 
@@ -47172,20 +47823,215 @@ review keeps proposing ahead of a trigger that asks for it.
 
 ### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#55
 
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident · hash: sha256:23302e75c3e4562548f9b108c6130755b05059680941db64734b41d1d5f3a4dc*
+
+## Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#56
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident · hash: sha256:8cdfd5e7b58548ad11132fcf7edc8056a0edadfb7f1c361a80daaea3d22b5012*
+
+An eighth round of the same external review restates this record's central recommendation once
+more -- build the generalized analysis planner at P0, ahead of further rule work -- and adds
+four adjacent claims: that `RulePackage` ownership is inverted, that workflow dispatch is
+vendor-coupled, that the capability-contract crates are over-fragmented, and that the project
+should stop feature work for a consolidation phase. It also raises three questions this record
+does not reach, which became `OD-HOST-011`, `OD-HOST-012` and `OD-AGENT-004` rather than
+amendments here.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#57
+
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / The seventh amendment made a measurement error, and this one corrects it · hash: sha256:7c7e91efd0b492fce3579b58c4814620bd4d63998c78a7232884242d20afb6f7*
+
+### The seventh amendment made a measurement error, and this one corrects it
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#58
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / The seventh amendment made a measurement error, and this one corrects it · hash: sha256:a7a07814472a944564ebe489644e19c823b15d612a09f525b5e8217dc06bd3e6*
+
+The seventh amendment stated, under trigger 2: "no second selection axis exists anywhere in
+`nomos-check-orchestration` or `nomos-rules` -- no `ScopeSelector`, no per-request parameter
+beyond the one `OD-GATE-017` built."
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#59
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / The seventh amendment made a measurement error, and this one corrects it · hash: sha256:3eb845e24087cfa0bc2041ccb2ef1edd0302688929858ca9b8916ed869188490*
+
+**The parenthetical was false when it was written.**
+`crates/orchestration/nomos-gate-orchestration/src/policy/scope_selector.rs` exists, is a real
+`ScopeSelector` with `include`/`exclude` prefix lists and an `Is_In_Scope` predicate, is a field
+on `GateCommand`, and its file was last touched on 2026-08-30 by `P24-REGRESSION-ORCHESTRATION`
+-- a week before the seventh amendment was committed on 2026-09-06. `gate_plan.rs` dates it
+further back still, to `P13-GATE-014-SCOPE-RULE-`. It was not absent; it was not looked for
+outside the two crates the sentence named.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#60
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / The seventh amendment made a measurement error, and this one corrects it · hash: sha256:5cacd2f4d1805c79fc12c956e7153f41c9475647ec928bed1fd494d6748c8fa4*
+
+**And it is reached by real callers narrowing real work, not carried and ignored.**
+`nomos-cli::gate::parsing` turns repeated `--include`/`--exclude` arguments straight into
+`ScopeSelector`'s two lists; `nomos-api-transport::gate_parameters` parses the same selector off
+the wire. `crates/host/nomos-cli/tests/gate_orchestration_seam.rs` pins the ordering that
+matters: `Run_Gate` "scopes the walk before ever calling `nomos_check_orchestration::Run`", and
+a scope admitting nothing reports the same `ExitCode::Vacuous` an empty walk does. So the work
+removed is removed ahead of the judging seam rather than filtered out of its results afterward.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#61
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / The seventh amendment made a measurement error, and this one corrects it · hash: sha256:0fb2f3b29673e7953f0b4f386ff56b12c848fd00aad9883966fc1d4694e998ed*
+
+**The trigger it was supporting is nevertheless still unfired, for a better reason than the one
+given.** `ScopeSelector` narrows *sources*, not rules: `gate_environment::Scoped_Sources`
+filters a `Vec<SourceFile>` before `Run` is ever called, and every selected rule still runs
+over every source that survives. No rule runs for some invocations and not others, which is
+trigger 2's actual wording ("a rule meant to run for *some* check invocations and not others").
+The narrow claim -- that no second axis exists *inside* `nomos-check-orchestration` -- is true.
+The bare claim that no `ScopeSelector` exists was not.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#62
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / The seventh amendment made a measurement error, and this one corrects it · hash: sha256:635cd9f3c2259ea2de5de027da638cf6a89387fa8b985fd1e13a724d449c32fc*
+
+This cuts the way this record already goes, and more sharply than the sentence it replaces. A
+real second selection axis was added to this workspace, by a real caller, and it was
+implemented as one `filter` over a vector ahead of the judging seam. That is a second axis
+arriving *without* a planner underneath it, which is stronger evidence for this record's
+standing decline than the absence the seventh amendment claimed.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#63
+
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / The other three triggers, measured at this round · hash: sha256:409e4c7559ad2ef256c9725d6a1bb0c69b52e3c14253c31a7a95850e1f160955*
+
+### The other three triggers, measured at this round
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#64
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / The other three triggers, measured at this round · hash: sha256:498179da6da99909f89a1c3cc043cb7294d53c369ffc8635236b1b8195a32c00*
+
+**Trigger 1 (selection creating unread work)** fired once and was answered narrowly by
+`OD-GATE-017`; unchanged. The registry-versus-`Run` divergence the sixth amendment found is
+still closed by derivation from `DESCRIPTORS`.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#65
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / The other three triggers, measured at this round · hash: sha256:2cdb4e3bfde71e820bc54e23f6a77409066854439f7be1b0c53bd333079a560a*
+
+**Trigger 3 (a materialization step costing real wasted work)** is decided, not tracked:
+`P33-RULES-019-RECORD` declined a shared `standards.json` read, and independent parsing is the
+accepted cost.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#66
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / The other three triggers, measured at this round · hash: sha256:71663054e084f0a6c9145ee178b68bc3fff4e01400200b518cb30299aa5f7ef3*
+
+**Trigger 4 (a diverging capability population)** moved by exactly one, and the seventh
+amendment's count of it is now stale. `crates/capabilities/` holds **eleven** crates, not the
+ten it recorded: `nomos-cap-requirement-trace` joined via
+`P42-REQUIREMENT-TRACE-STALENESS-RULE-2`. One crate in a family of ten is not divergence
+resuming, and `OD-PACKAGE-015` already governs whether that family's boundaries are earned at
+all.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#67
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / The other three triggers, measured at this round · hash: sha256:fc27df3d3719f5372f11b9d1d811603c066871fc1f4968b9f6f166dca3d0573a*
+
+**The population absorbed better again.** `nomos-rules` exports **eighty-six** `Check_*`
+functions against `DESCRIPTORS`, `Declared_Rules`, `Registered` and `Composed_Rules` holding
+together at **seventy** -- `run_context.rs`'s `RULE_COUNT` reads 70, against the 66 the seventh
+amendment measured. Sixteen of eighty-six sit additive and unwired, down from nineteen of
+eighty-five. Four rules were composed in since the last round, and the four synchronized
+authorities stayed synchronized without anything being hand-maintained into agreement.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#68
+
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / What this round's five overlapping claims are worth · hash: sha256:b390d7f9d73dafa5efb3a045be841364f24645ddc40cc9010e01c6806b881962*
+
+### What this round's five overlapping claims are worth
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#69
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / What this round's five overlapping claims are worth · hash: sha256:40c750efbd7aa5d89f468421dea610db23c1e966d746fb4734389a4eb6a2827e*
+
+All five are restatements. The planner case is this record's own subject, eight rounds running.
+The `RulePackage` claim describes `declared_rules.rs` accurately -- one `PackageVersion` for the
+set, `AlwaysSupported` across the board, `NO_STATED_FLOOR` capability requirements -- but reads
+as concealment what that module states in its own doc comments as deliberate, each with its
+reason and one with an openly named gap (`OD-PACKAGE-008`'s structurally-partial rule, for which
+`RuleDescriptor` carries no field). The vendor-coupling claim describes `Body` accurately and is
+answered at the site by `OD-EXECUTOR-001`, `OD-EXECUTOR-004` and `OD-PACKAGE-013`, whose shared
+trigger -- a second instance of either role -- has not fired: the population is one
+`AgentExecutor` and one `ModelBackend`. The crate-granularity claim proposes a boundary test
+`OD-PACKAGE-015` already states, including the isolation clause the review presents as missing.
+The consolidation freeze is the recommendation `OD-ROADMAP-001` has now declined five times.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#70
+
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / What the round actually produced, which was not an architectural argument · hash: sha256:d7162ae793187cf6ba4bfdd31d8e4f93884e7d33acf8885774cb967435606029*
+
+### What the round actually produced, which was not an architectural argument
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#71
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / What the round actually produced, which was not an architectural argument · hash: sha256:abb60f96709eb53dc7e8c5b6f1d14b72f0aca51f394a3e440314efadafa9719f*
+
+Its sixth point asserted that source-tree walking is duplicated between `nomos-cli` and
+`nomos-api` because "the platform port does not expose directory enumeration", and advised
+against adding a listing operation to `nomos-platform`.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#72
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / What the round actually produced, which was not an architectural argument · hash: sha256:61ef2d8f3bc91587efbc6434f5cd61defaa87ed94837759a0aee42577be0357c*
+
+**The duplication is real and the stated reason was false.** `OD-PLATFORM-002` gave `FileSystem`
+a `Read_Directory` on 2026-09-05, one day before the review. The reviewer did not invent the
+premise: it was read out of this workspace's own module documentation, which had restated it at
+fifteen sites across eight crates and one test crate, plus `OD-HOST-001`, `OD-HOST-002` and
+`OD-LEDGER-025`, none of which had been updated. `nomos-surface-provenance::discovery` quoted
+the false sentence out of another module as its own stated authority. Two sites enumerated the
+port's operations by name and were wrong about its shape rather than about one operation.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#73
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / What the round actually produced, which was not an architectural argument · hash: sha256:137c8468556c35aa2da843ce534393a97808e06866fff95db0b611cd5b8a0bce*
+
+So the eighth round's contribution to this workspace was to act as an unintentional detector for
+`OD-GATE-011`'s defect class, and to demonstrate its cost in the most legible form available: an
+outside reader, reasoning carefully from committed documentation, reached a recommendation that
+was wrong because the documentation was. `P72-STALE-PLATFORM-DIRECTORY-CLAIM` and its two
+follow-ups corrected all fifteen sites and all three records. `OD-AGENT-004` takes up whether
+restating a reason rather than routing to it is the underlying defect.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#74
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: An Eighth Round, Whose Architectural Case Is Unchanged And Whose Real Contribution Was Finding Stale Prose By Accident / What the round actually produced, which was not an architectural argument · hash: sha256:f11dbe088580613fe194cee536b441dbb911436c200620a87b23ae037ba99c7c*
+
+**Neither the round's proposal nor its evidence fires a trigger this record does not already
+track.** Eight rounds in, the pattern holds without exception: what this workspace finds under
+the review's banner gets fixed at the site where the problem actually is -- a stale clause, a
+divergent registry, a duplicated parse -- and never by the standing abstraction the review keeps
+proposing ahead of a trigger asking for it. The decline stands.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#75
+
 *revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#56
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#76
 
-*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:190c0d24193a066dc92fa1bc72cf8672aac07201c8b116741343080302c7d5b2*
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:f73f67a046b2b3d950e63555aabc363e13c5c2d40a971a02441667b38ae21709*
 
 Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`; the fourth
 fired once, via `Check_Cross_Language_Correspondence`, arguing against the planner on its own
 terms. The third trigger fired once, narrowly, via the repo-policy family's duplicated
 `standards.json` reads, and is now decided: `P33-RULES-019-RECORD` declined a shared read,
-leaving independent parsing as the accepted cost. The second remains unfired through seven
-rounds. The registry-versus-`Run` divergence `OD-GATE-020` measured is closed, not merely decided
+leaving independent parsing as the accepted cost. The second remains unfired through eight
+rounds, but not for the reason the seventh amendment gave: a real `ScopeSelector` has existed in
+`nomos-gate-orchestration` since well before that amendment denied one, and narrows *sources*
+ahead of `Run` rather than varying which rules participate — a second axis that arrived without
+a planner underneath it, which the eighth amendment corrects and reads as evidence for this
+decline rather than against it. The registry-versus-`Run` divergence `OD-GATE-020` measured is closed, not merely decided
 narrowly: `nomos-gate-orchestration::composition::Registered` derives from `nomos_rules::
 DESCRIPTORS` directly and is pinned against `Composed_Rules` by a real test, the same shape
 `Declared_Rules()` already used against `Composed_Rules()` on the `nomos-check-orchestration`

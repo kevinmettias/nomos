@@ -13,9 +13,9 @@
 //! Three things now, since composing the registry, ingesting the walk and judging it live
 //! in `nomos-check-orchestration`:
 //!
-//! 1. walk the tree — [`sources::Walked_Sources`] — because no [`nomos_platform::FileSystem`]
-//!    directory-listing port exists, the same exception `nomos-cli::work::
-//!    Published_Records` already has;
+//! 1. walk the tree — [`sources::Walked_Sources`] — because the walk is recursive and
+//!    [`nomos_platform::FileSystem`]'s `Read_Directory` is one level by `OD-PLATFORM-002`'s
+//!    own floor; that function's own doc is the authority on the difference;
 //! 2. read what this binary was compiled as — [`composition::Host_Variant`] — because
 //!    `env!` resolves against the crate that calls it and cannot be read correctly from
 //!    inside the orchestration crate;

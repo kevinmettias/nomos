@@ -109,9 +109,10 @@ pub struct RunContext<'a, Launcher: ProcessLauncher, Fs: FileSystem>
 /// runs at all, not only whether its finding counts toward a disposition
 /// `nomos_gate_orchestration::RuleSelector` narrows after the fact.
 ///
-/// `sources` is the walk, already done -- this crate has no [`nomos_platform::FileSystem`]
-/// port to walk a directory through, the same reason `nomos-cli::check::sources::Walked`
-/// stayed in the composition root. `context.variant` is what that root's own binary was
+/// `sources` is the walk, already done -- `nomos-cli::check::sources::Walked_Sources` stayed
+/// in the composition root, and its own doc carries the current reason:
+/// [`nomos_platform::FileSystem`]'s `Read_Directory` is one level by `OD-PLATFORM-002`'s own
+/// floor, not a traversal. `context.variant` is what that root's own binary was
 /// compiled as, read through `env!` there because that macro resolves against the
 /// *compiling* crate and cannot be read correctly from this one. `context.root` is the
 /// tree `sources` was walked from -- carried separately because the dependency-edges,

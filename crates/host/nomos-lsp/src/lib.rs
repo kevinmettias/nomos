@@ -5,9 +5,10 @@
 //! Every finding published here was judged by `nomos_check_orchestration::Run`, the
 //! identical seam `nomos-cli::check` and `nomos-correction-orchestration::run` already call
 //! -- this crate adds a walk (`sources.rs`, a third copy of the same shape those two
-//! crates' own composition roots each carry, since `nomos-check-orchestration` has no
-//! `nomos_platform::FileSystem` port to walk a directory through) and a translation
-//! ([`file_diagnostic::Diagnostics_For`]) from [`nomos_contracts::Finding`] to
+//! crates' own composition roots each carry, since `nomos-check-orchestration` composes no
+//! [`nomos_platform::FileSystem`] and the port's own `Read_Directory` is one level) and a
+//! translation ([`file_diagnostic::Diagnostics_For`]) from [`nomos_contracts::Finding`] to
+//! [`lsp_types::Diagnostic`], never a second judgment.
 //! [`lsp_types::Diagnostic`], never a second judgment.
 //!
 //! # What "walk outward from a diagnostic" answers today, and what it does not

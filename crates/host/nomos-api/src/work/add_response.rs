@@ -72,9 +72,11 @@ impl AddResponse
 /// Every file this repository has already published as a decision record, as a `Territory`
 /// -- a deliberate twin of `crates/host/nomos-cli/src/work.rs`'s own `Published_Records`,
 /// not a shared dependency of it, the same "a walk is a composition-root concern"
-/// `crate::sources` already documents for Gate's own walk. `nomos_platform::FileSystem` has
-/// no directory-listing operation, so `nomos_work_orchestration::Run`'s own `published`
-/// closure exists precisely so each composition root can answer this its own way.
+/// `crate::sources` already documents for Gate's own walk. `nomos_work_orchestration::Run`'s
+/// own `published` closure exists precisely so each composition root can answer this its own
+/// way. Unlike the recursive source walk, this listing is one level, so routing it through
+/// `OD-PLATFORM-002`'s `Read_Directory` is a real available increment rather than the
+/// impossibility this doc claimed before that operation existed.
 ///
 /// An unreadable or absent `docs/records` yields `Territory::Empty()` rather than refusing --
 /// the one judgement worth stating here, because this repository's usual rule is the

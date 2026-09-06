@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:0141d47773f9a160a9d69176258e7eef3a21bda90f2efb476d8499e80b4d5ad5",
-  "inputs_digest": "sha256:b233dc209901aced0920d7c0dc9ccde79f3367d75cbc51db4f800705a4048ba4",
+  "content_digest": "sha256:4d9dd7cb1a5dfa5546b2ab7e75e2f0f8bd32a3f9e0dc8d454a899558d82f4a21",
+  "inputs_digest": "sha256:dbd6ca0844f46e0327c779c7ad291743b6bbaebc312b99c33a6d7758e522f092",
   "sections": [
     [
       "Documents",
-      212
+      215
     ],
     [
       "Sections",
-      1715
+      1742
     ],
     [
       "Source blocks",
-      5943
+      6034
     ]
   ],
   "inputs": [
@@ -124,6 +124,11 @@
       "content": "documents",
       "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md@authored",
       "hash": "sha256:9f320881faa41b945d440f86e3851dad8c56f5564b27d481fa52b9a4c8fd84aa"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md@authored",
+      "hash": "sha256:4c1a7d4d9fd912f4d715f4e634da7039d2ed6a5dc82be4a2f46ca2bccffb12ff"
     },
     {
       "content": "documents",
@@ -468,12 +473,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored",
-      "hash": "sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012"
+      "hash": "sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored",
-      "hash": "sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef"
+      "hash": "sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40"
     },
     {
       "content": "documents",
@@ -509,6 +514,16 @@
       "content": "documents",
       "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md@authored",
       "hash": "sha256:68d1d753054542c6d8e57a0ce6d40c300f5bc598959791a06ca99ec7514b97e8"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md@authored",
+      "hash": "sha256:361139ee1bbe26b54f84f93988dbf0ccf3488045465fa4f1558161c02d48ba8b"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md@authored",
+      "hash": "sha256:1f5a1bfd574bfb0b43f9b1b360bd932f8c620d390cb1eb9a0931804fbc9d76db"
     },
     {
       "content": "documents",
@@ -633,7 +648,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored",
-      "hash": "sha256:eb130f220e8857ef4f36ac411db06e950f6210ff703608149af6925e7fc60640"
+      "hash": "sha256:912850b32803e66cc7c192ad341c167ffdb7000ec320965300d3ddd027f230c8"
     },
     {
       "content": "documents",
@@ -868,7 +883,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored",
-      "hash": "sha256:defa3294df3aba7c74ba108ccbf6d69ba6788c0e13cf9b908c1f490c06743a46"
+      "hash": "sha256:bb390d2976a56fcf195f29cd1e73ab108464ff25aab02fac64daa3d9b736bb24"
     },
     {
       "content": "documents",
@@ -1834,6 +1849,36 @@
       "content": "headings",
       "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#14",
       "hash": "sha256:3db2eff38700e4f6d331abc2d019b60dbf43900c2546c8e6a0d0c8dbd2c2e78d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#1",
+      "hash": "sha256:fbbec9c2525aa5fd8f3f2612fda44cbece62d96ef8bae1b7487637c9a6a39849"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#2",
+      "hash": "sha256:1bba7ce7f17a593f7dbe96b80c0643548d401e0f53b9dc90f8a8e9eaa1dd7dc8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#5",
+      "hash": "sha256:d98696085c0c20453c1b56828c64fd01fda7e828aeef25a5520e13604b48eb76"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#12",
+      "hash": "sha256:9d721de054068707b48ee8c67d8e78fd972990ee10e680ef4238983d7e85fa87"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#18",
+      "hash": "sha256:2dddcb983c2d6c5da0a3141b1cb4c03afb36bdd95b539ef85e27a013c5c96d28"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#20",
+      "hash": "sha256:9bf8189de3041f319720bf0bd2c8041cf14dbe4653eefac0bb6aae6ce2038e01"
     },
     {
       "content": "headings",
@@ -4567,6 +4612,11 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#17",
+      "hash": "sha256:861b584e2cc9c8a646d999e6cf7d0e59c87f8c05c16f03ec748729ba608fcb3c"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1",
       "hash": "sha256:d812f1f24d28e399110f5076c869c99a9f9cce1e2a77fb762c8b1879a023e57b"
     },
@@ -4604,6 +4654,11 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#34",
       "hash": "sha256:97e7b4648a86515c39686e355d698cf9a3fe7598a243f16895d243a591c73efb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#37",
+      "hash": "sha256:891317193081bd83c41d42d5604b4edb05a898ee0424a9878bb9aa5ff7aefb3e"
     },
     {
       "content": "headings",
@@ -4814,6 +4869,71 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#22",
       "hash": "sha256:ef726778b77e1a958527a3cba3f07fd428d0d362366dd739d34604b5bbfbb718"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#1",
+      "hash": "sha256:55f0035aa26618356db401b0ddefea6f503c215417873c357b991811a5a7eccc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#2",
+      "hash": "sha256:9d5dbe309c5738afb2671fb9f4c68906773a18be29b117e2e49c58105aa0a006"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#5",
+      "hash": "sha256:1ccb998ee082f75b3c67ffee3c1b02940c3187df380a1b9de72c080b45b82d53"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#10",
+      "hash": "sha256:8594469aec30b3267caf1edc71f5960e34c111a945fbf7806f201fcec251c624"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#14",
+      "hash": "sha256:6d32f0b106e72bea6032c7923e42127ba661960e809209c59d6873281dbda7bd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#16",
+      "hash": "sha256:5e13f78feb83991655a86a773c0f8d93e52df44253f4e8673fa4c694d36100a0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#18",
+      "hash": "sha256:b7ac70ac202ba207c676d3195b5a208d2beb87337e7fb7a13471625aa0b981f2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#1",
+      "hash": "sha256:5656a3d38902d839d4ad5ed2b7761359376cdab6e09c361cf6e5b82a824385ea"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#2",
+      "hash": "sha256:edb37552e707bac91a798402f89670cdda35736480b67541a6671e8fa97001c5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#5",
+      "hash": "sha256:f76b2a2d05ac03d76086485fda090e98915a400f3185ed4dccbf75bbfff39889"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#10",
+      "hash": "sha256:5fe9511a592a4c613180b77cd4255609db75421ec35055a62ca8bc21675cef6b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#15",
+      "hash": "sha256:ae0bccb8b778f748d4ad134de95bd596a3fca2e9df77f0ac85f5a09d2159635c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#17",
+      "hash": "sha256:8db6490375a97e6fc820063e99337b8526d2da2d882a9028a62337f2d1a9d7c4"
     },
     {
       "content": "headings",
@@ -6133,7 +6253,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#38",
-      "hash": "sha256:5d6370ab9e2806729f79a8df8988700a00b59d9b5f3cfc0bd64a1dac14de7b4f"
+      "hash": "sha256:a6817ce25b108618178eae6f2759ce0a6696e8532b7b7b0bea4fd0dad7ac7f09"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#42",
+      "hash": "sha256:452419d797fc40fe610e8175ea35a8dfdc3a6260addd81ec1aa6cdaff29906cc"
     },
     {
       "content": "headings",
@@ -7973,7 +8098,32 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#55",
-      "hash": "sha256:0e0d335f47d233f0064db48278fd51e8eb517965ab63bb5e00207833d5686cd8"
+      "hash": "sha256:dc9c95f9a2093fa3b44ef12ee62e1b1f775274e17b13ad0d33aea9b95c5838ef"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#57",
+      "hash": "sha256:c22253be1c5cbf0e40e2330766e0595018c7fddf4e527a64ef68664b909f40bd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#63",
+      "hash": "sha256:9a876f9cf1d90db99e52ce2b3f11a42186e82a60c314e91ce1a4ddb787dacf64"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#68",
+      "hash": "sha256:10b6304d7075a73f8b715709d1298796716fe61d32594f56a937a91610b77c7c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#70",
+      "hash": "sha256:7b42eb5ae6442428a7e619bee2ba7bcf965a10127c1f5f1f8e3e337bdad72cca"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#75",
+      "hash": "sha256:8e3aacc927630907d48d11963e51430438be8d1d1b050da321d292b2454dad54"
     },
     {
       "content": "headings",
@@ -12264,6 +12414,111 @@
       "content": "blocks",
       "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#15",
       "hash": "sha256:88a5dfc67c9731d184b4ee4ddf8f58fbe5ed1fa4b0fbc6ff5a6b4873317abbbd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#1",
+      "hash": "sha256:26cb8e26e2b493bcb2b5a49b1bbf65b56b472429332f05d4b30b7f632888474e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#3",
+      "hash": "sha256:a8ba93f95f0c4d4e719264a9a7587c8c5da7b334afc7ab2206dd236e582beaa3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#4",
+      "hash": "sha256:220269da81f012ae1777795214e188e1f891a4ea1a2777b29e5f1edb453c6338"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#6",
+      "hash": "sha256:34b6ac8cb8b656b6812402f08bc6894f26cbf6cb3b920583890e05672e0f552a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#7",
+      "hash": "sha256:b0cbf3ad9e0314a97c45adbbf70ab3c7d63058597e5940415e8e920364427d17"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#8",
+      "hash": "sha256:070853ef9d2a7321f63268422f02f57e21fbb47a921a6b1092e486fc6b7dcc55"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#9",
+      "hash": "sha256:1da835ba759d01bfe9cdf5ad072b3f12d1a417d48d3891445bd9e205add76e3d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#10",
+      "hash": "sha256:c7aa82a80afdbee86d6667cdf064300a9e376b53f9cee82ecfdc90775b4e125a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#11",
+      "hash": "sha256:951173f53afe3d1216ecc10c1783e8fd767d9782ac5df93b6e74bed091c59d8c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#12",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#13",
+      "hash": "sha256:00e5af89c95477277b19e0ce05830726904cc9f00af16f1adfa78d1cfced9103"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#14",
+      "hash": "sha256:014fce5b03e3f16ac63503bb98c9a2767027e4623f6e5ed85452fbbda28e1ba9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#15",
+      "hash": "sha256:353cdb0ab792f29067632043d6b6a5b68c72869135ddc3274fe4416483256677"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#16",
+      "hash": "sha256:89476f5b0635763ab03da43dce7c8c7fd5aba603b2d3e170d53383f1371705f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#17",
+      "hash": "sha256:1bbac67404d23dddf6dd4e3d14913943238a89eea9f37eaa3e4fa26a76c9fd72"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#18",
+      "hash": "sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#19",
+      "hash": "sha256:c07f35a8d05149fe83363ea3e9ab93fe191fc44a297988d2f2c2df60d9428611"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#20",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#21",
+      "hash": "sha256:c0ac4ea0ebfaa46a73db63d6b3359f0c7832218c78ef1b0435be71cfcd084192"
     },
     {
       "content": "blocks",
@@ -21487,6 +21742,31 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#17",
+      "hash": "sha256:7042fa8dbf13528baceac7627a349605c69a52c236d3e4c1e224dd7f0a70c88a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#18",
+      "hash": "sha256:f36d000f95db74af4a58d5b547ab14fa04e8b023c80c3031027451c63840b5ed"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#19",
+      "hash": "sha256:60cf5ad7fdc870ca0a833151896133c32e55e67b8cb8d81155f42989a378fe99"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#20",
+      "hash": "sha256:fb817b245ea8a60f59c78c26bce1800eae1a7483a459835a8cbbb20ec414fb8b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#21",
+      "hash": "sha256:f2f758564d15e77791dc5c15ac6e96d52e4bffaef79b3a02b9df7287d054aa32"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1",
       "hash": "sha256:ff96854272e6fbdd3589108df8cac6977db4f8054761d6152cdb0341047b380c"
     },
@@ -21664,6 +21944,26 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#36",
       "hash": "sha256:e325a7cfa0d0bdd76c7f709ad942d9840a18b343f0e20ee7d19b84ee41a7f61f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#37",
+      "hash": "sha256:b2e902a2ff9e056fef45496205c02335d249f61836fb8877ee3c0fadee8af2f8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#38",
+      "hash": "sha256:fc876b0ea110531422d41d7ee62b9e2406250fb31dd6a6fd407269c8a38dd4e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#39",
+      "hash": "sha256:7d579ab34e1e0eddad3c047b80a4cc5dbcc9a704f3f1223770d545277c2b6dc9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#40",
+      "hash": "sha256:028ac6da5f2650232c948cc9152701d3e71ceb94de48515082f62c394fd45bc8"
     },
     {
       "content": "blocks",
@@ -22369,6 +22669,191 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#23",
       "hash": "sha256:54038a099a226b53d3362aab4cf8c355ea04f81733b1b767567f82b6159074dc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#1",
+      "hash": "sha256:8dcf8794cf3170eccd40314322dc0122cd4545401c54734be3cec040e4efb0e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#3",
+      "hash": "sha256:00c18de92099a66f33baa9fc42f90263af19d3464d286217712b49513fdfb279"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#4",
+      "hash": "sha256:f86a07d8de19e3799ce3f1c3810ee0c58ca092e77a17acdc3d59af74b2855335"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#6",
+      "hash": "sha256:b35755513647548c909918bb2d9079453b0a4667a29c66be5f38fa96f192929e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#7",
+      "hash": "sha256:2009ff2601ac0c76b5291b8a00a3817353956686861476262c29dca983133ad7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#8",
+      "hash": "sha256:6bd5a5ff097547430ae5934e2cc8f2d929bd20625e7687420a7dce724973c6eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#9",
+      "hash": "sha256:db60453bcd1b1438a978ea86cf731dd6ca70525a12374a0d4a849e9d94c87396"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#10",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#11",
+      "hash": "sha256:1410a1c21c0335787fa09e85316f3acdd6944ad31d962dd4dfe9815650d2f7e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#12",
+      "hash": "sha256:9f99e4dfec3b9d3f975cff1827aaded850be0ba4fcd30ea258dedd2cfd5e93e3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#13",
+      "hash": "sha256:1012d75279e21433864c2cb625648ed6699618ebad483a3a8634690e294b425c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#14",
+      "hash": "sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#15",
+      "hash": "sha256:a17a4ea5698273ac69c39abdab33b264cfa8041eec3ed3e9cbe1ddf3d427e398"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#16",
+      "hash": "sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#17",
+      "hash": "sha256:6c13cf1cc643c9b760e16ff5e26e35cc3cca9ea3b655acf607b56a69c8516a9c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#18",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#19",
+      "hash": "sha256:f50b703cf0b53f3d515bb23503a88feb804a944925aec865f3b44eb7fea3a9dd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#1",
+      "hash": "sha256:82d25b1f61f26587c70ebc55a18e6533ee759671ceb4c75c654b6e9d914d4dc3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#3",
+      "hash": "sha256:f7e233bcdb0e346c1b42e733d1608101e4135d798b963f86fcb62bf28d25710f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#4",
+      "hash": "sha256:8150928a83cc2ffc441879bb1400e6275f40aeaf95909cb219d784c7e76c88df"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#6",
+      "hash": "sha256:a81c79b3fe299fb8e8ec7e6fb2d572034bb9706f2b82231d96d2ebec3ad2f5a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#7",
+      "hash": "sha256:b0a56eb2520a8a8b100f28e8dd0cb512a56621f74d7359025d02c554f02ba842"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#8",
+      "hash": "sha256:902cf0f3a40c609de3f2f7af1fbe567a2363f216328199d32add9da02018c024"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#9",
+      "hash": "sha256:e60701228eb59995c5e073955bd4db27c48b75f7c90072f2240d0440e5e4b5e2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#10",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#11",
+      "hash": "sha256:f154e2078094fc86350b175e1969612b8f45e73a4c97e39a635ae9b0d2eafc88"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#12",
+      "hash": "sha256:3c58c69b3dc6005df7c67729baf9a9aeeea70979c38ea9d997f81bbcfecf50ac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#13",
+      "hash": "sha256:15994f973081a96f5895f0c6bc3683d42a3537de231bc2aae66314988d1c9d2f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#14",
+      "hash": "sha256:6457e68240f27469be595144abb399c8921896b6f25139a97cbd02eee0b76b89"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#15",
+      "hash": "sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#16",
+      "hash": "sha256:4a8b40e275798f41d72a139d76e26f015d6a13d141b4cc81203ce2a74b3dc697"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#17",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#18",
+      "hash": "sha256:c5598213284e5cddc4540ee21dc2d670ba21897d2cda66ff08446fc40083e664"
     },
     {
       "content": "blocks",
@@ -27373,11 +27858,31 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#38",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:111bf0194295c9cc1b8a4430065c99b1caec20541c31de71d453337d421499a5"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#39",
+      "hash": "sha256:3fb44bd7d78286c1d5b3d1c4684f8854d44f09da546c365c0e020470edbee109"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#40",
+      "hash": "sha256:6d4e4d232d793bd6ad48d92893d8f818a035934cf450f74b01460600b66bd6f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#41",
+      "hash": "sha256:1e0d7027ca270feaba2e7d96813311b14d2c7e75aa2d177966c752920fa431e4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#42",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#43",
       "hash": "sha256:42d4b0a0041e4a0ac6551f9c770da781419017924bbfd605f33824f93e2a6f55"
     },
     {
@@ -33868,12 +34373,112 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#55",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:23302e75c3e4562548f9b108c6130755b05059680941db64734b41d1d5f3a4dc"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#56",
-      "hash": "sha256:190c0d24193a066dc92fa1bc72cf8672aac07201c8b116741343080302c7d5b2"
+      "hash": "sha256:8cdfd5e7b58548ad11132fcf7edc8056a0edadfb7f1c361a80daaea3d22b5012"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#57",
+      "hash": "sha256:7c7e91efd0b492fce3579b58c4814620bd4d63998c78a7232884242d20afb6f7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#58",
+      "hash": "sha256:a7a07814472a944564ebe489644e19c823b15d612a09f525b5e8217dc06bd3e6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#59",
+      "hash": "sha256:3eb845e24087cfa0bc2041ccb2ef1edd0302688929858ca9b8916ed869188490"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#60",
+      "hash": "sha256:5cacd2f4d1805c79fc12c956e7153f41c9475647ec928bed1fd494d6748c8fa4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#61",
+      "hash": "sha256:0fb2f3b29673e7953f0b4f386ff56b12c848fd00aad9883966fc1d4694e998ed"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#62",
+      "hash": "sha256:635cd9f3c2259ea2de5de027da638cf6a89387fa8b985fd1e13a724d449c32fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#63",
+      "hash": "sha256:409e4c7559ad2ef256c9725d6a1bb0c69b52e3c14253c31a7a95850e1f160955"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#64",
+      "hash": "sha256:498179da6da99909f89a1c3cc043cb7294d53c369ffc8635236b1b8195a32c00"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#65",
+      "hash": "sha256:2cdb4e3bfde71e820bc54e23f6a77409066854439f7be1b0c53bd333079a560a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#66",
+      "hash": "sha256:71663054e084f0a6c9145ee178b68bc3fff4e01400200b518cb30299aa5f7ef3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#67",
+      "hash": "sha256:fc27df3d3719f5372f11b9d1d811603c066871fc1f4968b9f6f166dca3d0573a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#68",
+      "hash": "sha256:b390d7f9d73dafa5efb3a045be841364f24645ddc40cc9010e01c6806b881962"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#69",
+      "hash": "sha256:40c750efbd7aa5d89f468421dea610db23c1e966d746fb4734389a4eb6a2827e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#70",
+      "hash": "sha256:d7162ae793187cf6ba4bfdd31d8e4f93884e7d33acf8885774cb967435606029"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#71",
+      "hash": "sha256:abb60f96709eb53dc7e8c5b6f1d14b72f0aca51f394a3e440314efadafa9719f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#72",
+      "hash": "sha256:61ef2d8f3bc91587efbc6434f5cd61defaa87ed94837759a0aee42577be0357c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#73",
+      "hash": "sha256:137c8468556c35aa2da843ce534393a97808e06866fff95db0b611cd5b8a0bce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#74",
+      "hash": "sha256:f11dbe088580613fe194cee536b441dbb911436c200620a87b23ae037ba99c7c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#75",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#76",
+      "hash": "sha256:f73f67a046b2b3d950e63555aabc363e13c5c2d40a971a02441667b38ae21709"
     },
     {
       "content": "blocks",

@@ -51829,7 +51829,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "OD-RULES-009 has declined the generalized analysis planner across eight rounds of the same external review, most recently in its eighth amendment at this item's own occasion. The item's dependency edge is mechanically stale (P41-RULE-DECLARES-ITS-REQUIREMENTS-5 is Done), but repointing it to ready would put an artifact on the board that a governing record refuses. Three of the record's four triggers are unfired and the fourth is decided; the concrete cases that would revive this are named in OD-RULES-009's What Would Decide It."
+        }
+      },
       "depends_on": [
         "P41-RULE-DECLARES-ITS-REQUIREMENTS"
       ],
@@ -51847,7 +51851,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-review8",
+        "declined_at": 1788718896
+      }
     },
     {
       "id": "P41-APPLICABILITY-IN-THE-PLAN",
@@ -59392,14 +59399,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-review8",
-        "acquired_at": 1788718011,
-        "lease_expires_at": 1788728811
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -59411,7 +59414,29 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "ed out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-connector-coderabbit v0.1.0 (F:\\repos\\nomos\\crates\\connectors\\nomos-connector-coderabbit)\n   Compiling nomos-lang-go v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-go)\n   Compiling nomos-repo-policy v0.1.0 (F:\\repos\\nomos\\crates\\repository\\nomos-repo-policy)\n   Compiling nomos-lang-rust-deny v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-deny)\n   Compiling nomos-lang-rust-cargo v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-cargo)\n   Compiling nomos-lang-rust-clippy v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-clippy)\n   Compiling nomos-lang-rust-package v0.1.0 (F:\\repos\\nomos\\crates\\packages\\nomos-lang-rust-package)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n   Compiling nomos-lang-go-package v0.1.0 (F:\\repos\\nomos\\crates\\packages\\nomos-lang-go-package)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.29s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-52ed58db35d2deab.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-c6f56ff29c8620ea.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-190d626778b28abc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788718945,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fb732272a531d0b2b913596e9496a98e518c850f"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -59430,14 +59455,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-review8",
-        "acquired_at": 1788718011,
-        "lease_expires_at": 1788728811
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -59447,7 +59468,27 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 15 tests\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788719048,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fb732272a531d0b2b913596e9496a98e518c850f"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -59467,14 +59508,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-review8",
-        "acquired_at": 1788718011,
-        "lease_expires_at": 1788728811
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -59484,7 +59521,27 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 15 tests\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788719075,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fb732272a531d0b2b913596e9496a98e518c850f"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -59504,14 +59561,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-review8",
-        "acquired_at": 1788718011,
-        "lease_expires_at": 1788728811
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -59521,7 +59574,27 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 15 tests\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788719091,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fb732272a531d0b2b913596e9496a98e518c850f"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -59541,7 +59614,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P72-STALE-PLATFORM-DIRECTORY-CLAIM"
       ],
@@ -59556,7 +59629,27 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 15 tests\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788719110,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fb732272a531d0b2b913596e9496a98e518c850f"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -59578,14 +59671,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-review8",
-        "acquired_at": 1788718166,
-        "lease_expires_at": 1788728966
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -59599,7 +59688,31 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-surface-provenance",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "kend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-c226e6882493b33d.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-68fa5eb5ca446e2e.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-1e2e017afe35a214.exe)\n     Running tests\\platform_std_seam.rs (target\\debug\\deps\\platform_std_seam-46670ac961be25f8.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-bf28e6ede2601af2.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-e264b5b56bef16b6.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-db8d914b13f4e9e6.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-35d4a24ef336fb70.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-4765368cd51779f1.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-048cfa443e51ba3d.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-41ee05978fb468e3.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-01bdda5894a22b0c.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-98a452887345a37b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7f6eeb9f724411e2.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-1e7e4a5b93fb1d41.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-f91b522bac265377.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-8a3ca0b783b33ca7.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-d5fbb8c0c64c0700.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_surface_provenance-b8c6763b3cf76d00.exe)\n     Running tests\\platform_integration.rs (target\\debug\\deps\\platform_integration-3fac503ee55bb626.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788719017,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fb732272a531d0b2b913596e9496a98e518c850f"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -59625,14 +59738,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-review8",
-        "acquired_at": 1788718246,
-        "lease_expires_at": 1788729046
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -59646,7 +59755,31 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-orchestration",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-workflow-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "Failed_Dispatch_Stops_The_Run ... ok\ntest tests::Test_A_Failing_Gate_Step_Ends_The_Workflow_Rather_Than_Completing ... ok\ntest tests::Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes ... ok\ntest tests::Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonical_Seam ... ok\ntest tests::Test_A_Two_Step_Sequence_Completes_In_Order ... ok\ntest tests::Test_A_Correction_Step_Should_Refuse_An_Ambiguous_Claim_Without_Committing ... ok\ntest tests::Test_A_Correction_Step_Should_Commit_A_Real_Phantom_Claim ... ok\n\ntest result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-work-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-work-orchestration)\n   Compiling nomos-spec-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-spec-orchestration)\n   Compiling nomos-workflow-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-workflow-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.51s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_orchestration-f10cea549c7c8481.exe)\n     Running tests\\spec_run_seam.rs (target\\debug\\deps\\spec_run_seam-bcddbd3106f8e877.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_work_orchestration-7fb3e543f6c120ef.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-fcea00eba6063ee9.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workflow_orchestration-a4eb24c97cae0d49.exe)\n   Doc-tests nomos_spec_orchestration\n   Doc-tests nomos_work_orchestration\n   Doc-tests nomos_workflow_orchestration\n",
+        "verified_at": 1788719032,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fb732272a531d0b2b913596e9496a98e518c850f"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

@@ -166,6 +166,24 @@ controls:
 No item on the board carries a spent or duplicated identifier as this lands, so the check is
 proved by its own tests rather than by what it happens to catch today.
 
+## Amendment: The Rejection Stands, But Not On The Clause It Cites
+
+"What Was Considered And Rejected" rejects enumerating `docs/records` inside the store partly
+because "`FileSystem` has no directory listing to do it with -- `Read_To_String`,
+`Replace_Atomically` and `Exists` are the whole port". That sentence is now wrong twice. The
+port also has `Remove_File`, and `OD-PLATFORM-002` added `FileSystem::Read_Directory` on
+2026-09-05 (`P41-PLATFORM-DIRECTORY-ENUMERATION-3`, `093a0e4e`).
+
+**The rejection is undisturbed, because this record already said the clause was not carrying
+it.** The same paragraph states the real ground explicitly: "the reason not to is not that it
+was out of this item's territory: it is decision 2's, that a general ledger should not become a
+repository scanner." That ground is untouched by the port gaining an operation. Had the
+directory-listing clause been load-bearing, this amendment would have had to reopen the
+rejection rather than merely correct it.
+
+Corrected under `P72-STALE-PLATFORM-DIRECTORY-CLAIM-2`. `OD-HOST-001`'s own amendment carries
+the measured population of the same overtaken clause and what it cost.
+
 ## Status
 
 Closed by P11-ADD-IDENTIFIER-GUARD, which is `P11-SPENT-RECORD-ID` reissued twice — once for

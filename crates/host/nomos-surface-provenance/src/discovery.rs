@@ -1,9 +1,11 @@
 //! Which crates this report can check: every `tests/contract/surface/<crate>.txt`.
 //!
-//! `nomos-check`'s own composition root gives the reason this reads the filesystem
-//! directly rather than through a port: "no `nomos_platform::FileSystem`
-//! directory-listing port exists" — the same exception, at the same layer, for the same
-//! kind of call.
+//! This reads the filesystem directly rather than through a port because the listing it
+//! needs is a single level and this crate composes no [`nomos_platform::FileSystem`] of its
+//! own. `OD-PLATFORM-002` since gave the port a one-level `Read_Directory`, so routing this
+//! through it is a real available increment; what stops it today is the missing composition,
+//! not a missing operation. Stated here rather than quoted from another module, per
+//! `OD-AGENT-001`.
 
 use std::path::{Path, PathBuf};
 

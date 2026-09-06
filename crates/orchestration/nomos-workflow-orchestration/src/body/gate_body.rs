@@ -8,7 +8,8 @@ use nomos_rules::SourceFile;
 ///
 /// `sources` is already walked for the identical reason [`crate::CheckBody::sources`] and
 /// [`crate::CorrectionBody::sources`] both are: this crate has no `nomos_platform::
-/// FileSystem` port to walk a directory through, so a workflow step's own author assembles
+/// FileSystem` whose `Read_Directory` is one level rather than a recursive walk, so a
+/// workflow step's own author assembles
 /// it before building this body. `command` is [`nomos_gate_orchestration::GateCommand`]
 /// itself, carried whole rather than flattened into a second copy of its fields: it is
 /// already the one shape both `nomos gate run` and `nomos-api` construct, and a gate body

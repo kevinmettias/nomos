@@ -261,3 +261,21 @@ gains its consumer the way `LanguagePackage` did: something reads a declared man
 that kind and refuses one it cannot resolve. Until then, family 6's original point holds
 for those fifteen unchanged — package state is reconstructed through that reader once it
 exists, not accumulated inside whichever surface implements resolution first.
+
+## Amendment: Family 3's Directory-Listing Clause Was Overtaken By OD-PLATFORM-002
+
+State family 3 says the walk "stays a composition-root concern
+(`nomos-cli::check::sources::Walked`), the same exception `nomos-cli::work::Published_Records`
+already has for a directory listing `nomos_platform::FileSystem` has no port for". The port has
+one: `OD-PLATFORM-002` added `FileSystem::Read_Directory` on 2026-09-05
+(`P41-PLATFORM-DIRECTORY-ENUMERATION-3`, `093a0e4e`).
+
+**The family's own claim is unaffected.** What family 3 asserts is that a `CheckOutcome` is
+reconstructable by any client that walks the same tree, and that the walk is a composition-root
+concern. Both are still true, and the surviving reason is that `Read_Directory` is one level by
+`OD-PLATFORM-002`'s own floor while a source walk is recursive -- not that no operation exists.
+`nomos-cli::check::sources::Walked_Sources` carries that reason at the site.
+
+Corrected under `P72-STALE-PLATFORM-DIRECTORY-CLAIM-2`, alongside fourteen other sites and two
+other records carrying the same overtaken clause. `OD-HOST-001`'s own amendment has the
+measured population and what the staleness cost.

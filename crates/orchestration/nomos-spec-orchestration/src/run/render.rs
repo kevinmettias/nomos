@@ -6,7 +6,8 @@
 //! Writing a projection's body and its sidecar is two single-file writes at paths this crate
 //! already knows -- exactly [`FileSystem::Replace_Atomically`]'s shape, the same port
 //! `nomos_work_orchestration::Run` already threads through for the ledger. It is not a
-//! directory listing (no port exists for that, which is why [`crate::corpus::Assemble_Corpus`]'s own
+//! directory listing (`OD-PLATFORM-002`'s `Read_Directory` is one level, not the recursive
+//! walk these need, which is why [`crate::corpus::Assemble_Corpus`]'s own
 //! walk and `nomos-cli::work::Published_Records` both stay client-side), and it is not read
 //! from a caller-named arbitrary path outside this crate's control (which is why `Preview`'s
 //! and `Commit`'s `--from` file, staged by an author, is deliberately left as future work

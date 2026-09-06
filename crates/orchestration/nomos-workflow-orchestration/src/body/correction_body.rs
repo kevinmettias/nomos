@@ -7,8 +7,8 @@ use std::path::PathBuf;
 /// The tree a correction body judges and, if a blocking claim from either correction
 /// family matches, stages, validates and optionally commits a fix for -- already walked,
 /// the identical reason [`crate::CheckBody`] carries `sources` rather than a root to walk
-/// itself: this crate has no `nomos_platform::FileSystem` port to walk a directory
-/// through, so a workflow step's own author assembles `sources` before building this
+/// itself: this crate composes no `nomos_platform::FileSystem`, and the port's own
+/// `Read_Directory` is one level rather than a recursive walk
 /// body.
 ///
 /// `root` is carried alongside `sources` for the same reason [`crate::CheckBody::root`]

@@ -21,9 +21,12 @@
 //!
 //! # What stays out
 //!
-//! The directory walk stays in `nomos-cli::check::sources` — no
-//! [`nomos_platform::FileSystem`] directory-listing operation exists, the same exception
-//! `nomos-cli::work::Published_Records` already has. What this binary was compiled as
+//! The directory walk stays in `nomos-cli::check::sources` — not because the port cannot
+//! enumerate a directory: `OD-PLATFORM-002` gave [`nomos_platform::FileSystem`] a
+//! `Read_Directory`, and that primitive is deliberately one level rather than a traversal, so
+//! a recursive walk is composed by a caller. `nomos-cli::check::sources::Walked_Sources`
+//! carries that reason and this line routes to it rather than restating it. What this binary
+//! was compiled as
 //! (`nomos-cli::check::composition::Host_Variant`) stays there too: it is read through
 //! `env!`, which resolves against the crate that calls it, so a build variant computed
 //! inside this crate would describe this library's own compilation rather than the binary

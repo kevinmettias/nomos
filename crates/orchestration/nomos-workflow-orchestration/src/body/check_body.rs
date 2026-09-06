@@ -7,8 +7,8 @@ use std::path::PathBuf;
 /// The tree a check body judges, already walked, and the rules it judges against.
 ///
 /// `nomos_check_orchestration::Run` takes its source already walked -- this crate has no
-/// `nomos_platform::FileSystem` port to walk a directory through, the identical reason
-/// `nomos-cli` and `nomos-gate-orchestration` each carry that responsibility themselves
+/// [`nomos_platform::FileSystem`] whose `Read_Directory` is one level rather than the
+/// recursive walk this needs, the identical reason
 /// rather than pushing it into the seam they call. A workflow step's own author walks (or
 /// otherwise assembles) `sources` before building this body, the same way a step's
 /// `TaskEnvelope` arrives with its `goal` already composed rather than the dispatch

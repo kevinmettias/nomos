@@ -104,9 +104,9 @@ fn Fixture_Root() -> PathBuf
     return manifest.join("fixtures").join("third-party").join("hex-0.4.3");
 }
 
-/// The fixture's own two files, read directly rather than walked: this crate has no
-/// `nomos_platform::FileSystem` directory-listing port (the same exception
-/// `nomos-cli::check::sources` documents), and a fixture of exactly two named files does not
+/// The fixture's own two files, read directly rather than walked: a fixture of exactly two
+/// named files needs no walk at all, and `nomos_platform::FileSystem`'s `Read_Directory` is
+/// one level rather than the recursive shape `nomos-cli::check::sources` documents.
 /// need one.
 fn Fixture_Sources() -> Vec<SourceFile>
 {
