@@ -31,6 +31,7 @@ nomos-lang-rust-deny = { workspace = true }
 nomos-lang-go = { workspace = true }
 nomos-lang-go-modules = { workspace = true }
 nomos-model = { workspace = true }
+nomos-package = { workspace = true }
 nomos-platform = { workspace = true }
 nomos-repo-policy = { workspace = true }
 nomos-rule-package = { workspace = true }
@@ -38,6 +39,8 @@ nomos-rules = { workspace = true }
 nomos-workspace = { workspace = true }
 
 [dev-dependencies]
+nomos-lang-go-package = { workspace = true }
+nomos-lang-rust-package = { workspace = true }
 nomos-platform-std = { workspace = true }
 
 [lints]

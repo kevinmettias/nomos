@@ -54545,7 +54545,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -54558,7 +54558,27 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "ffer_Every_Syntax_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Deny_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Clippy_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Declare_Every_Capability_Crates_Own_Real_Contract ... ok\ntest Test_Registered_Should_Offer_Every_Dependency_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Reachability_Providers_Own_Real_Offer ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List ... ok\ntest Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule ... ok\ntest Test_Run_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.62s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: unused import: `Subject_Of_Path`\n  --> crates\\orchestration\\nomos-check-orchestration\\src\\package_conformance.rs:43:35\n   |\n43 | use nomos_model::{Content_Digest, Subject_Of_Path};\n   |                                   ^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-check-orchestration` (lib) generated 1 warning (run `cargo fix --lib -p nomos-check-orchestration` to apply 1 suggestion)\nwarning: `nomos-check-orchestration` (lib test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-e3af36cf6a92a280.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-67fecb39a50f3b22.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-cf55f942ca5e86a6.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1788702103,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "74596c61be8f18c8475732e9b2ce7c4a0f541cb1"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -58930,6 +58950,45 @@
           "nomos-lang-rust-deny"
         ],
         "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P69-SELF-MATCH-VIA-STRING-LITERALS-FIVE-MORE-RULES",
+      "title": "five more text-scanning rules read a string literal's own prose as real code",
+      "why": "P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON's own new test file, tests/integration/tests/calibration.rs, is itself judged by nomos-cli's self-check (cargo test -p nomos-cli --test check_command), and five rules fire Blocking findings against it: shared-interior-mutability-says-why (line 212, the string literal reads \"no Rc<RefCell<...>>-shaped construct...\"), a-disabled-test-states-why (line 256, the string literal reads \"...there is no #[ignore] attribute...\"), inline-always-requires-justification (line 257, \"no #[inline(always)] attribute...\"), lifetimes-follow-the-descriptive-naming-rule (line 262, the string literal names 'a several times in prose), and static-bounds-are-justified (line 263, the string literal names 'static in prose). Every one of these is the identical root cause P66-UNSAFE-JUSTIFICATION-STRING-BLINDNESS already fixed for Has_Unsafe_Construct/Is_Unsafe_Declaration in rust_text.rs: a bare text/substring scan reading a string literal's own quoted prose as if it were real code, rather than masking string bodies first the way code_prefix.rs's Code_With_String_Bodies_Masked already does for the two rules P66 fixed. Not visible from nomos's own tree before this file existed, because nothing in this repository previously wrote a RuleVerdict-table-shaped file whose reason text quotes attribute/lifetime syntax in prose describing what a fixture does NOT contain.",
+      "done_when": "None of the five named rules reports a finding against tests/integration/tests/calibration.rs's own reason strings. Each rule's own scan masks string-literal (and raw-string, char-literal) bodies before searching for its keyword/pattern shape, the same way rust_text.rs's Has_Unsafe_Construct/Is_Unsafe_Declaration already do via code_prefix.rs's Code_With_String_Bodies_Masked -- reusing that shared primitive where the file already depends on rust_text.rs's module, or an equivalent masking step in lifetime_discipline.rs where it does not. A regression test proves each fix: a string literal naming the same keyword/pattern the rule looks for, with no real code alongside it, must not be reported.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks/flakiness_text.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+          "crates/rules/nomos-rules/src/checks/lifetime_discipline.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "check_command"
+        ],
+        "timeout_seconds": 1200
       },
       "verified": null,
       "abandoned": [],
