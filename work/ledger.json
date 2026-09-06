@@ -57643,7 +57643,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -57658,7 +57658,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?!.*the only I/O any provider in this workspace performs).*\\z",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "",
+        "verified_at": 1788709460,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "274b9db10a5595a3d8b49a7c058db48a4d9b6ea4"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
