@@ -1,0 +1,5 @@
+# This directory is its own standalone cargo workspace (see Cargo.toml's own module doc),
+# so running calibration.rs leaves ordinary build output behind here, same as any other
+# cargo workspace's own .gitignore would exclude.
+/target
+Cargo.lock

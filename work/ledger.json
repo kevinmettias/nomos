@@ -54288,14 +54288,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-loop",
-        "acquired_at": 1788695761,
-        "lease_expires_at": 1788706561
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -54306,7 +54302,28 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": ".. ok\ntest domains::Test_The_Parser_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Limits_Policy_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Rollup_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Projection_Output_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Go_Dependency_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Requirement_Trace_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Dependency_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Dependency_Policy_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Lint_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Copy_Clones_Provider_Should_Meet_Its_Declared_Strategy has been running for over 60 seconds\ntest domains::Test_The_Nested_Locks_Provider_Should_Meet_Its_Declared_Strategy has been running for over 60 seconds\ntest domains::Test_The_Nested_Locks_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Copy_Clones_Provider_Should_Meet_Its_Declared_Strategy ... ok\n\ntest result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 245.51s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.55s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-66ac90cf637c2d3e.exe)\n     Running tests\\analysis_slice\\main.rs (target\\debug\\deps\\analysis_slice-57038259e4e446d3.exe)\n     Running tests\\calibration.rs (target\\debug\\deps\\calibration-12d704e4d601fb14.exe)\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-ea502e7d2778b6f9.exe)\n   Doc-tests nomos_integration_tests\n",
+        "verified_at": 1788699180,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "50a91850b93e71ff8db1c6c017eed969e2fb2d29"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

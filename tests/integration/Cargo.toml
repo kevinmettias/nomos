@@ -19,6 +19,12 @@ nomos-lang-rust = { workspace = true }
 nomos-lang-rust-scan = { workspace = true }
 
 [dev-dependencies]
+# P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON: `nomos_check_orchestration::
+# Run`'s own public signature takes `sources: &[nomos_rules::SourceFile]` and is not
+# re-exported from that crate, so `tests/calibration.rs` needs this crate directly to
+# build the sources it hands to a real `Run` call, the same reason every subprocess
+# provider crate below is already a dev-dependency of this harness.
+nomos-rules = { workspace = true }
 nomos-lang-go = { workspace = true }
 nomos-lang-rust-cargo = { workspace = true }
 nomos-lang-rust-clippy = { workspace = true }

@@ -1257,6 +1257,7 @@ dependencies = [
  "nomos-model",
  "nomos-platform-std",
  "nomos-repo-policy",
+ "nomos-rules",
  "nomos-spec-bundle",
  "nomos-spec-model",
  "nomos-spec-project",
