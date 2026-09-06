@@ -72,6 +72,7 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md | authored | 23 | 7 | sha256:1f668a9c3b8b790d0935f12b8f3350130ac9c388e0f9c0671ef5d57379f74b47 |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md | authored | 19 | 6 | sha256:0c2b9021270c0e484742945479352a8b2d9d573056158e27d377c6f56433545d |
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md@authored | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md | authored | 21 | 6 | sha256:aaa9dd1bb14d99b9df945e287c5e7452b3630a41da0ec8983451f3a9bf1be262 |
+| docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md@authored | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md | authored | 19 | 6 | sha256:2b4a9d2bb3daa50e11f78a921b819c109cbcab767766c84970181f3873081454 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
@@ -680,6 +681,12 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#10 | authored | 2 | The Decision |
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#15 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#20 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#1 | authored | 1 | A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate |
+| docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#2 | authored | 2 | Question |
+| docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#9 | authored | 2 | The Decision |
+| docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#13 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#18 | authored | 2 | Status |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1 | authored | 1 | A skipped test reports ok, so the size of the hole is declared rather than the hole being closed |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#5 | authored | 2 | What Was Found |
@@ -16854,6 +16861,181 @@ Accepted. `scope` and `prohibited_changes` each have a real, evidence-backed mec
 `available_tools` is refused rather than silently dropped until a capability-serving bridge
 exists; `applicable_rules` reaches the run as context now and stays undecided as a
 validation boundary until a `WorkResult` exists to validate.
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#1
+
+*revision: authored · kind: heading · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate · hash: sha256:080e4c0bf30b53687095c93c95de482038877bac0d579bdba387994890a9f85b*
+
+# A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#2
+
+*revision: authored · kind: heading · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#3
+
+*revision: authored · kind: prose · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / Question · hash: sha256:7b19646d10251eab34d8b567988f67880ff8fb69b350372dc8c252251c8dade3*
+
+`TaskEnvelope.expected_output_schema` names a schema and nothing builds a `WorkResult`
+against it. What comes back from Claude Code is read structurally rather than trusted as
+prose — the right instinct, per `OD-EXECUTOR-001` — but the type callers hold is still the
+vendor's own JSON shape: `AgentExecutionOutcome.response` is free text, and
+`crates/host/nomos-cli/src/agent/dispatch.rs` and `workflow.rs` both print it directly. A
+validated correction path, a workflow body and any second harness executor all have to
+agree on what an agent produced, and today there is no one artifact to agree on.
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#4
+
+*revision: authored · kind: prose · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / Question · hash: sha256:9cf3404748f58af894ee7c5a2ff7ba368dfbd9d180952e63e9ba30e82683c516*
+
+`OD-EXECUTOR-007`, decided immediately before this record, named this gap directly as one
+of `applicable_rules`' own blockers and declined to build it speculatively. A person has now
+required it decided.
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#5
+
+*revision: authored · kind: heading · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#6
+
+*revision: authored · kind: prose · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / What Was Measured · hash: sha256:b4b838e50ebe3efcef2dcda7b4fd8c941c993258e8963094e780655f7e729fb7*
+
+**`--json-schema` gives a real, separately validated `structured_output` field, verified
+adversarially.** A narrow schema — `assumptions` and `unresolved_questions`, both string
+arrays, `additionalProperties: false` — produced a clean `structured_output` object holding
+exactly those two fields on a first, unforced prompt. A second, adversarial prompt
+explicitly instructed the model to also emit a top-level `plan` field bypassing the schema;
+`structured_output` still carried only the two declared fields, and the model's own text
+named the reason: `additionalProperties: false` refused the extra key structurally. This is
+the same real-denial shape `OD-EXECUTOR-001`'s own `permission_denials` finding already
+established for tool access, now confirmed for output shape.
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#7
+
+*revision: authored · kind: prose · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / What Was Measured · hash: sha256:3b0f1cf6ecf748de738e8ded3ff0823bd94cfcf6000efb3c0070e045a60b5e3e*
+
+**`WorkResult`'s richer fields have nothing honest to ground them in this executor.**
+`plan: Option<CorrectionPlan>` embeds a `ChangeSet`/`Edit` — a concrete file diff.
+`claims: Vec<Finding>` embeds a `SubjectId` — a content digest of a real subject. Both
+presuppose the agent read or produced something real to describe. This executor's own
+structural boundary (`OD-EXECUTOR-001`: isolated empty directory, no tool granted by
+default, one `--print` turn) means the model has seen no real file and computed no real
+digest by the time it answers. A schema cannot make an invented `SubjectId` or an invented
+diff honest; it can only make the *shape* conform, and a conforming lie is not this record's
+goal. `assumptions: Vec<String>` and `unresolved_questions: Vec<String>` are different in
+kind: free-text judgment a model forms about the goal it was given, with no claim to have
+touched anything real.
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#8
+
+*revision: authored · kind: prose · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / What Was Measured · hash: sha256:2d772deab403509e3d71317a57f8a778736faf56ce54a08ea109a83edfd76c27*
+
+**`AgentExecutionOutcome.response` is read by real callers today, all as display text, none
+structurally.** `crates/host/nomos-cli/src/agent/dispatch.rs` (two sites) and
+`crates/host/nomos-cli/src/workflow.rs` (two sites) each `writeln!` it directly to a human.
+No caller anywhere parses `.response` as data. Replacing what the field carries changes four
+call sites, all renderers, none consumers with a structural dependency on the current shape.
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#9
+
+*revision: authored · kind: heading · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#10
+
+*revision: authored · kind: prose · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / The Decision · hash: sha256:55cc4f8986bfeef71f5aaa470c3b8ef6ea282fedc3d10d258f53d353cc46405a*
+
+**The schema this executor requests is the narrow, honest subset:**
+`{"type":"object","properties":{"assumptions":{"type":"array","items":{"type":"string"}},
+"unresolved_questions":{"type":"array","items":{"type":"string"}}},"required":
+["assumptions","unresolved_questions"],"additionalProperties":false}`, passed via
+`--json-schema` on every invocation. `TaskEnvelope.expected_output_schema` names this schema
+by `SchemaId`; a future caller wanting a richer schema is a different `SchemaId` and a
+different question, not decided here.
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#11
+
+*revision: authored · kind: prose · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / The Decision · hash: sha256:31aa3f4faa9bdc7fa25eded8ec86c3b1a77ef8907fb20f1738d7e097323502c6*
+
+**`AgentExecutionOutcome` carries a real `nomos_agent_contracts::WorkResult`, built only
+from `structured_output`, never from `result`.** `assumptions` and `unresolved_questions`
+are read off `structured_output`'s own two fields; `plan`, `claims`, `tests` and
+`requested_verification` are always `None`/empty, constructed by this crate, never read from
+the model — structural absence, the identical principle `OD-EXECUTOR-001` already applies to
+tool grants, applied here to output content. `denied_tool_uses`, `is_error`, `cost_usd` and
+`duration_ms` stay exactly as they are: facts about the invocation, not about its content,
+unaffected by this decision.
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#12
+
+*revision: authored · kind: prose · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / The Decision · hash: sha256:fa4bae7c619c58a159ef9fe88edaaf8843cbed77a6a837ce7b921c0579c80d7b*
+
+**A response missing `structured_output`, or one that fails to decode into the two required
+fields, is refused rather than coerced.** A new `AgentExecutionError` variant —
+`Unparseable`'s existing shape already fits, reused rather than duplicated — reports it. The
+existing free-text `result` field is not read as a fallback: a caller that gets a `WorkResult`
+back got one Claude Code's own schema validation produced, or got nothing.
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#13
+
+*revision: authored · kind: heading · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#14
+
+*revision: authored · kind: prose · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / What This Record Does Not Do · hash: sha256:78d36bc67905c1a8681771b52a92df3cb2006a916e313accfaa1ca06c6132821*
+
+**No code changes here.** `response.rs` gains a `structured_output` reader; `Command_For`
+gains `--json-schema`; `AgentExecutionOutcome`'s own field changes from `response: String` to
+`result: WorkResult`; `dispatch.rs` and `workflow.rs`'s four rendering sites move from
+printing `outcome.response` to rendering `assumptions`/`unresolved_questions` for a human —
+each is a follow-up item's own territory, named here so its own territory can be declared
+completely rather than discovered mid-claim the way this record's own first framing was.
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#15
+
+*revision: authored · kind: prose · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / What This Record Does Not Do · hash: sha256:56b78a00fac3690f15a4ba878f914ec43d89352b457fc0f46ac729249ba0db1c*
+
+It does not decide a schema for `plan`, `claims`, `tests` or `requested_verification`. Those
+stay unbuilt until a real executor exists that can ground them — real tool access, a real
+file read, a real fact — which `OD-EXECUTOR-007`'s own `scope` mechanism is the first step
+toward, not a claim this record makes about when that arrives.
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#16
+
+*revision: authored · kind: prose · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / What This Record Does Not Do · hash: sha256:2f3a0595dd1ae4b7cbddb55c96f5c41a7766fa917ca053dedd050773230ea420*
+
+It does not change `nomos-model-backend-ollama`'s own response handling, or decide whether a
+second executor shares this schema. `OD-EXECUTOR-002` already measured that this workspace
+has exactly one real agent-given-tool-access executor today; a second one earns its own
+measurement against its own real mechanism the same way this one did.
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#17
+
+*revision: authored · kind: prose · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / What This Record Does Not Do · hash: sha256:78c9ad3d31b63ed5752f6166985b36248f4664d4140f2abf769c9cb5f300775a*
+
+It does not build a richer schema for a future executor that does have real grounding. The
+schema named above is this executor's own honest ceiling today, not a permanent limit on
+what `WorkResult` could ever carry from an agent.
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#18
+
+*revision: authored · kind: heading · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#19
+
+*revision: authored · kind: prose · heading: A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate / Status · hash: sha256:3dbd1615723c84f5b3b9ac2b23c4a816c68fbf11ebb02157709af2aaeaabc036*
+
+Accepted. A narrow, adversarially-verified JSON schema is the mechanism; `WorkResult`'s
+ungroundable fields stay structurally absent rather than model-filled; no code changes here.
 
 ### docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1
 

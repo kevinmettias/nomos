@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:1481134f75d34e1d4eb5d3f3b4d3fa8ddd86df69de3f49ffea8eef40579b1cd5",
-  "inputs_digest": "sha256:8c263f67c5ecb0bfd75f555e745a85139d2bfbe4d69f3c3b78e5e0b142087375",
+  "content_digest": "sha256:f03821c2d392e64664d701e7948e726495ada11a9ea9fae20862df5ac5c60337",
+  "inputs_digest": "sha256:bbf6e075b0b09fb69b40ca7b8515db04d3aa505b0a476442d5a79048972999b8",
   "sections": [
     [
       "Documents",
-      196
+      197
     ],
     [
       "Sections",
-      1611
+      1617
     ],
     [
       "Source blocks",
-      5624
+      5643
     ]
   ],
   "inputs": [
@@ -329,6 +329,11 @@
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md@authored",
       "hash": "sha256:aaa9dd1bb14d99b9df945e287c5e7452b3630a41da0ec8983451f3a9bf1be262"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md@authored",
+      "hash": "sha256:2b4a9d2bb3daa50e11f78a921b819c109cbcab767766c84970181f3873081454"
     },
     {
       "content": "documents",
@@ -3344,6 +3349,36 @@
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#20",
       "hash": "sha256:8558989acf67b4be5ed2f171b7a8681640026ac69aafc055c8adfb1676986570"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#1",
+      "hash": "sha256:3f7f2e41fe294030c3406a904d181ba5500a6d81d74f92262d2e974d4a181f46"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#2",
+      "hash": "sha256:3415f763375660e4561b9a5c5487861bc37587a6418eb473b4edd10570d0c647"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#5",
+      "hash": "sha256:59c2b4b107850da128f4120296cf81f99b47c516d5270684dcbae184b830bb53"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#9",
+      "hash": "sha256:c239ce749389e4236eb126b4ca72cd7586fe9abafa4ebfb9f1c6f6d86801040d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#13",
+      "hash": "sha256:ea458c7f1128087f199eccbd2424dae62822517d55741f2c900ed85a04293a6c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#18",
+      "hash": "sha256:bb078aac90c96eea35a9646988b88417d0b1a277774845f1de6d1f77d33afaa8"
     },
     {
       "content": "headings",
@@ -17014,6 +17049,101 @@
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#21",
       "hash": "sha256:9dc05f2bd8fd8417559c3be069e04f897d140689728cb842412fb3fe3bab6cc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#1",
+      "hash": "sha256:080e4c0bf30b53687095c93c95de482038877bac0d579bdba387994890a9f85b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#3",
+      "hash": "sha256:7b19646d10251eab34d8b567988f67880ff8fb69b350372dc8c252251c8dade3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#4",
+      "hash": "sha256:9cf3404748f58af894ee7c5a2ff7ba368dfbd9d180952e63e9ba30e82683c516"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#6",
+      "hash": "sha256:b4b838e50ebe3efcef2dcda7b4fd8c941c993258e8963094e780655f7e729fb7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#7",
+      "hash": "sha256:3b0f1cf6ecf748de738e8ded3ff0823bd94cfcf6000efb3c0070e045a60b5e3e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#8",
+      "hash": "sha256:2d772deab403509e3d71317a57f8a778736faf56ce54a08ea109a83edfd76c27"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#9",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#10",
+      "hash": "sha256:55cc4f8986bfeef71f5aaa470c3b8ef6ea282fedc3d10d258f53d353cc46405a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#11",
+      "hash": "sha256:31aa3f4faa9bdc7fa25eded8ec86c3b1a77ef8907fb20f1738d7e097323502c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#12",
+      "hash": "sha256:fa4bae7c619c58a159ef9fe88edaaf8843cbed77a6a837ce7b921c0579c80d7b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#13",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#14",
+      "hash": "sha256:78d36bc67905c1a8681771b52a92df3cb2006a916e313accfaa1ca06c6132821"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#15",
+      "hash": "sha256:56b78a00fac3690f15a4ba878f914ec43d89352b457fc0f46ac729249ba0db1c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#16",
+      "hash": "sha256:2f3a0595dd1ae4b7cbddb55c96f5c41a7766fa917ca053dedd050773230ea420"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#17",
+      "hash": "sha256:78c9ad3d31b63ed5752f6166985b36248f4664d4140f2abf769c9cb5f300775a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#18",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#19",
+      "hash": "sha256:3dbd1615723c84f5b3b9ac2b23c4a816c68fbf11ebb02157709af2aaeaabc036"
     },
     {
       "content": "blocks",
