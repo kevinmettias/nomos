@@ -60206,6 +60206,117 @@
         ],
         "patterns": []
       },
+      "state": {
+        "Declined": {
+          "reason": "Scope was too narrow, found so within the session that authored it. Two things arrived after it was filed. First, a third instance: OD-GATE-022 is Done, its own What This Record Does Not Do section says it does not wire compare into any surface and that each is separate implementation territory, and Compare_Gate_Runs has zero callers -- filed as P73-GATE-COMPARE-HAS-NO-CALLER. Three instances is a shape, not a coincidence. Second, nomos-dd observed that a decline orphans a subtree the same way a decision-before-code item does, from the other direction, and demonstrated it in one write: declining P41-RUN-PLANNER stranded three dependents directly and left four more waiting behind those, with no warning at decline time and no prompt to repoint anything. Both are the same underlying defect -- an item can be ended honestly while silently making other items unreachable -- and their remedies are likely the same mechanism, so one record should name both rather than two records each seeing half. Re-added as -2."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-ae",
+        "declined_at": 1788720434
+      }
+    },
+    {
+      "id": "P73-GATE-COMPARE-HAS-NO-CALLER",
+      "title": "Compare_Gate_Runs is exported, decided and reachable by nobody",
+      "why": "Measured at ecfaf833: Compare_Gate_Runs has zero callers. The only two mentions outside its own module are its own re-export in lib.rs and a line of lib.rs prose describing it. The CLI refuses the verb outright -- gate/parsing.rs treats compare as an unknown verb and gate/tests.rs asserts that refusal -- so the one surface a user could reach it from is wired to say no. This is the third instance this session of a decided mechanism with no code behind it, after OD-EXECUTOR-007 and OD-EXECUTOR-008, and it is the cleanest: OD-GATE-022 is Done and its own What This Record Does Not Do section says in as many words that it does not wire compare into the CLI, nomos-api, nomos-api-transport or nomos-mcp, that each is separate implementation territory, and that each can now proceed without inventing its own answer. Its Status goes further and names the shape a first caller takes: two same-process walks of Run_Gate over two roots, two revisions or two policies produce the two GateRunResults it already takes, needing no new store and no new serializable type. Nothing was filed against that. P62-GATE-COMPARE-LIB-DOC-STALE corrected the lib.rs prose that said no increment implements compare, which left the documentation accurate and the verb still unreachable. This item takes the CLI only, because the record calls each surface separate territory.",
+      "done_when": "nomos gate compare runs two real same-process walks and prints their difference; the CLI stops refusing the verb and the test asserting that refusal is replaced by one asserting the verb works; a second root is named by a decided argument shape; the disposition changes between the two runs are rendered; and no new serializable type is added to nomos-gate-orchestration to do it.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate/invocation.rs",
+          "crates/host/nomos-cli/src/gate/parsing.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P74-ONE-LEVEL-LISTINGS-ANSWER-THE-PORT-THREE-WAYS",
+      "title": "Three one-level directory listings now answer the same port question three different ways",
+      "why": "P72 corrected fifteen sites that denied the platform port could list a directory, but left the three sites that actually do a one-level listing disagreeing about what to do now that it can. nomos-cli work.rs states the question is settled and the walk stays a composition-root function regardless, for a reason about repository convention rather than port capability. nomos-api add_response.rs, which its own doc calls a deliberate twin of that exact function, instead says routing through Read_Directory is a real available increment. Declared twins that reach opposite conclusions are the duplicated-authority defect OD-GATE-011 names, and this instance was introduced by P72 itself. nomos-surface-provenance discovery.rs is a third and genuinely different case, listing tests/contract/surface rather than records, and says only that composition is what blocks it.",
+      "done_when": "The three sites give the same answer to whether a one-level listing routes through OD-PLATFORM-002's Read_Directory, or each states the reason it differs from the other two. The nomos-api twin agrees with the nomos-cli function it declares itself a twin of, or stops declaring that.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/work/add_response.rs",
+          "crates/host/nomos-surface-provenance/src/discovery.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P73-DECISION-BEFORE-CODE-STRANDS-ITS-DEPENDENTS-2",
+      "title": "An item can be ended honestly and leave other items silently unreachable",
+      "why": "Two shapes of one defect, both measured on this board in one session. Shape one, a decision that cannot satisfy its dependents: an item declined for under-reserved territory is re-authored as a decision whose title ends in the words before code. It is claimed, recorded and finished honestly, because its done_when asked for a decided mechanism and it delivered one. But a dependent whose own precondition is working code is not satisfied by it, and repointing onto it would not help. Three instances. P42-EXECUTOR-ENVELOPE-MECHANISM and P42-EXECUTOR-WORKRESULT-MECHANISM are Done as OD-EXECUTOR-007 and OD-EXECUTOR-008, and P42-SECOND-HARNESS-EXECUTOR and P40-AGENT-WORKRESULT-VALIDATED-PATH-2 sat stranded behind them with no implementation filed. OD-GATE-022 is Done and explicitly says it does not wire compare into any surface and that each is separate implementation territory, and Compare_Gate_Runs still has zero callers. Shape two, a decline that orphans a live subtree: declining P41-RUN-PLANNER stranded three dependents directly and left four more waiting behind those, in a single write, with nothing said at decline time about the seven items just made unreachable. The decline was correct on its merits and the cascade was still invisible. Two mechanics make both shapes hard to see afterward and belong to the same question: a re-authored successor is sometimes renamed rather than suffixed, so a search by -2 reports it absent -- this session reported two such successors as missing work before finding them by territory -- and one root was decomposed into three narrower items rather than re-authored under its own name. The ledger already knows how to say stranded. What it cannot say is that a dependency was answered by a decision nobody carried out, or that ending one item just ended six others.",
+      "done_when": "It is decided whether the ledger should warn or refuse when a decline or a finish leaves dependents unreachable, whether a decision item may be named as a dependency by an item whose precondition is code, whether a decline whose stated remedy is a follow-up must file one, and how a re-authored successor is discoverable from the id it replaces; and the decision is recorded naming both shapes rather than one.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-038.record"
+        ],
+        "patterns": []
+      },
       "state": "Ready",
       "depends_on": [],
       "blocked": null,
@@ -60218,6 +60329,72 @@
           "nomos-ledger"
         ],
         "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P74-CONTRACT-ZONE-CARRIES-REAL-IO",
+      "title": "Whether a bundled contract crate doing real I/O may be classified Capability Contract zone",
+      "why": "The eighth-round review's fourth point was the one this reconciliation left unrecorded, and it has substance the other nine did not. nomos-connector-coderabbit runs gh api as a subprocess and nomos-cap-requirement-trace reads arbitrary files through a FileSystem, and both are classified Capability Contract zone. README states the reason plainly for both: the classification is chosen so that nomos-rules can depend on them at all, because Permits forbids Rules zone from naming Provider zone. So a zone whose other nine members are pure contracts now holds two crates that do real I/O, and the classification was decided by what the dependency graph permits rather than by what the crate does. OD-CAPABILITY-002 licenses the bundling and its one-provider criterion is untouched by this, but it decides nothing about the zone consequence. Two instances exist, so this is not a population of one.",
+      "done_when": "A governing record decides whether zone classification may be chosen to satisfy a dependency edge when the crate's real behaviour belongs to another zone, or whether the two I/O-carrying bundles owe a contract-provider split despite having one provider each. It names what the boundary tests are actually asserting about the Capability Contract zone under the answer chosen.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P74-RUN-ARRAY-DERIVATION-DISPOSITION",
+      "title": "Whether Run can derive its composed-rule array the way the gate registry already does, or whether that derivation is the planner",
+      "why": "P41-RUN-STOPS-NAMING-EVERY-RULE is stranded behind the P41-RUN-PLANNER decline, and its complaint is intact: run_context.rs still builds a hand-written array of seventy ComposedRule entries and Composed_Rules derives from that array rather than from DESCRIPTORS. But the gate side already did the derivation this item asks for, composition::Registered loops over nomos_rules::DESCRIPTORS directly, which is a real precedent that the item predates. The question nobody has answered is whether Run can do the same. Each entry closes over a different capability slice, so deriving the array needs the descriptor to carry which slice its check reads, which may be the demand planner OD-RULES-009 declines under another name. Either answer resolves a stranded item honestly; leaving it stranded answers nothing and leaving it stranded behind a declined root is board debris.",
+      "done_when": "A governing record decides whether the array derivation is available without a demand planner or is the planner, citing composition::Registered as the precedent and the per-entry capability capture as the obstacle. P41-RUN-STOPS-NAMING-EVERY-RULE is then declined or re-authored on that answer rather than left stranded.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1200
       },
       "verified": null,
       "abandoned": [],
