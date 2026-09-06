@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:20179eff75beb45092d33a494f106f231413fbed06f1b1d876edddeb776581b5",
-  "inputs_digest": "sha256:2bf072337377cd059b5888ca9c65749f0fd28ae2f6e0970d0ad81aee920d8da1",
+  "content_digest": "sha256:9a994abb3e661441bbe345cc627e704d48ae6cfd327c6ec43852cd9ae63316b6",
+  "inputs_digest": "sha256:4ba960a366ee059253141214fd630bd202625f27e1861cc2cc589f0b0da80c6d",
   "sections": [
     [
       "Documents",
-      199
+      200
     ],
     [
       "Sections",
-      1629
+      1635
     ],
     [
       "Source blocks",
-      5676
+      5693
     ]
   ],
   "inputs": [
@@ -879,6 +879,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md@authored",
       "hash": "sha256:06d7276cc87daf98d5315060d60a9a8b745eb6a1e1af5b124691dc7e3ea0f097"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md@authored",
+      "hash": "sha256:90ba93672af6660a576f0c0499410b79dbd8c905508e823f5e9465e116366033"
     },
     {
       "content": "documents",
@@ -7949,6 +7954,36 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#16",
       "hash": "sha256:fa2b04417e8191b2e5be4d62c1dff7480ed76f84b6f150f5baf6828a721fbffd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#1",
+      "hash": "sha256:f5d42c620e52f12fb4b2cc72e8237c73edc21c5c4f9a89f22b8e0df668fa4836"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#2",
+      "hash": "sha256:e70a4e7823e2bd44721d0207c7e03cbbd9c03bc3336ded65dc205cb7152051a2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#4",
+      "hash": "sha256:75ab1345bc7cdc69fe0cc9e8d9d9ba1b2f6196c64113d612c925814358398eeb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#9",
+      "hash": "sha256:6beae38932d9a30a9170141d108947498f2681cbdc40000b2879a8d4f27c39bc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#12",
+      "hash": "sha256:04f91b1dd01f3d8ac7617543b9a2c8c6e3329663aaeff23d826b7b736f1960d1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#16",
+      "hash": "sha256:1b5593d5ea0270bd2b08a35aed352326382a0d5238c7937e66812ed01f1371bd"
     },
     {
       "content": "headings",
@@ -33574,6 +33609,91 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#17",
       "hash": "sha256:c6bbc0b4cbd32c1534c03bda7491c1fb484811f609f491c00725e4d099203d57"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#1",
+      "hash": "sha256:6ef19d91a094a7f2c183633deea4e3addc2ee7da832a530b8e71c1760bcba0b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#3",
+      "hash": "sha256:0dd70df2c17b119cb4b5e701ac88169e4039cf90e5bcc243534ea17f71da6d93"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#5",
+      "hash": "sha256:c4554fb2b6fe598f117cc776812b079e3fd0309887215d4bf35c3d9fdff331f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#6",
+      "hash": "sha256:9e8ab838f0ebd1da52896d002b8a955fcca26dd35c24e9afb087fc728ed52835"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#7",
+      "hash": "sha256:01316dea789ed020658948eaccb98774e68792d4cf656e62ac32d63f7d8157c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#8",
+      "hash": "sha256:2b7671411e657a669a7584e0481699b6f92f287e66e935f30a61eb9649d9757b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#9",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#10",
+      "hash": "sha256:302002eac84a9fd7e247e26700071c232246345b3837428f4ebddaab7f1687f8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#11",
+      "hash": "sha256:21920cd7432926d7f752758926caecf43f1edc1e6cd1127e5bf66f3b7c112f16"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#12",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#13",
+      "hash": "sha256:aba4eb88ef14e0b43c3452ce1d43b03ceedbd51ff6ec3e027c372848266ac2cc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#14",
+      "hash": "sha256:5cc493519972acc6f5e1199e84c6e11fbfceaf32338031b641116a82eac44b6c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#15",
+      "hash": "sha256:e584d7f1c4a0d703deac4760b17452cb7d8730479d19ff9905ed8add7ad8089d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#16",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#17",
+      "hash": "sha256:0dfeef9c85393fd73cb9738005b6d7d6df73daa5d30fd0c7a72bac035aa5b633"
     },
     {
       "content": "blocks",

@@ -182,6 +182,7 @@ profile: domain-specification
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md@authored | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md | authored | 30 | 6 | sha256:ee25e5bafb0ab46ae96890e572a96aa4a970f0f854957c7e2474998c6a5949ad |
 | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md@authored | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md | authored | 16 | 6 | sha256:ce866cdba1b609d99736475258c51c1342b6274867a9c2e8f8703946cec253c3 |
 | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md@authored | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md | authored | 17 | 6 | sha256:06d7276cc87daf98d5315060d60a9a8b745eb6a1e1af5b124691dc7e3ea0f097 |
+| docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md@authored | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md | authored | 17 | 6 | sha256:90ba93672af6660a576f0c0499410b79dbd8c905508e823f5e9465e116366033 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1601,6 +1602,12 @@ profile: domain-specification
 | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#9 | authored | 2 | The Decision |
 | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#12 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#16 | authored | 2 | Status |
+| docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#1 | authored | 1 | Duplicate authority needs a value-comparison fact and a canonical/projection convention |
+| docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#9 | authored | 2 | The Decision |
+| docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#12 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#16 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -47281,6 +47288,179 @@ workspace does not yet have a fact to check them against. A capability or fact d
 the next step for each, named here rather than improvised inside a rule's own
 implementation; representation leakage's clean baseline is recorded for whenever that
 decision lands.
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#1
+
+*revision: authored · kind: heading · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention · hash: sha256:6ef19d91a094a7f2c183633deea4e3addc2ee7da832a530b8e71c1760bcba0b1*
+
+# Duplicate authority needs a value-comparison fact and a canonical/projection convention
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#2
+
+*revision: authored · kind: heading · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#3
+
+*revision: authored · kind: prose · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / Question · hash: sha256:0dd70df2c17b119cb4b5e701ac88169e4039cf90e5bcc243534ea17f71da6d93*
+
+A person required a rule against a class this workspace has paid for more than once: two
+artifacts that independently determine the same behaviour, where one should have been a
+projection of the other — not source duplication, which ordinary tools already find, but
+two independent computations of one fact with no declared relationship between them. The
+item's own `why` names two historical instances and asks that a real one be found today,
+with a declared projection relationship suppressing a finding rather than a per-file
+exemption. Whether this is buildable needed checking the same way `OD-RULES-023` checked
+write authority and ownership, and `OD-RULES-024` checked drift and leakage.
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#4
+
+*revision: authored · kind: heading · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#5
+
+*revision: authored · kind: prose · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / What Was Measured · hash: sha256:c4554fb2b6fe598f117cc776812b079e3fd0309887215d4bf35c3d9fdff331f4*
+
+**The nearest existing mechanism answers a different question.** `Check_Completeness_
+Mirrors` and `universe_kind.rs`'s "Mirrored by \`Test_Name\`" convention resolve whether a
+*named check exists* — it looks up a backtick-quoted identifier and confirms the function is
+real. It never extracts a value from either side and never compares one. Duplicate
+authority needs the opposite: pull a comparable value out of two independent artifacts and
+judge whether they agree. No capability in `crates/capabilities/` does that, and no rule in
+`nomos-rules` does either — every existing "the declaration matches the graph" judgment
+(`Check_Dependency_Direction`, `Check_Write_Authority`, `readme.rs`'s own band-table check)
+is a bespoke, hand-written comparison against one specific pair, decided and coded once, not
+a general "discover two artifacts asserting the same fact" mechanism.
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#6
+
+*revision: authored · kind: prose · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / What Was Measured · hash: sha256:9e8ab838f0ebd1da52896d002b8a955fcca26dd35c24e9afb087fc728ed52835*
+
+**Both historical instances the item cites are already fixed, and neither was fixed by a
+rule.** The band table — `nomos-rules/src/dependency/bands.rs`, `tests/contract/tests/
+boundaries/bands.rs`, and README's own table, three hand-maintained copies with a fourth
+test checking one of them — was closed by `OD-RULES-020`'s zone migration: `zones.rs`'s
+`ZONES`/`SAME_ZONE_EDGES` became the one authority, and every reader now imports it through
+`nomos-rules`' own public surface. The "twelve" figure — `checks/mirror.rs`'s own module doc
+once restated `UNMIRRORED_TOTAL`'s value by hand and drifted to twelve after the real number
+fell to three — was closed by removing the restatement, not by a rule catching the drift; the
+comment now says outright why it declines to repeat a number the table beside it already
+owns. Both fixes are the general lesson ("stop maintaining two copies") applied by a person,
+not a mechanically enforced property.
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#7
+
+*revision: authored · kind: prose · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / What Was Measured · hash: sha256:01316dea789ed020658948eaccb98774e68792d4cf656e62ac32d63f7d8157c3*
+
+**A real, live instance exists today, and it is instructive about the size of the problem
+rather than a shortcut past it.** As of this record, `nomos-rules/src/lib.rs` narrates
+`Check_Write_Authority` as "the sixty-seventh rule" and `checks.rs`'s own header claims
+"the sixty-seven rules this crate implements" — both hand-counted prose. Three different
+counts of "how many rules" exist in this workspace right now, none asserted equal to
+another by anything: the prose figure (67), `nomos_rules::DESCRIPTORS.len()` and
+`nomos-check-orchestration`'s own `RULE_COUNT` (65, proven equal to each other by `tests/
+contract/tests/rule_descriptors.rs`'s bidirectional set comparison), and the raw count of
+every `pub fn Check_*` this crate defines (84, counting every rule function regardless of
+whether it is composed into a real run or resolved through `DESCRIPTORS`). That three
+plausible "authoritative" numbers can coexist, unreconciled, in a workspace this disciplined
+about mirrors and completeness is itself the strongest evidence the `why` text offers: this
+property is real, current, and unchecked — and also that even a person auditing it by hand
+cannot say which of the three the prose was ever supposed to match without knowing what
+population each one counts. A rule cannot resolve that ambiguity either without the same
+answer a person needs first.
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#8
+
+*revision: authored · kind: prose · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / What Was Measured · hash: sha256:2b7671411e657a669a7584e0481699b6f92f287e66e935f30a61eb9649d9757b*
+
+**What "a declared projection relationship suppresses the finding" would require does not
+exist yet, on either side of it.** It presupposes a new annotation naming which artifact is
+canonical and which is a projection — not `universe_kind.rs`'s "Mirrored by", which only
+names a check's existence, never a value or a source-of-truth relationship — and a decision
+about whether suppression trusts the declaration on its face or the rule still verifies the
+projection actually holds. Building the annotation without deciding the second question
+would ship exactly the false-coverage shape `OD-COMPLETENESS-001` exists to catch: a
+declared relationship nothing confirms is worse than an admitted absence of one.
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#9
+
+*revision: authored · kind: heading · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#10
+
+*revision: authored · kind: prose · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / The Decision · hash: sha256:302002eac84a9fd7e247e26700071c232246345b3837428f4ebddaab7f1687f8*
+
+**The rule is not built here.** It needs two facts this workspace does not materialize
+today — a normalized value extracted from free prose (so "sixty-seven" reads as 67, not as
+opaque text), and an element count or comparable computed value for a declared list or
+table, held as an observed fact rather than read only by `cargo test` — and one convention
+not yet designed: a canonical/projection annotation, and whether suppression under it is
+trusted or itself verified. All three are capability-and-convention design questions of the
+same weight `OD-RULES-024` named for architecture drift and representation leakage, not
+details a rule's own implementation could improvise on the way past.
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#11
+
+*revision: authored · kind: prose · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / The Decision · hash: sha256:21920cd7432926d7f752758926caecf43f1edc1e6cd1127e5bf66f3b7c112f16*
+
+**The three-way rule-count disagreement measured above is recorded as the real instance a
+future rule should expect to find and resolve on its first run**, the same way `OD-RULES-
+023` recorded `nomos-store`'s single write door and `OD-RULES-024` recorded representation
+leakage's clean baseline. Which of 67, 65, or 84 the prose is actually supposed to track is
+not decided here: fixing it by hand now, without knowing what population `nomos-rules`'
+module-level prose is meant to describe, risks trading one unchecked number for another.
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#12
+
+*revision: authored · kind: heading · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#13
+
+*revision: authored · kind: prose · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / What This Record Does Not Do · hash: sha256:aba4eb88ef14e0b43c3452ce1d43b03ceedbd51ff6ec3e027c372848266ac2cc*
+
+**No code changes here**, the same discipline `OD-RULES-023` and `OD-RULES-024` both held
+to. It does not design the value-extraction fact, the list-length fact, or the canonical/
+projection annotation — each is a real capability or convention decision, not answered by
+naming that it is needed.
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#14
+
+*revision: authored · kind: prose · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / What This Record Does Not Do · hash: sha256:5cc493519972acc6f5e1199e84c6e11fbfceaf32338031b641116a82eac44b6c*
+
+It does not correct `lib.rs`'s or `checks.rs`'s own rule-count prose. That edit is left
+for whoever decides which of the three counts the sentence is meant to track — the fix
+belongs with the design that would let a rule hold it correct going forward, not as a
+one-off hand edit this record makes on its way past.
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#15
+
+*revision: authored · kind: prose · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / What This Record Does Not Do · hash: sha256:e584d7f1c4a0d703deac4760b17452cb7d8730479d19ff9905ed8add7ad8089d*
+
+It does not withdraw the property the original item asked for. Duplicate authority remains
+real, and this workspace has paid for it more than once, exactly as the item's own `why`
+says. It is undecided as unready, not declined as unwanted.
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#16
+
+*revision: authored · kind: heading · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#17
+
+*revision: authored · kind: prose · heading: Duplicate authority needs a value-comparison fact and a canonical/projection convention / Status · hash: sha256:0dfeef9c85393fd73cb9738005b6d7d6df73daa5d30fd0c7a72bac035aa5b633*
+
+Accepted. Duplicate authority needs a value-comparison fact, a list-length fact, and an
+undesigned canonical/projection convention before any rule can judge it; a real, live
+three-way rule-count disagreement in this crate's own prose is recorded as the instance a
+future rule should resolve.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

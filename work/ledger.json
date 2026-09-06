@@ -52857,7 +52857,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "not buildable against an existing fact: the nearest mechanism (Check_Completeness_Mirrors) only resolves whether a named check exists, never extracts or compares a value. Duplicate authority needs a value-extraction-from-prose fact, a list-length-as-observed-fact, and an undesigned canonical/projection annotation with its own suppression semantics. Reauthored as a Decision item citing OD-RULES-025, which also records a real live instance: nomos-rules' own rule-count prose (67) disagrees with both DESCRIPTORS.len()/RULE_COUNT (65) and the raw Check_ function count (84)."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -52873,7 +52877,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788672183
+      }
     },
     {
       "id": "P42-EXTERNAL-REVIEW-CAPABILITY",
@@ -56782,6 +56789,97 @@
           "exit_code": 0
         },
         "revision": "e81994b65025c9f2ca736efb7c5513ec043dca1b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-025-PROBE",
+      "title": "probe",
+      "why": "probe",
+      "done_when": "probe",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-025-probe.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "probe to check identifier availability; real item follows"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788672137
+      }
+    },
+    {
+      "id": "P58-DUPLICATE-AUTHORITY-MECHANISM",
+      "title": "Duplicate authority needs a value-comparison fact and a canonical/projection convention",
+      "why": "A person required a rule catching two artifacts that independently determine the same behaviour, where one should have been a projection of the other -- not source duplication, which ordinary tools already find. The nearest existing mechanism, Check_Completeness_Mirrors, only resolves whether a named check exists; it never extracts or compares a value, which is what this property actually needs. Both historical instances the item cited (the three-copy band table, the drifted twelve figure in mirror.rs) are already fixed by hand, neither by a rule. A real, live instance was found anyway: nomos-rules' own rule-count prose in lib.rs and checks.rs claims sixty-seven, while DESCRIPTORS.len()/RULE_COUNT (proven equal to each other) is sixty-five, and the raw count of every pub fn Check_* is eighty-four -- three numbers, none asserted equal to another by anything.",
+      "done_when": "A record measures the gap directly: confirms Check_Completeness_Mirrors judges existence rather than value equality, confirms both cited historical instances are already fixed and how, records the real three-way rule-count disagreement found in nomos-rules' own prose today, and names exactly what a real rule would need (a normalized-value-from-prose fact, a list/array-length-as-observed-fact, and a canonical/projection annotation with decided suppression semantics) without designing any of them. No code changes under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 15 tests\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788672256,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a7e1e126073f5f0a531af255193cc126f3ec2c42"
       },
       "abandoned": [],
       "displaced": [],
