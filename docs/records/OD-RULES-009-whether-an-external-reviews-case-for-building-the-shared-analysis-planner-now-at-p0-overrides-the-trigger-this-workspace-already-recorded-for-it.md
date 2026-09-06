@@ -3,7 +3,7 @@ id: OD-RULES-009
 type: decision
 title: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it
 status: accepted
-version: 6
+version: 7
 authority: canonical-normative-record
 tags:
   - rules
@@ -422,17 +422,78 @@ planner remains undeclined-against in principle; it remains, six rounds in, stil
 trigger that asks for it specifically rather than for a narrower fix at the site where growth
 actually happened.
 
+## Amendment: A Seventh Round, Naming The Same Mapping OD-GATE-017 Already Named And Finding The Registry Gap Closed Rather Than Open
+
+A seventh round of the same external review named `run_context.rs`'s `Materialize_*_Section`
+functions as its own highest-priority finding, proposing that each section's gate — a hardcoded
+chain of `Is_Rule_Selected(selected, X) || Is_Rule_Selected(selected, Y) || ...` naming specific
+`RuleId`s by hand — be replaced by a lookup against `RuleDescriptor.requires`, so a new rule
+needs only a `DESCRIPTORS` entry rather than a second hand-written one in this crate. Checked
+directly against the tree at this amendment's checkpoint rather than assumed novel: this is the
+identical shape `OD-GATE-017` already named and declined to build — "a fifth rule still needs
+its own hand-written entry in both places" — restated against nine sections instead of four, not
+new evidence bearing on any of the four triggers this record tracks.
+
+**Trigger 1 is not reopened, and the gap `OD-GATE-020` measured is now closed rather than merely
+decided narrowly.** `nomos-gate-orchestration::composition::Registered`
+(`crates/orchestration/nomos-gate-orchestration/src/composition.rs:90-108`) no longer builds its
+registry from a hand-written list at all: it loops over `nomos_rules::DESCRIPTORS` directly,
+`Offer`-ing every descriptor, and calls `nomos_check_orchestration::Resolve_Rules` against
+`Declared_Rules()` and `Composed_Rules()` first so a contradiction refuses before the registry is
+built. `Test_Registered_Should_Offer_Every_Composed_Rule` pins the result against `Composed_Rules`
+directly rather than a written-out identifier list, and `nomos-check-orchestration`'s own
+`Test_Every_Composed_Rule_Should_Be_Declared_And_Nothing_Else` pins `Declared_Rules()` against
+`Composed_Rules()` the same way. Both pass, verified directly, at `DESCRIPTORS.len() == 66`,
+matching `run_context.rs`'s own `RULE_COUNT`. The registry-versus-`Run` divergence this record's
+fifth amendment mis-stated as converging and the sixth amendment found had widened to forty-eight
+is gone, not narrowed — closed by exactly the kind of derived, tested pairing `OD-GATE-011`'s
+legitimate-exception test asks for, built for rule *identity* rather than for the materialization
+question this amendment's own review round re-raised.
+
+**Trigger 2 remains unfired, checked directly.** Every `selected` parameter in
+`run_context.rs` is still typed `&[RuleId]`, and no second selection axis exists anywhere in
+`nomos-check-orchestration` or `nomos-rules` — no `ScopeSelector`, no per-request parameter
+beyond the one `OD-GATE-017` built. Seven rounds in, participation still varies along exactly one
+axis.
+
+**Trigger 3 is decided, not merely tracked.** `P33-RULES-019-RECORD` — "whether the five
+repo-policy providers owe `standards.json` one shared read, or independent parsing stays the
+accepted cost of one-capability-one-provider" — is `declined`. Independent parsing is the
+accepted cost; this record's own prior Status line describing it as "not decided here" is now
+stale and is corrected below.
+
+**Trigger 4 has not diverged further.** `crates/capabilities/` still holds exactly the ten crates
+the sixth amendment counted, unchanged.
+
+**The population this record measures for absorption has grown again, and is absorbing better,
+not worse.** `nomos-rules` now exports eighty-five `Check_*` functions (`grep -c "^pub fn Check_"`
+against every file under `crates/rules/nomos-rules/src/`), against `DESCRIPTORS`,
+`Declared_Rules`, `Registered` and `Composed_Rules` holding steady at sixty-six, all four
+synchronized and tested rather than independently maintained. Nineteen rules sit additive and
+unwired — smaller a share of the whole (nineteen of eighty-five) than the thirty-one of
+thirty-nine the fifth amendment found, the opposite of what a straining hand-written surface
+would show.
+
+**Neither this round's proposal nor its supporting evidence fires a trigger this record does not
+already track, and the one number that changed moved the wrong direction for the review's own
+argument.** Seven rounds in, the pattern the sixth amendment named continues: real problems this
+workspace has found under the review's general banner are fixed or decided narrowly at the site
+where growth actually happened — trigger 1's gap by generic derivation scoped to rule identity,
+trigger 3 by a decision that independent parsing is fine — never by the standing abstraction the
+review keeps proposing ahead of a trigger that asks for it.
+
 ## Status
 
 Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`; the fourth
 fired once, via `Check_Cross_Language_Correspondence`, arguing against the planner on its own
-terms. The third trigger has now fired for the first time, narrowly, via the repo-policy family's
-duplicated `standards.json` reads — tracked as `P33-RULES-019-RECORD`, not decided here. The
-second remains unfired through six rounds. The registry-versus-`Run` divergence `OD-GATE-020`
-measured corrects this record's own fifth-amendment premise that the two lists were growing
-together, without reopening trigger 1, and is itself now decided narrowly rather than by the
-general mechanism this record continues to decline. Revisit if `P33-RULES-019-RECORD` or a
-correction closing `OD-GATE-020`'s gap is itself found to need a second, independently-maintained
-representation rather than the shared-derivation or sentinel shapes each has already named, or if
-participation varies by a second axis, or if a *diverging* rule population resumes growing the
-hand-written surface past a point future evidence shows it stops absorbing cleanly.
+terms. The third trigger fired once, narrowly, via the repo-policy family's duplicated
+`standards.json` reads, and is now decided: `P33-RULES-019-RECORD` declined a shared read,
+leaving independent parsing as the accepted cost. The second remains unfired through seven
+rounds. The registry-versus-`Run` divergence `OD-GATE-020` measured is closed, not merely decided
+narrowly: `nomos-gate-orchestration::composition::Registered` derives from `nomos_rules::
+DESCRIPTORS` directly and is pinned against `Composed_Rules` by a real test, the same shape
+`Declared_Rules()` already used against `Composed_Rules()` on the `nomos-check-orchestration`
+side. Revisit if participation varies by a second axis, or if a *diverging* rule population
+resumes growing the hand-written materialization surface past a point future evidence shows it
+stops absorbing cleanly, or if a future round's proposal names a trigger this record does not
+already track rather than restating one already found unfired.
