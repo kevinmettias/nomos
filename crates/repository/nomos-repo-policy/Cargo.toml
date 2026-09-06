@@ -1,0 +1,27 @@
+[package]
+name = "nomos-repo-policy"
+version = "0.1.0"
+description = "Band 25. The five nomos.cap.*.policy providers (naming, limits, scripting, words, goals), consolidated from six crates into one after OD-PACKAGE-015 found none of them earned an independent crate boundary. Each provider keeps its own module, its own capability contract, and its own ProviderId; the shared standards.json read/parse step OD-RULES-019 decided the five owe is a private module beneath them. OD-RULES-011, OD-RULES-019, OD-PACKAGE-015."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-analysis = { workspace = true }
+nomos-cap-naming-policy = { workspace = true }
+nomos-cap-limits-policy = { workspace = true }
+nomos-cap-scripting-policy = { workspace = true }
+nomos-cap-words-policy = { workspace = true }
+nomos-cap-goals-policy = { workspace = true }
+nomos-platform = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+nomos-platform-std = { workspace = true }
+
+[lints]
+workspace = true

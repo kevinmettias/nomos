@@ -1043,11 +1043,7 @@ dependencies = [
  "nomos-model",
  "nomos-platform",
  "nomos-platform-std",
- "nomos-repo-goals",
- "nomos-repo-limits",
- "nomos-repo-scripting",
- "nomos-repo-standards",
- "nomos-repo-words",
+ "nomos-repo-policy",
  "nomos-rule-package",
  "nomos-rules",
  "nomos-workspace",
@@ -1162,11 +1158,7 @@ dependencies = [
  "nomos-lang-rust-scan",
  "nomos-model",
  "nomos-platform-std",
- "nomos-repo-goals",
- "nomos-repo-limits",
- "nomos-repo-scripting",
- "nomos-repo-standards",
- "nomos-repo-words",
+ "nomos-repo-policy",
  "nomos-spec-bundle",
  "nomos-spec-model",
  "nomos-spec-project",
@@ -1380,86 +1372,20 @@ dependencies = [
 ]
 
 [[package]]
-name = "nomos-repo-goals"
+name = "nomos-repo-policy"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
  "nomos-cap-goals-policy",
- "nomos-capability",
- "nomos-contracts",
- "nomos-model",
- "nomos-platform",
- "nomos-platform-std",
- "nomos-repo-standards-document",
- "serde_json",
-]
-
-[[package]]
-name = "nomos-repo-limits"
-version = "0.1.0"
-dependencies = [
- "nomos-analysis",
  "nomos-cap-limits-policy",
- "nomos-capability",
- "nomos-contracts",
- "nomos-model",
- "nomos-platform",
- "nomos-platform-std",
- "nomos-repo-standards-document",
- "serde_json",
-]
-
-[[package]]
-name = "nomos-repo-scripting"
-version = "0.1.0"
-dependencies = [
- "nomos-analysis",
- "nomos-cap-scripting-policy",
- "nomos-capability",
- "nomos-contracts",
- "nomos-model",
- "nomos-platform",
- "nomos-platform-std",
- "nomos-repo-standards-document",
- "serde_json",
-]
-
-[[package]]
-name = "nomos-repo-standards"
-version = "0.1.0"
-dependencies = [
- "nomos-analysis",
  "nomos-cap-naming-policy",
- "nomos-capability",
- "nomos-contracts",
- "nomos-model",
- "nomos-platform",
- "nomos-platform-std",
- "nomos-repo-standards-document",
- "serde_json",
-]
-
-[[package]]
-name = "nomos-repo-standards-document"
-version = "0.1.0"
-dependencies = [
- "nomos-platform",
- "nomos-platform-std",
- "serde_json",
-]
-
-[[package]]
-name = "nomos-repo-words"
-version = "0.1.0"
-dependencies = [
- "nomos-analysis",
+ "nomos-cap-scripting-policy",
  "nomos-cap-words-policy",
  "nomos-capability",
  "nomos-contracts",
  "nomos-model",
  "nomos-platform",
  "nomos-platform-std",
- "nomos-repo-standards-document",
  "serde_json",
 ]
 

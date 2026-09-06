@@ -83,45 +83,15 @@ members = [
     # none of them may name it. `OD-CAPABILITY-009`.
     "crates/languages/nomos-lang-go-modules",
 
-    # Band 24 — the shared standards.json acquisition step OD-RULES-019 decided the five
-    # nomos.cap.*.policy providers below owe one read/parse boundary. Owns STANDARDS_JSON,
-    # the Read_To_String/serde_json::from_str sequence and one error type; no semantic
-    # extraction, which stays in each provider's own reading.rs. Strictly below the five
-    # providers it is depended on by, and above nomos-platform, the port it reads through.
-    "crates/repository/nomos-repo-standards-document",
-
-    # Band 25 — nomos.cap.naming.policy's one provider, and the first crate under
-    # crates/repository/ rather than crates/languages/: it reads standards.json, a
-    # repository-wide configuration file, not one language's source or manifest format.
-    # `OD-RULES-011`.
-    "crates/repository/nomos-repo-standards",
-
-    # Band 25 — nomos.cap.limits.policy's one provider, alongside nomos-repo-standards for
-    # the same reason: it reads standards.json's limits and languages.*.limits blocks, a
-    # repository-wide configuration file, not one language's source or manifest format.
-    # `OD-RULES-011`'s threshold-family instance.
-    "crates/repository/nomos-repo-limits",
-
-    # Band 25 — nomos.cap.scripting.policy's one provider, alongside nomos-repo-standards
-    # and nomos-repo-limits for the same reason: it reads standards.json's
-    # scripting.tooling_language and scripting.forbidden_extensions, a repository-wide
-    # configuration file, not one language's source or manifest format. `OD-RULES-011`'s
-    # third instance.
-    "crates/repository/nomos-repo-scripting",
-
-    # Band 25 — nomos.cap.words.policy's one provider, alongside nomos-repo-standards,
-    # nomos-repo-limits and nomos-repo-scripting for the same reason: it reads
-    # standards.json's words.approved_abbreviations, a repository-wide configuration file,
-    # not one language's source or manifest format. `OD-RULES-011`'s fourth instance.
-    "crates/repository/nomos-repo-words",
-
-    # Band 25 — nomos.cap.goals.policy's one provider, alongside its four siblings above
-    # for the same reason: it reads standards.json's goals, max_subsystems_per_goal and
-    # subsystems keys, a repository-wide configuration file, not one language's source or
-    # manifest format. `OD-RULES-011`'s fifth instance, and the strongest case for the
-    # placement: a goal is a statement about the system, and a system does not have one set
-    # of purposes per language.
-    "crates/repository/nomos-repo-goals",
+    # Band 25 — the five nomos.cap.*.policy providers (naming, limits, scripting, words,
+    # goals), consolidated from six crates into one after OD-PACKAGE-015 found none of them
+    # earned an independent crate boundary: no independent versioning, no enforced
+    # isolation, and their two real consumers (nomos-check-orchestration and
+    # tests/integration) already depended on all five together, every time. Each provider
+    # keeps its own module, its own capability contract, and its own ProviderId; the shared
+    # standards.json read/parse step OD-RULES-019 decided the five owe is a private module
+    # beneath them. `OD-RULES-011`, `OD-RULES-019`, `OD-PACKAGE-015`.
+    "crates/repository/nomos-repo-policy",
 
     # Band 23 — the nomos.cap.dependency.edges contract, alongside nomos-cap-syntax. Not
     # left beside its provider the way nomos.cap.module.index is: nomos-rules is a real
@@ -369,7 +339,6 @@ nomos-cap-limits-policy = { path = "crates/capabilities/nomos-cap-limits-policy"
 nomos-cap-scripting-policy = { path = "crates/capabilities/nomos-cap-scripting-policy" }
 nomos-cap-words-policy = { path = "crates/capabilities/nomos-cap-words-policy" }
 nomos-cap-goals-policy = { path = "crates/capabilities/nomos-cap-goals-policy" }
-nomos-repo-goals = { path = "crates/repository/nomos-repo-goals" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-lang-go = { path = "crates/languages/nomos-lang-go" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
@@ -378,11 +347,7 @@ nomos-lang-rust-clippy = { path = "crates/languages/nomos-lang-rust-clippy" }
 nomos-lang-rust-deny = { path = "crates/languages/nomos-lang-rust-deny" }
 nomos-lang-rust-compiler = { path = "crates/languages/nomos-lang-rust-compiler" }
 nomos-lang-go-modules = { path = "crates/languages/nomos-lang-go-modules" }
-nomos-repo-standards = { path = "crates/repository/nomos-repo-standards" }
-nomos-repo-limits = { path = "crates/repository/nomos-repo-limits" }
-nomos-repo-scripting = { path = "crates/repository/nomos-repo-scripting" }
-nomos-repo-words = { path = "crates/repository/nomos-repo-words" }
-nomos-repo-standards-document = { path = "crates/repository/nomos-repo-standards-document" }
+nomos-repo-policy = { path = "crates/repository/nomos-repo-policy" }
 nomos-package = { path = "crates/packages/nomos-package" }
 nomos-lang-rust-package = { path = "crates/packages/nomos-lang-rust-package" }
 nomos-model-package = { path = "crates/packages/nomos-model-package" }

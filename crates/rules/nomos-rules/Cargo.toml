@@ -39,29 +39,29 @@ nomos-cap-lint = { workspace = true }
 # happens to come from today. OD-RULES-010's second real ToolProvider.
 nomos-cap-dependency-policy = { workspace = true }
 # nomos-cap-naming-policy, the identical reasoning: the six casing rules name
-# nomos.cap.naming.policy, never nomos-repo-standards, which is where the answer happens
+# nomos.cap.naming.policy, never nomos-repo-policy::naming, which is where the answer happens
 # to come from today. OD-RULES-011: an optional read, per OD-CAPABILITY-004 -- its
 # absence falls back to each rule's own prior default rather than becoming a Finding.
 nomos-cap-naming-policy = { workspace = true }
 # nomos-cap-limits-policy, the identical reasoning applied to OD-RULES-011's threshold-
 # family instance: the file-size trigger rules name nomos.cap.limits.policy, never
-# nomos-repo-limits, which is where the answer happens to come from today. Also an
+# nomos-repo-policy::limits, which is where the answer happens to come from today. Also an
 # optional read, per the same OD-CAPABILITY-004 fallback naming's rules already use.
 nomos-cap-limits-policy = { workspace = true }
 # nomos-cap-scripting-policy, a third OD-RULES-011 instance: Check_Declared_Tooling_
-# Language_For_Scripts names nomos.cap.scripting.policy, never nomos-repo-scripting, which
+# Language_For_Scripts names nomos.cap.scripting.policy, never nomos-repo-policy::scripting, which
 # is where the answer happens to come from today. Unlike its two siblings, an unconfigured
 # repository resolves to no findings at all rather than a hardcoded prior value -- this
 # rule never existed before this capability did.
 nomos-cap-scripting-policy = { workspace = true }
 # nomos-cap-words-policy, a fourth OD-RULES-011 instance: Check_Abbreviations names
-# nomos.cap.words.policy, never nomos-repo-words, which is where the answer happens to
+# nomos.cap.words.policy, never nomos-repo-policy::words, which is where the answer happens to
 # come from today. An optional read that extends a hardcoded default vocabulary rather
 # than replacing it -- code-standards' own words package's stated philosophy.
 nomos-cap-words-policy = { workspace = true }
 # nomos-cap-goals-policy, a fifth OD-RULES-011 instance and the only one whose rule reads
 # nothing else: Check_Goals_And_Parts_Line_Up names nomos.cap.goals.policy, never
-# nomos-repo-goals, which is where the answer happens to come from today. Optional in the
+# nomos-repo-policy::goals, which is where the answer happens to come from today. Optional in the
 # same OD-CAPABILITY-004 sense as its four siblings -- but here an absent read and an empty
 # declaration are the same answer, since a repository that declared no goals is judged
 # nothing either way, so this rule carries no fallback default of its own.

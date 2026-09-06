@@ -367,7 +367,7 @@
 //! is a value a repository states — the goal set, the part-to-goal mapping, and the
 //! ceiling on how thinly one purpose may be spread — so no version of this rule could have
 //! compiled its parameters in and still meant anything. `nomos-cap-goals-policy` carries
-//! all three and `nomos-repo-goals` reads them out of `standards.json`.
+//! all three and `nomos-repo-policy::goals` reads them out of `standards.json`.
 //!
 //! One rule document, four judgments — the exact opposite of `facade`'s split one
 //! paragraph above, where one code-standards tool carried three published rule documents.

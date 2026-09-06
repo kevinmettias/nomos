@@ -30,11 +30,7 @@ nomos-lang-go = { workspace = true }
 nomos-lang-go-modules = { workspace = true }
 nomos-model = { workspace = true }
 nomos-platform = { workspace = true }
-nomos-repo-standards = { workspace = true }
-nomos-repo-limits = { workspace = true }
-nomos-repo-scripting = { workspace = true }
-nomos-repo-goals = { workspace = true }
-nomos-repo-words = { workspace = true }
+nomos-repo-policy = { workspace = true }
 nomos-rule-package = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-workspace = { workspace = true }

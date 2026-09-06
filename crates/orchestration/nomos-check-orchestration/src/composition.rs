@@ -151,14 +151,14 @@ fn Declare_Dependency_Policy_Capability(registry: &mut Registry) -> Result<(), R
 }
 
 /// A sixth capability, one offer against it -- `OD-RULES-011`'s first capability instance
-/// wired for real. `nomos_repo_standards` reads this repository's own `standards.json`
+/// wired for real. `nomos_repo_policy::naming` reads this repository's own `standards.json`
 /// through the `FileSystem` [`crate::run_context::RunContext`] now carries, the same
 /// `Declare`-then-`Offer` shape [`Declare_Dependency_Policy_Capability`] already has one
 /// capability over.
 fn Declare_Naming_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
 {
     registry.Declare(nomos_cap_naming_policy::Capability_Contract())?;
-    registry.Offer(nomos_repo_standards::Provider_Offer())?;
+    registry.Offer(nomos_repo_policy::naming::Provider_Offer())?;
 
     return Ok(());
 }
@@ -176,7 +176,7 @@ fn Declare_Naming_Policy_Capability(registry: &mut Registry) -> Result<(), Regis
 fn Declare_Limits_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
 {
     registry.Declare(nomos_cap_limits_policy::Capability_Contract())?;
-    registry.Offer(nomos_repo_limits::Provider_Offer())?;
+    registry.Offer(nomos_repo_policy::limits::Provider_Offer())?;
 
     return Ok(());
 }
@@ -193,7 +193,7 @@ fn Declare_Limits_Policy_Capability(registry: &mut Registry) -> Result<(), Regis
 fn Declare_Scripting_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
 {
     registry.Declare(nomos_cap_scripting_policy::Capability_Contract())?;
-    registry.Offer(nomos_repo_scripting::Provider_Offer())?;
+    registry.Offer(nomos_repo_policy::scripting::Provider_Offer())?;
 
     return Ok(());
 }
@@ -209,7 +209,7 @@ fn Declare_Scripting_Policy_Capability(registry: &mut Registry) -> Result<(), Re
 fn Declare_Goals_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
 {
     registry.Declare(nomos_cap_goals_policy::Capability_Contract())?;
-    registry.Offer(nomos_repo_goals::Provider_Offer())?;
+    registry.Offer(nomos_repo_policy::goals::Provider_Offer())?;
 
     return Ok(());
 }
@@ -223,7 +223,7 @@ fn Declare_Goals_Policy_Capability(registry: &mut Registry) -> Result<(), Regist
 fn Declare_Words_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
 {
     registry.Declare(nomos_cap_words_policy::Capability_Contract())?;
-    registry.Offer(nomos_repo_words::Provider_Offer())?;
+    registry.Offer(nomos_repo_policy::words::Provider_Offer())?;
 
     return Ok(());
 }

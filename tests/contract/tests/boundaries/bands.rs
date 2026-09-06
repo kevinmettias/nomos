@@ -75,13 +75,6 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // so a second language's package crate can depend on this one without also
     // depending on Rust's. `OD-PACKAGE-007`.
     ("nomos-package", 24),
-    // The shared standards.json acquisition step OD-RULES-019 decided the five
-    // nomos.cap.*.policy providers below owe one read/parse boundary: STANDARDS_JSON, the
-    // Read_To_String/serde_json::from_str sequence, and one error type each of the five
-    // providers' own errors converts from. Strictly below the five providers that depend
-    // on it and above nomos-platform, the port it reads through. No semantic extraction —
-    // that stays in each provider's own reading.rs, unchanged by this crate's existence.
-    ("nomos-repo-standards-document", 24),
     // Language providers sit above analysis because they produce the facts it stores,
     // and nothing sits above them but a composition root. They reach each other not at
     // all: two languages are two providers of one capability, and the registry is the
@@ -122,14 +115,12 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // says why -- but the same band and the same rule as its three siblings above: none of
     // the four may name any other. `OD-CAPABILITY-009`.
     ("nomos-lang-go-modules", 25),
-    // The one provider of nomos.cap.naming.policy -- reads standards.json through
-    // nomos_platform::FileSystem. The first crate under crates/repository/ rather than
-    // crates/languages/. `OD-RULES-011`.
-    ("nomos-repo-standards", 25),
-    ("nomos-repo-limits", 25),
-    ("nomos-repo-scripting", 25),
-    ("nomos-repo-words", 25),
-    ("nomos-repo-goals", 25),
+    // The five nomos.cap.*.policy providers (naming, limits, scripting, words, goals),
+    // consolidated from six crates into one after OD-PACKAGE-015 found none of them earned
+    // an independent crate boundary. Each provider keeps its own module and the shared
+    // standards.json read step OD-RULES-019 decided the five owe is a private module
+    // beneath them. `OD-RULES-011`, `OD-RULES-019`, `OD-PACKAGE-015`.
+    ("nomos-repo-policy", 25),
     // The Rust installable-unit manifest format: PackageId, PackageKind and PKG-007's
     // four version domains, given a reader that refuses what it cannot resolve. Wraps
     // nomos-package's generic core with RustEdition resolution. Above the two language

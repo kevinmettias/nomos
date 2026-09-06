@@ -140,7 +140,7 @@ fn Test_The_Copy_Clones_Provider_Should_Meet_Its_Declared_Strategy()
 #[test]
 fn Test_The_Limits_Policy_Provider_Should_Meet_Its_Declared_Strategy()
 {
-    use nomos_repo_limits::LimitsPolicyFactProduction;
+    use nomos_repo_policy::limits::LimitsPolicyFactProduction;
 
     // No golden, the identical reason `DependencyPolicyFactProduction` has none above:
     // `LimitsPolicyFactProduction` declares `CrossRun`.
@@ -154,7 +154,7 @@ fn Test_The_Limits_Policy_Provider_Should_Meet_Its_Declared_Strategy()
 #[test]
 fn Test_The_Naming_Policy_Provider_Should_Meet_Its_Declared_Strategy()
 {
-    use nomos_repo_standards::NamingPolicyFactProduction;
+    use nomos_repo_policy::naming::NamingPolicyFactProduction;
 
     // No golden, the identical reason `LimitsPolicyFactProduction` has none above:
     // `NamingPolicyFactProduction` declares `CrossRun`.
@@ -168,7 +168,7 @@ fn Test_The_Naming_Policy_Provider_Should_Meet_Its_Declared_Strategy()
 #[test]
 fn Test_The_Scripting_Policy_Provider_Should_Meet_Its_Declared_Strategy()
 {
-    use nomos_repo_scripting::ScriptingPolicyFactProduction;
+    use nomos_repo_policy::scripting::ScriptingPolicyFactProduction;
 
     // No golden, the identical reason `NamingPolicyFactProduction` has none above:
     // `ScriptingPolicyFactProduction` declares `CrossRun`.
@@ -182,7 +182,7 @@ fn Test_The_Scripting_Policy_Provider_Should_Meet_Its_Declared_Strategy()
 #[test]
 fn Test_The_Words_Policy_Provider_Should_Meet_Its_Declared_Strategy()
 {
-    use nomos_repo_words::WordsPolicyFactProduction;
+    use nomos_repo_policy::words::WordsPolicyFactProduction;
 
     // No golden, the identical reason `ScriptingPolicyFactProduction` has none above:
     // `WordsPolicyFactProduction` declares `CrossRun`.
@@ -196,7 +196,7 @@ fn Test_The_Words_Policy_Provider_Should_Meet_Its_Declared_Strategy()
 #[test]
 fn Test_The_Goals_Policy_Provider_Should_Meet_Its_Declared_Strategy()
 {
-    use nomos_repo_goals::GoalsPolicyFactProduction;
+    use nomos_repo_policy::goals::GoalsPolicyFactProduction;
 
     // No golden, the identical reason `WordsPolicyFactProduction` has none above:
     // `GoalsPolicyFactProduction` declares `CrossRun`.

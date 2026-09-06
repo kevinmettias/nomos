@@ -685,7 +685,7 @@ fn Repository_Root() -> std::path::PathBuf
         .expect("tests/integration sits two levels below the workspace root");
 }
 
-/// `nomos-repo-limits`'s one fact over this repository's own real `standards.json`.
+/// `nomos_repo_policy::limits`'s one fact over this repository's own real `standards.json`.
 ///
 /// The identical reasoning [`Dependency_Policy_Production`] gives for using the real
 /// repository rather than the shared `FIXTURE`: this provider's whole reason for existing is
@@ -699,9 +699,9 @@ pub(crate) fn Limits_Policy_Production() -> Vec<u8>
     return Rendered_Limits_Policy_Fact(&fact);
 }
 
-fn Limits_Policy_Context() -> nomos_repo_limits::FactContext
+fn Limits_Policy_Context() -> nomos_repo_policy::limits::FactContext
 {
-    return nomos_repo_limits::FactContext {
+    return nomos_repo_policy::limits::FactContext {
         snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
         variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
         configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
@@ -711,13 +711,13 @@ fn Limits_Policy_Context() -> nomos_repo_limits::FactContext
 
 /// This repository's own real workspace, materialized through the door this provider
 /// actually reads `standards.json` through.
-fn Discovered_Limits_Policy_Fact(context: nomos_repo_limits::FactContext) -> nomos_repo_limits::PolicyFact
+fn Discovered_Limits_Policy_Fact(context: nomos_repo_policy::limits::FactContext) -> nomos_repo_policy::limits::PolicyFact
 {
-    return nomos_repo_limits::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
+    return nomos_repo_policy::limits::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
         .expect("this repository's own standards.json is real and well-formed");
 }
 
-fn Rendered_Limits_Policy_Fact(fact: &nomos_repo_limits::PolicyFact) -> Vec<u8>
+fn Rendered_Limits_Policy_Fact(fact: &nomos_repo_policy::limits::PolicyFact) -> Vec<u8>
 {
     let mut rendered = Vec::new();
     rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
@@ -726,7 +726,7 @@ fn Rendered_Limits_Policy_Fact(fact: &nomos_repo_limits::PolicyFact) -> Vec<u8>
     return rendered;
 }
 
-/// `nomos-repo-standards`'s one fact over this repository's own real `standards.json`.
+/// `nomos_repo_policy::naming`'s one fact over this repository's own real `standards.json`.
 ///
 /// The identical reasoning [`Limits_Policy_Production`] gives, one crate over: this
 /// provider's whole reason for existing is that it reads this repository's own declared
@@ -739,9 +739,9 @@ pub(crate) fn Naming_Policy_Production() -> Vec<u8>
     return Rendered_Naming_Policy_Fact(&fact);
 }
 
-fn Naming_Policy_Context() -> nomos_repo_standards::FactContext
+fn Naming_Policy_Context() -> nomos_repo_policy::naming::FactContext
 {
-    return nomos_repo_standards::FactContext {
+    return nomos_repo_policy::naming::FactContext {
         snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
         variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
         configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
@@ -751,13 +751,13 @@ fn Naming_Policy_Context() -> nomos_repo_standards::FactContext
 
 /// This repository's own real workspace, materialized through the door this provider
 /// actually reads `standards.json` through.
-fn Discovered_Naming_Policy_Fact(context: nomos_repo_standards::FactContext) -> nomos_repo_standards::PolicyFact
+fn Discovered_Naming_Policy_Fact(context: nomos_repo_policy::naming::FactContext) -> nomos_repo_policy::naming::PolicyFact
 {
-    return nomos_repo_standards::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
+    return nomos_repo_policy::naming::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
         .expect("this repository's own standards.json is real and well-formed");
 }
 
-fn Rendered_Naming_Policy_Fact(fact: &nomos_repo_standards::PolicyFact) -> Vec<u8>
+fn Rendered_Naming_Policy_Fact(fact: &nomos_repo_policy::naming::PolicyFact) -> Vec<u8>
 {
     let mut rendered = Vec::new();
     rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
@@ -766,7 +766,7 @@ fn Rendered_Naming_Policy_Fact(fact: &nomos_repo_standards::PolicyFact) -> Vec<u
     return rendered;
 }
 
-/// `nomos-repo-scripting`'s one fact over this repository's own real `standards.json`.
+/// `nomos_repo_policy::scripting`'s one fact over this repository's own real `standards.json`.
 ///
 /// The identical reasoning [`Limits_Policy_Production`] gives, one crate over: this
 /// provider's whole reason for existing is that it reads this repository's own declared
@@ -779,9 +779,9 @@ pub(crate) fn Scripting_Policy_Production() -> Vec<u8>
     return Rendered_Scripting_Policy_Fact(&fact);
 }
 
-fn Scripting_Policy_Context() -> nomos_repo_scripting::FactContext
+fn Scripting_Policy_Context() -> nomos_repo_policy::scripting::FactContext
 {
-    return nomos_repo_scripting::FactContext {
+    return nomos_repo_policy::scripting::FactContext {
         snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
         variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
         configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
@@ -791,13 +791,13 @@ fn Scripting_Policy_Context() -> nomos_repo_scripting::FactContext
 
 /// This repository's own real workspace, materialized through the door this provider
 /// actually reads `standards.json` through.
-fn Discovered_Scripting_Policy_Fact(context: nomos_repo_scripting::FactContext) -> nomos_repo_scripting::PolicyFact
+fn Discovered_Scripting_Policy_Fact(context: nomos_repo_policy::scripting::FactContext) -> nomos_repo_policy::scripting::PolicyFact
 {
-    return nomos_repo_scripting::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
+    return nomos_repo_policy::scripting::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
         .expect("this repository's own standards.json is real and well-formed");
 }
 
-fn Rendered_Scripting_Policy_Fact(fact: &nomos_repo_scripting::PolicyFact) -> Vec<u8>
+fn Rendered_Scripting_Policy_Fact(fact: &nomos_repo_policy::scripting::PolicyFact) -> Vec<u8>
 {
     let mut rendered = Vec::new();
     rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
@@ -806,7 +806,7 @@ fn Rendered_Scripting_Policy_Fact(fact: &nomos_repo_scripting::PolicyFact) -> Ve
     return rendered;
 }
 
-/// `nomos-repo-words`'s one fact over this repository's own real `standards.json`.
+/// `nomos_repo_policy::words`'s one fact over this repository's own real `standards.json`.
 ///
 /// The identical reasoning [`Limits_Policy_Production`] gives, one crate over: this
 /// provider's whole reason for existing is that it reads this repository's own declared
@@ -819,9 +819,9 @@ pub(crate) fn Words_Policy_Production() -> Vec<u8>
     return Rendered_Words_Policy_Fact(&fact);
 }
 
-fn Words_Policy_Context() -> nomos_repo_words::FactContext
+fn Words_Policy_Context() -> nomos_repo_policy::words::FactContext
 {
-    return nomos_repo_words::FactContext {
+    return nomos_repo_policy::words::FactContext {
         snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
         variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
         configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
@@ -831,13 +831,13 @@ fn Words_Policy_Context() -> nomos_repo_words::FactContext
 
 /// This repository's own real workspace, materialized through the door this provider
 /// actually reads `standards.json` through.
-fn Discovered_Words_Policy_Fact(context: nomos_repo_words::FactContext) -> nomos_repo_words::PolicyFact
+fn Discovered_Words_Policy_Fact(context: nomos_repo_policy::words::FactContext) -> nomos_repo_policy::words::PolicyFact
 {
-    return nomos_repo_words::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
+    return nomos_repo_policy::words::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
         .expect("this repository's own standards.json is real and well-formed");
 }
 
-fn Rendered_Words_Policy_Fact(fact: &nomos_repo_words::PolicyFact) -> Vec<u8>
+fn Rendered_Words_Policy_Fact(fact: &nomos_repo_policy::words::PolicyFact) -> Vec<u8>
 {
     let mut rendered = Vec::new();
     rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
@@ -846,7 +846,7 @@ fn Rendered_Words_Policy_Fact(fact: &nomos_repo_words::PolicyFact) -> Vec<u8>
     return rendered;
 }
 
-/// `nomos-repo-goals`'s one fact over this repository's own real `standards.json`.
+/// `nomos_repo_policy::goals`'s one fact over this repository's own real `standards.json`.
 ///
 /// The identical reasoning [`Words_Policy_Production`] gives, one crate over -- with one
 /// thing worth saying out loud, since it would otherwise read as a hole: this repository
@@ -862,9 +862,9 @@ pub(crate) fn Goals_Policy_Production() -> Vec<u8>
     return Rendered_Goals_Policy_Fact(&fact);
 }
 
-fn Goals_Policy_Context() -> nomos_repo_goals::FactContext
+fn Goals_Policy_Context() -> nomos_repo_policy::goals::FactContext
 {
-    return nomos_repo_goals::FactContext {
+    return nomos_repo_policy::goals::FactContext {
         snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
         variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
         configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
@@ -874,13 +874,13 @@ fn Goals_Policy_Context() -> nomos_repo_goals::FactContext
 
 /// This repository's own real workspace, materialized through the door this provider
 /// actually reads `standards.json` through.
-fn Discovered_Goals_Policy_Fact(context: nomos_repo_goals::FactContext) -> nomos_repo_goals::PolicyFact
+fn Discovered_Goals_Policy_Fact(context: nomos_repo_policy::goals::FactContext) -> nomos_repo_policy::goals::PolicyFact
 {
-    return nomos_repo_goals::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
+    return nomos_repo_policy::goals::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
         .expect("this repository's own standards.json is real and well-formed");
 }
 
-fn Rendered_Goals_Policy_Fact(fact: &nomos_repo_goals::PolicyFact) -> Vec<u8>
+fn Rendered_Goals_Policy_Fact(fact: &nomos_repo_policy::goals::PolicyFact) -> Vec<u8>
 {
     let mut rendered = Vec::new();
     rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());

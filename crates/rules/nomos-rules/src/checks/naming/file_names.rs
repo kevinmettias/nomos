@@ -112,7 +112,7 @@ fn Comparable_Stem(path: &str) -> Option<String>
 ///
 /// A module holding types alone is named for a type, and `file-name-matches-declared-type`
 /// says which one. A module that also exports a free function is named for what it does,
-/// and its types are subordinate to that: `nomos-repo-goals/src/reading.rs` exports
+/// and its types are subordinate to that: `nomos-repo-policy/src/goals/reading.rs` exports
 /// `Discover_Workspace` and the error `Discover_Workspace` returns, so renaming it
 /// `goals_policy_error.rs` would name it after the least important thing in it. `OD-RULES-015`
 /// records the decision and the measurement behind it -- across the 46 findings this rule

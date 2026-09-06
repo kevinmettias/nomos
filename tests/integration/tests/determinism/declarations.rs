@@ -48,11 +48,11 @@ fn Declared_Domains() -> [(&'static str, DeterminismStrength); 19]
     use nomos_lang_rust_compiler::CloneOnCopyFactProduction;
     use nomos_lang_rust_deny::DependencyPolicyFactProduction;
     use nomos_lang_rust_scan::ScanFactProduction;
-    use nomos_repo_limits::LimitsPolicyFactProduction;
-    use nomos_repo_goals::GoalsPolicyFactProduction;
-    use nomos_repo_scripting::ScriptingPolicyFactProduction;
-    use nomos_repo_standards::NamingPolicyFactProduction;
-    use nomos_repo_words::WordsPolicyFactProduction;
+    use nomos_repo_policy::limits::LimitsPolicyFactProduction;
+    use nomos_repo_policy::goals::GoalsPolicyFactProduction;
+    use nomos_repo_policy::scripting::ScriptingPolicyFactProduction;
+    use nomos_repo_policy::naming::NamingPolicyFactProduction;
+    use nomos_repo_policy::words::WordsPolicyFactProduction;
     use nomos_spec_bundle::BundleSerialization;
     use nomos_spec_project::ProjectionOutput;
     use nomos_workspace::SnapshotSerialization;

@@ -29,7 +29,7 @@ pub fn Materialize_Naming_Policy<Fs: FileSystem>(root: &Path, context: &Context,
 {
     let production = Naming_Production(context);
 
-    let Ok(fact) = nomos_repo_standards::Materialize_Workspace(root, production, filesystem)
+    let Ok(fact) = nomos_repo_policy::naming::Materialize_Workspace(root, production, filesystem)
     else
     {
         return 0;
@@ -38,13 +38,13 @@ pub fn Materialize_Naming_Policy<Fs: FileSystem>(root: &Path, context: &Context,
     return usize::from(store.Materialize(fact.fact, &[]).is_ok());
 }
 
-/// The reading context as `nomos_repo_standards`'s provider takes it -- the same
+/// The reading context as `nomos_repo_policy::naming`'s provider takes it -- the same
 /// four-field carry [`super::dependency_materialization::Deny_Production`] already does for
 /// `nomos_lang_rust_deny`, since every provider's own `FactContext` shape agrees on
 /// snapshot/variant/configuration/generation.
-fn Naming_Production(context: &Context) -> nomos_repo_standards::FactContext
+fn Naming_Production(context: &Context) -> nomos_repo_policy::naming::FactContext
 {
-    return nomos_repo_standards::FactContext {
+    return nomos_repo_policy::naming::FactContext {
         snapshot: context.snapshot,
         variant: context.variant,
         configuration: context.configuration,
@@ -68,7 +68,7 @@ pub fn Materialize_Limits_Policy<Fs: FileSystem>(root: &Path, context: &Context,
 {
     let production = Limits_Production(context);
 
-    let Ok(fact) = nomos_repo_limits::Materialize_Workspace(root, production, filesystem)
+    let Ok(fact) = nomos_repo_policy::limits::Materialize_Workspace(root, production, filesystem)
     else
     {
         return 0;
@@ -77,9 +77,9 @@ pub fn Materialize_Limits_Policy<Fs: FileSystem>(root: &Path, context: &Context,
     return usize::from(store.Materialize(fact.fact, &[]).is_ok());
 }
 
-fn Limits_Production(context: &Context) -> nomos_repo_limits::FactContext
+fn Limits_Production(context: &Context) -> nomos_repo_policy::limits::FactContext
 {
-    return nomos_repo_limits::FactContext {
+    return nomos_repo_policy::limits::FactContext {
         snapshot: context.snapshot,
         variant: context.variant,
         configuration: context.configuration,
@@ -100,7 +100,7 @@ pub fn Materialize_Scripting_Policy<Fs: FileSystem>(root: &Path, context: &Conte
 {
     let production = Scripting_Production(context);
 
-    let Ok(fact) = nomos_repo_scripting::Materialize_Workspace(root, production, filesystem)
+    let Ok(fact) = nomos_repo_policy::scripting::Materialize_Workspace(root, production, filesystem)
     else
     {
         return 0;
@@ -109,9 +109,9 @@ pub fn Materialize_Scripting_Policy<Fs: FileSystem>(root: &Path, context: &Conte
     return usize::from(store.Materialize(fact.fact, &[]).is_ok());
 }
 
-fn Scripting_Production(context: &Context) -> nomos_repo_scripting::FactContext
+fn Scripting_Production(context: &Context) -> nomos_repo_policy::scripting::FactContext
 {
-    return nomos_repo_scripting::FactContext {
+    return nomos_repo_policy::scripting::FactContext {
         snapshot: context.snapshot,
         variant: context.variant,
         configuration: context.configuration,
@@ -133,7 +133,7 @@ pub fn Materialize_Goals_Policy<Fs: FileSystem>(root: &Path, context: &Context, 
 {
     let production = Goals_Production(context);
 
-    let Ok(fact) = nomos_repo_goals::Materialize_Workspace(root, production, filesystem)
+    let Ok(fact) = nomos_repo_policy::goals::Materialize_Workspace(root, production, filesystem)
     else
     {
         return 0;
@@ -142,9 +142,9 @@ pub fn Materialize_Goals_Policy<Fs: FileSystem>(root: &Path, context: &Context, 
     return usize::from(store.Materialize(fact.fact, &[]).is_ok());
 }
 
-fn Goals_Production(context: &Context) -> nomos_repo_goals::FactContext
+fn Goals_Production(context: &Context) -> nomos_repo_policy::goals::FactContext
 {
-    return nomos_repo_goals::FactContext {
+    return nomos_repo_policy::goals::FactContext {
         snapshot: context.snapshot,
         variant: context.variant,
         configuration: context.configuration,
@@ -166,7 +166,7 @@ pub fn Materialize_Words_Policy<Fs: FileSystem>(root: &Path, context: &Context, 
 {
     let production = Words_Production(context);
 
-    let Ok(fact) = nomos_repo_words::Materialize_Workspace(root, production, filesystem)
+    let Ok(fact) = nomos_repo_policy::words::Materialize_Workspace(root, production, filesystem)
     else
     {
         return 0;
@@ -175,9 +175,9 @@ pub fn Materialize_Words_Policy<Fs: FileSystem>(root: &Path, context: &Context, 
     return usize::from(store.Materialize(fact.fact, &[]).is_ok());
 }
 
-fn Words_Production(context: &Context) -> nomos_repo_words::FactContext
+fn Words_Production(context: &Context) -> nomos_repo_policy::words::FactContext
 {
-    return nomos_repo_words::FactContext {
+    return nomos_repo_policy::words::FactContext {
         snapshot: context.snapshot,
         variant: context.variant,
         configuration: context.configuration,
