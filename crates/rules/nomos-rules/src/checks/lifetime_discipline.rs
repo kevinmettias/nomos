@@ -31,7 +31,7 @@
 //! Ported literally, this rule would report a justified bound as unjustified and there
 //! would be nowhere to say otherwise.
 
-use super::code_prefix::Code_Prefix;
+use super::code_prefix::{Code_Prefix, Code_With_String_Bodies_Masked};
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 use std::collections::BTreeSet;
@@ -96,7 +96,11 @@ fn Terse_Lifetime_Findings_In(source: &SourceFile) -> Vec<Finding>
 
     for (index, line) in source.text.lines().enumerate()
     {
-        let code = Code_Prefix(line);
+        // `P69-SELF-MATCH-VIA-STRING-LITERALS-FIVE-MORE-RULES`: a string literal's own prose
+        // can spell "struct"/"impl" and quote a lifetime by name without either being a real
+        // declaration -- masking the literal's body before this scan is what keeps that
+        // prose from being read as chosen syntax.
+        let code = Code_With_String_Bodies_Masked(&Code_Prefix(line));
 
         if !Opens_A_Declaration(&code)
         {
@@ -126,7 +130,10 @@ fn Static_Bound_Findings_In(source: &SourceFile) -> Vec<Finding>
 
     for (index, line) in lines.iter().enumerate()
     {
-        if Bounds_By_Static(&Code_Prefix(line)) && !Has_Adjacent_Explanation(&lines, index)
+        // Same reason as `Terse_Lifetime_Findings_In`: a string literal's own prose can
+        // quote `'static` without that being a real trait bound.
+        let code = Code_With_String_Bodies_Masked(&Code_Prefix(line));
+        if Bounds_By_Static(&code) && !Has_Adjacent_Explanation(&lines, index)
         {
             findings.push(Static_Bound_Finding(source, index.saturating_add(1)));
         }
@@ -422,6 +429,20 @@ mod tests
         assert!(findings.is_empty(), "{findings:?}");
     }
 
+    /// `P69-SELF-MATCH-VIA-STRING-LITERALS-FIVE-MORE-RULES`: a string literal's own prose can
+    /// spell "struct"/"impl" and quote a lifetime by name several times without a single one
+    /// of those being real, chosen syntax.
+    #[test]
+    fn Test_Check_Lifetimes_Follow_The_Descriptive_Naming_Rule_Should_Not_Judge_A_String_Literals_Own_Text()
+    {
+        let text = "let reason = \"struct BytesToHexChars<'a>, impl<'a> ... for BytesToHexChars<'a>\";";
+        let sources = vec![Source("demo/src/a.rs", text)];
+
+        let findings = Check_Lifetimes_Follow_The_Descriptive_Naming_Rule(&sources);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
     #[test]
     fn Test_Check_Static_Bounds_Are_Justified_Should_Report_An_Unexplained_Bound()
     {
@@ -491,6 +512,19 @@ mod tests
     {
         let text = format!("fn Name() -> &{} str", Lifetime("static"));
         let sources = vec![Source("demo/src/a.rs", &text)];
+
+        let findings = Check_Static_Bounds_Are_Justified(&sources);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// `P69-SELF-MATCH-VIA-STRING-LITERALS-FIVE-MORE-RULES`: a string literal's own prose can
+    /// quote `'static` without that being a real trait bound.
+    #[test]
+    fn Test_Check_Static_Bounds_Are_Justified_Should_Not_Judge_A_String_Literals_Own_Text()
+    {
+        let text = "let reason = \"the fixture's only 'static usage is a reference's own lifetime, not T: 'static\";";
+        let sources = vec![Source("demo/src/a.rs", text)];
 
         let findings = Check_Static_Bounds_Are_Justified(&sources);
 

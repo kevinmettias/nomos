@@ -781,7 +781,11 @@ fn Unjustified_Construct_Findings_In(source: &SourceFile, rule: Rule<'_>, messag
 
     for (index, line) in lines.iter().enumerate()
     {
-        let code = Code_Prefix(line);
+        // `P69-SELF-MATCH-VIA-STRING-LITERALS-FIVE-MORE-RULES`: every detector here looks
+        // for real attribute/keyword syntax, which is never legitimately written inside a
+        // string literal -- masking a literal's own body before the search can only drop a
+        // false positive (prose quoting the construct it describes), never hide a real one.
+        let code = Code_With_String_Bodies_Masked(&Code_Prefix(line));
         if detector.has_construct.Detects(&code) && !detector.has_local_justification.Detects(&lines, index)
         {
             let finding = Finding_For_Line(source, rule.0, Line_Number(index), message.0);
@@ -1056,6 +1060,18 @@ mod tests
         assert!(findings.is_empty(), "{findings:?}");
     }
 
+    /// `P69-SELF-MATCH-VIA-STRING-LITERALS-FIVE-MORE-RULES`: a string literal's own prose
+    /// naming the construct is not the construct.
+    #[test]
+    fn Test_Check_Shared_Interior_Mutability_Says_Why_Should_Not_Judge_A_String_Literals_Own_Text()
+    {
+        let source = Source("src/lib.rs", "let reason = \"no Rc<RefCell<...>>-shaped construct anywhere\";\n");
+
+        let findings = Check_Shared_Interior_Mutability_Says_Why(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
     #[test]
     fn Test_Check_Every_Allow_Carries_A_Justification_Should_Report_An_Unexplained_Allow()
     {
@@ -1310,6 +1326,18 @@ mod tests
         assert!(findings.is_empty(), "{findings:?}");
     }
 
+    /// `P69-SELF-MATCH-VIA-STRING-LITERALS-FIVE-MORE-RULES`: a string literal's own prose
+    /// naming the attribute is not the attribute.
+    #[test]
+    fn Test_Check_Inline_Always_Justification_Should_Not_Judge_A_String_Literals_Own_Text()
+    {
+        let source = Source("src/lib.rs", "let reason = \"no #[inline(always)] attribute in the fixture\";\n");
+
+        let findings = Check_Inline_Always_Justification(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
     #[test]
     fn Test_Check_A_Disabled_Test_States_Why_Should_Report_A_Bare_Ignore()
     {
@@ -1341,6 +1369,18 @@ mod tests
             "tests/lib.rs",
             "#[test]\n// flaky under -race, see #88\n#[ignore]\nfn Test_Something() {}\n",
         );
+
+        let findings = Check_A_Disabled_Test_States_Why(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// `P69-SELF-MATCH-VIA-STRING-LITERALS-FIVE-MORE-RULES`: a string literal's own prose
+    /// naming the attribute is not the attribute.
+    #[test]
+    fn Test_Check_A_Disabled_Test_States_Why_Should_Not_Judge_A_String_Literals_Own_Text()
+    {
+        let source = Source("src/lib.rs", "let reason = \"there is no #[ignore] attribute for this rule to examine\";\n");
 
         let findings = Check_A_Disabled_Test_States_Why(&[source]);
 

@@ -59014,7 +59014,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Predicate was mis-scoped at authoring time: cargo test -p nomos-rules -p nomos-cli --test check_command runs this workspace's own whole-tree self-check, which measurably cannot reach a clean exit for reasons unrelated to this item -- val (tests/integration/fixtures/third-party/hex-0.4.3/lib.rs, calibration.rs's own permanently-expected true positive) and T (the blanket-impl generic-parameter gap, separately declined and re-filed as P70-IMPL-BLOCK-GENERIC-PARAMETERS-NOT-IN-PAYLOAD) both remain Blocking regardless of this fix. Measured directly: before this fix, cargo test -p nomos-cli --test check_command reported 8 Blocking findings; after, 2 (val and T, both pre-existing and tracked elsewhere) -- the five named findings this item exists to close are gone. Re-filed as P69-SELF-MATCH-VIA-STRING-LITERALS-FIVE-MORE-RULES-2 with a predicate scoped to this fix's own evidence rather than the whole tree's."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -59032,9 +59036,18 @@
         "timeout_seconds": 1200
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "the fix is complete and verified by hand, but this item's own predicate names the whole-workspace self-check, which can never durably pass -- val (a real, permanently-expected hex-fixture finding) and T (single-letter-names' separate, already-declined-and-refiled gap, P70) will always keep it red for reasons this item's fix does not touch. Re-filing as -2 with a predicate scoped to this fix's own evidence.",
+          "abandoned_at": 1788703313
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788703313
+      }
     },
     {
       "id": "P70-IMPL-BLOCK-GENERIC-PARAMETERS-NOT-IN-PAYLOAD",
@@ -59065,6 +59078,60 @@
         "timeout_seconds": 1200
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P69-SELF-MATCH-VIA-STRING-LITERALS-FIVE-MORE-RULES-2",
+      "title": "five more text-scanning rules read a string literal's own prose as real code",
+      "why": "Same subject as the declined P69-SELF-MATCH-VIA-STRING-LITERALS-FIVE-MORE-RULES, re-filed only to correct a mis-scoped predicate. The fix itself is unchanged and already measured: shared-interior-mutability-says-why, a-disabled-test-states-why and inline-always-requires-justification all route through rust_text.rs's shared Unjustified_Construct_Findings_In, which now masks string-literal bodies (Code_With_String_Bodies_Masked) before its construct detectors run, the same P66 fix already applied one layer over for unsafe-justification. lifetimes-follow-the-descriptive-naming-rule and static-bounds-are-justified needed the identical masking added at their own two call sites in lifetime_discipline.rs, which did not previously import Code_With_String_Bodies_Masked at all. Measured directly: cargo test -p nomos-cli --test check_command went from 8 Blocking findings to 2 (val and T, both pre-existing, unrelated, and tracked by other items) after this fix, with real regression tests added in both files reproducing calibration.rs's own exact reason-string text.",
+      "done_when": "cargo test -p nomos-rules passes, including the six new regression tests (three in rust_text.rs, two in lifetime_discipline.rs, matching calibration.rs's own five flagged reason-string phrasings) proving each rule no longer reads a string literal's own quoted prose as the construct it describes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks/lifetime_discipline.rs",
+          "tests/integration/tests/calibration.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 631 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.34s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-4229d88af1b153aa.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-7bb3e9f1e56bdd7d.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788703341,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6a23965597ad5376e82cb47d15a220f519cc04e7"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
