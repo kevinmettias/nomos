@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:d7534b76a006db3880aa16825396b84fb5b428a85b24c91c50f923b3e854878d",
-  "inputs_digest": "sha256:d47969c4857ada69565faf1b324d4a7eac6ead4ee93ac45455509ce992dc2a72",
+  "content_digest": "sha256:c51e704bf154f49eee7224420ed9302cd661012f9d065d1baccc35fe4df86efe",
+  "inputs_digest": "sha256:c9a7c4cc27456c71949f7828bd0101d79d43b169f710137e9786d2b61ac8d5b3",
   "sections": [
     [
       "Documents",
-      201
+      202
     ],
     [
       "Sections",
-      1642
+      1648
     ],
     [
       "Source blocks",
-      5715
+      5735
     ]
   ],
   "inputs": [
@@ -224,6 +224,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md@authored",
       "hash": "sha256:49347b91e13b7f953160008054dc9e028aef8b1893f14bafbc8e4121ee8b623c"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md@authored",
+      "hash": "sha256:88d25ef06103ea7b630b4cf9e09748244421ae9d293d1030f63bed54f2be8850"
     },
     {
       "content": "documents",
@@ -2554,6 +2559,36 @@
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#21",
       "hash": "sha256:2b04a20975cd261de6970f6240cf68ea470a337448d19dae047eb298264f9b8d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#1",
+      "hash": "sha256:3cc7ae74a351624024602255538dbcb2567cf48cda7cb5906c1311b676b9e591"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#2",
+      "hash": "sha256:5ec08035b3d19745ec1f0d1996e6703e0d903fca77e13bafb466132b10e1aeb7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#4",
+      "hash": "sha256:7409a803e4b568615d75af464b2422f6cfbb1a1044b6277ee821dcd4589df02d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#8",
+      "hash": "sha256:613af36d65afa99c879bfa9115acccbc0c91a210f35b54510882ac79dd4ee0bc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#15",
+      "hash": "sha256:c16f978693108a1ca4e54333817524de277fa2335c1878a272775dc82fa6f6af"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#19",
+      "hash": "sha256:b41f856b8b7774d669d86f86d628b87f9c6b694d5c6827e7db542d09891a640c"
     },
     {
       "content": "headings",
@@ -14469,6 +14504,106 @@
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#23",
       "hash": "sha256:0c2a046a27c7bbb80979b7b8a5162726062726107d1a5caf6c3e078cb970d2cb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#1",
+      "hash": "sha256:81234edc9ce4035272037e82581a2601f8bebbc98aa8730cb6adb535b8659179"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#3",
+      "hash": "sha256:6d8f4c4624b79e128d2ca204b4a0676606caf8f0bd1ad820013ad6c2e81a77ca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#5",
+      "hash": "sha256:2dcf3027b8abd9592a4a870059c7a3e0f28dd1e702b58c02d00caec5017ddac1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#6",
+      "hash": "sha256:6ff64db68e20329b5ad07a99c6bebc3cfc579bf1f89eba407dfa7e13b4be0c14"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#7",
+      "hash": "sha256:d2681b90eafa9444b754f3ad8477115dca9f7a01af48f262f5f7edfceddd9d27"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#9",
+      "hash": "sha256:9f95f8b78e8cc1faeed23c40641520b9051d88af49b076a82f2b014e82973f7b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#10",
+      "hash": "sha256:2eb39d4c79859c336e42ae58b0b4cd0f5bce6f39cc14d1352537db0c6caa8a85"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#11",
+      "hash": "sha256:71c2372d1c30fd491a18d21e218c5d2727ab5eca98b37c53d4b42ac10cd8b06a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#12",
+      "hash": "sha256:16f76d0afcd41ffbd01cd5ba8bdb0b59921846802453e1dc5bcccb3e611689af"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#13",
+      "hash": "sha256:5e6cfe5f15a2db96243a2484ea4196fa402d9e83fc9bc084fb729437992603ed"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#14",
+      "hash": "sha256:6d4c9c7db80bcac91b3f3455f26dd0d1eec3452eb395842edb3dd5bcd2c62aa1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#15",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#16",
+      "hash": "sha256:a18af41842b1e521a3064485401fe53ca8e9bf87600051e05a0ec55924a3db7c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#17",
+      "hash": "sha256:e7006e10a3795099130482e5c33093937cc3c7e03712dfa879287ed014bdd608"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#18",
+      "hash": "sha256:0c277b0c9fbe8ac66b319737345451884170f4009236f03f6448ef4fa9af4b5f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#19",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#20",
+      "hash": "sha256:cb0901e93279e531d39368618e025e54e22e1fc8a43de5b197c1a5a23ae2c6c7"
     },
     {
       "content": "blocks",

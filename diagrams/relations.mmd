@@ -10,6 +10,7 @@ graph LR
     arc_conformance_001 -->|"relates-to"| od_analysis_006["OD-ANALYSIS-006"]
     arc_conformance_001 -->|"relates-to"| od_analysis_010["OD-ANALYSIS-010"]
     arc_conformance_001 -->|"relates-to"| od_capability_006["OD-CAPABILITY-006"]
+    arc_conformance_001 -->|"relates-to"| od_capability_012["OD-CAPABILITY-012"]
     arc_conformance_001 -->|"relates-to"| od_rules_003["OD-RULES-003"]
     arc_connector_001["ARC-CONNECTOR-001"] -->|"relates-to"| arc_ecosystem_001
     arc_connector_001 -->|"relates-to"| d_130["D-130"]
@@ -290,6 +291,7 @@ graph LR
     od_analysis_010 -->|"relates-to"| arc_conformance_001
     od_analysis_010 -->|"relates-to"| od_analysis_004
     od_analysis_010 -->|"relates-to"| od_analysis_007
+    od_analysis_010 -->|"relates-to"| od_capability_012
     od_analysis_010 -->|"relates-to"| od_rules_008
     od_capability_001 -->|"relates-to"| arc_harness_001
     od_capability_001 -->|"relates-to"| od_analysis_001
@@ -300,6 +302,7 @@ graph LR
     od_capability_001 -->|"relates-to"| od_capability_006
     od_capability_001 -->|"relates-to"| od_capability_008
     od_capability_001 -->|"relates-to"| od_capability_009["OD-CAPABILITY-009"]
+    od_capability_001 -->|"relates-to"| od_capability_012
     od_capability_001 -->|"relates-to"| od_contracts_002
     od_capability_002 -->|"relates-to"| od_analysis_002
     od_capability_002 -->|"relates-to"| od_analysis_004
@@ -361,6 +364,9 @@ graph LR
     od_capability_010 -->|"relates-to"| od_rules_001
     od_capability_010 -->|"relates-to"| od_rules_009
     od_capability_010 -->|"relates-to"| od_syntax_002
+    od_capability_012 -->|"relates-to"| arc_conformance_001
+    od_capability_012 -->|"relates-to"| od_analysis_010
+    od_capability_012 -->|"relates-to"| od_capability_001
     od_completeness_001 -->|"affected_by"| d_134
     od_completeness_001 -->|"affected_by"| od_completeness_002
     od_completeness_001 -->|"affected_by"| od_completeness_004["OD-COMPLETENESS-004"]
@@ -1466,6 +1472,7 @@ graph LR
     od_capability_008
     od_capability_009
     od_capability_010
+    od_capability_012
     od_completeness_001
     od_completeness_002
     od_completeness_004

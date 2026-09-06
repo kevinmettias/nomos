@@ -51,6 +51,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md@authored | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md | authored | 23 | 7 | sha256:940be97fa9f66be4c6fe9fad40c41e939c385a48199a77f48742b07cc90971ad |
 | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md@authored | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md | authored | 36 | 10 | sha256:ebe2fe7a455f06f27dc6a52e573aa98fa57e7b1eb29feb90173c84a3ff266dee |
 | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md@authored | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md | authored | 23 | 6 | sha256:49347b91e13b7f953160008054dc9e028aef8b1893f14bafbc8e4121ee8b623c |
+| docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md@authored | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md | authored | 20 | 6 | sha256:88d25ef06103ea7b630b4cf9e09748244421ae9d293d1030f63bed54f2be8850 |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ea548df7de6d318f3946ffc3c153f837e4289c5b25045352897d0221c1c1d3f7 |
@@ -522,6 +523,12 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#9 | authored | 2 | The Decision |
 | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#15 | authored | 2 | What This Does Not Do |
 | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#21 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#1 | authored | 1 | Whether a language server is a provider, and of what |
+| docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#2 | authored | 2 | Question |
+| docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#8 | authored | 2 | The Decision |
+| docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#15 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#19 | authored | 2 | Status |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1 | authored | 1 | A completeness guard is only as complete as the universe it quantifies over |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#2 | authored | 2 | Question |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#5 | authored | 2 | The Shape, Which Is Not The One The Item Assumed |
@@ -11708,6 +11715,202 @@ families `OD-CAPABILITY-006` named still wait on producers this workspace does n
 no record has yet made the case for a Rust-to-Go type mapping. Revisit if a second
 correspondence family becomes reachable at `Syntactic`, or if a rule needs to compare the two
 sides' field *types* rather than carry them for a person to read.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#1
+
+*revision: authored · kind: heading · heading: Whether a language server is a provider, and of what · hash: sha256:81234edc9ce4035272037e82581a2601f8bebbc98aa8730cb6adb535b8659179*
+
+# Whether a language server is a provider, and of what
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#2
+
+*revision: authored · kind: heading · heading: Whether a language server is a provider, and of what / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#3
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / Question · hash: sha256:6d8f4c4624b79e128d2ca204b4a0676606caf8f0bd1ad820013ad6c2e81a77ca*
+
+`P42-SEMANTIC-FACT-FAMILY` and `P40-COMPILER-BACKED-PROVIDER` both assume resolved-semantics
+work means a compiler integration per language. A language server is the other candidate,
+and its shape looks right on its face: a subprocess behind a capability, exactly what
+`nomos-lang-rust-cargo`, `nomos-lang-rust-clippy` and `nomos-lang-rust-deny` already are, and
+one protocol reaching every language this system might add rather than one integration per
+language. `OD-ANALYSIS-010` declined embedding a compiler or language server for one fact,
+control-flow reachability's sound tier, and was explicit that it forecloses nothing for a
+future rule whose subject genuinely needs one. Whether that future has arrived for the class,
+not one fact, needed checking directly.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#4
+
+*revision: authored · kind: heading · heading: Whether a language server is a provider, and of what / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#5
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / What Was Measured · hash: sha256:2dcf3027b8abd9592a4a870059c7a3e0f28dd1e702b58c02d00caec5017ddac1*
+
+**`P40-COMPILER-BACKED-PROVIDER` is done, and it answered the class question by the other
+route.** `nomos-lang-rust-compiler` is a real, shipped provider of `nomos.cap.rust.
+copy_clones`, built against a direct compiler semantic API, not a language server. The
+premise that "no provider uses a real compiler semantic API" is no longer true; what remains
+open is only whether an *language-server-shaped* route is also warranted beside it, not
+whether resolved semantics can be had at all.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#6
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / What Was Measured · hash: sha256:6ff64db68e20329b5ad07a99c6bebc3cfc579bf1f89eba407dfa7e13b4be0c14*
+
+**A language server is not, in fact, the same subprocess shape its siblings are.**
+`nomos_platform::ProcessLauncher`'s one method, `Run`, is documented precisely: "runs the
+command to completion and captures its output." Every real provider today —
+`nomos-lang-rust-cargo`'s `cargo metadata`, `nomos-lang-rust-clippy`'s `cargo clippy`,
+`nomos-lang-rust-deny`'s `cargo deny` — is exactly that: spawn, run to completion, parse
+stdout, exit. A language server is the opposite shape on purpose: a long-lived process
+initialized once, holding an incrementally-maintained index, answering many requests over
+one session through a bidirectional JSON-RPC channel that is never expected to close between
+queries. Nothing in `nomos_platform` spawns a process, holds it open, and exchanges more than
+one message with it. Forcing a language server into `ProcessLauncher::Run` would mean
+spawning a fresh server, paying its full workspace index cold-start, for every single query —
+discarding the one property that makes a language server worth using instead of a direct
+compiler call, and answering the query more slowly and less honestly than
+`nomos-lang-rust-compiler`'s own direct-API shape already does for Rust.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#7
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / What Was Measured · hash: sha256:d2681b90eafa9444b754f3ad8477115dca9f7a01af48f262f5f7edfceddd9d27*
+
+**A language server's own resolution is not sound the way a direct compiler call is, and this
+workspace's `Assurance` has no variant for the difference.** `nomos_contracts::Assurance` is
+exactly three values: `Sound` ("the property is claimed and the claim is backed"), `Unsound`,
+and `Unknown` ("nobody has established this either way"). `rust-analyzer` and its siblings are
+built for editor responsiveness over an incomplete or mid-edit tree, and are documented to
+answer some queries — under heavy macro expansion, certain generic instantiations, or a
+buffer mid-edit — best-effort rather than backed by a real compilation the way `rustc` itself
+is. A fact sourced from a language server could not honestly claim `Assurance::Sound` on
+those axes the way `nomos-lang-rust-compiler`'s direct-`rustc`-API route already can; it would
+have to declare `Unknown` for whatever it cannot back, a strictly weaker guarantee than the
+provider this workspace already shipped for the same class of question.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#8
+
+*revision: authored · kind: heading · heading: Whether a language server is a provider, and of what / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#9
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / The Decision · hash: sha256:9f95f8b78e8cc1faeed23c40641520b9051d88af49b076a82f2b014e82973f7b*
+
+**A language server may be a provider in principle — the shape argument is right, one
+protocol reaching every language rather than one integration per language — but it is not
+buildable today, on two concrete grounds rather than a preference.**
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#10
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / The Decision · hash: sha256:2eb39d4c79859c336e42ae58b0b4cd0f5bce6f39cc14d1352537db0c6caa8a85*
+
+First, `nomos_platform` has no port for a long-lived, bidirectionally-communicating process.
+Building one is a real platform-layer design question of its own weight — what a session
+lifecycle looks like, how many concurrent sessions a run may hold, how a session outlives or
+does not outlive one `nomos check` invocation — not a detail a provider's own implementation
+could improvise past `ProcessLauncher::Run`'s existing one-shot contract.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#11
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / The Decision · hash: sha256:71c2372d1c30fd491a18d21e218c5d2727ab5eca98b37c53d4b42ac10cd8b06a*
+
+Second, whatever capability a language-server-backed fact would answer — `nomos.cap.lsp.
+definition`, `nomos.cap.lsp.references`, `nomos.cap.lsp.symbol_hierarchy`, one per LSP request
+shape, provider-neutral in the sense the field asked for — cannot honestly declare the
+`Assurance::Sound` ceiling `nomos-lang-rust-compiler` already proved reachable for the
+identical class of question (needing resolved types, in that case whether a type is `Copy`)
+by calling a compiler directly. A language server is the right mechanism only for a fact
+whose own honest ceiling is `Assurance::Unknown` on at least one axis, and no rule in this
+workspace has yet named a question that needs exactly that shape of answer rather than a
+sound one.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#12
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / The Decision · hash: sha256:16f76d0afcd41ffbd01cd5ba8bdb0b59921846802453e1dc5bcccb3e611689af*
+
+`IncrementalGranularity` is not decided here either, and should not be read as merely `File`
+versus `Project`: a language server surviving across separate `nomos check` invocations is a
+staleness question this system's own reassessment-cache model has no story for yet — who
+restarts a session, on what signal, and how the cache learns the session's own index went
+stale relative to disk are all open, and none is answered by picking a granularity value.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#13
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / The Decision · hash: sha256:5e6cfe5f15a2db96243a2484ea4196fa402d9e83fc9bc084fb729437992603ed*
+
+**This does not change what `OD-ANALYSIS-010` already decided, and confirms its direction
+rather than reopening it.** That record covered one fact and explicitly left a genuine
+compiler-frontend need open for later; this record answers the wider class question it did
+not reach, and agrees: prefer a narrow, direct compiler-API integration — the shape
+`nomos-lang-rust-compiler` already proved — over a language-server integration, for the
+identical reason `OD-ANALYSIS-010` gave for control-flow reachability's tier 2, now
+reinforced by two further, concrete grounds this record adds: the process-shape mismatch and
+the `Assurance` ceiling.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#14
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / The Decision · hash: sha256:6d4c9c7db80bcac91b3f3455f26dd0d1eec3452eb395842edb3dd5bcd2c62aa1*
+
+**`P40-COMPILER-BACKED-PROVIDER` is satisfied by the direct-API route it already took, not by
+this one.** A language-server provider, if one is ever built, would be a separate mechanism
+answering a separate capability — editor-navigation-shaped facts a direct compiler API does
+not expose the same way — not a substitute for what `P40` already delivered.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#15
+
+*revision: authored · kind: heading · heading: Whether a language server is a provider, and of what / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#16
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / What This Record Does Not Do · hash: sha256:a18af41842b1e521a3064485401fe53ca8e9bf87600051e05a0ec55924a3db7c*
+
+**No provider is built here.** It does not design the long-lived-process platform port a
+language-server provider would need, and does not name that design's own territory beyond
+stating that it is real, separate work.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#17
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / What This Record Does Not Do · hash: sha256:e7006e10a3795099130482e5c33093937cc3c7e03712dfa879287ed014bdd608*
+
+It does not block `P42-SEMANTIC-FACT-FAMILY`. That item's own `depends_on` is already
+satisfied by `P40-COMPILER-BACKED-PROVIDER`'s real delivery; a claimant may proceed by the
+direct-compiler-API route that route already proved, entirely independent of this record's
+own question about language servers specifically.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#18
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / What This Record Does Not Do · hash: sha256:0c277b0c9fbe8ac66b319737345451884170f4009236f03f6448ef4fa9af4b5f*
+
+It does not foreclose a language-server provider forever. It names the two concrete things
+that would have to be true first — a real platform capability for a long-lived,
+bidirectional process, and a real rule whose own question is honestly answered at
+`Assurance::Unknown` rather than needing the `Sound` ceiling a direct compiler call already
+reaches — rather than leaving "maybe someday" standing in for either.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#19
+
+*revision: authored · kind: heading · heading: Whether a language server is a provider, and of what / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#20
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / Status · hash: sha256:cb0901e93279e531d39368618e025e54e22e1fc8a43de5b197c1a5a23ae2c6c7*
+
+Accepted. A language server is the right shape for one protocol reaching every language, but
+not a provider today: `nomos_platform` has no long-lived-process port to host one, and no
+rule has yet named a question honestly answered at `Assurance::Unknown` rather than the
+`Sound` ceiling a direct compiler-API provider — already shipped for Rust — can reach instead.
 
 ### docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1
 
