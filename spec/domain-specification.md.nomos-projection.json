@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:c51e704bf154f49eee7224420ed9302cd661012f9d065d1baccc35fe4df86efe",
-  "inputs_digest": "sha256:c9a7c4cc27456c71949f7828bd0101d79d43b169f710137e9786d2b61ac8d5b3",
+  "content_digest": "sha256:c950bed93b89c979027414d752c1a75330e590138b29c8b53e923f15c0b6194c",
+  "inputs_digest": "sha256:9fe31059b3159fac9f90109858ebf3bf7f5c2c9cea4ba868d0faa7657002264d",
   "sections": [
     [
       "Documents",
-      202
+      203
     ],
     [
       "Sections",
-      1648
+      1654
     ],
     [
       "Source blocks",
-      5735
+      5753
     ]
   ],
   "inputs": [
@@ -174,6 +174,11 @@
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored",
       "hash": "sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md@authored",
+      "hash": "sha256:05eb45335e03a5d62b2c97bb0815702e51852b67c101e91b9c3b852491e0967a"
     },
     {
       "content": "documents",
@@ -2144,6 +2149,36 @@
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15",
       "hash": "sha256:1ede96a18093b3ee358c643cb4387deb8236faacc6888aa6ff5f005072e073d0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#1",
+      "hash": "sha256:ea29b35d90cf302c0c7df84efa782e2dd17e72a76cdd141b7cb2bceb2c3a2174"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#2",
+      "hash": "sha256:f6449df278983ce61f03285166716abbcdef79d879bde32fc7f12a9bbf660817"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#4",
+      "hash": "sha256:9bff9da8f70542efbb0a9bd19dec84d196e7cedb6e4f688288e236f61fa076bc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#8",
+      "hash": "sha256:3706550c83820e876ccfd2037bdab54986c81798c217b64ff3b114975f74d381"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#12",
+      "hash": "sha256:0f02ff9748d7933f4880363f9ed2d84a4f28a4214381c488d7c4a7b5f1862443"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#17",
+      "hash": "sha256:12e12a31f51b189ba3cbfa3e69a4fa200b19459cae6afdc984bc3b2f538f1f6f"
     },
     {
       "content": "headings",
@@ -13109,6 +13144,96 @@
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#16",
       "hash": "sha256:f87d102ea13bcda0373b3bf59999dfe26afdc5b7b28086ddfc70ce0ed1a4e11f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#1",
+      "hash": "sha256:6ae33a35714df381eb2ff8b1f3c07d51e10bcccdd3fd8250b389989b28dfa8a1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#3",
+      "hash": "sha256:9f3019ddfa2db1bbe7c07282235562e738100ce876cdf43575690987ce40c948"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#5",
+      "hash": "sha256:5798a43275df1411dee98dd04fc2852854df8c3c8c1f3eb09eb50db49a9b5497"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#6",
+      "hash": "sha256:b76091b2b5a5c3a4207fe44eeade13e8422ce81be83fa62be88dbe97a7a7b2b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#7",
+      "hash": "sha256:06be62fe3bcfb4fe576744bcf5b59d4cff0fa0f56e13f617a118ef68eba182ae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#9",
+      "hash": "sha256:5ce222650054373293c64103c92317ddc1901e0d2b3ecb8a19edd03bc231a04a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#10",
+      "hash": "sha256:e7c95671e822c52ae726c6ea3d949fa1cf634f53da332af71bcde1a2c28fbdf3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#11",
+      "hash": "sha256:db23b5f116356f7bc48321d7f26b6a2f3e2152cc8f9e8e374402411e1a46dc9d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#12",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#13",
+      "hash": "sha256:c528748c2fd59149f0dbff8598b55647b6c333ed394f8622a91834c718456e8d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#14",
+      "hash": "sha256:94ec2f72fabd63900c29b55db2dcf253a760a01f43689c6e8a3d91e8e66232fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#15",
+      "hash": "sha256:87749a39dd81f1f36f590b376f180d1bd4d49d97dbc1a51669f3c7455f068559"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#16",
+      "hash": "sha256:0cd27228bfcba768d646c3dd38115d7e6a3db466b40c97f61a5376858399ef3e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#17",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#18",
+      "hash": "sha256:5eba321dcf72991df3810ce3a2392af9a9ae2b097da77fe45508779c8c511a9f"
     },
     {
       "content": "blocks",

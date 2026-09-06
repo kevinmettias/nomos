@@ -41,6 +41,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md | authored | 22 | 8 | sha256:2a1f9cc14ba7229566dea2754dfbafa91116a43aa78032e04f419cbd3c313272 |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 22 | 7 | sha256:7d281622d199fb8d91210c9ea37e044767b56494a54464391dcf0c91b572de75 |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md | authored | 16 | 6 | sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md@authored | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md | authored | 18 | 6 | sha256:05eb45335e03a5d62b2c97bb0815702e51852b67c101e91b9c3b852491e0967a |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
@@ -440,6 +441,12 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#9 | authored | 2 | The Decision |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#13 | authored | 2 | What This Does Not Do |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#1 | authored | 1 | A rule that judged an empty population is reported apart from one that judged clean |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#2 | authored | 2 | Question |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#8 | authored | 2 | The Decision |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#12 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#17 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1 | authored | 1 | The guarantee decides which usable offer answers, and the caller decides how far down to spend |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#4 | authored | 2 | What It Did |
@@ -9010,6 +9017,189 @@ Accepted. Names the mechanism `OD-RULES-008` traced but declined to choose, chec
 against `ARC-CONFORMANCE-001`'s own test for when native analysis is owed, against what tier 2
 actually needs to resolve (narrower than general Rust name resolution), and against what
 `nomos-lang-rust` already is. The provider itself is a following item.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#1
+
+*revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean · hash: sha256:6ae33a35714df381eb2ff8b1f3c07d51e10bcccdd3fd8250b389989b28dfa8a1*
+
+# A rule that judged an empty population is reported apart from one that judged clean
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#2
+
+*revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#3
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Question · hash: sha256:9f3019ddfa2db1bbe7c07282235562e738100ce876cdf43575690987ce40c948*
+
+`CheckOutcome::NoFacts` catches one instance of a general shape: a run whose syntax facts
+never materialized reports that fact rather than rendering as a clean tree. Nothing
+generalizes the same protection to a single composed rule whose own subject population was
+empty while the rest of the run judged real subjects. `P43-SCRIPT-RULES-CANNOT-FIRE`
+measured a real, live instance: four composed rules — `scripts-use-a-portable-shebang`,
+`a-script-declares-its-purpose`, `executed-scripts-set-nounset`,
+`declared-tooling-language-for-scripts` — now walk a real, reachable population that is
+simply empty in this tree today, and their zero findings render exactly as if they had
+examined real scripts and found them clean. A person required a decision on how a run owes a
+reader that distinction, independent of whichever fix the walker itself got.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#4
+
+*revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#5
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / What Was Measured · hash: sha256:5798a43275df1411dee98dd04fc2852854df8c3c8c1f3eb09eb50db49a9b5497*
+
+**Every existing outcome vocabulary was read for a shape that already fits, and none does.**
+`nomos_contracts::Applicability`'s ten variants are all per-*finding* dispositions — each one
+presupposes a `Finding` with a `subject` to attach itself to. An empty population has no
+subject at all: there is nothing to build a `Finding` around, so no `Applicability` value,
+including `ProviderUnavailable` and `NotApplicable`, can carry this fact. `Claim_Of` (`crates/
+orchestration/nomos-check-orchestration/src/examined/claim.rs`) proves the gap directly:
+`Test_Claim_Of_Should_Report_Complete_For_An_Empty_Findings_List` shows an empty findings
+list already reports `Claim::Complete` — the identical verdict a rule that judged real
+subjects and found them clean would produce. `Examined { files, facts }` is the nearest
+structural precedent — "two denominators, not one," because "0 findings over 400 files" and
+"0 findings over 400 files none of which produced a fact" are different claims — but it is
+computed once for the whole run's syntax layer, not per composed rule, and does not reach
+`Check_Goals_And_Parts_Line_Up` (a `SubjectKind::Workspace` rule with no per-file population
+at all) or the four script rules (`SubjectKind::SourceText`, reading whatever the walk
+collected rather than a syntax fact).
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#6
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / What Was Measured · hash: sha256:b76091b2b5a5c3a4207fe44eeade13e8422ce81be83fa62be88dbe97a7a7b2b7*
+
+**The four rules `P43-SCRIPT-RULES-CANNOT-FIRE` names are the real, present instance, not a
+hypothetical.** That correction fixed the walkers that fed them and measured, directly, that
+this repository has zero real `.sh`/`.ps1`/`.psm1`/`.bat`/`.cmd` files anywhere outside
+`target`/`.git` today. All four rules are now composed against a real, reachable, currently
+empty population. Their own zero findings are honest about the tree — nothing wrong exists —
+but a reader cannot tell that from a rule that examined a hundred real scripts and found
+every one compliant. `P43-SCRIPT-RULES-CANNOT-FIRE`'s own commit message states this outright:
+"the four rules will fire the moment a real script with a defect exists to walk into" — which
+is a promise about the future, not a fact this run's own report states about the present.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#7
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / What Was Measured · hash: sha256:06be62fe3bcfb4fe576744bcf5b59d4cff0fa0f56e13f617a118ef68eba182ae*
+
+**Where the verdict would be computed is already known, because the population itself is
+already known there.** `run_context.rs`'s `Findings_For_Selected_Rules`/`With_Composed_Rules`
+already holds, for every `ComposedRule`, the exact slice its check closure is about to read —
+`sources` for the text and syntax-fact rules, `capabilities.dependency_sources`/
+`lint_sources`/`policy_sources` for the capability-backed ones. The population size is not a
+new fact to materialize; it is a count already sitting in scope at the one place every
+composed rule's own subjects are threaded through, before its closure is called.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#8
+
+*revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#9
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / The Decision · hash: sha256:5ce222650054373293c64103c92317ddc1901e0d2b3ecb8a19edd03bc231a04a*
+
+**An empty population is a new fact reported alongside a run's findings, not a new
+`Applicability` variant and not a new `CheckOutcome` variant.** It is not `Applicability`
+because there is no subject for a per-finding disposition to describe. It is not a new
+`CheckOutcome` arm because `CheckOutcome::NoFacts` already owns the coarser claim — the whole
+syntax layer failed for every source — and a per-rule empty population is a narrower, still-
+real fact that can be true while the rest of the run judges plenty. The right extension is
+`CheckOutcome::Judged` itself, alongside `findings`, `examined` and `claim`: a third
+denominator, in `Examined`'s own words, naming which composed rules examined a real,
+nonempty population and which examined none — computed at the same point in `run_context.rs`
+that already holds each rule's own source slice, at no new materialization cost.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#10
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / The Decision · hash: sha256:e7c95671e822c52ae726c6ea3d949fa1cf634f53da332af71bcde1a2c28fbdf3*
+
+**Its disposition is Advisory, the same as `ProviderUnavailable`'s existing `GateCategory`,
+and it does flip `Claim` to `Incomplete`.** `Claim::Incomplete`'s own definition is "the run
+did not reach a judgment about it" — a rule with zero subjects reached no judgment about
+anything, the identical shape a coverage-debt finding already represents, not merely a milder
+version of it. Reporting it as `Complete`, the way an empty findings list does today, is the
+exact lie this record exists to name: `Claim` currently cannot distinguish "every rule judged
+real subjects and found them clean" from "some rules judged nothing at all," and a person
+reading a clean, `Complete` run has no way to learn that four of the rules that would have
+told them about a broken script never got the chance to look for one.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#11
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / The Decision · hash: sha256:db23b5f116356f7bc48321d7f26b6a2f3e2152cc8f9e8e374402411e1a46dc9d*
+
+**Applied to the four rules `P43-SCRIPT-RULES-CANNOT-FIRE` names: today, in this tree, all
+four report an empty population under this decision**, since the same repository-wide search
+that correction already ran found zero real scripts of any of the five recognized
+extensions. This is not a defect in either correction — the walker fix was necessary and
+correct on its own terms, and today's population really is empty — it is exactly the fact
+this record's own mechanism exists to surface rather than hide.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#12
+
+*revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#13
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / What This Record Does Not Do · hash: sha256:c528748c2fd59149f0dbff8598b55647b6c333ed394f8622a91834c718456e8d*
+
+**No code moves here.** `CheckOutcome::Judged`'s new field, the population count computed in
+`run_context.rs`, and `Claim_Of`'s own extension to read it are named precisely enough for a
+follow-up item's territory to be declared completely, rather than a decision to build
+against.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#14
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / What This Record Does Not Do · hash: sha256:94ec2f72fabd63900c29b55db2dcf253a760a01f43689c6e8a3d91e8e66232fc*
+
+It does not touch `Applicability` or add a variant to it. The measurement above found every
+existing variant presupposes a subject this fact does not have, and inventing one anyway
+would misuse a per-finding vocabulary for a per-rule fact.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#15
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / What This Record Does Not Do · hash: sha256:87749a39dd81f1f36f590b376f180d1bd4d49d97dbc1a51669f3c7455f068559*
+
+It does not decide `P41-APPLICABILITY-IN-THE-PLAN`. That item asks which subjects a rule
+*declines* once a plan resolves applicability in advance — a question about a plan that does
+not exist yet, per `P41-RUN-PLANNER`'s own stranded state. This record's own question — what a
+run owes a reader about a rule whose population was already empty when it ran — holds with or
+without a plan, is true today, and is answered here rather than left waiting on a planner
+that has not been built.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#16
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / What This Record Does Not Do · hash: sha256:0cd27228bfcba768d646c3dd38115d7e6a3db466b40c97f61a5376858399ef3e*
+
+It does not change what `P43-SCRIPT-RULES-CANNOT-FIRE` already did. That correction remains
+the right fix to the walkers; this record adds the reporting layer that would have made its
+own prior silence visible without needing that specific investigation to find it by hand.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#17
+
+*revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#18
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Status · hash: sha256:5eba321dcf72991df3810ce3a2392af9a9ae2b097da77fe45508779c8c511a9f*
+
+Accepted. An empty population is a per-rule fact reported in `CheckOutcome::Judged` itself,
+Advisory and `Claim`-flipping the same way `ProviderUnavailable` already is, computed from
+population sizes `run_context.rs` already holds. The four rules `P43-SCRIPT-RULES-CANNOT-FIRE`
+measured are the real, present instance: all four report an empty population in this tree
+today, honestly, rather than an indistinguishable clean.
 
 ### docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1
 

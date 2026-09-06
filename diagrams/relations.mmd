@@ -293,6 +293,9 @@ graph LR
     od_analysis_010 -->|"relates-to"| od_analysis_007
     od_analysis_010 -->|"relates-to"| od_capability_012
     od_analysis_010 -->|"relates-to"| od_rules_008
+    od_analysis_012["OD-ANALYSIS-012"] -->|"relates-to"| od_completeness_001
+    od_analysis_012 -->|"relates-to"| od_completeness_004["OD-COMPLETENESS-004"]
+    od_analysis_012 -->|"relates-to"| p43_script_rules_cannot_fire["P43-SCRIPT-RULES-CANNOT-FIRE"]
     od_capability_001 -->|"relates-to"| arc_harness_001
     od_capability_001 -->|"relates-to"| od_analysis_001
     od_capability_001 -->|"relates-to"| od_capability_002
@@ -369,7 +372,8 @@ graph LR
     od_capability_012 -->|"relates-to"| od_capability_001
     od_completeness_001 -->|"affected_by"| d_134
     od_completeness_001 -->|"affected_by"| od_completeness_002
-    od_completeness_001 -->|"affected_by"| od_completeness_004["OD-COMPLETENESS-004"]
+    od_completeness_001 -->|"affected_by"| od_completeness_004
+    od_completeness_001 -->|"relates-to"| od_analysis_012
     od_completeness_001 -->|"relates-to"| od_capability_010
     od_completeness_001 -->|"relates-to"| od_contracts_002
     od_completeness_001 -->|"relates-to"| od_determinism_002
@@ -391,6 +395,7 @@ graph LR
     od_completeness_002 -->|"relates-to"| od_ledger_007["OD-LEDGER-007"]
     od_completeness_002 -->|"relates-to"| od_spec_007
     od_completeness_004 -->|"affects"| od_completeness_001
+    od_completeness_004 -->|"relates-to"| od_analysis_012
     od_completeness_004 -->|"relates-to"| od_gate_003["OD-GATE-003"]
     od_completeness_004 -->|"relates-to"| od_gate_004
     od_completeness_004 -->|"relates-to"| od_gate_016
@@ -1437,6 +1442,7 @@ graph LR
     od_workflow_005 -->|"relates-to"| od_workflow_003
     od_workflow_005 -->|"relates-to"| od_workflow_004
     p10_package_seam -->|"relates-to"| arc_ecosystem_001
+    p43_script_rules_cannot_fire -->|"relates-to"| od_analysis_012
   end
   subgraph "Decisions"
     d_129
@@ -1462,6 +1468,7 @@ graph LR
     od_analysis_008
     od_analysis_009
     od_analysis_010
+    od_analysis_012
     od_capability_001
     od_capability_002
     od_capability_003
