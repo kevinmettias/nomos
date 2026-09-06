@@ -61082,6 +61082,70 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P80-DENY-DISCOVERY-TESTS-ROOT-AT-A-WINDOWS-ONLY-PATH",
+      "title": "Two cargo-deny discovery tests root at a literal whose deny.toml only exists on one machine",
+      "why": "Test_Discover_Workspace_Should_Read_A_Violation_From_The_Json_Stream and Test_Discover_Workspace_Should_Refuse_An_Empty_Stderr_Stream in deny_error.rs both root at Path::new of F:/repos/nomos. Discover_Workspace requires root's own deny.toml to exist before cargo deny is ever launched, deliberately, so that cargo deny's upward search cannot silently pick up an ancestor's config. On this developer's machine F:/repos/nomos/deny.toml is a real file and both tests pass. On ubuntu-latest nothing is there and both fail with no deny.toml at F:/repos/nomos/deny.toml. This is the same class as P79 in the sibling clippy crate, with a different mechanism: P79's literal failed because it is only absolute on Windows, and these fail because the file it names exists on only one machine. The crate already has the platform-independent answer beside them: fact_context.rs derives Repository_Root from CARGO_MANIFEST_DIR by walking three parents, and the workspace root holds a real deny.toml. Fixing these two alone does not turn CI green, because the same crate's Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Policy_Violation fails on ubuntu for an unrelated and genuinely platform-dependent reason recorded in its own item.",
+      "done_when": "Both tests root at a directory derived from the build rather than a hand-typed literal, so they depend on no machine's layout, and the crate's tests pass for a reason that holds on every platform rather than because the developer's checkout happens to be at F:/repos/nomos.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-deny/src/deny_error.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-deny"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P81-A-REAL-DENY-RUN-ASSERTS-A-PLATFORM-DEPENDENT-FACT",
+      "title": "A cargo-deny provider test asserts this workspace has a duplicate dependency, which is false on Linux",
+      "why": "Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Policy_Violation in fact_context.rs runs the real cargo deny against this repository and asserts at least one violation whose code is duplicate, justified by the comment that this workspace's own deny.toml sets multiple-versions to warn and this workspace has at least one duplicated dependency today. On ubuntu-latest cargo deny runs successfully and returns PolicyPayload with violations empty, so the assertion fails. The tool is present and the run is real; the dependency graph simply differs, because duplicated versions in this workspace arrive through platform-gated dependencies that do not resolve the same way on Linux. The test therefore asserts a property of one platform's resolution as though it were a property of the workspace. It is the last known failure standing between dev and a green run, and unlike P79 and P80 it cannot be fixed by making a path portable: it needs a decision about what the test should guarantee. Weakening it to assert only that the run parsed would remove the evidence that the provider finds real violations at all, which is the reason the test exists; asserting a violation only on platforms that have one makes the guarantee conditional in a way nothing else in this crate is.",
+      "done_when": "A decision is recorded on what a real cargo deny run over this workspace is allowed to assert across platforms, and the test asserts exactly that: either a violation class that both platforms genuinely produce, or a guarantee that does not depend on which platform resolved the dependency graph, with the reasoning stated where the next reader meets it rather than in a commit message.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-deny/src/fact_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-deny"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
