@@ -5,9 +5,11 @@ use nomos_contracts::Finding;
 
 /// Every disposition a run should honor.
 ///
-/// Empty is "nothing is suppressed," the state every caller is in today: `Default` gives
-/// that state, so every construction site that predates this type and CI's own `gate run
-/// --root .` are unchanged in behavior.
+/// Empty is "nothing is suppressed": `Default` gives that state, so every construction site
+/// that predates this type is unchanged in behavior. It is also what
+/// [`crate::Run_Gate`] reads as "take this from the `nomos-gate.json` under the run's root,
+/// if there is one" -- see `crate::policy::gate_policy_file`. CI's own `gate run --root .`
+/// is unchanged because this repository declares no such file.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct SuppressionPolicy
 {

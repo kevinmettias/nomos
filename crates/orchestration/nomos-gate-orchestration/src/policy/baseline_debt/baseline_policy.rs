@@ -5,10 +5,10 @@ use nomos_contracts::Finding;
 
 /// Every piece of existing debt a real run should tolerate rather than block.
 ///
-/// Empty is "nothing is baselined," the state every caller is in today: `Default` gives
-/// that state, so every construction site that predates this type and CI's own `gate run
-/// --root .` are unchanged in behavior -- the same guarantee [`crate::SuppressionPolicy`]
-/// makes.
+/// Empty is "nothing is baselined": `Default` gives that state, so every construction site
+/// that predates this type is unchanged in behavior, and [`crate::Run_Gate`] reads it as
+/// "take this from the `nomos-gate.json` under the run's root, if there is one" -- the same
+/// guarantee and the same declared source [`crate::SuppressionPolicy`] has.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct BaselinePolicy
 {

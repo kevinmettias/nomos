@@ -41,32 +41,34 @@ pub struct GateCommand
     pub rules: RuleSelector,
     /// Which findings a real run must not let fail the build, despite `Finding::
     /// Can_Fail_A_Build`. Read by [`crate::Run_Gate`] only, the same asymmetry as `scope`
-    /// and `rules`. Nothing constructs a non-empty one yet -- see
-    /// [`crate::SuppressionPolicy`]'s own doc for what authors one, and what does not yet.
+    /// and `rules`. Left at its default, [`crate::Run_Gate`] fills it in from the
+    /// `nomos-gate.json` under `root` -- see `crate::policy::gate_policy_file` for the file's
+    /// shape, why a caller's own value wins over it, and which rules a path-authored entry
+    /// does not reach.
     pub suppressions: SuppressionPolicy,
     /// Existing debt a real run must not let fail the build either, checked after
     /// `suppressions` so a finding matched by both reports as suppressed. Read by
     /// [`crate::Run_Gate`] only, the same asymmetry as `scope`, `rules` and `suppressions`.
-    /// Nothing constructs a non-empty one yet -- see [`crate::BaselinePolicy`]'s own doc for
-    /// what authors one, and what does not yet.
+    /// Left at its default, [`crate::Run_Gate`] fills it in from the `nomos-gate.json` under
+    /// `root`, the same way `suppressions` is.
     pub baseline: BaselinePolicy,
     /// Rules a real run must treat as advisory rather than blocking, checked before
     /// `suppressions` and `baseline` since it is a coarser, rule-wide override rather than a
     /// per-finding one. Read by [`crate::Run_Gate`] only, the same asymmetry as `scope`,
-    /// `rules`, `suppressions` and `baseline`. Nothing constructs a non-empty one yet -- see
-    /// [`crate::AdoptionPolicy`]'s own doc for what authors one, and what does not yet.
+    /// `rules`, `suppressions` and `baseline`. Left at its default, [`crate::Run_Gate`] fills
+    /// it in from the `nomos-gate.json` under `root`. A calibration matches by rule alone, so
+    /// unlike `suppressions` and `baseline` it reaches every rule a file can name.
     pub adoption: AdoptionPolicy,
     /// Whether coverage debt over the rule-and-scope-selected findings should affect a real
     /// run's disposition, beyond the information-only `Claim` `check_outcome` already
     /// carries. Read by [`crate::Run_Gate`] only, the same asymmetry as `scope`, `rules`,
-    /// `suppressions`, `baseline` and `adoption`. Nothing constructs a non-[`CoveragePolicy::
-    /// Unset`] one yet -- see [`crate::CoveragePolicy`]'s own doc for what authors one, and
-    /// what does not yet.
+    /// `suppressions`, `baseline` and `adoption`. Left at [`CoveragePolicy::Unset`],
+    /// [`crate::Run_Gate`] fills it in from the `nomos-gate.json` under `root`.
     pub coverage: CoveragePolicy,
     /// `MODEL-ROUTE-001`'s declared reference: what an agent-assisted operation running
-    /// under this command should use, when one is selected. Read by nothing yet -- the
-    /// same nothing constructs a non-empty one yet asymmetry `suppressions`, `baseline`
-    /// and `adoption` already have -- because no registered rule yields
+    /// under this command should use, when one is selected. Read by nothing yet -- now the
+    /// only field of this struct in that state, since `suppressions`, `baseline`, `adoption`
+    /// and `coverage` all gained a declared source -- because no registered rule yields
     /// `nomos_contracts::Applicability::AgentRequired` today, so there is no real
     /// operation for a selected profile to activate. `None` is not a smaller case of
     /// this field; it is `MODEL-ROUTE-012`'s own first clause: a gate stays valid when no

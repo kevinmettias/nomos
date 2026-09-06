@@ -7,10 +7,12 @@ use nomos_contracts::Finding;
 /// Every rule a real run should treat as advisory rather than blocking, regardless of
 /// per-finding suppression or baseline debt.
 ///
-/// Empty is "nothing is calibrated," the state every caller is in today: `Default` gives
-/// that state, so every construction site that predates this type and CI's own `gate run
-/// --root .` are unchanged in behavior -- the same guarantee [`crate::SuppressionPolicy`]
-/// and [`crate::BaselinePolicy`] both make.
+/// Empty is "nothing is calibrated": `Default` gives that state, so every construction site
+/// that predates this type is unchanged in behavior, and [`crate::Run_Gate`] reads it as
+/// "take this from the `nomos-gate.json` under the run's root, if there is one" -- the same
+/// guarantee and the same declared source [`crate::SuppressionPolicy`] and
+/// [`crate::BaselinePolicy`] both have. A calibration matches by rule alone, so a
+/// file-authored one reaches every rule rather than only the file-addressed ones.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct AdoptionPolicy
 {

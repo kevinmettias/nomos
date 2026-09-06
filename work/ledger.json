@@ -59847,10 +59847,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-lspfam",
+        "acquired_at": 1788722083,
+        "lease_expires_at": 1788729283
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -60615,14 +60619,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-ae",
-        "acquired_at": 1788721202,
-        "lease_expires_at": 1788732002
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -60634,7 +60634,29 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api-transport"
+        ],
+        "exit_code": 0,
+        "output_tail": "est Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified ... ok\ntest Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestration_Seam ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.39s\n\n\nrunning 4 tests\ntest Test_Disposition_Of_Findings_Should_Fail_On_A_Blocking_Finding ... ok\ntest Test_Disposition_Of_Findings_Should_Fail_With_One_Blocking_Finding_Among_Many ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_When_Nothing_Can_Fail_A_Build ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_With_No_Findings ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-spec-ingest v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-ingest)\n   Compiling nomos-spec-project v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-project)\n   Compiling nomos-spec-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-spec-orchestration)\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\n   Compiling nomos-api-transport v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api-transport)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.78s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api_transport-024edc738bf51a57.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-6e01aba37fd37912.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-17f38121b6e33ad6.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-2372e45c25533d27.exe)\n   Doc-tests nomos_api_transport\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1788722287,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4bc9dc92dd5eb2fb853e97ba1e09373764ca076f"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -60761,6 +60783,43 @@
         ],
         "patterns": []
       },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-lspfam",
+        "acquired_at": 1788722083,
+        "lease_expires_at": 1788729283
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P76-A-SUB-ITEM-FINDING-CANNOT-BE-SUPPRESSED-BY-PATH",
+      "title": "A person can author a suppression that silently matches nothing",
+      "why": "P40-GATE-POLICY-AUTHORING-3 gave the four gate policies a declared source, and entries in it name a path because SubjectId is a digest nobody can write by hand. nomos_model::Subject_Of_Path turns that path into the identity a run matches on, calling the same kernel function every real walk uses. That works only for findings a rule addresses by the file's own subject. Measured directly against a real run rather than assumed: no-single-line-function-bodies and todo-format-is-todo-name-description-ticket address the file, so a path names them; completeness-mirror addresses the mirrored item and single-letter-names addresses the name, so a path names neither. The consequence is a silent one, which is what makes it worth an item: an author who writes a suppression for completeness-mirror gets no error, no warning and no effect, and the finding keeps blocking with nothing anywhere saying why the entry did not take. nomos-gate-orchestration tests.rs already documented the underlying fact before this file existed, in the comment on Test_A_Suppressed_Finding_Should_Not_Block, which reads its subject off a real run precisely because Subject_Of_Path does not name it. The fix is not a digest field in the file, which would reintroduce the unauthorable identity the design exists to avoid.",
+      "done_when": "It is decided how a person names a sub-item finding in a declared policy, or that they cannot; if they can, a Finding carries an addressable name a policy entry can match and the resolver uses it; and either way an entry that matches nothing is reported rather than silently ignored.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-024.record"
+        ],
+        "patterns": []
+      },
       "state": "Ready",
       "depends_on": [],
       "blocked": null,
@@ -60770,9 +60829,42 @@
           "cargo",
           "test",
           "-p",
-          "nomos-lsp"
+          "nomos-gate-orchestration"
         ],
-        "timeout_seconds": 600
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P76-POLICY-ENTRY-DOCS-CITE-A-CLOSED-ABSENCE",
+      "title": "Two policy entry types justify their narrow shape by an absence that has closed",
+      "why": "BaselineDebt and RuleCalibration each explain why they omit owner, approver and date fields by citing the same reasoning: nothing constructs one yet, so validating fields nothing populates would validate against nothing. P40-GATE-POLICY-AUTHORING-3 closed that absence. A declared nomos-gate.json now constructs both, so the premise those two docs rest on is false even though their conclusion may well still be right, and a reader checking why the fields are missing is sent to a reason that no longer holds. Found while doing that item and deliberately not fixed there: policy/baseline_debt.rs and policy/rule_calibration.rs were outside its reserved territory, and the whole point of that session was to stop reaching past a reservation. Small, but it is exactly the stale-justification shape P72 found fifteen instances of.",
+      "done_when": "Both docs state a reason that is true after a declared policy source exists, either by re-arguing the narrow shape on its own merits or by naming what would now justify widening it, and no doc in the policy module still cites nothing constructs one yet as a live fact.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/policy/baseline_debt.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/rule_calibration.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 7200
       },
       "verified": null,
       "abandoned": [],

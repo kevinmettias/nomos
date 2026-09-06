@@ -826,3 +826,99 @@ fn Test_Required_Completeness_Should_Not_Touch_A_Failed_Run()
     assert_eq!(result.disposition, GateRunOutcome::Failed);
     assert!(!result.findings.blocking_findings.is_empty());
 }
+
+/// A tree of this test's own, carrying `policy` as its `nomos-gate.json` -- the declared
+/// source `Run_Gate` resolves from, rather than a policy handed to it in a `GateCommand`.
+fn Root_Declaring(name: &str, policy: &str) -> PathBuf
+{
+    let root = std::env::temp_dir().join(format!("nomos-gate-orchestration-policy-{name}-{}", std::process::id()));
+    std::fs::create_dir_all(&root).expect("writable");
+    std::fs::write(root.join("nomos-gate.json"), policy).expect("writable");
+
+    return root;
+}
+
+/// The end-to-end case this whole item exists for: a suppression and a baseline entry a
+/// person wrote in a file, resolved by a real run, tolerating two real findings that would
+/// otherwise block.
+///
+/// Both rules here are addressed by the file's own subject, which is what makes a
+/// path-authored entry match them -- see `crate::policy::gate_policy_file`'s own doc for the
+/// rules this does not yet reach and why.
+#[test]
+fn Test_A_Declared_Policy_File_Should_Tolerate_Findings_A_Command_Never_Mentioned()
+{
+    let sources = || return vec![Source("b.rs", "pub fn badName() {}\n"), Source("c.rs", "// TODO fix this\npub fn Ok()\n{\n}\n")];
+    let root = Root_Declaring(
+        "tolerates",
+        r#"{
+            "suppressions": [
+                {
+                    "rule": "no-single-line-function-bodies",
+                    "path": "b.rs",
+                    "disposition": "false-positive",
+                    "rationale": "test fixture",
+                    "owner": "test"
+                }
+            ],
+            "baseline": [
+                { "rule": "todo-format-is-todo-name-description-ticket", "path": "c.rs", "rationale": "test fixture" }
+            ]
+        }"#,
+    );
+
+    let result = Run_Gate(Some(sources()), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(root), Test_Run_Id());
+
+    assert!(!result.findings.suppressed_findings.is_empty(), "the file's suppression must have matched a real finding");
+    assert!(!result.findings.baselined_findings.is_empty(), "the file's baseline entry must have matched a real finding");
+    assert!(
+        !result.findings.blocking_findings.iter().any(|finding| return finding.rule == RuleId::New("no-single-line-function-bodies")),
+        "the suppressed rule must not still block: {:?}",
+        result.findings.blocking_findings
+    );
+}
+
+/// The same tree with no policy file resolves to today's behavior exactly, which is what
+/// makes the file safe to add: every existing caller, and CI's own `gate run --root .`, sits
+/// in this case.
+#[test]
+fn Test_A_Root_With_No_Policy_File_Should_Judge_Exactly_As_Before()
+{
+    let root = std::env::temp_dir().join(format!("nomos-gate-orchestration-policy-absent-{}", std::process::id()));
+    std::fs::create_dir_all(&root).expect("writable");
+    let _ = std::fs::remove_file(root.join("nomos-gate.json"));
+
+    let result = Run_Gate(Some(vec![Source("b.rs", "pub fn badName() {}\n")]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(root), Test_Run_Id());
+
+    assert!(result.findings.suppressed_findings.is_empty());
+    assert!(result.findings.baselined_findings.is_empty());
+    assert_eq!(result.disposition, GateRunOutcome::Failed);
+}
+
+/// A coverage floor nobody could set before: declared in the file, it downgrades a run that
+/// would otherwise report `Passed` rather than riding along for information only.
+#[test]
+fn Test_A_Declared_Coverage_Floor_Should_Reach_The_Disposition()
+{
+    let root = Root_Declaring("coverage", r#"{ "coverage": "require-completeness" }"#);
+
+    let result = Run_Gate(Some(Coverage_Debt_Fixture()), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(root), Test_Run_Id());
+
+    assert_ne!(result.disposition, GateRunOutcome::Failed, "this fixture must not block, so the floor is what is being observed");
+    assert_eq!(result.disposition, GateRunOutcome::Indeterminate, "a declared coverage floor must reach the disposition");
+}
+
+/// A policy file that exists and cannot be parsed refuses the run. The check still happened
+/// and `check_outcome` still carries it, but no verdict is reported, because the rules for
+/// reaching one were unreadable -- a build that passed here would be passing under a policy
+/// nobody authored.
+#[test]
+fn Test_A_Malformed_Policy_File_Should_Refuse_Rather_Than_Report_A_Verdict()
+{
+    let root = Root_Declaring("malformed", "{ not json");
+
+    let result = Run_Gate(Some(vec![Source("b.rs", "pub fn Named() {}\n")]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(root), Test_Run_Id());
+
+    assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
+    assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }), "the check itself still ran: {:?}", result.check_outcome);
+}

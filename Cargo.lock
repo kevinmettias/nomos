@@ -1235,6 +1235,8 @@ dependencies = [
  "nomos-platform-std",
  "nomos-rules",
  "nomos-workspace",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

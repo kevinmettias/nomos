@@ -99,8 +99,8 @@
 //! debt from a reintroduced or genuinely new finding, and no scope beyond the named
 //! `rule`/`subject` pairs an entry lists -- `BaselineDebt`'s own doc says why. `Run_Gate`
 //! checks suppression before baseline, so a finding matched by both reports as suppressed;
-//! the two lists do not overlap. No CLI flag or config file constructs a [`BaselineDebt`]
-//! yet, the same absence [`SuppressionPolicy`]'s fifth increment already declined to fill.
+//! the two lists do not overlap. A declared file constructs one as of the tenth increment
+//! below; until it, nothing outside a test did.
 //!
 //! Its eighth increment, `P13-GATE-015-ADOPTION-FIRST-INCREMENT`, gives [`GateCommand`] a
 //! real [`AdoptionPolicy`] under the same user override, taking the third and last of
@@ -114,9 +114,8 @@
 //! and it still appears in [`GateRunResult::check_outcome`] and
 //! [`GateFindings::calibrated_findings`], never silently. Deliberately narrower than
 //! `ADOPT-CONFIG-*`'s full corpus shape: no declared phases, thresholds or approvals, and no
-//! separate consumer-owned configuration file -- [`RuleCalibration`]'s own doc says why. No
-//! CLI flag or config file constructs one yet, the same absence [`SuppressionPolicy`]'s and
-//! [`BaselinePolicy`]'s own first increments already declined to fill.
+//! separate consumer-owned configuration file -- [`RuleCalibration`]'s own doc says why.
+//! A declared file constructs one as of the tenth increment below.
 //!
 //! Its ninth increment, `P14-GATE-016-COVERAGE-POLICY-FIRST-INCREMENT`, gives [`GateCommand`]
 //! a real [`CoveragePolicy`] under `OD-GATE-016`'s decision -- unlike every policy before it,
@@ -130,8 +129,29 @@
 //! a disposition that would otherwise be [`GateRunOutcome::Passed`] is reported
 //! [`GateRunOutcome::Indeterminate`] instead whenever that recomputed claim is incomplete.
 //! A disposition that would otherwise be `Failed` is left untouched, for the reason
-//! [`CoveragePolicy`]'s own doc gives. No CLI flag or config file constructs a non-default
-//! one yet, the same absence every policy before it also declined to fill first.
+//! [`CoveragePolicy`]'s own doc gives. A declared file constructs a non-default one as of
+//! the tenth increment below.
+//!
+//! Its tenth increment, `P40-GATE-POLICY-AUTHORING-3`, gives all four of those policies the
+//! authoring surface the four increments above each declined to build first. A run resolves
+//! `nomos-gate.json` under [`GateCommand::root`], through the `FileSystem` port [`Run_Gate`]
+//! already carries, so the CLI, `nomos-api`, the transport and MCP each get it without a
+//! fifth copy of the format -- the duplication `OD-GATE-011` names as a defect class. An
+//! absent file resolves to every default, which is today's behavior for every existing
+//! caller and for CI's own `gate run --root .`; a policy a caller built in code still wins
+//! over the file, so a test that pins one is never silently overridden by a working
+//! directory. A file that exists and cannot be parsed refuses: the check still runs and
+//! [`GateRunResult::check_outcome`] still carries it in full, but the disposition is
+//! [`GateRunOutcome::Indeterminate`], because a build that passed there would be passing
+//! under policy nobody authored.
+//!
+//! Entries name a path, not a `SubjectId`, since that identity is a digest nobody can write
+//! by hand -- `nomos_model::Subject_Of_Path` computes it, the same function every real walk
+//! already uses. That reaches only findings a rule addresses by the file's own subject:
+//! measured directly, `no-single-line-function-bodies` and
+//! `todo-format-is-todo-name-description-ticket` are reachable and `completeness-mirror` and
+//! `single-letter-names` are not. `crate::policy::gate_policy_file`'s own doc states that
+//! limit and why it is not papered over with a digest field.
 //!
 //! # What no increment is
 //!

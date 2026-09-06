@@ -8,6 +8,7 @@ use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::Path;
 
+use crate::policy::{GatePolicyFile, Resolve_Gate_Policy};
 use crate::{
     AdoptionPolicy, BaselinePolicy, CoveragePolicy, Disposition_Of_Findings, GateCommand, GateFindings, GateRunOutcome, GateRunResult, RuleSelector,
     ScopeSelector, SuppressionPolicy,
@@ -104,14 +105,23 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem>(
 ) -> GateRunResult
 {
     let GateEnvironment { variant, launcher, filesystem } = environment;
+    let declared = Resolve_Gate_Policy(&command.root, filesystem);
+    let effective = match &declared
+    {
+        Ok(Some(from_file)) => from_file.Resolved_Over(command),
+        // No file, or one that could not be read: the command's own policies stand alone,
+        // which for every caller that states none is today's behavior exactly.
+        Ok(None) | Err(_) => GatePolicyFile::default().Resolved_Over(command),
+    };
+
     let scoped = walked.map(|sources| return Scoped_Sources(sources, &command.scope));
     let outcome = Judged_Sources(scoped, launcher, filesystem, JudgeContext { variant, root: &command.root, selected: &command.rules.include });
 
     let reduced = Reduced_Findings(
         &outcome,
         &command.rules,
-        DispositionPolicies { adoption: &command.adoption, suppressions: &command.suppressions, baseline: &command.baseline },
-        command.coverage,
+        DispositionPolicies { adoption: &effective.adoption, suppressions: &effective.suppressions, baseline: &effective.baseline },
+        effective.coverage,
     );
 
     return GateRunResult {
@@ -119,7 +129,13 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem>(
         run,
         check_outcome: outcome,
         findings: reduced.findings,
-        disposition: reduced.disposition,
+        // A policy file that exists and could not be turned into a policy refuses the run
+        // rather than letting it report a disposition reached under policy nobody authored.
+        // The judgment above still happens and `check_outcome` still carries it in full, so a
+        // caller sees exactly what the check found; what it does not get is a verdict, because
+        // the rules for turning findings into one were unreadable. Reported after judging
+        // rather than instead of it so the answer stays as informative as it honestly can be.
+        disposition: if declared.is_err() { GateRunOutcome::Indeterminate } else { reduced.disposition },
     };
 }
 

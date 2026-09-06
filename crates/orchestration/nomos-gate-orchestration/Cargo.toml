@@ -19,6 +19,12 @@ nomos-model-package = { workspace = true }
 nomos-platform = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-workspace = { workspace = true }
+# The policy file `P40-GATE-POLICY-AUTHORING-3` added is JSON, the format this workspace
+# already reads for `standards.json` and `work/ledger.json`. `serde` is derive-only here:
+# the deserialized shapes live in `policy/gate_policy_file.rs` and never reach the domain
+# policy types, so no public type in this crate gains a serde bound.
+serde = { workspace = true }
+serde_json = { workspace = true }
 
 [dev-dependencies]
 nomos-platform-std = { workspace = true }

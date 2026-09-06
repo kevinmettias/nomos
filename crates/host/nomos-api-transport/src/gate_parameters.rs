@@ -12,12 +12,19 @@ use std::path::PathBuf;
 /// `KNOWN_ARGUMENTS` -- so a wire caller and a shell caller narrow a run by the same
 /// vocabulary rather than by two that have to be kept in step.
 ///
-/// [`GateCommand`]'s five remaining fields are absent rather than accepted and ignored.
-/// `suppressions`, `baseline`, `adoption` and `coverage` each carry a doc in that struct
-/// saying nothing constructs a non-empty one yet, and `model` says it is read by nothing;
-/// `P40-GATE-POLICY-AUTHORING-2` is that gap's own item. A wire field a caller can set that
-/// changes no outcome is a promise this transport cannot keep, and is worse than its absence
-/// because absence is legible.
+/// [`GateCommand`]'s five remaining fields are absent rather than accepted and ignored, and
+/// since `P40-GATE-POLICY-AUTHORING-3` that absence means two different things.
+///
+/// `suppressions`, `baseline`, `adoption` and `coverage` are now resolved by `Run_Gate`
+/// itself, from the `nomos-gate.json` under the run's own root. Leaving them off the wire is
+/// therefore what makes them work rather than what withholds them: a request that left them
+/// at their defaults is exactly the request that picks the served tree's declared policy up,
+/// and a wire caller overriding a repository's own suppressions per-request is a different
+/// and much larger question than this transport should answer by accident.
+///
+/// `model` is the one field still absent for the original reason: it is read by nothing, and
+/// a wire field a caller can set that changes no outcome is a promise this transport cannot
+/// keep, worse than its absence because absence is legible.
 #[derive(Clone, Debug, Default, Deserialize)]
 #[serde(default, deny_unknown_fields)]
 pub struct GateParameters

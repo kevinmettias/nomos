@@ -8,9 +8,11 @@
 /// `OD-GATE-016`'s own first increment: a repository that never sets this is in exactly the
 /// state `OD-COMPLETENESS-004` already settled for `nomos check`'s own exit code -- coverage
 /// debt reported, not gated on -- so `Default` gives [`Self::Unset`] and every construction
-/// site that predates this type, and CI's own `gate run --root .`, are unchanged in
-/// behavior, the same guarantee [`crate::SuppressionPolicy`], [`crate::BaselinePolicy`] and
-/// [`crate::AdoptionPolicy`] each already make for their own default.
+/// site that predates this type is unchanged in behavior, the same guarantee
+/// [`crate::SuppressionPolicy`], [`crate::BaselinePolicy`] and [`crate::AdoptionPolicy`]
+/// each make for their own default. [`Self::Unset`] is also what [`crate::Run_Gate`] reads
+/// as "take this from the `nomos-gate.json` under the run's root, if there is one"; CI's own
+/// `gate run --root .` is unchanged because this repository declares no such file.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub enum CoveragePolicy
 {
