@@ -60902,6 +60902,38 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P77-SPEC-CHANGE-SKILL-RENDER-TREE-RULE-INCOMPLETE",
+      "title": "The spec-change skill's render-tree rule names records but the inputs also cover source",
+      "why": "The nomos-spec-change skill states the render-tree rule as a claim about records: the tree you render in holds exactly the registered records your commit will publish, no more and no fewer, and its worked example builds a detached worktree at HEAD and copies only the record files in. Measured on 2026-09-06 that is necessary but not sufficient. A worktree at 4bc9dc92 carrying the edited record rendered domain-specification cleanly there, freshness exit 0, and the identical bytes read stale with exit 8 against the shared tree at edd8f1c9. Both trees had byte-identical record files, byte-identical projection bodies and the same 216 registration files; the only difference was one peer commit touching gate-orchestration source and no records at all, plus one uncommitted source edit. The domain-specification input hash therefore covers repository source and not only the record set, so following the skill exactly still yields a stale projection whenever HEAD has moved on code, which is the common case in this tree. The skill's own reason for existing is that this step was absent for eleven commits, so an incomplete statement of it has the same cost.",
+      "done_when": "The skill states that the render tree must hold what the commit publishes in source as well as records, gives the measured evidence that a records-only match is insufficient, and names the cheap correct path of rendering from the shared tree when git status shows it clean apart from the author's own change. The existing worktree recipe stays for the case where the shared tree is contaminated, with the added step of copying the source changes in and re-creating it if HEAD moves.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-spec-change/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
