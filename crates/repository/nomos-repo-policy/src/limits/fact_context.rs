@@ -28,9 +28,11 @@ pub fn Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, 
     let subject = nomos_model::Subject_Of_Path("");
     let guarantee = Declared_Guarantee();
     let payload_bytes = Encode_Payload(&payload);
-    let key = scaffolding::Compute_Fact_Key(Capability(), CONTRACT_VERSION, PROVIDER, CONTRACT_VERSION, subject, guarantee, context);
+    let identity = scaffolding::CapabilityIdentity { capability: Capability(), contract_version: CONTRACT_VERSION, provider: PROVIDER, provider_version: CONTRACT_VERSION };
+    let key = scaffolding::Compute_Fact_Key(&identity, subject, guarantee, context);
+    let payload = scaffolding::EncodedPayload { schema: Payload_Schema(), bytes: payload_bytes };
 
-    return Ok(scaffolding::Materialize_Fact(subject, guarantee, context, key, Payload_Schema(), payload_bytes));
+    return Ok(scaffolding::Materialize_Fact(subject, guarantee, scaffolding::FactFiling { context, key }, payload));
 }
 
 #[cfg(test)]
@@ -101,8 +103,9 @@ mod tests
             nomos_contracts::IncrementalGranularity::WholeWorkspace,
         );
 
-        let strong_key = scaffolding::Compute_Fact_Key(Capability(), CONTRACT_VERSION, PROVIDER, CONTRACT_VERSION, subject, Declared_Guarantee(), Context());
-        let weak_key = scaffolding::Compute_Fact_Key(Capability(), CONTRACT_VERSION, PROVIDER, CONTRACT_VERSION, subject, weaker, Context());
+        let identity = scaffolding::CapabilityIdentity { capability: Capability(), contract_version: CONTRACT_VERSION, provider: PROVIDER, provider_version: CONTRACT_VERSION };
+        let strong_key = scaffolding::Compute_Fact_Key(&identity, subject, Declared_Guarantee(), Context());
+        let weak_key = scaffolding::Compute_Fact_Key(&identity, subject, weaker, Context());
 
         assert_ne!(strong_key.Digest(), weak_key.Digest(), "two offers of the same subject at different guarantees must file apart");
     }

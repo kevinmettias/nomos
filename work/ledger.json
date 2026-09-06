@@ -58609,6 +58609,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P65-SCAFFOLDING-FILE-NAME-AND-ARITY",
+      "title": "The new shared policy scaffolding module itself carries two real self-check findings",
+      "why": "cargo test/clippy do not run nomos's own rules; only nomos-cli's own self-check does. Immediately after P43-POLICY-PROVIDER-SCAFFOLDING-DUPLICATION-2 landed, that same self-check caught two real findings in the crate it just added: scaffolding.rs declared both FactContext and PolicyFact as public types in a file named after neither (file-name-matches-declared-type), and Compute_Fact_Key (arity 7) and Materialize_Fact (arity 6) both exceeded the four-value-parameter cap this workspace's own parameter-count rule already enforces elsewhere -- the identical class of arity violation P42-REQUIREMENT-TRACE-STALENESS-RULE-2's own predicates.rs just had to fix.",
+      "done_when": "Neither finding appears in a real nomos-cli self-check run. FactContext and PolicyFact each live in their own file named for the type; Compute_Fact_Key and Materialize_Fact each take four or fewer value parameters, grouped the same environment-struct way this session's other arity fixes already were. No provider's materialized fact or declared guarantee changes; every existing per-module test passes unchanged.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-policy",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-policy",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ds::reading::tests::Test_Discover_Workspace_Should_Return_An_Empty_Policy_For_A_File_Declaring_No_Words_Block ... ok\ntest words::provider::tests::Test_Materialize_Workspace_Should_Materialize_This_Repositorys_Own_Declared_Additions ... ok\ntest words::reading::tests::Test_Discover_Workspace_Should_Read_This_Repositorys_Own_Declared_Additions ... ok\n\ntest result: ok. 70 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-268e7e83bad5aa9e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-5784768ca0f1090f.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-513e18542be398a1.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-6e5562a3f7cdfa63.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-339a6fd2ca04820d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-78d0981b5c9b6e0b.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-40f802280fae901d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-02401d6b032b8cc1.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-021f9817f180883c.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-d47356fe6ddd8486.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-6808ca7ce910cde0.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_repo_policy-38c7aa586dd1cca5.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_repo_policy\n",
+        "verified_at": 1788690409,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c425537caee56cf35840a478b162400c5891ab5a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
