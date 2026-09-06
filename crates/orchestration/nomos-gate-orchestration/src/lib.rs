@@ -135,9 +135,14 @@
 //!
 //! # What no increment is
 //!
-//! None implements `compare` -- that verb has no variant here at all, not a stub one, the
-//! same "no invented shape ahead of a real body" this crate's own [`command`] module
-//! documents. None touches declared phases, thresholds or approvals -- every other clause
+//! `compare` is real as a library verb: [`Compare_Gate_Runs`] takes two already-produced
+//! [`GateRunResult`]s and reports each finding's [`FindingDisposition`] change as a
+//! [`DispositionChange`] in a [`GateCompareResult`] -- see [`crate::gate_compare`]'s own
+//! doc for why a disposition diff, not a raw finding diff. It is not CLI-wired: no flag or
+//! config file reaches it from a `nomos gate` invocation, and `nomos-cli`'s own gate-command
+//! parser still refuses a `compare` subcommand outright, the same "no invented shape ahead
+//! of a real body" this crate's own [`command`] module documents for the wiring, if not the
+//! verb itself. None touches declared phases, thresholds or approvals -- every other clause
 //! `WF-001` names beyond suppression, baseline, rule calibration and coverage. `GatePlan`
 //! still does not vary by [`GateCommand::root`], `scope`, `rules`, `suppressions`,
 //! `baseline` or `adoption` -- it
