@@ -8,7 +8,7 @@
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
-pub(crate) use nomos_rules::{Permits, Zone, Zone_Of, SAME_ZONE_EDGES, ZONES, ZONE_LIST};
+pub(crate) use nomos_rules::{Permits, Zone, Zone_Of, SAME_ZONE_EDGES, WRITE_DOORS, ZONES, ZONE_LIST};
 
 /// The workspace root, from this crate's manifest directory.
 pub(crate) fn Repository_Root() -> PathBuf

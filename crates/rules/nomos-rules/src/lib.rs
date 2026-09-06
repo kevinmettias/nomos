@@ -387,6 +387,17 @@
 //! *sourced library* — a file whose only top-level statements define and never do. No
 //! repository-configurable dimension, so a leaf addition beside its two siblings rather
 //! than a fourth thing needing `nomos.cap.scripting.policy`.
+//!
+//! [`Check_Write_Authority`] is the sixty-seventh rule, `OD-RULES-023`'s own design applied
+//! beside [`Check_Every_Member_Declares_A_Band`] rather than folded into it: a person
+//! required a rule against declared write authority and declared component ownership both,
+//! and measurement found only the first ready — `nomos-store`'s own "one write door per
+//! authority" design was true today and checkable against the identical
+//! `nomos.cap.dependency.edges` fact this crate already reads, while the one concrete
+//! reading of ownership anyone could name (type-name uniqueness) was falsified by this
+//! workspace's own surface snapshots before any code was written. No new capability, no new
+//! provider: a declared allow-list is judged the same way [`Permits`] already judges a zone
+//! crossing, aimed at authority instead of direction. [`WRITE_DOORS`] is that table.
 
 #![forbid(unsafe_code)]
 
@@ -407,8 +418,10 @@ pub use checks::{
     Check_Seqcst_Justified_Explicitly, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, RELAXED_NOT_USED_WHEN_ORDERING_MATTERS,
     SEQCST_JUSTIFIED_EXPLICITLY,
     Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION,
-    Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, Permits, Zone, Zone_Of, DEPENDENCY_COMPLETENESS,
-    DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION, SAME_ZONE_EDGES, ZONES, ZONE_LIST,
+    Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, Check_Write_Authority, Permits, Zone, Zone_Of,
+    DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
+    SAME_ZONE_EDGES, WRITE_AUTHORITY, WRITE_AUTHORITY_CONTRACT_RECORD, WRITE_AUTHORITY_CONTRACT_RECORD_VERSION, WRITE_DOORS,
+    ZONES, ZONE_LIST,
     Check_Eager_Vs_Lazy_Context, Check_Error_Message_Has_No_Trailing_Punctuation, Check_Error_Message_Starts_Lowercase,
     EAGER_VS_LAZY_CONTEXT, LOWERCASE_FIRST_LETTER, NO_TRAILING_PUNCTUATION,
     Check_A_Consumer_Imports_Through_The_Facade, Check_A_Facade_Publishes_A_Child_One_Way,

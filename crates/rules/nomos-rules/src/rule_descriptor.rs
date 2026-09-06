@@ -80,7 +80,7 @@ pub struct RuleDescriptor
     pub requires: &'static [RequiredFact],
     /// The authority this rule's implementation cites.
     ///
-    /// A versioned governing record identifier for the seven rules whose contract a record
+    /// A versioned governing record identifier for the eight rules whose contract a record
     /// decides, [`PORTED_STANDARD`] for a rule ported from code-standards, or
     /// [`WORKSPACE_CONVENTIONS`] for the one rule whose contract is this repository's own
     /// prose. `OD-GATE-020` measured that population and confirmed the two-field shape
@@ -184,6 +184,7 @@ pub const DESCRIPTORS: &[RuleDescriptor] = &[
     Described(crate::NAMING_CONVENTION, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy]).Citing(WORKSPACE_CONVENTIONS, NO_VERSIONED_RECORD),
     Described(crate::DEPENDENCY_DIRECTION, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges]).Citing(crate::DEPENDENCY_CONTRACT_RECORD, crate::DEPENDENCY_CONTRACT_RECORD_VERSION),
     Described(crate::DEPENDENCY_COMPLETENESS, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges]).Citing(crate::DEPENDENCY_CONTRACT_RECORD, crate::DEPENDENCY_CONTRACT_RECORD_VERSION),
+    Described(crate::WRITE_AUTHORITY, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges]).Citing(crate::WRITE_AUTHORITY_CONTRACT_RECORD, crate::WRITE_AUTHORITY_CONTRACT_RECORD_VERSION),
     Described(crate::LINT_DIAGNOSTICS, SubjectKind::SourceFacts, &[RequiredFact::LintDiagnostics]).Citing(crate::LINT_CONTRACT_RECORD, crate::LINT_CONTRACT_RECORD_VERSION),
     Described(crate::DEPENDENCY_POLICY, SubjectKind::SourceFacts, &[RequiredFact::DependencyPolicy]).Citing(crate::DEPENDENCY_POLICY_CONTRACT_RECORD, crate::DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION),
     Described(crate::UNREAD_REACHES_FINDING, SubjectKind::SourceFacts, &[RequiredFact::Reachability]).Citing(crate::UNREAD_REACHES_FINDING_CONTRACT_RECORD, crate::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION),

@@ -1,11 +1,12 @@
-//! The sixty-six rules this crate implements, one module each — `naming` holds fourteen,
+//! The sixty-seven rules this crate implements, one module each — `naming` holds fourteen,
 //! `rust_text` holds eight, `go_text` holds five, `structure` holds five, `formatting` holds
 //! five, `security_text` holds three, `concurrency_text` holds three, `error_text` holds
-//! three, `facade` holds three, `placement` holds two, `dependency` holds two, and `goals`
+//! three, `facade` holds three, `placement` holds two, `dependency` holds three, and `goals`
 //! holds the one rule here whose subject is not source at all, while
 //! `script_discipline` holds four,
-//! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`],
-//! since both judge the same declared architecture and observed
+//! [`Check_Dependency_Direction`], [`Check_Every_Member_Declares_A_Band`] and
+//! [`Check_Write_Authority`],
+//! since all three judge the same declared architecture and observed
 //! `nomos.cap.dependency.edges` fact, while naming holds the general function convention
 //! and the test-name behavior convention.
 //! `lib.rs`'s own module doc walks why each one exists and in what order it was built;
@@ -72,8 +73,10 @@ pub use crosslang::{
     CROSS_LANGUAGE_CORRESPONDENCE,
 };
 pub use dependency::{
-    Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, Permits, Zone, Zone_Of, DEPENDENCY_COMPLETENESS,
-    DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION, SAME_ZONE_EDGES, ZONES, ZONE_LIST,
+    Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, Check_Write_Authority, Permits, Zone, Zone_Of,
+    DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
+    SAME_ZONE_EDGES, WRITE_AUTHORITY, WRITE_AUTHORITY_CONTRACT_RECORD, WRITE_AUTHORITY_CONTRACT_RECORD_VERSION, WRITE_DOORS,
+    ZONES, ZONE_LIST,
 };
 pub use domain_type_alias::{Check_Domain_Values_Are_Distinct_Types, DOMAIN_VALUES_ARE_DISTINCT_TYPES};
 pub use enum_shape::{Check_Named_Fields_Over_Positional_Variant_Payloads, NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS};

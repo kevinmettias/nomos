@@ -56621,6 +56621,73 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P56-WRITE-AUTHORITY-RULE",
+      "title": "OD-RULES-023's write-authority table becomes a real, composed rule",
+      "why": "OD-RULES-023 decided the mechanism and named the territory: nomos-store's own one-write-door-per-authority design is real but unchecked, and a declared allow-list over the identical nomos.cap.dependency.edges fact judges it the same way Check_Dependency_Direction already judges a zone crossing. This item builds it end to end: the table, the rule, its composition into a real nomos check run, its descriptor, and the contract-test mirror a new pub const table needs.",
+      "done_when": "Check_Write_Authority exists in nomos-rules, composed into nomos-check-orchestration's real Run behind WRITE_AUTHORITY, described in nomos_rules::DESCRIPTORS, cites OD-RULES-023 as its own versioned contract, and WRITE_DOORS is mirrored by a real contract test comparing it against the workspace's own Cargo.toml dependencies. cargo test -p nomos-rules -p nomos-contract-tests passes and cargo build --workspace is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/dependency/write_authority.rs",
+          "crates/rules/nomos-rules/src/checks/dependency.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/reading.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/tests/boundaries/graph.rs",
+          "tests/contract/tests/completeness_universes/table.rs",
+          "tests/contract/tests/rule_contract_citation.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.20s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-00b66ab4528ef7e7.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-a687a78484f4deae.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-10de939333ed2329.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-c05b0e9a76aaa2c5.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-e6b3c39fd64c51d8.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-0b84c0f2dc0ab2f5.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a3949cf1ce48d25d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-ce4ce73de05f4395.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-5b2ef081c9fe2cd3.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-9eee39c69777f55a.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-66b1797fc05c2077.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788671202,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2f441e3d4230220d53cd6050d9212ee01de57a15"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

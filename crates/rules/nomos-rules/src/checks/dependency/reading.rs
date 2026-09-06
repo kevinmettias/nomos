@@ -6,12 +6,13 @@
 //! payload gets found and decoded in the first place — the half no fixture reaches.
 //!
 //! [`Payload_Of`] takes the calling rule's own [`RuleId`] label rather than naming
-//! [`super::DEPENDENCY_DIRECTION`] itself: both [`super::Check_Dependency_Direction`] and
-//! [`super::Check_Every_Member_Declares_A_Band`] read the identical
-//! `nomos.cap.dependency.edges` fact through the identical requirement, and an unread
-//! subject has to be reported under whichever rule actually asked for it, not always the
-//! first rule that needed this reader. Two real callers is what licenses the parameter —
-//! before the second rule existed there was nothing to disambiguate.
+//! [`super::DEPENDENCY_DIRECTION`] itself: [`super::Check_Dependency_Direction`],
+//! [`super::Check_Every_Member_Declares_A_Band`] and [`super::Check_Write_Authority`] all
+//! read the identical `nomos.cap.dependency.edges` fact through the identical requirement,
+//! and an unread subject has to be reported under whichever rule actually asked for it, not
+//! always the first rule that needed this reader. Two real callers is what licensed the
+//! parameter — before the second rule existed there was nothing to disambiguate — and a
+//! third changed nothing about the shape, only the count.
 
 use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest, MaterializedFact};

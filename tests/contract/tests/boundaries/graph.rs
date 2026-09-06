@@ -1,6 +1,6 @@
 //! What the dependency graph is allowed to do, and the vacuity guard in front of it.
 
-use crate::bands::{Permits, Zone_Of, SAME_ZONE_EDGES, ZONES};
+use crate::bands::{Permits, Zone_Of, SAME_ZONE_EDGES, WRITE_DOORS, ZONES};
 use nomos_contract_tests::Workspace;
 
 /// Everything `nomos-contracts` is permitted to reach, transitively.
@@ -230,6 +230,32 @@ fn Test_Every_Same_Zone_Edge_Should_Be_A_Real_Dependency()
              such dependency. A named exception with nothing behind it permits an edge \
              nobody's code actually draws."
         );
+    }
+}
+
+/// `OD-RULES-023`'s own write-authority table names only doors that are real dependencies.
+#[test]
+fn Test_Every_Write_Door_Should_Be_A_Real_Dependency()
+{
+    let workspace = Workspace::Load();
+
+    for (authority, doors) in WRITE_DOORS
+    {
+        for door in *doors
+        {
+            let Some(member) = workspace.Get(door)
+            else
+            {
+                panic!("{door} names no real workspace member");
+            };
+
+            assert!(
+                member.direct_dependencies.contains(*authority),
+                "WRITE_DOORS names {door} as a door into {authority}, but {door}'s own \
+                 Cargo.toml declares no such dependency. A named door with nothing behind \
+                 it permits an edge nobody's code actually draws."
+            );
+        }
     }
 }
 

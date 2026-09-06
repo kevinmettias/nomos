@@ -101,6 +101,10 @@ pub const nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::UNSAFE_JUSTIFICATION: &str
 pub const nomos_rules::UNWRAP_EXPECT_DISCIPLINE: &str
 pub const nomos_rules::WORKSPACE_MARKERS_CARRY_A_REASON: &str
+pub const nomos_rules::WRITE_AUTHORITY: &str
+pub const nomos_rules::WRITE_AUTHORITY_CONTRACT_RECORD: &str
+pub const nomos_rules::WRITE_AUTHORITY_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::WRITE_DOORS: &[(&str, &[&str])]
 pub const nomos_rules::ZERO_FLAKE_POLICY: &str
 pub const nomos_rules::ZONES: &[(&str, Zone)]
 pub const nomos_rules::ZONE_LIST: [Zone; 11]
@@ -228,6 +232,7 @@ pub fn nomos_rules::Check_Unread_Reaches_A_Finding(sources: &[SourceFile], facts
 pub fn nomos_rules::Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Unwrap_Expect_Discipline(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Workspace_Markers_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Write_Authority(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Permits(from: Zone, to: Zone) -> bool
 pub fn nomos_rules::RequiredFact::Capability(self) -> CapabilityId
 pub fn nomos_rules::RuleDescriptor::Rule(&self) -> RuleId

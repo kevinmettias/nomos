@@ -282,4 +282,13 @@ pub(crate) const UNIVERSES: &[Universe] = &[
             by: "Test_Every_Zone_Should_Be_Matched_Exhaustively",
         },
     },
+    // ---- OD-RULES-023's write-authority table ----
+    Universe {
+        path: "crates/rules/nomos-rules/src/checks/dependency/write_authority.rs",
+        name: "WRITE_DOORS",
+        kind: UniverseKind::Constant,
+        standing: Standing::Mirrored {
+            by: "Test_Every_Write_Door_Should_Be_A_Real_Dependency",
+        },
+    },
 ];

@@ -32,14 +32,14 @@ use nomos_rules::{
     Check_Scripts_Use_A_Portable_Shebang, Check_Seqcst_Justified_Explicitly, Check_Shared_Interior_Mutability_Says_Why,
     Check_Sleep_Is_Not_Synchronization, Check_Suppression_Directives_Carry_A_Reason, Check_Todo_Format,
     Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter, Check_Unread_Reaches_A_Finding,
-    Check_Unsafe_Justification, Check_Workspace_Markers_Carry_A_Reason, SourceFile,
+    Check_Unsafe_Justification, Check_Workspace_Markers_Carry_A_Reason, Check_Write_Authority, SourceFile,
     A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, A_DISABLED_TEST_STATES_WHY, A_DISCARDED_ERROR_IS_EXPLAINED, A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
     A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, A_SCRIPT_DECLARES_ITS_PURPOSE, A_SECRET_DOES_NOT_TRAVEL_IN_A_URL,
     A_SKIPPED_TEST_STATES_WHY, AN_EXCLUDED_FILE_SAYS_WHY, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED,
     BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, CLOSURE_BOUNDS_ARE_MINIMAL,
     CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, COMPLETENESS_MIRROR, CONSTANTS_SPLIT_BY_EXPORT,
     CROSS_LANGUAGE_CORRESPONDENCE, DATA_NAMES_STAY_LOWER_SNAKE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS,
-    DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, DEPRECATION, EAGER_VS_LAZY_CONTEXT,
+    DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, DEPRECATION, EAGER_VS_LAZY_CONTEXT, WRITE_AUTHORITY,
     ABBREVIATIONS, EXECUTED_SCRIPTS_SET_NOUNSET, GOALS_AND_PARTS_LINE_UP,
     EVERY_ALLOW_CARRIES_A_JUSTIFICATION, EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE,
     FILE_SIZE_JUSTIFICATION_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
@@ -72,7 +72,7 @@ pub use rule_reassessment_cache::RuleReassessmentCache;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 64;
+const RULE_COUNT: usize = 65;
 
 /// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
 /// through, the filesystem a repository-declared policy capability (`nomos.cap.naming.
@@ -283,9 +283,10 @@ fn Judged_Over<Launcher: ProcessLauncher, Fs: FileSystem>(sources: &[SourceFile]
 /// [`Materialize_Lint`], [`Materialize_Policy`], [`Materialize_Reachability`] and
 /// [`Materialize_Naming_Policy`] give.
 ///
-/// Each runs only when `selected` asks for a rule it feeds -- `DEPENDENCY_DIRECTION` or
-/// `DEPENDENCY_COMPLETENESS` for the first (both judge the same `dependencies.sources`),
-/// `LINT_DIAGNOSTICS` for the second, `DEPENDENCY_POLICY` for the third,
+/// Each runs only when `selected` asks for a rule it feeds -- `DEPENDENCY_DIRECTION`,
+/// `DEPENDENCY_COMPLETENESS` or `WRITE_AUTHORITY` for the first (all three judge the same
+/// `dependencies.sources`), `LINT_DIAGNOSTICS` for the second, `DEPENDENCY_POLICY` for the
+/// third,
 /// `UNREAD_REACHES_FINDING` for the fourth, any of `NAMING_CONVENTION`, `DATA_NAMES_STAY_
 /// LOWER_SNAKE`, `EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE`, `UNEXPORTED_FUNCTIONS_
 /// LOWERCASE_ONLY_THE_FIRST_LETTER` or `TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE` for the
@@ -360,7 +361,9 @@ fn Materialize_Dependency_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
     selected: &[RuleId],
 ) -> DependencyMaterialization
 {
-    if Is_Rule_Selected(selected, DEPENDENCY_DIRECTION) || Is_Rule_Selected(selected, DEPENDENCY_COMPLETENESS)
+    if Is_Rule_Selected(selected, DEPENDENCY_DIRECTION)
+        || Is_Rule_Selected(selected, DEPENDENCY_COMPLETENESS)
+        || Is_Rule_Selected(selected, WRITE_AUTHORITY)
     {
         return Materialize_Dependencies(env.root, env.context, env.store, env.launcher);
     }
@@ -809,6 +812,7 @@ fn With_Composed_Rules<Answer>(
         ComposedRule { id: NAMING_CONVENTION, check: &|reader: &mut Reader<'_, '_>| return Check_Naming_Convention(sources, reader) },
         ComposedRule { id: DEPENDENCY_DIRECTION, check: &|reader: &mut Reader<'_, '_>| return Check_Dependency_Direction(&capabilities.dependency_sources, reader) },
         ComposedRule { id: DEPENDENCY_COMPLETENESS, check: &|reader: &mut Reader<'_, '_>| return Check_Every_Member_Declares_A_Band(&capabilities.dependency_sources, reader) },
+        ComposedRule { id: WRITE_AUTHORITY, check: &|reader: &mut Reader<'_, '_>| return Check_Write_Authority(&capabilities.dependency_sources, reader) },
         ComposedRule { id: LINT_DIAGNOSTICS, check: &|reader: &mut Reader<'_, '_>| return Check_Lint_Diagnostics(&capabilities.lint_sources, reader) },
         ComposedRule { id: DEPENDENCY_POLICY, check: &|reader: &mut Reader<'_, '_>| return Check_Dependency_Policy(&capabilities.policy_sources, reader) },
         ComposedRule { id: UNREAD_REACHES_FINDING, check: &|reader: &mut Reader<'_, '_>| return Check_Unread_Reaches_A_Finding(sources, reader) },
