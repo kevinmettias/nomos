@@ -58924,7 +58924,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Investigated the payload directly: PayloadItem (crates/capabilities/nomos-cap-syntax/src/payload_item.rs) carries only kind/visibility/qualified_name/documentation/shape, and an Implementation item's shape (nomos-lang-rust/src/syntax/shape.rs's Impl_Shape) is only ever TRAIT or INHERENT, computed from node.trait_.is_some() alone. The impl block's own generic parameter list (syn::ItemImpl::generics, read at the exact call site in walk.rs's visit_item_impl, right beside the unused node.generics field) is never threaded into the payload at all -- there is no existing signal single_letter_names.rs could read to tell impl<T: AsRef<[u8]>> ToHex for T (self-type is a bare, already-declared generic parameter) apart from impl Trait for X where X is a real, single-letter-named struct someone actually chose and still deserves the finding. A rule-side heuristic with no new data (e.g. exempting every single-uppercase-letter Implementation name) would hide that second, real case, which is worse than the gap this item names. Closing it honestly needs the payload's shape vocabulary extended to carry an impl's own generic parameter names -- a change spanning nomos-lang-rust's walker, nomos-lang-rust/src/syntax/shape.rs, and nomos-cap-syntax's payload shape encoding, the identical kind of payload-extension decision OD-CAPABILITY-011 made for three other named cases -- not a single-file Correction against single_letter_names.rs alone. Re-file as a Decision item scoped to that payload extension, with this Correction re-authored to depend on it once the extension exists."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -58942,9 +58946,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "investigated before deciding; the fix needs more territory than declared, see decline reason",
+          "abandoned_at": 1788702970
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788702970
+      }
     },
     {
       "id": "P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT",
@@ -59015,6 +59028,39 @@
           "nomos-cli",
           "--test",
           "check_command"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P70-IMPL-BLOCK-GENERIC-PARAMETERS-NOT-IN-PAYLOAD",
+      "title": "an impl block's own generic parameters exist in the walker and never reach the payload",
+      "why": "P68-SINGLE-LETTER-NAMES-READS-A-BLANKET-IMPLS-GENERIC-PARAMETER measured this directly against hex-0.4.3's real impl<T: AsRef<[u8]>> ToHex for T: single-letter-names cannot tell a blanket impl's Self type, which is literally its own already-declared generic parameter, apart from a real single-letter struct name someone chose to implement a trait for -- because nomos-cap-syntax's PayloadItem (payload_item.rs) carries only kind/visibility/qualified_name/documentation/shape, and Impl_Shape (nomos-lang-rust/src/syntax/shape.rs) only ever encodes TRAIT or INHERENT from node.trait_.is_some(). The impl's own generics (syn::ItemImpl::generics) are read by nothing: walk.rs's visit_item_impl sits right beside node.generics and never touches it. A rule-side heuristic (exempting every single-uppercase-letter Implementation name) would hide the real case this rule exists to catch, so closing the gap honestly requires the payload itself to say whether an Implementation item's own name is one of its own declared generic parameters, the same kind of payload-shape decision OD-CAPABILITY-011 already made for three other named extensions (enum per-variant shape, Fn parameter/return list, Use item's real source path).",
+      "done_when": "A decision record states whether and how nomos-cap-syntax's payload gains a signal for 'this Implementation item's own name is one of its own declared generic parameters' -- as a new shape flag on Impl_Shape's encoding, a new PayloadItem field, or an explicit refusal naming why not. If accepted, the record names which crates the change spans (nomos-lang-rust's walker and shape.rs, nomos-cap-syntax's shape vocabulary, any cross-language mirror nomos-lang-go/nomos-lang-rust-scan would also need) so a follow-up Correction re-authoring P68-SINGLE-LETTER-NAMES-READS-A-BLANKET-IMPLS-GENERIC-PARAMETER can depend on it with real, bounded territory.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-014.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
         ],
         "timeout_seconds": 1200
       },
