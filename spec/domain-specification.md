@@ -180,6 +180,7 @@ profile: domain-specification
 | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md@authored | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md | authored | 16 | 6 | sha256:2021593cf5f8734035d023e39e1f1fc3fabf8ee21b2ddd4dd7322195e9ff483f |
 | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md@authored | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md | authored | 18 | 6 | sha256:7c00cbb230b504b22e7922e6d767d0c0a9bd413158db489b9c851c70d34f83fe |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md@authored | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md | authored | 30 | 6 | sha256:ee25e5bafb0ab46ae96890e572a96aa4a970f0f854957c7e2474998c6a5949ad |
+| docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md@authored | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md | authored | 16 | 6 | sha256:ce866cdba1b609d99736475258c51c1342b6274867a9c2e8f8703946cec253c3 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1587,6 +1588,12 @@ profile: domain-specification
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#15 | authored | 2 | The Decision |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#22 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#28 | authored | 2 | Status |
+| docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#1 | authored | 1 | Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first |
+| docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#8 | authored | 2 | The Decision |
+| docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#11 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#15 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -46931,6 +46938,169 @@ Accepted.
 Revisit if the resolution step, once built, finds a rule whose declaration cannot state
 something the array said — which would be evidence the manifest was measured against four rules
 and generalized past what they showed, rather than a reason to keep a second table beside it.
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#1
+
+*revision: authored · kind: heading · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first · hash: sha256:7ca6f9a1cdefcf33e1543e28e100cb216d8fb5f14682b001a5a6ec50df28a6be*
+
+# Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#2
+
+*revision: authored · kind: heading · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#3
+
+*revision: authored · kind: prose · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / Question · hash: sha256:58cbb5c8bcd93b79cd2837731adec425a5ce6b1c7287607828116b9da17da644*
+
+`Check_Dependency_Direction` proves the shape this workspace's rule system is for: a
+declared architecture beside an observed fact, judged into a `Finding`. A person required
+two named extensions of it — declared component ownership against the observed public and
+dependency surface, and declared write authority against observed mutation paths, "the
+property `nomos-store` was built around and which nothing currently checks." Both need a
+real mechanism decided, not assumed from the shape of the first rule.
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#4
+
+*revision: authored · kind: heading · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#5
+
+*revision: authored · kind: prose · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / What Was Measured · hash: sha256:cbece365e69f4e1b8b1acc2385a0cb149505a83d25994e720de30fc8216fdf5a*
+
+**Write authority is already, accidentally, true — and checkable with a fact this crate
+already reads.** `nomos-store`'s own README row states "one write door per authority."
+Measured directly: exactly one crate, `nomos-workspace`, declares `nomos-store` as a real
+dependency (`grep`'d across every `Cargo.toml` in the workspace), and its own
+`workspace.rs` is the only site anywhere that imports `nomos_store::{Commit, DocumentStore,
+...}`. `Check_Dependency_Direction` already reads `nomos.cap.dependency.edges` — the
+identical fact — to judge zone crossings. A second judgment over the same fact, checking a
+crate's dependents against a declared allow-list rather than a declared zone, is the
+identical shape `tests/contract/tests/boundaries/graph.rs`'s own `PLATFORM_ADAPTER` and
+`KNOWLEDGE_ADAPTER` already use: name every crate permitted to depend on the authority
+crate; anything else that does is the second write door this property exists to catch.
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#6
+
+*revision: authored · kind: prose · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / What Was Measured · hash: sha256:6dddb6d9f31b5bce2971de7ce59176a0839a989e5053e932bee06d271e930d65*
+
+**A naive reading of "ownership" is falsified by real data, not merely doubtful.** The most
+direct reading — no two crates define a top-level type of the same name — was checked
+against every committed surface snapshot in `tests/contract/surface/`. `Refusal` is
+independently defined in nine different crates; `Visibility`, `Scope`, `Reading`,
+`PayloadRefusal`, `Member`, `ManifestError`, `ItemKind`, `Item` and `Disposition` each in
+three. This is not drift: it is ordinary, idiomatic Rust — a small crate naming its own
+local concept `Refusal` and relying on `nomos_foo::Refusal` versus `nomos_bar::Refusal` to
+disambiguate, exactly what the module system exists to let it do. A rule built on this
+reading would report roughly two dozen findings on its first real run, every one of them a
+false positive against this workspace's own established style, not a real ownership
+conflict.
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#7
+
+*revision: authored · kind: prose · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / What Was Measured · hash: sha256:e5fe1240704892f52fe8ed5fa274140668a0e749f8587372dd3fd4deeae9e472*
+
+**Nothing in this workspace declares ownership as a structured claim today.** README's own
+"Owns" column is prose, read by a person, not parsed by anything — `OD-PROJECT-001` already
+decided this file stays hand-authored for exactly that reason. `OD-CONTRACTS-001`/
+`OD-CONTRACTS-005`'s own admission tests reason in prose about why one type belongs in one
+crate, checked by a person reading the record, not by a rule reading a table.
+"Ownership" has no `ZONES`-shaped declaration to check an observed fact against yet — unlike
+write authority, which only needed a second table over a fact this crate already reads,
+ownership needs the table itself designed first: what a crate claims (a type name? a
+capability id? a file path prefix?), and what "the actual public and dependency surface"
+means as the observed half of that same claim.
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#8
+
+*revision: authored · kind: heading · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#9
+
+*revision: authored · kind: prose · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / The Decision · hash: sha256:c9d178209ff56f91e3025d8b5290f828ba354108bbe08250b81d1a61d2ba915f*
+
+**Write authority is a declared allow-list, checked as a third rule over
+`nomos.cap.dependency.edges` — real, ready to build.** A table names, for each crate that is
+the sole intended write door for some authority, exactly which crates may depend on it
+directly: `nomos-store` → `nomos-workspace`, the only real entry this workspace has today. A
+crate outside the named set that depends on the authority crate is the second write door
+`nomos-store`'s own design was built to prevent, reported the identical way
+`Check_Dependency_Direction` already reports a zone violation. This needs no new fact family
+— `nomos.cap.dependency.edges` already carries everything the check reads — and no change to
+`nomos-store` itself, whose "one write door per authority" property this rule only makes
+mechanical rather than trusted.
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#10
+
+*revision: authored · kind: prose · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / The Decision · hash: sha256:ec35bdee6f8efff2cd4a54362fbecb4dcb89234b315c993d4e5e9107ff53971c*
+
+**Ownership is not decided here.** The item that named it asked for a rule against "the
+actual public and dependency surface," and this record's own measurement found the one
+concrete reading anyone could check today — type-name uniqueness — actively wrong for this
+workspace's real style. Building the rule anyway, over a definition already shown to
+misfire, would ship the exact false-coverage failure `OD-COMPLETENESS-001` and this
+session's own `NoUndeclaredFillerTemplate` rule both exist to catch elsewhere: a check that
+runs and reports, having checked a definition of the property that was not the property. A
+real definition — what a crate claims, in what structured form, checked against which
+observed fact — is a question of the same shape and the same weight `OD-RULES-020` answered
+for zones, not a detail to improvise while building the rule that reads it.
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#11
+
+*revision: authored · kind: heading · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#12
+
+*revision: authored · kind: prose · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / What This Record Does Not Do · hash: sha256:d3eb2b8b67c522f1f0d05ef6c2ef7fdf19fce06e874ba591b82dcafff55d5163*
+
+**No code changes here.** The write-authority table, its rule, its composition into a real
+`nomos check` run, and the finding count measured before composition — this item's own
+`done_when` for that half — are a follow-up item's own territory, named completely rather
+than discovered mid-claim: `crates/rules/nomos-rules/src/checks/architecture_authority.rs`
+(new), the composition site in `nomos-check-orchestration` that wires
+`Check_Dependency_Direction` today, and whichever contract-test file would carry a
+`WRITE_DOORS`-style declaration if one is kept outside `nomos-rules` the way `PLATFORM_
+ADAPTER` is.
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#13
+
+*revision: authored · kind: prose · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / What This Record Does Not Do · hash: sha256:7adf792b9fb13a9280869f67e7b5410ccc939e40c6ab6f6753a3f1dab63172ef*
+
+It does not design ownership's own declaration format. It names the one reading measured
+and rejected, and the two questions a real design needs to answer — what is claimed, and
+what observed fact it is checked against — without answering either, the same way this
+record's own predecessor left plugin, transport and deterministic-subprocess boundary
+shapes named but undecided in `OD-EXECUTOR-002`.
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#14
+
+*revision: authored · kind: prose · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / What This Record Does Not Do · hash: sha256:14ddb6c66c39eee542b6db15c0093696ca2a031169049c99ed4f23dfedc37fff*
+
+It does not reduce this item's own scope from two rules to one. Write authority is decided
+and ready; ownership is a second decision this record did not reach, not a requirement this
+record is declining.
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#15
+
+*revision: authored · kind: heading · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#16
+
+*revision: authored · kind: prose · heading: Write authority is a declared allow-list over an existing fact; ownership needs its own declaration first / Status · hash: sha256:5293d2983f3bf83f9fe58e5845e1522da39b0a8f665040e095c4e2f2c5e4d9b1*
+
+Accepted. Write authority: a declared allow-list over the existing dependency-edges fact,
+ready for a follow-up item to build. Ownership: the one mechanical reading available today
+is measured and found wrong; a real definition is undecided and left open.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

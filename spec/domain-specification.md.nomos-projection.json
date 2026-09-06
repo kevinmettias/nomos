@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:f03821c2d392e64664d701e7948e726495ada11a9ea9fae20862df5ac5c60337",
-  "inputs_digest": "sha256:bbf6e075b0b09fb69b40ca7b8515db04d3aa505b0a476442d5a79048972999b8",
+  "content_digest": "sha256:579d0555f02fa340eb3a03871b0141c82ccb8f58822d3414b4d3549b19f165d3",
+  "inputs_digest": "sha256:7da7bdef2e3990440aa7ed7f1418139fd95046381967b08c91297294ca624e8f",
   "sections": [
     [
       "Documents",
-      197
+      198
     ],
     [
       "Sections",
-      1617
+      1623
     ],
     [
       "Source blocks",
-      5643
+      5659
     ]
   ],
   "inputs": [
@@ -869,6 +869,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md@authored",
       "hash": "sha256:ee25e5bafb0ab46ae96890e572a96aa4a970f0f854957c7e2474998c6a5949ad"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md@authored",
+      "hash": "sha256:ce866cdba1b609d99736475258c51c1342b6274867a9c2e8f8703946cec253c3"
     },
     {
       "content": "documents",
@@ -7879,6 +7884,36 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#28",
       "hash": "sha256:28d176532a1cb77c91dc9ec612de79255f0d85963fd3076a3d0ce9774b1a5c55"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#1",
+      "hash": "sha256:8002a595fa7b06059bbef7c31f64b47ff93bd6054adcc6b51adeb16a0577828c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#2",
+      "hash": "sha256:db0d2e8c024215a92d48c13932a8b05b325288be8acf36c16116433c4165f44d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#4",
+      "hash": "sha256:89a117d4f83c5bdd1059ad712126e8c17a894b73767bcf77439ffcaa5211d90a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#8",
+      "hash": "sha256:a2cd4d364c306167cc3f6e9bc1b3cda3080f49933c6fe1bcc797c9909a5c17cd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#11",
+      "hash": "sha256:4e33a72f3a23258d7225ea8c9e44ddf3549953dbbc3987a5d4a442570b1b598f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#15",
+      "hash": "sha256:44d91755b28d25ec87b809a8906c83a36b94af0cbf37088986ef50bd76729253"
     },
     {
       "content": "headings",
@@ -33339,6 +33374,86 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#30",
       "hash": "sha256:04974558409f067ce90206c89490601a10e5d565eb3b51af5803a58c3c371b2d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#1",
+      "hash": "sha256:7ca6f9a1cdefcf33e1543e28e100cb216d8fb5f14682b001a5a6ec50df28a6be"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#3",
+      "hash": "sha256:58cbb5c8bcd93b79cd2837731adec425a5ce6b1c7287607828116b9da17da644"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#5",
+      "hash": "sha256:cbece365e69f4e1b8b1acc2385a0cb149505a83d25994e720de30fc8216fdf5a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#6",
+      "hash": "sha256:6dddb6d9f31b5bce2971de7ce59176a0839a989e5053e932bee06d271e930d65"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#7",
+      "hash": "sha256:e5fe1240704892f52fe8ed5fa274140668a0e749f8587372dd3fd4deeae9e472"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#9",
+      "hash": "sha256:c9d178209ff56f91e3025d8b5290f828ba354108bbe08250b81d1a61d2ba915f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#10",
+      "hash": "sha256:ec35bdee6f8efff2cd4a54362fbecb4dcb89234b315c993d4e5e9107ff53971c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#11",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#12",
+      "hash": "sha256:d3eb2b8b67c522f1f0d05ef6c2ef7fdf19fce06e874ba591b82dcafff55d5163"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#13",
+      "hash": "sha256:7adf792b9fb13a9280869f67e7b5410ccc939e40c6ab6f6753a3f1dab63172ef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#14",
+      "hash": "sha256:14ddb6c66c39eee542b6db15c0093696ca2a031169049c99ed4f23dfedc37fff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#15",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#16",
+      "hash": "sha256:5293d2983f3bf83f9fe58e5845e1522da39b0a8f665040e095c4e2f2c5e4d9b1"
     },
     {
       "content": "blocks",

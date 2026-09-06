@@ -52773,7 +52773,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Investigated both halves before writing code. Write authority is real and buildable: only\nnomos-workspace depends on nomos-store today (grepped every Cargo.toml and every real\nimport site), and Check_Dependency_Direction already reads the one fact\n(nomos.cap.dependency.edges) a write-door allow-list check would need -- no new fact\nfamily, no new wiring beyond composing a third rule the way the first two already are.\n\nOwnership is not ready. The only concrete, checkable reading of \"declared ownership against\nthe actual public and dependency surface\" -- no two crates define a same-named top-level\ntype -- was checked directly against every committed surface snapshot: Refusal is\nindependently defined in nine different crates, Visibility/Scope/Reading/PayloadRefusal/\nMember/ManifestError/ItemKind/Item/Disposition each in three. This is ordinary, idiomatic\nRust naming, not drift -- a rule built on this reading would report roughly two dozen false\npositives on its first real run. Nothing in this workspace declares ownership as a\nstructured claim to check a real fact against (README's own Owns column is prose,\nOD-PROJECT-001 already decided it stays hand-authored for exactly that reason), so\n\"decided\" here would mean inventing the declaration format under this item's own single-file\nterritory rather than deciding it as its own question first.\n\nDeclining the combined two-rule framing and re-authoring as a decision that closes write\nauthority concretely and leaves ownership named but undecided, rather than shipping a rule\nagainst a definition already shown wrong or silently dropping half of what was required."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -52789,7 +52793,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788669964
+      }
     },
     {
       "id": "P42-ARCHITECTURE-DRIFT-AND-LEAKAGE-RULES",
@@ -56552,6 +56559,58 @@
           "exit_code": 0
         },
         "revision": "5b2323fe1515ba6b45a647f99d725a190e87d38f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-ARCH-AUTHORITY-MECHANISM",
+      "title": "Write authority and declared ownership each need their own mechanism decided first",
+      "why": "Check_Dependency_Direction already proves the shape this system is for: a declared\narchitecture beside an observed fact, judged into a finding. A person required two named\nextensions of it -- declared ownership against the observed surface, and declared write\nauthority against observed mutation paths, the property nomos-store was built around and\nwhich nothing currently checks. Both need a real mechanism decided before either is built:\nwrite authority's real population (measured directly: only nomos-workspace depends on\nnomos-store) is checkable with a fact nomos-rules already reads, but the one concrete\nreading of \"ownership\" available today was checked against real surface snapshots and\nfound to misfire on ordinary, idiomatic Rust naming, not on a real conflict.",
+      "done_when": "A record decides write authority's real mechanism (a declared allow-list over the existing\ndependency-edges fact) as ready to build, and states plainly that ownership's own\ndeclaration format is undecided, naming the one reading measured and rejected and the two\nopen questions a real design would need to answer. No code changes under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 15 tests\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788670199,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b6003ee9fe8b01dc43941e9fac161588888c20ac"
       },
       "abandoned": [],
       "displaced": [],
