@@ -1,6 +1,6 @@
 //! One line in, one answer out -- and the four ways a line does not become a call.
 
-use crate::{FindingParameters, GateParameters, ServedMethod, WireError, WireRequest, WireResponse};
+use crate::{CorrectionParameters, FindingParameters, GateParameters, ServedMethod, WireError, WireRequest, WireResponse};
 use serde::Serialize;
 use serde_json::Value;
 
@@ -66,6 +66,11 @@ fn Answered(method: ServedMethod, request: WireRequest) -> WireResponse
         ServedMethod::GateExplain => match Parsed::<FindingParameters>(parameters)
         {
             Ok(parameters) => Serialized(id, &nomos_api::Handle_Gate_Explain(&parameters.Root(), &parameters.Query())),
+            Err(error) => WireResponse::Refusing(id, error),
+        },
+        ServedMethod::Correction => match Parsed::<CorrectionParameters>(parameters)
+        {
+            Ok(parameters) => Serialized(id, &nomos_api::Handle_Correction_Run(&parameters.Command())),
             Err(error) => WireResponse::Refusing(id, error),
         },
     };
@@ -170,5 +175,24 @@ mod tests
         let result = response.result.expect("a plan over this workspace's own registry answers");
         assert_eq!(At(&result, "/outcome"), "planned", "{result}");
         assert!(Count_At(&result, "/rules") > 0, "{result}");
+    }
+
+    /// A real correction run over a fixture tree with no blocking claim reaches a real
+    /// `clean` answer -- proving this transport, not only `nomos-api` directly, can reach
+    /// `Handle_Correction_Run`.
+    #[test]
+    fn Test_A_Correction_Run_Over_A_Clean_Tree_Should_Reach_A_Real_Clean_Answer()
+    {
+        let root = std::env::temp_dir().join("nomos-api-transport-correction-run-clean");
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("creates a fresh directory");
+        std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("writable");
+
+        let body = format!(r#"{{"jsonrpc":"2.0","id":1,"method":"nomos.correction.run","params":{{"root":{:?}}}}}"#, root.display().to_string());
+        let response = Answer(&body);
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        let result = response.result.expect("a correction run over a clean tree answers");
+        assert_eq!(At(&result, "/outcome"), "clean", "{result}");
     }
 }

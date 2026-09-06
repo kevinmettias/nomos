@@ -1,5 +1,5 @@
-//! Band 93 — host. An MCP server over stdio, projecting `nomos-api-transport`'s own three
-//! Gate verbs as MCP tools.
+//! Band 93 — host. An MCP server over stdio, projecting `nomos-api-transport`'s own Gate
+//! and Correction verbs as MCP tools.
 //!
 //! `AGT-006` names this workspace's own commitment: "integration shall occur through
 //! neutral versioned contracts and MCP tools." `nomos-api`'s own module doc had, until this

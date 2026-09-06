@@ -53063,14 +53063,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "None of the three worked examples is a real, reproducible, buildable increment today. Runtime allocation evidence and benchmark history each need an evidence-capture category this workspace has zero instance of (no runtime observation port beyond one-shot ProcessLauncher, no benchmarking convention anywhere in Cargo.lock); the first also reaches into territory ARC-ROADMAP-001 already deferred on purpose (runtime/debug intelligence under Deferred consuming systems). A previously-removed dependency reappearing is not a gap: it is already a live, composed, reproducible check -- DEPENDENCY_POLICY, cargo deny check bans against deny.toml's committed ban list, composed in run_context.rs -- and on inspection its evidence was never historical, only a static current-graph-vs-committed-list comparison; the one way to make it genuinely historical (querying git log live) is exactly what OD-STORE-002 and nomos-surface-provenance already decline to wire into a gate, confirmed against gate.yml's own shallow (unset fetch-depth) checkout. OD-RULES-026 records this measurement and its evidence; a future explicit decision to accept git history or runtime observation as gate input, if this workspace's boundary or CI checkout depth ever changes, is not foreclosed."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-loop",
-        "acquired_at": 1788682484,
-        "lease_expires_at": 1788693284
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -53081,9 +53081,18 @@
         "timeout_seconds": 3600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "Investigated all three worked examples directly against the real tree. Runtime allocation evidence: ProcessLauncher is one-shot/run-to-completion only, no provider crate observes a judged repository's own running code, and ARC-ROADMAP-001 already places runtime/debug intelligence under Deferred consuming systems. Benchmark history: no criterion dependency, no benchmark-results convention anywhere in this workspace -- nothing to extend. A previously-removed dependency reappearing: already shipped as DEPENDENCY_POLICY (cargo deny check bans against deny.toml's committed ban list of wgpu/egui/winit/ash/naga), composed into run_context.rs today -- and its evidence was never historical, it is a static current-graph-vs-committed-list comparison, the same shape dependency-direction already proves. The one way to make it genuinely historical (a live git log query) is exactly what OD-STORE-002 and nomos-surface-provenance already decline to wire as a gate input, confirmed against gate.yml's own unset fetch-depth (shallow CI checkout). The item's own premise that generations are 'most of what a historical claim needs' is also directly contradicted by OD-STORE-002, which predates it. Declining with a decision record (OD-RULES-026) rather than abandoning for someone else to retry the same three examples.",
+          "abandoned_at": 1788683063
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788683073
+      }
     },
     {
       "id": "P40-AGENT-WORKRESULT-VALIDATED-PATH-2",
@@ -57856,7 +57865,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-transport-mcp-correction",
+          "reason": "Territory omitted tests/contract/tests/boundaries/transport_registry.rs: OD-HOST-007s own ADMITTED allow-list there hardcodes exactly three handler names and refuses any transport call outside it, so widening ServedMethod to admit Correction requires deliberately widening ADMITTED too, not just the two crates originally reserved. Re-adding with corrected territory.",
+          "abandoned_at": 1788682937
+        }
+      ],
       "displaced": [],
       "declined": null
     },
@@ -58082,6 +58097,123 @@
           "exit_code": 0
         },
         "revision": "a1673de1183ddbad7f7f59d3d9538da87cdd44ad"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P62-TRANSPORT-MCP-CORRECTION-SURFACE-2",
+      "title": "nomos-api-transport and nomos-mcp both hard-cap at the three Gate verbs; Correction has a real nomos-api seam neither one projects",
+      "why": "Same as P62-TRANSPORT-MCP-CORRECTION-SURFACE, re-added only for corrected territory. ServedMethod in nomos-api-transport served_method.rs is a closed three-variant enum, GatePlan, GateRun, GateExplain, and its own doc justifies excluding the twenty-one Handle_Work_star and Handle_Spec_star handlers by name, because README.md marks those crates repo tooling. It gives no such reason for Handle_Correction_Run: that handler is not repo tooling, P40-CORRECTIONS-CANONICAL-SEAM built it as a real end-user seam nomos-cli correct already mirrors, and it is simply absent from the registry with nothing said about why. nomos-mcp ServedTool is a thin, deliberately narrow projection of ServedMethod own three variants, its own doc says widening what a tools/call can reach must first widen ServedMethod in that crate, so it inherits the same gap. Confirmed CorrectionResponse already derives Serialize with a snake_case, outcome-tagged shape ready to serve. Checked before re-adding: tests/contract/tests/boundaries/transport_registry.rs hardcodes an ADMITTED allow-list of exactly three handler names and refuses a qualified call to any handler outside it by design, so admitting Correction requires editing that list deliberately, which is outside crates/host/nomos-api-transport and crates/host/nomos-mcp.",
+      "done_when": "ServedMethod gains a Correction variant, wire name nomos.correction.run matching OperationName convention, dispatch.rs routes it to nomos_api Handle_Correction_Run, and ServedTool REGISTRY gains a matching fourth entry with a real description and JSON Schema for CorrectionCommand fields, root and commit, keeping Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry green by construction rather than by coincidence. transport_registry.rs own ADMITTED list gains Handle_Correction_Run, a deliberate widening rather than a silent one, and its surrounding doc comments are updated to say four verbs rather than three. cargo test -p nomos-api-transport -p nomos-mcp -p nomos-contract-tests passes.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api-transport",
+          "crates/host/nomos-mcp",
+          "tests/contract/tests/boundaries/transport_registry.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api-transport",
+          "-p",
+          "nomos-mcp",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api-transport",
+          "-p",
+          "nomos-mcp",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "d; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.24s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api_transport-ba380188c5556159.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-22529c44a1265231.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-18ee297b32198073.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-cb4875d92703f027.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-7c2d003869f67560.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2e5b2963b6b6a7e0.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-04dc1f96808ae620.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-62eb7b53f3879784.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0e59ed04f262a84a.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-1fb258a0cc4d7ea7.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-53cfe538a5636859.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-22e345f5b5373ae3.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_mcp-4ecf5eb13f28a80b.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_mcp-74c804cb165e4753.exe)\n     Running tests\\stdio.rs (target\\debug\\deps\\stdio-396a28313c193fa1.exe)\n   Doc-tests nomos_api_transport\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_mcp\n",
+        "verified_at": 1788683191,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e1d3e248c62585a6a8032b82df60a1acce3c3747"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-RUNTIME-AND-HISTORY-RULES-2",
+      "title": "Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check",
+      "why": "P42-RUNTIME-AND-HISTORY-RULES claimed the fact substrate's generations are most of what a historical claim needs and named three worked examples. Investigated directly against the real tree: OD-STORE-002 already states MemoryFactStore is in-process and generation-scoped, nothing survives past the process that built it -- contradicting the item's premise before it was written. Runtime allocation evidence has no observation mechanism anywhere in this workspace (ProcessLauncher is one-shot/run-to-completion only) and ARC-ROADMAP-001 already defers runtime/debug intelligence on purpose. Benchmark history has no first-class concept here at all (no criterion in Cargo.lock, no results-store convention). A previously-removed dependency reappearing turns out to already be shipped: DEPENDENCY_POLICY (cargo deny check bans against deny.toml's committed wgpu/egui/winit/ash/naga ban list) is already composed into run_context.rs, reproducible with no network call and no git query -- and its evidence was never historical, only a static current-graph-vs-committed-list comparison. The one way to make that example genuinely historical, a live git log query, is exactly what OD-STORE-002 and nomos-surface-provenance already decline to wire into a gate, confirmed against gate.yml's own shallow (unset fetch-depth) checkout.",
+      "done_when": "A decision record measures all three examples against the real tree, corrects the item's own premise about generations against OD-STORE-002, states which parts need infrastructure this workspace has no instance of, names that the dependency-reappearance example is already a live composed check whose evidence was never historical, and does not foreclose a future explicit decision to accept git history or runtime observation as gate input if the workspace's boundary or CI checkout depth changes. No code changes. The record is both documented under docs/records/ and registered under crates/spec/nomos-spec-store/records/, per OD-SPEC-007.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-026.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s\n\n\nrunning 15 tests\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788683190,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e1d3e248c62585a6a8032b82df60a1acce3c3747"
       },
       "abandoned": [],
       "displaced": [],

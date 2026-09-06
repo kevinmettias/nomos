@@ -1,7 +1,8 @@
 //! What the API transport may project, asserted rather than left to a list that is short today.
 //!
-//! `OD-HOST-007` decided that an external surface over `nomos-api` projects the three Gate
-//! verbs and does not project the twenty-one handlers belonging to crates `README.md` marks
+//! `OD-HOST-007` decided that an external surface over `nomos-api` projects Gate's three
+//! verbs, `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2` widened that to a fourth for Correction,
+//! and neither projects the many handlers belonging to crates `README.md` marks
 //! `[repo tooling]`, and said in as many words how that exclusion has to hold: "The exclusion
 //! is structural rather than advisory: the transport crate declares its tool registry
 //! explicitly, and `tests/contract` asserts that the registry names no handler belonging to a
@@ -50,13 +51,13 @@ const PROJECTED_CRATE: &str = "nomos_api";
 /// remembering to add it.
 const PROJECTED_SURFACE: &str = "tests/contract/surface/nomos-api.txt";
 
-/// The three handlers `OD-HOST-007` admits.
+/// The handlers `OD-HOST-007` and `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2` admit.
 ///
 /// Authored here rather than derived, because which verbs are a product surface and which are
 /// how this repository is developed is a decision, and there is nothing in the source to
 /// infer it from. Changing this list is changing what that record decided, which is what a
 /// failure below is meant to make somebody notice.
-const ADMITTED: [&str; 3] = ["Handle_Gate_Plan", "Handle_Gate_Run", "Handle_Gate_Explain"];
+const ADMITTED: [&str; 4] = ["Handle_Gate_Plan", "Handle_Gate_Run", "Handle_Gate_Explain", "Handle_Correction_Run"];
 
 /// The transport calls no handler its registry does not admit.
 ///

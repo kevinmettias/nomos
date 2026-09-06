@@ -5,14 +5,16 @@ use serde_json::{json, Value};
 
 /// One operation this server exposes as an MCP tool.
 ///
-/// A thin second name for [`ServedMethod`]'s own three variants -- not a wider registry and
-/// not a narrower one. `OD-HOST-007`'s three Gate verbs are the whole of what an MCP client
-/// sees here too, the same boundary `nomos-api-transport` already draws and proves against
-/// `nomos-api`'s own blessed surface: this crate never calls a `nomos_api::Handle_*` function
-/// or depends on `nomos-api` at all, so widening what a `tools/call` can reach would first
-/// have to widen [`ServedMethod`] itself, in that crate, where the exclusion is already
-/// policed. This type adds only what `tools/list` needs beside a name -- a human description
-/// and a JSON Schema for its arguments -- neither of which that crate has a reason to carry.
+/// A thin second name for [`ServedMethod`]'s own four variants -- not a wider registry and
+/// not a narrower one. `OD-HOST-007`'s three Gate verbs, plus
+/// `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2`'s Correction verb, are the whole of what an MCP
+/// client sees here too, the same boundary `nomos-api-transport` already draws and proves
+/// against `nomos-api`'s own blessed surface: this crate never calls a `nomos_api::Handle_*`
+/// function or depends on `nomos-api` at all, so widening what a `tools/call` can reach
+/// would first have to widen [`ServedMethod`] itself, in that crate, where the exclusion is
+/// already policed. This type adds only what `tools/list` needs beside a name -- a human
+/// description and a JSON Schema for its arguments -- neither of which that crate has a
+/// reason to carry.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct ServedTool(ServedMethod);
 
@@ -23,10 +25,11 @@ impl ServedTool
     /// keeping a second one beside it.
     ///
     /// Mirrored by `Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry`.
-    /// A fourth `ServedMethod` variant added to that registry without a matching entry here
+    /// A fifth `ServedMethod` variant added to that registry without a matching entry here
     /// would otherwise vanish silently: nothing else compares this array's length or order
     /// against the registry it claims to project.
-    pub const REGISTRY: [Self; 3] = [Self(ServedMethod::GatePlan), Self(ServedMethod::GateRun), Self(ServedMethod::GateExplain)];
+    pub const REGISTRY: [Self; 4] =
+        [Self(ServedMethod::GatePlan), Self(ServedMethod::GateRun), Self(ServedMethod::GateExplain), Self(ServedMethod::Correction)];
 
     /// This tool's canonical name -- `nomos_contracts::OperationName`'s own identity,
     /// projected without renaming. That type's own doc states the rule directly: "an MCP tool
@@ -67,6 +70,9 @@ impl ServedTool
             ServedMethod::GatePlan => "Reports what this workspace's rule registry holds, without walking or judging any tree.",
             ServedMethod::GateRun => "Walks and judges a tree, and reports the findings and disposition of a real gate run over it.",
             ServedMethod::GateExplain => "Explains one named finding from a prior run: what it means and whether it would keep a run from passing.",
+            ServedMethod::Correction => {
+                "Walks a tree, stages a fix for the first real blocking correction claim it finds (a stale doc mirror or trailing whitespace), and, only if asked, commits it."
+            }
         };
     }
 
@@ -129,6 +135,20 @@ impl ServedTool
                     },
                 },
                 "required": ["rule", "location"],
+                "additionalProperties": false,
+            }),
+            ServedMethod::Correction => json!({
+                "type": "object",
+                "properties": {
+                    "root": {
+                        "type": "string",
+                        "description": "The tree to correct. Absent, this server's own working directory.",
+                    },
+                    "commit": {
+                        "type": "boolean",
+                        "description": "Whether to actually write the corrected file, or only stage and validate it. Absent, false.",
+                    },
+                },
                 "additionalProperties": false,
             }),
         };

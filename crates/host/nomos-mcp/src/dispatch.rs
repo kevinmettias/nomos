@@ -204,9 +204,9 @@ mod tests
         assert_eq!(At(&result, "/serverInfo/name"), "nomos-mcp", "{result}");
     }
 
-    /// `tools/list` names all three Gate verbs and no other tool.
+    /// `tools/list` names Gate's three verbs plus Correction's one, and no other tool.
     #[test]
-    fn Test_Tools_List_Should_Name_Exactly_The_Three_Gate_Verbs()
+    fn Test_Tools_List_Should_Name_Exactly_The_Four_Admitted_Verbs()
     {
         let response = Answer(r#"{"jsonrpc":"2.0","id":1,"method":"tools/list"}"#).expect("tools/list is a request");
         let result = response.result.expect("tools/list always answers");
@@ -214,7 +214,7 @@ mod tests
         let listed = tools.as_array().expect("tools/list answers with an array");
         let names: Vec<Value> = (0..listed.len()).map(|index| return At(&tools, &format!("/{index}/name"))).collect();
 
-        assert_eq!(names, vec!["nomos.gate.plan", "nomos.gate.run", "nomos.gate.explain"], "{result}");
+        assert_eq!(names, vec!["nomos.gate.plan", "nomos.gate.run", "nomos.gate.explain", "nomos.correction.run"], "{result}");
     }
 
     /// A real `tools/call` for `nomos.gate.plan` reaches a real answer over this

@@ -1,5 +1,5 @@
 pub const nomos_mcp::PROTOCOL_VERSION: &str
-pub const nomos_mcp::ServedTool::REGISTRY: [Self; 3]
+pub const nomos_mcp::ServedTool::REGISTRY: [Self; 4]
 pub fn nomos_mcp::Answer(line: &str) -> Option<WireResponse>
 pub fn nomos_mcp::Serve(input: impl BufRead, mut output: impl Write) -> std::io::Result<()>
 pub fn nomos_mcp::ServedTool::Listing(self) -> Value

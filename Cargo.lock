@@ -970,6 +970,7 @@ version = "0.1.0"
 dependencies = [
  "nomos-api",
  "nomos-contracts",
+ "nomos-correction-orchestration",
  "nomos-gate-orchestration",
  "serde",
  "serde_json",

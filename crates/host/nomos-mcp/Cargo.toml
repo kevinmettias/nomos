@@ -1,7 +1,7 @@
 [package]
 name = "nomos-mcp"
 version = "0.1.0"
-description = "An MCP server over stdio, projecting the same three Gate verbs nomos-api-transport already serves -- as MCP tools, dispatched through that crate's own JSON-RPC handler rather than a second one."
+description = "An MCP server over stdio, projecting the same Gate and Correction verbs nomos-api-transport already serves -- as MCP tools, dispatched through that crate's own JSON-RPC handler rather than a second one."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

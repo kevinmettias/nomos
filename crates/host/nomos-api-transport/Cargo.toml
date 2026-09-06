@@ -1,7 +1,7 @@
 [package]
 name = "nomos-api-transport"
 version = "0.1.0"
-description = "The transport nomos-api deliberately does not wire: JSON-RPC 2.0 over a TCP socket, serving the three Gate handlers OD-HOST-007 admits and none of the twenty-one repo-tooling handlers it excludes."
+description = "The transport nomos-api deliberately does not wire: JSON-RPC 2.0 over a TCP socket, serving Gate's three handlers plus Correction's one that OD-HOST-007 and P62-TRANSPORT-MCP-CORRECTION-SURFACE-2 admit, and none of the twenty-one repo-tooling handlers it excludes."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -10,6 +10,7 @@ publish.workspace = true
 [dependencies]
 nomos-api = { workspace = true }
 nomos-contracts = { workspace = true }
+nomos-correction-orchestration = { workspace = true }
 nomos-gate-orchestration = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

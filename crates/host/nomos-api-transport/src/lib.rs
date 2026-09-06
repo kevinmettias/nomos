@@ -9,25 +9,31 @@
 //! stays exactly where those two sentences put it: `nomos-api` gains no socket, no protocol
 //! dependency and no new handler here, and this crate holds every byte of both.
 //!
-//! # What it serves, and why that is three verbs rather than twenty-four
+//! # What it serves, and why that is four verbs rather than twenty-six or more
 //!
-//! `OD-HOST-007` decided this before the crate existed, which is the difference between a
-//! boundary and an apology for one. `nomos-api` exports twenty-four handlers and twenty-one
-//! of them belong to crates `README.md` marks `[repo tooling]` -- `nomos-work-orchestration`
-//! and `nomos-spec-orchestration`, which "exist to develop or preserve this repository, not
-//! to answer a question an end-user repository would ask Nomos". A transport projecting
-//! `nomos-api` wholesale would publish seven repo-tooling verbs for every product verb, two
-//! of which carry authority rather than information: `Handle_Spec_Commit` writes this
-//! repository's own governing records, and `Handle_Work_Finish` writes `work/ledger.json`,
-//! which `AGENTS.md` calls "global coordination state, shared with live sessions".
+//! `OD-HOST-007` decided the shape of this before the crate existed, which is the
+//! difference between a boundary and an apology for one. `nomos-api` now exports twenty-six
+//! or more handlers (`Handle_Check_Run` and `Handle_Workflow_Run` landed after this crate
+//! did) and most of them belong to crates `README.md` marks `[repo tooling]` --
+//! `nomos-work-orchestration` and `nomos-spec-orchestration`, which "exist to develop or
+//! preserve this repository, not to answer a question an end-user repository would ask
+//! Nomos". A transport projecting `nomos-api` wholesale would publish many repo-tooling
+//! verbs for every product verb, some of which carry authority rather than information:
+//! `Handle_Spec_Commit` writes this repository's own governing records, and
+//! `Handle_Work_Finish` writes `work/ledger.json`, which `AGENTS.md` calls "global
+//! coordination state, shared with live sessions".
 //!
-//! So the registry is the three Gate verbs, in [`ServedMethod`], and it is an enum rather
-//! than a list precisely because that record refused a registry "merely short today, with
-//! nothing stopping a later increment from lengthening it". `tests/contract`'s
+//! So the registry is Gate's three verbs plus Correction's one,
+//! `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2`'s own increment, in [`ServedMethod`], and it is
+//! an enum rather than a list precisely because that record refused a registry "merely
+//! short today, with nothing stopping a later increment from lengthening it". `tests/contract`'s
 //! `Test_The_Transport_Should_Name_No_Repo_Tooling_Handler` is the artifact that record was
 //! waiting for: it reads `nomos-api`'s own blessed surface snapshot and refuses this crate's
-//! source for naming any handler outside the three, so widening the registry is a test
-//! failure rather than a diff nobody is watching.
+//! source for calling a handler its own `ADMITTED` allow-list has not deliberately named,
+//! so widening the registry to reach a fifth handler is a conscious edit to that list, not a
+//! diff nobody is watching. Check and Workflow, this crate's two newest handlers, are not
+//! in it yet -- admitting either is a real increment of its own, not a consequence of this
+//! one.
 //!
 //! # What it speaks
 //!
@@ -67,6 +73,7 @@
 //! `OD-LEDGER-036` and `OD-HOST-006` share "fires against the transport, not against
 //! `nomos-api`", so what this registry admits is a commitment made by this crate.
 
+mod correction_parameters;
 mod dispatch;
 mod finding_parameters;
 mod gate_parameters;
@@ -76,6 +83,7 @@ mod wire_error;
 mod wire_request;
 mod wire_response;
 
+pub use correction_parameters::CorrectionParameters;
 pub use dispatch::Answer;
 pub use finding_parameters::FindingParameters;
 pub use gate_parameters::GateParameters;

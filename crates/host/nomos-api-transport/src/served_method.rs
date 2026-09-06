@@ -7,14 +7,18 @@ use nomos_contracts::OperationName;
 /// A closed enum rather than a map from names to function pointers, because `OD-HOST-007`
 /// requires the exclusion it decided be structural rather than advisory: "A registry that is
 /// merely short today, with nothing stopping a later increment from lengthening it, would be
-/// the absence-as-boundary `OD-CONNECTOR-001` refuses." The three variants here are the three
-/// Gate verbs that record admits; the twenty-one `Handle_Work_*` and `Handle_Spec_*` handlers
-/// `nomos-api` also exports belong to crates `README.md` marks `[repo tooling]`, and adding
-/// one would take a variant, a dispatch arm, and that handler's name written into this
-/// crate's own source. `tests/contract`'s
-/// `Test_The_Transport_Should_Name_No_Repo_Tooling_Handler` refuses the last of those,
+/// the absence-as-boundary `OD-CONNECTOR-001` refuses." The four variants here are Gate's
+/// three verbs, admitted from the start, plus `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2`'s own
+/// `Correction`: `nomos_api::Handle_Correction_Run` is a real, end-user-facing seam
+/// (`P40-CORRECTIONS-CANONICAL-SEAM`), not one of the `Handle_Work_*` and `Handle_Spec_*`
+/// handlers `nomos-api` also exports that belong to crates `README.md` marks
+/// `[repo tooling]`; adding one of *those* would take a variant, a dispatch arm, and that
+/// handler's name written into this crate's own source. `tests/contract`'s
+/// `Test_The_Transport_Should_Name_No_Repo_Tooling_Handler` refuses the repo-tooling ones,
 /// measured against `nomos-api`'s own blessed surface rather than against a list kept here
-/// that could go stale beside it.
+/// that could go stale beside it, and its own `ADMITTED` allow-list is what a handler this
+/// crate calls must be added to deliberately -- widening `REGISTRY` alone is not enough to
+/// admit one.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ServedMethod
 {
@@ -25,6 +29,9 @@ pub enum ServedMethod
     /// One named finding, and whether it would keep a real run from passing.
     /// `nomos_api::Handle_Gate_Explain`.
     GateExplain,
+    /// A real correction run over a named tree, staging and, if asked, committing a fix.
+    /// `nomos_api::Handle_Correction_Run`.
+    Correction,
 }
 
 impl ServedMethod
@@ -45,7 +52,7 @@ impl ServedMethod
     /// this enum and left out of the array: that leaves an operation nothing serves rather
     /// than a registry claiming more than it serves, and this list stays true of what is
     /// served either way.
-    pub const REGISTRY: [Self; 3] = [Self::GatePlan, Self::GateRun, Self::GateExplain];
+    pub const REGISTRY: [Self; 4] = [Self::GatePlan, Self::GateRun, Self::GateExplain, Self::Correction];
 
     /// This operation's canonical name.
     ///
@@ -65,6 +72,7 @@ impl ServedMethod
             Self::GatePlan => "nomos.gate.plan",
             Self::GateRun => "nomos.gate.run",
             Self::GateExplain => "nomos.gate.explain",
+            Self::Correction => "nomos.correction.run",
         };
     }
 
