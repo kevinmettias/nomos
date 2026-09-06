@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:6059cabc33c1c1827b78413d8538f971dee6c4bff452690bcde9bb11acd14cbc",
-  "inputs_digest": "sha256:d8d847c143b397391459e0c3f2ed782135ce680af6764abef46c2c1a7ee5e061",
+  "content_digest": "sha256:faaf6835b699d9547e6a56ee78012788a6e160a4e216f27e1b33496db596ba32",
+  "inputs_digest": "sha256:22f1228e756beb4b85511d0bfef80f8f82f40afc049aab8cabd78bf531f37ebf",
   "sections": [
     [
       "Relations",
-      1386
+      1390
     ],
     [
       "Decisions",
-      186
+      187
     ]
   ],
   "inputs": [
@@ -270,6 +270,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to OD-PROJECT-004",
       "hash": "sha256:baf30333ad82037dada875fa0d99de244656454c88dab967ad77aa8f7f709963"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to OD-RULES-020",
+      "hash": "sha256:7b2078413db845f6654bc21b8504ec6957928d14e9fe74cd96be9915bb14ec57"
     },
     {
       "content": "relations",
@@ -5318,6 +5323,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PROJECT-004 relates-to OD-RULES-020",
+      "hash": "sha256:9293608df2a16786db58816ff72246c630fbd72772e58d82dd7fb884b8ac419d"
+    },
+    {
+      "content": "relations",
       "identity": "OD-RELEASE-001 relates-to OD-AGENT-002",
       "hash": "sha256:5080ab55a37eb70bd441750caea3101fb650f69806f3378adb6cd7d5a89bc87b"
     },
@@ -6085,6 +6095,16 @@
       "content": "relations",
       "identity": "OD-RULES-019 relates-to OD-RULES-011",
       "hash": "sha256:35a1909c9b883c13e540cd31600aaa22e02aff0ea758bdb74aded4ca56a0e6c9"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-020 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:dd813cc33559e174e689cd677bfec835845d4edf52ad68e4443dbd236168fcef"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-020 relates-to OD-PROJECT-004",
+      "hash": "sha256:3f10fa7df1b4119e6d3ac5e731f60635ef3f3aa9e7387dc5cabae241df17be77"
     },
     {
       "content": "relations",
@@ -7735,6 +7755,11 @@
       "content": "nodes",
       "identity": "OD-RULES-019",
       "hash": "sha256:f05b78cdb13c6e8aa03f80a309ebd4145eead2895fa0c85eb67d0f317bf59381"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-RULES-020",
+      "hash": "sha256:046cc8c9db545fd29cf051ec4e66bc5a7e41eb59cac8064de8c82c3b2b3fb294"
     },
     {
       "content": "nodes",

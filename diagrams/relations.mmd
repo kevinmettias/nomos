@@ -54,6 +54,7 @@ graph LR
     arc_ecosystem_001 -->|"relates-to"| od_package_014["OD-PACKAGE-014"]
     arc_ecosystem_001 -->|"relates-to"| od_package_015["OD-PACKAGE-015"]
     arc_ecosystem_001 -->|"relates-to"| od_project_004["OD-PROJECT-004"]
+    arc_ecosystem_001 -->|"relates-to"| od_rules_020["OD-RULES-020"]
     arc_ecosystem_001 -->|"relates-to"| p10_package_seam["P10-PACKAGE-SEAM"]
     arc_ecosystem_002 -->|"relates-to"| arc_conformance_001
     arc_ecosystem_002 -->|"relates-to"| arc_ecosystem_001
@@ -1063,6 +1064,7 @@ graph LR
     od_project_004 -->|"relates-to"| od_ledger_001
     od_project_004 -->|"relates-to"| od_ledger_036
     od_project_004 -->|"relates-to"| od_package_015
+    od_project_004 -->|"relates-to"| od_rules_020
     od_release_001 -->|"relates-to"| od_agent_002
     od_release_001 -->|"relates-to"| od_gate_005
     od_roadmap_001 -->|"affected_by"| od_roadmap_002
@@ -1217,6 +1219,8 @@ graph LR
     od_rules_019 -->|"relates-to"| od_rules_006
     od_rules_019 -->|"relates-to"| od_rules_009
     od_rules_019 -->|"relates-to"| od_rules_011
+    od_rules_020 -->|"relates-to"| arc_ecosystem_001
+    od_rules_020 -->|"relates-to"| od_project_004
     od_rules_022 -->|"relates-to"| od_gate_017
     od_rules_022 -->|"relates-to"| od_host_004
     od_rules_022 -->|"relates-to"| od_package_008
@@ -1549,6 +1553,7 @@ graph LR
     od_rules_017
     od_rules_018
     od_rules_019
+    od_rules_020
     od_rules_022
     od_spec_001
     od_spec_002
