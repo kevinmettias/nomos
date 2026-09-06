@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:4906b65240a3a4c3d556573f96ee67d0ec00c80773f7df726249d942ba00c34e",
-  "inputs_digest": "sha256:bed0a90e5ce7863b9f8949a065d07f61acd6ef7642d48bdc624757f06ab74862",
+  "content_digest": "sha256:37ef5201adf40f5d9ef88a95117cd88fbb15cf726a79a5e8e70ca84cf4d3d15b",
+  "inputs_digest": "sha256:c6381048bcbe947181d11de7ac09536f4b268acb65af0cfca2b61bba7be96ce5",
   "sections": [
     [
       "Documents",
@@ -16,7 +16,7 @@
     ],
     [
       "Source blocks",
-      5604
+      5603
     ]
   ],
   "inputs": [
@@ -853,7 +853,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md@authored",
-      "hash": "sha256:e5d673b9ce634752b046ff7c8b6672b27f6aa2c5c731dead9570d3ccad160373"
+      "hash": "sha256:7c00cbb230b504b22e7922e6d767d0c0a9bd413158db489b9c851c70d34f83fe"
     },
     {
       "content": "documents",
@@ -7777,8 +7777,8 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#18",
-      "hash": "sha256:3141849b3c566021820971a75259df393e9e56565ccae0e1c41d53c929d70361"
+      "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#17",
+      "hash": "sha256:0734889e917c5ac645e61b9f46a2c813e114c286d4d225732e4be8b0274987bb"
     },
     {
       "content": "headings",
@@ -32883,17 +32883,17 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#11",
-      "hash": "sha256:91140fd32d8d8e722bf857fea9fd15907bed995e87e68ad385833050a6afc251"
+      "hash": "sha256:48c800f8b2845afecd6720a0d6d91bd35af106f841f915388c1ef7d653ee2067"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#12",
-      "hash": "sha256:4b7c3bc2746714dfe72a9539519fc85e616d2c0d03cd785a57dc286373970a81"
+      "hash": "sha256:4078161de1635d748e2a9027a7aed5e53fd51316d55ede50f9443b117711f020"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#13",
-      "hash": "sha256:9cbaddbb2bad912876b385c5ad33f3dad7103d8d50a31b3e0d585522000bf220"
+      "hash": "sha256:e1ae4980301e7da5cfb9abe24aa3eb1064e586334392fc799b9917f2dce05062"
     },
     {
       "content": "blocks",
@@ -32903,27 +32903,22 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#15",
-      "hash": "sha256:8d8818fdb158cfddc4e2daa007ad7aefb77e264784e0aea3ec0c2709b8236501"
+      "hash": "sha256:f6e27af903e96f00972ee05cc467e45edef0e2ffaba553e00317ac3f23a9814e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#16",
-      "hash": "sha256:dfa2a671abce3ffbe3afaa5676ce5b67fe28d54e38b58a6ad41c2f1f18bd63f7"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#17",
       "hash": "sha256:5ba9c966fe369777b70b1b3613559c5ee45813fbf002c18e525ea45b7710c571"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#18",
+      "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#17",
       "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#19",
-      "hash": "sha256:12b925b443761da92792ac26c2eb2317c2a0a9d81326770052c51afe058b8dfe"
+      "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#18",
+      "hash": "sha256:83b203aa734ddea741238982f4df0bd2df55d70dac21bec81a6e5da661070532"
     },
     {
       "content": "blocks",

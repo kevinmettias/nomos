@@ -176,7 +176,7 @@ profile: domain-specification
 | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md@authored | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md | authored | 21 | 6 | sha256:ecd850bb6c29efe9ac6e25ef920c7e6492a59d5e6fe177709d05c01a8bbef25f |
 | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md@authored | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md | authored | 16 | 6 | sha256:be774faf1f653161ca537fca09f49287c8b993c75d9f1cc9385f73849c3136ae |
 | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md@authored | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md | authored | 16 | 6 | sha256:2021593cf5f8734035d023e39e1f1fc3fabf8ee21b2ddd4dd7322195e9ff483f |
-| docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md@authored | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md | authored | 19 | 6 | sha256:e5d673b9ce634752b046ff7c8b6672b27f6aa2c5c731dead9570d3ccad160373 |
+| docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md@authored | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md | authored | 18 | 6 | sha256:7c00cbb230b504b22e7922e6d767d0c0a9bd413158db489b9c851c70d34f83fe |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md@authored | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md | authored | 30 | 6 | sha256:ee25e5bafb0ab46ae96890e572a96aa4a970f0f854957c7e2474998c6a5949ad |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
@@ -1566,7 +1566,7 @@ profile: domain-specification
 | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#8 | authored | 2 | The Decision |
 | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#14 | authored | 2 | What This Does Not Do |
-| docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#18 | authored | 2 | Status |
+| docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#17 | authored | 2 | Status |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#1 | authored | 1 | Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#6 | authored | 2 | What Was Measured |
@@ -46149,7 +46149,7 @@ relocations:
 
 ### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#11
 
-*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / The Decision · hash: sha256:91140fd32d8d8e722bf857fea9fd15907bed995e87e68ad385833050a6afc251*
+*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / The Decision · hash: sha256:48c800f8b2845afecd6720a0d6d91bd35af106f841f915388c1ef7d653ee2067*
 
 | Zone | Crates | May depend on |
 |---|---|---|
@@ -46159,29 +46159,40 @@ relocations:
 | Capability Contract | the ten `nomos-cap-*` crates | Protocol, Substrate |
 | Provider | `nomos-package`, every `nomos-lang-*`, `nomos-repo-policy`, every `*-package` manifest crate | Protocol, Substrate, Capability Contract |
 | Rules | `nomos-rules` | Protocol, Substrate, Capability Contract — never Provider by name, `nomos-rules`' own `Cargo.toml` already states why |
-| Agent | `nomos-corrections`, `nomos-agent-contracts`, `nomos-agent-executor-claude-code`, `nomos-model-backend-ollama` | Protocol, Substrate |
-| Application Service | `nomos-check-orchestration`, `nomos-gate-orchestration`, `nomos-correction-orchestration`, `nomos-workflow-orchestration` | Protocol, Substrate, Capability Contract, Provider, Rules, Agent, and the three named same-zone edges the measurement above found real: gate → check, correction → check, workflow → check, correction, gate |
+| Agent | `nomos-corrections`, `nomos-agent-contracts`, `nomos-agent-executor-claude-code`, `nomos-model-backend-ollama` | Protocol, Substrate, Provider — `nomos-agent-contracts` and `nomos-agent-executor-claude-code` both depend on `nomos-model-package` for the package-kind vocabulary `AGT-002`'s `WorkResult` and `OD-EXECUTOR-001`'s executor boundary carry, an edge this record's own first pass did not check for |
+| Application Service | `nomos-check-orchestration`, `nomos-gate-orchestration`, `nomos-correction-orchestration`, `nomos-workflow-orchestration` | Protocol, Substrate, Capability Contract, Provider, Rules, Agent, and the same-zone edges named below |
 | Repo Tooling | `nomos-ledger`, `nomos-work-orchestration`, `nomos-surface-provenance` | Protocol, Substrate — `OD-PROJECT-004`'s own population, carried over rather than re-derived |
 | Host | `nomos-cli`, `nomos-api`, `nomos-api-transport`, `nomos-mcp` | every zone above |
 | Verification | `nomos-contract-tests`, `nomos-integration-tests` | every zone above; it observes the workspace, the workspace does not observe it |
 
 ### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#12
 
-*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / The Decision · hash: sha256:4b7c3bc2746714dfe72a9539519fc85e616d2c0d03cd785a57dc286373970a81*
+*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / The Decision · hash: sha256:4078161de1635d748e2a9027a7aed5e53fd51316d55ede50f9443b117711f020*
 
-**A same-zone edge is declared per pair, not per zone.** `Application Service` is the one
-zone this measurement found real internal edges in; the three above are named explicitly
-rather than opened as a blanket "anything in this zone may depend on anything else in it,"
-which would silently permit a fourth crate to grow an edge nobody decided on. A new
-same-zone edge is a decision with the same weight as widening `PLATFORM_ADAPTER` — named,
-not inferred from the crate compiling.
+**A same-zone edge is declared per pair, not per zone — and this record's own first
+measurement undercounted how many pairs that is.** `P41-ZONES-MIGRATION-3`, the item that
+carried this decision out, cross-checked every real workspace `Cargo.toml` against the
+model above rather than trusting the worked example below, and found six more zones carry
+the identical internal build-up `Application Service` does: `Substrate` (seven edges —
+subjects before documents, ports before their std implementation), `Specification` (eleven
+edges — the normalizer, then the store, then bundle/ingest over the store, then
+validate/project over ingest), `Provider` (seven edges — the package-manifest crates
+wrapping `nomos-package`'s generic core and, for the two language packages, their own
+language's providers), `Agent` (three edges, table above), `Repo Tooling` (one edge:
+`nomos-work-orchestration` into `nomos-ledger`) and `Host` (two edges: the transport layers
+each wrapping the crate beneath them). Every edge is named explicitly in `nomos-rules`'
+`SAME_ZONE_EDGES` rather than opened as a blanket "anything in this zone may depend on
+anything else in it," which would silently permit an edge nobody decided on — that part of
+the design holds; only the claim that one zone needed it was wrong. A new same-zone edge is
+still a decision with the same weight as widening `PLATFORM_ADAPTER` — named, not inferred
+from the crate compiling.
 
 ### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#13
 
-*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / The Decision · hash: sha256:9cbaddbb2bad912876b385c5ad33f3dad7103d8d50a31b3e0d585522000bf220*
+*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / The Decision · hash: sha256:e1ae4980301e7da5cfb9abe24aa3eb1064e586334392fc799b9917f2dce05062*
 
 **Zone-to-zone edges are a small, fixed table, checked as a lookup rather than an
-inequality.** `Application Service` may reach seven other zones by name; nothing about
+inequality.** `Application Service` may reach six other zones by name; nothing about
 that requires a shared number line, and nothing in it changes when a crate's role does not
 change. Moving `nomos-workflow-orchestration` to depend on a fourth Application Service
 sibling tomorrow would add a fourth named pair to the table above; it would not touch any
@@ -46196,28 +46207,17 @@ workflow-orchestration renumbers both lacked.
 
 ### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#15
 
-*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / What This Does Not Do · hash: sha256:8d8818fdb158cfddc4e2daa007ad7aefb77e264784e0aea3ec0c2709b8236501*
+*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / What This Does Not Do · hash: sha256:f6e27af903e96f00972ee05cc467e45edef0e2ffaba553e00317ac3f23a9814e*
 
-**No code moves under this record.** `bands.rs`, `README.md`'s band table, `standards.json`
-and every other place the numeric table is copied stay exactly as they are; this record
-states the target shape, not the migration. Building `ZONES` and `SAME_ZONE_EDGES` as real
-data next to (or in place of) `BANDS`, rewriting `Test_Dependencies_Should_Run_Strictly_
-Downward` as a zone-and-edge lookup, and re-deriving every crate's classification from this
-table rather than from this record's own population are each a future item's own territory.
+**No code moved under this record.** It stated the target shape, not the migration.
+`P41-ZONES-MIGRATION-3` built `ZONES`, `SAME_ZONE_EDGES` and `Permits` as real data in
+place of `BANDS`, rewrote `Test_Dependencies_Should_Run_Strictly_Downward` as a
+zone-and-edge lookup, and — going further than this record itself did — cross-checked
+every real crate's classification and every same-zone edge against the actual dependency
+graph rather than trusting the proposal below. This section originally deferred that audit
+to a future item; the amendment above is that audit's own finding.
 
 ### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#16
-
-*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / What This Does Not Do · hash: sha256:dfa2a671abce3ffbe3afaa5676ce5b67fe28d54e38b58a6ad41c2f1f18bd63f7*
-
-It does not audit every crate's `Cargo.toml` against the table above exhaustively. The
-zone-to-zone edges are populated from `nomos-rules`' own stated Provider exclusion and from
-the six orchestration crates' real dependencies, measured directly; the remaining
-classifications follow the existing band clusters they are drawn from and are stated as
-this record's own proposal, not as a line-by-line audit result. A future item building the
-real check is where any misclassification this record made would surface and get fixed,
-the same way a wrong band entry surfaces today.
-
-### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#17
 
 *revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / What This Does Not Do · hash: sha256:5ba9c966fe369777b70b1b3613559c5ee45813fbf002c18e525ea45b7710c571*
 
@@ -46227,19 +46227,21 @@ crates land where this record already put them. A zone with population one (`Pro
 population four (several) is not itself a defect this record found reason to flatten
 further.
 
-### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#18
+### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#17
 
 *revision: authored · kind: heading · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#19
+### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#18
 
-*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / Status · hash: sha256:12b925b443761da92792ac26c2eb2317c2a0a9d81326770052c51afe058b8dfe*
+*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / Status · hash: sha256:83b203aa734ddea741238982f4df0bd2df55d70dac21bec81a6e5da661070532*
 
-Accepted. Eleven named zones replace the numeric band table's role, each with a declared
-set of zones it may reach and, for the one zone measured to need it, a named list of
-same-zone edges; no crate's classification moves and no test is rewritten here.
+Accepted, version 2. Eleven named zones replace the numeric band table's role, each with a
+declared set of zones it may reach and, for the seven zones the real migration measured to
+need it, a named list of same-zone edges. Amended by `P41-RULES-020-RECONCILE-REAL-
+MEASUREMENT` once `P41-ZONES-MIGRATION-3`'s own exhaustive cross-check found this record's
+"one zone" claim incomplete; the zone model itself is unchanged, only the count.
 
 ### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#1
 

@@ -3,7 +3,7 @@ id: OD-RULES-020
 type: decision
 title: A dependency model names its zones and its allowed edges rather than ordering everything on one number line
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -85,21 +85,32 @@ relocations:
 | Capability Contract | the ten `nomos-cap-*` crates | Protocol, Substrate |
 | Provider | `nomos-package`, every `nomos-lang-*`, `nomos-repo-policy`, every `*-package` manifest crate | Protocol, Substrate, Capability Contract |
 | Rules | `nomos-rules` | Protocol, Substrate, Capability Contract — never Provider by name, `nomos-rules`' own `Cargo.toml` already states why |
-| Agent | `nomos-corrections`, `nomos-agent-contracts`, `nomos-agent-executor-claude-code`, `nomos-model-backend-ollama` | Protocol, Substrate |
-| Application Service | `nomos-check-orchestration`, `nomos-gate-orchestration`, `nomos-correction-orchestration`, `nomos-workflow-orchestration` | Protocol, Substrate, Capability Contract, Provider, Rules, Agent, and the three named same-zone edges the measurement above found real: gate → check, correction → check, workflow → check, correction, gate |
+| Agent | `nomos-corrections`, `nomos-agent-contracts`, `nomos-agent-executor-claude-code`, `nomos-model-backend-ollama` | Protocol, Substrate, Provider — `nomos-agent-contracts` and `nomos-agent-executor-claude-code` both depend on `nomos-model-package` for the package-kind vocabulary `AGT-002`'s `WorkResult` and `OD-EXECUTOR-001`'s executor boundary carry, an edge this record's own first pass did not check for |
+| Application Service | `nomos-check-orchestration`, `nomos-gate-orchestration`, `nomos-correction-orchestration`, `nomos-workflow-orchestration` | Protocol, Substrate, Capability Contract, Provider, Rules, Agent, and the same-zone edges named below |
 | Repo Tooling | `nomos-ledger`, `nomos-work-orchestration`, `nomos-surface-provenance` | Protocol, Substrate — `OD-PROJECT-004`'s own population, carried over rather than re-derived |
 | Host | `nomos-cli`, `nomos-api`, `nomos-api-transport`, `nomos-mcp` | every zone above |
 | Verification | `nomos-contract-tests`, `nomos-integration-tests` | every zone above; it observes the workspace, the workspace does not observe it |
 
-**A same-zone edge is declared per pair, not per zone.** `Application Service` is the one
-zone this measurement found real internal edges in; the three above are named explicitly
-rather than opened as a blanket "anything in this zone may depend on anything else in it,"
-which would silently permit a fourth crate to grow an edge nobody decided on. A new
-same-zone edge is a decision with the same weight as widening `PLATFORM_ADAPTER` — named,
-not inferred from the crate compiling.
+**A same-zone edge is declared per pair, not per zone — and this record's own first
+measurement undercounted how many pairs that is.** `P41-ZONES-MIGRATION-3`, the item that
+carried this decision out, cross-checked every real workspace `Cargo.toml` against the
+model above rather than trusting the worked example below, and found six more zones carry
+the identical internal build-up `Application Service` does: `Substrate` (seven edges —
+subjects before documents, ports before their std implementation), `Specification` (eleven
+edges — the normalizer, then the store, then bundle/ingest over the store, then
+validate/project over ingest), `Provider` (seven edges — the package-manifest crates
+wrapping `nomos-package`'s generic core and, for the two language packages, their own
+language's providers), `Agent` (three edges, table above), `Repo Tooling` (one edge:
+`nomos-work-orchestration` into `nomos-ledger`) and `Host` (two edges: the transport layers
+each wrapping the crate beneath them). Every edge is named explicitly in `nomos-rules`'
+`SAME_ZONE_EDGES` rather than opened as a blanket "anything in this zone may depend on
+anything else in it," which would silently permit an edge nobody decided on — that part of
+the design holds; only the claim that one zone needed it was wrong. A new same-zone edge is
+still a decision with the same weight as widening `PLATFORM_ADAPTER` — named, not inferred
+from the crate compiling.
 
 **Zone-to-zone edges are a small, fixed table, checked as a lookup rather than an
-inequality.** `Application Service` may reach seven other zones by name; nothing about
+inequality.** `Application Service` may reach six other zones by name; nothing about
 that requires a shared number line, and nothing in it changes when a crate's role does not
 change. Moving `nomos-workflow-orchestration` to depend on a fourth Application Service
 sibling tomorrow would add a fourth named pair to the table above; it would not touch any
@@ -108,20 +119,13 @@ workflow-orchestration renumbers both lacked.
 
 ## What This Does Not Do
 
-**No code moves under this record.** `bands.rs`, `README.md`'s band table, `standards.json`
-and every other place the numeric table is copied stay exactly as they are; this record
-states the target shape, not the migration. Building `ZONES` and `SAME_ZONE_EDGES` as real
-data next to (or in place of) `BANDS`, rewriting `Test_Dependencies_Should_Run_Strictly_
-Downward` as a zone-and-edge lookup, and re-deriving every crate's classification from this
-table rather than from this record's own population are each a future item's own territory.
-
-It does not audit every crate's `Cargo.toml` against the table above exhaustively. The
-zone-to-zone edges are populated from `nomos-rules`' own stated Provider exclusion and from
-the six orchestration crates' real dependencies, measured directly; the remaining
-classifications follow the existing band clusters they are drawn from and are stated as
-this record's own proposal, not as a line-by-line audit result. A future item building the
-real check is where any misclassification this record made would surface and get fixed,
-the same way a wrong band entry surfaces today.
+**No code moved under this record.** It stated the target shape, not the migration.
+`P41-ZONES-MIGRATION-3` built `ZONES`, `SAME_ZONE_EDGES` and `Permits` as real data in
+place of `BANDS`, rewrote `Test_Dependencies_Should_Run_Strictly_Downward` as a
+zone-and-edge lookup, and — going further than this record itself did — cross-checked
+every real crate's classification and every same-zone edge against the actual dependency
+graph rather than trusting the proposal below. This section originally deferred that audit
+to a future item; the amendment above is that audit's own finding.
 
 It does not decide whether the eleven zones named above are the final set. `OD-PROJECT-004`
 already reserved `Repo Tooling`'s population; if that record's own move happens, the
@@ -131,6 +135,8 @@ further.
 
 ## Status
 
-Accepted. Eleven named zones replace the numeric band table's role, each with a declared
-set of zones it may reach and, for the one zone measured to need it, a named list of
-same-zone edges; no crate's classification moves and no test is rewritten here.
+Accepted, version 2. Eleven named zones replace the numeric band table's role, each with a
+declared set of zones it may reach and, for the seven zones the real migration measured to
+need it, a named list of same-zone edges. Amended by `P41-RULES-020-RECONCILE-REAL-
+MEASUREMENT` once `P41-ZONES-MIGRATION-3`'s own exhaustive cross-check found this record's
+"one zone" claim incomplete; the zone model itself is unchanged, only the count.
