@@ -48,7 +48,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md@authored | docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md | authored | 22 | 10 | sha256:ea609aca6a9c76589527e8a307b6ff3840ea67e64a89515c949b7ce4a3d37ed3 |
 | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md@authored | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md | authored | 36 | 8 | sha256:6921af0ffee38a77a00c90bb6ebeebcd97e7db786652bdfdb80f9f854577cdfd |
 | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md@authored | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md | authored | 16 | 6 | sha256:28d369d79f6b9bc16f144ce71796ae80ccae724f627a779891daec3b61fa5b35 |
-| docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md@authored | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md | authored | 19 | 6 | sha256:4d04815ed763e5dcf94dac93b3ea02bfc1095a5ca15731b5d342e314f8a33fc8 |
+| docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md@authored | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md | authored | 23 | 7 | sha256:940be97fa9f66be4c6fe9fad40c41e939c385a48199a77f48742b07cc90971ad |
 | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md@authored | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md | authored | 36 | 10 | sha256:ebe2fe7a455f06f27dc6a52e573aa98fa57e7b1eb29feb90173c84a3ff266dee |
 | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md@authored | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md | authored | 23 | 6 | sha256:49347b91e13b7f953160008054dc9e028aef8b1893f14bafbc8e4121ee8b623c |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
@@ -504,7 +504,8 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#6 | authored | 2 | Current Position |
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#11 | authored | 2 | A Third Provider Joins: What It Reveals |
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#15 | authored | 2 | What Would Decide It |
-| docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#18 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#18 | authored | 2 | Both Named Triggers Have Fired, Checked Directly Rather Than Assumed |
+| docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#22 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#1 | authored | 1 | Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make |
 | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#5 | authored | 2 | What Was Read |
@@ -10987,25 +10988,83 @@ closer to Go's dynamic dispatch reappears by design. That consumer does not exis
 
 ### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#18
 
+*revision: authored · kind: heading · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Both Named Triggers Have Fired, Checked Directly Rather Than Assumed · hash: sha256:5c447e102cb3f8fb7245fd0d6a64ccac4d2d742caa38c8414ed75e42ed39c806*
+
+## Both Named Triggers Have Fired, Checked Directly Rather Than Assumed
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#19
+
+*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Both Named Triggers Have Fired, Checked Directly Rather Than Assumed · hash: sha256:5a1c9db16dc96bb39ae292678fae917d71e9a74107a10e44557d875c072d96ba*
+
+**The whole-repository class this record's own "what would decide it" section named as the
+next test now has six real members, not the fourth this record speculated about.** Every
+`pub fn Materialize_Workspace` in the workspace was read, not sampled: `nomos-repo-policy`'s
+five domains (`goals`, `limits`, `naming`, `scripting`, `words`) and `nomos-lang-rust-deny`
+all carry the identical shape `Materialize_Workspace<Port>(root: &Path, context:
+FactContext, port: &Port) -> Result<PolicyFact, ErrorType>` — one call, one `PolicyFact`,
+differing only in `Port` (`FileSystem` for the five repo-policy domains, `ProcessLauncher`
+for `nomos-lang-rust-deny`) and the error type. This is not the "third, genuinely distinct
+capability granularity" the Status section below asked a fourth provider to test: it is six
+further instances of the *same* one-call-one-fact granularity `nomos-lang-rust-deny` already
+established alone, now checked against five more real bodies rather than inferred from one.
+The other whole-workspace shape this record did not separately name — `nomos-lang-rust-
+cargo`, `nomos-lang-rust-clippy` and `nomos-lang-go-modules`, each `Result<Vec<Fact>,
+Error>`, one call producing many facts — stays the genuinely different granularity this
+record already reasoned would not unify with the per-file shape, untouched by this finding.
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#20
+
+*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Both Named Triggers Have Fired, Checked Directly Rather Than Assumed · hash: sha256:8b62d43115f40d98db66e55f9beea4c2ef1f10e37c725cbcb06db9fd3582b89a*
+
+Six real, checked instances of one exact shape license a second, narrower trait this record
+did not previously have grounds to name: `PROVIDER`/`Declared_Guarantee`/`FactContext`
+across all providers, *and* `Materialize_Workspace` specifically within the `Result<PolicyFact,
+Error>` family, generic over an injected port type and an associated error type. Unifying
+`Materialize` across *that* six-member family would not repeat the mistake this record named
+for the wider population — cargo, clippy and go-modules stay outside it, because their
+return shape is a different capability kind, not a subtly-drifted copy of this one.
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#21
+
+*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Both Named Triggers Have Fired, Checked Directly Rather Than Assumed · hash: sha256:5234b7bfc203de55b0cb8bf82cfc3147d66b4238e310ff94de4f894d3fb16dc1*
+
+**The second trigger — a consumer holding providers polymorphically — has not fired, and the
+item that would fire it needs its own correction first, not this record's.** `P41-RUN-
+PLANNER`, named here as the consumer, is `stranded`: its `depends_on` still names
+`P41-RULE-DECLARES-ITS-REQUIREMENTS`, which was declined, while the capability that
+prerequisite was for was separately delivered under `P41-RULE-DECLARES-ITS-REQUIREMENTS-5`,
+now `Done`. `P41-RUN-PLANNER` itself was never built and its stale dependency link is why —
+not a design question this record answers, and not evidence the polymorphic-consumer trigger
+has fired. A claimant of `P41-RUN-PLANNER` needs to know two things this record states
+plainly rather than leaves to be re-derived: its own `depends_on` entry is stale and should
+be re-pointed at (or re-verified against) `P41-RULE-DECLARES-ITS-REQUIREMENTS-5` before the
+item is claimable again, and once unblocked, that consumer is the second trigger this record
+has been waiting on — building it is what would make the polymorphic-provider question real
+rather than hypothetical.
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#22
+
 *revision: authored · kind: heading · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#19
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#23
 
-*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Status · hash: sha256:9d86be1e32f0b271eb3bb536ad953f9efde7a061493203da01683e227d07196e*
+*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Status · hash: sha256:b7dbcecd1c3aba279040eb03fefc2bd02e90f273bf18c3fbda8f8a5dfd505a83*
 
-Open. The record's own named trigger — a third provider — has fired, and what it shows
-narrows rather than resolves the question: `PROVIDER`/`Declared_Guarantee`/`FactContext` are
-verified identical across all three real instances today, so a trait over exactly those three
-is buildable on real, checked agreement rather than an assumption from two instances — but
-`Materialize` itself should not be unified, because its divergence at the third instance
-tracks a genuine difference in capability granularity (per-file versus whole-workspace) rather
-than an accidental drift a trait exists to catch. Revisit either half independently: build the
-narrower three-part trait when a caller needs it enforced rather than inspected (the same
-"wait for a need, not a wish" discipline `D-135` already names elsewhere), or reopen
-`Materialize`'s own shape when a fourth provider arrives with a third, genuinely distinct
-capability granularity to check the per-file/whole-workspace split against.
+Open, both named triggers addressed rather than left standing. The whole-repository class
+has fired and decides, not merely narrows, the first half: `PROVIDER`/`Declared_Guarantee`/
+`FactContext` across every provider, plus `Materialize_Workspace` within the six-member
+`Result<PolicyFact, Error>` family specifically, are each buildable as a trait on real,
+checked agreement — build either when a caller needs it enforced rather than inspected, the
+same "wait for a need, not a wish" discipline `D-135` already names elsewhere, since nothing
+today consumes providers in a way inspection does not already cover. The wider `Materialize`
+unification this record originally worried about stays declined: cargo, clippy and
+go-modules' `Result<Vec<Fact>, Error>` shape is a different capability kind, not a fourth
+granularity needing the trait to grow again. The second trigger has not fired — `P41-RUN-
+PLANNER` does not exist as a built consumer, is `stranded` on a stale dependency reference to
+a since-declined item rather than blocked on a real design question, and is named here as
+exactly what a claimant needs to know before that trigger can ever fire for real.
 
 ### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#1
 

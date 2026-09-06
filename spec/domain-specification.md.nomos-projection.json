@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:9787efd5195695646a5904fa28aec7c61ceff1929bb2979889055d07083f4710",
-  "inputs_digest": "sha256:c11758837652eb361df4204749d90275071e317ddffb3f15cf7edea5540b48ca",
+  "content_digest": "sha256:d7534b76a006db3880aa16825396b84fb5b428a85b24c91c50f923b3e854878d",
+  "inputs_digest": "sha256:d47969c4857ada69565faf1b324d4a7eac6ead4ee93ac45455509ce992dc2a72",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1641
+      1642
     ],
     [
       "Source blocks",
-      5711
+      5715
     ]
   ],
   "inputs": [
@@ -213,7 +213,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md@authored",
-      "hash": "sha256:4d04815ed763e5dcf94dac93b3ea02bfc1095a5ca15731b5d342e314f8a33fc8"
+      "hash": "sha256:940be97fa9f66be4c6fe9fad40c41e939c385a48199a77f48742b07cc90971ad"
     },
     {
       "content": "documents",
@@ -2468,7 +2468,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#18",
-      "hash": "sha256:83e90fa82d2dbf915892448aaa718200925a00cf740cb2d4c4b90415a805906b"
+      "hash": "sha256:7e2ccc72db0c0ae3eebd441c170db14c486dc9c6c7f75dff4532ccf9331ff5cb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#22",
+      "hash": "sha256:85e2e325b3bb3b44625f5c61085c66924ad6c88d62fae6371e310656fbf1b24b"
     },
     {
       "content": "headings",
@@ -14143,12 +14148,32 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#18",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:5c447e102cb3f8fb7245fd0d6a64ccac4d2d742caa38c8414ed75e42ed39c806"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#19",
-      "hash": "sha256:9d86be1e32f0b271eb3bb536ad953f9efde7a061493203da01683e227d07196e"
+      "hash": "sha256:5a1c9db16dc96bb39ae292678fae917d71e9a74107a10e44557d875c072d96ba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#20",
+      "hash": "sha256:8b62d43115f40d98db66e55f9beea4c2ef1f10e37c725cbcb06db9fd3582b89a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#21",
+      "hash": "sha256:5234b7bfc203de55b0cb8bf82cfc3147d66b4238e310ff94de4f894d3fb16dc1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#22",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#23",
+      "hash": "sha256:b7dbcecd1c3aba279040eb03fefc2bd02e90f273bf18c3fbda8f8a5dfd505a83"
     },
     {
       "content": "blocks",
