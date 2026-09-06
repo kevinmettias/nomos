@@ -5,10 +5,15 @@
 //! attributes, shared `Rc`/`Arc` plus `RefCell` ownership escapes, and four rules built on
 //! the same "an attribute or construct carries no adjacent explanatory comment" shape —
 //! `#[allow(...)]`, `unsafe` constructs, `#[inline(always)]`, and a bare `#[ignore]` with no
-//! `= "reason"` value. All four reuse [`Previous_Comment_Block_Has`], the same "walk the
-//! contiguous comment block immediately above this line" primitive [`Panic_Findings_In`] and
-//! [`Shared_Interior_Mutability_Findings_In`] already share — real repeat consumers, not a
-//! new abstraction invented for them.
+//! `= "reason"` value. Three of the four — `#[allow(...)]`, `#[inline(always)]` and the bare
+//! `#[ignore]` — reuse [`Previous_Comment_Block_Has`], the same "walk the contiguous comment
+//! block immediately above this line" primitive [`Panic_Findings_In`] and [`Shared_Interior_
+//! Mutability_Findings_In`] already share — real repeat consumers, not a new abstraction
+//! invented for them. `unsafe` is the fourth, and `OD-RULES-021` decided its own two
+//! constructs — a bare `unsafe {}` block and an `unsafe fn`/`trait`/`impl` declaration —
+//! need two different artifacts rather than one matcher applied uniformly: see
+//! [`Has_Local_Safety_Justification`]'s own doc for why it does not reuse the shared
+//! primitive either way.
 
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
@@ -289,7 +294,10 @@ fn Allow_Findings_In(source: &SourceFile) -> Vec<Finding>
     );
 }
 
-/// Reports `unsafe` blocks, functions, impls and traits with no adjacent `// SAFETY:` comment.
+/// Reports an `unsafe {}` block with no adjacent `// SAFETY:` comment carrying a real
+/// reason, or an `unsafe fn`/`unsafe trait`/`unsafe impl` declaration with no rustdoc
+/// `# Safety` section carrying one — `OD-RULES-021`'s two artifact shapes, matched to
+/// whether the construct has a declaration site of its own to document.
 #[must_use]
 pub fn Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Finding>
 {
@@ -545,25 +553,165 @@ fn Has_Unsafe_Construct(code: &str) -> bool
         || code.contains("unsafe trait");
 }
 
+/// `OD-RULES-021`'s dispatch: a declaration (`unsafe fn`/`trait`/`impl`) has its own
+/// doc-comment site and is judged by [`Has_Rustdoc_Safety_Section`]; a bare `unsafe {}`
+/// block has none and keeps the adjacent-`// SAFETY:`-comment shape every one of this
+/// rule's own tests already exercises.
 fn Has_Local_Safety_Justification(lines: &[&str], index: usize) -> bool
 {
-    if lines.get(index).is_some_and(|line| return Comment_Has_Safety_Reason(line))
+    let code = lines.get(index).map(|line| return Code_Prefix(line)).unwrap_or_default();
+    if Is_Unsafe_Declaration(code)
     {
-        return true;
+        return Has_Rustdoc_Safety_Section(lines, index);
     }
 
-    return Previous_Comment_Block_Has(lines, index, Comment_Has_Safety_Reason);
+    return Has_Safety_Comment_Block(lines, index);
 }
 
-fn Comment_Has_Safety_Reason(line: &str) -> bool
+/// Whether `code` (the comment-stripped current line) declares `unsafe fn`, `unsafe trait`
+/// or `unsafe impl` rather than matching only on a bare `unsafe {}` block — the distinction
+/// `OD-RULES-021` measured `Has_Unsafe_Construct` collapsing into one shape.
+fn Is_Unsafe_Declaration(code: &str) -> bool
 {
-    let Some(comment) = Comment_Text_Of(line)
-    else
-    {
-        return false;
-    };
+    return code.contains("unsafe fn ") || code.contains("unsafe fn(") || code.contains("unsafe impl") || code.contains("unsafe trait");
+}
 
-    return comment.to_ascii_lowercase().starts_with("safety:");
+/// A rustdoc `# Safety` heading in the doc-comment block immediately above `index`, with
+/// real text on a later line of the same block — `OD-RULES-021`'s second artifact shape,
+/// measured directly against `aho-corasick`'s own `packed/ext.rs` and `automaton.rs`, both
+/// of which carry exactly this convention on an `unsafe fn`/`unsafe trait` this rule
+/// reported as unjustified before this fix.
+fn Has_Rustdoc_Safety_Section(lines: &[&str], index: usize) -> bool
+{
+    let mut seen_heading = false;
+    for doc_line in Preceding_Doc_Comment_Block(lines, index)
+    {
+        if seen_heading
+        {
+            if !doc_line.is_empty()
+            {
+                return true;
+            }
+        }
+        else if doc_line.eq_ignore_ascii_case("# safety")
+        {
+            seen_heading = true;
+        }
+    }
+
+    return false;
+}
+
+/// Every `///` line of the contiguous doc-comment block immediately above `index`, in file
+/// order, `///` and surrounding whitespace stripped — tolerant of an intervening attribute
+/// line (`#[must_use]`, ...) between the doc block and the declaration it documents, the
+/// same way [`Is_Skippable_Block_Line`] already is for a `//` comment block.
+fn Preceding_Doc_Comment_Block<'a>(lines: &[&'a str], index: usize) -> Vec<&'a str>
+{
+    let mut doc_lines = Vec::new();
+    let mut cursor = index;
+
+    while let Some(previous) = cursor.checked_sub(1)
+    {
+        let Some(line) = lines.get(previous)
+        else
+        {
+            break;
+        };
+
+        if Is_Skippable_Block_Line(line)
+        {
+            cursor = previous;
+            continue;
+        }
+
+        let Some(doc) = line.trim_start().strip_prefix("///")
+        else
+        {
+            break;
+        };
+
+        doc_lines.push(doc.trim());
+        cursor = previous;
+    }
+
+    doc_lines.reverse();
+    return doc_lines;
+}
+
+/// A `// SAFETY:` block for a bare `unsafe {}` construct, `OD-RULES-021`'s first artifact
+/// shape. Checked over the whole contiguous comment block rather than one line, because a
+/// real safety comment routinely spells the marker on its own line and the actual reason on
+/// a following bullet — `Test_Check_Unsafe_Justification_Should_Accept_A_Safety_Comment`'s
+/// own fixture is exactly this shape. A marker with nothing else in its block —
+/// `OD-RULES-021`'s vacuous-marker gap, unique to this rule among its siblings:
+/// `Has_Local_Allow_Justification`, `Has_Local_Inline_Always_Justification` and
+/// `Has_Local_Ignore_Justification` all check [`Comment_Is_Non_Empty`] already — does not
+/// satisfy this either.
+fn Has_Safety_Comment_Block(lines: &[&str], index: usize) -> bool
+{
+    let mut block = Preceding_Comment_Block(lines, index);
+    if let Some(same_line) = lines.get(index).and_then(|line| return Comment_Text_Of(line))
+    {
+        block.push(same_line.trim());
+    }
+
+    let mut seen_marker = false;
+    let mut has_reason = false;
+    for comment in block
+    {
+        let lower = comment.to_ascii_lowercase();
+        if let Some(after) = lower.strip_prefix("safety:")
+        {
+            seen_marker = true;
+            if !after.trim().is_empty()
+            {
+                has_reason = true;
+            }
+        }
+        else if seen_marker && !comment.trim().is_empty()
+        {
+            has_reason = true;
+        }
+    }
+
+    return seen_marker && has_reason;
+}
+
+/// Every comment line ([`Comment_Text_Of`]) of the contiguous block immediately above
+/// `index`, in file order, marker and surrounding whitespace stripped — tolerant of an
+/// intervening blank or attribute line the same way [`Is_Skippable_Block_Line`] already is.
+fn Preceding_Comment_Block<'a>(lines: &[&'a str], index: usize) -> Vec<&'a str>
+{
+    let mut comment_lines = Vec::new();
+    let mut cursor = index;
+
+    while let Some(previous) = cursor.checked_sub(1)
+    {
+        let Some(line) = lines.get(previous)
+        else
+        {
+            break;
+        };
+
+        if Is_Skippable_Block_Line(line)
+        {
+            cursor = previous;
+            continue;
+        }
+
+        let Some(comment) = Comment_Text_Of(line)
+        else
+        {
+            break;
+        };
+
+        comment_lines.push(comment.trim());
+        cursor = previous;
+    }
+
+    comment_lines.reverse();
+    return comment_lines;
 }
 
 /// `rule` and `message` are both `&str`; without a distinct type per position, a call site
@@ -1015,6 +1163,89 @@ mod tests
         let findings = Check_Unsafe_Justification(&[source]);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
+    }
+
+    /// `OD-RULES-021`'s real regression: the shape `aho-corasick`'s own `packed/ext.rs` and
+    /// `automaton.rs` both carry on a real `unsafe fn`/`unsafe trait`, measured directly and
+    /// reported unjustified before this fix.
+    #[test]
+    fn Test_Check_Unsafe_Justification_Should_Accept_A_Rustdoc_Safety_Section_On_An_Unsafe_Fn()
+    {
+        let source = Source(
+            "src/lib.rs",
+            "/// Reads one byte from `ptr`.\n\
+             ///\n\
+             /// # Safety\n\
+             ///\n\
+             /// `ptr` must be valid for reads of one byte.\n\
+             pub unsafe fn Read_Raw(ptr: *const u8) -> u8\n{\n    return *ptr;\n}\n",
+        );
+
+        let findings = Check_Unsafe_Justification(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Unsafe_Justification_Should_Accept_A_Rustdoc_Safety_Section_On_An_Unsafe_Trait()
+    {
+        let source = Source(
+            "src/lib.rs",
+            "/// # Safety\n\
+             ///\n\
+             /// Implementors must uphold the layout invariant.\n\
+             pub unsafe trait Packed\n{\n}\n",
+        );
+
+        let findings = Check_Unsafe_Justification(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Unsafe_Justification_Should_Report_An_Unsafe_Fn_Whose_Safety_Section_Has_No_Text()
+    {
+        let source = Source(
+            "src/lib.rs",
+            "/// # Safety\n\
+             pub unsafe fn Read_Raw(ptr: *const u8) -> u8\n{\n    return *ptr;\n}\n",
+        );
+
+        let findings = Check_Unsafe_Justification(&[source]);
+
+        assert_eq!(findings.len(), 1, "a bare heading with nothing after it must not satisfy the rule: {findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Unsafe_Justification_Should_Not_Accept_An_Unversioned_Comment_On_An_Unsafe_Fn()
+    {
+        let source = Source(
+            "src/lib.rs",
+            "// SAFETY: ptr is valid\n\
+             pub unsafe fn Read_Raw(ptr: *const u8) -> u8\n{\n    return *ptr;\n}\n",
+        );
+
+        let findings = Check_Unsafe_Justification(&[source]);
+
+        assert_eq!(
+            findings.len(),
+            1,
+            "a declaration's own doc-comment site is the artifact this rule asks for, not an adjacent // comment: {findings:?}"
+        );
+    }
+
+    #[test]
+    fn Test_Check_Unsafe_Justification_Should_Report_A_Bare_Safety_Marker_With_No_Reason()
+    {
+        let source = Source(
+            "src/lib.rs",
+            "// SAFETY:\n\
+             let slice = unsafe { core::slice::from_raw_parts(ptr, len) };\n",
+        );
+
+        let findings = Check_Unsafe_Justification(&[source]);
+
+        assert_eq!(findings.len(), 1, "a marker with nothing after it must not satisfy the rule: {findings:?}");
     }
 
     #[test]

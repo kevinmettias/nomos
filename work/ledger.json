@@ -57196,6 +57196,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P61-UNSAFE-JUSTIFICATION-TWO-ARTIFACTS",
+      "title": "Check_Unsafe_Justification judges a declaration by its own doc-comment site",
+      "why": "OD-RULES-021 decided the mechanism, measured directly against aho-corasick's real unsafe fn/unsafe trait declarations (packed/ext.rs, automaton.rs), both carrying a real rustdoc # Safety section this rule reported as unjustified. Has_Unsafe_Construct treated a block and a declaration identically; Comment_Has_Safety_Reason also accepted a bare marker with nothing after it, a gap unique to this rule among its allow/inline-always/ignore siblings.",
+      "done_when": "Check_Unsafe_Justification judges an unsafe fn/trait/impl declaration by a rustdoc # Safety section with real text following the heading, and a bare unsafe {} block by its existing adjacent-comment shape corrected to require real text somewhere in the marked block rather than accepting a bare marker. Real regression tests model aho-corasick's own packed/ext.rs and automaton.rs shapes. No other rule in this file changes. cargo test -p nomos-rules -p nomos-contract-tests passes with no new clippy warnings in rust_text.rs.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/rust_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-abc555b9e903cbb2.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-8ae5ae9cc497c8b7.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-88acd38323431422.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-83cf5dbe7ab34311.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-ce64a8d5969326b1.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f907f15ab68e612f.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a5e18bc28d523eba.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-e6c2c3bc301b1af1.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-5eeca62234b16c98.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-b8cac562ba5d46fa.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-8f9f2566e9d488f5.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-ec96d2364fe7a98a.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-15a96404da6a3de4.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788678170,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e58d44ea51a6ebee319882e5e605ead8bb8bd985"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
