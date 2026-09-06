@@ -38,6 +38,14 @@ const STRUCT: &str = "Struct";
 /// same name once per file that imports it. It was 144 of this rule's 327 findings against
 /// this workspace, all of them `PathBuf`.
 const USE_BINDING: &str = "Use";
+
+/// An `extern crate` declaration names the crate being linked, not a name chosen at this
+/// site -- the identical reason [`USE_BINDING`] is exempt, one level up: the real name was
+/// fixed wherever that crate itself was published. `P68-ABBREVIATIONS-DOES-NOT-EXEMPT-
+/// EXTERN-CRATE` measured this directly: `extern crate alloc;` reported `alloc` as a chosen
+/// abbreviation, invisible from this workspace's own tree (edition 2021, no `extern crate`
+/// statements) but a real, still-common idiom elsewhere.
+const EXTERN_CRATE: &str = "ExternCrate";
 const MINIMUM_JUDGED_WORD_LENGTH: usize = 2;
 const VOWELS: &str = "aeiouy";
 
@@ -191,8 +199,9 @@ fn Enclosing_Trait_Impl(item: &PayloadItem, previous: Option<String>) -> Option<
 }
 
 /// Whether `item`'s own name is not this rule's to judge: a member of the trait `impl`
-/// block at `enclosing_trait_impl` (a name the trait fixed, not the author), or a `use`
-/// binding (a name chosen wherever the binding's target was declared).
+/// block at `enclosing_trait_impl` (a name the trait fixed, not the author), a `use`
+/// binding, or an `extern crate` declaration (both a name chosen wherever the thing bound
+/// or linked was actually declared, not here).
 fn Is_Exempt(item: &PayloadItem, enclosing_trait_impl: Option<&str>) -> bool
 {
     if enclosing_trait_impl.is_some_and(|block| return Is_Member_Of(item, block))
@@ -200,7 +209,7 @@ fn Is_Exempt(item: &PayloadItem, enclosing_trait_impl: Option<&str>) -> bool
         return true;
     }
 
-    return item.kind == USE_BINDING;
+    return item.kind == USE_BINDING || item.kind == EXTERN_CRATE;
 }
 
 /// Whether `item` is declared inside the `impl` block at `block`.
@@ -612,6 +621,20 @@ mod tests
         let findings = Violations_In(&payload, "src/lib.rs", &[]);
 
         assert!(findings.is_empty(), "an import names something declared elsewhere: {findings:?}");
+    }
+
+    /// `P68-ABBREVIATIONS-DOES-NOT-EXEMPT-EXTERN-CRATE`: the third name-nobody-chose
+    /// exemption, found by `P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON`'s own
+    /// third-party fixture. `extern crate alloc;` names the crate being linked, not
+    /// something authored at this site, the identical reason a `Use` binding is exempt.
+    #[test]
+    fn Test_Violations_In_Should_Not_Judge_An_Extern_Crate_Declaration()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tExternCrate\tPrivate\talloc\t.\t.\n");
+
+        let findings = Violations_In(&payload, "src/lib.rs", &[]);
+
+        assert!(findings.is_empty(), "the real crate being linked chose this name, not this site: {findings:?}");
     }
 
     /// And the half that keeps the exemption honest: the declaration itself is still judged,

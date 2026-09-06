@@ -40,7 +40,7 @@
 
 use nomos_capability::Registry;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, ProviderId, RuleId};
-use nomos_model::{Content_Digest, Subject_Of_Path};
+use nomos_model::Content_Digest;
 use nomos_package::ProviderRegistration;
 use std::collections::BTreeSet;
 

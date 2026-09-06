@@ -55699,12 +55699,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P54-TOOL-FAMILY-TAXONOMY"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-loop",
+        "acquired_at": 1788702583,
+        "lease_expires_at": 1788713383
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -58860,7 +58864,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -58877,7 +58881,31 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "calibration"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 2 tests\ntest Test_Table_Names_Exactly_The_Composed_Rule_Set ... ok\ntest Test_Composed_Rules_Against_An_Idiomatic_Third_Party_Fixture ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s\n\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.54s\n     Running tests\\calibration.rs (target\\debug\\deps\\calibration-f61fb1a6a5ce5e05.exe)\n",
+        "verified_at": 1788702861,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a0f55672840fd7c1995e020cd386c6c08e16de2d"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
