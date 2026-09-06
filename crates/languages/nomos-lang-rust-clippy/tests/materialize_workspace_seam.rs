@@ -18,13 +18,30 @@ use nomos_cap_lint::{Parse_Payload, Payload_Schema};
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
 use nomos_lang_rust_clippy::{Declared_Guarantee, FactContext, Materialize_Workspace};
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
-/// Neither this crate nor the fake launcher below ever touches a real filesystem at this
-/// path — `Discover_Workspace` only relativizes the `package_id` strings the launcher hands
-/// back against it, so a synthetic root proves the same string arithmetic a real repository
-/// root would.
-const ROOT: &str = "/workspace";
+/// `Discover_Workspace` absolutizes `root` against the real process working directory
+/// before relativizing any `package_id` against it (`Absolutized`, added for
+/// `P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT`) — an already-absolute root such as
+/// this one, from a real (if never created) directory under the OS temp directory, passes
+/// through that step unchanged, so this fixture still proves the same string arithmetic a
+/// real repository root would without either this crate or the fake launcher below ever
+/// touching a real filesystem at this path.
+fn Root() -> PathBuf
+{
+    return std::env::temp_dir().join("nomos-lang-rust-clippy-materialize-workspace-seam");
+}
+
+/// A `path+file://` package id `cargo clippy` could plausibly report for `path` — the
+/// same construction `src/clippy_error.rs`'s own `local_tests::Package_Id_Uri` uses,
+/// reproduced here because that one is private to the crate's own test module.
+fn Package_Id_Uri(path: &Path) -> String
+{
+    let forward = path.to_string_lossy().replace('\\', "/");
+    let rooted = if forward.starts_with('/') { forward } else { format!("/{forward}") };
+
+    return format!("path+file://{rooted}#0.1.0");
+}
 
 /// A launcher that hands `Materialize_Workspace` a fixed JSON-lines stream, or a failed
 /// exit, instead of running a real `cargo clippy` — the same shape `src/clippy_error.rs`'s
@@ -61,15 +78,16 @@ impl ProcessLauncher for FakeLauncher
 /// actually prints, in the same two-line form `src/clippy_error.rs`'s own fixtures use.
 fn Single_Member_Clippy_Output() -> String
 {
+    let package_id = Package_Id_Uri(&Root().join("nomos-rules"));
     let artifact = serde_json::json!({
         "reason": "compiler-artifact",
-        "package_id": "path+file:///workspace/nomos-rules#0.1.0",
+        "package_id": package_id.clone(),
         "target": { "kind": ["lib"] }
     })
     .to_string();
     let message = serde_json::json!({
         "reason": "compiler-message",
-        "package_id": "path+file:///workspace/nomos-rules#0.1.0",
+        "package_id": package_id.clone(),
         "message": {
             "level": "warning",
             "message": "unneeded return statement",
@@ -103,7 +121,7 @@ fn Test_Materialize_Workspace_Should_Produce_A_Fact_Nomos_Analysis_And_Nomos_Mod
     let launcher = FakeLauncher::Reporting(Single_Member_Clippy_Output());
     let context = Context(GenerationId::INITIAL);
 
-    let facts = Materialize_Workspace(Path::new(ROOT), context, &launcher).expect("the fake launcher reports one clean member");
+    let facts = Materialize_Workspace(&Root(), context, &launcher).expect("the fake launcher reports one clean member");
 
     assert_eq!(facts.len(), 1, "{facts:?}");
     let member = facts.first().expect("asserted len 1 above");
@@ -143,9 +161,9 @@ fn Test_The_Facts_Key_Should_Depend_On_The_Build_Variant_But_Not_On_The_Generati
     let different_variant =
         FactContext { variant: BuildVariantId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH])), ..base };
 
-    let at_base = Materialize_Workspace(Path::new(ROOT), base, &launcher).expect("base context");
-    let at_later_generation = Materialize_Workspace(Path::new(ROOT), later_generation, &launcher).expect("later generation");
-    let at_different_variant = Materialize_Workspace(Path::new(ROOT), different_variant, &launcher).expect("different variant");
+    let at_base = Materialize_Workspace(&Root(), base, &launcher).expect("base context");
+    let at_later_generation = Materialize_Workspace(&Root(), later_generation, &launcher).expect("later generation");
+    let at_different_variant = Materialize_Workspace(&Root(), different_variant, &launcher).expect("different variant");
 
     let key_at_base = at_base.first().expect("one member").fact.Key().Digest();
     let key_at_later_generation = at_later_generation.first().expect("one member").fact.Key().Digest();
@@ -179,7 +197,7 @@ fn Test_A_Non_Zero_Exit_Should_Refuse_Rather_Than_Report_A_Clean_Result()
     };
 
     let error =
-        Materialize_Workspace(Path::new(ROOT), Context(GenerationId::INITIAL), &launcher).expect_err("a non-zero exit must refuse");
+        Materialize_Workspace(&Root(), Context(GenerationId::INITIAL), &launcher).expect_err("a non-zero exit must refuse");
 
     assert!(error.reason.contains("exit 101"), "{}", error.reason);
     assert!(error.reason.contains("mismatched types"), "{}", error.reason);

@@ -64,16 +64,26 @@ fn Posix_First_Party_Package_Id_Cases() -> Vec<(&'static str, &'static str, &'st
     )];
 }
 
+/// `P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT`: a package `root` cannot relativize
+/// against must be excluded, not folded in under its own absolute path -- the fallback
+/// this test used to assert the *opposite* of, back when `root` not being an ancestor of
+/// `id` was read as "an unrelated root, so report the package anyway" rather than as the
+/// exact shape of the escape this reader now exists to catch. `Discover_Workspace`'s own
+/// `Absolutized` step is what makes a genuinely relative root (`.`) resolve to a real
+/// ancestor in practice; this unit test calls `First_Party_Relative_Root` directly and so
+/// never absolutizes `root` itself, which is exactly why `.` and an unrelated absolute `id`
+/// must disagree here.
 #[test]
-fn Test_A_First_Party_Package_Id_Should_Resolve_Even_When_Root_Does_Not_Relativize_It()
+fn Test_A_First_Party_Package_Id_Outside_Root_Should_Be_Excluded_Rather_Than_Included_Under_Its_Absolute_Path()
 {
     let root = Path::new(".");
     let id = "path+file:///F:/repos/nomos/crates/substrate/nomos-ledger#0.1.0";
 
     assert_eq!(
         First_Party_Relative_Root(id, root),
-        Some("F:/repos/nomos/crates/substrate/nomos-ledger".to_owned()),
-        "a relative root (nomos check's own CLI default) must not read a real path package as a registry dependency"
+        None,
+        "a package root cannot relativize -- the escape this item measured directly -- must \
+         be excluded, not read as first-party under its own absolute path"
     );
 }
 

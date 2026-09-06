@@ -56,9 +56,29 @@ impl core::fmt::Display for ClippyError
 pub fn Discover_Workspace<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<Vec<DiscoveredDiagnostics>, ClippyError>
 {
     let stdout = Run_Cargo_Clippy(root, launcher)?;
-    let discovered = Grouped_By_Package(&stdout, root);
+    let absolute_root = Absolutized(root)?;
+    let discovered = Grouped_By_Package(&stdout, &absolute_root);
 
     return Require_Nonempty(discovered);
+}
+
+/// `root` made absolute against the real process working directory -- not
+/// `std::fs::canonicalize`, whose Windows implementation returns a `\\?\`-prefixed
+/// verbatim path that a `cargo clippy`-reported `package_id` never carries, which would
+/// silently break every prefix match in [`First_Party_Relative_Root`] below (the exact
+/// footgun `nomos_lang_rust_compiler::reading::Load_Crate`'s own doc already names, for
+/// the identical reason: a *prefix* comparison, unlike a plain equality check, cannot
+/// tolerate one side being canonicalized and the other not). A relative root -- `nomos
+/// check`'s own CLI default is `.` -- must resolve to the same real directory `cargo
+/// clippy` itself ran in, or every first-party package it reports would fail to
+/// relativize against it and be excluded as if it were external.
+fn Absolutized(root: &Path) -> Result<PathBuf, ClippyError>
+{
+    let current_dir = std::env::current_dir().map_err(|error| ClippyError {
+        reason: format!("the current directory could not be read: {error}"),
+    })?;
+
+    return Ok(current_dir.join(root));
 }
 
 fn Run_Cargo_Clippy<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<String, ClippyError>
@@ -179,17 +199,24 @@ fn First_Party_Relative_Root_Of(value: &serde_json::Value, root: &Path) -> Optio
 /// slashes — the same convention `nomos_lang_rust_cargo::metadata::Manifest_Relative_Root`
 /// derives from `cargo metadata`'s own `manifest_path`, derived here instead from `cargo
 /// clippy`'s `package_id`, since this crate may not depend on that one to reuse its
-/// reader. `None` only for a registry dependency (`package_id` prefixed `registry+`, never
-/// `path+file://`); a path package `root` cannot relativize against (`root` given relative
-/// while `package_id` is always absolute, the CLI's own default) falls back to the absolute
-/// path rather than being read as external, the same `unwrap_or` `Manifest_Relative_Root`
-/// already uses on the identical mismatch.
+/// reader.
+///
+/// `None` for a registry dependency (`package_id` prefixed `registry+`, never
+/// `path+file://`) and, just as importantly, for a path package `root` cannot relativize
+/// against: `P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT` measured directly that folding
+/// such a package in under its own absolute path instead (as this function used to) is
+/// exactly how a `cargo clippy --workspace` escape past a nested root -- reporting on the
+/// enclosing workspace instead of refusing -- went unnoticed: every escaped package still
+/// got a manifest-relative-looking string, just one that was actually somebody else's
+/// absolute path. `root` is expected to already be absolute (`Discover_Workspace`'s own
+/// [`Absolutized`] guarantees this for every real caller); a package genuinely outside it
+/// is excluded, not included under a different key.
 fn First_Party_Relative_Root(package_id: &str, root: &Path) -> Option<String>
 {
     let after_scheme = package_id.strip_prefix("path+file://")?;
     let (raw_path, _version) = after_scheme.rsplit_once('#')?;
     let absolute = PathBuf::from(Windows_Drive_Path(raw_path));
-    let relative = absolute.strip_prefix(root).unwrap_or(&absolute);
+    let relative = absolute.strip_prefix(root).ok()?;
 
     return Some(relative.to_string_lossy().replace('\\', "/"));
 }
@@ -329,6 +356,18 @@ mod local_tests
         }
     }
 
+    /// A `path+file://` package id `cargo clippy` could plausibly report for `path` --
+    /// built from a real [`PathBuf`] rather than a hand-typed literal so a fixture can
+    /// name a real, absolute directory (a real temp directory, or the test's own real
+    /// current directory) without also hand-encoding its drive letter and separators.
+    fn Package_Id_Uri(path: &Path) -> String
+    {
+        let forward = path.to_string_lossy().replace('\\', "/");
+        let rooted = if forward.starts_with('/') { forward } else { format!("/{forward}") };
+
+        return format!("path+file://{rooted}#0.1.0");
+    }
+
     #[test]
     fn Test_Discover_Workspace_Should_Read_A_First_Party_Package_From_The_Json_Stream()
     {
@@ -358,21 +397,62 @@ mod local_tests
         assert!(error.reason.contains("no first-party workspace member"), "{}", error.reason);
     }
 
+    /// A relative root -- `nomos check`'s own CLI default is `.` -- must resolve to the
+    /// real directory the fake launcher's own report is genuinely nested under, not fail
+    /// to relativize and be excluded. Built from the test's own real current directory
+    /// (`Discover_Workspace`'s [`Absolutized`] resolves `.` against exactly that), rather
+    /// than a hardcoded absolute path with no real relationship to it: before `Absolutized`
+    /// existed, this test only passed because of the very fallback-to-inclusion bug
+    /// `P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT` fixes, not because the package was
+    /// ever really found under `.`.
     #[test]
     fn Test_Discover_Workspace_Should_Not_Refuse_Under_A_Relative_Root()
     {
         let root = Path::new(".");
+        let current_dir = std::env::current_dir().expect("a real test process has a real current directory");
+        let member = current_dir.join("nomos-lang-rust-clippy");
         let stdout = serde_json::json!({
             "reason": "compiler-artifact",
-            "package_id": "path+file:///F:/repos/nomos/crates/contracts/nomos-contracts#0.1.0",
+            "package_id": Package_Id_Uri(&member),
             "target": { "kind": ["lib"] }
         })
         .to_string();
         let launcher = FakeLauncher { stdout };
 
         let discovered = Discover_Workspace(root, &launcher)
-            .expect("a relative root -- nomos check's own CLI default -- must still find the first-party package the stream named");
+            .expect("a relative root, once resolved against the real current directory, must still find a package genuinely under it");
 
         assert_eq!(discovered.len(), 1);
+    }
+
+    /// The regression this whole item exists to close, measured directly while building
+    /// `tests/integration/fixtures/third-party/hex-0.4.3`: pointed at a root, `cargo
+    /// clippy --workspace` can report a package that lives *outside* it (the escape past a
+    /// nested root with no manifest of its own). Before this fix, `First_Party_Relative_
+    /// Root`'s `unwrap_or` fallback folded such a package in under its own absolute path
+    /// instead of excluding it, which is exactly how 174 unrelated findings about the
+    /// whole enclosing repository were silently attributed to a two-file fixture. With
+    /// only one (excluded) package reported, this also exercises `Require_Nonempty`'s own
+    /// honest refusal rather than a clean but empty result.
+    #[test]
+    fn Test_Discover_Workspace_Should_Refuse_Rather_Than_Include_A_Package_Reported_Outside_Root()
+    {
+        let root = std::env::temp_dir().join("nomos-lang-rust-clippy-p68-root-fixture");
+        let escaped = std::env::temp_dir().join("nomos-lang-rust-clippy-p68-outside-fixture").join("elsewhere");
+        let stdout = serde_json::json!({
+            "reason": "compiler-artifact",
+            "package_id": Package_Id_Uri(&escaped),
+            "target": { "kind": ["lib"] }
+        })
+        .to_string();
+        let launcher = FakeLauncher { stdout };
+
+        let error = Discover_Workspace(&root, &launcher).expect_err(
+            "a package cargo clippy reports outside the judged root must be excluded, leaving \
+             nothing for a real, honest Require_Nonempty refusal to report instead of a clean \
+             but empty result",
+        );
+
+        assert!(error.reason.contains("no first-party workspace member"), "{}", error.reason);
     }
 }

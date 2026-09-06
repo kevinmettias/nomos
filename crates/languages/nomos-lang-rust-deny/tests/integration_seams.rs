@@ -80,11 +80,19 @@ fn Context() -> FactContext
 /// Runs `Materialize_Workspace` over the fake launcher's own canned violation -- the one
 /// path every test below that needs a real [`PolicyFact`] shares, rather than
 /// `fact_context::tests`'s own real, whole-repository `cargo deny` invocation.
-fn Materialize_With(cases: &[(&str, &str, &str)]) -> PolicyFact
+///
+/// Over a real [`ScratchDirectory`] (defined further down, alongside the one real-process
+/// test that also needs it) rather than `Path::new(".")`: `Discover_Workspace` now refuses
+/// before ever reaching a launcher -- fake or real -- unless `root` has its own `deny.toml`
+/// (`P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT`), and `.` here would resolve to this
+/// crate's own manifest directory, which has none. `name` disambiguates each caller's own
+/// scratch directory, since `cargo test` runs this file's tests concurrently.
+fn Materialize_With(cases: &[(&str, &str, &str)], name: &str) -> PolicyFact
 {
+    let scratch = ScratchDirectory::New(name);
     let launcher = FakeLauncher { stderr: Diagnostics_Stderr(cases) };
 
-    return Materialize_Workspace(Path::new("."), Context(), &launcher)
+    return Materialize_Workspace(scratch.Path(), Context(), &launcher)
         .expect("the fake launcher writes a real stderr stream Discover_Workspace can read");
 }
 
@@ -94,10 +102,11 @@ fn Materialize_With(cases: &[(&str, &str, &str)]) -> PolicyFact
 #[test]
 fn Test_Discover_Workspace_Should_Read_A_Real_Diagnostic_Shape_Through_The_Process_Launcher_Port()
 {
+    let scratch = ScratchDirectory::New("read-diagnostic-shape");
     let cases = Sample_Violation_Cases();
     let launcher = FakeLauncher { stderr: Diagnostics_Stderr(&cases) };
 
-    let violations = Discover_Workspace(Path::new("."), &launcher)
+    let violations = Discover_Workspace(scratch.Path(), &launcher)
         .expect("the fake launcher writes a real stderr stream Discover_Workspace can read");
 
     let (code, severity_label, message) = cases.first().expect("one sample case");
@@ -119,7 +128,7 @@ fn Test_Discover_Workspace_Should_Read_A_Real_Diagnostic_Shape_Through_The_Proce
 #[test]
 fn Test_The_Materialized_Facts_Subject_Should_Be_Nomos_Models_Subject_Of_Path()
 {
-    let PolicyFact { subject, .. } = Materialize_With(&Sample_Violation_Cases());
+    let PolicyFact { subject, .. } = Materialize_With(&Sample_Violation_Cases(), "facts-subject");
 
     assert_eq!(subject, nomos_model::Subject_Of_Path(""));
 }
@@ -150,7 +159,7 @@ fn Test_A_Materialized_Fact_Should_Be_Accepted_And_Read_Back_By_Nomos_Analysiss_
 {
     use nomos_analysis::{FactStore, MemoryFactStore};
 
-    let PolicyFact { fact, .. } = Materialize_With(&Sample_Violation_Cases());
+    let PolicyFact { fact, .. } = Materialize_With(&Sample_Violation_Cases(), "analysis-store");
     let key = fact.Key().clone();
     let mut store = MemoryFactStore::New();
 
@@ -178,10 +187,16 @@ fn Test_This_Crates_Declared_Guarantee_Should_Satisfy_The_Capabilitys_Own_Ceilin
     assert!(Ceiling().Satisfies(&Declared_Guarantee()));
 }
 
-/// A scratch directory with no `Cargo.toml`, removed when the test ends -- just enough for
-/// a real `cargo deny` invocation to answer quickly with no diagnostic lines to parse,
-/// proportionate to what this test needs unlike `fact_context::tests`'s own real invocation
-/// over the whole repository under its real `deny.toml`.
+/// A scratch directory with no `Cargo.toml` but its own minimal `deny.toml`, removed when
+/// the test ends -- shared by every test above that needs a real root `Discover_Workspace`
+/// will accept, fake launcher or real, plus the one real-process test below it was
+/// originally written for.
+///
+/// The `deny.toml` is required, not incidental: `Required_Deny_Config` now refuses before
+/// ever launching `cargo deny` when `root` has none of its own
+/// (`P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT`), regardless of which launcher would
+/// have answered -- `Path::new(".")` (this crate's own manifest directory, which has no
+/// `deny.toml`) stopped being a valid stand-in root the moment that check landed.
 struct ScratchDirectory
 {
     root: PathBuf,
@@ -191,9 +206,10 @@ impl ScratchDirectory
 {
     fn New(name: &str) -> Self
     {
-        let root = std::env::temp_dir().join(format!("nomos-lang-rust-deny-platform-std-{name}-{}", std::process::id()));
+        let root = std::env::temp_dir().join(format!("nomos-lang-rust-deny-scratch-{name}-{}", std::process::id()));
         let _ignored = std::fs::remove_dir_all(&root);
         std::fs::create_dir_all(&root).expect("a scratch directory outside any cargo workspace");
+        std::fs::write(root.join("deny.toml"), "[bans]\nmultiple-versions = \"allow\"\n").expect("writing the scratch deny.toml");
 
         return Self { root };
     }
@@ -231,7 +247,8 @@ fn Test_Discover_Workspace_Should_Run_A_Real_Process_Through_Nomos_Platform_Std_
 
     assert!(
         violations.is_empty(),
-        "no deny.toml is reachable from a scratch directory with no Cargo.toml, so no \
-         diagnostic lines exist to parse: {violations:?}"
+        "the scratch directory's own deny.toml is pinned via --config, but it has no \
+         Cargo.toml for cargo deny to resolve a graph against, so no diagnostic lines exist \
+         to parse: {violations:?}"
     );
 }

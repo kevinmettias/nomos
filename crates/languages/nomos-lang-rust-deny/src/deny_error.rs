@@ -6,7 +6,7 @@
 
 use nomos_cap_dependency_policy::{PolicySeverity, PolicyViolation};
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::time::Duration;
 
 /// `cargo deny check` over this whole repository reads `Cargo.lock` and every crate's own
@@ -64,14 +64,44 @@ impl core::fmt::Display for DenyError
 /// answer it does not like.
 pub fn Discover_Workspace<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<Vec<PolicyViolation>, DenyError>
 {
-    let stream = Run_Cargo_Deny(root, launcher)?;
+    let config = Required_Deny_Config(root)?;
+    let stream = Run_Cargo_Deny(root, &config, launcher)?;
 
     return Ok(Canonical_Order(Violations_Of(&stream)));
 }
 
-fn Run_Cargo_Deny<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<String, DenyError>
+/// `root`'s own `deny.toml`, required to exist before `cargo deny` is ever launched.
+///
+/// `Cargo_Deny_Command` never used to pass `--config`, so `cargo deny` walked upward from
+/// `working_directory` looking for the nearest `deny.toml` on its own -- independently of
+/// cargo's own workspace-root resolution, and a second, separate escape from the one
+/// `nomos_lang_rust_cargo::metadata_error::Require_Workspace_Root_Is` catches
+/// (`P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT`). `tests/integration/fixtures/
+/// third-party/hex-0.4.3/deny.toml`'s own doc comment measures this directly: without a
+/// `deny.toml` of its own, that fixture's `cargo deny` invocation walked up past it and
+/// judged the whole enclosing repository's dependency-license diversity instead. Pinning
+/// `--config` to a `deny.toml` this reader confirmed exists at `root` closes that gap from
+/// this side too, rather than leaving every caller to supply its own workaround fixture.
+fn Required_Deny_Config(root: &Path) -> Result<PathBuf, DenyError>
 {
-    let command = Cargo_Deny_Command(root);
+    let config = root.join("deny.toml");
+    if !config.is_file()
+    {
+        return Err(DenyError {
+            reason: format!(
+                "no deny.toml at {} -- refusing rather than letting cargo deny's own upward \
+                 search silently pick up an ancestor's config",
+                config.display()
+            ),
+        });
+    }
+
+    return Ok(config);
+}
+
+fn Run_Cargo_Deny<Launcher: ProcessLauncher>(root: &Path, config: &Path, launcher: &Launcher) -> Result<String, DenyError>
+{
+    let command = Cargo_Deny_Command(root, config);
     let output = launcher.Run(&command).map_err(|error| DenyError {
         reason: format!("cargo deny could not be run: {error}"),
     })?;
@@ -88,7 +118,10 @@ fn Run_Cargo_Deny<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -
     return Ok(output.stderr);
 }
 
-fn Cargo_Deny_Command(root: &Path) -> Command
+/// `config` is passed explicitly rather than left for `cargo deny` to discover on its own
+/// -- [`Required_Deny_Config`]'s own doc explains why that discovery is a second escape
+/// this provider must not leave open.
+fn Cargo_Deny_Command(root: &Path, config: &Path) -> Command
 {
     let cargo = std::env::var("CARGO").unwrap_or_else(|_| "cargo".to_owned());
     let mut command = Command::New(
@@ -97,6 +130,8 @@ fn Cargo_Deny_Command(root: &Path) -> Command
             "deny".to_owned(),
             "--format".to_owned(),
             "json".to_owned(),
+            "--config".to_owned(),
+            config.to_string_lossy().into_owned(),
             "check".to_owned(),
             "bans".to_owned(),
             "licenses".to_owned(),
@@ -191,6 +226,7 @@ mod tests
 {
     use super::*;
     use nomos_platform::ProcessOutput;
+    use std::cell::RefCell;
 
     /// A launcher that hands `Discover_Workspace` a fixed stderr stream instead of running
     /// a real `cargo deny` — the boundary this crate's own module doc names as the one
@@ -210,6 +246,124 @@ mod tests
                 stderr: self.stderr.clone(),
             });
         }
+    }
+
+    /// A launcher that records every [`Command`] it was asked to run, rather than
+    /// actually running one — what [`Test_Discover_Workspace_Should_Pin_Cargo_Denys_Own_
+    /// Config_Discovery_To_Roots_Own_Deny_Toml`] asserts the exact argv of, and what
+    /// [`Test_Discover_Workspace_Should_Refuse_Before_Launching_When_Root_Has_No_Deny_
+    /// Toml`] asserts is never invoked at all. `ProcessLauncher::Run` takes `&self`, so
+    /// recording needs interior mutability rather than a `&mut self` this trait does not
+    /// offer.
+    struct RecordingLauncher
+    {
+        received: RefCell<Vec<Command>>,
+    }
+
+    impl RecordingLauncher
+    {
+        fn New() -> Self
+        {
+            return Self { received: RefCell::new(Vec::new()) };
+        }
+    }
+
+    impl ProcessLauncher for RecordingLauncher
+    {
+        fn Run(&self, command: &Command) -> Result<ProcessOutput, String>
+        {
+            self.received.borrow_mut().push(command.clone());
+
+            return Ok(ProcessOutput {
+                outcome: ExitOutcome::Exited { code: 0 },
+                stdout: String::new(),
+                stderr: serde_json::json!({ "type": "summary", "fields": { "errors": 0 } }).to_string(),
+            });
+        }
+    }
+
+    /// A real scratch directory, removed when the test ends -- [`Required_Deny_Config`]
+    /// now reads the real filesystem (`root.join("deny.toml").is_file()`), so proving it
+    /// needs a real directory rather than a hardcoded, possibly-nonexistent path.
+    struct ScratchDirectory
+    {
+        root: PathBuf,
+    }
+
+    impl ScratchDirectory
+    {
+        fn New(name: &str) -> Self
+        {
+            let root = std::env::temp_dir().join(format!("nomos-lang-rust-deny-config-{name}-{}", std::process::id()));
+            let _ignored = std::fs::remove_dir_all(&root);
+            std::fs::create_dir_all(&root).expect("a scratch directory");
+
+            return Self { root };
+        }
+
+        fn Path(&self) -> &Path
+        {
+            return &self.root;
+        }
+    }
+
+    impl Drop for ScratchDirectory
+    {
+        fn drop(&mut self)
+        {
+            let _ignored = std::fs::remove_dir_all(&self.root);
+        }
+    }
+
+    /// `P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT`: a root with no `deny.toml` of its
+    /// own must be refused before `cargo deny` is ever launched, not silently judged
+    /// against whichever ancestor's `deny.toml` `cargo deny`'s own upward search would
+    /// otherwise find.
+    #[test]
+    fn Test_Discover_Workspace_Should_Refuse_Before_Launching_When_Root_Has_No_Deny_Toml()
+    {
+        let scratch = ScratchDirectory::New("missing");
+        let launcher = RecordingLauncher::New();
+
+        let error = Discover_Workspace(scratch.Path(), &launcher)
+            .expect_err("a root with no deny.toml of its own must be refused");
+
+        assert!(error.reason.contains("deny.toml"), "{}", error.reason);
+        assert!(
+            launcher.received.borrow().is_empty(),
+            "cargo deny must never be launched when this reader could not confirm a deny.toml \
+             of root's own exists: {:?}",
+            launcher.received.borrow()
+        );
+    }
+
+    /// A root that does have its own `deny.toml` must have `cargo deny` pinned to exactly
+    /// that file via `--config`, not left to its own upward search -- the fix half of the
+    /// same escape [`Test_Discover_Workspace_Should_Refuse_Before_Launching_When_Root_Has_
+    /// No_Deny_Toml`] proves the refusal half of.
+    #[test]
+    fn Test_Discover_Workspace_Should_Pin_Cargo_Denys_Own_Config_Discovery_To_Roots_Own_Deny_Toml()
+    {
+        let scratch = ScratchDirectory::New("present");
+        std::fs::write(scratch.Path().join("deny.toml"), "[bans]\nmultiple-versions = \"allow\"\n").expect("writing a scratch deny.toml");
+        let launcher = RecordingLauncher::New();
+
+        let _ignored = Discover_Workspace(scratch.Path(), &launcher).expect("a root with its own deny.toml must be run, not refused");
+
+        let received = launcher.received.borrow();
+        let command = received.first().expect("Discover_Workspace must have launched exactly one command");
+        let expected_config = scratch.Path().join("deny.toml").to_string_lossy().into_owned();
+        let config_index = command
+            .argv
+            .iter()
+            .position(|argument| return argument == "--config")
+            .expect("the launched command must carry --config");
+        assert_eq!(
+            command.argv.get(config_index.saturating_add(1)),
+            Some(&expected_config),
+            "--config must name root's own deny.toml exactly: {:?}",
+            command.argv
+        );
     }
 
     #[test]

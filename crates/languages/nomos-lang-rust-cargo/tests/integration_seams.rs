@@ -18,7 +18,7 @@
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
 use nomos_lang_rust_cargo::{Declared_Guarantee, Discover_Workspace, FactContext, Materialize_Workspace, Provider_Offer};
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 /// A [`ProcessLauncher`] that never runs anything -- it returns a canned answer regardless
 /// of what `command` names, which is what makes the boundary check here cheap and
@@ -65,12 +65,23 @@ impl ProcessLauncher for FakeLauncher
 
 /// A minimal, fabricated `cargo metadata --format-version 1` document: two workspace
 /// members, `alpha` depending on `beta` -- the exact shape `Discover_Workspace` reads
-/// (`workspace_members`, and each `packages` entry's `id`/`name`/`manifest_path`/
-/// `dependencies`), small enough to read at a glance rather than a real `cargo metadata`
-/// dump's hundreds of fields.
-fn Fake_Metadata_Document() -> &'static str
+/// (`workspace_root`, `workspace_members`, and each `packages` entry's `id`/`name`/
+/// `manifest_path`/`dependencies`), small enough to read at a glance rather than a real
+/// `cargo metadata` dump's hundreds of fields.
+///
+/// `workspace_root` must be `root` itself, byte for byte before `serde_json` re-encodes
+/// it: `Discover_Workspace` now canonicalizes both sides and refuses if they disagree
+/// (`P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT`), so a fixture whose `workspace_root`
+/// does not correspond to a real, canonicalizable directory matching `root` would be
+/// refused as an escape rather than read as the well-formed document it is meant to be.
+fn Fake_Metadata_Document(root: &Path) -> String
 {
-    return r#"{
+    let workspace_root = root.to_string_lossy().into_owned();
+    let alpha_manifest = root.join("alpha").join("Cargo.toml").to_string_lossy().into_owned();
+    let beta_manifest = root.join("beta").join("Cargo.toml").to_string_lossy().into_owned();
+
+    return serde_json::json!({
+        "workspace_root": workspace_root,
         "workspace_members": [
             "alpha 0.1.0 (path+file:///workspace/alpha)",
             "beta 0.1.0 (path+file:///workspace/beta)"
@@ -79,7 +90,7 @@ fn Fake_Metadata_Document() -> &'static str
             {
                 "id": "alpha 0.1.0 (path+file:///workspace/alpha)",
                 "name": "alpha",
-                "manifest_path": "/workspace/alpha/Cargo.toml",
+                "manifest_path": alpha_manifest,
                 "dependencies": [
                     { "name": "beta", "kind": null, "optional": false }
                 ]
@@ -87,13 +98,56 @@ fn Fake_Metadata_Document() -> &'static str
             {
                 "id": "beta 0.1.0 (path+file:///workspace/beta)",
                 "name": "beta",
-                "manifest_path": "/workspace/beta/Cargo.toml",
+                "manifest_path": beta_manifest,
                 "dependencies": []
             }
         ]
-    }"#;
+    })
+    .to_string();
 }
 
+/// A real, empty scratch directory for a fabricated `cargo metadata` document's own
+/// `"workspace_root"` to resolve to. `Require_Workspace_Root_Is` canonicalizes both sides
+/// for real (it must, to catch a real escape), so this fixture needs a real directory on
+/// disk to canonicalize against -- unlike `Fake_Metadata_Document`'s member paths, which
+/// `Manifest_Relative_Root` only ever strips a textual prefix from and never touches disk
+/// for.
+struct FakeWorkspaceRoot
+{
+    path: PathBuf,
+}
+
+impl FakeWorkspaceRoot
+{
+    fn New(name: &str) -> Self
+    {
+        let path = std::env::temp_dir().join(format!("nomos-lang-rust-cargo-fake-workspace-{name}-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&path);
+        std::fs::create_dir_all(&path).expect("a scratch directory for the fixture's own workspace_root");
+        let canonical = std::fs::canonicalize(&path).expect("the directory this call just created");
+
+        return Self { path: canonical };
+    }
+
+    fn Path(&self) -> &Path
+    {
+        return &self.path;
+    }
+}
+
+impl Drop for FakeWorkspaceRoot
+{
+    fn drop(&mut self)
+    {
+        let _ignored = std::fs::remove_dir_all(&self.path);
+    }
+}
+
+/// `Discover_Workspace`'s own `Require_Clean_Exit` check runs before `Require_Workspace_
+/// Root_Is` ever reads a document, so a launcher that never produces one does not need a
+/// fixture that could canonicalize -- this stays the simple, non-existent placeholder
+/// `Test_Discover_Workspace_Should_Report_The_Launchers_Own_Stderr_On_A_Nonzero_Exit`
+/// alone still needs.
 fn Fake_Workspace_Root() -> PathBuf
 {
     return PathBuf::from("/workspace");
@@ -117,9 +171,10 @@ fn Context() -> FactContext
 #[test]
 fn Test_Discover_Workspace_Should_Read_Packages_And_Edges_From_A_Fake_Launchers_Own_Output()
 {
-    let launcher = FakeLauncher::Succeeding(Fake_Metadata_Document());
+    let workspace_root = FakeWorkspaceRoot::New("read-packages");
+    let launcher = FakeLauncher::Succeeding(&Fake_Metadata_Document(workspace_root.Path()));
 
-    let discovered = Discover_Workspace(&Fake_Workspace_Root(), &launcher).expect("a well-formed fake metadata document");
+    let discovered = Discover_Workspace(workspace_root.Path(), &launcher).expect("a well-formed fake metadata document");
 
     assert_eq!(discovered.len(), 2);
     let alpha = discovered
@@ -222,9 +277,10 @@ fn Test_The_Declared_Guarantee_Should_Satisfy_Nomos_Cap_Dependencys_Own_Contract
 #[test]
 fn Test_A_Facts_Subject_Should_Match_Nomos_Models_Own_Subject_Of_Its_Path()
 {
-    let launcher = FakeLauncher::Succeeding(Fake_Metadata_Document());
+    let workspace_root = FakeWorkspaceRoot::New("facts-subject");
+    let launcher = FakeLauncher::Succeeding(&Fake_Metadata_Document(workspace_root.Path()));
 
-    let facts = Materialize_Workspace(&Fake_Workspace_Root(), Context(), &launcher).expect("a well-formed fake metadata document");
+    let facts = Materialize_Workspace(workspace_root.Path(), Context(), &launcher).expect("a well-formed fake metadata document");
 
     let alpha = facts
         .iter()

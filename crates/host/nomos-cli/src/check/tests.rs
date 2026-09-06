@@ -330,7 +330,15 @@ fn Broken_Provider_Run() -> (ExitCode, String)
 /// A real, if minimal, Cargo.toml is required: without one, `cargo metadata` cannot find a
 /// workspace here at all, and the dependency-edges provider reports `ProviderUnavailable`
 /// for a reason that has nothing to do with what this test means by "clean": a tree with no
-/// findings, not a tree the provider cannot even see.
+/// findings, not a tree the provider cannot even see. A real, if minimal, `deny.toml` is
+/// required for the identical reason since `P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT`:
+/// `nomos_lang_rust_deny::Discover_Workspace` now refuses before ever launching `cargo deny`
+/// over a root with no `deny.toml` of its own, rather than letting it silently walk upward
+/// (this fixture's temp-directory ancestry happens to have no `deny.toml` to escape into, but
+/// the fix does not special-case that -- refusing when it cannot confirm is the whole point).
+/// The `Cargo.toml`'s own `license` field is declared to match the `deny.toml`'s own
+/// `licenses.allow` list, so the fixture is genuinely clean under `dependency-policy` too,
+/// not merely unlicensed in a way this reader happens not to flag.
 fn Clean_Run() -> (ExitCode, String)
 {
     let root = std::env::temp_dir().join("nomos-check-clean-only");
@@ -339,7 +347,12 @@ fn Clean_Run() -> (ExitCode, String)
     std::fs::write(root.join("a.rs"), "pub fn ok()\n{\n}\n").expect("writable");
     std::fs::write(
         root.join("Cargo.toml"),
-        "[package]\nname = \"nomos-check-clean-only-fixture\"\nversion = \"0.0.0\"\nedition = \"2021\"\n",
+        "[package]\nname = \"nomos-check-clean-only-fixture\"\nversion = \"0.0.0\"\nedition = \"2021\"\nlicense = \"MIT\"\n",
+    )
+    .expect("writable");
+    std::fs::write(
+        root.join("deny.toml"),
+        "[graph]\nall-features = false\n\n[advisories]\nversion = 2\n\n[licenses]\nversion = 2\nallow = [\"MIT\"]\n\n[bans]\nmultiple-versions = \"warn\"\n\n[sources]\n",
     )
     .expect("writable");
     std::fs::create_dir_all(root.join("src")).expect("the src directory is creatable");

@@ -74,12 +74,61 @@ impl core::fmt::Display for MetadataError
 pub fn Discover_Workspace<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<Vec<DiscoveredPackage>, MetadataError>
 {
     let document = Run_Cargo_Metadata(root, launcher)?;
+    Require_Workspace_Root_Is(&document, root)?;
     let members = Member_Ids(&document)?;
     let packages = Packages_Array(&document)?;
     let member_names = Member_Names(packages, &members);
     let discovered = Discovered_Packages(packages, &members, &member_names, root)?;
 
     return Require_Nonempty(discovered);
+}
+
+/// Refuses if `document`'s own `"workspace_root"` does not resolve to `root` -- the exact
+/// escape `P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT` measured directly: `cargo
+/// metadata`, pointed at a directory with no `Cargo.toml` of its own that sits inside a
+/// larger cargo workspace, silently walks upward and answers about that enclosing
+/// workspace instead of refusing. `cargo metadata`'s own document always names exactly
+/// which workspace root it actually resolved to, so this check reads that field directly
+/// rather than inferring the escape indirectly from which packages came back.
+///
+/// Both sides are canonicalized before comparing: `workspace_root` is cargo's own already-
+/// resolved absolute path, and `root` is often a relative `.` in a real invocation (`nomos
+/// check`'s own CLI default), which `std::fs::canonicalize` resolves against the real
+/// process working directory the same way `cargo metadata` itself did. Canonicalizing both
+/// sides is safe even though `std::fs::canonicalize`'s own Windows implementation returns a
+/// `\\?\`-prefixed verbatim path (`nomos_lang_rust_compiler::reading::Load_Crate`'s own doc
+/// names this as a real footgun for a *prefix* comparison) -- this is a plain equality
+/// check, and the identical transformation applied to both sides cancels out.
+fn Require_Workspace_Root_Is(document: &serde_json::Value, root: &Path) -> Result<(), MetadataError>
+{
+    let workspace_root = document
+        .get("workspace_root")
+        .and_then(serde_json::Value::as_str)
+        .ok_or_else(|| MetadataError {
+            reason: "cargo metadata's document has no \"workspace_root\" string".to_owned(),
+        })?;
+
+    let resolved = std::fs::canonicalize(workspace_root).map_err(|error| MetadataError {
+        reason: format!("cargo metadata's own \"workspace_root\" ({workspace_root}) could not be read: {error}"),
+    })?;
+    let expected = std::fs::canonicalize(root).map_err(|error| MetadataError {
+        reason: format!("the root cargo metadata was asked about ({}) could not be read: {error}", root.display()),
+    })?;
+
+    if resolved != expected
+    {
+        return Err(MetadataError {
+            reason: format!(
+                "cargo metadata escaped the workspace it was asked about: asked over \"{}\", it \
+                 answered for \"{}\" instead -- refusing rather than silently reporting on the \
+                 wrong tree",
+                expected.display(),
+                resolved.display()
+            ),
+        });
+    }
+
+    return Ok(());
 }
 
 fn Run_Cargo_Metadata<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<serde_json::Value, MetadataError>
@@ -251,6 +300,14 @@ fn Manifest_Relative_Root(package: &serde_json::Value, root: &Path) -> Result<St
 
     let absolute = PathBuf::from(manifest_path);
     let directory = absolute.parent().unwrap_or(&absolute);
+    // `Require_Workspace_Root_Is` has already refused unless `root` is genuinely the
+    // workspace root `cargo metadata` itself resolved, and every package this function
+    // reads is one `cargo metadata` reported as a member of that same workspace -- so
+    // `directory` is always really under `root` by the time execution reaches here. The
+    // `unwrap_or` fallback below is therefore dead in practice, kept only because a
+    // caller that skipped straight to this function without going through
+    // `Discover_Workspace` first would have no such guarantee, and reporting a package's
+    // own absolute path is a safer failure than a panic for that caller.
     let relative = directory.strip_prefix(root).unwrap_or(directory);
 
     return Ok(relative.to_string_lossy().replace('\\', "/"));
