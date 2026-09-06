@@ -59159,6 +59159,40 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P71-GATE-TESTS-OWN-CLEAN-TREE-ASSERTION-IS-STALE",
+      "title": "nomos-cli's own gate::tests assert zero Blocking findings, which P45's fixture now permanently contradicts",
+      "why": "cargo test -p nomos-cli --bin nomos gate::tests::Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree and its sibling Test_Read_Source_Should_Underlie_A_Runs_RunId_Report both run a real gate over this repository's own tree and assert ExitCode::Ok, which nomos_gate_orchestration only returns when zero findings can fail a build. P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON (3be57464) deliberately committed tests/integration/fixtures/third-party/hex-0.4.3 with one permanent, accepted true positive (abbreviations: val, calibration.rs's own RuleVerdict table names it Expected::TruePositive(1)) plus single-letter-names: T, tracked separately by P70-IMPL-BLOCK-GENERIC-PARAMETERS-NOT-IN-PAYLOAD. Both are Blocking. Measured directly against the real tree at HEAD (31750a5e), independent of any uncommitted work: both gate::tests fail today, and neither test's own predicate has ever been named by an item's verification argv (every item this session named -p nomos-check-orchestration, -p nomos-rules, or -p nomos-cli --test check_command specifically, never -p nomos-cli --bin nomos), so this went unnoticed since P45 landed. Discovered independently in two unrelated worktrees (P47-TOOLPROVIDER-HAS-NO-PACKAGE-2's and P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT's), each reproducing the identical failure with completely disjoint changes -- confirming it is neither item's own regression.",
+      "done_when": "Both gate::tests pass again, honestly: either the test's own expectation is corrected to account for a real, permanently-accepted third-party calibration fixture that is not itself first-party code this workspace's own gate judges for cleanliness (excluding tests/integration/fixtures/third-party/ from what a real gate run over this workspace's own tree walks, if that is the right boundary -- OD-GATE-* precedent should be checked before deciding), or the assertion is corrected to name the exact accepted findings rather than asserting zero. Whichever is chosen, a future third true positive accepted the same deliberate way (a fourth calibration fixture, say) must not silently re-break this test a second time.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--bin",
+          "nomos"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
