@@ -155,6 +155,7 @@ profile: domain-specification
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md@authored | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md | authored | 20 | 6 | sha256:5f9c67cc4d6f14d07b696b7c2842958e0e79c15eede17749d7e63ce8627f8793 |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md@authored | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md | authored | 18 | 7 | sha256:4264b9448cf95f7bb22780f4a6cd970a7f64828eea993961df2987984417b701 |
 | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md@authored | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md | authored | 18 | 6 | sha256:5369feac3ebd7b343b32234f25aa30ba669d4151b15af6d83d2ad37da0f58379 |
 | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md | authored | 24 | 6 | sha256:b8159cff04a7379eb48a47ce46a3da98ad447cc8ccec98c33ab48526d604e57f |
@@ -1403,6 +1404,12 @@ profile: domain-specification
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#14 | authored | 2 | The Decision |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#17 | authored | 2 | Controls |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#19 | authored | 2 | Status |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#1 | authored | 1 | The tools that govern this repository are separated from the product they govern |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#2 | authored | 2 | Question |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#10 | authored | 2 | The Decision |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#14 | authored | 2 | What This Does Not Do |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#19 | authored | 2 | Status |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1 | authored | 1 | Main and dev mean different things, and the distance between them is a decision, not an accident |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#2 | authored | 2 | Question |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#5 | authored | 2 | What main is for |
@@ -40462,6 +40469,215 @@ declined to pay, by a mechanism that record did not name.
 Accepted. The full eighteen-profile catalogue remains available through `nomos spec render`
 and `nomos spec sources`; this record is why only two of the eighteen outputs are ever
 checked in.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#1
+
+*revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern · hash: sha256:fd05c2faee80c8e8742379442a423524055c9bfb7fc3ef7dd41071dd434c8180*
+
+# The tools that govern this repository are separated from the product they govern
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#2
+
+*revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#3
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Question · hash: sha256:f56e34afe8bea9d56889488a20122e3d90d2b8b855f2a67ce08a916bdda9abaf*
+
+`README.md` already marks four crates `[repo tooling]` — `nomos-ledger`, `nomos-work-
+orchestration`, `nomos-spec-orchestration` and `nomos-surface-provenance` — and states
+plainly that the mark "does not move a crate, does not change a dependency, and is not
+itself a decision." `OD-LEDGER-036` went further for the ledger specifically, settling
+*ownership* (bootstrap machinery, not a Nomos product feature) while explicitly declining
+to reopen *location*: "It does not move any file, rename any crate... this record answers
+the ownership question... without reopening the location question it explicitly declined
+to answer." `ARC-ECOSYSTEM-001` named the same three subsystems — the specification
+system, the work ledger, and the contract-test/surface-snapshot/gate-derivation tooling —
+and said in advance that nobody may cite their location as proof of ownership, without
+deciding what their location should be.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#4
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Question · hash: sha256:744a15061fc3b414cbe7dd251f2535913fdace0d84bf4274b4cd82317c2bd3b3*
+
+Naming a distinction and enforcing it are different acts. The risk `OD-PACKAGE-015`'s own
+why already states for crate boundaries generally applies here specifically: a distinction
+that costs nothing to cross gets crossed without anyone deciding to.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#5
+
+*revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#6
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / What Was Measured · hash: sha256:07ee03de252cb4a993b699e29486c3759565f2bc2df53f9c79b3c2f3050ab058*
+
+**The four marked crates sit in three different directories, interleaved with product.**
+`nomos-ledger` is under `crates/substrate/`, beside `nomos-capability` and `nomos-analysis`.
+`nomos-work-orchestration` and `nomos-spec-orchestration` are under `crates/orchestration/`,
+beside `nomos-check-orchestration` and `nomos-gate-orchestration` — real product surfaces.
+`nomos-surface-provenance` is under `crates/host/`, beside `nomos-cli` and `nomos-api`. A
+reader cannot tell repo tooling from product by directory today; the README mark is the
+only signal, and it is prose, not a boundary.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#7
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / What Was Measured · hash: sha256:3a5afa99b4f010727029f41be50029e818dc9ac2b09f48ce09b5cd5daab6bd3a*
+
+**The specification family already solved this for itself, partially.** Five of its six
+crates — `nomos-spec-model`, `nomos-spec-store`, `nomos-spec-bundle`, `nomos-spec-ingest`,
+`nomos-spec-validate`, `nomos-spec-project` — live under `crates/spec/`, physically apart
+from product. `nomos-spec-orchestration`, the family's own orchestration layer, does not:
+it was placed under `crates/orchestration/` instead, grouped by pattern (orchestration
+crates sit together) rather than by subject (spec crates sit together), splitting one
+family across two directories for a reason nothing records.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#8
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / What Was Measured · hash: sha256:fea3fb07777979b51f737ce06703485fc6d7597f315d975e223f8848830a869f*
+
+**No enforced test exists for either claim.** `tests/contract/tests/boundaries/graph.rs`
+already enforces two structurally identical claims — `Test_Only_The_Platform_Adapter_May_
+Name_The_Sibling_Workspace` and `Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench`,
+both an allowlist checked against `Workspace::Transitive_Dependencies` — for the sibling
+XVPE and KWB workspaces. Grepping the same suite for `nomos_spec` or a repo-tooling name
+finds only band-table entries. README's own claim for the specification family — "It
+reaches the product only through a knowledge capability, so nothing in the product may
+name it" — and the identical claim this record would make for repo tooling are both
+unenforced prose today.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#9
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / What Was Measured · hash: sha256:d31fa91ebc5792080bc08021ce900e7778e5bf0e15f4ba127d0c6779bd10eb82*
+
+**The gap is not hypothetical: three real product crates already depend on repo tooling
+for one type that does not require it.** `Territory` is defined in `nomos-scope-
+verification` (band 19, the crate `OD-LEDGER-037` extracted specifically so it would be
+"ledger-agnostic"), and `nomos-ledger` re-exports it. `nomos-agent-executor-claude-code`,
+`nomos-model-backend-ollama` and `nomos-workflow-orchestration` — three genuine product
+crates — each carry `nomos-ledger` as a **dev-dependency** solely to reach `Territory` in
+their own tests (`use nomos_ledger::Territory;`, five call sites across the three crates),
+when `nomos_scope_verification::Territory` would give them the identical type without
+naming repo tooling at all. This is exactly the "architectural attention" failure this
+item's own why names: nothing broke, nothing shipped wrong, and three crates still reached
+for the tool instead of the primitive beneath it, because nothing made the difference cost
+anything to cross.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#10
+
+*revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#11
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / The Decision · hash: sha256:341e53bc4e468e54fce156b664d540f257db6d219fbc39e8bce2e407c7e1ef72*
+
+**The four `[repo tooling]` crates move to a new top-level directory, `crates/repo-
+tooling/`, naming the distinction physically rather than only in README prose.**
+`nomos-ledger` and `nomos-work-orchestration` (repository coordination, no existing
+family) and `nomos-surface-provenance` (a standalone report, no existing family) go there.
+`nomos-spec-orchestration` goes to `crates/spec/` instead, rejoining the five siblings it
+was split from — its subject is the specification family, and `crates/spec/` is already
+that family's home; `crates/repo-tooling/` would only re-create the split this record
+measured, one directory over. Both moves keep every crate's band, every dependency edge,
+and every public type exactly as they are: this is a `path` change in the workspace
+manifest and a `git mv`, nothing else.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#12
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / The Decision · hash: sha256:a744aae7976a811a2df367c43f85a5a6e3dda141b0a3a26cc77febe34c08c08b*
+
+**It stays one Cargo workspace, not two.** A second workspace buys none of the three
+things `OD-PACKAGE-015` asks a boundary to earn: no crate here is independently versioned
+or published, no isolation is enforced that a directory plus the test below does not
+already give, and `nomos-cli`/`nomos-api` — the two real hosts that legitimately wire both
+product and repo-tooling verbs into one binary — would still declare the identical `path`
+dependency they declare today, just across a workspace boundary instead of a directory
+one, at the cost of a second `Cargo.lock`, a second `cargo build` invocation for CI to
+know about, and no dependency this repository does not already have a mechanism to check.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#13
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / The Decision · hash: sha256:4b10e8e558cd997bf3ca60a22225aa3d8d9bcdb11ab88ec34005fe6728a6f66f*
+
+**A product crate is prevented from depending on repo tooling by a fifth graph
+assertion, the same shape as the existing two sibling-workspace checks.** An allowlist
+(`nomos-cli`, `nomos-api`, and any crate whose own `root` sits under `crates/repo-
+tooling/`) is checked against every other member's `Transitive_Dependencies`; any of the
+four repo-tooling crate names found outside that allowlist fails the assertion, naming
+which crate reached across the line and which tooling crate it named — the identical
+report shape `Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench` already gives.
+Unlike `Test_Dependencies_Should_Run_Strictly_Downward`, this check does **not** exempt
+dev-dependencies. The band check's own reasoning for exempting them — "a low crate's tests
+may reasonably use a higher-level fixture" — is about a layer legitimately reaching for
+its own kind of fixture; the measurement above is a different shape, three crates
+reaching into repo tooling's own internals in their tests when a substrate primitive
+already gives them the type without naming the tool. A dev-dependency on repo tooling is
+exactly the failure this record exists to make visible, not a case to carve out of it.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#14
+
+*revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#15
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / What This Does Not Do · hash: sha256:6bd33e580087cc88c7b376ea0b26f1b433420f8f68b0e17116ceaf11f158c5eb*
+
+**No crate moves under this record.** It names the target directory, the one exception
+(`nomos-spec-orchestration` to `crates/spec/`, not `crates/repo-tooling/`), the choice to
+stay in one workspace, and the shape of the enforcement test; carrying the moves out,
+writing the fifth graph assertion, and fixing the three crates found reaching into repo
+tooling from a dev-dependency are each a future item's own territory, scoped against this
+record's findings rather than re-deriving them.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#16
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / What This Does Not Do · hash: sha256:c39fa5d62a0de71de708502f428723979c3ebc3580d886e7a9a5b2834eec24b2*
+
+It does not reopen `OD-LEDGER-036`'s ownership question. That record decided the ledger is
+bootstrap machinery, not a product feature; this record answers the location question that
+record explicitly left open, for the ledger and its three `[repo tooling]` siblings
+together, without disturbing what either record decided about ownership.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#17
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / What This Does Not Do · hash: sha256:970649b2cad262ed7486349bf55d151a0f1ad377f9094af772b19d288d924371*
+
+It does not decide the specification family's own remaining gap — no enforced test exists
+for README's "nothing in the product may name it" claim about `nomos-spec-*` as a whole
+either, only measured here as a parallel instance of the same missing mechanism. This
+record closes the repo-tooling case its own why names; the specification family's
+identical gap is left exactly as open as this record found it, for whichever item takes it
+up by name.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#18
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / What This Does Not Do · hash: sha256:76a48433983f501b69f65fd3282baa59dcd7a54c7dbc7771d91f11c9f1717549*
+
+It does not decide whether `crates/repo-tooling/` should someday become its own workspace,
+should the population or a real independent-versioning need change what `OD-PACKAGE-015`'s
+test would find. Nothing measured here shows that need existing today.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#19
+
+*revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#20
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Status · hash: sha256:d244b0b265fc6ea0d6d56949bf88d02595c0b3c6ea700ea23f13138a7b88787b*
+
+Accepted. Four crates named for a new directory, one of the four redirected to an
+existing family directory instead, one Cargo workspace kept, and one graph assertion's
+shape stated; no crate moves and no test is written here.
 
 ### docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1
 
