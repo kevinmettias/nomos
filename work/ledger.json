@@ -54378,7 +54378,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -54392,7 +54392,28 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "A_Composed_Rule ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-268e7e83bad5aa9e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-5784768ca0f1090f.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-513e18542be398a1.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-6e5562a3f7cdfa63.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-339a6fd2ca04820d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-78d0981b5c9b6e0b.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-40f802280fae901d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-02401d6b032b8cc1.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-9915f04b3b581dab.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-021f9817f180883c.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-d47356fe6ddd8486.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-6808ca7ce910cde0.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1788697527,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6ac426280e81296aefbbb1337a9dce699b11336b"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

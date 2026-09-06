@@ -32,6 +32,8 @@ use nomos_rules::{
     Check_No_Trailing_Whitespace, Check_Parameter_Count, Check_Relaxed_Not_Used_When_Ordering_Matters,
     Check_Review_Findings, REVIEW_FINDING,
     Check_Scripts_Use_A_Portable_Shebang, Check_Seqcst_Justified_Explicitly, Check_Shared_Interior_Mutability_Says_Why,
+    Check_Nonnegative_Storage_Is_Unsigned, Check_A_Known_Range_Picks_Its_Type, Check_Named_Fields_Over_Positional_Variant_Payloads,
+    NONNEGATIVE_STORAGE_IS_UNSIGNED, A_KNOWN_RANGE_PICKS_ITS_TYPE, NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS,
     Check_Sleep_Is_Not_Synchronization, Check_Suppression_Directives_Carry_A_Reason, Check_Todo_Format,
     Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter, Check_Unread_Reaches_A_Finding,
     Check_Unsafe_Justification, Check_Workspace_Markers_Carry_A_Reason, Check_Write_Authority, SourceFile,
@@ -76,7 +78,7 @@ pub use rule_reassessment_cache::RuleReassessmentCache;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 67;
+const RULE_COUNT: usize = 70;
 
 /// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
 /// through, the filesystem a repository-declared policy capability (`nomos.cap.naming.
@@ -907,6 +909,12 @@ fn With_Composed_Rules<Answer>(
         ComposedRule { id: GO_HELPERS_PACKAGE_FIVE_INPUTS, check: &|reader: &mut Reader<'_, '_>| return Check_Go_Helpers_Package_Five_Inputs(sources, reader) },
         ComposedRule { id: DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, check: &|reader: &mut Reader<'_, '_>| return Check_Declared_Tooling_Language_For_Scripts(sources, reader) },
         ComposedRule { id: FILE_SIZE_JUSTIFICATION_TRIGGER, check: &|reader: &mut Reader<'_, '_>| return Check_File_Size_Justification_Trigger(sources, reader) },
+        // Measured against this workspace's own real tree before composing, per
+        // P46-UNCOMPOSED-RULES-ARE-COUNTED's own discipline: zero findings for all three,
+        // so nothing here is an unmeasured rule composed blind.
+        ComposedRule { id: NONNEGATIVE_STORAGE_IS_UNSIGNED, check: &|_reader: &mut Reader<'_, '_>| return Check_Nonnegative_Storage_Is_Unsigned(sources) },
+        ComposedRule { id: A_KNOWN_RANGE_PICKS_ITS_TYPE, check: &|_reader: &mut Reader<'_, '_>| return Check_A_Known_Range_Picks_Its_Type(sources) },
+        ComposedRule { id: NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS, check: &|_reader: &mut Reader<'_, '_>| return Check_Named_Fields_Over_Positional_Variant_Payloads(sources) },
         ComposedRule { id: ONE_THOUSAND_LINE_HARD_TRIGGER, check: &|reader: &mut Reader<'_, '_>| return Check_Go_File_Size_Hard_Trigger(sources, reader) },
         ComposedRule { id: FIVE_HUNDRED_LINE_REVIEW_TRIGGER, check: &|reader: &mut Reader<'_, '_>| return Check_Go_File_Size_Review_Trigger(sources, reader) },
         ComposedRule { id: LOWERCASE_FIRST_LETTER, check: &|_reader: &mut Reader<'_, '_>| return Check_Error_Message_Starts_Lowercase(sources) },
