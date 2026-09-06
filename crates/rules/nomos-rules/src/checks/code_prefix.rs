@@ -245,26 +245,36 @@ mod tests
 
     /// The first real defect this rule exists to fix: a string literal holding a URL must
     /// not truncate the real code that follows it on the same line.
+    ///
+    /// Deliberately not spelled `unsafe { ... }` past the string, unlike an earlier version
+    /// of this test: `unsafe-justification`'s own `Has_Unsafe_Construct` is a bare substring
+    /// search over this same `Code_Prefix` output, and since this function preserves a
+    /// string's own body rather than blanking it, a fixture whose STRING happened to contain
+    /// that phrase already tripped it once — this file's own module doc names why blanking
+    /// is not the fix. `Real_Code(p)` proves the identical truncation property without
+    /// handing another rule's text scanner a phrase it does not know is quoted.
     #[test]
     fn Test_Code_Prefix_Should_Not_Truncate_At_A_Url_Inside_A_String()
     {
-        let line = "let doc = \"https://example.com\"; unsafe { core::ptr::read(p) }";
+        let line = "let doc = \"https://example.com\"; Real_Code(p)";
 
         let prefix = Code_Prefix(line);
 
         assert!(
-            prefix.contains("unsafe { core::ptr::read(p) }"),
+            prefix.contains("Real_Code(p)"),
             "the string's own // must not hide the real code after it: {prefix:?}"
         );
     }
 
     /// A literal's own body is preserved, not blanked — this crate's own module doc names
     /// why: `A_Rust_Path_Stays_Within_Its_Own_Subtree` and others need a specific string's
-    /// real value, not a placeholder.
+    /// real value, not a placeholder. Says "block" rather than `unsafe`, for the reason the
+    /// test above now states explicitly: this string's own text must not spell a phrase
+    /// another rule's own text scanner reads as real code.
     #[test]
     fn Test_Code_Prefix_Should_Preserve_A_Strings_Own_Text()
     {
-        let line = "let example = \"call unsafe { ... } to do it\";";
+        let line = "let example = \"call the block { ... } to do it\";";
 
         assert_eq!(Code_Prefix(line), line);
     }
@@ -283,11 +293,11 @@ mod tests
     #[test]
     fn Test_Code_Prefix_Should_Honor_An_Escaped_Quote_Inside_A_String()
     {
-        let line = "let s = \"a \\\" // not a comment\"; unsafe {}";
+        let line = "let s = \"a \\\" // not a comment\"; Real_Code()";
 
         let prefix = Code_Prefix(line);
 
-        assert!(prefix.contains("unsafe {}"), "the escaped quote must not end the string early: {prefix:?}");
+        assert!(prefix.contains("Real_Code()"), "the escaped quote must not end the string early: {prefix:?}");
     }
 
     #[test]
@@ -328,33 +338,38 @@ mod tests
     #[test]
     fn Test_Code_Prefix_Should_Not_Truncate_At_A_Double_Slash_Inside_A_Raw_String()
     {
-        let line = "let s = r\"https://example.com\"; unsafe { core::ptr::read(p) }";
+        let line = "let s = r\"https://example.com\"; Real_Code(p)";
 
         let prefix = Code_Prefix(line);
 
-        assert!(prefix.contains("unsafe { core::ptr::read(p) }"), "{prefix:?}");
+        assert!(prefix.contains("Real_Code(p)"), "{prefix:?}");
     }
 
     #[test]
     fn Test_Code_Prefix_Should_Not_Truncate_At_A_Double_Slash_Inside_A_Hashed_Raw_String()
     {
-        let line = "let s = r#\"a \" b // still a string\"#; unsafe {}";
+        let line = "let s = r#\"a \" b // still a string\"#; Real_Code()";
 
         let prefix = Code_Prefix(line);
 
-        assert!(prefix.contains("unsafe {}"), "{prefix:?}");
+        assert!(prefix.contains("Real_Code()"), "{prefix:?}");
     }
 
     /// A raw string with an unbalanced quote inside it — one hash count, one real
     /// delimiter — must still close only at its own real delimiter, not at the stray `"`.
+    /// Its own body reads `begin { let x = "`, not `unsafe { let x = "` as an earlier version
+    /// of this test spelled it: the shape under test is a brace and a stray quote inside a
+    /// raw string, and spelling it with the one word `unsafe-justification`'s own text
+    /// scanner reads as real code — a bare substring search over this same `Code_Prefix`
+    /// output — made this fixture's own quoted text trip a different rule's finding.
     #[test]
     fn Test_Code_Prefix_Should_Handle_A_Raw_String_With_An_Unbalanced_Quote()
     {
-        let line = "let s = r#\"unsafe { let x = \" } \"#; // real comment";
+        let line = "let s = r#\"begin { let x = \" } \"#; // real comment";
 
         let prefix = Code_Prefix(line);
 
-        assert!(prefix.starts_with("let s = r#\"unsafe { let x = \" } \"#; "), "{prefix:?}");
+        assert!(prefix.starts_with("let s = r#\"begin { let x = \" } \"#; "), "{prefix:?}");
         assert!(!prefix.contains("real comment"), "{prefix:?}");
     }
 

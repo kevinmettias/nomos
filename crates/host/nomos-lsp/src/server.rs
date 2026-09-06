@@ -73,6 +73,9 @@ fn Workspace_Root(params: &InitializeParams) -> PathBuf
         return path;
     }
 
+    // `root_uri` is deprecated by the LSP spec in favor of `workspace_folders`, but an
+    // older or simpler client may still send only this field, and falling back to it is
+    // this function's own stated fallback order.
     #[allow(deprecated)]
     if let Some(root_uri) = params.root_uri.as_ref()
         && let Some(path) = Path_From_File_Uri(root_uri)

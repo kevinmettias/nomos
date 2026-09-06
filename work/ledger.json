@@ -53695,12 +53695,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P41-CRATE-BOUNDARY-REVIEW"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-loop",
+        "acquired_at": 1788687391,
+        "lease_expires_at": 1788698191
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -58325,6 +58329,69 @@
         "timeout_seconds": 3600
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P65-SELF-CHECK-FINDINGS-FROM-RECENT-WORK",
+      "title": "This session's own recent additions carry four real, self-hosted findings",
+      "why": "nomos-cli's own self-check (Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build) is nomos judging its own tree, and it caught four real findings none of this session's cargo test/clippy runs did, because parameter-count/unsafe-justification/abbreviations/every-allow-carries-a-justification are nomos's own rules, not rustc or clippy lints: nomos-lsp/src/server.rs:76 carries #[allow(deprecated)] with no adjacent reason; nomos-cap-requirement-trace/src/predicates.rs's Unresolved had arity 6 against a cap of 4; nomos-rules/src/checks/code_prefix.rs's own test fixtures spelled unsafe { ... } as literal string content to test string-preservation, and unsafe-justification's Has_Unsafe_Construct is a bare substring search over the same Code_Prefix output that preserves string bodies verbatim, so the fixture's own quoted text tripped it; nomos-rules/src/checks/rust_text.rs's Preceding_Doc_Comment_Block spells the known abbreviation doc. All four trace to work committed this session (nomos-lsp, nomos-cap-requirement-trace, code_prefix.rs, and rust_text.rs's OD-RULES-021 unsafe-justification work), discovered while investigating why P43-AGENT-CANONICAL-SEAM-2's own -p nomos-cli predicate leg was failing.",
+      "done_when": "None of the four findings above appears in a real nomos-cli self-check run, proven by re-running it after the fix; no test's own assertion is weakened, only its input text or the declaration it judges changes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-lsp/src/server.rs",
+          "crates/capabilities/nomos-cap-requirement-trace/src/predicates.rs",
+          "crates/rules/nomos-rules/src/checks/code_prefix.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-cap-requirement-trace",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-cap-requirement-trace",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "verse_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 619 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-lsp v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-lsp)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.63s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_requirement_trace-d6f8e646fe4f8a8f.exe)\n     Running tests\\contract.rs (target\\debug\\deps\\contract-6a5c510a9a62d137.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lsp-5141d6243f1e273a.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_lsp-4dd9a8f5f6daa650.exe)\n     Running tests\\fixture_tree.rs (target\\debug\\deps\\fixture_tree-219d26ec4f8507db.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-a8949ad1a524e01d.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-3d8711e32e769530.exe)\n   Doc-tests nomos_cap_requirement_trace\n   Doc-tests nomos_lsp\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788689171,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3eb32860fb15774e3fa1ec2a2099419a819dae47"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

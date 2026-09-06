@@ -23,16 +23,35 @@ use crate::payload::{Problem, ProblemKind};
 use nomos_platform::FileSystem;
 use std::path::Path;
 
+/// Where `Unresolved` reads from -- `root` and `filesystem` always travel together, since
+/// every call site resolves a path through the same pair.
+struct Workspace<'a, Fs: FileSystem>
+{
+    root: &'a Path,
+    filesystem: &'a Fs,
+}
+
+/// Which kind of problem `Unresolved` reports, and the word its own message uses for what
+/// it was checking -- always chosen together, since a caller naming one already knows the
+/// other.
+struct ProblemShape<'a>
+{
+    kind: ProblemKind,
+    label: &'a str,
+}
+
 /// Every site that is not where its entry says it is.
 pub fn Unresolved_Sites<Fs: FileSystem>(root: &Path, assessments: &[Assessment], filesystem: &Fs) -> Vec<Problem>
 {
     let mut missing = Vec::new();
+    let workspace = Workspace { root, filesystem };
 
     for assessment in assessments
     {
         for site in &assessment.sites
         {
-            let unresolved = Unresolved(root, &assessment.requirement, site, ProblemKind::UnresolvedSite, "site", filesystem);
+            let shape = ProblemShape { kind: ProblemKind::UnresolvedSite, label: "site" };
+            let unresolved = Unresolved(&workspace, &assessment.requirement, site, shape);
             missing.extend(unresolved);
         }
     }
@@ -48,12 +67,14 @@ pub fn Unresolved_Sites<Fs: FileSystem>(root: &Path, assessments: &[Assessment],
 pub fn Unresolved_Gaps<Fs: FileSystem>(root: &Path, assessments: &[Assessment], filesystem: &Fs) -> Vec<Problem>
 {
     let mut missing = Vec::new();
+    let workspace = Workspace { root, filesystem };
 
     for assessment in assessments
     {
         for gap in &assessment.gaps
         {
-            let unresolved = Unresolved(root, &assessment.requirement, gap, ProblemKind::UnresolvedGap, "gap", filesystem);
+            let shape = ProblemShape { kind: ProblemKind::UnresolvedGap, label: "gap" };
+            let unresolved = Unresolved(&workspace, &assessment.requirement, gap, shape);
             missing.extend(unresolved);
         }
     }
@@ -61,25 +82,18 @@ pub fn Unresolved_Gaps<Fs: FileSystem>(root: &Path, assessments: &[Assessment], 
     return missing;
 }
 
-/// Why one site (or gap) is not where its entry says it is, if it is not. `label` names
-/// which field `site` came from ("site" or "gap"), so the message stands on its own.
-fn Unresolved<Fs: FileSystem>(
-    root: &Path,
-    requirement: &str,
-    site: &Site,
-    kind: ProblemKind,
-    label: &str,
-    filesystem: &Fs,
-) -> Option<Problem>
+/// Why one site (or gap) is not where its entry says it is, if it is not. `shape.label`
+/// names which field `site` came from ("site" or "gap"), so the message stands on its own.
+fn Unresolved<Fs: FileSystem>(workspace: &Workspace<'_, Fs>, requirement: &str, site: &Site, shape: ProblemShape<'_>) -> Option<Problem>
 {
-    let path = root.join(&site.path);
-    let Ok(text) = filesystem.Read_To_String(&path)
+    let path = workspace.root.join(&site.path);
+    let Ok(text) = workspace.filesystem.Read_To_String(&path)
     else
     {
         return Some(Problem {
-            kind,
+            kind: shape.kind,
             requirement: requirement.to_owned(),
-            message: format!("{requirement}: {label} {} is not a file in this workspace", site.path),
+            message: format!("{requirement}: {} {} is not a file in this workspace", shape.label, site.path),
         });
     };
     if text.contains(&site.symbol)
@@ -88,9 +102,9 @@ fn Unresolved<Fs: FileSystem>(
     }
 
     return Some(Problem {
-        kind,
+        kind: shape.kind,
         requirement: requirement.to_owned(),
-        message: format!("{requirement}: {} no longer occurs in {label} {}", site.symbol, site.path),
+        message: format!("{requirement}: {} no longer occurs in {} {}", site.symbol, shape.label, site.path),
     });
 }
 

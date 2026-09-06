@@ -585,7 +585,7 @@ fn Is_Unsafe_Declaration(code: &str) -> bool
 fn Has_Rustdoc_Safety_Section(lines: &[&str], index: usize) -> bool
 {
     let mut seen_heading = false;
-    for doc_line in Preceding_Doc_Comment_Block(lines, index)
+    for doc_line in Preceding_Documentation_Comment_Block(lines, index)
     {
         if seen_heading
         {
@@ -607,7 +607,7 @@ fn Has_Rustdoc_Safety_Section(lines: &[&str], index: usize) -> bool
 /// order, `///` and surrounding whitespace stripped — tolerant of an intervening attribute
 /// line (`#[must_use]`, ...) between the doc block and the declaration it documents, the
 /// same way [`Is_Skippable_Block_Line`] already is for a `//` comment block.
-fn Preceding_Doc_Comment_Block<'a>(lines: &[&'a str], index: usize) -> Vec<&'a str>
+fn Preceding_Documentation_Comment_Block<'a>(lines: &[&'a str], index: usize) -> Vec<&'a str>
 {
     let mut doc_lines = Vec::new();
     let mut cursor = index;
