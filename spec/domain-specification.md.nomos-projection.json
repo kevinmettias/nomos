@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:73877ccb1753b991c40491f1cb6c562b9c4646d442b098811a576e10cb6ba896",
-  "inputs_digest": "sha256:e973e372a835a2ec29ea3856f9db2491bcddb2dcb4047afbe93b5f1e49588215",
+  "content_digest": "sha256:5dadb3e7de5ab1bcbf4f2ddc688b2ffff7ce2418ec4bb36e6aa8eec03832dddb",
+  "inputs_digest": "sha256:534ab882f5178ce6786698d8e003bdc8c96329825cb04c7e64136bf9be4688a0",
   "sections": [
     [
       "Documents",
-      209
+      210
     ],
     [
       "Sections",
-      1693
+      1699
     ],
     [
       "Source blocks",
-      5883
+      5899
     ]
   ],
   "inputs": [
@@ -929,6 +929,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md@authored",
       "hash": "sha256:90ba93672af6660a576f0c0499410b79dbd8c905508e823f5e9465e116366033"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md@authored",
+      "hash": "sha256:66d2427694c21ad26b870820393f14285fbb1678448d0a33f4490a61fd0f1118"
     },
     {
       "content": "documents",
@@ -8319,6 +8324,36 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#16",
       "hash": "sha256:1b5593d5ea0270bd2b08a35aed352326382a0d5238c7937e66812ed01f1371bd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#1",
+      "hash": "sha256:b641fcb07601c4349240e5d038cf08d55777e9d6ead39f85a3160ce36738f9ea"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#2",
+      "hash": "sha256:640749724964b0cc8952d41cf7ae4ab932106312771703c88af985d2ecbb5f8e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#4",
+      "hash": "sha256:4b1bde2206816182fac98746287b7c82c6b402da1d85bf19a0bbc3c1e27687e3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#10",
+      "hash": "sha256:952518156cfbb05b1109e1501ec02bb07a857ed8738530c9e85e4ce49706a315"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#12",
+      "hash": "sha256:197b0c2287bb4047c3124d95a096aa0f77fcc256693beb848e8a080e9cc2ff99"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#15",
+      "hash": "sha256:0a572a0bea627e7cf59cdd91b47f651fff081974091e095253bd3002b457862b"
     },
     {
       "content": "headings",
@@ -34979,6 +35014,86 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#17",
       "hash": "sha256:0dfeef9c85393fd73cb9738005b6d7d6df73daa5d30fd0c7a72bac035aa5b633"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#1",
+      "hash": "sha256:3310e391b8f54f95720260cfc1313aa65f40ef4fb3fd655420d051d6fcdcb6eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#3",
+      "hash": "sha256:02527124933c0b47e41524da01578c3cee1aaefc1b65e4f80ca53c4794d5e8cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#4",
+      "hash": "sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#5",
+      "hash": "sha256:66eb6ec095dd744c256cffb053b59511d64c1a53136963673912c40d022ee10f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#6",
+      "hash": "sha256:bbabbe6fe60ec01225cb62993c007e83e7103eff93fc22d320c05439e502632a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#7",
+      "hash": "sha256:af574aaa59cebc2e389917869ab4426201faf74689dd0e143553bd13377af1c9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#8",
+      "hash": "sha256:609921792c8c3cdb1360bb624fd0e2b0f5ce4d37473c2739829b0691b8431e40"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#9",
+      "hash": "sha256:811ac3f0a3f6188eda6c0655f736ea27fa11dcb480e6abb35789d3146bee0d84"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#10",
+      "hash": "sha256:7aa2f73247e8e841994b4336774dac9fac57a059848a83f6efeddd2da79f37be"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#11",
+      "hash": "sha256:55472b15bc40fbf3bd122d6d9c67f738f92c7e9e3cfde571c2e859cb75d739dc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#12",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#13",
+      "hash": "sha256:f6569da94d5303e10f386ec1bc8faeb3df25d37620a7abc606cffe57454065b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#14",
+      "hash": "sha256:0e32c850e91ead13672584980a728c190ee7d6b12245d0474f6cec3a991edefd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#15",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#16",
+      "hash": "sha256:c0d2e9482b993beebbee813f801d24e18320e86a63d7a258d43c0c0ca445e14b"
     },
     {
       "content": "blocks",

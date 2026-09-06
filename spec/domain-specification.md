@@ -192,6 +192,7 @@ profile: domain-specification
 | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md@authored | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md | authored | 16 | 6 | sha256:ce866cdba1b609d99736475258c51c1342b6274867a9c2e8f8703946cec253c3 |
 | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md@authored | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md | authored | 17 | 6 | sha256:06d7276cc87daf98d5315060d60a9a8b745eb6a1e1af5b124691dc7e3ea0f097 |
 | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md@authored | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md | authored | 17 | 6 | sha256:90ba93672af6660a576f0c0499410b79dbd8c905508e823f5e9465e116366033 |
+| docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md@authored | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md | authored | 16 | 6 | sha256:66d2427694c21ad26b870820393f14285fbb1678448d0a33f4490a61fd0f1118 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1675,6 +1676,12 @@ profile: domain-specification
 | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#9 | authored | 2 | The Decision |
 | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#12 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#16 | authored | 2 | Status |
+| docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#1 | authored | 1 | Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check |
+| docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#4 | authored | 2 | What was measured |
+| docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#10 | authored | 2 | The verdict |
+| docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#12 | authored | 2 | What this record does not do |
+| docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#15 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -49527,6 +49534,188 @@ Accepted. Duplicate authority needs a value-comparison fact, a list-length fact,
 undesigned canonical/projection convention before any rule can judge it; a real, live
 three-way rule-count disagreement in this crate's own prose is recorded as the instance a
 future rule should resolve.
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#1
+
+*revision: authored · kind: heading · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check · hash: sha256:3310e391b8f54f95720260cfc1313aa65f40ef4fb3fd655420d051d6fcdcb6eb*
+
+# Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#2
+
+*revision: authored · kind: heading · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#3
+
+*revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / Question · hash: sha256:02527124933c0b47e41524da01578c3cee1aaefc1b65e4f80ca53c4794d5e8cd*
+
+`P42-RUNTIME-AND-HISTORY-RULES` claimed every rule in this workspace judges the tree as it
+is now, and named three worked examples of what would be different: a declared
+zero-allocation path judged against runtime allocation evidence, a performance requirement
+judged against benchmark history, and a previously removed dependency reappearing as an
+architectural regression. Its own `why` stated the fact substrate's generations are "most
+of what a historical claim needs." Its territory was one file,
+`crates/rules/nomos-rules/src/checks/runtime_history.rs`. Whether any of the three is a
+real, narrow, reproducible increment — rather than a request to invent a category of
+infrastructure this workspace has no instance of — is the question this record answers.
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#4
+
+*revision: authored · kind: heading · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / What was measured · hash: sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491*
+
+## What was measured
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#5
+
+*revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / What was measured · hash: sha256:66eb6ec095dd744c256cffb053b59511d64c1a53136963673912c40d022ee10f*
+
+**The item's own premise about generations is substantially overstated.**
+`nomos_contracts::GenerationId` (`crates/contracts/nomos-contracts/src/digest128/generation_id.rs`)
+is a bare `u64` with no serialization anywhere in its file. `MemoryFactStore`
+(`crates/substrate/nomos-analysis/src/fact/memory_fact_store.rs`) holds every entry in
+in-process `BTreeMap`s with no disk I/O anywhere in the type. Generations exist to let one
+run's own invalidation walk know which of its own already-computed facts are stale after a
+mid-run edit; nothing survives past the process that built it. `docs/records/OD-STORE-002`
+already states this independently and predates this item: `MemoryFactStore` "is in-process
+and generation-scoped" and nothing in it "survives past the process that built it or
+reaches back across a git revision boundary." The fact substrate supplies none of what a
+historical claim needs; it supplies the opposite guarantee.
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#6
+
+*revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / What was measured · hash: sha256:bbabbe6fe60ec01225cb62993c007e83e7103eff93fc22d320c05439e502632a*
+
+**Runtime allocation evidence has no observation mechanism to build on, and collides with
+an already-drawn boundary.** `nomos_platform::ProcessLauncher::Run`
+(`crates/platform/nomos-platform/src/process_launcher.rs`) runs a command to completion and
+captures its output — one-shot, no attach, no stream, no instrumentation hook. Every
+provider crate under `crates/languages/` (`nomos-lang-rust`, `-scan`, `-cargo`, `-clippy`,
+`-deny`, `-compiler`, `-go`, `-go-modules`) either parses source, reads a manifest,
+consults the compiler for resolved semantics, or relays another static tool's report —
+none executes the judged repository's own binary or tests and observes it running. No
+allocator counter, profiler, or `valgrind`/`heaptrack` integration exists anywhere in this
+tree. Beyond the absence of any starting point, `docs/records/ARC-ROADMAP-001` already
+places "runtime/debug intelligence" and "DBG (debugger integration)" under "Deferred
+consuming systems," not Nomos Core's near-term boundary — this example asks for work this
+workspace has already decided comes later.
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#7
+
+*revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / What was measured · hash: sha256:af574aaa59cebc2e389917869ab4426201faf74689dd0e143553bd13377af1c9*
+
+**Benchmark history has no first-class concept to build on.** `Cargo.lock` carries no
+`criterion` dependency, and nothing in the workspace references a `target/criterion/`
+convention or any benchmark-results format. There is no persisted-history mechanism to
+read from and none to extend; building one means inventing both a benchmarking convention
+and a results store with nothing here to build on.
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#8
+
+*revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / What was measured · hash: sha256:609921792c8c3cdb1360bb624fd0e2b0f5ce4d37473c2739829b0691b8431e40*
+
+**A previously-removed dependency reappearing is not a gap. It is already a live,
+gate-composed check, discovered under a different name.** `BaselineDebt`/`BaselinePolicy`
+(`crates/orchestration/nomos-gate-orchestration/src/policy/baseline_debt*.rs`) was the
+expected template — a committed baseline compared against current state — but
+`docs/records/OD-GATE-015` states directly that "No CLI flag or configuration file
+constructs a `BaselineDebt` yet"; it is an in-memory tolerate-list with no persistence, not
+the pattern this example needs. What already exists instead: `deny.toml`'s `[bans]` section
+carries a committed, rationale-documented `deny = [...]` list (`wgpu`, `egui`, `winit`,
+`ash`, `naga`) — a deliberate "this must never come back" declaration. `nomos-lang-rust-deny`
+runs `cargo deny check bans` (network-free, deterministic: reads only `Cargo.lock` and
+`deny.toml`) and materializes its violations as `nomos.cap.dependency.policy` facts.
+`crates/rules/nomos-rules/src/checks/policy.rs`'s `Check_Dependency_Policy` already relays
+every violation as a `Finding`, and it is already composed into a real run —
+`crates/orchestration/nomos-check-orchestration/src/run_context.rs`'s `ComposedRule { id:
+DEPENDENCY_POLICY, ... }`. If any banned crate reappeared in the resolved graph today, an
+ordinary `nomos check` run would already report it, reproducibly, with no network call and
+no git query.
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#9
+
+*revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / What was measured · hash: sha256:811ac3f0a3f6188eda6c0655f736ea27fa11dcb480e6abb35789d3146bee0d84*
+
+**What this exposes is that the third example, examined honestly, was never actually about
+history.** The mechanism above never asks "did this reappear" — it asks "is a banned name
+present now," a static comparison between the current resolved graph and a currently
+committed declared list. That is the identical declared-constraint-vs-observed-fact shape
+`dependency-direction` and `write-authority` already prove, not evidence "from a run or
+from the past" as the item's own `why` distinguishes it. The only way to make this example
+genuinely about history — an automatic diff against git's own record of what was removed
+and when — is exactly the live `git log`/`git diff` query `OD-STORE-002` and
+`crates/host/nomos-surface-provenance` already decline to wire as a gate input, for the
+reproducibility reason both give: `.github/workflows/gate.yml`'s `actions/checkout` sets no
+`fetch-depth`, so CI runs the default shallow checkout, and a live history query inside a
+gate rule would be exactly as non-reproducible as those records already warn.
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#10
+
+*revision: authored · kind: heading · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / The verdict · hash: sha256:7aa2f73247e8e841994b4336774dac9fac57a059848a83f6efeddd2da79f37be*
+
+## The verdict
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#11
+
+*revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / The verdict · hash: sha256:55472b15bc40fbf3bd122d6d9c67f738f92c7e9e3cfde571c2e859cb75d739dc*
+
+None of the three worked examples is a real, narrow, reproducible increment buildable
+today. Two (runtime allocation evidence, benchmark history) require inventing an entire
+evidence-capture category this workspace has no instance of, and the first of those two
+additionally reaches into territory `ARC-ROADMAP-001` already deferred on purpose. The
+third (a reappearing dependency) is not a gap at all — it is already shipped as
+`dependency-policy`, composed and gate-reachable, and on inspection its evidence was never
+actually historical; forcing a second, weaker, hand-rolled version of it under this item
+would manufacture the appearance of new work without delivering what the item's own `why`
+asked for: evidence from a run or from the past, rather than from current source.
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#12
+
+*revision: authored · kind: heading · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / What this record does not do · hash: sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4*
+
+## What this record does not do
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#13
+
+*revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / What this record does not do · hash: sha256:f6569da94d5303e10f386ec1bc8faeb3df25d37620a7abc606cffe57454065b7*
+
+It does not close the door on runtime or historical evidence permanently.
+`ARC-ROADMAP-001` already names a path for runtime/debug intelligence, on its own
+schedule, once Nomos Core's near-term tier is further along. A benchmark-history
+capability becomes reachable the moment this workspace adopts a benchmarking convention
+for its own purposes, at which point a comparable `WholeWorkspace` fact and rule, shaped
+like `dependency-policy`, is a real next step. Nothing here forecloses a future, explicit
+decision to accept `git log` as a CI-time input once a non-shallow checkout or an
+equivalent reproducibility fix exists; `OD-STORE-002`'s own rule already gives the shape
+such a decision would need to satisfy.
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#14
+
+*revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / What this record does not do · hash: sha256:0e32c850e91ead13672584980a728c190ee7d6b12245d0474f6cec3a991edefd*
+
+It does not touch `crates/rules/nomos-rules/src/checks/policy.rs`, `deny.toml`, or any
+composed rule. Nothing described as already built here needed a change to be found; this
+record only names what already exists and traces the item's own examples against it.
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#15
+
+*revision: authored · kind: heading · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#16
+
+*revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / Status · hash: sha256:c0d2e9482b993beebbee813f801d24e18320e86a63d7a258d43c0c0ca445e14b*
+
+Accepted. `P42-RUNTIME-AND-HISTORY-RULES`'s single-file territory
+(`crates/rules/nomos-rules/src/checks/runtime_history.rs`) is not built. Its own premise
+about the fact substrate's generations is corrected against the real code and against
+`OD-STORE-002`, which already settled the question before this item was written. Two of
+its three worked examples need infrastructure categories with no instance in this
+workspace; the third is already a live, composed, reproducible check
+(`dependency-policy`/`cargo deny check bans`), whose evidence, read honestly, was never
+historical in the first place.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
