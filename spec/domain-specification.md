@@ -181,6 +181,7 @@ profile: domain-specification
 | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md@authored | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md | authored | 18 | 6 | sha256:7c00cbb230b504b22e7922e6d767d0c0a9bd413158db489b9c851c70d34f83fe |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md@authored | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md | authored | 30 | 6 | sha256:ee25e5bafb0ab46ae96890e572a96aa4a970f0f854957c7e2474998c6a5949ad |
 | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md@authored | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md | authored | 16 | 6 | sha256:ce866cdba1b609d99736475258c51c1342b6274867a9c2e8f8703946cec253c3 |
+| docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md@authored | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md | authored | 17 | 6 | sha256:06d7276cc87daf98d5315060d60a9a8b745eb6a1e1af5b124691dc7e3ea0f097 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1594,6 +1595,12 @@ profile: domain-specification
 | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#8 | authored | 2 | The Decision |
 | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#11 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md#15 | authored | 2 | Status |
+| docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#1 | authored | 1 | Architecture drift and representation leakage both need a fact this workspace does not yet produce |
+| docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#9 | authored | 2 | The Decision |
+| docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#12 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#16 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -47101,6 +47108,179 @@ record is declining.
 Accepted. Write authority: a declared allow-list over the existing dependency-edges fact,
 ready for a follow-up item to build. Ownership: the one mechanical reading available today
 is measured and found wrong; a real definition is undecided and left open.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#1
+
+*revision: authored · kind: heading · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce · hash: sha256:7912125f653418b7c75e2dee656ed33d18365bdc0093d51bb39fa2d049e36972*
+
+# Architecture drift and representation leakage both need a fact this workspace does not yet produce
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#2
+
+*revision: authored · kind: heading · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#3
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / Question · hash: sha256:18d2e086baa1c1a1e62f567ff7ae52565323c485159f620b34db8dda3b598aa7*
+
+A person required a second pair of declared-architecture rules beside write authority and
+ownership: architecture drift — declared topology against the observed call, data and
+dependency graph, judged for *shape* rather than the *direction* `OD-RULES-020`'s zones
+already judge — and representation leakage — a provider-specific type reaching a consumer
+promised only the capability contract. The item's own territory named one new file,
+`crates/rules/nomos-rules/src/checks/architecture_drift.rs`, for both. Whether that is
+buildable needed checking the same way `OD-RULES-023` checked write authority and ownership,
+rather than assumed from the first rule's shape.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#4
+
+*revision: authored · kind: heading · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#5
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / What Was Measured · hash: sha256:4c53540071f3cbcbea5e124cf9d944939cf22de0429a3e96f6dd675984ec5799*
+
+**Every capability this workspace has today was read, not assumed.** Ten capability
+contracts exist under `crates/capabilities/`: dependency edges, controlflow reachability,
+lint diagnostics, four policy families (dependency, naming, limits, scripting, goals,
+words), and syntax items. `nomos.cap.dependency.edges` — the fact `Zone_Of`/`Permits`/
+`SAME_ZONE_EDGES` and now `WRITE_DOORS` all read — is package-level: `DependencyPayload {
+package, edges: Vec<DependencyEdge> }`, a Cargo dependency, nothing finer. `nomos.cap.
+controlflow`'s own contract is narrower still: whether a control-flow path from a
+fact-read `Err` reaches a `Finding` construction inside one function, not a cross-module or
+cross-crate call graph. No capability here answers a call graph, a data-flow graph, or any
+topology finer than the eleven zones `ZONES` already declares. `SAME_ZONE_EDGES` is the
+finest declared adjacency this workspace has.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#6
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / What Was Measured · hash: sha256:60d6d091a680c702bd3cad64c77d3b9771757278644b41d6e0ed153d4e73c53c*
+
+**Architecture drift has nothing to be judged against.** "Shape not direction" presupposes
+an observed graph finer than package-level dependency edges — module reaches module, type
+flows into type, function calls function — and this workspace materializes none of them.
+The gap is the identical shape `OD-RULES-023` found for ownership: a real reading is asked
+for, and the one fact this crate can reach today (`nomos.cap.dependency.edges`) cannot carry
+it. Building a rule against it now would mean silently narrowing "call, data and dependency
+graph" down to whatever the existing package-level fact happens to expose, which is not the
+property that was asked for — the same false-coverage failure `OD-COMPLETENESS-001` and
+`OD-RULES-023` both already declined to ship.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#7
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / What Was Measured · hash: sha256:4c0ee63f2a9351e7ea7e48e731e82e6cef97d12d158a724d8178c7352200346f*
+
+**Representation leakage is a real, checkable property — and this workspace is clean against
+it today, which is not the same as ready to check it mechanically.** Every public signature
+in `nomos-rules` and `nomos-check-orchestration`'s own surface snapshots was checked for a
+provider-specific type — `DiscoveredPackage`, `MetadataError`, `FactContext`, or any
+`nomos_lang_*` path — reaching a consumer promised only a capability contract. None does:
+`RunContext`'s own public fields name only `nomos_workspace::Workspace`, `nomos_platform::
+{FileSystem, ProcessLauncher}` and `nomos_analysis::MemoryFactStore`, all Substrate, never
+Provider. The real case is clean the same way `nomos-store`'s write-authority case was true
+before anything checked it.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#8
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / What Was Measured · hash: sha256:9eedb42f33fd13d6962c3bd8bd2d05cf7bdb93128162689a009aa49bb6b45205*
+
+But the mechanism to catch a future leak mechanically is not ready the way write authority's
+was. `tests/contract/src/surface.rs` deliberately does not resolve where a bare type name in
+a signature is defined — `OD-GATE-002` decided that on purpose, no rustdoc resolution — and
+`nomos.cap.syntax.items`'s own `PayloadItem` carries `kind`, `visibility`, `qualified_name`
+and a coarse shape (arity, field count), never a signature's own referenced type identifiers.
+The capability-to-provider pairing this rule would need to judge against exists only as
+literal `registry.Declare`/`registry.Offer` calls in `nomos-check-orchestration`'s own
+`composition.rs` — not a fact `nomos-rules` (Rules zone, forbidden by `Permits` from naming
+Provider at all) can read. A rule reading provider identity from inside the Rules zone would
+also be the exact boundary crossing `Permits` exists to forbid, which this record's own
+measurement surfaces as a design question nobody has answered yet: what fact carries
+"provider-specific type" without the checking rule itself having to see the Provider zone.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#9
+
+*revision: authored · kind: heading · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#10
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / The Decision · hash: sha256:1681c17f1ab42aa01f3204e8198677d10426542d7a050b0c4d98152aae826317*
+
+**Neither rule is built here.** Both need a real fact this workspace does not yet produce,
+not a design choice a rule's own implementation could make on the way past. Architecture
+drift needs a call-graph or data-flow capability decided and provided before any rule can
+read it — a materialization question of the same weight `OD-RULES-010`'s `ToolProvider`
+instances answered for lint and dependency-policy facts, not a detail to invent inside
+`architecture_drift.rs`. Representation leakage needs either `nomos.cap.syntax.items`'s own
+payload schema widened to carry a signature's referenced types, or a new fact naming which
+crate is the provider of which capability in a form `nomos-rules` may read without crossing
+into the Provider zone itself — `OD-GATE-002`'s own no-resolution stance is not reversed by
+this record, only named as the reason the mechanism is not ready.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#11
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / The Decision · hash: sha256:1c82ebfa3607cb21d4e6921e049d30f6f970836828c01de405e40f4a85579d23*
+
+**The clean baseline for representation leakage is worth recording now, so a future rule is
+measured against a known starting point rather than an assumed one.** Zero provider-specific
+types were found reaching a consumer's public surface as of this record. A rule built once
+the fact exists should expect to compose against that baseline, the same way `OD-RULES-023`
+recorded `nomos-store`'s single real write door before anything checked it.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#12
+
+*revision: authored · kind: heading · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#13
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / What This Record Does Not Do · hash: sha256:3310b40816bcf2f16ae708f7c4dbe51f0764305c2df8794284cf3e5f11998bfc*
+
+**No code changes here**, the same way `OD-RULES-023` made none. It does not design the
+call-graph or data-flow capability architecture drift would need, nor the widened syntax
+payload or provider-identity fact representation leakage would need — both are real
+capability-design questions, each the size `OD-RULES-010` and `OD-CAPABILITY-010` were, not
+answered by naming that they exist.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#14
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / What This Record Does Not Do · hash: sha256:0ced6f5d056bbb32076acb672562b386abe47185663215d46c7fc84a5774f977*
+
+It does not withdraw the property either rule is for. Both remain real: architecture drift
+is a gap `OD-RULES-020`'s zones do not close, and representation leakage is the mechanism
+that keeps a capability contract from being a boundary "only by intention," in the original
+item's own words. Neither is declined as unwanted; both are undecided as unready.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#15
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / What This Record Does Not Do · hash: sha256:7e0399122f85459f3c29a04c9c48e354caa55dfb441697d17e094c9cd0161e0b*
+
+It does not reduce the original item's two-rule scope to one. Unlike `OD-RULES-023`, where
+write authority was ready and only ownership was not, this record found neither half
+buildable against an existing fact — the split there does not repeat here because there is
+nothing on this record's own side of it to build yet.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#16
+
+*revision: authored · kind: heading · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#17
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / Status · hash: sha256:c6bbc0b4cbd32c1534c03bda7491c1fb484811f609f491c00725e4d099203d57*
+
+Accepted. Architecture drift and representation leakage are both real properties this
+workspace does not yet have a fact to check them against. A capability or fact decision is
+the next step for each, named here rather than improvised inside a rule's own
+implementation; representation leakage's clean baseline is recorded for whenever that
+decision lands.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

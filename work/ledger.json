@@ -52812,7 +52812,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "neither rule is buildable against an existing fact: architecture drift needs a call-graph/data-flow capability that does not exist, and representation leakage needs a widened syntax payload or a provider-identity fact nomos-rules cannot read without crossing into the Provider zone. Reauthored as a Decision item citing OD-RULES-024, which measures both gaps directly against the real capability set and surface snapshots."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -52834,7 +52838,10 @@
         }
       ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788671553
+      }
     },
     {
       "id": "P42-DUPLICATE-AUTHORITY-RULE",
@@ -56684,6 +56691,97 @@
           "exit_code": 0
         },
         "revision": "2f441e3d4230220d53cd6050d9212ee01de57a15"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-024-PROBE",
+      "title": "probe",
+      "why": "probe",
+      "done_when": "probe",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-024-probe.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "probe item to check identifier availability before writing the record file; real item follows"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788671483
+      }
+    },
+    {
+      "id": "P57-ARCH-DRIFT-LEAKAGE-MECHANISM",
+      "title": "Architecture drift and representation leakage each need a fact that does not exist yet",
+      "why": "Check_Dependency_Direction and now Check_Write_Authority prove the shape this system is for: a declared architecture beside an observed fact, judged into a finding. A person required two more rules built on it: architecture drift (declared topology against the observed call, data and dependency graph, for shape rather than direction) and representation leakage (a provider-specific type reaching a consumer promised only the capability contract). Every capability this workspace has was read directly: none carries a call graph, a data-flow graph, or a topology finer than the eleven zones OD-RULES-020 already declares, and nomos-rules cannot read provider identity without crossing the Provider zone Permits forbids it from naming. Both need a real fact decided before either rule is buildable.",
+      "done_when": "A record measures both gaps directly against the real capability set (crates/capabilities/) and the real surface snapshots, states plainly that neither rule is buildable without a new or widened fact, names exactly what each would need (a call-graph or data-flow capability for drift; a widened syntax payload or a provider-identity fact readable from the Rules zone for leakage), and records representation leakage's own clean baseline (zero provider-specific types found in nomos-rules or nomos-check-orchestration's public surface today) so a future rule is measured against a known starting point. No code changes under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s\n\n\nrunning 15 tests\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.22s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788671656,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e81994b65025c9f2ca736efb7c5513ec043dca1b"
       },
       "abandoned": [],
       "displaced": [],
