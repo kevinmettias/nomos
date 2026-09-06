@@ -71,14 +71,11 @@ nomos-gate-orchestration = { workspace = true }
 nomos-spec-model = { workspace = true }
 nomos-spec-project = { workspace = true }
 nomos-spec-store = { workspace = true }
-# The typed input/output shape and first real dispatcher for an agent-assisted operation --
-# `agent.rs` supplies StdProcessLauncher, the same choice `check.rs` and `work.rs` already
-# make for their own subprocesses.
+# TaskEnvelope, still named directly here for workflow.rs's own Body::ClaudeCode/Body::
+# Ollama construction -- P43-AGENT-CANONICAL-SEAM-2 moved agent.rs's own former direct use
+# of this crate (building a bare TaskEnvelope) into nomos-agent-orchestration, but this
+# dependency survives that move because workflow.rs's own need for it is unrelated.
 nomos-agent-contracts = { workspace = true }
-nomos-agent-executor-claude-code = { workspace = true }
-# The first real ModelBackend adapter, not a second AgentExecutor (OD-PACKAGE-013) --
-# `agent.rs`'s --model-backend flag is the real caller reaching it, per OD-EXECUTOR-004.
-nomos-model-backend-ollama = { workspace = true }
 # TaskEnvelope.effort's type, since OD-CONTRACTS-004 -- `agent.rs` names a value of it
 # directly rather than depending on nomos-agent-contracts alone to re-export one.
 nomos-model-package = { workspace = true }
@@ -90,6 +87,12 @@ nomos-correction-orchestration = { workspace = true }
 # dispatch target -- `workflow.rs` walks a check step's own tree and renders; this crate
 # composes and dispatches. `P40-WORKFLOW-CLI-VERB`.
 nomos-workflow-orchestration = { workspace = true }
+# The seam for dispatching one TaskEnvelope to a chosen backend both hosts call --
+# `agent.rs` supplies StdProcessLauncher, the same choice `check.rs` and `work.rs` already
+# make for their own subprocesses; this crate composes the dispatch itself and no longer
+# depends on nomos-agent-executor-claude-code or nomos-model-backend-ollama directly.
+# `P43-AGENT-CANONICAL-SEAM-2`.
+nomos-agent-orchestration = { workspace = true }
 
 [dev-dependencies]
 # `check::sources::Read_Entry` and `gate::sources::Read_Entry` hardcode the `"go"`
@@ -99,6 +102,15 @@ nomos-workflow-orchestration = { workspace = true }
 # dependency is what lets `tests/lang_go_seam.rs` prove the two have not drifted apart
 # without giving the shipped binary a dependency the walk does not need.
 nomos-lang-go = { workspace = true }
+# `P43-AGENT-CANONICAL-SEAM-2` moved this crate's own former production dependency on
+# these two backend crates into `nomos-agent-orchestration` -- the shipped binary no
+# longer names either directly. `tests/agent_executor_claude_code_seam.rs` and
+# `tests/model_backend_ollama_seam.rs` still drive each backend's own public
+# `Execute_Task` with a scripted launcher directly, the identical assertion
+# `nomos-agent-orchestration`'s own tests now also make over the shared seam; kept here as
+# a test-only dependency rather than deleted, so no existing coverage is lost.
+nomos-agent-executor-claude-code = { workspace = true }
+nomos-model-backend-ollama = { workspace = true }
 
 [lints]
 workspace = true

@@ -18,10 +18,12 @@
 # `available_tools` and `expected_output_schema`, reusing `Territory` at two different
 # membership senses for the two scope-shaped fields and a real `SchemaId` rather than prose
 # for the output schema. This is not merely declared and unused: `nomos-cli`'s `agent
-# execute` and `agent judge-role` verbs each construct a real `TaskEnvelope` --
-# `dispatch.rs::Execute_Task` and `judge_role.rs::Judgment_Task` -- and hand it to a real
-# `AgentExecutor` (`nomos_agent_executor_claude_code::Execute_Task`) before that agent work
-# runs, which is this requirement's own "before agent work" clause.
+# execute` and `agent judge-role` verbs each dispatch through a real `TaskEnvelope`
+# construction -- `Bare_Task` and `Judgment_Task`, both in `nomos-agent-orchestration`
+# since `P43-AGENT-CANONICAL-SEAM-2` moved them out of `nomos-cli`'s own former
+# `dispatch.rs`/`judge_role.rs` so `nomos-api` could reach the identical construction --
+# and hand it to a real `AgentExecutor` (`nomos_agent_executor_claude_code::Execute_Task`)
+# before that agent work runs, which is this requirement's own "before agent work" clause.
 #
 # What is not yet true is a separate, stronger property this requirement does not itself
 # ask for: today's real construction sites populate `scope`/`prohibited_changes`/
@@ -32,6 +34,6 @@
 # run, so that gap does not weaken this verdict.
 verdict: Met
 site: crates/agent/nomos-agent-contracts/src/task_envelope.rs#TaskEnvelope
-site: crates/host/nomos-cli/src/agent/dispatch.rs#Execute_Task
-site: crates/host/nomos-cli/src/agent/judge_role.rs#Judgment_Task
+site: crates/orchestration/nomos-agent-orchestration/src/run.rs#Bare_Task
+site: crates/orchestration/nomos-agent-orchestration/src/run.rs#Judgment_Task
 site: crates/agent/nomos-agent-executor-claude-code/src/lib.rs#Execute_Task

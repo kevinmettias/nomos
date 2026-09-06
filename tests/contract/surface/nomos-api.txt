@@ -1,6 +1,8 @@
 pub enum nomos_api::AbandonResponse
 pub enum nomos_api::AddResponse
+pub enum nomos_api::AgentDispatchResponse
 pub enum nomos_api::AgentExecutionErrorResponse
+pub enum nomos_api::AgentJudgeRoleResponse
 pub enum nomos_api::AuditResponse
 pub enum nomos_api::BlockChangeResponse
 pub enum nomos_api::CheckResponse
@@ -43,8 +45,14 @@ pub enum variant nomos_api::AbandonResponse::Abandoned
 pub enum variant nomos_api::AbandonResponse::Refused { cause: String, retryable: bool, }
 pub enum variant nomos_api::AddResponse::Added
 pub enum variant nomos_api::AddResponse::Refused { cause: String, }
+pub enum variant nomos_api::AgentDispatchResponse::ClaudeCode { response: String, denied_tool_uses: Vec<String>, is_error: bool, cost_usd: f64, duration_ms: u64 }
+pub enum variant nomos_api::AgentDispatchResponse::Ollama { response: String }
+pub enum variant nomos_api::AgentDispatchResponse::Unavailable { reason: String }
 pub enum variant nomos_api::AgentExecutionErrorResponse::Unavailable { reason: String, }
 pub enum variant nomos_api::AgentExecutionErrorResponse::Unparseable { reason: String, }
+pub enum variant nomos_api::AgentJudgeRoleResponse::Dispatched { dispatch: AgentDispatchResponse }
+pub enum variant nomos_api::AgentJudgeRoleResponse::NoDeclaredRoleOrSurface
+pub enum variant nomos_api::AgentJudgeRoleResponse::NoFinding
 pub enum variant nomos_api::AuditResponse::Audited { blocked: Vec<BlockedItem>, now: Timestamp, }
 pub enum variant nomos_api::AuditResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::BlockChangeResponse::Added { ordinal: u32, kind: String }
@@ -171,6 +179,8 @@ pub enum variant nomos_api::WorkflowRunResponse::Completed { completed: Vec<Step
 pub enum variant nomos_api::WorkflowRunResponse::Failed { completed: Vec<StepOutcomeResponse>, index: usize, error: DispatchErrorResponse, }
 pub enum variant nomos_api::WorkflowRunResponse::Refused { completed: Vec<StepOutcomeResponse>, index: usize, }
 pub enum variant nomos_api::WorkflowRunResponse::UnreadableRoot { reason: String, }
+pub fn nomos_api::Handle_Agent_Execute(goal: &str, config: DispatchConfig) -> AgentDispatchResponse
+pub fn nomos_api::Handle_Agent_Judge_Role(root: &Path, crate_name: &str, config: DispatchConfig) -> AgentJudgeRoleResponse
 pub fn nomos_api::Handle_Check_Run(command: &CheckCommand) -> CheckResponse
 pub fn nomos_api::Handle_Correction_Run(command: &CorrectionCommand) -> CorrectionResponse
 pub fn nomos_api::Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse

@@ -276,6 +276,13 @@ members = [
     # `P40-WORKFLOW-CHECK-BODY`, `P40-WORKFLOW-CORRECTION-BODY`.
     "crates/orchestration/nomos-workflow-orchestration",
 
+    # Application Service — the seam for dispatching one TaskEnvelope to a chosen
+    # backend both hosts call: Run_Agent_Execute and Run_Agent_Judgment compose
+    # nomos-agent-executor-claude-code and nomos-model-backend-ollama into a real
+    # AgentDispatchOutcome, apart from choosing a platform or rendering the answer.
+    # `P43-AGENT-CANONICAL-SEAM-2`.
+    "crates/orchestration/nomos-agent-orchestration",
+
     # Band 1 — the specification system. Reaches the product only through a
     # KnowledgeCapability, never directly.
     "crates/spec/nomos-spec-model",
@@ -393,6 +400,7 @@ nomos-spec-orchestration = { path = "crates/orchestration/nomos-spec-orchestrati
 nomos-workflow-orchestration = { path = "crates/orchestration/nomos-workflow-orchestration" }
 nomos-gate-orchestration = { path = "crates/orchestration/nomos-gate-orchestration" }
 nomos-correction-orchestration = { path = "crates/orchestration/nomos-correction-orchestration" }
+nomos-agent-orchestration = { path = "crates/orchestration/nomos-agent-orchestration" }
 nomos-api = { path = "crates/host/nomos-api" }
 nomos-api-transport = { path = "crates/host/nomos-api-transport" }
 nomos-lsp = { path = "crates/host/nomos-lsp" }

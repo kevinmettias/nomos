@@ -9,6 +9,7 @@ publish.workspace = true
 
 [dependencies]
 nomos-agent-executor-claude-code = { workspace = true }
+nomos-agent-orchestration = { workspace = true }
 nomos-analysis = { workspace = true }
 nomos-check-orchestration = { workspace = true }
 nomos-contracts = { workspace = true }
@@ -17,6 +18,7 @@ nomos-gate-orchestration = { workspace = true }
 nomos-ledger = { workspace = true }
 nomos-model = { workspace = true }
 nomos-model-backend-ollama = { workspace = true }
+nomos-model-package = { workspace = true }
 nomos-platform = { workspace = true }
 nomos-platform-std = { workspace = true }
 nomos-rules = { workspace = true }

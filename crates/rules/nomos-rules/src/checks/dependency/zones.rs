@@ -175,6 +175,7 @@ pub const ZONES: &[(&str, Zone)] = &[
     ("nomos-gate-orchestration", Zone::ApplicationService),
     ("nomos-correction-orchestration", Zone::ApplicationService),
     ("nomos-workflow-orchestration", Zone::ApplicationService),
+    ("nomos-agent-orchestration", Zone::ApplicationService),
     ("nomos-ledger", Zone::RepoTooling),
     ("nomos-work-orchestration", Zone::RepoTooling),
     ("nomos-surface-provenance", Zone::RepoTooling),

@@ -107,7 +107,16 @@
 //! invocation -- this dispatches the identical single-step shape, reusing
 //! [`check::CheckResponse`], [`correction::CorrectionResponse`] and
 //! [`response::GateRunResponse`] for the three step kinds this crate already twins, rather
-//! than a fourth, divergent projection of the same outcomes.
+//! than a fourth, divergent projection of the same outcomes. Its twenty-fifth,
+//! [`agent::Handle_Agent_Execute`] (with [`agent::Handle_Agent_Judge_Role`] alongside it),
+//! gives this crate its first Agent verbs: `P43-AGENT-CANONICAL-SEAM-2` moved `nomos agent`
+//! `execute`/`judge-role`'s own dispatch out of `nomos-cli`'s own `agent.rs` and its
+//! `agent/` directory into `nomos_agent_orchestration::Run_Agent_Execute`/
+//! `Run_Agent_Judgment`, the only major verb family in this workspace that had reached this
+//! point with no orchestration crate of its own -- this crate's own first real caller of
+//! that seam outside its own unit tests and `nomos-cli`. [`agent::AgentDispatchResponse`]
+//! is its own response type, not a reuse of [`workflow::AgentExecutionOutcomeResponse`]/
+//! [`workflow::OllamaExecutionOutcomeResponse`]: see `agent.rs`'s own module doc for why.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `Invocation::Run` arm: it walks `command.root` for `.rs` sources
@@ -132,6 +141,7 @@
 //! design it against; this increment's job is only to prove the seam is reachable and
 //! projectable from a second composition root at all.
 
+mod agent;
 mod check;
 mod composition;
 mod correction;
@@ -143,6 +153,7 @@ mod test_support;
 mod work;
 mod workflow;
 
+pub use agent::{AgentDispatchResponse, AgentJudgeRoleResponse, Handle_Agent_Execute, Handle_Agent_Judge_Role};
 pub use check::{CheckResponse, ClaimResponse, ExaminedResponse, Handle_Check_Run};
 pub use correction::{CorrectionResponse, Handle_Correction_Run};
 pub use response::{

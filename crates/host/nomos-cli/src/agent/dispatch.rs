@@ -1,106 +1,72 @@
-//! Assembling a bare `TaskEnvelope` and dispatching any `TaskEnvelope` to a chosen backend --
-//! the primitive `execute` and `judge-role` both end at.
+//! Dispatching `execute`'s own bare goal through `nomos-agent-orchestration`'s
+//! [`Run_Agent_Execute`], and rendering whichever of the two outcome shapes it produces --
+//! the rendering both `execute` and `judge-role` end at.
+//!
+//! `P43-AGENT-CANONICAL-SEAM-2` moved this module's own former composition -- assembling a
+//! bare `TaskEnvelope`, matching on which backend to reach, and rendering whichever of the
+//! two outcome shapes it produces -- into `nomos_agent_orchestration::Run_Agent_Execute`
+//! (and, for `judge-role`, `Run_Agent_Judgment`), so `nomos-api` could reach the same
+//! dispatch without depending on this crate. What is left here is choosing a
+//! [`nomos_platform_std::StdProcessLauncher`] for the seam's own one platform port and
+//! rendering an [`nomos_agent_orchestration::AgentDispatchOutcome`] into the exact text and
+//! [`ExitCode`] this command has always reported.
+//!
+//! # A deliberate change from what this file's own comment used to defend
+//!
+//! The former `Dispatch_Task` here was fixed to `StdProcessLauncher` rather than generic,
+//! matching `check.rs`'s and `work.rs`'s own composition-root choice for their own
+//! subprocesses -- correct advice for a CLI-only module with exactly one caller. It stopped
+//! being correct the moment this dispatch moved into a crate two hosts call:
+//! `nomos_agent_orchestration::Run_Agent_Execute`/`Run_Agent_Judgment` are generic over
+//! `nomos_platform::ProcessLauncher`, the identical reason
+//! `nomos_correction_orchestration::Run_Correction` already is, so `nomos-api` supplies its
+//! own `StdProcessLauncher` at its own call site rather than depending on this crate's
+//! choice, or on this crate at all. Genericizing also retires the `// check-test-coverage:
+//! allow-untested` exclusion this file's own two match arms used to carry: they were
+//! untestable here only because they were fixed to a real launcher, and
+//! `nomos-agent-orchestration`'s own tests now reach the identical match with a scripted
+//! one instead -- see that crate's own `run` module doc for the fuller account.
 
-use super::{Backend, DispatchConfig, ExitCode};
-use nomos_agent_contracts::TaskEnvelope;
+use super::{DispatchConfig, ExitCode};
+use nomos_agent_orchestration::{AgentDispatchOutcome, AgentEnvironment, Run_Agent_Execute};
 
-// check-test-coverage: allow-untested unconditionally reaches Dispatch_Task, which itself
-// unconditionally spawns the real `claude` or `ollama` subprocess through StdProcessLauncher
-// (fixed at this composition root, not generic -- see the module doc above and Dispatch_Task's
-// own allow-untested reason). A test that actually calls this function would either depend on
-// which binaries happen to be on the running machine's PATH, or risk a real, costly invocation
-// of a live external tool; neither is safe or deterministic to exercise here.
 pub(super) fn Execute_Goal(goal: &str, config: DispatchConfig, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
-{
-    let task = Execute_Task(goal, config.effort);
-
-    return Dispatch_Task(&task, config.backend, output, notes);
-}
-
-/// Runs `task` against `backend` and renders whichever of the two outcome shapes it
-/// produces. The two crates share no trait -- `OD-EXECUTOR-001`/`OD-EXECUTOR-004` both
-/// decline to invent one ahead of a real need, and `OD-EXECUTOR-005` found that trigger has
-/// not fired even once `--executor`/`--model-backend` replaced `--backend`: there is still
-/// only one real `AgentExecutor`, so this match is the entire dispatch, not a stand-in for a
-/// trait either flag's own vocabulary would need.
-// check-test-coverage: allow-untested both match arms launch a real external subprocess (the
-// `claude` or `ollama` CLI) through `nomos_platform_std::StdProcessLauncher`, fixed here rather
-// than generic over `ProcessLauncher` -- the same composition-root choice `check.rs` and
-// `work.rs` make for their own subprocesses, per this module's own doc comment. Injecting a fake
-// launcher would mean making this function generic against that established convention; calling
-// it as-is would spawn a live process whose presence on PATH this test suite does not control,
-// risking a real, costly invocation. `Answered_Claude_Code`, `Answered_Ollama` and
-// `Backend_Unavailable` below are the pure, already-testable pieces this function assembles.
-pub(super) fn Dispatch_Task(task: &TaskEnvelope, backend: Backend, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
 {
     use nomos_platform_std::StdProcessLauncher;
 
-    return match backend
+    let outcome = Run_Agent_Execute(goal, config, &AgentEnvironment { launcher: &StdProcessLauncher });
+
+    return Rendered(&outcome, output, notes);
+}
+
+/// Renders `outcome` into the exact text and [`ExitCode`] this command has always
+/// reported -- shared with [`super::judge_role::Judge_Role`], the one place both commands'
+/// own dispatch ends at.
+///
+/// `denied_tool_uses` is printed unconditionally, empty or not, so its absence is a
+/// caller's own observation rather than a line that only appears when there is bad news to
+/// report -- `OD-EXECUTOR-001`'s rule, restated at the one place this workspace renders an
+/// executor's answer for a person to read.
+pub(super) fn Rendered(outcome: &AgentDispatchOutcome, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
+{
+    return match outcome
     {
-        Backend::ClaudeCode => match nomos_agent_executor_claude_code::Execute_Task(task, &StdProcessLauncher)
+        AgentDispatchOutcome::ClaudeCode(outcome) =>
         {
-            Ok(outcome) => Answered_Claude_Code(&outcome, output),
-            Err(error) => Backend_Unavailable(&error, notes),
-        },
-        Backend::Ollama => match nomos_model_backend_ollama::Execute_Task(task, &StdProcessLauncher)
+            let _ = writeln!(output, "{}", outcome.response);
+            let _ = writeln!(output, "denied tool uses: {:?}", outcome.denied_tool_uses);
+            let _ = writeln!(output, "is_error: {}  cost_usd: {}  duration_ms: {}", outcome.is_error, outcome.cost_usd, outcome.duration_ms);
+            ExitCode::Ok
+        }
+        AgentDispatchOutcome::Ollama(outcome) =>
         {
-            Ok(outcome) => Answered_Ollama(&outcome, output),
-            Err(error) => Backend_Unavailable(&error, notes),
-        },
-    };
-}
-
-/// Renders an outcome for what it structurally reported, never for what its own text
-/// claims — `OD-EXECUTOR-001`'s rule, restated at the one place this workspace renders an
-/// executor's answer for a person to read. `denied_tool_uses` is printed unconditionally,
-/// empty or not, so its absence is a caller's own observation rather than a line that only
-/// appears when there is bad news to report.
-fn Answered_Claude_Code(outcome: &nomos_agent_executor_claude_code::AgentExecutionOutcome, output: &mut impl std::io::Write) -> ExitCode
-{
-    let _ = writeln!(output, "{}", outcome.response);
-    let _ = writeln!(output, "denied tool uses: {:?}", outcome.denied_tool_uses);
-    let _ = writeln!(output, "is_error: {}  cost_usd: {}  duration_ms: {}", outcome.is_error, outcome.cost_usd, outcome.duration_ms);
-
-    return ExitCode::Ok;
-}
-
-fn Backend_Unavailable(error: &impl std::fmt::Display, notes: &mut impl std::io::Write) -> ExitCode
-{
-    let _ = writeln!(notes, "{error}");
-
-    return ExitCode::Unavailable;
-}
-
-/// `nomos-model-backend-ollama`'s own outcome carries only `response`, honestly: there is
-/// no `denied_tool_uses` to print because there is no tool subsystem to have denied
-/// anything from, and no dollar cost because inference is local. Printing placeholder
-/// values for fields this backend does not have would claim a signal it never produced.
-fn Answered_Ollama(outcome: &nomos_model_backend_ollama::AgentExecutionOutcome, output: &mut impl std::io::Write) -> ExitCode
-{
-    let _ = writeln!(output, "{}", outcome.response);
-
-    return ExitCode::Ok;
-}
-
-/// A bare `TaskEnvelope` naming only `goal` and `effort`. `scope`, `prohibited_changes` and
-/// `available_tools` are the empty value `OD-EXECUTOR-001` already reads as "nothing
-/// enumerated, nothing granted" — this command has no configuration surface to fill them
-/// from yet, and inventing one ahead of a real need would repeat the mistake this workspace
-/// has already declined to make elsewhere. `expected_output_schema` names this call site
-/// rather than a real schema, since nothing here validates a response against one.
-fn Execute_Task(goal: &str, effort: nomos_model_package::EffortLevel) -> TaskEnvelope
-{
-    use nomos_contracts::SchemaId;
-    use nomos_ledger::Territory;
-
-    return TaskEnvelope {
-        goal: goal.to_owned(),
-        scope: Territory::Of_Files(Vec::<String>::new()),
-        knowledge_context: Vec::new(),
-        applicable_rules: Vec::new(),
-        prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
-        available_tools: Vec::new(),
-        expected_output_schema: SchemaId::New("nomos.agent.executor.cli.v1"),
-        effort,
+            let _ = writeln!(output, "{}", outcome.response);
+            ExitCode::Ok
+        }
+        AgentDispatchOutcome::Unavailable(reason) =>
+        {
+            let _ = writeln!(notes, "{reason}");
+            ExitCode::Unavailable
+        }
     };
 }

@@ -1,22 +1,30 @@
 //! The seam between `nomos_cli`'s `agent` group and `nomos_agent_executor_claude_code`.
 //!
-//! `agent/dispatch.rs::Dispatch_Task` calls
-//! `nomos_agent_executor_claude_code::Execute_Task(task, &StdProcessLauncher)` unconditionally
-//! once a `TaskEnvelope` exists, spawning a real `claude` (or `claude.cmd`) subprocess with
-//! no injection point -- its own `check-test-coverage: allow-untested` marker records that
-//! this is deliberate, since this machine may have a real `claude` binary on `PATH` and a
-//! test that reached it could trigger a live, costly, recursive agent invocation. This suite
-//! never does that.
+//! `P43-AGENT-CANONICAL-SEAM-2` moved the call this file once documented --
+//! `agent/dispatch.rs::Dispatch_Task` calling `nomos_agent_executor_claude_code::
+//! Execute_Task(task, &StdProcessLauncher)` directly -- into `nomos-agent-orchestration`'s
+//! own `Run_Agent_Execute`/`Run_Agent_Judgment`, generic over `ProcessLauncher` rather than
+//! fixed here. `nomos-cli` no longer names this crate in its own production dependencies;
+//! it reaches it only transitively, through the shared seam. This suite is kept anyway,
+//! as a test-only dependency (see `Cargo.toml`'s own comment), rather than deleted: it
+//! still drives the exact backend both `nomos agent execute` and `nomos agent judge-role`
+//! reach through that seam, and `nomos-agent-orchestration`'s own tests make the identical
+//! assertion over the shared dispatch itself, so no coverage is lost either way.
 //!
-//! Instead it drives the exact same public function nomos-cli's own composition root calls --
+//! It never spawns a real `claude` (or `claude.cmd`) subprocess -- this machine may have a
+//! real one on `PATH`, and a test that reached it could trigger a live, costly, recursive
+//! agent invocation.
+//!
+//! Instead it drives the exact same public function the shared seam calls --
 //! `Execute_Task<Launcher: ProcessLauncher>` -- with a scripted, in-process `ProcessLauncher`
 //! that never spawns anything, the identical pattern
-//! `nomos-agent-executor-claude-code::address_tests` already uses for its own direct suite.
-//! This proves the real contract nomos-cli's `Dispatch_Task` depends on: a `TaskEnvelope`
-//! shaped the way `dispatch.rs::Execute_Task` builds it, in; an `AgentExecutionOutcome`
-//! carrying `response`, `denied_tool_uses`, `is_error`, `cost_usd` and `duration_ms` -- every
-//! field `Answered_Claude_Code` renders -- out, or an `AgentExecutionError` when the process
-//! reports anything other than a clean exit.
+//! `nomos-agent-executor-claude-code::address_tests` and `nomos-agent-orchestration::run`'s
+//! own tests already use. This proves the real contract the shared seam depends on: a
+//! `TaskEnvelope` shaped the way `nomos_agent_orchestration::run`'s own `Bare_Task` builds
+//! it, in; an `AgentExecutionOutcome` carrying `response`, `denied_tool_uses`, `is_error`,
+//! `cost_usd` and `duration_ms` -- every field `nomos-cli`'s own `agent/dispatch.rs::
+//! Rendered` prints -- out, or an `AgentExecutionError` when the process reports anything
+//! other than a clean exit.
 
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_agent_executor_claude_code::{AgentExecutionError, Execute_Task};
@@ -61,8 +69,8 @@ fn Bare_Task(goal: &str) -> TaskEnvelope
 }
 
 /// The happy path: a clean scripted response reads back as an `AgentExecutionOutcome`
-/// carrying every field `agent/dispatch.rs::Answered_Claude_Code` renders to a caller of
-/// `nomos agent execute`.
+/// carrying every field `nomos-cli`'s own `agent/dispatch.rs::Rendered` prints for a
+/// caller of `nomos agent execute`.
 #[test]
 fn Test_Execute_Task_Should_Return_Every_Field_The_Cli_Renders_For_A_Clean_Response()
 {
@@ -83,7 +91,8 @@ fn Test_Execute_Task_Should_Return_Every_Field_The_Cli_Renders_For_A_Clean_Respo
 
 /// The error that crosses this boundary: a non-zero exit is refused as
 /// `AgentExecutionError::Unavailable` rather than read as a response, the exact case
-/// `agent/dispatch.rs::Backend_Unavailable` renders to `nomos agent execute`'s notes stream.
+/// `nomos_agent_orchestration::AgentDispatchOutcome::Unavailable` folds it into and
+/// `agent/dispatch.rs::Rendered` writes to `nomos agent execute`'s notes stream.
 #[test]
 fn Test_Execute_Task_Should_Refuse_A_Non_Zero_Exit_Rather_Than_Read_It_As_A_Response()
 {
@@ -95,7 +104,7 @@ fn Test_Execute_Task_Should_Refuse_A_Non_Zero_Exit_Rather_Than_Read_It_As_A_Resp
 }
 
 /// Through the real binary: `nomos agent execute` with no `--goal` refuses before a
-/// `TaskEnvelope` is ever built and before `Dispatch_Task` is ever called -- the one
+/// `TaskEnvelope` is ever built and before the shared seam is ever called -- the one
 /// argument shape this suite may drive through the compiled `nomos` binary itself without
 /// any risk of reaching a live `claude` subprocess.
 #[test]

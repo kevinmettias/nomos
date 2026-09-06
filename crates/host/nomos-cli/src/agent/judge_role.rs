@@ -1,10 +1,17 @@
 //! `judge-role` -- reading a crate's declared role and actual surface, judging them with
 //! `nomos_rules::Check_Declared_Role_Matches_Surface`, and dispatching the finding it
-//! produces.
+//! produces through `nomos-agent-orchestration`'s own [`Run_Agent_Judgment`].
+//!
+//! `P43-AGENT-CANONICAL-SEAM-2` moved this module's own former `Judgment_Task` -- building
+//! the `TaskEnvelope` that carries the rule's own question -- into that crate, alongside
+//! `Run_Agent_Execute`. What stays here is everything `OD-HOST-002` keeps at a composition
+//! root: reading `root`'s `README.md` row and its committed surface snapshot, and running
+//! the rule itself to get the real `Finding` it produces. `Run_Agent_Judgment` is handed
+//! both already built, the identical "already walked" contract
+//! `nomos_correction_orchestration::Run_Correction` holds for the source it is given.
 
 use super::{DispatchConfig, ExitCode};
-use nomos_agent_contracts::TaskEnvelope;
-use nomos_contracts::{Finding, SchemaId};
+use nomos_contracts::Finding;
 use nomos_rules::RoleSurfacePair;
 use std::path::Path;
 
@@ -31,7 +38,8 @@ pub(super) fn Judge_Role(
     notes: &mut impl std::io::Write,
 ) -> ExitCode
 {
-    use super::dispatch::Dispatch_Task;
+    use nomos_agent_orchestration::{AgentEnvironment, Run_Agent_Judgment};
+    use nomos_platform_std::StdProcessLauncher;
 
     let pair = match Role_Surface_Pair(request, notes)
     {
@@ -45,9 +53,9 @@ pub(super) fn Judge_Role(
         Err(code) => return code,
     };
 
-    let task = Judgment_Task(&pair, &finding, config.effort);
+    let outcome = Run_Agent_Judgment(&pair, &finding, config, &AgentEnvironment { launcher: &StdProcessLauncher });
 
-    return Dispatch_Task(&task, config.backend, output, notes);
+    return super::dispatch::Rendered(&outcome, output, notes);
 }
 
 /// `request`'s declared role and actual surface, read and paired -- [`Judge_Role`]'s own
@@ -109,34 +117,6 @@ fn Judged_Finding(pair: &RoleSurfacePair, notes: &mut impl std::io::Write) -> Re
     return Ok(finding.clone());
 }
 
-/// The judgment `role_surface.rs`'s own module doc says this rule cannot reach itself —
-/// whether `pair`'s declared role and actual surface agree — carrying `finding.summary`
-/// so the dispatched question is traceably the rule's own, not a paraphrase invented here.
-fn Judgment_Task(pair: &RoleSurfacePair, finding: &Finding, effort: nomos_model_package::EffortLevel) -> TaskEnvelope
-{
-    use nomos_ledger::Territory;
-
-    let goal = format!(
-        "A Rust crate's declared role, from its workspace README's band table: {}\n\n\
-         The crate's actual public surface, as a list of every item it exports:\n{}\n\n\
-         {}. Does the declared role accurately and completely describe what the surface \
-         exports? Name anything the role claims that the surface does not show, or anything \
-         the surface exports that the role does not mention, in 2-4 sentences.",
-        pair.declared_role, pair.actual_surface, finding.summary
-    );
-
-    return TaskEnvelope {
-        goal,
-        scope: Territory::Of_Files(Vec::<String>::new()),
-        knowledge_context: Vec::new(),
-        applicable_rules: vec![finding.rule.clone()],
-        prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
-        available_tools: Vec::new(),
-        expected_output_schema: SchemaId::New("nomos.agent.executor.cli.v1"),
-        effort,
-    };
-}
-
 /// Which pipe-delimited cell of a `README.md` band-table row holds a crate's name.
 const README_TABLE_CRATE_NAME_COLUMN: usize = 2;
 
@@ -188,9 +168,10 @@ mod tests
     use super::super::Backend;
 
     /// `Judge_Role`'s own first step, `Role_Surface_Pair`, fails at `Resolve_Declared_Role`
-    /// before this ever reaches `Dispatch_Task` -- a root with no `README.md` at all names no
-    /// row for any crate. This drives the real, top-level function end to end without ever
-    /// touching a live backend subprocess, the same way `Run`'s own judge-role test (in
+    /// before this ever reaches `Run_Agent_Judgment` -- a root with no `README.md` at all
+    /// names no row for any crate. This drives the real, top-level function end to end
+    /// without ever touching a live backend subprocess, the same way `Run`'s own judge-role
+    /// test (in
     /// `agent/tests.rs`) stays safe by failing before dispatch.
     #[test]
     fn Test_Judge_Role_Should_Report_Not_Found_When_The_Root_Has_No_Readme()

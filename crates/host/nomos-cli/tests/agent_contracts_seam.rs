@@ -1,25 +1,26 @@
 //! The seam between `nomos_cli`'s `agent` group and `nomos_agent_contracts`.
 //!
-//! `nomos-cli` is `[[bin]]`-only, so nothing here can call `agent::dispatch::Execute_Task`
-//! or `agent::judge_role::Judgment_Task` directly -- both are private to that crate, and
-//! both are also the one step downstream of parsing that this suite must never reach for
-//! real: once a `TaskEnvelope` is built, the very next thing either composition root does
-//! is dispatch it to a live `claude` or `ollama` subprocess through
-//! `nomos_platform_std::StdProcessLauncher`, fixed rather than generic
-//! (`agent/dispatch.rs`'s own `check-test-coverage: allow-untested` markers on
-//! `Execute_Goal`/`Dispatch_Task` record exactly this). This machine may well have a real
-//! `claude` binary on `PATH`, so a test that actually reached that point could spawn a
-//! live, costly, recursive agent invocation -- never attempted here.
+//! `nomos-cli` is `[[bin]]`-only, so nothing here can call
+//! `nomos_agent_orchestration::run::Bare_Task`/`Judgment_Task` directly -- both are private
+//! to that crate, and both build the `TaskEnvelope` that the very next step, generic
+//! dispatch to a live `claude` or `ollama` subprocess, must never reach for real in this
+//! suite. This machine may well have a real `claude` binary on `PATH`, so a test that
+//! actually reached that point could spawn a live, costly, recursive agent invocation --
+//! never attempted here. `P43-AGENT-CANONICAL-SEAM-2` moved that envelope-building and
+//! dispatch out of this crate's own `agent/dispatch.rs` and `agent/judge_role.rs` into
+//! `nomos-agent-orchestration`; this suite's own concern -- `nomos-cli`'s use of
+//! `nomos_agent_contracts::TaskEnvelope` and `Isolated_Working_Directory` -- is unaffected
+//! by where the envelope gets built, and `workflow.rs` still names this crate directly for
+//! its own `Body::ClaudeCode`/`Body::Ollama` construction.
 //!
-//! What this proves instead: the exact `TaskEnvelope` shape both composition roots build
-//! (`dispatch.rs::Execute_Task`, `judge_role.rs::Judgment_Task` -- a bare `goal`/`effort`,
-//! every other field the empty value `OD-EXECUTOR-001` already reads as "nothing
-//! enumerated, nothing granted"), constructed here the same way and checked against
-//! `nomos_agent_contracts::TaskEnvelope`'s own public fields; the shared isolation
-//! primitive (`Isolated_Working_Directory`) both real executor crates call before ever
-//! reaching a subprocess; and, through the real binary, that `nomos agent`'s two verbs
-//! are wired up and refuse *before* any `TaskEnvelope` is ever built, for the argument
-//! shapes that must never reach one.
+//! What this proves: the exact `TaskEnvelope` shape a bare `nomos agent execute` or
+//! `judge-role` call builds (a bare `goal`/`effort`, every other field the empty value
+//! `OD-EXECUTOR-001` already reads as "nothing enumerated, nothing granted"), constructed
+//! here the same way and checked against `nomos_agent_contracts::TaskEnvelope`'s own public
+//! fields; the shared isolation primitive (`Isolated_Working_Directory`) both real executor
+//! crates call before ever reaching a subprocess; and, through the real binary, that
+//! `nomos agent`'s two verbs are wired up and refuse *before* any `TaskEnvelope` is ever
+//! built, for the argument shapes that must never reach one.
 
 use nomos_agent_contracts::{Isolated_Working_Directory, TaskEnvelope};
 
@@ -95,7 +96,7 @@ fn Test_Isolated_Working_Directory_Should_Never_Collide_Across_Two_Calls()
 
 /// `nomos agent execute` with no `--goal` at all must refuse before a `TaskEnvelope` is
 /// ever built -- `Execute_Command_From_String_Arguments` requires it before `Command`
-/// exists, so this can never reach `Dispatch_Task`. Safe to run for real: parsing alone,
+/// exists, so this can never reach the shared seam. Safe to run for real: parsing alone,
 /// never a subprocess.
 #[test]
 fn Test_Agent_Execute_Should_Refuse_Before_Building_A_Task_Envelope_When_Goal_Is_Missing()
@@ -107,7 +108,7 @@ fn Test_Agent_Execute_Should_Refuse_Before_Building_A_Task_Envelope_When_Goal_Is
 }
 
 /// `nomos agent judge-role` over a root with no `README.md` fails at
-/// `Resolve_Declared_Role`, before `Judgment_Task` is ever called -- the same safe,
+/// `Resolve_Declared_Role`, before `Run_Agent_Judgment` is ever called -- the same safe,
 /// never-reaches-a-backend path `judge_role.rs`'s own inline test drives in process. This
 /// is the same property, driven through the real binary instead.
 #[test]

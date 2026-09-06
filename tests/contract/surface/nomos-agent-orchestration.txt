@@ -1,0 +1,14 @@
+pub enum nomos_agent_orchestration::AgentDispatchOutcome
+pub enum nomos_agent_orchestration::Backend
+pub enum variant nomos_agent_orchestration::AgentDispatchOutcome::ClaudeCode(nomos_agent_executor_claude_code::AgentExecutionOutcome)
+pub enum variant nomos_agent_orchestration::AgentDispatchOutcome::Ollama(nomos_model_backend_ollama::AgentExecutionOutcome)
+pub enum variant nomos_agent_orchestration::AgentDispatchOutcome::Unavailable(String)
+pub enum variant nomos_agent_orchestration::Backend::ClaudeCode
+pub enum variant nomos_agent_orchestration::Backend::Ollama
+pub fn nomos_agent_orchestration::Run_Agent_Execute<Launcher: ProcessLauncher>(goal: &str, config: DispatchConfig, environment: &AgentEnvironment<'_, Launcher>) -> AgentDispatchOutcome
+pub fn nomos_agent_orchestration::Run_Agent_Judgment<Launcher: ProcessLauncher>( pair: &RoleSurfacePair, finding: &Finding, config: DispatchConfig, environment: &AgentEnvironment<'_, Launcher>, ) -> AgentDispatchOutcome
+pub struct field nomos_agent_orchestration::AgentEnvironment::launcher: &'a Launcher
+pub struct field nomos_agent_orchestration::DispatchConfig::backend: Backend
+pub struct field nomos_agent_orchestration::DispatchConfig::effort: EffortLevel
+pub struct nomos_agent_orchestration::AgentEnvironment<'a, Launcher: ProcessLauncher>
+pub struct nomos_agent_orchestration::DispatchConfig
