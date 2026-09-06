@@ -57,22 +57,32 @@ comment now says outright why it declines to repeat a number the table beside it
 owns. Both fixes are the general lesson ("stop maintaining two copies") applied by a person,
 not a mechanically enforced property.
 
-**A real, live instance exists today, and it is instructive about the size of the problem
-rather than a shortcut past it.** As of this record, `nomos-rules/src/lib.rs` narrates
-`Check_Write_Authority` as "the sixty-seventh rule" and `checks.rs`'s own header claims
-"the sixty-seven rules this crate implements" — both hand-counted prose. Three different
-counts of "how many rules" exist in this workspace right now, none asserted equal to
-another by anything: the prose figure (67), `nomos_rules::DESCRIPTORS.len()` and
-`nomos-check-orchestration`'s own `RULE_COUNT` (65, proven equal to each other by `tests/
-contract/tests/rule_descriptors.rs`'s bidirectional set comparison), and the raw count of
-every `pub fn Check_*` this crate defines (84, counting every rule function regardless of
-whether it is composed into a real run or resolved through `DESCRIPTORS`). That three
-plausible "authoritative" numbers can coexist, unreconciled, in a workspace this disciplined
-about mirrors and completeness is itself the strongest evidence the `why` text offers: this
-property is real, current, and unchecked — and also that even a person auditing it by hand
-cannot say which of the three the prose was ever supposed to match without knowing what
-population each one counts. A rule cannot resolve that ambiguity either without the same
-answer a person needs first.
+**A real, live instance exists, and it is instructive about the size of the problem
+rather than a shortcut past it.** Measured at `edd8f1c9`: `nomos-rules/src/checks.rs`'s own
+header claims "the sixty-nine rules this crate implements", and `lib.rs` narrates its rules
+one at a time up to `Check_Requirement_Trace_Staleness`, "the sixty-ninth rule" — both
+hand-counted prose. Three different counts of "how many rules" exist in this workspace at
+that commit, none asserted equal to another by anything: the prose figure (69),
+`nomos_rules::DESCRIPTORS.len()` and `nomos-check-orchestration`'s own `RULE_COUNT` (70,
+proven equal to each other by `tests/contract/tests/rule_descriptors.rs`'s bidirectional set
+comparison against `Composed_Rules()`, whose own array is `RULE_COUNT` long), and the raw
+count of every `pub fn Check_*` this crate defines (86, counting every rule function
+regardless of whether it is composed into a real run or resolved through `DESCRIPTORS`).
+That three plausible "authoritative" numbers can coexist, unreconciled, in a workspace this
+disciplined about mirrors and completeness is itself the strongest evidence the `why` text
+offers: this property is real, current, and unchecked — and also that even a person auditing
+it by hand cannot say which of the three the prose was ever supposed to match without
+knowing what population each one counts. A rule cannot resolve that ambiguity either without
+the same answer a person needs first.
+
+**Those three figures are a measurement at a named commit, not a standing fact, and they
+have already moved once.** This record first stated them as 67, 65 and 84. By `edd8f1c9`
+every one of them had rotted, while the disagreement they were cited to prove stayed exactly
+as real — the recorded property demonstrating itself on this record's own prose, which is
+why the numbers above name the commit they were taken at and why nothing here asserts them
+of the present tense. Re-measure before citing them; do not carry them forward. The same
+discipline `tests/contract/tests/rule_composition.rs` already keeps in its own header, where
+`P46-UNCOMPOSED-RULES-ARE-COUNTED`'s count is dated to the day it was taken.
 
 **What "a declared projection relationship suppresses the finding" would require does not
 exist yet, on either side of it.** It presupposes a new annotation naming which artifact is
@@ -86,7 +96,7 @@ declared relationship nothing confirms is worse than an admitted absence of one.
 ## The Decision
 
 **The rule is not built here.** It needs two facts this workspace does not materialize
-today — a normalized value extracted from free prose (so "sixty-seven" reads as 67, not as
+today — a normalized value extracted from free prose (so "sixty-nine" reads as 69, not as
 opaque text), and an element count or comparable computed value for a declared list or
 table, held as an observed fact rather than read only by `cargo test` — and one convention
 not yet designed: a canonical/projection annotation, and whether suppression under it is
@@ -97,9 +107,11 @@ details a rule's own implementation could improvise on the way past.
 **The three-way rule-count disagreement measured above is recorded as the real instance a
 future rule should expect to find and resolve on its first run**, the same way `OD-RULES-
 023` recorded `nomos-store`'s single write door and `OD-RULES-024` recorded representation
-leakage's clean baseline. Which of 67, 65, or 84 the prose is actually supposed to track is
+leakage's clean baseline. Which of 69, 70, or 86 the prose is actually supposed to track is
 not decided here: fixing it by hand now, without knowing what population `nomos-rules`'
-module-level prose is meant to describe, risks trading one unchecked number for another.
+module-level prose is meant to describe, risks trading one unchecked number for another —
+and a future rule should expect the three values themselves to have moved again by the time
+it runs, since nothing yet holds them still.
 
 ## What This Record Does Not Do
 

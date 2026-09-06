@@ -9,7 +9,6 @@
 //! [`nomos_platform::FileSystem`] and the port's own `Read_Directory` is one level) and a
 //! translation ([`file_diagnostic::Diagnostics_For`]) from [`nomos_contracts::Finding`] to
 //! [`lsp_types::Diagnostic`], never a second judgment.
-//! [`lsp_types::Diagnostic`], never a second judgment.
 //!
 //! # What "walk outward from a diagnostic" answers today, and what it does not
 //!
