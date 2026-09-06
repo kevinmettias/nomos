@@ -23,6 +23,7 @@
 
 mod borrowed_container;
 mod closure_bounds;
+mod code_prefix;
 mod concurrency_text;
 mod constant_scope;
 mod crosslang;

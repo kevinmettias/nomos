@@ -26,6 +26,7 @@
 //! the marker convention. This module follows the implementation, the same choice this crate
 //! already made once for a stale `enforced_by` claim on `inline-always-requires-justification`.
 
+use super::code_prefix::Code_Prefix;
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -117,12 +118,12 @@ struct RuleContext<'a>
 fn Ordering_Finding_For_Line(context: RuleContext<'_>, matches_partition: fn(&str) -> bool, lines: &[&str], index: usize) -> Option<Finding>
 {
     let code = Code_Prefix(lines.get(index).copied().unwrap_or_default());
-    if Is_Import_Line(code)
+    if Is_Import_Line(&code)
     {
         return None;
     }
 
-    let variant = Ordering_Match_In(code)?;
+    let variant = Ordering_Match_In(&code)?;
     if !matches_partition(variant) || Has_Marker_Reason(lines, index)
     {
         return None;
@@ -158,11 +159,11 @@ fn Ordering_Finding(context: RuleContext<'_>, variant: Variant<'_>, index: usize
 /// rules catch them. [`super::Is_Test_Or_Example_Source`] does not cover this case because it
 /// is a file-path exemption and this file's own path (`checks/concurrency_text.rs`) is not
 /// itself a test/example path, even though its content carries a test module.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/concurrency_text.rs";
+const OWN_IMPLEMENTATION_FILE: &str = "crates/rules/nomos-rules/src/checks/concurrency_text.rs";
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+    return source.path.replace('\\', "/") == OWN_IMPLEMENTATION_FILE;
 }
 
 fn Line_Number(index: usize) -> usize
@@ -173,11 +174,6 @@ fn Line_Number(index: usize) -> usize
 /// The code before any `//` line comment -- this crate's established convention
 /// (`rust_text::Code_Prefix`) for staying text-local rather than a full lexer, duplicated here
 /// per this crate's per-file helper convention.
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
-}
-
 fn Is_Import_Line(code: &str) -> bool
 {
     let trimmed = code.trim_start();

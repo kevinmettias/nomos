@@ -68,6 +68,7 @@
 //! avoid opening a line inside a string literal with the declaration keyword, so the
 //! question stays academic.
 
+use super::code_prefix::Code_Prefix;
 use crate::SourceFile;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 use std::collections::{BTreeMap, BTreeSet};
@@ -241,13 +242,13 @@ impl<'a> SourceTree<'a>
         {
             let code = Code_Prefix(line);
 
-            if let Some(relative) = Declared_Path_Attribute(code)
+            if let Some(relative) = Declared_Path_Attribute(&code)
                 && let Some(child) = self.Resolve_Path_Attribute(declaring_directory, relative)
             {
                 children.push(child);
             }
 
-            if let Some(name) = Declared_Module_Name(code)
+            if let Some(name) = Declared_Module_Name(&code)
                 && let Some(child) = self.Resolve_Declaration(&parent.directory, name)
             {
                 children.push(child);
@@ -392,11 +393,6 @@ fn Joined_Path(directory: &str, relative: &str) -> Option<String>
 /// one — which would hide the very orphan this rule looks for. This crate's established
 /// per-file convention, which `P45-CODE-PREFIX-KNOWS-STRINGS` will replace with one shared
 /// helper.
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
-}
-
 /// The module name a line declares with `mod name;`, or `None` for any other line.
 ///
 /// The terminating semicolon is required, which is what excludes an inline module: one

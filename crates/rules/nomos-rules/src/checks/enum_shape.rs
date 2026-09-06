@@ -92,11 +92,11 @@ pub fn Check_Named_Fields_Over_Positional_Variant_Payloads(sources: &[SourceFile
 /// inside a Rust string literal, which would otherwise self-match when this crate checks
 /// its own workspace — the same self-exemption every other `*_text.rs`-shaped rule here
 /// carries for the identical reason.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/enum_shape.rs";
+const OWN_IMPLEMENTATION_FILE: &str = "crates/rules/nomos-rules/src/checks/enum_shape.rs";
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+    return source.path.replace('\\', "/") == OWN_IMPLEMENTATION_FILE;
 }
 
 fn Variant_Findings_In(source: &SourceFile) -> Vec<Finding>

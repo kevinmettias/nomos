@@ -11,6 +11,7 @@
 //! shared code, not shared configuration, the same distinction `OD-RULES-011`'s own
 //! naming/limits capabilities do not apply here.
 
+use super::code_prefix::Code_Prefix;
 use crate::{GO_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -51,7 +52,7 @@ fn Discarded_Error_Findings_In(source: &SourceFile) -> Vec<Finding>
     for (index, line) in lines.iter().enumerate()
     {
         let code = Code_Prefix(line);
-        if Is_Discarded_Call(code) && !Has_Adjacent_Explanation(&lines, index)
+        if Is_Discarded_Call(&code) && !Has_Adjacent_Explanation(&lines, index)
         {
             let finding = Finding_For_Line(
                 source,
@@ -116,7 +117,7 @@ fn Skip_Finding_For(source: &SourceFile, lines: &[&str], index: usize, line: &st
 {
     let code = Code_Prefix(line);
 
-    if Has_Empty_Skip_Call(CodeText(code), CallName("t.Skip(")) || Has_Empty_Skip_Call(CodeText(code), CallName("t.Skipf("))
+    if Has_Empty_Skip_Call(CodeText(&code), CallName("t.Skip(")) || Has_Empty_Skip_Call(CodeText(&code), CallName("t.Skipf("))
     {
         let finding = Finding_For_Line(source, A_SKIPPED_TEST_STATES_WHY, Line_Number(index), "calls t.Skip/t.Skipf with no explanatory message");
         return Some(finding);
@@ -344,11 +345,6 @@ fn Lines_Of(source: &SourceFile) -> Vec<&str>
 fn Line_Number(index: usize) -> usize
 {
     return index.saturating_add(1);
-}
-
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
 }
 
 fn Comment_Text_Of(line: &str) -> Option<&str>

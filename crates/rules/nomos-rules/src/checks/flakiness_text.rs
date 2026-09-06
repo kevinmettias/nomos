@@ -62,6 +62,7 @@
 //! and is read as illustration, not requirement, the same choice `concurrency_text.rs`
 //! already made once for a stale claim.
 
+use super::code_prefix::Code_Prefix;
 use crate::{GO_LANGUAGE, RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -170,7 +171,7 @@ fn Test_Scan_Start(source: &SourceFile, lines: &[&str]) -> Option<usize>
 fn Sleep_Finding_At(source: &SourceFile, index: usize, line: &str, vocabulary: &[&str]) -> Option<Finding>
 {
     let code = Code_Prefix(line);
-    let call = Sleep_Match_In(code, vocabulary)?;
+    let call = Sleep_Match_In(&code, vocabulary)?;
 
     if Has_Allow_Marker(line)
     {
@@ -192,11 +193,6 @@ fn Sleep_Finding_At(source: &SourceFile, index: usize, line: &str, vocabulary: &
 
 /// The code before any `//` line comment -- this crate's established convention
 /// (`rust_text::Code_Prefix`), duplicated here per this crate's per-file helper convention.
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
-}
-
 fn Sleep_Match_In<'a>(code: &str, vocabulary: &[&'a str]) -> Option<&'a str>
 {
     let mut earliest: Option<(usize, &'a str)> = None;
@@ -367,11 +363,11 @@ fn Has_Allow_Marker(line: &str) -> bool
 /// inside a Rust string literal, which would otherwise self-match when this crate checks
 /// its own workspace -- the same self-exemption `concurrency_text.rs`, `rust_text.rs` and
 /// `security_text.rs` each carry for the identical reason.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/flakiness_text.rs";
+const OWN_IMPLEMENTATION_FILE: &str = "crates/rules/nomos-rules/src/checks/flakiness_text.rs";
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+    return source.path.replace('\\', "/") == OWN_IMPLEMENTATION_FILE;
 }
 
 #[cfg(test)]

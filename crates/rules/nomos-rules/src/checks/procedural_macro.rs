@@ -23,6 +23,7 @@
 //! here — see [`super::lifetime_discipline`], which makes the same divergence and records
 //! the measurement behind it.
 
+use super::code_prefix::Code_Prefix;
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -59,7 +60,7 @@ fn Procedural_Macro_Findings_In(source: &SourceFile) -> Vec<Finding>
 
     for (index, line) in lines.iter().enumerate()
     {
-        if Declares_A_Function_Like_Procedural_Macro(Code_Prefix(line)) && !Has_Adjacent_Explanation(&lines, index)
+        if Declares_A_Function_Like_Procedural_Macro(&Code_Prefix(line)) && !Has_Adjacent_Explanation(&lines, index)
         {
             findings.push(Procedural_Macro_Finding(source, index.saturating_add(1)));
         }
@@ -148,11 +149,6 @@ fn Procedural_Macro_Finding(source: &SourceFile, line_number: usize) -> Finding
 
 /// The code before any line comment. This crate's established per-file convention, which
 /// `P45-CODE-PREFIX-KNOWS-STRINGS` will replace with one shared helper.
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
-}
-
 #[cfg(test)]
 mod tests
 {

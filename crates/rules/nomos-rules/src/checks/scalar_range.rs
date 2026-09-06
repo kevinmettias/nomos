@@ -342,7 +342,7 @@ fn Declared_Scalar_Bound(trimmed: &str, index: usize, min: Option<i64>, max: Opt
 
     return Some(Bound {
         line_index: index,
-        member: name.to_owned(),
+        member: name,
         declared_spelling: spelling,
         declared_bits: bits,
         declared_signed: signed,
@@ -464,9 +464,10 @@ fn Apply_Clause(clause: &str, min: &mut Option<i64>, max: &mut Option<i64>)
 }
 
 /// `name: Type` (optionally `pub`/`pub(...)`-qualified, trailing comma optional).
-fn Field_Declaration(trimmed: &str) -> Option<(&str, &str)>
+fn Field_Declaration(trimmed: &str) -> Option<(String, String)>
 {
-    let code = trimmed.split("//").next().unwrap_or(trimmed).trim();
+    let code_owned = super::code_prefix::Code_Prefix(trimmed);
+    let code = code_owned.trim();
     let code = code.strip_suffix(',').map_or(code, str::trim_end);
     let after_visibility = Strip_Rust_Visibility(code);
     let (name, declared_type) = after_visibility.split_once(':')?;
@@ -482,7 +483,7 @@ fn Field_Declaration(trimmed: &str) -> Option<(&str, &str)>
         return None;
     }
 
-    return Some((name, declared_type));
+    return Some((name.to_owned(), declared_type.to_owned()));
 }
 
 fn Is_Valid_Identifier(name: &str) -> bool
@@ -512,11 +513,11 @@ fn Line_Number(index: usize) -> usize
 /// Rust string literal, which would otherwise self-match when this crate checks its own
 /// workspace — the same self-exemption every other `*_text.rs`-shaped rule here carries for
 /// the identical reason.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/scalar_range.rs";
+const OWN_IMPLEMENTATION_FILE: &str = "crates/rules/nomos-rules/src/checks/scalar_range.rs";
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+    return source.path.replace('\\', "/") == OWN_IMPLEMENTATION_FILE;
 }
 
 #[cfg(test)]

@@ -335,11 +335,11 @@ fn Is_Test_Or_Fixture_Source(source: &SourceFile) -> bool
 /// Checked safe today: this file's own doc comments and detection code contain no genuine
 /// live credential, sensitive-parameter URL, or disabled-verification literal outside its
 /// own patterns and fixtures.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/security_text.rs";
+const OWN_IMPLEMENTATION_FILE: &str = "crates/rules/nomos-rules/src/checks/security_text.rs";
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+    return source.path.replace('\\', "/") == OWN_IMPLEMENTATION_FILE;
 }
 
 fn Line_Number(index: usize) -> usize

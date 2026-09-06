@@ -78,11 +78,11 @@ pub fn Check_Constants_Are_The_Exception_To_Function_Scope_Use(sources: &[Source
 /// Rust string literal, which would otherwise self-match when this crate checks its own
 /// workspace — the same self-exemption every other `*_text.rs`-shaped rule here carries for
 /// the identical reason.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/constant_scope.rs";
+const OWN_IMPLEMENTATION_FILE: &str = "crates/rules/nomos-rules/src/checks/constant_scope.rs";
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+    return source.path.replace('\\', "/") == OWN_IMPLEMENTATION_FILE;
 }
 
 fn Constant_Findings_For_Source(source: &SourceFile) -> Vec<Finding>
@@ -175,9 +175,10 @@ fn Fn_Header_Name(line: &str) -> Option<String>
 /// after `const` (optionally `pub`/`pub(...)`-qualified) must be an identifier immediately
 /// followed by `:`, which excludes `const fn` — a function modifier, not a value
 /// declaration, since `fn` is never followed directly by a colon.
-fn Rust_Const_Name(trimmed: &str) -> Option<&str>
+fn Rust_Const_Name(trimmed: &str) -> Option<String>
 {
-    let code = trimmed.split("//").next().unwrap_or(trimmed).trim();
+    let code_owned = super::code_prefix::Code_Prefix(trimmed);
+    let code = code_owned.trim();
     let after_visibility = Strip_Rust_Visibility(code);
     let after_const = after_visibility.strip_prefix("const ")?.trim_start();
     let name_len = after_const.find(|character: char| return !Is_Ident_Char(character)).unwrap_or(after_const.len());
@@ -193,7 +194,7 @@ fn Rust_Const_Name(trimmed: &str) -> Option<&str>
         return None;
     }
 
-    return Some(name);
+    return Some(name.to_owned());
 }
 
 fn Strip_Rust_Visibility(code: &str) -> &str
@@ -336,9 +337,10 @@ fn Go_Constant_In_Const_Block(trimmed: &str, index: usize, scan: &mut GoConstant
 /// A Go single-line `const name = value` or `const name Type = value` declaration (the
 /// parenthesized block form is handled separately by the scan's own `in_const_block`
 /// state, since each member line inside it carries no `const` keyword of its own).
-fn Go_Const_Name(trimmed: &str) -> Option<&str>
+fn Go_Const_Name(trimmed: &str) -> Option<String>
 {
-    let code = trimmed.split("//").next().unwrap_or(trimmed).trim();
+    let code_owned = super::code_prefix::Code_Prefix(trimmed);
+    let code = code_owned.trim();
     let after_const = code.strip_prefix("const ")?.trim_start();
     if after_const.starts_with('(')
     {
@@ -352,7 +354,7 @@ fn Go_Const_Name(trimmed: &str) -> Option<&str>
         return None;
     }
 
-    return Some(name);
+    return Some(name.to_owned());
 }
 
 fn Advance_Go_Constant_Scan(line: &str, scan: &mut GoConstantScan)

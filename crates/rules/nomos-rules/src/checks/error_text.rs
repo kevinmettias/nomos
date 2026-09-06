@@ -25,6 +25,7 @@
 //! the same line" limit is the precedent): an attribute or call spanning multiple lines is
 //! left unjudged rather than guessed at.
 
+use super::code_prefix::Code_Prefix;
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -174,11 +175,6 @@ fn Context_Laziness_Finding_At(source: &SourceFile, lines: &[&str], index: usize
     return Some(Finding_At(source, EAGER_VS_LAZY_CONTEXT, line_number, &summary));
 }
 
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
-}
-
 fn Error_Message_Findings(sources: &[SourceFile], rule: &str, judge: impl Fn(&str) -> Option<String>) -> Vec<Finding>
 {
     let mut findings = Vec::new();
@@ -254,11 +250,11 @@ fn Finding_At(source: &SourceFile, rule: &str, line_number: usize, summary: &str
 /// this file's own finding-message text and detection code (`#[error("...")]`,
 /// `.With_Context(`) and its `#[cfg(test)] mod tests { ... }` fixtures necessarily spell out
 /// the exact shapes each rule looks for.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/error_text.rs";
+const OWN_IMPLEMENTATION_FILE: &str = "crates/rules/nomos-rules/src/checks/error_text.rs";
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+    return source.path.replace('\\', "/") == OWN_IMPLEMENTATION_FILE;
 }
 
 fn Line_Number(index: usize) -> usize

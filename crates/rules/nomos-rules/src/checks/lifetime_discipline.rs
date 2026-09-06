@@ -31,6 +31,7 @@
 //! Ported literally, this rule would report a justified bound as unjustified and there
 //! would be nowhere to say otherwise.
 
+use super::code_prefix::Code_Prefix;
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 use std::collections::BTreeSet;
@@ -97,12 +98,12 @@ fn Terse_Lifetime_Findings_In(source: &SourceFile) -> Vec<Finding>
     {
         let code = Code_Prefix(line);
 
-        if !Opens_A_Declaration(code)
+        if !Opens_A_Declaration(&code)
         {
             continue;
         }
 
-        let chosen = Chosen_Lifetimes_In(code);
+        let chosen = Chosen_Lifetimes_In(&code);
 
         if chosen.len() < LIFETIMES_NEEDING_NAMES
         {
@@ -125,7 +126,7 @@ fn Static_Bound_Findings_In(source: &SourceFile) -> Vec<Finding>
 
     for (index, line) in lines.iter().enumerate()
     {
-        if Bounds_By_Static(Code_Prefix(line)) && !Has_Adjacent_Explanation(&lines, index)
+        if Bounds_By_Static(&Code_Prefix(line)) && !Has_Adjacent_Explanation(&lines, index)
         {
             findings.push(Static_Bound_Finding(source, index.saturating_add(1)));
         }
@@ -334,11 +335,6 @@ fn Static_Bound_Finding(source: &SourceFile, line_number: usize) -> Finding
 
 /// The code before any line comment. This crate's established per-file convention, which
 /// `P45-CODE-PREFIX-KNOWS-STRINGS` will replace with one shared helper.
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
-}
-
 #[cfg(test)]
 mod tests
 {

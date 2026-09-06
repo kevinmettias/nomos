@@ -54116,7 +54116,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "declared territory named 11 files sharing the naive Code_Prefix copy plus a new code_prefix.rs, but five more files carry the identical defect, measured directly: closure_bounds.rs, lifetime_discipline.rs, borrowed_container.rs, procedural_macro.rs, orphan_modules.rs. Also found mid-implementation that a first design (blanking every string/raw-string/char-literal body) broke three real, passing tests that read a specific literal's own value as syntax (#[path=\"value\"], .expect(\"message\"), t.Skip(\"reason\")) -- reverted to comment-boundary-only correctness, documented in code_prefix.rs's own module doc. Re-authoring as P45-CODE-PREFIX-KNOWS-STRINGS-2 with the complete 16-file set and the corrected, narrower scope (comment-truncation and self-exemption fixes; blanket string-content blinding explicitly not attempted, named as a real but harder follow-up)."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -54130,9 +54134,18 @@
         "timeout_seconds": 2700
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "territory too narrow: closure_bounds.rs, lifetime_discipline.rs, borrowed_container.rs, procedural_macro.rs and orphan_modules.rs also carry the identical naive line.split(\"//\").next() Code_Prefix copy, measured directly, not named in the original territory alongside the 11 that were. Re-authoring with the complete 16-file set.",
+          "abandoned_at": 1788680087
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788680099
+      }
     },
     {
       "id": "P45-SAFETY-JUSTIFICATION-ARTIFACT",
@@ -57248,6 +57261,75 @@
           "exit_code": 0
         },
         "revision": "e58d44ea51a6ebee319882e5e605ead8bb8bd985"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P45-CODE-PREFIX-KNOWS-STRINGS-2",
+      "title": "The shared text substrate under the rules does not know what a string literal is",
+      "why": "Measured 2026-09-05 against the built binary: the comment stripper every text rule copies is a naive split on the first two-slash sequence, so a line whose string literal holds a URL is truncated at that URL and everything after it becomes invisible; a bare path-suffix self-exemption lets any repository whose file happens to end in the same path spoof exemption from the rule that would otherwise judge it. A single shared code_prefix.rs, aware of string, raw-string and char literals, replaces the identical naive copy this session found in sixteen files (eleven with a named Code_Prefix function, three with the same expression inlined, plus rust_text.rs and code_prefix.rs itself), and the ten self-exemption checks now compare a full repo-relative path exactly rather than a path suffix. A first design also blanked every literal's own body so a syntax detector's bare .contains(\"unsafe {\") could not match a string that merely quotes the words; it broke three real, passing tests that read a specific literal's own value as syntax (#[path=\"value\"], .expect(\"message\"), t.Skip(\"reason\")), so it was reverted in favor of comment-boundary correctness alone, documented in code_prefix.rs's own module doc as a real, narrower gap this item does not close.",
+      "done_when": "code_prefix.rs exists with a real byte-level scanner aware of string literals, raw strings (including b-prefixed byte-string forms) and char literals holding a quote, distinguishing a char literal from a lifetime. Every one of the sixteen files that copied the naive line.split(\"//\").next() shape uses it instead. Every one of the ten self-exemption checks compares a full repo-relative path exactly rather than by suffix. Three fixtures reproduce as tests: a URL inside a string followed by real code, a lifetime not misread as a char literal, and two files with identical content at two different paths getting identical verdicts. cargo test -p nomos-rules passes and cargo clippy -p nomos-rules introduces no new warning, including no indexing_slicing or arithmetic_side_effects violation (workspace deny-level lints).",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/checks/code_prefix.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks/closure_bounds.rs",
+          "crates/rules/nomos-rules/src/checks/lifetime_discipline.rs",
+          "crates/rules/nomos-rules/src/checks/borrowed_container.rs",
+          "crates/rules/nomos-rules/src/checks/procedural_macro.rs",
+          "crates/rules/nomos-rules/src/checks/orphan_modules.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+          "crates/rules/nomos-rules/src/checks/facade.rs",
+          "crates/rules/nomos-rules/src/checks/go_text.rs",
+          "crates/rules/nomos-rules/src/checks/error_text.rs",
+          "crates/rules/nomos-rules/src/checks/flakiness_text.rs",
+          "crates/rules/nomos-rules/src/checks/constant_scope.rs",
+          "crates/rules/nomos-rules/src/checks/domain_type_alias.rs",
+          "crates/rules/nomos-rules/src/checks/scalar_range.rs",
+          "crates/rules/nomos-rules/src/checks/security_text.rs",
+          "crates/rules/nomos-rules/src/checks/enum_shape.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 615 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-ec96d2364fe7a98a.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-15a96404da6a3de4.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788680197,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a9e2aad16d21a8febc1ee410e7f59e90faca91c3"
       },
       "abandoned": [],
       "displaced": [],

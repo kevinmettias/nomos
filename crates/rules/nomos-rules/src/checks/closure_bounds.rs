@@ -35,6 +35,7 @@
 //! `pub fn f(work: impl FnOnce())` would. The boxed-`dyn` case likewise fires on a fixture
 //! and is a genuine zero: nothing in this workspace boxes or shares a closure.
 
+use super::code_prefix::Code_Prefix;
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -121,7 +122,7 @@ fn Minimal_Bound_Findings_In(source: &SourceFile) -> Vec<Finding>
         let code = Code_Prefix(line);
         let line_number = index.saturating_add(1);
 
-        match Closure_Bound_Shape(code)
+        match Closure_Bound_Shape(&code)
         {
             Some(ClosureBoundShape::ExtraBound) if !Has_Adjacent_Explanation(&lines, index) =>
             {
@@ -147,7 +148,7 @@ fn Boxed_Closure_Findings_In(source: &SourceFile) -> Vec<Finding>
     {
         let code = Code_Prefix(line);
 
-        if matches!(Closure_Bound_Shape(code), Some(ClosureBoundShape::BoxedDyn)) && !Has_Adjacent_Explanation(&lines, index)
+        if matches!(Closure_Bound_Shape(&code), Some(ClosureBoundShape::BoxedDyn)) && !Has_Adjacent_Explanation(&lines, index)
         {
             findings.push(Boxed_Closure_Finding(source, index.saturating_add(1)));
         }
@@ -366,20 +367,15 @@ fn Boxed_Closure_Finding(source: &SourceFile, line_number: usize) -> Finding
 /// Verified rather than assumed: composing this rule and running a real `nomos gate run`
 /// against this workspace reported eight findings against this exact file before this
 /// exemption existed, none of them a real violation.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/closure_bounds.rs";
+const OWN_IMPLEMENTATION_FILE: &str = "crates/rules/nomos-rules/src/checks/closure_bounds.rs";
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+    return source.path.replace('\\', "/") == OWN_IMPLEMENTATION_FILE;
 }
 
 /// The code before any line comment. This crate's established per-file convention, which
 /// `P45-CODE-PREFIX-KNOWS-STRINGS` will replace with one shared helper.
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
-}
-
 #[cfg(test)]
 mod tests
 {

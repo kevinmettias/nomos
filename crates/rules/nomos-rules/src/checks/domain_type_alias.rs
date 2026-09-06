@@ -93,11 +93,11 @@ pub fn Check_Domain_Values_Are_Distinct_Types(sources: &[SourceFile]) -> Vec<Fin
 /// Rust string literal, which would otherwise self-match when this crate checks its own
 /// workspace — the same self-exemption every other `*_text.rs`-shaped rule here carries for
 /// the identical reason.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/domain_type_alias.rs";
+const OWN_IMPLEMENTATION_FILE: &str = "crates/rules/nomos-rules/src/checks/domain_type_alias.rs";
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+    return source.path.replace('\\', "/") == OWN_IMPLEMENTATION_FILE;
 }
 
 fn Alias_Findings_For_Source(source: &SourceFile) -> Vec<Finding>
@@ -233,9 +233,10 @@ fn Right_Boundary_Ends_The_Word(line: &str, end: usize) -> bool
 /// hand match rather than a `regex` dependency this crate has never taken on. Returns the
 /// right-hand side, trimmed, with generics or compound spellings left exactly as written so
 /// [`Is_Primitive`]'s exact-match check can tell a bare scalar from anything else.
-fn Rust_Type_Alias_Match(trimmed: &str) -> Option<&str>
+fn Rust_Type_Alias_Match(trimmed: &str) -> Option<String>
 {
-    let code = trimmed.split("//").next().unwrap_or(trimmed).trim();
+    let code_owned = super::code_prefix::Code_Prefix(trimmed);
+    let code = code_owned.trim();
     let after_visibility = Strip_Rust_Visibility(code);
     let after_type = after_visibility.strip_prefix("type ")?.trim_start();
     let (name_and_generics, rest) = after_type.split_once('=')?;
@@ -252,7 +253,7 @@ fn Rust_Type_Alias_Match(trimmed: &str) -> Option<&str>
         return None;
     }
 
-    return Some(aliased);
+    return Some(aliased.to_owned());
 }
 
 fn Strip_Rust_Visibility(code: &str) -> &str
@@ -331,7 +332,7 @@ fn Go_Aliases_In(lines: &[&str]) -> Vec<Alias>
             continue;
         }
 
-        if Go_Type_Alias_Match(trimmed).is_some_and(|aliased| return Is_Primitive(aliased, GO_PRIMITIVE_ALIASES))
+        if Go_Type_Alias_Match(trimmed).is_some_and(|aliased| return Is_Primitive(&aliased, GO_PRIMITIVE_ALIASES))
         {
             found.push(Alias { line_index: index, contract_bound: false });
         }
@@ -343,9 +344,10 @@ fn Go_Aliases_In(lines: &[&str]) -> Vec<Alias>
 /// `type Name = Aliased` — Go never terminates a declaration with a semicolon, and the
 /// presence of the `=` is the whole distinction from a defined type (`type Name Aliased`,
 /// which never matches here at all).
-fn Go_Type_Alias_Match(trimmed: &str) -> Option<&str>
+fn Go_Type_Alias_Match(trimmed: &str) -> Option<String>
 {
-    let code = trimmed.split("//").next().unwrap_or(trimmed).trim();
+    let code_owned = super::code_prefix::Code_Prefix(trimmed);
+    let code = code_owned.trim();
     let after_type = code.strip_prefix("type ")?.trim_start();
     let (name, rest) = after_type.split_once('=')?;
 
@@ -361,7 +363,7 @@ fn Go_Type_Alias_Match(trimmed: &str) -> Option<&str>
         return None;
     }
 
-    return Some(aliased);
+    return Some(aliased.to_owned());
 }
 
 fn Is_Ident_Char(character: char) -> bool

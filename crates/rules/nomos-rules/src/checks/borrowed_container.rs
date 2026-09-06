@@ -25,6 +25,7 @@
 //! `String` and is not what this rule is about: the borrow there is a use, not a contract
 //! offered to a caller. Dropping the colon turned this into a rule against the `&` operator.
 
+use super::code_prefix::Code_Prefix;
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -79,7 +80,7 @@ fn Borrowed_Container_Findings_In(source: &SourceFile) -> Vec<Finding>
     {
         let code = Code_Prefix(line);
 
-        if let Some(found) = BORROWED_CONTAINERS.iter().find(|container| return Borrows(code, container))
+        if let Some(found) = BORROWED_CONTAINERS.iter().find(|container| return Borrows(&code, container))
         {
             findings.push(Borrowed_Container_Finding(source, index.saturating_add(1), found));
         }
@@ -161,11 +162,6 @@ fn Borrowed_Container_Finding(source: &SourceFile, line_number: usize, container
 /// divergence was accepted: the whole workspace contains no instance of any of these four
 /// patterns at all, in code or in a string, so nothing changes verdict for it today. The
 /// fixtures below are written so this file does not become the first — see [`Signature`].
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
-}
-
 #[cfg(test)]
 mod tests
 {

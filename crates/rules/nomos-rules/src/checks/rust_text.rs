@@ -15,6 +15,7 @@
 //! [`Has_Local_Safety_Justification`]'s own doc for why it does not reuse the shared
 //! primitive either way.
 
+use super::code_prefix::Code_Prefix;
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 use std::path::Component;
@@ -61,8 +62,8 @@ fn Unwrap_Expect_Findings_In(source: &SourceFile) -> Vec<Finding>
     for (index, line) in source.text.lines().enumerate()
     {
         let code = Code_Prefix(line);
-        Push_Unwrap_Finding(source, code, index, &mut findings);
-        Push_Placeholder_Expect_Finding(source, code, index, &mut findings);
+        Push_Unwrap_Finding(source, &code, index, &mut findings);
+        Push_Placeholder_Expect_Finding(source, &code, index, &mut findings);
     }
 
     return findings;
@@ -160,7 +161,7 @@ fn Path_Attribute_Findings_In(source: &SourceFile) -> Vec<Finding>
     for (index, line) in source.text.lines().enumerate()
     {
         let code = Code_Prefix(line);
-        if let Some(value) = Path_Attribute_Value(code)
+        if let Some(value) = Path_Attribute_Value(&code)
         {
             if Path_Is_Absolute_Or_Escaping(value)
             {
@@ -560,7 +561,7 @@ fn Has_Unsafe_Construct(code: &str) -> bool
 fn Has_Local_Safety_Justification(lines: &[&str], index: usize) -> bool
 {
     let code = lines.get(index).map(|line| return Code_Prefix(line)).unwrap_or_default();
-    if Is_Unsafe_Declaration(code)
+    if Is_Unsafe_Declaration(&code)
     {
         return Has_Rustdoc_Safety_Section(lines, index);
     }
@@ -766,7 +767,7 @@ fn Unjustified_Construct_Findings_In(source: &SourceFile, rule: Rule<'_>, messag
     for (index, line) in lines.iter().enumerate()
     {
         let code = Code_Prefix(line);
-        if detector.has_construct.Detects(code) && !detector.has_local_justification.Detects(&lines, index)
+        if detector.has_construct.Detects(&code) && !detector.has_local_justification.Detects(&lines, index)
         {
             let finding = Finding_For_Line(source, rule.0, Line_Number(index), message.0);
             findings.push(finding);
@@ -790,11 +791,11 @@ fn Unjustified_Construct_Findings_In(source: &SourceFile, rule: Rule<'_>, messag
 /// building the per-line, string-literal-aware self-reference tracking this crate has so
 /// far declined to build — the same tradeoff every other path-based exemption here already
 /// makes.
-const OWN_IMPLEMENTATION_FILE: &str = "checks/rust_text.rs";
+const OWN_IMPLEMENTATION_FILE: &str = "crates/rules/nomos-rules/src/checks/rust_text.rs";
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    return source.path.replace('\\', "/").ends_with(OWN_IMPLEMENTATION_FILE);
+    return source.path.replace('\\', "/") == OWN_IMPLEMENTATION_FILE;
 }
 
 fn Lines_Of(source: &SourceFile) -> Vec<&str>
@@ -805,11 +806,6 @@ fn Lines_Of(source: &SourceFile) -> Vec<&str>
 fn Line_Number(index: usize) -> usize
 {
     return index.saturating_add(1);
-}
-
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
 }
 
 /// `every-allow-carries-a-justification`'s own example is plain prose with no special
@@ -1317,6 +1313,24 @@ mod tests
         let findings = Check_Unsafe_Justification(&[source]);
 
         assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// `P45-CODE-PREFIX-KNOWS-STRINGS-2`'s real third defect: two files carrying the
+    /// identical content, one at this crate's own real path and one at a path that merely
+    /// ends the same way, must get identical verdicts — a path-suffix self-exemption a
+    /// stranger's repository could reproduce is not a real self-exemption.
+    #[test]
+    fn Test_Check_Unsafe_Justification_Should_Judge_A_Path_That_Only_Ends_Like_The_Own_Implementation_File()
+    {
+        let text = "let slice = unsafe { core::slice::from_raw_parts(ptr, len) };\n";
+        let real = Source("crates/rules/nomos-rules/src/checks/rust_text.rs", text);
+        let spoofed = Source("vendored/crates/rules/nomos-rules/src/checks/rust_text.rs", text);
+
+        let real_findings = Check_Unsafe_Justification(&[real]);
+        let spoofed_findings = Check_Unsafe_Justification(&[spoofed]);
+
+        assert!(real_findings.is_empty(), "{real_findings:?}");
+        assert_eq!(spoofed_findings.len(), 1, "a suffix match is not this crate's own implementation file: {spoofed_findings:?}");
     }
 
     fn Source(path: &str, text: &str) -> SourceFile

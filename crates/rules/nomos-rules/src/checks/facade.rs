@@ -70,6 +70,7 @@
 //! `rust_text`, `security_text`, `concurrency_text` and `error_text` each carry is
 //! therefore absent here on purpose rather than by oversight.
 
+use super::code_prefix::Code_Prefix;
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -359,7 +360,7 @@ fn Facade_Exports_In(source: &SourceFile) -> Vec<FacadeExport>
 
     for line in Code_Lines(&source.text)
     {
-        if let Some(export) = Facade_Export_For_Line(line, &facade_path)
+        if let Some(export) = Facade_Export_For_Line(&line, &facade_path)
         {
             exports.push(export);
         }
@@ -528,14 +529,9 @@ fn Facade_Label(facade: &str) -> &str
     return facade;
 }
 
-fn Code_Prefix(line: &str) -> &str
-{
-    return line.split("//").next().unwrap_or(line);
-}
-
 /// Every line of `text` with any `//` comment removed, so a commented-out declaration is
 /// never read as a real one. The line count is preserved, so an index is still a line.
-fn Code_Lines(text: &str) -> Vec<&str>
+fn Code_Lines(text: &str) -> Vec<String>
 {
     return text.lines().map(Code_Prefix).collect();
 }
