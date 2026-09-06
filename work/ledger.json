@@ -60917,6 +60917,45 @@
         ],
         "patterns": []
       },
+      "state": {
+        "Declined": {
+          "reason": "Premise disproven by experiment. The domain-specification input digest does not cover repository source; it covers the record set only, and the staleness I attributed to a source-only commit was my own stale binary. nomos-ae reproduced the same symptom independently, found the cause, and caught it on a render diff of 85 insertions against 2180 deletions before publishing anything. Measured in a detached worktree at 5816c2bf with a binary built in that worktree: clean baseline exit 0; two source files appended to and rebuilt, still exit 0; a record body appended to and rebuilt, exit 8; that record reverted without rebuilding, still exit 8. Source does not stale it, records do, and a binary that was not rebuilt reports stale about a tree that is correct. My own error was exact: I built the worktree binary, then edited the record citation afterwards, then re-rendered without rebuilding, so the render emitted the superseded record text and mismatched the shared tree's correct binary. cargo does track docs/records as a build input, which is why a rebuild fixes it and why omitting one is silent. Nothing wrong was published: the committed projection carries edd8f1c9 twice and 4bc9dc92 zero times, and re-rendering it on a clean tree produces an empty diff. Superseded by P77-STALE-BINARY-RENDERS-A-TRUNCATED-PROJECTION, which records the real and sharper hazard."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-lspfam",
+        "declined_at": 1788723225
+      }
+    },
+    {
+      "id": "P77-STALE-BINARY-RENDERS-A-TRUNCATED-PROJECTION",
+      "title": "A binary built before the last record edit renders a projection missing records, successfully",
+      "why": "The spec-change skill says to build the binary in the render worktree, because a binary built in the shared tree has the wrong records compiled into it. It does not say what happens when the binary is right at build time and wrong afterwards, which is the common case: build the worktree binary, then edit the record again, then re-render. Record content is compiled in and cargo does track docs/records as a build input, so the second render silently emits the superseded text and every check around it passes. Two sessions hit this within an hour on 2026-09-06. One rendered a projection carrying a record citation it had already replaced, and read the resulting mismatch as evidence that repository source feeds the input digest, filing P77-SPEC-CHANGE-SKILL-RENDER-TREE-RULE-INCOMPLETE on that false premise; experiment later showed source-only changes leave freshness at exit 0 and only record changes stale it. The other, running a binary copied to a scratchpad at session start, re-rendered and produced a diff of 85 insertions against 2180 deletions, having dropped the projection entries for OD-GATE-023, OD-HOST-011, OD-HOST-012, OD-AGENT-004 and the amended OD-RULES-025, and caught it only by reading the diff. The render exits 0 and freshness then agrees with it, because both are computed from the same stale compiled-in record set. That is the shape this repository files items about: a check that passes by not looking.",
+      "done_when": "The spec-change skill states that the render binary must be rebuilt after the last record edit and not merely built once in the worktree, gives the measured failure mode that a stale binary renders a projection with records missing while exiting 0, names reading the render diff as the check that catches it, and records that cargo tracks docs/records so a rebuild is sufficient. The measurements distinguishing record-fed from source-fed inputs are stated so the next session does not re-derive them from a symptom.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-spec-change/SKILL.md"
+        ],
+        "patterns": []
+      },
       "state": "Ready",
       "depends_on": [],
       "blocked": null,
