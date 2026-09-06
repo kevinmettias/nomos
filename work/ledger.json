@@ -52896,7 +52896,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "declared territory (one new crate, nomos-cap-review) presumes the wrong shape. OD-EXECUTOR-006 already decided a CodeRabbit-style tool is connector-shaped (ARC-CONNECTOR-001), not a same-band ToolProvider capability crate, and explicitly deferred the fact-contract question until a second connector exists. A second connector -- nomos-connector-coderabbit, contract+provider+fixture, real gh api integration -- already exists in full on the unmerged track-c-external-kwb branch (commit d85a22a0), 342 dev commits stale (predates the zone migration and crate reorg). Reauthoring as a port-and-adapt item with corrected territory rather than a from-scratch nomos-cap-review crate."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -52912,7 +52916,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788672774
+      }
     },
     {
       "id": "P42-SECOND-HARNESS-EXECUTOR",
@@ -52963,7 +52970,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "not buildable: KWB itself has no exposed interface yet. Verified directly against f:/repos/kwb -- every one of its ten crates is an unimplemented scaffold (kwb-cli/kwb-mcp print 'nothing wired yet', kwb-platform-std says 'nothing implemented yet', kwb-contracts stays deliberately empty pending a decision KWB has not made about its own citation-identity shape). D-137 already says 'nothing yet produces or consumes' KnowledgeReferenceId, and ARC-ECOSYSTEM-001 states plainly 'no KWB or XVPE integration is implemented, and none is scheduled here.' Building nomos-knowledge-context now would mean inventing both ends of a protocol against a peer that doesn't have one. Reauthored as a Decision item citing OD-EXECUTOR-009, which records promotion as honestly refused (nothing exists to promote) while leaving acquisition and selection blocked on KWB's own progress."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -52979,7 +52990,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788673052
+      }
     },
     {
       "id": "P42-SEMANTIC-FACT-FAMILY",
@@ -56880,6 +56894,97 @@
           "exit_code": 0
         },
         "revision": "a7e1e126073f5f0a531af255193cc126f3ec2c42"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-EXECUTOR-009-PROBE",
+      "title": "probe",
+      "why": "probe",
+      "done_when": "probe",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-EXECUTOR-009-probe.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "probe to check identifier availability; real item follows"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788672995
+      }
+    },
+    {
+      "id": "P59-KWB-BRIDGE-MECHANISM",
+      "title": "Knowledge context cannot bridge to a peer that has not exposed an interface yet",
+      "why": "TaskEnvelope.knowledge_context is a declared field the executor ignores, and OD-EXECUTOR-007 already deferred it alongside the three fields that record did decide. A person required a real bridge: acquisition, provenance, task-scoped selection, and promotion recorded either way. Verified directly against f:/repos/kwb rather than assumed: every one of its ten crates is real but unimplemented today -- kwb-cli and kwb-mcp print that nothing is wired, kwb-platform-std says nothing is implemented, and kwb-contracts stays deliberately empty pending a citation-identity decision KWB itself has not made. D-137 already says nothing yet produces or consumes KnowledgeReferenceId, and ARC-ECOSYSTEM-001 states no KWB integration is implemented or scheduled. There is no interface on the KWB side today for a bridge to acquire from, select against, or promote to.",
+      "done_when": "A record confirms KWB exposes no interface yet (checked directly against the real repository, not assumed), confirms D-137 and ARC-ECOSYSTEM-001's own claims are still current, records promotion back across the boundary as honestly refused (nothing exists yet to promote), and leaves acquisition and selection explicitly blocked on an observable KWB-side fact rather than a Nomos-side design pass. No code changes under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s\n\n\nrunning 15 tests\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788673113,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "bf5d2f224ce44e71980318c01a05b38780a1d612"
       },
       "abandoned": [],
       "displaced": [],

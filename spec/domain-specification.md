@@ -73,6 +73,7 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md | authored | 19 | 6 | sha256:0c2b9021270c0e484742945479352a8b2d9d573056158e27d377c6f56433545d |
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md@authored | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md | authored | 21 | 6 | sha256:aaa9dd1bb14d99b9df945e287c5e7452b3630a41da0ec8983451f3a9bf1be262 |
 | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md@authored | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md | authored | 19 | 6 | sha256:2b4a9d2bb3daa50e11f78a921b819c109cbcab767766c84970181f3873081454 |
+| docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md@authored | docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md | authored | 18 | 6 | sha256:45cf84c5f564bbf8c10b18bf9bcfd793f0fb284d663a48bda04e8376577f3728 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
@@ -690,6 +691,12 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#9 | authored | 2 | The Decision |
 | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#13 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#18 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#1 | authored | 1 | Knowledge context cannot bridge to a peer that has not exposed an interface yet |
+| docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#2 | authored | 2 | Question |
+| docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#9 | authored | 2 | The Decision |
+| docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#12 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#17 | authored | 2 | Status |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1 | authored | 1 | A skipped test reports ok, so the size of the hole is declared rather than the hole being closed |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#5 | authored | 2 | What Was Found |
@@ -17057,6 +17064,171 @@ what `WorkResult` could ever carry from an agent.
 
 Accepted. A narrow, adversarially-verified JSON schema is the mechanism; `WorkResult`'s
 ungroundable fields stay structurally absent rather than model-filled; no code changes here.
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#1
+
+*revision: authored · kind: heading · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet · hash: sha256:5da8947f24ce147c31321dc6e510fc2f520fe4e788a98fb1e0038ecf0af80b9f*
+
+# Knowledge context cannot bridge to a peer that has not exposed an interface yet
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#2
+
+*revision: authored · kind: heading · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#3
+
+*revision: authored · kind: prose · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / Question · hash: sha256:017fbcec03175677f9e06024b994759ae0acca89fd1c3d402e9b721d88729dd0*
+
+`TaskEnvelope.knowledge_context: Vec<KnowledgeReferenceId>` is a declared field the executor
+ignores. A person required a real bridge: acquisition from a real source, provenance per
+item, task-scoped selection decided by the system rather than guessed by a caller, and
+promotion back across the boundary either implemented or recorded as refused, all without
+normative authority leaving Nomos. `OD-EXECUTOR-007` named this same field as one of
+`TaskEnvelope`'s unenforced four and declined to build it speculatively, alongside `scope`,
+`prohibited_changes` and `available_tools`, which that record did decide. Whether
+`knowledge_context` is now buildable needed checking directly against KWB itself, not
+assumed from the field's own shape.
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#4
+
+*revision: authored · kind: heading · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#5
+
+*revision: authored · kind: prose · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / What Was Measured · hash: sha256:ccd135387c5962c9774ddc4f5109187d52be510d9d45f271d7664170a297ec4b*
+
+**`KnowledgeReferenceId` was admitted on exactly this understanding, and nothing has changed
+it.** `D-137`'s own title says so outright: "`KnowledgeReferenceId` is admitted to
+nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes
+one." Two committed requirement assessments cite it as their gap for the identical reason:
+`AGT-007.assessment` — "the KWB half... is unreachable: `KnowledgeReferenceId` exists (D-137)
+but, by that record's own text, 'nothing yet produces or consumes one'" — and
+`AGT-017.assessment`, the same citation for a handoff's cross-system links.
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#6
+
+*revision: authored · kind: prose · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / What Was Measured · hash: sha256:061d81c47b755d63cdc5035df48ae9086458d4369a87ba94e43505d2166ebb73*
+
+**`ARC-ECOSYSTEM-001` draws the boundary precisely and deliberately builds nothing across
+it.** KWB owns knowledge — rationale, semantic intent, decision context, long-term epistemic
+memory; Nomos owns software-specific reality. The record diagrams the crossing (KWB semantic
+intent through a governed projection into a Nomos executable contract) and states the rule a
+bridge must honour — a rationale is not enforceable, only a derived contract is, and the
+derivation must be a recorded step — but names no concrete interface, protocol, or wire
+format, and says outright: "No KWB or XVPE integration is implemented, and none is scheduled
+here." The boundary is a governance decision, not yet a crossing anything could build
+against.
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#7
+
+*revision: authored · kind: prose · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / What Was Measured · hash: sha256:78e428350895a59d55469357dac57fdb4dc016df9dc94b5bfc687e68ce7d2302*
+
+**KWB itself was read directly, not assumed from its own architecture documents.** It is
+real and structured — ten crates, band-organized, densely commented with the same
+contract-first discipline this workspace uses — and every one of them is an unimplemented
+scaffold today: `kwb-cli/src/main.rs` prints "no verbs are wired yet"; `kwb-mcp/src/main.rs`
+prints "no tools are wired yet" and names nine planned read-only tools none of which exist;
+`kwb-platform-std/src/lib.rs` says plainly "Nothing is implemented yet"; `kwb-contracts`'s own
+crate stays deliberately empty because, in its own words, the shape a citation identity
+string takes "is a decision rather than a guess" until `kwb-model` exists to derive it from.
+There is no CLI, no HTTP endpoint, no file export, and no library surface on the KWB side
+today that anything could call or read.
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#8
+
+*revision: authored · kind: prose · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / What Was Measured · hash: sha256:25fb9a1835d06a28aa3c2e71b393443c9286520108ca680062b033ed68d6f7ec*
+
+**This is not a design gap Nomos can close by itself.** `OD-RULES-024` and `OD-RULES-025`
+both found a missing fact or convention *this workspace* could eventually decide and
+materialize. Here the blocker is external: KWB has not yet decided what a
+`KnowledgeReferenceId`'s own string content is, has not built retrieval or query, and has
+wired no host at all. A Nomos-side `nomos-knowledge-context` crate built now would have no
+real peer to acquire from, select against, or promote to — it would mean inventing both ends
+of a protocol against an interface that does not exist, the identical speculative-building
+`D-137` already declined when it admitted the identifier alone and stopped there.
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#9
+
+*revision: authored · kind: heading · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#10
+
+*revision: authored · kind: prose · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / The Decision · hash: sha256:9cf9c9a7b83dd1ede0c4c2d32a451c92ff8b7902d722925f8e582be26a4313cc*
+
+**Acquisition and selection are not built here.** Both presuppose a KWB-side interface —
+something that answers a query, something that names a citation's shape — that this
+workspace does not control and cannot honestly stand in for. Building either now would be
+guessing at a peer's contract before the peer has one, which `ARC-ECOSYSTEM-001`'s own
+ownership split exists to prevent as much as to enable.
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#11
+
+*revision: authored · kind: prose · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / The Decision · hash: sha256:06b8c2e987941d6978b5fed051c42f97e55f85acccb062d5232be4c18897784b*
+
+**Promotion back across the boundary is recorded as refused, and this much is genuinely
+free.** `ARC-ECOSYSTEM-001` already forbids normative authority leaving Nomos, and since
+nothing yet produces a `knowledge_context` entry, there is nothing a promotion path would
+carry. Refusing it costs nothing and states a true fact rather than an aspiration: there is
+no promotion mechanism because there is no acquisition mechanism for it to promote from.
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#12
+
+*revision: authored · kind: heading · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#13
+
+*revision: authored · kind: prose · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / What This Record Does Not Do · hash: sha256:35f31e4c0c1608ee50b1db6af4654a0a29fab50ec2025a26add631b637aa1fe3*
+
+**No code changes here.** It does not build `crates/orchestration/nomos-knowledge-context`,
+which is not authored — that territory presumed a real KWB peer that does not exist yet, the
+same way `OD-RULES-024`'s architecture-drift territory presumed a capability that was never
+built.
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#14
+
+*revision: authored · kind: prose · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / What This Record Does Not Do · hash: sha256:be6830452a4c0aed9f2f0d2c4bdfd9080c62a6ce1bb637db1b78bfb92f65f8bb*
+
+It does not amend `ARC-ECOSYSTEM-001` or `D-137`. Both already say precisely what this
+record measured; this record confirms their claims are still current rather than
+superseding them.
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#15
+
+*revision: authored · kind: prose · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / What This Record Does Not Do · hash: sha256:54507e7a7480904564f037a31b525d74dd83fa01ad6c48a6945b8b1c063e0624*
+
+It does not withdraw the requirement. `AGT-007` and `AGT-017` stay `Partial` for the
+identical reason they already are: the gap is real, and closing it is gated on KWB's own
+progress, not on a decision Nomos has been withholding.
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#16
+
+*revision: authored · kind: prose · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / What This Record Does Not Do · hash: sha256:f5f03265511e2170d2ed11cb18630913964c356d0798823b1071191f5a720c34*
+
+It does not say KWB will never be ready. Revisiting this is conditioned on an observable
+KWB-side fact — a real host binary that answers a query, or a decided citation-identity
+shape in `kwb-contracts` — not on a timer or another Nomos-side design pass.
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#17
+
+*revision: authored · kind: heading · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#18
+
+*revision: authored · kind: prose · heading: Knowledge context cannot bridge to a peer that has not exposed an interface yet / Status · hash: sha256:d1ce573216cf6cd90dba4bf88e1cf1218c45d6d8e969c3247e4fc0714bd9e509*
+
+Accepted. Knowledge-context acquisition and selection are blocked on KWB exposing a real
+interface, which it has not done; promotion back across the boundary is recorded as refused,
+honestly, because nothing yet exists to promote.
 
 ### docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1
 
