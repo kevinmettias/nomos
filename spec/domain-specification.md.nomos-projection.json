@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:4d630c3640ab46f64304df2cae84866250c8e760e13aed84cca860ac81ffbe78",
-  "inputs_digest": "sha256:0a61e371fa1d3bd485b54feaef4a917d12f3c71c9836cbd34cc5771acdc41dee",
+  "content_digest": "sha256:ef632d3c7c742c376094274fd1b9dc407ec710c34d076417141b2ef430cc8a09",
+  "inputs_digest": "sha256:ad1899f9e5142b8d3d1ad0142580575e285ebab07bd886cf12bdac8120bc7446",
   "sections": [
     [
       "Documents",
-      205
+      206
     ],
     [
       "Sections",
-      1666
+      1672
     ],
     [
       "Source blocks",
-      5795
+      5815
     ]
   ],
   "inputs": [
@@ -889,6 +889,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md@authored",
       "hash": "sha256:7c00cbb230b504b22e7922e6d767d0c0a9bd413158db489b9c851c70d34f83fe"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md@authored",
+      "hash": "sha256:ea313379a437b3b5e7ba623617be84b08618537398e039ce978a91cec5a88df3"
     },
     {
       "content": "documents",
@@ -8044,6 +8049,36 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#17",
       "hash": "sha256:0734889e917c5ac645e61b9f46a2c813e114c286d4d225732e4be8b0274987bb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#1",
+      "hash": "sha256:5e54a592014193356057ff1715f112b33358effb3b3ad154fbdfbcf0b9370a40"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#2",
+      "hash": "sha256:8c11ef3e9437476724efe573219b7c5023547bb48ace573ac80a91001a498e2c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#4",
+      "hash": "sha256:482656e6029a277c96eab181547717b8c47a5199048c2849bf6b9d2c849ea0d1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#9",
+      "hash": "sha256:895e025396c9feedc2d79ef8f27c167eb1c947db2acea0c0e83d9a5211f50a84"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#15",
+      "hash": "sha256:6af5ce7c8ca96f12318fe08e261b3f0909f58afaed3b03269f6bbbbdd70e28c1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#19",
+      "hash": "sha256:cf81c3f7c72e4bc221be00b878dc1fe4cb9b4808cb22133eab80f823d47304ad"
     },
     {
       "content": "headings",
@@ -33984,6 +34019,106 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#18",
       "hash": "sha256:83b203aa734ddea741238982f4df0bd2df55d70dac21bec81a6e5da661070532"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#1",
+      "hash": "sha256:a444417c5d700b5c804c836f74324f028e4bfac91ee684d0bceaf49162bf52db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#3",
+      "hash": "sha256:cad51b2d5035e3ec56653e80b3111382cefbf477182a4923d7d08d665b611b40"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#5",
+      "hash": "sha256:6a4d8dc9ab95211ac6cde98b77507705b6c707439d95c345783ec6283c2363fb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#6",
+      "hash": "sha256:ec3a6b0550d70287625bc63608b5cdcccf66e9930ba9df4086ff0edb3cc40033"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#7",
+      "hash": "sha256:f3e459fc44c129be3ea76766d7e5242cf6e122b49ad13adeffe24f6c28681816"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#8",
+      "hash": "sha256:eaba4f7a97a7f7c801b919080c1fc7090f83a58de8909c3478531de9e9841d3e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#9",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#10",
+      "hash": "sha256:659846ed528fb5761d8466518a4d0b7d5b56ebd5ee18040b85f494a3b2cfd11d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#11",
+      "hash": "sha256:feef8cef92801821dd8c30003ae9dc7eb3744b53dd9fd44e692d0ae104f1c4b2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#12",
+      "hash": "sha256:debeaa67b3d51b80725a1cffce6f036516d7157a6b75705eb09d7e91f6268b5b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#13",
+      "hash": "sha256:1dc6fcfaaeb84b482622d339fd591eaeaa1363cc7bef54641b43f0ba3b6ffebf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#14",
+      "hash": "sha256:88272aba67814af320584543ada07dd8dd8f6f25949925d0443d217828697a9a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#15",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#16",
+      "hash": "sha256:32a2a96abc9a16062393ddb8d20a2f48990e3699c7dd4bf365aec55d83d88af1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#17",
+      "hash": "sha256:caa302a176aecea0e5ff79068ad7c40c3751a5510a192df79dd9bb06eae45423"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#18",
+      "hash": "sha256:3dfc7132eeb9a1062ae35305b9fe01a69d45328c56c47e554e75a9380175d924"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#19",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#20",
+      "hash": "sha256:a6b78507bf328cf5d17eb19f3c9b0eef68c82be46373e84fc0bb054f5be2a36c"
     },
     {
       "content": "blocks",

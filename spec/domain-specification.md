@@ -184,6 +184,7 @@ profile: domain-specification
 | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md@authored | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md | authored | 16 | 6 | sha256:be774faf1f653161ca537fca09f49287c8b993c75d9f1cc9385f73849c3136ae |
 | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md@authored | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md | authored | 16 | 6 | sha256:2021593cf5f8734035d023e39e1f1fc3fabf8ee21b2ddd4dd7322195e9ff483f |
 | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md@authored | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md | authored | 18 | 6 | sha256:7c00cbb230b504b22e7922e6d767d0c0a9bd413158db489b9c851c70d34f83fe |
+| docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md@authored | docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md | authored | 20 | 6 | sha256:ea313379a437b3b5e7ba623617be84b08618537398e039ce978a91cec5a88df3 |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md@authored | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md | authored | 30 | 6 | sha256:ee25e5bafb0ab46ae96890e572a96aa4a970f0f854957c7e2474998c6a5949ad |
 | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md@authored | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md | authored | 16 | 6 | sha256:ce866cdba1b609d99736475258c51c1342b6274867a9c2e8f8703946cec253c3 |
 | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md@authored | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md | authored | 17 | 6 | sha256:06d7276cc87daf98d5315060d60a9a8b745eb6a1e1af5b124691dc7e3ea0f097 |
@@ -1620,6 +1621,12 @@ profile: domain-specification
 | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#8 | authored | 2 | The Decision |
 | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#14 | authored | 2 | What This Does Not Do |
 | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#17 | authored | 2 | Status |
+| docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#1 | authored | 1 | What artifact discharges a justification requirement, and whether it must say anything |
+| docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#9 | authored | 2 | The Decision |
+| docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#15 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#19 | authored | 2 | Status |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#1 | authored | 1 | Composition resolves a declared rule package against a linked implementation, and OD-HOST-004's trigger has already fired |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#6 | authored | 2 | What Was Measured |
@@ -47740,6 +47747,210 @@ declared set of zones it may reach and, for the seven zones the real migration m
 need it, a named list of same-zone edges. Amended by `P41-RULES-020-RECONCILE-REAL-
 MEASUREMENT` once `P41-ZONES-MIGRATION-3`'s own exhaustive cross-check found this record's
 "one zone" claim incomplete; the zone model itself is unchanged, only the count.
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#1
+
+*revision: authored · kind: heading · heading: What artifact discharges a justification requirement, and whether it must say anything · hash: sha256:a444417c5d700b5c804c836f74324f028e4bfac91ee684d0bceaf49162bf52db*
+
+# What artifact discharges a justification requirement, and whether it must say anything
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#2
+
+*revision: authored · kind: heading · heading: What artifact discharges a justification requirement, and whether it must say anything / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#3
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / Question · hash: sha256:cad51b2d5035e3ec56653e80b3111382cefbf477182a4923d7d08d665b611b40*
+
+`Check_Unsafe_Justification` was measured on 2026-09-05 against `aho-corasick` (32 files,
+20,937 lines, a crate that documents its safety contracts carefully) and produced 219
+blocking findings there. Checked against the source directly rather than counted:
+`packed/ext.rs` line 8 declares an `unsafe fn` with a rustdoc `# Safety` section on the three
+lines directly above it, and `automaton.rs` line 198 declares an `unsafe trait` with the
+identical convention — both reported as unjustified. Separately, a bare `// SAFETY:` marker
+with nothing after it satisfies the rule today, unlike its siblings. Neither half is fixable
+by editing the matcher alone: both are the same question, what artifact discharges a
+justification requirement, and whether it has to say anything — and the answer shapes at
+least four rules that each ask for one.
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#4
+
+*revision: authored · kind: heading · heading: What artifact discharges a justification requirement, and whether it must say anything / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#5
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / What Was Measured · hash: sha256:6a4d8dc9ab95211ac6cde98b77507705b6c707439d95c345783ec6283c2363fb*
+
+**Nomos's own self-check has never exercised this rule against a real `unsafe` declaration.**
+Fifty-seven crates in this workspace declare `#![forbid(unsafe_code)]`, and a direct search
+of every real `.rs` file under `crates/` found exactly zero genuine `unsafe fn`, `unsafe
+impl`, `unsafe trait` or `unsafe { }` construct — the only two files matching a text search
+are `rust_text.rs` itself (this rule's own hand-written test fixtures) and
+`nomos-lang-rust-scan/src/item_kind.rs` (a string-literal syntax table, not real unsafe code).
+The defect this record answers was invisible to this workspace's own gate for the same
+reason `P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON` names: a rule tuned only
+against fixtures and a codebase that forbids the construct it judges has never been checked
+against a real population of it.
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#6
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / What Was Measured · hash: sha256:ec3a6b0550d70287625bc63608b5cdcccf66e9930ba9df4086ff0edb3cc40033*
+
+**`Has_Unsafe_Construct` treats a block and a declaration as one shape, and they are not.**
+`crates/rules/nomos-rules/src/checks/rust_text.rs` matches `unsafe {`, `unsafe fn`, `unsafe
+impl` and `unsafe trait` identically, then checks all four for the same artifact:
+`Comment_Has_Safety_Reason`, which requires a `//`-prefixed line (checked via `Comment_Text_
+Of`, which also accepts `///` and `//!` as comment markers generically) whose trimmed text
+`starts_with("safety:")`. A rustdoc `# Safety` heading — the convention `rustc` and `clippy::
+missing_safety_doc` already ask for on an `unsafe fn` — is a markdown heading, `# Safety`, not
+a line starting with the literal text `safety:`. It is scanned as a candidate comment line by
+the same `Previous_Comment_Block_Has` walk that would find a `// SAFETY:` line, and still
+fails the check, because the predicate it is tested against looks for the wrong prefix. An
+`unsafe {}` block has no declaration site of its own to carry a doc section; a `#[must_use]`-
+style item declaration does, and `unsafe fn`/`unsafe trait`/`unsafe impl` are declarations.
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#7
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / What Was Measured · hash: sha256:f3e459fc44c129be3ea76766d7e5242cf6e122b49ad13adeffe24f6c28681816*
+
+**A third artifact shape already exists in this workspace, correctly, and is not the one
+`unsafe` needs.** `Check_Suppression_Directives_Carry_A_Reason` (`go_text.rs`) judges Go's
+`//nolint`/`//nolint:linter` directive, checked via `Nolint_Has_Reason` against trailing text
+on the identical line as the directive — a same-line marker, because a suppression directive
+in Go carries no separate declaration to attach a doc section to and is not naturally split
+across two lines the way a preceding comment is. This shape is already right for what it
+judges and is not proposed as a substitute for either of the other two.
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#8
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / What Was Measured · hash: sha256:eaba4f7a97a7f7c801b919080c1fc7090f83a58de8909c3478531de9e9841d3e*
+
+**The vacuous-marker gap is real and is not shared by `unsafe`'s own siblings.** `Has_Local_
+Allow_Justification`, `Has_Local_Inline_Always_Justification` and `Has_Local_Ignore_
+Justification` all check `Comment_Is_Non_Empty` — real, non-whitespace text beyond the
+comment marker. `Comment_Has_Safety_Reason` checks only a fixed prefix, so `// SAFETY:` alone,
+or `// SAFETY: TODO`, satisfies it today. `allow`, `inline-always` and Go's `nolint` never had
+this gap; `unsafe` is the one rule among its siblings that accepts a marker saying nothing.
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#9
+
+*revision: authored · kind: heading · heading: What artifact discharges a justification requirement, and whether it must say anything / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#10
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / The Decision · hash: sha256:659846ed528fb5761d8466518a4d0b7d5b56ebd5ee18040b85f494a3b2cfd11d*
+
+**Three artifact shapes, matched to what the construct actually has to attach to, not one
+matcher applied uniformly:**
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#11
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / The Decision · hash: sha256:feef8cef92801821dd8c30003ae9dc7eb3744b53dd9fd44e692d0ae104f1c4b2*
+
+1. **Adjacent comment** — a `//`-prefixed line, on the same line as the construct or in the
+   immediately preceding comment block — for a construct with no declaration site of its own
+   to document: `unsafe { }` blocks, `#[inline(always)]`, `#[allow(...)]`/`#![allow(...)]`,
+   and a bare `#[ignore]`. Unchanged from what `allow`, `inline-always` and the disabled-test
+   rule already do correctly.
+2. **A rustdoc `# Safety` section** — a markdown heading, not a line-comment prefix — for a
+   construct that is itself a declaration with its own doc-comment site: `unsafe fn`, `unsafe
+   trait`, `unsafe impl`. `Check_Unsafe_Justification` needs a second detector recognizing
+   this heading, checked in place of (not in addition to, for these three constructs) the
+   `// SAFETY:` line-comment check that stays correct for a bare `unsafe { }` block.
+3. **Same-line trailing text** — text following the directive on its own line, no adjacent
+   comment involved — for a directive that is inherently one line and carries no separate
+   declaration: Go's `//nolint`/`//nolint:linter`. Already correct; not touched.
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#12
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / The Decision · hash: sha256:debeaa67b3d51b80725a1cffce6f036516d7157a6b75705eb09d7e91f6268b5b*
+
+**A justification must carry real text beyond its marker, in every one of the three shapes,
+with no exception.** `Check_Unsafe_Justification`'s own `Comment_Has_Safety_Reason` is the
+one place this workspace accepts a marker saying nothing; every sibling rule already refuses
+one, and this decision closes the gap by making `unsafe` match its siblings rather than by
+loosening any of them.
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#13
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / The Decision · hash: sha256:1dc6fcfaaeb84b482622d339fd591eaeaa1363cc7bef54641b43f0ba3b6ffebf*
+
+**Applied by name to the four rules named:**
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#14
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / The Decision · hash: sha256:88272aba67814af320584543ada07dd8dd8f6f25949925d0443d217828697a9a*
+
+- `Check_Unsafe_Justification`: needs both fixes. Its `unsafe {}` block case keeps the
+  adjacent-comment shape, corrected to require real text after `safety:` (shape 1, vacuous
+  gap closed). Its `unsafe fn`/`unsafe trait`/`unsafe impl` cases move to shape 2, a real
+  `# Safety` heading with real text following it, checked in the construct's own preceding
+  doc-comment block rather than a `//` comment.
+- `Check_Inline_Always_Justification`: no change. `#[inline(always)]` is always an attribute
+  with no declaration site of its own distinct from what it decorates; shape 1 already fits,
+  and its justification is already non-vacuous.
+- `Check_Every_Allow_Carries_A_Justification`: no change, for the identical reason.
+- `Check_Suppression_Directives_Carry_A_Reason`: no change. Shape 3 already fits Go's
+  `//nolint` convention and is already non-vacuous.
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#15
+
+*revision: authored · kind: heading · heading: What artifact discharges a justification requirement, and whether it must say anything / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#16
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / What This Record Does Not Do · hash: sha256:32a2a96abc9a16062393ddb8d20a2f48990e3699c7dd4bf365aec55d83d88af1*
+
+**No rule code moves here.** `Check_Unsafe_Justification`'s new `# Safety`-heading detector,
+its retained (and corrected) block-level `// SAFETY:` detector, and the test fixtures proving
+both — including a real case shaped like `aho-corasick`'s own `packed/ext.rs` — are a
+follow-up item's own territory: `crates/rules/nomos-rules/src/checks/rust_text.rs` alone, no
+new capability and no new fact, since this is the identical text-scanning shape every rule in
+that file already uses.
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#17
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / What This Record Does Not Do · hash: sha256:caa302a176aecea0e5ff79068ad7c40c3751a5510a192df79dd9bb06eae45423*
+
+It does not touch `Check_A_Test_Does_Not_Retry_Until_Green`, `Check_Panics_Are_Justified_
+Documented_And_Validated` or `Check_Shared_Interior_Mutability_Says_Why`. Those were not
+named in the item this record answers, and each judges a construct (a retried assertion, a
+panic macro, an `Rc<RefCell<_>>`) with no declaration-vs-block duality of its own to
+reconsider — they are not silently assumed correct, they are simply outside this record's
+own scope.
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#18
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / What This Record Does Not Do · hash: sha256:3dfc7132eeb9a1062ae35305b9fe01a69d45328c56c47e554e75a9380175d924*
+
+It does not decide anything about a doc-comment convention for a language other than Rust.
+Go's `//nolint` is already shape 3 and untouched; no other language in this workspace has an
+`unsafe`-shaped construct today.
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#19
+
+*revision: authored · kind: heading · heading: What artifact discharges a justification requirement, and whether it must say anything / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#20
+
+*revision: authored · kind: prose · heading: What artifact discharges a justification requirement, and whether it must say anything / Status · hash: sha256:a6b78507bf328cf5d17eb19f3c9b0eef68c82be46373e84fc0bb054f5be2a36c*
+
+Accepted. Three artifact shapes — an adjacent comment, a rustdoc `# Safety` section, and
+same-line trailing text — matched to whether a construct has its own declaration site to
+document, not one shape applied to all four. Every shape must carry real text beyond its
+marker; `Check_Unsafe_Justification`'s block case already can be fixed to require this, and
+its declaration cases need the new rustdoc-heading detector this record names but does not
+build. `inline-always`, `allow` and Go's `nolint` are already correct and unchanged.
 
 ### docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md#1
 
