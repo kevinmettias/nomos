@@ -42,6 +42,7 @@
 //! first's is not that population yet.
 
 use crate::correction_command::CorrectionCommand;
+use crate::correction_family::CorrectionFamily;
 use crate::correction_outcome::CorrectionOutcome;
 use crate::phantom_mirror::{self, ClaimError, Finding_Reference, Phantom_Claim, PhantomClaim};
 use crate::trailing_whitespace::{self, TrailingWhitespaceClaim};
@@ -159,7 +160,7 @@ struct JudgeContext<'a>
 /// non-`Judged` check outcome already decides.
 fn Judged<Launcher: ProcessLauncher, Fs: FileSystem>(sources: &[SourceFile], launcher: &Launcher, filesystem: &Fs, context: JudgeContext<'_>) -> Result<Vec<Finding>, CorrectionOutcome>
 {
-    let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR), RuleId::New(nomos_rules::NO_TRAILING_WHITESPACE)];
+    let selected: Vec<RuleId> = CorrectionFamily::ALL.iter().map(|family| return family.Rule()).collect();
     let outcome = nomos_check_orchestration::Run(
         sources,
         nomos_check_orchestration::RunContext {
@@ -199,20 +200,38 @@ struct ClaimedFix
     evidence_reference: EvidenceRef,
 }
 
-/// Tries phantom-mirror's own claim first, then trailing-whitespace's, against
-/// `findings` -- the first to recognize one wins. `None` if neither does, a clean run.
-/// `Some(Err(...))` if a family recognized a claim but could not safely build a
-/// candidate for it. This crate's own module doc says what this priority order is and is
+/// Tries each [`CorrectionFamily`] against `findings`, in [`CorrectionFamily::ALL`]'s own
+/// declared order -- the first to recognize a claim wins. `None` if none does, a clean
+/// run. `Some(Err(...))` if a family recognized a claim but could not safely build a
+/// candidate for it. This crate's own module doc says what that priority order is and is
 /// not.
+///
+/// Iterating the family list and matching exhaustively over it is deliberate, and is the
+/// mechanism the whole declaration rests on: a variant added to [`CorrectionFamily`] does
+/// not compile until it is wired to a real recognizer here, so a family cannot be selected
+/// by [`Judged`] and then be recognized by nobody. An `if let` chain, which is what this
+/// was, would have accepted the new family in silence.
 fn Claimed_Fix<Fs: FileSystem>(root: &Path, findings: &[Finding], filesystem: &Fs) -> Option<Result<ClaimedFix, CorrectionOutcome>>
 {
-    if let Some(claim) = findings.iter().find_map(Phantom_Claim)
+    for family in CorrectionFamily::ALL
     {
-        return Some(Phantom_Mirror_Fix(root, &claim, filesystem));
-    }
-    if let Some(claim) = trailing_whitespace::Trailing_Whitespace_Claim(findings)
-    {
-        return Some(Trailing_Whitespace_Fix(root, &claim, filesystem));
+        match family
+        {
+            CorrectionFamily::PhantomMirror =>
+            {
+                if let Some(claim) = findings.iter().find_map(Phantom_Claim)
+                {
+                    return Some(Phantom_Mirror_Fix(root, &claim, filesystem));
+                }
+            }
+            CorrectionFamily::TrailingWhitespace =>
+            {
+                if let Some(claim) = trailing_whitespace::Trailing_Whitespace_Claim(findings)
+                {
+                    return Some(Trailing_Whitespace_Fix(root, &claim, filesystem));
+                }
+            }
+        }
     }
 
     return None;

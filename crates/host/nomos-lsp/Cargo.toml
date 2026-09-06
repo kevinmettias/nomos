@@ -20,9 +20,11 @@ lsp-server = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 nomos-contracts = { workspace = true }
-# `Zone`, `ZONES` and the composed rule constants (`COMPLETENESS_MIRROR`,
-# `NO_TRAILING_WHITESPACE`, `DESCRIPTORS`) this crate reads to answer "which architectural
-# component" and "which correction family", without judging anything itself.
+# `Zone`, `ZONES` and `DESCRIPTORS`, which this crate reads to answer "which architectural
+# component" and "which governing rule" without judging anything itself. "Which correction
+# family" is not answered from here: that is `nomos-correction-orchestration`'s own
+# `CorrectionFamily`, below. `COMPLETENESS_MIRROR` and `NO_TRAILING_WHITESPACE` appear in
+# this crate's tests as fixture rule ids and nowhere in what it compiles for a real run.
 nomos-rules = { workspace = true }
 nomos-platform = { workspace = true }
 nomos-platform-std = { workspace = true }
@@ -36,12 +38,13 @@ nomos-capability = { workspace = true }
 # rather than reaching into another composition root's private module) and renders what
 # `Run` returns.
 nomos-check-orchestration = { workspace = true }
-# The narrow, real answer to "is a correction available for this finding": exactly the two
-# rule ids (`nomos_rules::COMPLETENESS_MIRROR`, `nomos_rules::NO_TRAILING_WHITESPACE`)
-# `nomos-correction-orchestration::run::Judged` composes today. Not invoked here -- see
-# `walk_outward/available_correction.rs`'s own doc for why this crate declares the
-# membership rather than re-running the pipeline per diagnostic, and for the
-# duplicated-knowledge risk that judgment call carries.
+# The narrow, real answer to "is a correction available for this finding": `CorrectionFamily`,
+# that crate's own declaration of which rules it composes a correction for, read here rather
+# than copied. This crate declared that membership itself until
+# `P73-LSP-CORRECTION-FAMILY-DUPLICATED-2` exported it, which is why the dependency is a
+# lookup and no longer a duplicate. `Run_Correction` is still never invoked -- see
+# `walk_outward/available_correction.rs`'s own doc for why reading the declaration beats
+# re-judging the whole tree per diagnostic for a coarser, first-claim-wins answer.
 nomos-correction-orchestration = { workspace = true }
 nomos-model = { workspace = true }
 

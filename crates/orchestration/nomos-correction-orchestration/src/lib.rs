@@ -32,15 +32,23 @@
 //!
 //! `nomos-cli`'s `correct` module and `nomos-api`'s own correction surface both call
 //! [`Run_Correction`] now; neither owns the composition any more.
+//!
+//! [`CorrectionFamily`] is where the rules this crate corrects are declared, and the only
+//! place they are. [`Run_Correction`] is the whole pipeline and can only answer by running
+//! it; a host needing to know whether a correction family exists for one finding --
+//! `nomos-lsp` asks exactly that, per diagnostic -- reads that list rather than keeping a
+//! copy of it that this crate's own build would never notice going stale.
 
 #![forbid(unsafe_code)]
 
 mod correction_command;
+mod correction_family;
 mod correction_outcome;
 mod phantom_mirror;
 mod run;
 mod trailing_whitespace;
 
 pub use correction_command::CorrectionCommand;
+pub use correction_family::CorrectionFamily;
 pub use correction_outcome::CorrectionOutcome;
 pub use run::{CorrectionEnvironment, Run_Correction};

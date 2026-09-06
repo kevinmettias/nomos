@@ -60132,14 +60132,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-lspfam",
-        "acquired_at": 1788721019,
-        "lease_expires_at": 1788728219
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -60151,7 +60147,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-correction-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "d::available_correction::tests::Test_Of_Should_Be_None_For_A_Rule_With_No_Known_Correction_Family ... ok\ntest walk_outward::governing_rule::tests::Test_Of_Should_Find_A_Real_Composed_Rule ... ok\ntest walk_outward::governing_rule::tests::Test_Of_Should_Report_No_Required_Facts_For_A_Source_Text_Rule ... ok\ntest walk_outward::tests::Test_Of_Should_Carry_Every_Real_Answer_For_A_Correctable_Rules_Zone_Finding ... ok\ntest sources::tests::Test_Read_Source_Should_File_The_Relative_Path ... ok\ntest walk_outward::tests::Test_Of_Should_Report_No_Correction_And_No_Component_For_An_Unlocated_Package_Finding ... ok\ntest sources::tests::Test_Walked_Sources_Should_Return_Sources_For_A_Real_Directory ... ok\ntest sources::tests::Test_Read_Sources_Should_Not_Descend_Into_A_Nested_Git_Worktree ... ok\ntest sources::tests::Test_Read_Sources_Should_Skip_Target_And_Git_Directories ... ok\n\ntest result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 1 test\ntest Test_Diagnostics_For_Should_Translate_A_Real_Run_Result ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_correction_orchestration-74743c527486738e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lsp-12a71289f691c959.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_lsp-6dec3a0741b433a3.exe)\n     Running tests\\fixture_tree.rs (target\\debug\\deps\\fixture_tree-f6a8ddbc37d8cd6e.exe)\n   Doc-tests nomos_correction_orchestration\n   Doc-tests nomos_lsp\n",
+        "verified_at": 1788721740,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d0d2ea45caaaaa99b73635080a4b46230ad8d108"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -60615,6 +60633,128 @@
           "nomos-api-transport"
         ],
         "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P73-LSP-CARGO-COMMENT-DECLARES-MEMBERSHIP",
+      "title": "nomos-lsp's dependency comment still says the host declares the correction membership",
+      "why": "The nomos-correction-orchestration entry in nomos-lsp's Cargo.toml carries a six-line comment stating that this crate declares the correction-family membership rather than re-running the pipeline per diagnostic, and pointing at walk_outward/available_correction.rs for the duplicated-knowledge risk that judgment call carries. P73-LSP-CORRECTION-FAMILY-DUPLICATED-2 removes the declaration and the risk both: the membership is now exported as CorrectionFamily and the host looks it up. The comment then describes a design the tree no longer has, and cites a doc that no longer says it, which is the same stale-prose defect P72 filed three rounds of. It is one manifest comment, in a file that item does not reserve, so it is separated rather than swept in.",
+      "done_when": "The dependency comment in nomos-lsp's Cargo.toml describes reading the exported CorrectionFamily membership instead of declaring it, names no duplicated-knowledge risk that no longer exists, and still explains why the pipeline is not invoked per diagnostic, which remains true.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-lsp/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp"
+        ],
+        "exit_code": 0,
+        "output_tail": ":tests::Test_Of_Should_Recognize_The_Trailing_Whitespace_Family ... ok\ntest uri::tests::Test_Path_From_File_Uri_Should_Be_None_For_A_Non_File_Scheme ... ok\ntest walk_outward::governing_rule::tests::Test_Of_Should_Report_No_Required_Facts_For_A_Source_Text_Rule ... ok\ntest walk_outward::architectural_component::tests::Test_Of_Should_Resolve_A_Real_Crate_Path_To_Its_Declared_Zone ... ok\ntest walk_outward::governing_rule::tests::Test_Of_Should_Find_A_Real_Composed_Rule ... ok\ntest walk_outward::governing_rule::tests::Test_Of_Should_Be_None_For_An_Unknown_Rule ... ok\ntest sources::tests::Test_Read_Source_Should_File_The_Relative_Path ... ok\ntest walk_outward::tests::Test_Of_Should_Report_No_Correction_And_No_Component_For_An_Unlocated_Package_Finding ... ok\ntest walk_outward::tests::Test_Of_Should_Carry_Every_Real_Answer_For_A_Correctable_Rules_Zone_Finding ... ok\ntest sources::tests::Test_Walked_Sources_Should_Return_Sources_For_A_Real_Directory ... ok\ntest sources::tests::Test_Read_Sources_Should_Not_Descend_Into_A_Nested_Git_Worktree ... ok\ntest sources::tests::Test_Read_Sources_Should_Skip_Target_And_Git_Directories ... ok\n\ntest result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 1 test\ntest Test_Diagnostics_For_Should_Translate_A_Real_Run_Result ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lsp-12a71289f691c959.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_lsp-6dec3a0741b433a3.exe)\n     Running tests\\fixture_tree.rs (target\\debug\\deps\\fixture_tree-f6a8ddbc37d8cd6e.exe)\n   Doc-tests nomos_lsp\n",
+        "verified_at": 1788721747,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d0d2ea45caaaaa99b73635080a4b46230ad8d108"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P76-CAPABILITY-SURFACE-SNAPSHOT-UNBLESSED",
+      "title": "nomos-capability's public surface grew in P54 and its snapshot was never blessed, so CI has been red on every push since",
+      "why": "c0e5c79f added Remedy and Unmet::Remedy to nomos-capability without blessing tests/contract/surface/nomos-capability.txt. Verified directly rather than taken on report: the snapshot contains no Remedy and is unmodified in the working tree, so this is committed state and not anybody's in-flight work; cargo test -p nomos-contract-tests --test public_surface fails locally at HEAD naming nomos-capability and the same six added lines; and gh run view on the P54 run shows both gate jobs, windows-latest and ubuntu-latest, failing on that one test with 7 passed and 1 failed. Three further runs are queued behind it against an unchanged snapshot and will hit the same wall. The surface test's own failure message names the fix, which is why this is a correction and not a decision.",
+      "done_when": "tests/contract/surface/nomos-capability.txt carries the six added lines, cargo test -p nomos-contract-tests --test public_surface passes with no bless variable set, and the snapshot was regenerated from a tree holding no other session's uncommitted changes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/surface/nomos-capability.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-review8",
+        "acquired_at": 1788721619,
+        "lease_expires_at": 1788728819
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P73-LSP-LIB-DOC-LINE-DUPLICATED",
+      "title": "nomos-lsp's crate doc repeats one line verbatim",
+      "why": "crates/host/nomos-lsp/src/lib.rs states the line reading a translation from nomos_contracts::Finding to lsp_types::Diagnostic, never a second judgment, and then repeats its closing line verbatim on the next line. It is a duplicated doc line, not a duplicated sentence with different emphasis: the two lines are byte-identical. Nothing catches it, because a doc comment is prose to every check in the tree and rustdoc renders the repetition without complaint. Found while reading the crate doc during P73-LSP-CORRECTION-FAMILY-DUPLICATED-2, which does not reserve this file and did not cause the defect.",
+      "done_when": "The repeated line appears once in nomos-lsp's crate-level doc, the surrounding sentence still reads as one whole, and cargo test -p nomos-lsp stays green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-lsp/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp"
+        ],
+        "timeout_seconds": 600
       },
       "verified": null,
       "abandoned": [],
