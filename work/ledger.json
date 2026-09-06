@@ -60057,6 +60057,39 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P73-DECISION-BEFORE-CODE-STRANDS-ITS-DEPENDENTS",
+      "title": "A decision item satisfies its own done_when while leaving every dependent stranded behind it",
+      "why": "Found twice in one sweep of the board, and both instances were invisible until every stranded edge was walked by hand. An item is declined for an under-reserved territory and re-authored as a decision whose title ends in the words before code. That decision is claimed, recorded and finished honestly: its done_when asked for a decided mechanism and it delivered one. But the items that depended on the original were never repointed, and repointing them onto the decision would not help, because a decision structurally cannot satisfy a dependent whose own precondition is working code. P42-EXECUTOR-ENVELOPE-MECHANISM and P42-EXECUTOR-WORKRESULT-MECHANISM are both Done and recorded as OD-EXECUTOR-007 and OD-EXECUTOR-008; P42-SECOND-HARNESS-EXECUTOR and P40-AGENT-WORKRESULT-VALIDATED-PATH-2 sat stranded behind them with no implementation item filed at all. The board reported next: nothing is eligible with thirteen items Ready, and none of the five stranded ones was missing work. Two further mechanics made this hard to see and are part of the same defect: a re-authored successor is sometimes renamed rather than suffixed, so a search by -2 suffix reports it absent, and one root was decomposed into three narrower items rather than re-authored under its own name. The ledger already knows how to say stranded; what it cannot currently say is that a dependency was answered by a decision that was never carried out.",
+      "done_when": "It is decided whether the ledger should refuse or flag a decline whose stated remedy is a follow-up that is never filed, whether a decision item may be named as a dependency by an item needing code, and how a re-authored successor is discoverable from the id it replaces; and the decision is recorded.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-038-a-decision-item-cannot-satisfy-a-dependent-that-needs-code-and-a-decline-promising-a-follow-up-does-not-file-one.md",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-038.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
