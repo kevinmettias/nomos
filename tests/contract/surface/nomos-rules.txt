@@ -83,6 +83,7 @@ pub const nomos_rules::PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS: &str
 pub const nomos_rules::PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str
 pub const nomos_rules::RELAXED_NOT_USED_WHEN_ORDERING_MATTERS: &str
 pub const nomos_rules::RUST_LANGUAGE: &str
+pub const nomos_rules::SAME_ZONE_EDGES: &[(&str, &str)]
 pub const nomos_rules::SCRIPTS_USE_A_PORTABLE_SHEBANG: &str
 pub const nomos_rules::SEQCST_JUSTIFIED_EXPLICITLY: &str
 pub const nomos_rules::SHARED_INTERIOR_MUTABILITY_SAYS_WHY: &str
@@ -101,6 +102,8 @@ pub const nomos_rules::UNSAFE_JUSTIFICATION: &str
 pub const nomos_rules::UNWRAP_EXPECT_DISCIPLINE: &str
 pub const nomos_rules::WORKSPACE_MARKERS_CARRY_A_REASON: &str
 pub const nomos_rules::ZERO_FLAKE_POLICY: &str
+pub const nomos_rules::ZONES: &[(&str, Zone)]
+pub const nomos_rules::ZONE_LIST: [Zone; 11]
 pub enum nomos_rules::FunctionAritySource
 pub enum nomos_rules::Reading
 pub enum nomos_rules::ReceiverAllowance
@@ -108,6 +111,7 @@ pub enum nomos_rules::RequiredFact
 pub enum nomos_rules::RuleRegistryError
 pub enum nomos_rules::SubjectKind
 pub enum nomos_rules::UniverseKind
+pub enum nomos_rules::Zone
 pub enum variant nomos_rules::FunctionAritySource::All
 pub enum variant nomos_rules::FunctionAritySource::Language(&'static str)
 pub enum variant nomos_rules::Reading::Observed(Vec<DeclaredUniverse>)
@@ -130,6 +134,17 @@ pub enum variant nomos_rules::SubjectKind::SourceText
 pub enum variant nomos_rules::SubjectKind::Workspace
 pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
+pub enum variant nomos_rules::Zone::Agent
+pub enum variant nomos_rules::Zone::ApplicationService
+pub enum variant nomos_rules::Zone::CapabilityContract
+pub enum variant nomos_rules::Zone::Host
+pub enum variant nomos_rules::Zone::Protocol
+pub enum variant nomos_rules::Zone::Provider
+pub enum variant nomos_rules::Zone::RepoTooling
+pub enum variant nomos_rules::Zone::Rules
+pub enum variant nomos_rules::Zone::Specification
+pub enum variant nomos_rules::Zone::Substrate
+pub enum variant nomos_rules::Zone::Verification
 pub fn nomos_rules::Check_A_Consumer_Imports_Through_The_Facade(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Credential_Is_Not_Hardcoded_In_Source(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Disabled_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
@@ -213,6 +228,7 @@ pub fn nomos_rules::Check_Unread_Reaches_A_Finding(sources: &[SourceFile], facts
 pub fn nomos_rules::Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Unwrap_Expect_Discipline(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Workspace_Markers_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Permits(from: Zone, to: Zone) -> bool
 pub fn nomos_rules::RequiredFact::Capability(self) -> CapabilityId
 pub fn nomos_rules::RuleDescriptor::Rule(&self) -> RuleId
 pub fn nomos_rules::RuleRegistry::New() -> Self
@@ -222,6 +238,9 @@ pub fn nomos_rules::RuleRegistry::Offers(&self) -> impl Iterator<Item = &RuleOff
 pub fn nomos_rules::SourceFile::Is_Written_In(&self, language: &str) -> bool
 pub fn nomos_rules::SourceFile::New(path: impl Into<String>, subject: SubjectId, text: impl Into<String>) -> Self
 pub fn nomos_rules::Universes_In(path: &str, payload: &SyntaxPayload) -> Vec<DeclaredUniverse>
+pub fn nomos_rules::Zone::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_rules::Zone_Of(name: &str) -> Option<Zone>
+pub impl nomos_rules::Zone implements core::fmt::Display
 pub struct field nomos_rules::DeclaredUniverse::claimed_mirror: Option<String>
 pub struct field nomos_rules::DeclaredUniverse::kind: UniverseKind
 pub struct field nomos_rules::DeclaredUniverse::name: String

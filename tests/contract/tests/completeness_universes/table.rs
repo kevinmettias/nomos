@@ -256,4 +256,30 @@ pub(crate) const UNIVERSES: &[Universe] = &[
             by: "Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry",
         },
     },
+    // ---- OD-RULES-020's dependency model, the one declaration this workspace's ----
+    // ---- architecture is now read from ----
+    Universe {
+        path: "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+        name: "ZONES",
+        kind: UniverseKind::Constant,
+        standing: Standing::Mirrored {
+            by: "Test_Every_Member_Should_Declare_A_Band",
+        },
+    },
+    Universe {
+        path: "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+        name: "SAME_ZONE_EDGES",
+        kind: UniverseKind::Constant,
+        standing: Standing::Mirrored {
+            by: "Test_Every_Same_Zone_Edge_Should_Be_A_Real_Dependency",
+        },
+    },
+    Universe {
+        path: "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+        name: "ALL",
+        kind: UniverseKind::Constant,
+        standing: Standing::Mirrored {
+            by: "Test_Every_Zone_Should_Be_Matched_Exhaustively",
+        },
+    },
 ];

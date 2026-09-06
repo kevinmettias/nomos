@@ -1,7 +1,7 @@
-//! Judging whether an already-decoded dependency payload's own package has a declared band.
+//! Judging whether an already-decoded dependency payload's own package has a declared zone.
 //!
 //! `violations.rs`'s `Violations_In` silently produces no findings for a package with no
-//! entry in [`super::bands::BANDS`], naming the gap as a different defect —
+//! entry in [`super::zones::ZONES`], naming the gap as a different defect —
 //! `tests/contract`'s own `Test_Every_Member_Should_Declare_A_Band`'s subject, not this
 //! rule's. This module is that subject, promoted from a contract test's hand assertion to a
 //! Finding-producing judgment reachable through an ordinary `nomos check` run. A pure
@@ -13,13 +13,13 @@ use crate::SourceFile;
 use nomos_cap_dependency::DependencyPayload;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
-/// A finding when `payload`'s own package has no declared band — empty otherwise.
+/// A finding when `payload`'s own package has no declared zone — empty otherwise.
 #[must_use]
 pub(super) fn Violations_In(payload: &DependencyPayload, source: &SourceFile) -> Vec<Finding>
 {
-    use super::bands::Declared_Band;
+    use super::zones::Zone_Of;
 
-    if Declared_Band(&payload.package).is_some()
+    if Zone_Of(&payload.package).is_some()
     {
         return Vec::new();
     }
@@ -37,9 +37,9 @@ fn Violation_For_Package(source: &SourceFile, package: &str) -> Finding
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Advisory,
         summary: format!(
-            "{package} has no declared band. Every workspace member must declare where it \
-             sits in this workspace's own layering before its dependency direction can be \
-             judged against it."
+            "{package} has no declared zone. Every workspace member must declare where it \
+             sits in this workspace's own architecture before its dependency direction can \
+             be judged against it."
         ),
         locations: vec![source.path.clone()],
     };

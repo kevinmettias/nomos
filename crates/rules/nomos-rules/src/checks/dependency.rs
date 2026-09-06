@@ -11,60 +11,61 @@
 //! `P13-DEPENDENCY-WIRE-1` the same way `nomos_lang_rust_cargo`'s own provider was wired in
 //! ahead of it — `nomos check` judges dependency direction as part of an ordinary run.
 //!
-//! # `BANDS` is a second copy, deliberately, for now
+//! # `zones` is the one declaration, not a second copy
 //!
-//! [`bands::BANDS`] is a copy of `tests/contract/tests/boundaries/bands.rs`'s own table.
-//! `OD-RULES-003` names exactly this as the expected interim state: a declared
-//! architecture generalized into a portable, non-Rust-source format is real work this
-//! record does not schedule, and this workspace has exactly one declared architecture to
-//! check today. Duplicating it as rule-authored data — the same shape
-//! `nomos_rules::CONTRACT_RECORD` already is for `Check_Completeness_Mirrors` — costs a
-//! table that can drift; generalizing the format now would be designing it from a
-//! population of one, the mistake `OD-PACKAGE-006` and `OD-PACKAGE-008` both already
-//! declined elsewhere. A second repository wanting this property is the trigger for that
-//! generalization, not a hypothesis to build ahead of one.
+//! `OD-RULES-020` decided a total order over band numbers claims precedence between crates
+//! that have none, and `OD-RULES-020`'s own migration item made [`zones::ZONES`] this
+//! workspace's one declared architecture: `tests/contract/tests/boundaries/bands.rs` and
+//! `graph.rs` read it through this crate's own public surface rather than keeping their
+//! own copy, and `README.md`'s own table is checked against the identical declaration.
+//! What `OD-RULES-003` named as the expected interim state — one Rust-source table,
+//! generalizing the format only once a second repository wants this property — is
+//! unchanged by closing the copy; only the number of times that one table is typed out by
+//! hand changed, from three to one.
 //!
 //! # Scope
 //!
 //! First-party edges only — [`nomos_cap_dependency`]'s provider already filters to
 //! workspace members, so this rule never sees an external (registry) dependency to judge.
-//! `bands.rs`'s `CONTRACTS_ALLOWLIST` and `PLATFORM_ADAPTER` exceptions are not
-//! replicated: both are about reach *outside* this workspace's own band ordering, which
-//! this capability does not observe at all, so there is nothing here for them to except.
+//! `graph.rs`'s `CONTRACTS_ALLOWLIST` and `PLATFORM_ADAPTER` exceptions are not
+//! replicated: both are about reach *outside* this workspace's own zones, which this
+//! capability does not observe at all, so there is nothing here for them to except.
 //!
 //! # Split by responsibility
 //!
-//! [`bands`] holds this workspace's own declared architecture table and the lookup over it.
-//! [`reading`] requires and decodes one member's dependency fact. [`violations`] judges an
-//! already-decoded payload against the declared bands for *direction*; [`completeness`]
-//! judges the same payload for *coverage* — whether its own package has a declared band at
-//! all. This file keeps only what composes the pieces: the rules' own identifiers and
-//! [`Check_Dependency_Direction`]/[`Check_Every_Member_Declares_A_Band`] themselves, plus
-//! the end-to-end tests that exercise each through a real reader.
+//! [`zones`] holds this workspace's own declared architecture table and the lookup over
+//! it. [`reading`] requires and decodes one member's dependency fact. [`violations`]
+//! judges an already-decoded payload against the declared zones for *direction*;
+//! [`completeness`] judges the same payload for *coverage* — whether its own package has a
+//! declared zone at all. This file keeps only what composes the pieces: the rules' own
+//! identifiers and [`Check_Dependency_Direction`]/[`Check_Every_Member_Declares_A_Band`]
+//! themselves, plus the end-to-end tests that exercise each through a real reader.
 //!
 //! # A second rule over the same fact
 //!
 //! `violations.rs`'s own `Violations_In` has always silently produced no findings for a
-//! package with no declared band, naming the gap as a different defect —
+//! package with no declared zone, naming the gap as a different defect —
 //! `tests/contract/tests/boundaries/graph.rs`'s own `Test_Every_Member_Should_Declare_A_Band`
 //! already enforces it by hand, for this repository alone.
 //! [`Check_Every_Member_Declares_A_Band`] promotes that gap to a Finding-producing judgment
 //! reachable through an ordinary `nomos check` run, over whatever workspace supplies the
 //! fact — the same declared-architecture-vs-observed-fact shape `OD-RULES-003` designed for
 //! direction, applied to coverage instead. No new capability and no new provider: it reads
-//! the identical `nomos.cap.dependency.edges` fact and the identical [`bands::BANDS`] table
+//! the identical `nomos.cap.dependency.edges` fact and the identical [`zones::ZONES`] table
 //! [`Check_Dependency_Direction`] already reads.
 
-mod bands;
 mod completeness;
 mod reading;
 mod violations;
+mod zones;
 
 use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
 use reading::Payload_Of;
 use violations::Violations_In;
+
+pub use zones::{Permits, Zone, Zone_Of, ALL as ZONE_LIST, SAME_ZONE_EDGES, ZONES};
 
 /// This rule's own identifier.
 pub const DEPENDENCY_DIRECTION: &str = "dependency-direction";

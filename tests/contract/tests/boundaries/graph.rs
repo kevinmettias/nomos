@@ -1,6 +1,6 @@
 //! What the dependency graph is allowed to do, and the vacuity guard in front of it.
 
-use crate::bands::{Declared_Band, BANDS};
+use crate::bands::{Permits, Zone_Of, SAME_ZONE_EDGES, ZONES};
 use nomos_contract_tests::Workspace;
 
 /// Everything `nomos-contracts` is permitted to reach, transitively.
@@ -40,12 +40,12 @@ fn Test_The_Workspace_Should_Not_Appear_Empty()
     let members = workspace.Members();
 
     assert!(
-        members.len() >= BANDS.len(),
-        "found {} workspace members but {} bands are declared: {:?}.\n\
+        members.len() >= ZONES.len(),
+        "found {} workspace members but {} zones are declared: {:?}.\n\
          Every other assertion in this suite iterates over these members, so an empty or \
          truncated set makes all of them pass having checked nothing.",
         members.len(),
-        BANDS.len(),
+        ZONES.len(),
         members.iter().map(|member| &member.name).collect::<Vec<_>>()
     );
 
@@ -156,11 +156,16 @@ fn Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench()
     }
 }
 
-/// A crate may depend only on crates in a strictly lower band.
+/// A crate may depend only on a zone its own zone permits, or a same-zone peer named in
+/// `SAME_ZONE_EDGES`.
 ///
 /// Cargo already forbids cycles. This forbids the legal-but-wrong edges: a kernel crate
 /// reaching up into a service, a transport reaching past the service layer into
-/// analysis. Those compile perfectly and dissolve the architecture.
+/// analysis. Those compile perfectly and dissolve the architecture. `OD-RULES-020`
+/// replaced the numeric band comparison this assertion used to make with the identical
+/// zone-and-named-edge judgment `nomos-rules`' own `Check_Dependency_Direction` makes over
+/// a real `nomos check` run, so a forbidden edge is refused in both places from the one
+/// declaration.
 #[test]
 fn Test_Dependencies_Should_Run_Strictly_Downward()
 {
@@ -168,7 +173,7 @@ fn Test_Dependencies_Should_Run_Strictly_Downward()
 
     for member in workspace.Members()
     {
-        let Some(band) = Declared_Band(&member.name)
+        let Some(zone) = Zone_Of(&member.name)
         else
         {
             continue;
@@ -176,20 +181,55 @@ fn Test_Dependencies_Should_Run_Strictly_Downward()
 
         for dependency in &member.direct_dependencies
         {
-            let Some(dependency_band) = Declared_Band(dependency)
+            let Some(dependency_zone) = Zone_Of(dependency)
             else
             {
                 continue;
             };
 
+            let permitted = if zone == dependency_zone
+            {
+                SAME_ZONE_EDGES.contains(&(member.name.as_str(), dependency.as_str()))
+            }
+            else
+            {
+                Permits(zone, dependency_zone)
+            };
+
             assert!(
-                dependency_band < band,
-                "{} (band {band}) depends on {dependency} (band {dependency_band}).\n\
-                 Dependencies run strictly downward; equal or upward edges are how a \
-                 layered architecture becomes a graph nobody can reason about.",
+                permitted,
+                "{} ({zone:?}) depends on {dependency} ({dependency_zone:?}).\n\
+                 This edge is neither a permitted zone crossing nor a named same-zone \
+                 exception; an unchecked edge like this one is how a layered architecture \
+                 becomes a graph nobody can reason about.",
                 member.name
             );
         }
+    }
+}
+
+/// Every `SAME_ZONE_EDGES` pair is a real, direct dependency — a declared exception with
+/// nothing behind it is worse than no exception, since it would permit an edge nobody's
+/// code actually draws.
+#[test]
+fn Test_Every_Same_Zone_Edge_Should_Be_A_Real_Dependency()
+{
+    let workspace = Workspace::Load();
+
+    for (from, to) in SAME_ZONE_EDGES
+    {
+        let Some(member) = workspace.Get(from)
+        else
+        {
+            panic!("{from} names no real workspace member");
+        };
+
+        assert!(
+            member.direct_dependencies.contains(*to),
+            "SAME_ZONE_EDGES names {from} -> {to}, but {from}'s own Cargo.toml declares no \
+             such dependency. A named exception with nothing behind it permits an edge \
+             nobody's code actually draws."
+        );
     }
 }
 
@@ -203,13 +243,13 @@ fn Test_Every_Member_Should_Declare_A_Band()
         .Members()
         .iter()
         .map(|member| member.name.as_str())
-        .filter(|name| Declared_Band(name).is_none())
+        .filter(|name| Zone_Of(name).is_none())
         .collect();
 
     assert!(
         undeclared.is_empty(),
-        "these crates declare no band: {undeclared:?}.\n\
-         Add them to BANDS in common.rs. A crate outside the ordering is a crate the \
-         ordering does not constrain."
+        "these crates declare no zone: {undeclared:?}.\n\
+         Add them to nomos-rules' own ZONES. A crate outside the declared architecture is \
+         a crate the architecture does not constrain."
     );
 }

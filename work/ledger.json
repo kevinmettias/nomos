@@ -52176,7 +52176,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Its declared territory names crates/rules/nomos-rules/src/dependency/bands.rs, which does\nnot exist -- the real file is crates/rules/nomos-rules/src/checks/dependency/bands.rs, one\npath component short. Investigating the real blast radius before claiming (rather than\ndiscovering it mid-claim, as happened twice already this session) found the same\nunder-scoping pattern again: satisfying this item's own done_when touches the zone data\nfile itself, violations.rs and completeness.rs (the two judgments reading it),\ndependency.rs and checks.rs and lib.rs (the re-export chain that must carry the data\npublic so tests/contract can read the same declaration nomos-rules does),\ntests/contract/tests/boundaries/bands.rs, graph.rs and readme.rs (the second copy and the\ntwo assertions built on it), README.md itself (the checked table), and\ntests/contract/surface/nomos-rules.txt (a real crate widening its public surface to export\nthe zone data needs reblessing) -- eleven real files against the two the item names.\nRe-authoring with the complete list rather than claim, discover, decline mid-claim a\nfourth time."
+        }
+      },
       "depends_on": [
         "P41-ZONES-REPLACE-NUMERIC-BANDS"
       ],
@@ -52196,7 +52200,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788664857
+      }
     },
     {
       "id": "P41-CRATE-BOUNDARY-REVIEW",
@@ -56232,6 +56239,136 @@
           "exit_code": 0
         },
         "revision": "0220a3a36052dde1941af3db606b3a59c8d0561d"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-ZONES-MIGRATION-2",
+      "title": "The band table is maintained by hand in three places and a fourth checks it",
+      "why": "Whatever the zone decision concludes, the mechanism that enforces it is currently a\nnumeric table copied into the contract-test boundaries suite, into the dependency rule\ninside nomos-rules, and into the README, with a real gate run checking the third copy\nagainst the first two. Three hand-maintained copies of the architecture is the same\nunchecked-copy defect this repository has paid for elsewhere, and it is why a band change\nis remembered as touching three files rather than one. The migration should land the\ndecided model once and derive the rest.",
+      "done_when": "The dependency model is declared in one place, the enforcement rule and the contract-test\nboundary suite both read that one declaration rather than their own copies, the README\ntable is derived or checked rather than maintained by hand, and a real gate run still\nrefuses a forbidden edge.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/violations.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/completeness.rs",
+          "crates/rules/nomos-rules/src/checks/dependency.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/tests/boundaries/graph.rs",
+          "tests/contract/tests/boundaries/readme.rs",
+          "README.md",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "A fourth territory gap, found only after the code was already implemented and green:\nadding ZONES, SAME_ZONE_EDGES and ALL as public constants to nomos-rules made them real\n\"declared universes\" OD-COMPLETENESS-001's own scanner picks up, and\ntests/contract/tests/completeness_universes/table.rs must classify each one (Standing::\nMirrored, naming the real test that checks it against reality) or the derivation test\nrefuses to pass -- a file this item's prior territory never named. All implementation\nwork is complete and independently verified before this decline: cargo test -p nomos-rules\n-p nomos-contract-tests all green (583 + full contract suite passing, including the new\nTest_Every_Same_Zone_Edge_Should_Be_A_Real_Dependency and Test_Every_Zone_Should_Be_\nMatched_Exhaustively mirrors this table row needs), cargo build --workspace clean, cargo\nclippy --workspace --all-targets clean, and the nomos-rules surface reblessed. Re-authoring\nwith the complete file list `git status --short` now shows rather than guessing again."
+        }
+      },
+      "depends_on": [
+        "P41-ZONES-REPLACE-NUMERIC-BANDS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "re-authoring once more to add tests/contract/tests/completeness_universes/table.rs, discovered mid-implementation; everything else already verified green",
+          "abandoned_at": 1788666251
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788666263
+      }
+    },
+    {
+      "id": "P41-ZONES-MIGRATION-3",
+      "title": "The band table is maintained by hand in three places and a fourth checks it",
+      "why": "Whatever the zone decision concludes, the mechanism that enforces it is currently a\nnumeric table copied into the contract-test boundaries suite, into the dependency rule\ninside nomos-rules, and into the README, with a real gate run checking the third copy\nagainst the first two. Three hand-maintained copies of the architecture is the same\nunchecked-copy defect this repository has paid for elsewhere, and it is why a band change\nis remembered as touching three files rather than one. The migration should land the\ndecided model once and derive the rest.",
+      "done_when": "The dependency model is declared in one place, the enforcement rule and the contract-test\nboundary suite both read that one declaration rather than their own copies, the README\ntable is derived or checked rather than maintained by hand, and a real gate run still\nrefuses a forbidden edge.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/violations.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/completeness.rs",
+          "crates/rules/nomos-rules/src/checks/dependency.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/tests/boundaries/graph.rs",
+          "tests/contract/tests/boundaries/readme.rs",
+          "tests/contract/tests/completeness_universes/table.rs",
+          "README.md",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [
+        "P41-ZONES-REPLACE-NUMERIC-BANDS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "lay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.48s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-00b66ab4528ef7e7.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-a687a78484f4deae.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-10de939333ed2329.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-c05b0e9a76aaa2c5.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-e6b3c39fd64c51d8.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-0b84c0f2dc0ab2f5.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a3949cf1ce48d25d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-ce4ce73de05f4395.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-5b2ef081c9fe2cd3.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-9eee39c69777f55a.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-66b1797fc05c2077.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d88dc3f346684c75.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-13e0fc053692c839.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788666306,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0b6b98fdd7392bbb6cafdd52f325434f50cea37e"
       },
       "abandoned": [],
       "displaced": [],
