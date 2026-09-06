@@ -60973,6 +60973,63 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P78-CORRECTION-FAMILY-ALL-IS-AN-UNCLASSIFIED-UNIVERSE",
+      "title": "CorrectionFamily::ALL is a declared universe with no row, and it has reddened CI since 4bc9dc92",
+      "why": "d92249e1 introduced CorrectionFamily::ALL, a const array enumerating the correction families this workspace composes. Declared_Universes scans it as a universe, so the completeness_universes suite now finds 28 scanned universes against 27 classified rows and fails on both platforms: these declared universes are not classified in UNIVERSES, naming correction_family.rs ALL Constant. It reproduces at HEAD locally, so it is committed rather than environmental, and it has failed every CI run from 4bc9dc92 onward. The item that introduced ALL passed its own gate because its predicate named two crates and work finish runs clippy as the lint step, so nothing in either reached the contract tests. This is the same trap P40-API-TRANSPORT-2 hit when a new crate's ServedMethod REGISTRY turned out to need a table row outside its territory. Six universes already establish the pattern for an All over a closed enum, including Kind All, ExitCode All, Family All, Restored All, Sibling All and RowKind All, each mirrored by an exhaustive match with no wildcard arm that fails to compile when a variant is added without acknowledgement. ALL should follow that precedent rather than raise UNMIRRORED_TOTAL, because the mirror is real and cheap and the alternative buys a hole for nothing.",
+      "done_when": "CorrectionFamily::ALL carries a doc comment naming its mirror in the convention the scanner reads, an exhaustive-match test in its own file makes adding a variant a compile failure rather than a silent omission, UNIVERSES has a matching row whose by field names that test, UNMIRRORED_TOTAL is unchanged because the universe is genuinely mirrored, and the completeness_universes suite passes with 28 compared against 28.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/completeness_universes/table.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/correction_family.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-correction-orchestration"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-correction-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "_In_One_Candidate ... ok\ntest run::tests::Test_Committing_A_Trailing_Whitespace_Fix_Should_Strip_Every_Flagged_Line_At_Once ... ok\ntest run::tests::Test_Committing_Should_Strike_The_Claim_On_Disk_And_Leave_A_Clean_Rerun ... ok\n\ntest result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-d4619c243b30e906.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-5705bcd73cfecb06.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-ac1ba8050219874f.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-4edaf714cd2b6633.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-cbde772aac51abc4.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-9206fba9c6f102c3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ba863754c4c3715e.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-419079ddfc4ef035.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-e8216ae90636e129.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-5786c4c19c5394c5.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-8c4e08e48780ba15.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-896da39290cdc039.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_correction_orchestration-2ad5464f4f1a452c.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_correction_orchestration\n",
+        "verified_at": 1788727604,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8df32920dec283eaec817e2a90c03d99e66a95a6"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

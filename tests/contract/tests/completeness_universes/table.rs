@@ -213,6 +213,19 @@ pub(crate) const UNIVERSES: &[Universe] = &[
             by: "Test_Every_ChangeSource_Should_Be_Matched_Exhaustively",
         },
     },
+    // `P73-LSP-CORRECTION-FAMILY-DUPLICATED-2` exported this list so `nomos-lsp` could stop
+    // keeping its own copy of the correction-family membership, and introduced a universe
+    // with it. Scanned as `Constant` rather than `Enumeration` because it is a `const` array
+    // rather than an `All()` function, but it enumerates a closed enum and takes the same
+    // exhaustive-match mirror every `All` above it does.
+    Universe {
+        path: "crates/orchestration/nomos-correction-orchestration/src/correction_family.rs",
+        name: "ALL",
+        kind: UniverseKind::Constant,
+        standing: Standing::Mirrored {
+            by: "Test_Every_Correction_Family_Should_Be_Matched_Exhaustively",
+        },
+    },
     Universe {
         path: "crates/packages/nomos-lang-rust-package/src/known_providers.rs",
         name: "KNOWN_PROVIDERS",

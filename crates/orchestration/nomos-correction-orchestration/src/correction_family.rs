@@ -46,6 +46,12 @@ impl CorrectionFamily
 {
     /// Every family this crate composes, in the priority order [`crate::run`]'s own
     /// `Claimed_Fix` tries them.
+    ///
+    /// Mirrored by `Test_Every_Correction_Family_Should_Be_Matched_Exhaustively`, an
+    /// exhaustive match over every variant with no wildcard arm, in this file. It fails to
+    /// compile, not merely to pass, if a variant is added to [`CorrectionFamily`] without
+    /// being acknowledged there -- and it asserts each variant is matched at the position
+    /// this list puts it, so the two cannot silently reorder apart either.
     pub const ALL: [Self; 2] = [Self::PhantomMirror, Self::TrailingWhitespace];
 
     /// The rule whose blocking findings this family corrects.
@@ -121,5 +127,36 @@ mod tests
     fn Test_Of_Should_Refuse_A_Rule_No_Family_Corrects()
     {
         assert_eq!(CorrectionFamily::Of(&RuleId::New(nomos_rules::NAMING_CONVENTION)), None);
+    }
+
+    /// [`CorrectionFamily::ALL`]'s own mirror, named in the doc comment above it.
+    ///
+    /// The match has no wildcard arm. A variant added to [`CorrectionFamily`] without a
+    /// matching arm added here fails this file to *compile*, not merely to pass, which is
+    /// the property `OD-COMPLETENESS-001` asks a closed enum's mirror to have -- and the
+    /// reason this universe is classified `Mirrored` in
+    /// `tests/contract/tests/completeness_universes/table.rs` rather than raising
+    /// `UNMIRRORED_TOTAL`.
+    #[test]
+    fn Test_Every_Correction_Family_Should_Be_Matched_Exhaustively()
+    {
+        fn Ordinal_Of(family: CorrectionFamily) -> usize
+        {
+            return match family
+            {
+                CorrectionFamily::PhantomMirror => 0,
+                CorrectionFamily::TrailingWhitespace => 1,
+            };
+        }
+
+        for (index, family) in CorrectionFamily::ALL.iter().enumerate()
+        {
+            assert_eq!(
+                Ordinal_Of(*family),
+                index,
+                "{family:?} is not matched at the position CorrectionFamily::ALL puts it, so \
+                 the exhaustive match and the universe have drifted apart"
+            );
+        }
     }
 }
