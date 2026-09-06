@@ -51582,7 +51582,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Stranded on P40-INCREMENTAL-DEMAND-DRIVEN-RECOMPUTE, which is Declined, as is its -2. Neither will ever finish, so this item could never become claimable. The ambition behind that dependency was not abandoned but decomposed: P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS, P40-INCREMENTAL-SKIP-UNCHANGED-RULES and P40-INCREMENTAL-SKIP-COVERAGE-REGRESSION are all Done and deliver the currency machinery this item's own done_when needs. The dependency is therefore satisfied in substance and only the ledger edge is stale. work has no edit verb, so repointing means decline and re-add. Re-added as -2 with the dependency on P40-INCREMENTAL-SKIP-UNCHANGED-RULES, unchanged in territory, kind, done_when and predicate."
+        }
+      },
       "depends_on": [
         "P40-INCREMENTAL-DEMAND-DRIVEN-RECOMPUTE"
       ],
@@ -51600,7 +51604,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-ae",
+        "declined_at": 1788718318
+      }
     },
     {
       "id": "P40-COMPILER-BACKED-PROVIDER",
@@ -52050,7 +52057,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Stranded on P41-PLATFORM-DIRECTORY-ENUMERATION, which was declined for an under-reserved territory; its successor -3 is Done and put Read_Directory on the FileSystem port with both the standard implementation and the test double providing it, which is exactly what this item needs to stop the hosts reaching std::fs directly. The dependency is satisfied in substance and only the ledger edge is stale. work has no edit verb, so repointing means decline and re-add. Re-added as -2 with three corrections measured directly rather than carried over. First, the walk is duplicated four times, not twice: nomos-api sources.rs, nomos-cli check/sources.rs, nomos-cli gate/sources.rs and nomos-lsp sources.rs each hardcode the same rs and go extensions, the same target and .git exclusions and their own nested-worktree detection. Second, nomos-lsp duplicates deliberately and says so in its own manifest, because nomos-cli check sources is pub(super), so the fourth copy is a documented consequence of the missing service rather than an oversight. Third, the territory now reserves all four call sites and the registration a new crate actually costs -- workspace members, the README zone table, the ZONES crate table and a surface snapshot -- none of which the original named, which is the same under-reservation that declined its own dependency."
+        }
+      },
       "depends_on": [
         "P41-PLATFORM-DIRECTORY-ENUMERATION"
       ],
@@ -52070,7 +52081,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-ae",
+        "declined_at": 1788718567
+      }
     },
     {
       "id": "P41-SOURCE-ARTIFACT-OWNERSHIP",
@@ -52086,7 +52100,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Depended on P41-WORKSPACE-DISCOVERY-SERVICE, which this session declined and re-added as -2 to repoint its own stale dependency edge, so this item became stranded as a direct consequence rather than on its own merits. Re-added as -2 with the dependency on P41-WORKSPACE-DISCOVERY-SERVICE-2 and nothing else changed. Territory is deliberately left as the single declaration site: SourceFile is declared at nomos-rules lib.rs line 645 and named by more than twenty files across hosts, orchestration, languages and kernel today, but P41-WORKSPACE-DISCOVERY-SERVICE-2 removes four of those call sites and introduces a canonical service that may itself become the owner, so the consumer population this item has to migrate is not knowable until that item lands. Widening the reservation now would reserve a population about to change. Whoever claims this after the discovery service should re-measure and widen before starting, which is the step whose absence declined three items in this chain already."
+        }
+      },
       "depends_on": [
         "P41-WORKSPACE-DISCOVERY-SERVICE"
       ],
@@ -52106,7 +52124,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-ae",
+        "declined_at": 1788718635
+      }
     },
     {
       "id": "P41-ZONES-REPLACE-NUMERIC-BANDS",
@@ -52955,7 +52976,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Stranded on P42-AGENT-STRUCTURED-WORKRESULT and P42-AGENT-ENVELOPE-ENFORCEMENT, both Declined and both re-authored under renamed ids rather than -2 suffixes: P42-EXECUTOR-WORKRESULT-MECHANISM and P42-EXECUTOR-ENVELOPE-MECHANISM, both Done, recorded as OD-EXECUTOR-008 and OD-EXECUTOR-007. Both successors are decisions whose titles end in the words before code, so neither satisfies this item's own stated precondition that the second executor be written against the contract as enforced rather than inheriting accepted-and-ignored fields. The two missing implementations are now filed as P42-EXECUTOR-WORKRESULT-IMPLEMENTATION and P42-EXECUTOR-ENVELOPE-IMPLEMENTATION. Re-added as -2 depending on those two. Territory also corrected: the original reserved only the new crate's lib.rs, which cannot be finished honestly, because a new crate must also be added to the workspace members, the README zone table, the ZONES table in nomos-rules that names every crate by hand, and its own manifest and surface snapshot."
+        }
+      },
       "depends_on": [
         "P42-AGENT-STRUCTURED-WORKRESULT",
         "P42-AGENT-ENVELOPE-ENFORCEMENT"
@@ -52974,7 +52999,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-ae",
+        "declined_at": 1788718521
+      }
     },
     {
       "id": "P42-KWB-CONTEXT-BRIDGE",
@@ -53128,7 +53156,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Stranded on P42-AGENT-STRUCTURED-WORKRESULT, which is Declined and was re-authored under a renamed id rather than a -2 suffix: P42-EXECUTOR-WORKRESULT-MECHANISM, Done, recorded as OD-EXECUTOR-008. That successor is a decision whose own title ends in the words before code, so it does not by itself satisfy this item's stated precondition of a canonical result the executor actually constructs. The missing implementation is now filed as P42-EXECUTOR-WORKRESULT-IMPLEMENTATION. Re-added as -3 depending on that implementation and on P40-CORRECTIONS-CANONICAL-SEAM. Territory also corrected: the original reserved only nomos-agent-contracts work_result.rs, which defines the type rather than carrying it into a validated correction, and which the implementation item now reserves. The real seam is in nomos-agent-orchestration, which cannot reach corrections today, so the crate manifest and the zones edge table are reserved alongside it."
+        }
+      },
       "depends_on": [
         "P40-CORRECTIONS-CANONICAL-SEAM",
         "P42-AGENT-STRUCTURED-WORKRESULT"
@@ -53149,7 +53181,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-ae",
+        "declined_at": 1788718486
+      }
     },
     {
       "id": "P42-AGT-001-ASSESSMENT-CORRECTION",
@@ -59334,6 +59369,691 @@
         },
         "revision": "d3d00270eeca47a6059499ce977a91458aeb49f3"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P72-STALE-PLATFORM-DIRECTORY-CLAIM",
+      "title": "Five module docs and one governing record still say the platform port has no directory listing",
+      "why": "OD-PLATFORM-002 gave nomos_platform::FileSystem a Read_Directory operation on 2026-09-05 in commit 093a0e4e. Five module doc sites and OD-HOST-001 still state that no such operation exists, all dating to 2026-08-17. An eighth-round external review read the stale reason out of these comments and recommended against adding directory enumeration to the platform port, which already has it. This is the two-independent-encodings defect class OD-GATE-011 names, and the wrong recommendation is the measured cost.",
+      "done_when": "No committed file states that nomos_platform::FileSystem lacks a directory-listing operation. Each of the five sites either names the real current reason the walk stays in the host or drops the claim, and OD-HOST-001 carries an amendment recording that its stated reason was overtaken by OD-PLATFORM-002.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/work/add_response.rs",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-review8",
+        "acquired_at": 1788718011,
+        "lease_expires_at": 1788728811
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P72-RULES-009-EIGHTH-ROUND-RECHECK",
+      "title": "An eighth round of the same external review, checked against the same four named triggers",
+      "why": "An eighth round of the review OD-RULES-009 already answers seven times repeats the P0 planner recommendation, and adds four adjacent claims about RulePackage authority, vendor-coupled workflow dispatch, capability-crate granularity and a consolidation freeze. Each restates a case an existing record already declined on a measured trigger. Two numbers this record tracks have moved since the seventh amendment and are now stale in it: RULE_COUNT is 70 rather than 66, and crates/capabilities holds eleven crates rather than the ten trigger 4 counts.",
+      "done_when": "OD-RULES-009 carries an eighth-round amendment that measures each of its four named triggers against this round rather than against the seventh, states which of this round's five overlapping claims are already-declined restatements and which are new, and corrects the stale rule and capability-crate counts.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-review8",
+        "acquired_at": 1788718011,
+        "lease_expires_at": 1788728811
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P72-API-RESPONSE-TWINS-RECORD",
+      "title": "Whether nomos-api's response twins become one serializable application-contract layer",
+      "why": "nomos-api is 7826 lines across thirteen modules and its own module doc describes roughly eight response families as deliberate twins of orchestration outcomes, built because the underlying domain objects do not serialize. An external review reads this as schema proliferation heading toward domain type, orchestration outcome, API twin, JSON-RPC twin, MCP twin. Nothing decides whether the twin is the accepted cost of keeping serialization out of orchestration, or whether one canonical serializable application response belongs between them. OD-HOST-002 governs what a surface may hold but not what shape a canonical service returns.",
+      "done_when": "A governing record decides whether the twin stays the accepted cost or a shared serializable application-contract layer is owed, names the trigger that would fire the second answer if the first is chosen, and is registered so it governs.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-review8",
+        "acquired_at": 1788718011,
+        "lease_expires_at": 1788728811
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P72-REPO-TOOLING-API-OWNERSHIP",
+      "title": "Whether repo-tooling API ownership separates from the product application API",
+      "why": "nomos-api exports work and spec handlers alongside check, gate, correction, workflow and agent, and nomos-api-transport keeps them off the wire by a closed ServedMethod allowlist with tests that specifically reject nomos.work.list and nomos.spec.commit. The separation is achieved by a downstream refusal rather than by ownership: a transport needs tests proving it did not expose something its own upstream dependency handed it. OD-LEDGER-036 already says the work ledger is repository bootstrap machinery rather than a product workflow target, and OD-HOST-006 already carries that record's trigger for the spec half.",
+      "done_when": "A governing record decides whether repo-tooling handlers keep their present home behind the transport allowlist, move to their own crate, or stay CLI-only, and says what the allowlist tests mean under the answer chosen. Registered so it governs.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-review8",
+        "acquired_at": 1788718011,
+        "lease_expires_at": 1788728811
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P72-ARCHITECTURAL-PROSE-COMPACTION",
+      "title": "Whether architectural prose restated across README, Cargo.toml and module docs is compacted against one source",
+      "why": "Cargo.toml is 30191 bytes and carries architectural essays per member; README.md is 41559 bytes and carries the crate and zone tables; module roots carry chronological narratives of which item added which increment. The same architectural fact can therefore stand in a governing record, a README table, a Cargo.toml comment, a module doc and a commit message at once. OD-AGENT-001 already decided this exact shape for agent instruction files, that an unchecked copy of a checked file is a defect, and the contract tests already assert the README tables against the real workspace. Whether that principle extends to the manifest and module prose, and whether the tables should be generated rather than authored, is undecided. The stale platform directory claim in P72-STALE-PLATFORM-DIRECTORY-CLAIM is one measured instance of the cost.",
+      "done_when": "A governing record decides whether OD-AGENT-001's route-rather-than-restate rule extends to Cargo.toml member prose and module-root narratives, and whether any currently-authored architecture table is owed a generated projection instead. Registered so it governs.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md",
+          "crates/spec/nomos-spec-store/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P72-STALE-PLATFORM-DIRECTORY-CLAIM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P72-STALE-PLATFORM-DIRECTORY-CLAIM-2",
+      "title": "Two more module docs and two more records carry the same overtaken directory-listing claim",
+      "why": "P72-STALE-PLATFORM-DIRECTORY-CLAIM reserved five sites found by one grep spelling. Four more exist under different wording and were outside that item's territory: nomos-cli gate.rs and nomos-surface-provenance discovery.rs, plus OD-HOST-002 and OD-LEDGER-025. discovery.rs is the worst of them, quoting the stale sentence out of another module as its own stated authority, which is exactly the unchecked-copy-of-a-checked-file shape OD-AGENT-001 already decided against. OD-PLATFORM-002's own Question section states the same fact historically and is correct as written, so it is deliberately excluded.",
+      "done_when": "Neither gate.rs nor discovery.rs states that the platform port lacks directory enumeration, and discovery.rs states its own reason rather than quoting another module's. OD-HOST-002 and OD-LEDGER-025 each carry an amendment recording that the clause was overtaken by OD-PLATFORM-002 and what their decision now rests on.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-surface-provenance/src/discovery.rs",
+          "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md",
+          "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-review8",
+        "acquired_at": 1788718166,
+        "lease_expires_at": 1788728966
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-surface-provenance",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P72-STALE-PLATFORM-DIRECTORY-CLAIM-3",
+      "title": "Eight more sites across five crates restate the same overtaken directory-listing claim",
+      "why": "A definitive sweep after the first two items found the real population is fifteen sites and three records, not the six one grep spelling suggested. The eight here span nomos-lsp, nomos-spec-orchestration twice, nomos-work-orchestration, all three nomos-workflow-orchestration bodies, and the integration calibration test. Two of them enumerate the port's operations by name and omit both Read_Directory and Remove_File, so they are wrong about the port's shape and not only about one operation. This is the measured blast radius of a single 2026-09-05 port change against prose that restated a reason instead of routing to it, which is the evidence P72-ARCHITECTURAL-PROSE-COMPACTION exists to weigh. Excluded deliberately: spec-orchestration freshness.rs, which says what its own operation is rather than what the port lacks, and is correct as written.",
+      "done_when": "None of the eight sites states or implies that nomos_platform::FileSystem cannot list a directory, and no site enumerates the port's operations in a way that omits Read_Directory. Each either routes to the authority that holds the current reason or states a reason true today.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-lsp/src/lib.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/run/render.rs",
+          "crates/orchestration/nomos-work-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/body/check_body.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/body/correction_body.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/body/gate_body.rs",
+          "tests/integration/tests/calibration.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-review8",
+        "acquired_at": 1788718246,
+        "lease_expires_at": 1788729046
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-orchestration",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-workflow-orchestration"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P73-RULES-025-CITED-FIGURES-STALE",
+      "title": "OD-RULES-025 records a live rule-count instance whose three figures have all moved",
+      "why": "OD-RULES-025 is the authority a future duplicate-authority rule builds against, and it grounds itself in a measured live instance: a prose figure of 67, DESCRIPTORS.len() and nomos-check-orchestration RULE_COUNT at 65 and asserted equal to each other, and 84 raw pub fn Check_ definitions. Measured against c0e5c79f the same three are 69, 70 and 86: nomos-rules checks.rs line 1 now says sixty-nine rules, run_context.rs line 81 sets RULE_COUNT to 70, and nomos-rules defines 86 unique pub fn Check_ functions. The three-way disagreement the record claims is therefore still real and the finding survives; only its evidence rotted. But the record also names 67, 65 or 84 as the three candidate values a future rule must choose between, which is now a list of three numbers none of which exists in the tree, and it presents them as what that rule should expect to find on its first run. This is an instance of the very defect the record defines, and the same shape as P72-STALE-PLATFORM-DIRECTORY-CLAIM, where an external reviewer read a stale figure out of committed prose and recommended the wrong thing.",
+      "done_when": "OD-RULES-025 states its rule-count instance with figures measured against the tree the amending commit publishes, the equality it asserts between DESCRIPTORS.len() and RULE_COUNT is re-measured rather than carried over, and the passage reads as a measurement taken at a named commit rather than a standing fact. The nomos-rules module prose is not hand-corrected: the record's own stated reason for declining to choose among the counts still stands.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P73-LSP-CORRECTION-FAMILY-DUPLICATED",
+      "title": "nomos-lsp hardcodes the correction-family membership that correction orchestration keeps private",
+      "why": "nomos-lsp answers whether a correction family exists for a finding by hardcoding two rule ids in available_correction.rs: COMPLETENESS_MIRROR and NO_TRAILING_WHITESPACE. The real membership is a private local array at nomos-correction-orchestration run.rs line 162, and that crate exports only CorrectionCommand, CorrectionOutcome, CorrectionEnvironment and Run_Correction, so there is no membership query for a host to call. A third correction family composed into run.rs would leave the LSP silently reporting no correction available for it, and nothing would fail: the two ids are real public constants of nomos-rules, so the duplication compiles, tests green, and drifts quietly. The crate module doc already states both the defect and its remedy, that a real fix is exporting that membership from nomos-correction-orchestration itself rather than inventing it in the host. This is a live instance of the duplicate-authority class OD-RULES-025 describes, sitting inside the one host OD-HOST-003 says must consume canonical services rather than hold engineering knowledge of its own.",
+      "done_when": "nomos-correction-orchestration exports the set of rule ids it composes a correction family for; nomos-lsp AvailableCorrection resolves membership from that export instead of its own literal array; the committed surface snapshot for nomos-correction-orchestration records the new export; and a test fails if a rule id is added to the composed set in run.rs without the exported membership following it, so the next family cannot drift the two apart silently.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-lsp/src/walk_outward/available_correction.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/run.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/correction_family.rs",
+          "tests/contract/surface/nomos-correction-orchestration.txt",
+          "tests/contract/surface/nomos-lsp.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory too narrow, caught before anyone claimed it. A definitive sweep for every site naming both correction-family rule ids found that crates/host/nomos-lsp/src/walk_outward.rs carries the tests asserting the correction answer this item changes, and it was not reserved. The minimal fix may leave those tests untouched, but that is the same assumption P72-STALE-PLATFORM-DIRECTORY-CLAIM made about its own population and paid for with two follow-up items. Re-authored as -2 with walk_outward.rs added. The sweep also confirmed the substance is right: the membership duplication is exactly two sites, available_correction.rs and run.rs line 162; the other seven files naming both ids are rule registration or fixtures, not membership."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-correction-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-59",
+        "declined_at": 1788718528
+      }
+    },
+    {
+      "id": "P40-FACT-STORE-PERSISTENCE-2",
+      "title": "The fact store dies with the process, so incremental work cannot survive an invocation",
+      "why": "OD-ANALYSIS-009 already frames the question of whether Run should read a persistent fact store instead of constructing one fresh per invocation, and leaves it open. Skipping unchanged subjects and recomputing only demanded facts both buy nothing across process boundaries while the only store is in memory: every CLI invocation starts cold, which is the case that actually matters to somebody running the gate. This was originally sequenced after P40-INCREMENTAL-DEMAND-DRIVEN-RECOMPUTE, which was declined twice and never re-authored under that name; the currency machinery it was waiting for arrived instead as P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS, P40-INCREMENTAL-SKIP-UNCHANGED-RULES and P40-INCREMENTAL-SKIP-COVERAGE-REGRESSION, all Done. What is worth persisting and what a cache entry must carry to be safely reused are answered by that landed work rather than guessed ahead of it. It also brings a lifecycle with it, since a durable cache needs eviction, a version boundary and a way to be invalidated wholesale when the build variant changes.",
+      "done_when": "The persistence question OD-ANALYSIS-009 leaves open is decided and recorded, and if the decision is to persist, a store survives process exit, is keyed so a stale entry cannot be served across a build-variant or contract-version change, and has a stated eviction and invalidation lifecycle.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/persistent_store.rs",
+          "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-INCREMENTAL-SKIP-UNCHANGED-RULES"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION",
+      "title": "OD-EXECUTOR-008 decided the canonical WorkResult shape and no code carries it",
+      "why": "P42-AGENT-STRUCTURED-WORKRESULT was declined for an under-reserved territory and re-authored as a decision, P42-EXECUTOR-WORKRESULT-MECHANISM, whose own title ends in the words before code. That decision is Done and recorded as OD-EXECUTOR-008. The implementation it was explicitly a precondition for was never filed, so two items still name the declined original as their dependency and are stranded behind an id that will never finish. The executor still returns a vendor-shaped response: AgentExecutionOutcome carries response as a String, and nomos-cli agent dispatch.rs and workflow.rs both read that field directly. Until this lands, no consumer of an agent run reads a canonical type, and any validated-correction path built on top would be built on a vendor shape.",
+      "done_when": "The executor populates the WorkResult fields OD-EXECUTOR-008 decided it can honestly ground, via a narrow JSON schema with additionalProperties false; the fields that record decided must stay structurally absent are absent rather than model-filled; AgentExecutionOutcome carries the canonical type rather than a vendor-shaped String; every existing consumer reads the canonical type; and both affected public surface snapshots are re-blessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts/src/work_result.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/response.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/agent_execution_outcome.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/tests.rs",
+          "crates/host/nomos-cli/src/agent/dispatch.rs",
+          "crates/host/nomos-cli/src/workflow.rs",
+          "tests/contract/surface/nomos-agent-contracts.txt",
+          "tests/contract/surface/nomos-agent-executor-claude-code.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P42-EXECUTOR-WORKRESULT-MECHANISM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-EXECUTOR-ENVELOPE-IMPLEMENTATION",
+      "title": "OD-EXECUTOR-007 decided a mechanism for each unenforced TaskEnvelope field and no code enforces them",
+      "why": "P42-AGENT-ENVELOPE-ENFORCEMENT was declined for an under-reserved territory and re-authored as a decision, P42-EXECUTOR-ENVELOPE-MECHANISM, whose own title ends in the words before code. That decision is Done and recorded as OD-EXECUTOR-007, which verified a real mechanism against the live CLI: restricted plus add-dir plus an explicit allowed-tools list confines file reach structurally, and a forbidden read and a forbidden write were both refused before the filesystem was touched. The implementation was never filed. TaskEnvelope fields are therefore still accepted and ignored, which is the contract running ahead of enforcement that OD-EXECUTOR-001 warned a first executor decides by default. Enforcing scope needs a real root threaded through Execute_Task, which has callers in nomos-cli agent dispatch.rs and nomos-workflow-orchestration run.rs, so it reaches beyond the executor crate.",
+      "done_when": "Each TaskEnvelope field OD-EXECUTOR-007 gave a mechanism is enforced by that mechanism rather than accepted and ignored; Execute_Task resolves repo-relative Territory paths against a real root threaded from its callers; a test proves a reach outside the declared scope is refused before the filesystem is touched; and the fields that record left without a mechanism are documented as unenforced rather than silently accepted.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+          "crates/agent/nomos-agent-contracts/src/task_envelope.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-claude-code"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-AGENT-WORKRESULT-VALIDATED-PATH-3",
+      "title": "No agent run reaches a validated correction, so agent output is never checked before it lands",
+      "why": "A Claude Code executor and an Ollama backend both really run, and typed agent contracts exist, but nothing carries what an agent produced into a correction the system validates before committing. The game plan is explicit that an agent executor should not precede a solid mutation and validation contract; the executor was built first, so closing this restores that ordering rather than adding to the inversion. Sequenced behind the canonical correction seam because a workflow or agent tier calling into a CLI module would invert the layering, and behind the canonical result implementation because the executor does not construct one yet, so this path would otherwise be built on a vendor-shaped response. nomos-agent-orchestration is the seam that should carry this: it already dispatches an executor and it is the application-service peer of the correction orchestration it needs, but it does not name that peer today, so an explicit zone edge is part of the work rather than an accident of it.",
+      "done_when": "An agent run produces a canonical WorkResult that becomes a correction candidate, that candidate goes through Preview, Stage, Validate and Commit, a validation failure leaves the tree untouched, a test covers both outcomes, the new dependency is declared as an explicit allowed zone edge rather than left to the manifest alone, and the public surface snapshot is re-blessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-agent-orchestration/src/validated_correction.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-agent-orchestration/Cargo.toml",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "tests/contract/surface/nomos-agent-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-CORRECTIONS-CANONICAL-SEAM",
+        "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-corrections"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-SECOND-HARNESS-EXECUTOR-2",
+      "title": "One agent executor exists, so nothing has shown which of its choices are the contract",
+      "why": "The Claude Code executor is properly bounded: fresh isolated working directory, strict tool configuration, a structural allow-list, one turn, a budget ceiling, timeout and stall handling, and structured parsing rather than trusting prose. A second executor over a richer session or harness runtime, of which Clay is the motivating example, would be an adapter rather than a new execution architecture. Its value is evidence: with one implementation nothing distinguishes what the canonical task contract requires from what one vendor happened to need. It is deliberately sequenced after the envelope constraints and the canonical result are enforced in code rather than merely decided, so the second executor is written against the contract as enforced rather than inheriting the first executor accepted-and-ignored fields. A harness executor gets no scheduler authority, no work-graph authority and no rule authority.",
+      "done_when": "A second executor satisfies the same task contract with the same enforced constraints and produces the same canonical result type, what the two implementations disagree about is recorded, no scheduling, work-graph or rule authority moved into either, and the new crate is registered in the workspace members, the README zone table, the ZONES crate table and its own surface snapshot.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-harness/src/lib.rs",
+          "crates/agent/nomos-agent-executor-harness/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "tests/contract/surface/nomos-agent-executor-harness.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION",
+        "P42-EXECUTOR-ENVELOPE-IMPLEMENTATION"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-harness"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P73-LSP-CORRECTION-FAMILY-DUPLICATED-2",
+      "title": "nomos-lsp hardcodes the correction-family membership that correction orchestration keeps private",
+      "why": "nomos-lsp answers whether a correction family exists for a finding by hardcoding two rule ids in available_correction.rs: COMPLETENESS_MIRROR and NO_TRAILING_WHITESPACE. The real membership is a private local array at nomos-correction-orchestration run.rs line 162, and that crate exports only CorrectionCommand, CorrectionOutcome, CorrectionEnvironment and Run_Correction, so there is no membership query for a host to call. A third correction family composed into run.rs would leave the LSP silently reporting no correction available for it, and nothing would fail: the two ids are real public constants of nomos-rules, so the duplication compiles, tests green, and drifts quietly. The crate module doc already states both the defect and its remedy, that a real fix is exporting that membership from nomos-correction-orchestration itself rather than inventing it in the host. This is a live instance of the duplicate-authority class OD-RULES-025 describes, sitting inside the one host OD-HOST-003 says must consume canonical services rather than hold engineering knowledge of its own. A sweep of every site naming both ids confirms the duplication is exactly these two, the other seven being rule registration or fixtures.",
+      "done_when": "nomos-correction-orchestration exports the set of rule ids it composes a correction family for; nomos-lsp AvailableCorrection resolves membership from that export instead of its own literal array; the committed surface snapshot for nomos-correction-orchestration records the new export; and a test fails if a rule id is added to the composed set in run.rs without the exported membership following it, so the next family cannot drift the two apart silently.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-lsp/src/walk_outward/available_correction.rs",
+          "crates/host/nomos-lsp/src/walk_outward.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/run.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/correction_family.rs",
+          "tests/contract/surface/nomos-correction-orchestration.txt",
+          "tests/contract/surface/nomos-lsp.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-correction-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-WORKSPACE-DISCOVERY-SERVICE-2",
+      "title": "Four hosts walk the tree themselves and each hardcodes the languages Nomos supports",
+      "why": "nomos-api sources.rs calls itself a deliberate twin of the CLI walker, and measured directly at c0e5c79f there are four copies, not two: nomos-api sources.rs, nomos-cli check/sources.rs, nomos-cli gate/sources.rs and nomos-lsp sources.rs. Each hardcodes the same rs and go extensions, the same target and .git exclusions and its own nested-git-worktree detection, and each reaches std::fs directly. nomos-lsp says in its own manifest that it carries its own copy rather than reaching into another composition root private module, because nomos-cli check sources is pub(super) -- so the duplication is a documented consequence of the missing service, not an oversight, and a fifth copy appears the moment a daemon exists. That is four copies of the answer to which files Nomos analyses, in the layer that is supposed to be a thin adapter. The specification puts file and project recognition in LanguagePackage and says every user-visible action gets a canonical application service rather than client-specific logic; discovery is currently the clearest violation of both. Recognition should come from registered packages and providers so that adding a language does not require editing every host.",
+      "done_when": "One canonical discovery service resolves the source set, all four hosts call it and none names a file extension or an excluded directory, recognition comes from package and provider registration, adding a language changes no host, the new crate is registered in the workspace members, the README zone table, the ZONES crate table and its own surface snapshot, and the decision is recorded.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workspace-discovery/src/lib.rs",
+          "crates/orchestration/nomos-workspace-discovery/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "tests/contract/surface/nomos-workspace-discovery.txt",
+          "crates/host/nomos-api/src/sources.rs",
+          "crates/host/nomos-cli/src/check/sources.rs",
+          "crates/host/nomos-cli/src/gate/sources.rs",
+          "crates/host/nomos-lsp/src/sources.rs",
+          "crates/host/nomos-api/Cargo.toml",
+          "crates/host/nomos-cli/Cargo.toml",
+          "crates/host/nomos-lsp/Cargo.toml",
+          "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-008.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-PLATFORM-DIRECTORY-ENUMERATION-3"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-lsp"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-SOURCE-ARTIFACT-OWNERSHIP-2",
+      "title": "A discovered file is a nomos-rules type, so discovery is owned by the layer that judges",
+      "why": "SourceFile is declared in nomos-rules and it is what the API and CLI walkers return and what the whole orchestration passes around. That inverts ownership: a discovered artifact exists before any rule does, and making the rules package its owner means the workspace, analysis and discovery layers all depend on the judging layer to describe their own input. It also means a future consumer that never judges anything still links the rules package to name a file. A canonical source or artifact representation belongs to workspace, model or analysis, with rules consuming it. Sequenced behind P41-WORKSPACE-DISCOVERY-SERVICE-2 because that item removes four of this type's call sites and introduces the canonical service that is the natural owner, so migrating consumers before it lands would migrate a population about to change.",
+      "done_when": "The canonical discovered-source type is owned by workspace, model or analysis rather than by the rules package, rules consume it rather than declaring it, and no crate depends on nomos-rules solely to name its input.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P41-WORKSPACE-DISCOVERY-SERVICE-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
