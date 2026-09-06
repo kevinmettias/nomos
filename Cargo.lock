@@ -1656,6 +1656,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-tool-package"
+version = "0.1.0"
+dependencies = [
+ "nomos-contracts",
+ "nomos-lang-rust-clippy",
+ "nomos-lang-rust-deny",
+ "nomos-package",
+ "serde_json",
+]
+
+[[package]]
 name = "nomos-work-orchestration"
 version = "0.1.0"
 dependencies = [

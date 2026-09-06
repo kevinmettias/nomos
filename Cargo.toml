@@ -201,6 +201,15 @@ members = [
     # `OD-PACKAGE-006`, `OD-PACKAGE-007`.
     "crates/packages/nomos-lang-go-package",
 
+    # Band 26 — package manifests. The first ToolProvider manifest maturity: identity,
+    # PackageKind (restricted to ToolProvider), PKG-007's first two version domains reused
+    # from nomos-package unchanged, and OD-CAPABILITY-013's closed twelve-name FAMILY
+    # vocabulary in place of the fourth. Admits this workspace's two real ToolProviders,
+    # nomos-lang-rust-clippy and nomos-lang-rust-deny, by their own provider identities. A
+    # fifth peer of the four above -- none of the five names another.
+    # `OD-CAPABILITY-013`, `P47-TOOLPROVIDER-HAS-NO-PACKAGE-2`.
+    "crates/packages/nomos-tool-package",
+
     # Band 3 — rules. The first thing here that judges code rather than paperwork. A
     # rule is a pure function from source text to findings: it names no language
     # provider and opens no file, so the caller decides what tree is being judged and a
@@ -389,6 +398,7 @@ nomos-lang-rust-package = { path = "crates/packages/nomos-lang-rust-package" }
 nomos-model-package = { path = "crates/packages/nomos-model-package" }
 nomos-rule-package = { path = "crates/packages/nomos-rule-package" }
 nomos-lang-go-package = { path = "crates/packages/nomos-lang-go-package" }
+nomos-tool-package = { path = "crates/packages/nomos-tool-package" }
 nomos-rules = { path = "crates/rules/nomos-rules" }
 nomos-corrections = { path = "crates/corrections/nomos-corrections" }
 nomos-agent-contracts = { path = "crates/agent/nomos-agent-contracts" }

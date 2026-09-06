@@ -49,7 +49,7 @@ pub(crate) struct Universe
 ///
 /// A number somebody chose. Raising it is the deliberate step that adding an unmirrored
 /// universe is meant to cost, and lowering it is what closing one earns.
-pub(crate) const UNMIRRORED_TOTAL: usize = 3;
+pub(crate) const UNMIRRORED_TOTAL: usize = 4;
 
 /// Every declared universe in this workspace, classified by hand.
 ///
@@ -237,6 +237,20 @@ pub(crate) const UNIVERSES: &[Universe] = &[
                    identical risk nomos-lang-rust-package's own row states — bounded the same way, \
                    to additions rather than drift on the one entry it holds today, pulled \
                    from nomos-lang-go's own PROVIDER constant rather than retyped",
+        },
+    },
+    Universe {
+        path: "crates/packages/nomos-tool-package/src/known_providers.rs",
+        name: "KNOWN_PROVIDERS",
+        kind: UniverseKind::Constant,
+        standing: Standing::Unmirrored {
+            risk: "a third ToolProvider crate added to the workspace is not added to this list \
+                   automatically, so its registration is refused by Providers_Field until \
+                   somebody notices and extends it by hand — the identical risk \
+                   nomos-lang-rust-package's and nomos-lang-go-package's own rows state — \
+                   bounded the same way, to additions rather than drift on the two entries it \
+                   holds today, pulled from nomos-lang-rust-clippy's and nomos-lang-rust-deny's \
+                   own PROVIDER constants rather than retyped",
         },
     },
     // ---- what an external surface over nomos-api may serve ----

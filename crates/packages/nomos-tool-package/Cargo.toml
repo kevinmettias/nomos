@@ -1,0 +1,18 @@
+[package]
+name = "nomos-tool-package"
+version = "0.1.0"
+description = "The ToolProvider manifest format: wraps nomos-package's generic core rather than depending on a sibling package crate, admits this workspace's two real ToolProviders (nomos-lang-rust-clippy, nomos-lang-rust-deny) by their own provider identities, and classifies each registration under OD-CAPABILITY-013's closed twelve-name FAMILY vocabulary."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-package = { workspace = true }
+nomos-lang-rust-clippy = { workspace = true }
+nomos-lang-rust-deny = { workspace = true }
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

@@ -166,6 +166,7 @@ pub const ZONES: &[(&str, Zone)] = &[
     ("nomos-lang-go-package", Zone::Provider),
     ("nomos-model-package", Zone::Provider),
     ("nomos-rule-package", Zone::Provider),
+    ("nomos-tool-package", Zone::Provider),
     ("nomos-rules", Zone::Rules),
     ("nomos-corrections", Zone::Agent),
     ("nomos-agent-contracts", Zone::Agent),
@@ -233,7 +234,8 @@ pub const SAME_ZONE_EDGES: &[(&str, &str)] = &[
     ("nomos-spec-orchestration", "nomos-spec-ingest"),
     ("nomos-spec-orchestration", "nomos-spec-project"),
     // Provider: the package-manifest crates wrap nomos-package's generic core and, for the
-    // two language packages, their own language's syntax/dependency providers.
+    // two language packages and the ToolProvider manifest, their own admitted providers
+    // directly.
     ("nomos-lang-rust-package", "nomos-package"),
     ("nomos-lang-rust-package", "nomos-lang-rust"),
     ("nomos-lang-rust-package", "nomos-lang-rust-scan"),
@@ -241,6 +243,9 @@ pub const SAME_ZONE_EDGES: &[(&str, &str)] = &[
     ("nomos-lang-go-package", "nomos-lang-go"),
     ("nomos-model-package", "nomos-package"),
     ("nomos-rule-package", "nomos-package"),
+    ("nomos-tool-package", "nomos-package"),
+    ("nomos-tool-package", "nomos-lang-rust-clippy"),
+    ("nomos-tool-package", "nomos-lang-rust-deny"),
     // Agent: TaskEnvelope/WorkResult naming a correction candidate a rule produced, and
     // both AgentExecutors depending on the contracts they implement.
     ("nomos-agent-contracts", "nomos-corrections"),

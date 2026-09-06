@@ -55699,16 +55699,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P54-TOOL-FAMILY-TAXONOMY"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "claude-loop",
-        "acquired_at": 1788702583,
-        "lease_expires_at": 1788713383
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -55718,7 +55714,27 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-tool-package"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 5 tests\ntest family::tests::Test_A_Label_None_Of_The_Twelve_Name_Should_Resolve_To_Nothing ... ok\ntest family::tests::Test_Every_Family_Should_Round_Trip_Through_Its_Label ... ok\ntest family::tests::Test_Display_Should_Render_The_Label ... ok\ntest known_providers::tests::Test_An_Unregistered_Provider_Is_Not_Known ... ok\ntest known_providers::tests::Test_Both_Real_ToolProviders_Are_Known ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 12 tests\ntest Test_A_Missing_Field_Is_Refused ... ok\ntest Test_An_Empty_Providers_List_Is_Refused ... ok\ntest Test_A_Package_Kind_Not_Defined_At_All_Is_Refused ... ok\ntest Test_A_RulePackage_Kind_Is_Refused ... ok\ntest Test_A_Wrong_Type_Field_Is_Refused ... ok\ntest Test_A_Manifest_Naming_Both_Real_Tool_Providers_Resolves ... ok\ntest Test_Text_That_Is_Not_Json_Is_Refused ... ok\ntest Test_A_Missing_File_Is_Refused_As_Unreadable ... ok\ntest Test_An_Unknown_Provider_Is_Refused ... ok\ntest Test_An_Inverted_Protocol_Range_Is_Refused ... ok\ntest Test_A_Schema_Newer_Than_This_Build_Understands_Is_Refused ... ok\ntest Test_An_Unknown_Family_Label_Is_Refused ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.49s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_tool_package-232e2b29cf795eb7.exe)\n     Running tests\\manifest.rs (target\\debug\\deps\\manifest-7e4688aea14c077d.exe)\n   Doc-tests nomos_tool_package\n",
+        "verified_at": 1788707840,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "dec06e93b6c23e9fac4482c80f34f496606564f9"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
