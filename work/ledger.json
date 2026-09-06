@@ -58825,6 +58825,116 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P68-ABBREVIATIONS-DOES-NOT-EXEMPT-EXTERN-CRATE",
+      "title": "abbreviations judges an extern crate name nobody at that site chose",
+      "why": "P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON's own third-party fixture (hex 0.4.3) surfaced this directly: extern crate alloc; declares the name alloc, a known abbreviation on DEFAULT_BANNED_WORDS, and abbreviations.rs's Is_Exempt only recognizes ItemKind::Use (a use-binding's own name chosen wherever the binding's target was declared, not here) -- not ItemKind::ExternCrate, the identical shape for the identical reason. The name is fixed by the real crate being linked, not authored at this site, exactly like a use rename Is_Exempt already excuses. Invisible from nomos's own tree, which is edition 2021 and has no extern crate statements at all -- a real, precise gap this fixture surfaced by using an ordinary, still-common Rust idiom nomos's own code does not happen to write.",
+      "done_when": "Is_Exempt (or its equivalent) also recognizes ItemKind::ExternCrate the same way it already recognizes ItemKind::Use. A regression test proves it: extern crate alloc; must not be reported, the same way a real, chosen abbreviation elsewhere in the same file still is.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "calibration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P68-SINGLE-LETTER-NAMES-READS-A-BLANKET-IMPLS-GENERIC-PARAMETER",
+      "title": "single-letter-names reads a blanket impl's own generic Self-type parameter as a chosen name",
+      "why": "P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON's own third-party fixture (hex 0.4.3) surfaced this directly: impl<T: AsRef<[u8]>> ToHex for T reports T as an unjustified single-letter name. T is not a struct field or an ordinarily-declared item name a human carelessly abbreviated; nomos_lang_rust::syntax::walk's visit_item_impl records an Implementation item's own name as Type_Head(&node.self_ty), which for this common, idiomatic blanket-impl-over-a-generic-parameter shape is literally the generic parameter's own already-declared name, reached a second time through the Implementation item path. single_letter_names.rs's own module doc already states generic parameters are out of this rule's scope (left to a richer syntax shape) -- but that exemption does not reach this path, since the walker files this occurrence under the Implementation item's own name, not under the generic-parameter declaration site the existing exemption was written against. Invisible from nomos's own tree, which does not happen to write a blanket impl over a bare generic parameter this way.",
+      "done_when": "single-letter-names does not report an Implementation item whose own name is a bare generic parameter already declared on that same impl (or the underlying Implementation-item-naming choice in the syntax walk is corrected so this case does not reach the rule as a chosen name). A regression test proves it: impl<T: AsRef<[u8]>> ToHex for T must not be reported, the same way a real, deliberately abbreviated single-letter binding elsewhere still is.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/single_letter_names.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "calibration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT",
+      "title": "cargo clippy, cargo metadata and cargo deny do not confine themselves to the judged root",
+      "why": "P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON measured this directly while building its own fixture. Pointed at a root nested inside a larger cargo workspace with no manifest of its own stopping cargo's upward search, cargo clippy --workspace and cargo metadata (nomos-lang-rust-clippy's and nomos-lang-rust-cargo's own Materialize_Lint/Materialize_Dependencies) silently escaped upward and judged the enclosing workspace instead -- 174 unrelated lint-diagnostics findings about crates the caller never named. Giving the judged root its own manifest closes that escape for cargo itself, but cargo deny's own config/manifest discovery is a second, independent escape the same fix does not close: nomos-lang-rust-deny's Cargo_Deny_Command sets only working_directory, never a --manifest-path or --config, so cargo deny walks upward past the judged root's own boundary regardless and picks up whatever deny.toml it finds first. Neither provider's own materialization confines the real subprocess it launches to the root a caller actually named; both rely entirely on that root already being a self-contained cargo workspace, which nomos's own tree always is and an arbitrary judged root is not guaranteed to be.",
+      "done_when": "A rule judging a root that is not itself a cargo workspace root (nested inside a larger one, with no manifest of its own) does not silently report findings about the enclosing workspace instead. Each of the three affected commands (cargo clippy, cargo metadata, cargo deny) either is invoked with an explicit flag confining it to the given root, or the materialization refuses honestly when it cannot confirm the subprocess judged only what was asked. A regression fixture proves it: a directory with no cargo manifest of its own, nested inside a real workspace, must not produce a finding about anything outside itself.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-clippy",
+          "crates/languages/nomos-lang-rust-cargo",
+          "crates/languages/nomos-lang-rust-deny"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-lang-rust-deny"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
