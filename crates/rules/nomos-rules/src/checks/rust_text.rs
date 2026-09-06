@@ -15,7 +15,7 @@
 //! [`Has_Local_Safety_Justification`]'s own doc for why it does not reuse the shared
 //! primitive either way.
 
-use super::code_prefix::Code_Prefix;
+use super::code_prefix::{Code_Prefix, Code_With_String_Bodies_Masked};
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 use std::path::Component;
@@ -545,8 +545,20 @@ fn Has_Local_Ignore_Justification(lines: &[&str], index: usize) -> bool
 /// Matches `unsafe {`, `unsafe fn`, `unsafe impl` and `unsafe trait` specifically — not a
 /// bare substring search for `"unsafe"`, which would false-positive on
 /// `#![forbid(unsafe_code)]`.
+///
+/// `P66-UNSAFE-JUSTIFICATION-STRING-BLINDNESS`: matched against
+/// [`super::code_prefix::Code_With_String_Bodies_Masked`]'s own output, not `code` as
+/// given, so a string literal spelling one of these phrases as data --
+/// `("unsafe impl", Self::Implementation)`, a real committed table entry in
+/// `nomos-lang-rust-scan`'s own source -- is read as the quoted text it is, not as a real
+/// declaration. `code` has already had `Code_Prefix` remove any trailing `//` comment by
+/// the time this runs; re-scanning it for quote boundaries is safe and correct, since
+/// nothing about where a string opens or closes depends on whether a later comment was
+/// already stripped.
 fn Has_Unsafe_Construct(code: &str) -> bool
 {
+    let code = Code_With_String_Bodies_Masked(code);
+
     return code.contains("unsafe {")
         || code.contains("unsafe fn ")
         || code.contains("unsafe fn(")
@@ -571,9 +583,12 @@ fn Has_Local_Safety_Justification(lines: &[&str], index: usize) -> bool
 
 /// Whether `code` (the comment-stripped current line) declares `unsafe fn`, `unsafe trait`
 /// or `unsafe impl` rather than matching only on a bare `unsafe {}` block — the distinction
-/// `OD-RULES-021` measured `Has_Unsafe_Construct` collapsing into one shape.
+/// `OD-RULES-021` measured `Has_Unsafe_Construct` collapsing into one shape. Matched against
+/// the string-masked text for the identical reason [`Has_Unsafe_Construct`] now is.
 fn Is_Unsafe_Declaration(code: &str) -> bool
 {
+    let code = Code_With_String_Bodies_Masked(code);
+
     return code.contains("unsafe fn ") || code.contains("unsafe fn(") || code.contains("unsafe impl") || code.contains("unsafe trait");
 }
 
@@ -1145,6 +1160,33 @@ mod tests
     fn Test_Check_Unsafe_Justification_Should_Ignore_The_Forbid_Unsafe_Code_Attribute()
     {
         let source = Source("src/lib.rs", "#![forbid(unsafe_code)]\n");
+
+        let findings = Check_Unsafe_Justification(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// `P66-UNSAFE-JUSTIFICATION-STRING-BLINDNESS`: a real, committed table entry in
+    /// `nomos-lang-rust-scan/src/item_kind.rs`, `("unsafe impl", Self::Implementation),`,
+    /// was reported as an unjustified `unsafe impl` — the phrase is this line's own quoted
+    /// data, not a declaration, and the file this line comes from has no real `unsafe` at
+    /// all (`#![forbid(unsafe_code)]`, matching the test above).
+    #[test]
+    fn Test_Check_Unsafe_Justification_Should_Not_Read_A_String_Literals_Own_Text_As_A_Declaration()
+    {
+        let source = Source("src/item_kind.rs", "        (\"unsafe impl\", Self::Implementation),\n");
+
+        let findings = Check_Unsafe_Justification(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// The same string-literal blindness, for the bare-block half of the dispatch: a
+    /// string spelling `unsafe { ... }` as data must not be read as a real block either.
+    #[test]
+    fn Test_Check_Unsafe_Justification_Should_Not_Read_A_String_Literals_Own_Block_Text_As_A_Declaration()
+    {
+        let source = Source("src/fixture.rs", "let line = \"unsafe { core::ptr::read(p) }\";\n");
 
         let findings = Check_Unsafe_Justification(&[source]);
 

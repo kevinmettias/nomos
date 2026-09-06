@@ -46,6 +46,19 @@
 //! `//` comment block spanning lines it walks explicitly rather than one this function
 //! tracks silently. What this function adds is single-line correctness: a raw string that
 //! opens and closes within one line is read correctly, unbalanced quote and all.
+//!
+//! # The narrower fix this file's own history pointed at: [`Code_With_String_Bodies_Masked`]
+//!
+//! `P66-UNSAFE-JUSTIFICATION-STRING-BLINDNESS` measured the gap this module doc already
+//! named: `unsafe-justification`'s `Has_Unsafe_Construct` is a bare substring search over
+//! `Code_Prefix`'s own output, and `crates/languages/nomos-lang-rust-scan/src/item_kind.rs`
+//! declares a table entry, `("unsafe impl", Self::Implementation)`, whose own quoted text
+//! spells the exact phrase that search looks for — read as a real declaration, not the
+//! string data it is. Blanking every string uniformly already broke three real rules once
+//! (this file's own history, above); the fix this second function offers instead is the
+//! same scanner, reused for a caller that has already decided it wants a keyword search
+//! blind to string content, rather than changing what `Code_Prefix` itself returns to every
+//! caller. Nothing before this line changes what `Code_Prefix` does or who calls it.
 
 /// `line`, with any trailing `//` line comment removed — but a `//` only ends the line when
 /// it appears outside a string, a raw string, or a char literal, unlike the plain
@@ -102,6 +115,71 @@ pub(crate) fn Code_Prefix(line: &str) -> String
     // never fail on real input -- the fallback exists only so this stays a total function
     // rather than one that could panic on a construction its own scanner cannot produce.
     return String::from_utf8(output).unwrap_or_default();
+}
+
+/// [`Code_Prefix`]'s own comment-boundary scan, with every string, raw string and char
+/// literal's own body replaced by one space per byte rather than copied through — for a
+/// caller that searches the result for a bare keyword or construct (`"unsafe {"`, `"unsafe
+/// fn "`) and must not read a string literal's own quoted text as that construct. See this
+/// file's own module doc for why this is a second, narrowly-scoped function rather than a
+/// change to what `Code_Prefix` itself returns: a caller that needs a literal's real value
+/// — `#[path = "value"]`'s own path, `.expect("message")`'s own argument — must keep calling
+/// `Code_Prefix`, and this function exists only for the opposite, narrower need.
+///
+/// One space per masked byte, not the byte's own length in some other unit, so a substring
+/// search for a multi-character construct spanning a masked region still fails to match
+/// (`"unsafe { "` cannot appear inside a run of spaces) without disturbing any position a
+/// caller that does not search for one never asks this function to preserve.
+#[must_use]
+pub(crate) fn Code_With_String_Bodies_Masked(line: &str) -> String
+{
+    let bytes = line.as_bytes();
+    let mut output: Vec<u8> = Vec::with_capacity(bytes.len());
+    let mut index = 0;
+
+    while let Some(&byte) = bytes.get(index)
+    {
+        if let Some(hashes) = Raw_String_Opens_At(bytes, index)
+        {
+            let body_start = Raw_String_Body_Start(bytes, index, hashes);
+            let end = Skip_Raw_String_Body(bytes, body_start, hashes);
+            Mask_Range(&mut output, bytes, index, end);
+            index = end;
+            continue;
+        }
+
+        match byte
+        {
+            b'/' if bytes.get(index.saturating_add(1)) == Some(&b'/') => break,
+            b'"' =>
+            {
+                let end = Skip_String_Body(bytes, index.saturating_add(1));
+                Mask_Range(&mut output, bytes, index, end);
+                index = end;
+            }
+            b'\'' if Opens_Char_Literal(bytes, index) =>
+            {
+                let end = Skip_Char_Literal_Body(bytes, index.saturating_add(1));
+                Mask_Range(&mut output, bytes, index, end);
+                index = end;
+            }
+            other =>
+            {
+                output.push(other);
+                index = index.saturating_add(1);
+            }
+        }
+    }
+
+    return String::from_utf8(output).unwrap_or_default();
+}
+
+/// Pushes one space for every byte of `bytes[start..end]`, the masked stand-in for a
+/// literal's own body [`Code_With_String_Bodies_Masked`] never copies through.
+fn Mask_Range(output: &mut Vec<u8>, bytes: &[u8], start: usize, end: usize)
+{
+    let length = bytes.get(start..end).unwrap_or_default().len();
+    output.extend(std::iter::repeat_n(b' ', length));
 }
 
 /// Advances past a double-quoted string's own body, honoring a backslash escape so an
@@ -230,6 +308,57 @@ fn Raw_String_Closes_Here(bytes: &[u8], index: usize, hashes: usize) -> bool
 mod tests
 {
     use super::*;
+
+    /// The exact regression `P66-UNSAFE-JUSTIFICATION-STRING-BLINDNESS` measured:
+    /// `nomos-lang-rust-scan/src/item_kind.rs` declares
+    /// `("unsafe impl", Self::Implementation)`, a table entry whose own quoted text is not
+    /// a real `unsafe impl` — a bare substring search over `Code_Prefix`'s own output
+    /// (which preserves a string's real text) reads it as one anyway.
+    #[test]
+    fn Test_Code_With_String_Bodies_Masked_Should_Not_Read_A_Table_Entrys_Own_String_As_Real_Code()
+    {
+        let line = "(\"unsafe impl\", Self::Implementation),";
+
+        let masked = Code_With_String_Bodies_Masked(line);
+
+        assert!(!masked.contains("unsafe impl"), "{masked:?}");
+    }
+
+    /// The masked scan still finds a real, unquoted `unsafe {` — it must not blind a real
+    /// caller to real code, only to a string's own quoted text.
+    #[test]
+    fn Test_Code_With_String_Bodies_Masked_Should_Still_Find_Real_Unquoted_Code()
+    {
+        let line = "let s = \"unsafe impl\"; unsafe { core::ptr::read(p) }";
+
+        let masked = Code_With_String_Bodies_Masked(line);
+
+        assert!(masked.contains("unsafe { core::ptr::read(p) }"), "{masked:?}");
+        assert!(!masked.contains("unsafe impl"), "the string's own text must be masked: {masked:?}");
+    }
+
+    /// A trailing `//` comment is still recognized once the preceding string is masked,
+    /// not read through by accident.
+    #[test]
+    fn Test_Code_With_String_Bodies_Masked_Should_Still_Strip_A_Trailing_Comment()
+    {
+        let line = "let s = \"https://example.com\"; // a comment";
+
+        let masked = Code_With_String_Bodies_Masked(line);
+
+        assert!(!masked.contains("a comment"), "{masked:?}");
+    }
+
+    /// A raw string's own unsafe-shaped text is masked the same way a plain string's is.
+    #[test]
+    fn Test_Code_With_String_Bodies_Masked_Should_Mask_A_Raw_Strings_Own_Text()
+    {
+        let line = "let s = r#\"unsafe impl Foo for Bar {}\"#;";
+
+        let masked = Code_With_String_Bodies_Masked(line);
+
+        assert!(!masked.contains("unsafe impl"), "{masked:?}");
+    }
 
     #[test]
     fn Test_Code_Prefix_Should_Strip_A_Trailing_Comment()
