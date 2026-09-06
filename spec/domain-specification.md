@@ -102,6 +102,7 @@ profile: domain-specification
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md | authored | 15 | 5 | sha256:0cb15b83d0fb7a58f4a2afda083ac512ba0ac344d15ca0556f3446736cbd7ea9 |
 | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md@authored | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md | authored | 19 | 6 | sha256:c4b59b0c06e3e68eee7656804c4cf4fe6685ba8cf63bc66976ccc67c481f2120 |
 | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md@authored | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md | authored | 25 | 6 | sha256:3e1ca21fa30a1ca546fe40667181bda7de5ca80622a019656889537e6a72d206 |
+| docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md@authored | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md | authored | 19 | 6 | sha256:69f98af14b7a83532a14a4e3d604fdd9c7070616899302a48f5a09e1ec771a72 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -924,6 +925,12 @@ profile: domain-specification
 | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#11 | authored | 2 | The Decision |
 | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#16 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#21 | authored | 2 | Status |
+| docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#1 | authored | 1 | A repository declares which tool answers a family, and may decline one |
+| docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#8 | authored | 2 | The Decision |
+| docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#13 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#18 | authored | 2 | Status |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -24923,6 +24930,194 @@ library, each argued at the site that makes it. None of them reopens what this r
 What stays governing is the exclusion: `P40-MCP-SURFACE-4` projects this same registry over MCP
 framing and is bound by this record rather than by a fresh decision of its own, and a later
 surface making the opposite case about a repo-tooling verb must still make it explicitly.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#1
+
+*revision: authored · kind: heading · heading: A repository declares which tool answers a family, and may decline one · hash: sha256:cee35fd1035caae1d93d16be1bc24e2663ec3d3dea6e082d48ccce67e3a82f54*
+
+# A repository declares which tool answers a family, and may decline one
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#2
+
+*revision: authored · kind: heading · heading: A repository declares which tool answers a family, and may decline one / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#3
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / Question · hash: sha256:5029c0ffe83a64672122887c5e4965e58d7720b00dc9425a0943f7d242834144*
+
+`OD-HOST-004` decided `Registry::Resolve` never needs a selection mechanism, because it
+already ranks offers against whatever `Requirement` a caller states — a question about this
+engine's own composition root, settled and not reopened here. A different question that
+record never asked: whether the repository *being judged* may express a preference or an
+exclusion among the tools this engine could run against it. Today it may not. `code-
+standards`' `kernel/toolspec` names the cost of that absence directly, in its own package
+doc: "the engine's answer to an absent tool is correct... but it is the engine's answer, not
+the repository's decision, and the two look identical in a report." This workspace has that
+defect now, and a person required a decision on whether and how to close it.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#4
+
+*revision: authored · kind: heading · heading: A repository declares which tool answers a family, and may decline one / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#5
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / What Was Measured · hash: sha256:b8de3b14b2c4b1773b44665565d8e3473067444f441c0c09aae378929703e161*
+
+**`OD-HOST-004`'s own scope is confirmed orthogonal, not merely asserted so.** Its own text
+is explicit: `Registered`'s question is whether the *registry* needs a selection mechanism
+among offers a *caller* (the composition root) already names by `Requirement`. This record's
+question is whether the *repository under analysis* — not the composition root, not a
+caller — gets any say at all in which tool runs against it. `Registry::Resolve` ranking
+offers by guarantee has nothing to say about a repository declaring "use clippy, not
+`cargo check`" or "this repository has no dotnet, do not try": neither is a `Requirement` a
+caller states today, and neither changes what the registry does with the offers it is
+handed. The two questions do not touch.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#6
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / What Was Measured · hash: sha256:9c01b4754496698df4b19f0cbc365b0856b4bd70a7a5c09f08402ce363efc014*
+
+**The mechanism this decision would reach for already exists and is proven, not
+theoretical.** `OD-RULES-011` established that a repository's own configuration reaches a
+rule as a capability fact rather than as ambient state a rule reads directly, and five real
+capabilities already do exactly this: `nomos.cap.naming.policy`, `nomos.cap.limits.policy`,
+`nomos.cap.scripting.policy`, `nomos.cap.words.policy` and `nomos.cap.goals.policy` are all
+read from `standards.json` by `nomos-repo-policy`'s five domains, materialized the identical
+way every other capability is, and read by a rule through the identical `FactReader`
+interface. A sixth capability naming which tool a repository selects per family follows a
+path this workspace has built five times already, not a new one.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#7
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / What Was Measured · hash: sha256:19a286f94e9229913d2d8212c9261068c801d20e330f46df0a9e225e98f302e1*
+
+**The three cases the question asks to be told apart already have distinct vocabulary, and
+one of the three has never been produced by anything.** `nomos_contracts::Applicability`
+already carries `MissingCapability` ("no installed provider offers a capability the rule
+requires") and `ProviderUnavailable` ("a provider that would satisfy the requirement is
+installed but could not run") for a tool genuinely absent or broken, and
+`ConfigurationDisabled` ("policy switched the rule off for this subject — a deliberate
+human choice, not a capability gap") for exactly the third case, a repository's own
+decision. Checked directly: `ConfigurationDisabled` is rendered distinctly by `nomos-cli`'s
+own report (`check/report.rs`) and accounted for separately by `Coverage`, but no rule in
+`nomos-rules` produces it — a real word in the vocabulary with no real producer, not a gap
+in the vocabulary itself. A tool that ran against real subjects and found nothing stays
+`Applicability::Supported`, correctly identical to a genuinely clean tree, because it is
+one.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#8
+
+*revision: authored · kind: heading · heading: A repository declares which tool answers a family, and may decline one / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#9
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / The Decision · hash: sha256:b1e7d7b6f6e9a0c5c425773a0371efca5ec576b9e2d4b508280566deda9ed646*
+
+**A repository may declare, per language and per family (`OD-CAPABILITY-013`'s own twelve
+names), which tool answers it, or that none should run.** The declaration lives in
+`standards.json`, the same file the five existing policy families already read, under a new
+section keyed by language and family word — the identical shape `code-standards`'
+`tools.json` already proved, adapted to this workspace's one-file convention rather than a
+second configuration file.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#10
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / The Decision · hash: sha256:68ba4b8f336ad09746cbd75b71b29d03dc653af1d673197012cf54dbc72666d3*
+
+**It travels as a capability fact, the same way the five existing policy families do — a
+sixth `nomos.cap.tool.selection`-shaped capability, materialized from `standards.json`
+exactly like `nomos.cap.naming.policy` is.** No new mechanism is invented: `OD-RULES-011`'s
+own path is followed a sixth time, not extended or special-cased.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#11
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / The Decision · hash: sha256:c6166574a2de61a63a1130814d546fa1258c6d3409d4a35da40ff203e159da99*
+
+**A provider consults the selection before it runs, not after.** The natural point is
+`nomos-check-orchestration`'s own per-capability materialization step — the same place that
+already decides whether a family's provider is invoked at all for this request
+(`Is_Rule_Selected`) — gaining a second, independent gate: whether the repository's own
+selection permits this family to run for this language at all. A family the repository
+declined never reaches its provider's subprocess; a finding carrying
+`Applicability::ConfigurationDisabled` is filed in its place, `ConfigurationDisabled`'s first
+real producer. A family the repository did not mention, or explicitly left to the engine,
+resolves exactly as it does today.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#12
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / The Decision · hash: sha256:b8dca5416011d79e4f0c58c07e62e1c55f7ccea2f974571c71d978f51f8c7262*
+
+**The three cases resolve on existing vocabulary, not new vocabulary.** A tool absent from
+the machine or broken stays `MissingCapability`/`ProviderUnavailable`, unchanged. A tool the
+repository declined is `ConfigurationDisabled`, now real. A tool that ran and found nothing
+stays `Supported` with no findings — indistinguishable from a clean tree because that is
+what it is, which is correct and is not this record's problem to solve.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#13
+
+*revision: authored · kind: heading · heading: A repository declares which tool answers a family, and may decline one / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#14
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / What This Record Does Not Do · hash: sha256:a975404a39acbaf7e9792457413e60eb929994e0851cefd13bf56cc7d3d3351b*
+
+**No selection mechanism is built here.** The sixth capability contract, its payload shape,
+`standards.json`'s new section, and the materialization-time gate are named precisely enough
+for a follow-up item's territory — a new `nomos-cap-tool-selection` crate beside the five
+existing policy contracts, and one gate per subprocess-backed provider's own materialization
+function in `nomos-check-orchestration` — rather than built speculatively here.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#15
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / What This Record Does Not Do · hash: sha256:48aa648c57fd747df51610ad8758095abf51fd1435ef103348530b423e75c60d*
+
+It does not reopen `OD-HOST-004`. `Registered`'s own criterion — whether a rule's or
+provider's participation is unconditional or meant to vary by request — is untouched;
+naming a preference at the repository level is a fact a materialization step reads, not a
+change to how the registry resolves offers among the providers this engine ships.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#16
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / What This Record Does Not Do · hash: sha256:dfce1103fc4ef0303307eaaee6ba9fc008bd7eebc077fdd7d634b6796e5315ed*
+
+It does not decide `OD-CAPABILITY-013`'s own open half either. That record classified
+today's eight providers by family; this one uses that vocabulary as the key a repository's
+selection is written against, without revisiting the classification itself.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#17
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / What This Record Does Not Do · hash: sha256:ae5ae88243aed0792fb9e5f87c08cda2f74b0866f923ac86e7207c3b8b74d7bb*
+
+It does not give a repository the power to select a tool this engine has not shipped a
+provider for. A selection names which of the *admitted* offers for a family should run, or
+that none should — it cannot conjure a ninth provider, the same way `Registry::Resolve`
+cannot today.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#18
+
+*revision: authored · kind: heading · heading: A repository declares which tool answers a family, and may decline one / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#19
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / Status · hash: sha256:a1ff44fd445b6c67de374ba51874d95ed926a93356444ae5dcd6ca8221429743*
+
+Accepted. A repository may declare a tool preference or exclusion per language and family,
+written into `standards.json` and read as a capability fact the same way five existing
+policy families already are, checked before a provider's own subprocess runs. The three
+cases a report must tell apart already have the vocabulary: `MissingCapability`/
+`ProviderUnavailable` for absent, `ConfigurationDisabled` for declined — its first real
+producer — and `Supported` for ran and clean. `OD-HOST-004`'s own composition-root question
+is untouched. No mechanism is built here.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 

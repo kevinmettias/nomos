@@ -372,6 +372,7 @@ graph LR
     od_capability_012 -->|"relates-to"| od_analysis_010
     od_capability_012 -->|"relates-to"| od_capability_001
     od_capability_013 -->|"relates-to"| od_capability_001
+    od_capability_013 -->|"relates-to"| od_host_009["OD-HOST-009"]
     od_capability_013 -->|"relates-to"| od_package_014
     od_capability_013 -->|"relates-to"| od_rules_010["OD-RULES-010"]
     od_completeness_001 -->|"affected_by"| d_134
@@ -681,6 +682,7 @@ graph LR
     od_host_004 -->|"relates-to"| od_gate_017
     od_host_004 -->|"relates-to"| od_host_001
     od_host_004 -->|"relates-to"| od_host_002
+    od_host_004 -->|"relates-to"| od_host_009
     od_host_004 -->|"relates-to"| od_package_006
     od_host_004 -->|"relates-to"| od_package_007["OD-PACKAGE-007"]
     od_host_004 -->|"relates-to"| od_package_014
@@ -700,6 +702,9 @@ graph LR
     od_host_007 -->|"relates-to"| od_host_001
     od_host_007 -->|"relates-to"| od_host_006
     od_host_007 -->|"relates-to"| od_ledger_036
+    od_host_009 -->|"relates-to"| od_capability_013
+    od_host_009 -->|"relates-to"| od_host_004
+    od_host_009 -->|"relates-to"| od_rules_011
     od_ledger_001 -->|"affected_by"| od_ledger_004["OD-LEDGER-004"]
     od_ledger_001 -->|"affected_by"| od_ledger_011
     od_ledger_001 -->|"affected_by"| od_ledger_014["OD-LEDGER-014"]
@@ -1226,6 +1231,7 @@ graph LR
     od_rules_010 -->|"relates-to"| od_rules_011
     od_rules_011 -->|"relates-to"| od_capability_002
     od_rules_011 -->|"relates-to"| od_capability_004
+    od_rules_011 -->|"relates-to"| od_host_009
     od_rules_011 -->|"relates-to"| od_package_008
     od_rules_011 -->|"relates-to"| od_package_015
     od_rules_011 -->|"relates-to"| od_rules_001
@@ -1535,6 +1541,7 @@ graph LR
     od_host_005
     od_host_006
     od_host_007
+    od_host_009
     od_ledger_001
     od_ledger_002
     od_ledger_003
