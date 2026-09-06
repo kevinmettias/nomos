@@ -930,6 +930,47 @@ fn Rendered_Goals_Policy_Fact(fact: &nomos_repo_policy::goals::PolicyFact) -> Ve
     return rendered;
 }
 
+/// `nomos_cap_requirement_trace`'s one fact over this repository's own real committed
+/// requirement-assessment corpus.
+///
+/// Unlike every `nomos_repo_policy` production above, [`nomos_cap_requirement_trace::
+/// Materialize_Workspace`] cannot fail -- a missing `tests/contract/requirements/`
+/// directory is this capability's own ordinary case, per its module doc, not a read
+/// failure -- so there is no `Result` here to unwrap.
+pub(crate) fn Requirement_Trace_Production() -> Vec<u8>
+{
+    let context = Requirement_Trace_Context();
+    let fact = Discovered_Requirement_Trace_Fact(context);
+
+    return Rendered_Requirement_Trace_Fact(&fact);
+}
+
+fn Requirement_Trace_Context() -> nomos_cap_requirement_trace::FactContext
+{
+    return nomos_cap_requirement_trace::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
+        generation: GenerationId::INITIAL,
+    };
+}
+
+/// This repository's own real workspace, materialized through the door this provider
+/// actually reads `tests/contract/requirements/` through.
+fn Discovered_Requirement_Trace_Fact(context: nomos_cap_requirement_trace::FactContext) -> nomos_cap_requirement_trace::TraceFact
+{
+    return nomos_cap_requirement_trace::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem);
+}
+
+fn Rendered_Requirement_Trace_Fact(fact: &nomos_cap_requirement_trace::TraceFact) -> Vec<u8>
+{
+    let mut rendered = Vec::new();
+    rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
+    rendered.extend_from_slice(&fact.fact.payload.bytes);
+
+    return rendered;
+}
+
 /// The fixture `nomos-lang-go`'s production is measured over.
 ///
 /// A second, Go-specific fixture rather than the shared `FIXTURE` above — that one is Rust

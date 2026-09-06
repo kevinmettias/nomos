@@ -45,6 +45,7 @@ pub enum RequiredFact
     GoalsPolicy,
     WordsPolicy,
     ReviewFindings,
+    RequirementTrace,
 }
 
 impl RequiredFact
@@ -66,6 +67,7 @@ impl RequiredFact
             Self::GoalsPolicy => nomos_cap_goals_policy::Capability(),
             Self::WordsPolicy => nomos_cap_words_policy::Capability(),
             Self::ReviewFindings => nomos_connector_coderabbit::Capability(),
+            Self::RequirementTrace => nomos_cap_requirement_trace::Capability(),
         };
     }
 }
@@ -174,9 +176,10 @@ const fn Described(id: &'static str, subject: SubjectKind, requires: &'static [R
 ///
 /// The order matches the composed table so the two read side by side. The families beyond
 /// syntax are exactly the ones the run's own selection predicates gate: dependency edges,
-/// lint diagnostics, dependency policy, reachability, and the naming, limits, scripting,
-/// goals and words policies. Syntax is materialized unconditionally today and so appears in
-/// no predicate, which is why it is declared here per rule rather than inferred from one.
+/// lint diagnostics, dependency policy, reachability, the naming, limits, scripting, goals
+/// and words policies, review findings, and requirement trace. Syntax is materialized
+/// unconditionally today and so appears in no predicate, which is why it is declared here
+/// per rule rather than inferred from one.
 ///
 /// Mirrored by `Test_Every_Composed_Rule_Should_Have_A_Descriptor`, which compares this
 /// list against `nomos_check_orchestration::Composed_Rules` in both directions from
@@ -248,6 +251,12 @@ pub const DESCRIPTORS: &[RuleDescriptor] = &[
     Described(crate::NESTING_DEPTH, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy]),
     Described(crate::CLOSURE_BOUNDS_ARE_MINIMAL, SubjectKind::SourceText, &[]),
     Described(crate::BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, SubjectKind::SourceText, &[]),
+    // The second composed rule that takes no sources: its whole subject is a corpus of
+    // committed declaration files compared against the workspace, which arrives through
+    // the reader as one already-judged fact, the same way GOALS_AND_PARTS_LINE_UP's
+    // declaration does.
+    Described(crate::REQUIREMENT_TRACE_STALENESS, SubjectKind::Workspace, &[RequiredFact::RequirementTrace])
+        .Citing(crate::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD, crate::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD_VERSION),
 ];
 
 #[cfg(test)]

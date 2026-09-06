@@ -73,6 +73,13 @@ nomos-cap-goals-policy = { workspace = true }
 # Contract zone rather than Provider zone, precisely so this crate may depend on it at
 # all. OD-RULES-010, OD-EXECUTOR-006.
 nomos-connector-coderabbit = { workspace = true }
+# nomos-cap-requirement-trace, the second rule here whose subject is not source at all:
+# Check_Requirement_Trace_Staleness names nomos.cap.requirement.trace, whose contract this
+# crate bundles with its own one provider (OD-CAPABILITY-002 licenses this for a
+# single-provider capability, the identical reasoning nomos-connector-coderabbit already
+# states) at Capability Contract zone rather than Provider zone, precisely so this crate
+# may depend on it at all. OD-TRACE-001.
+nomos-cap-requirement-trace = { workspace = true }
 #
 # There is no parser here, and that is the end condition OD-RULES-001 wrote down rather
 # than a gap. `universe_kind.rs` carried `syn` and `proc-macro2` for one reason — the agreed

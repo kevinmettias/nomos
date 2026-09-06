@@ -25,6 +25,7 @@ use nomos_rules::{
     Check_No_Mod_Rs_Files,
     Check_No_Orphan_Modules, Check_No_Single_Line_Function_Bodies,
     Check_Parameters_Borrow_Unless_Ownership_Is_Taken, Check_Prefer_Macro_Rules_Over_Procedural_Macros,
+    Check_Requirement_Trace_Staleness,
     Check_Static_Bounds_Are_Justified,
     Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths, Check_Closure_Bounds_Are_Minimal,
     Check_No_Wildcard_Imports,
@@ -49,6 +50,7 @@ use nomos_rules::{
     LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, NESTING_DEPTH,
     NAMING_CONVENTION, NO_MOD_RS_FILES, NO_ORPHAN_MODULES, NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_PUNCTUATION, NO_TRAILING_WHITESPACE, NO_WILDCARD_IMPORTS,
     PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN, PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS,
+    REQUIREMENT_TRACE_STALENESS,
     STATIC_BOUNDS_ARE_JUSTIFIED,
     ONE_THOUSAND_LINE_HARD_TRIGGER, PARAMETER_COUNT,
     RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, SCRIPTS_USE_A_PORTABLE_SHEBANG, SEQCST_JUSTIFIED_EXPLICITLY,
@@ -64,8 +66,8 @@ use crate::composition::{Recognized_Language, Recognized_Syntax_Provider, Regist
 use crate::facts::{
     DependencyMaterialization, Ingested_Workspace, LintMaterialization, Materialize_Dependencies, Materialize_Goals_Policy,
     Materialize_Limits_Policy, Materialize_Lint, Materialize_Naming_Policy, Materialize_Policy, Materialize_Reachability,
-    Materialize_Review, Materialize_Scripting_Policy, Materialize_Syntax, Materialize_Words_Policy, PolicyMaterialization,
-    ReviewMaterialization,
+    Materialize_Requirement_Trace, Materialize_Review, Materialize_Scripting_Policy, Materialize_Syntax, Materialize_Words_Policy,
+    PolicyMaterialization, ReviewMaterialization,
 };
 use crate::CheckOutcome;
 
@@ -74,7 +76,7 @@ pub use rule_reassessment_cache::RuleReassessmentCache;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 66;
+const RULE_COUNT: usize = 67;
 
 /// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
 /// through, the filesystem a repository-declared policy capability (`nomos.cap.naming.
@@ -297,7 +299,7 @@ fn Judged_Over<Launcher: ProcessLauncher, Fs: FileSystem>(sources: &[SourceFile]
 /// filesystem read entirely, not merely its finding's place in a later disposition.
 ///
 /// Each call also names, into `changed`, the family it just wrote to at all -- every one of
-/// them does, unconditionally, whenever `selected` triggers it at all: none of the nine has
+/// them does, unconditionally, whenever `selected` triggers it at all: none of the ten has
 /// `Materialize_Syntax`'s own currency check yet. `rule_reassessment::RuleReassessmentCache`
 /// reads `changed` to decide which rules are still safe to reuse; a family missing from it
 /// because this function forgot to report it would let a stale rule's prior findings stand
@@ -319,6 +321,7 @@ fn Materialize_Capabilities<Launcher: ProcessLauncher, Fs: FileSystem>(
     Tracking(env, changed, RequiredFact::ScriptingPolicy, |env| Materialize_Scripting_Policy_Section(env, selected));
     Tracking(env, changed, RequiredFact::GoalsPolicy, |env| Materialize_Goals_Policy_Section(env, selected));
     Tracking(env, changed, RequiredFact::WordsPolicy, |env| Materialize_Words_Policy_Section(env, selected));
+    Tracking(env, changed, RequiredFact::RequirementTrace, |env| Materialize_Requirement_Trace_Section(env, selected));
     let review = Tracking(env, changed, RequiredFact::ReviewFindings, |_env| return Materialize_Review_Section(selected));
 
     return Capability_Materialization_Of(dependencies, lint, policy, review);
@@ -538,6 +541,23 @@ fn Materialize_Words_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
     if Is_Rule_Selected(selected, ABBREVIATIONS)
     {
         Materialize_Words_Policy(env.root, env.context, env.store, env.filesystem);
+    }
+}
+
+/// The requirement-trace section: [`Materialize_Requirement_Trace`] when its one rule is
+/// selected.
+///
+/// One rule reads this capability, so the gate is that rule's own selection -- the same
+/// shape [`Materialize_Goals_Policy_Section`] and [`Materialize_Words_Policy_Section`] each
+/// have one function above.
+fn Materialize_Requirement_Trace_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs>,
+    selected: &[RuleId],
+)
+{
+    if Is_Rule_Selected(selected, REQUIREMENT_TRACE_STALENESS)
+    {
+        Materialize_Requirement_Trace(env.root, env.context, env.store, env.filesystem);
     }
 }
 
@@ -895,6 +915,10 @@ fn With_Composed_Rules<Answer>(
         // The one composed rule that takes no sources: its whole subject is the repository's
         // own declaration, which arrives through the reader.
         ComposedRule { id: GOALS_AND_PARTS_LINE_UP, check: &|reader: &mut Reader<'_, '_>| return Check_Goals_And_Parts_Line_Up(reader) },
+        // The second composed rule that takes no sources: its whole subject is this
+        // repository's own committed requirement-assessment corpus, already compared
+        // against the real tree by the time it arrives through the reader.
+        ComposedRule { id: REQUIREMENT_TRACE_STALENESS, check: &|reader: &mut Reader<'_, '_>| return Check_Requirement_Trace_Staleness(reader) },
         ComposedRule { id: ABBREVIATIONS, check: &|reader: &mut Reader<'_, '_>| return Check_Abbreviations(sources, reader) },
         ComposedRule { id: SINGLE_LETTER_NAMES, check: &|reader: &mut Reader<'_, '_>| return Check_Single_Letter_Names(sources, reader) },
         ComposedRule { id: A_DISABLED_TEST_STATES_WHY, check: &|_reader: &mut Reader<'_, '_>| return Check_A_Disabled_Test_States_Why(sources) },

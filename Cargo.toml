@@ -165,6 +165,14 @@ members = [
     # unreachable by any rule. ARC-CONNECTOR-001, OD-CONNECTOR-001, OD-CONNECTOR-002.
     "crates/connectors/nomos-connector-coderabbit",
 
+    # Capability Contract zone — nomos.cap.requirement.trace's contract, bundled with its
+    # one provider in the same crate for the identical OD-CAPABILITY-002 reason
+    # nomos-connector-coderabbit is: exactly one provider, over this repository's own
+    # committed requirement assessments under tests/contract/requirements/ rather than
+    # standards.json. Promotes tests/contract/tests/requirement_trace's already-correct
+    # parsing and comparison logic into a real, gate-composed rule. OD-TRACE-001.
+    "crates/capabilities/nomos-cap-requirement-trace",
+
     # Band 2 — package manifests. The Rust installable-unit manifest format: PackageId,
     # PackageKind and PKG-007's four version domains, given a real reader that refuses
     # what it cannot resolve. Wraps nomos-package's generic core with RustEdition
@@ -359,6 +367,7 @@ nomos-cap-scripting-policy = { path = "crates/capabilities/nomos-cap-scripting-p
 nomos-cap-words-policy = { path = "crates/capabilities/nomos-cap-words-policy" }
 nomos-cap-goals-policy = { path = "crates/capabilities/nomos-cap-goals-policy" }
 nomos-connector-coderabbit = { path = "crates/connectors/nomos-connector-coderabbit" }
+nomos-cap-requirement-trace = { path = "crates/capabilities/nomos-cap-requirement-trace" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-lang-go = { path = "crates/languages/nomos-lang-go" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }

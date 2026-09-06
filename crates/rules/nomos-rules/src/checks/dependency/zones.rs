@@ -146,6 +146,12 @@ pub const ZONES: &[(&str, Zone)] = &[
     // may not name Provider zone at all. Provider zone would leave this fact family
     // structurally unreachable by nomos-rules, not merely misfiled.
     ("nomos-connector-coderabbit", Zone::CapabilityContract),
+    // Also bundles a single provider with its contract in one crate (OD-CAPABILITY-002),
+    // the identical reason nomos-connector-coderabbit does one row above -- reading
+    // arbitrary files across the repository tree needs a nomos_platform::FileSystem, which
+    // Permits forbids Rules zone from reaching except through a Capability Contract zone
+    // crate.
+    ("nomos-cap-requirement-trace", Zone::CapabilityContract),
     ("nomos-package", Zone::Provider),
     ("nomos-lang-rust", Zone::Provider),
     ("nomos-lang-rust-scan", Zone::Provider),

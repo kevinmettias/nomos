@@ -1,0 +1,68 @@
+pub const fn nomos_cap_requirement_trace::Ceiling() -> Guarantee
+pub const fn nomos_cap_requirement_trace::Declared_Guarantee() -> Guarantee
+pub const fn nomos_cap_requirement_trace::Verdict::Label(self) -> &'static str
+pub const fn nomos_cap_requirement_trace::Verdict::Owes_A_Record(self) -> bool
+pub const nomos_cap_requirement_trace::CAPABILITY: &str
+pub const nomos_cap_requirement_trace::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_requirement_trace::PROVIDER: &str
+pub const nomos_cap_requirement_trace::REGISTRY: &str
+pub const nomos_cap_requirement_trace::RequirementTraceFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_cap_requirement_trace::RequirementTraceFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_cap_requirement_trace::RequirementTraceFactProduction::TRACE: TraceEquivalence
+pub const nomos_cap_requirement_trace::SCHEMA: &str
+pub enum nomos_cap_requirement_trace::ProblemKind
+pub enum nomos_cap_requirement_trace::Verdict
+pub enum variant nomos_cap_requirement_trace::ProblemKind::DivergenceWithNoRecord
+pub enum variant nomos_cap_requirement_trace::ProblemKind::PartialWithNoGap
+pub enum variant nomos_cap_requirement_trace::ProblemKind::UnresolvedGap
+pub enum variant nomos_cap_requirement_trace::ProblemKind::UnresolvedRecord
+pub enum variant nomos_cap_requirement_trace::ProblemKind::UnresolvedSite
+pub enum variant nomos_cap_requirement_trace::Verdict::Diverges
+pub enum variant nomos_cap_requirement_trace::Verdict::Met
+pub enum variant nomos_cap_requirement_trace::Verdict::NotBinding
+pub enum variant nomos_cap_requirement_trace::Verdict::Partial
+pub fn nomos_cap_requirement_trace::Capability() -> CapabilityId
+pub fn nomos_cap_requirement_trace::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_requirement_trace::Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> RequirementTracePayload
+pub fn nomos_cap_requirement_trace::Divergences_With_No_Record(assessments: &[Assessment]) -> Vec<Problem>
+pub fn nomos_cap_requirement_trace::Encode_Payload(payload: &RequirementTracePayload) -> Vec<u8>
+pub fn nomos_cap_requirement_trace::Entries<Fs: FileSystem>(directory: &Path, filesystem: &Fs) -> Result<Vec<Assessment>, String>
+pub fn nomos_cap_requirement_trace::Is_Requirement_Id(stem: &str) -> bool
+pub fn nomos_cap_requirement_trace::Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, filesystem: &Fs) -> TraceFact
+pub fn nomos_cap_requirement_trace::Parse(stem: &str, text: &str) -> Result<Assessment, String>
+pub fn nomos_cap_requirement_trace::Parse_Payload(bytes: &[u8]) -> Result<RequirementTracePayload, Refusal>
+pub fn nomos_cap_requirement_trace::Partials_With_No_Gap(assessments: &[Assessment]) -> Vec<Problem>
+pub fn nomos_cap_requirement_trace::Payload_Schema() -> SchemaId
+pub fn nomos_cap_requirement_trace::Provider_Offer() -> ProviderOffer
+pub fn nomos_cap_requirement_trace::Refusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_cap_requirement_trace::Unresolved_Gaps<Fs: FileSystem>(root: &Path, assessments: &[Assessment], filesystem: &Fs) -> Vec<Problem>
+pub fn nomos_cap_requirement_trace::Unresolved_Records<Fs: FileSystem>(root: &Path, assessments: &[Assessment], filesystem: &Fs) -> Vec<Problem>
+pub fn nomos_cap_requirement_trace::Unresolved_Sites<Fs: FileSystem>(root: &Path, assessments: &[Assessment], filesystem: &Fs) -> Vec<Problem>
+pub impl nomos_cap_requirement_trace::Refusal implements core::fmt::Display
+pub impl nomos_cap_requirement_trace::RequirementTraceFactProduction implements Strategy
+pub struct field nomos_cap_requirement_trace::Assessment::gaps: Vec<Site>
+pub struct field nomos_cap_requirement_trace::Assessment::record: Option<String>
+pub struct field nomos_cap_requirement_trace::Assessment::requirement: String
+pub struct field nomos_cap_requirement_trace::Assessment::sites: Vec<Site>
+pub struct field nomos_cap_requirement_trace::Assessment::verdict: Verdict
+pub struct field nomos_cap_requirement_trace::FactContext::configuration: ConfigurationId
+pub struct field nomos_cap_requirement_trace::FactContext::generation: GenerationId
+pub struct field nomos_cap_requirement_trace::FactContext::snapshot: SnapshotId
+pub struct field nomos_cap_requirement_trace::FactContext::variant: BuildVariantId
+pub struct field nomos_cap_requirement_trace::Problem::kind: ProblemKind
+pub struct field nomos_cap_requirement_trace::Problem::message: String
+pub struct field nomos_cap_requirement_trace::Problem::requirement: String
+pub struct field nomos_cap_requirement_trace::Refusal::reason: String
+pub struct field nomos_cap_requirement_trace::RequirementTracePayload::problems: Vec<Problem>
+pub struct field nomos_cap_requirement_trace::Site::path: String
+pub struct field nomos_cap_requirement_trace::Site::symbol: String
+pub struct field nomos_cap_requirement_trace::TraceFact::fact: MaterializedFact
+pub struct field nomos_cap_requirement_trace::TraceFact::subject: SubjectId
+pub struct nomos_cap_requirement_trace::Assessment
+pub struct nomos_cap_requirement_trace::FactContext
+pub struct nomos_cap_requirement_trace::Problem
+pub struct nomos_cap_requirement_trace::Refusal
+pub struct nomos_cap_requirement_trace::RequirementTraceFactProduction
+pub struct nomos_cap_requirement_trace::RequirementTracePayload
+pub struct nomos_cap_requirement_trace::Site
+pub struct nomos_cap_requirement_trace::TraceFact

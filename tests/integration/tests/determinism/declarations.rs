@@ -28,9 +28,9 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
     let declared = Declared_Domains();
     assert_eq!(
         declared.len(),
-        20,
-        "twenty productions are covered by eighteen declarations; a new producer needs a \
-         row in this table and a test of its own, whether or not it also needs a \
+        21,
+        "twenty-one productions are covered by nineteen declarations; a new producer needs \
+         a row in this table and a test of its own, whether or not it also needs a \
          declaration of its own"
     );
 
@@ -38,9 +38,10 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
 }
 
 /// Every domain this workspace has, with the row of the contracts table it occupies.
-fn Declared_Domains() -> [(&'static str, DeterminismStrength); 20]
+fn Declared_Domains() -> [(&'static str, DeterminismStrength); 21]
 {
     use nomos_analysis::FactReuse;
+    use nomos_cap_requirement_trace::RequirementTraceFactProduction;
     use nomos_connector_coderabbit::ReviewFindingProduction;
     use nomos_corrections::CorrectionStaging;
     use nomos_lang_rust::SyntaxFactProduction;
@@ -92,6 +93,10 @@ fn Declared_Domains() -> [(&'static str, DeterminismStrength); 20]
         ("scripting-policy-fact-production", ScriptingPolicyFactProduction::STRENGTH),
         ("words-policy-fact-production", WordsPolicyFactProduction::STRENGTH),
         ("goals-policy-fact-production", GoalsPolicyFactProduction::STRENGTH),
+        (
+            "requirement-trace-fact-production",
+            RequirementTraceFactProduction::STRENGTH,
+        ),
         // The one connector's own translation: fixed vendor bytes in, deterministic
         // canonical bytes out, over the fixture crate::translation reads. OD-CONNECTOR-002's
         // evidence rule is why this declares over the translation rather than a live `gh`
@@ -109,7 +114,7 @@ fn Declared_Domains() -> [(&'static str, DeterminismStrength); 20]
 /// Each declared domain has a test registered under its name, and measures something —
 /// `DeterminismStrength::None` would be an obligation this loop discharges without ever
 /// checking anything.
-fn Each_Domain_Declares_A_Strategy_And_Is_Registered(declared: [(&str, DeterminismStrength); 20])
+fn Each_Domain_Declares_A_Strategy_And_Is_Registered(declared: [(&str, DeterminismStrength); 21])
 {
     use crate::harness::Test_Name_For;
 

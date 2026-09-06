@@ -1,0 +1,21 @@
+[package]
+name = "nomos-cap-requirement-trace"
+version = "0.1.0"
+description = "Capability Contract zone. The nomos.cap.requirement.trace contract and its one provider, over this repository's own committed requirement assessments under tests/contract/requirements/. OD-TRACE-001."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-analysis = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-platform = { workspace = true }
+
+[dev-dependencies]
+nomos-platform-std = { workspace = true }
+
+[lints]
+workspace = true

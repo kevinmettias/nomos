@@ -140,6 +140,10 @@ pub(crate) fn Test_Name_For(domain: &str) -> &'static str
         {
             "domains::Test_The_Words_Policy_Provider_Should_Meet_Its_Declared_Strategy"
         }
+        "requirement-trace-fact-production" =>
+        {
+            "domains::Test_The_Requirement_Trace_Provider_Should_Meet_Its_Declared_Strategy"
+        }
         "goals-policy-fact-production" =>
         {
             "domains::Test_The_Goals_Policy_Provider_Should_Meet_Its_Declared_Strategy"

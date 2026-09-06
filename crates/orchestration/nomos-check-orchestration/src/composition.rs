@@ -36,6 +36,7 @@ pub fn Registered() -> Result<Registry, RegistryError>
     Declare_Goals_Policy_Capability(&mut registry)?;
     Declare_Words_Policy_Capability(&mut registry)?;
     Declare_Review_Capability(&mut registry)?;
+    Declare_Requirement_Trace_Capability(&mut registry)?;
 
     return Ok(registry);
 }
@@ -243,6 +244,19 @@ fn Declare_Review_Capability(registry: &mut Registry) -> Result<(), RegistryErro
     return Ok(());
 }
 
+/// A twelfth capability, one offer against it -- `OD-TRACE-001`'s guard, promoted from
+/// `tests/contract/tests/requirement_trace` into a real, gate-composed rule.
+/// `nomos-cap-requirement-trace` bundles `nomos.cap.requirement.trace`'s contract with its
+/// own one provider in a single crate, the identical `OD-CAPABILITY-002`-licensed shape
+/// [`Declare_Review_Capability`] already has one capability over.
+fn Declare_Requirement_Trace_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_requirement_trace::Capability_Contract())?;
+    registry.Offer(nomos_cap_requirement_trace::Provider_Offer())?;
+
+    return Ok(());
+}
+
 /// Which registered `nomos.cap.syntax.items` provider `path` belongs to, if either does --
 /// `OD-CAPABILITY-009`'s corrected fix, and the one function both halves of the pipeline
 /// consult so they cannot independently drift on the answer.
@@ -380,13 +394,14 @@ mod tests
 
     /// How many `Declare` calls [`Registered`]'s own body wires: syntax, dependency,
     /// controlflow, lint, dependency-policy, all five of `OD-RULES-011`'s families --
-    /// naming, limits, scripting, goals and words -- and review.
-    const DECLARED_CAPABILITY_COUNT: usize = 11;
+    /// naming, limits, scripting, goals and words -- review, and requirement trace.
+    const DECLARED_CAPABILITY_COUNT: usize = 12;
 
     /// The composition this crate ships must not be self-contradictory, and it must
-    /// declare exactly the eleven capabilities [`Registered`]'s own body wires: syntax,
+    /// declare exactly the twelve capabilities [`Registered`]'s own body wires: syntax,
     /// dependency, controlflow, lint, dependency-policy, all five of `OD-RULES-011`'s
-    /// families -- naming, limits, scripting, goals and words -- and review.
+    /// families -- naming, limits, scripting, goals and words -- review, and requirement
+    /// trace.
     #[test]
     fn Test_Registered_Should_Declare_Every_Composed_Capability()
     {

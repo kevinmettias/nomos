@@ -17,8 +17,8 @@ pub use dependency_materialization::{
     PolicyMaterialization, ReviewMaterialization,
 };
 pub use policy_materialization::{
-    Materialize_Goals_Policy, Materialize_Limits_Policy, Materialize_Naming_Policy, Materialize_Scripting_Policy,
-    Materialize_Words_Policy,
+    Materialize_Goals_Policy, Materialize_Limits_Policy, Materialize_Naming_Policy, Materialize_Requirement_Trace,
+    Materialize_Scripting_Policy, Materialize_Words_Policy,
 };
 
 use nomos_analysis::Context;

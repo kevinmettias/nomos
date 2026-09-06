@@ -1033,6 +1033,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-cap-requirement-trace"
+version = "0.1.0"
+dependencies = [
+ "nomos-analysis",
+ "nomos-capability",
+ "nomos-contracts",
+ "nomos-model",
+ "nomos-platform",
+ "nomos-platform-std",
+]
+
+[[package]]
 name = "nomos-cap-scripting-policy"
 version = "0.1.0"
 dependencies = [
@@ -1075,6 +1087,7 @@ dependencies = [
  "nomos-cap-limits-policy",
  "nomos-cap-lint",
  "nomos-cap-naming-policy",
+ "nomos-cap-requirement-trace",
  "nomos-cap-scripting-policy",
  "nomos-cap-syntax",
  "nomos-cap-words-policy",
@@ -1145,11 +1158,14 @@ dependencies = [
 name = "nomos-contract-tests"
 version = "0.1.0"
 dependencies = [
+ "nomos-cap-requirement-trace",
  "nomos-cap-syntax",
  "nomos-check-orchestration",
  "nomos-contracts",
  "nomos-lang-rust",
  "nomos-ledger",
+ "nomos-platform",
+ "nomos-platform-std",
  "nomos-rules",
  "serde_json",
 ]
@@ -1205,6 +1221,7 @@ name = "nomos-integration-tests"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-requirement-trace",
  "nomos-cap-syntax",
  "nomos-capability",
  "nomos-check-orchestration",
@@ -1493,6 +1510,7 @@ dependencies = [
  "nomos-cap-limits-policy",
  "nomos-cap-lint",
  "nomos-cap-naming-policy",
+ "nomos-cap-requirement-trace",
  "nomos-cap-scripting-policy",
  "nomos-cap-syntax",
  "nomos-cap-words-policy",

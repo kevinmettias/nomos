@@ -1,8 +1,8 @@
-//! The sixty-eight rules this crate implements, one module each — `naming` holds fourteen,
+//! The sixty-nine rules this crate implements, one module each — `naming` holds fourteen,
 //! `rust_text` holds eight, `go_text` holds five, `structure` holds five, `formatting` holds
 //! five, `security_text` holds three, `concurrency_text` holds three, `error_text` holds
 //! three, `facade` holds three, `placement` holds two, `dependency` holds three, and `goals`
-//! holds the one rule here whose subject is not source at all, while
+//! and `requirement_trace` each hold one rule whose subject is not source at all, while
 //! `script_discipline` holds four,
 //! [`Check_Dependency_Direction`], [`Check_Every_Member_Declares_A_Band`] and
 //! [`Check_Write_Authority`],
@@ -47,6 +47,7 @@ mod placement;
 mod policy;
 mod procedural_macro;
 mod reachability;
+mod requirement_trace;
 mod review;
 mod role_surface_pair;
 mod rust_text;
@@ -145,6 +146,10 @@ pub use policy::{
 pub use reachability::{
     Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
     UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
+};
+pub use requirement_trace::{
+    Check_Requirement_Trace_Staleness, REQUIREMENT_TRACE_STALENESS, REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD,
+    REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD_VERSION,
 };
 pub use review::{Check_Review_Findings, REVIEW_CONTRACT_RECORD, REVIEW_CONTRACT_RECORD_VERSION, REVIEW_FINDING};
 pub use role_surface_pair::{Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE};

@@ -31,6 +31,20 @@ nomos-contracts = { workspace = true }
 # The ledger crate is used only by integration tests that check the agent contract
 # and toolchain-floor workflow derivation.
 nomos-ledger = { workspace = true }
+# The canonical Assessment/Verdict/Site vocabulary, the refusing reader and the five
+# predicates `tests/requirement_trace` compares the committed corpus with — named here
+# rather than reimplemented, for the identical reason `nomos-rules` above is: two readers
+# of one registry is how they come to disagree. `P42-REQUIREMENT-TRACE-STALENESS-RULE-2`
+# promoted what this suite used to carry alone into a real, gate-composed rule's own
+# provider; this suite now imports that logic rather than duplicating it. A dev
+# dependency, like `nomos-check-orchestration` above: only `tests/requirement_trace` uses
+# it, nothing this crate publishes does.
+nomos-cap-requirement-trace = { workspace = true }
+# The FileSystem port nomos_cap_requirement_trace's own reader and predicates now read
+# through, and its std implementation to read the real disk this suite has always run
+# against.
+nomos-platform = { workspace = true }
+nomos-platform-std = { workspace = true }
 
 [lints]
 workspace = true

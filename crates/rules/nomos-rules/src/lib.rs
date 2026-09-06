@@ -416,6 +416,24 @@
 //! `OD-CAPABILITY-002` licenses that for a single-provider capability — classified
 //! Capability Contract zone rather than Provider zone specifically so this crate may
 //! depend on it at all, since [`Permits`] forbids Rules zone from naming Provider zone.
+//!
+//! [`Check_Requirement_Trace_Staleness`] is the sixty-ninth rule, and a second whose
+//! subject is not source: `OD-TRACE-001` already required a corpus requirement's
+//! assessment to be a declared entry compared against the workspace, and
+//! `tests/contract/tests/requirement_trace/{assessment,registry,predicates}.rs` already
+//! parsed and compared it correctly — this rule promotes that logic into a real,
+//! gate-composed judgment rather than reinventing it. Like [`Check_Lint_Diagnostics`] and
+//! [`Check_Review_Findings`], its whole judgment is a relay: `nomos.cap.requirement.trace`
+//! is materialized by `nomos-cap-requirement-trace`'s own one provider, which reads
+//! `tests/contract/requirements/*.assessment` and checks every named site, gap and record
+//! against the real tree — work this crate cannot do itself, since Rules zone has no
+//! `nomos_platform::FileSystem` and may not depend on Provider zone at all. One `Finding`
+//! per stale or incomplete citation the provider already found, never collapsed: two
+//! vanished sites in one assessment are two facts a reader needs to see both of. A
+//! repository with no committed requirement corpus at all — every repository this rule
+//! judges except this one, today — resolves to the identical empty payload as one whose
+//! corpus fully resolves, the same "absent and clean read alike" shape
+//! [`Check_Goals_And_Parts_Line_Up`] already has for a repository that declared no goals.
 
 #![forbid(unsafe_code)]
 
@@ -474,6 +492,8 @@ pub use checks::{
     UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,
     Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
     UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
+    Check_Requirement_Trace_Staleness, REQUIREMENT_TRACE_STALENESS, REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD,
+    REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD_VERSION,
     Check_Review_Findings, REVIEW_CONTRACT_RECORD, REVIEW_CONTRACT_RECORD_VERSION, REVIEW_FINDING,
     Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE,
     Check_A_Disabled_Test_States_Why, Check_A_Rust_Path_Stays_Within_Its_Own_Subtree,
