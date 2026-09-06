@@ -18,6 +18,7 @@ graph LR
     arc_connector_001 -->|"relates-to"| od_analysis_001["OD-ANALYSIS-001"]
     arc_connector_001 -->|"relates-to"| od_connector_001["OD-CONNECTOR-001"]
     arc_connector_001 -->|"relates-to"| od_connector_002["OD-CONNECTOR-002"]
+    arc_connector_001 -->|"relates-to"| od_connector_004["OD-CONNECTOR-004"]
     arc_connector_001 -->|"relates-to"| od_executor_001["OD-EXECUTOR-001"]
     arc_connector_001 -->|"relates-to"| od_executor_002["OD-EXECUTOR-002"]
     arc_connector_001 -->|"relates-to"| od_executor_006["OD-EXECUTOR-006"]
@@ -418,8 +419,12 @@ graph LR
     od_connector_001 -->|"relates-to"| od_spec_009
     od_connector_002 -->|"relates-to"| arc_connector_001
     od_connector_002 -->|"relates-to"| od_connector_001
+    od_connector_002 -->|"relates-to"| od_connector_004
     od_connector_002 -->|"relates-to"| od_executor_006
     od_connector_002 -->|"relates-to"| od_gate_001
+    od_connector_004 -->|"relates-to"| arc_connector_001
+    od_connector_004 -->|"relates-to"| od_connector_002
+    od_connector_004 -->|"relates-to"| od_executor_006
     od_contracts_001 -->|"relates-to"| arc_ecosystem_001
     od_contracts_001 -->|"relates-to"| od_agent_001
     od_contracts_001 -->|"relates-to"| od_analysis_004
@@ -515,6 +520,7 @@ graph LR
     od_executor_006 -->|"relates-to"| arc_connector_001
     od_executor_006 -->|"relates-to"| od_connector_001
     od_executor_006 -->|"relates-to"| od_connector_002
+    od_executor_006 -->|"relates-to"| od_connector_004
     od_executor_006 -->|"relates-to"| od_executor_005
     od_executor_006 -->|"relates-to"| od_ledger_037
     od_executor_006 -->|"relates-to"| od_rules_010
@@ -1518,6 +1524,7 @@ graph LR
     od_completeness_004
     od_connector_001
     od_connector_002
+    od_connector_004
     od_contracts_001
     od_contracts_002
     od_contracts_003

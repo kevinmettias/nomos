@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5ed0bbea2b345b250c36b9ba46aba40ae815f11409380441d185b2e0fd46bdc8",
-  "inputs_digest": "sha256:a4d0a33cb81525805af7fcc5cab686a61fc9e3e36e18bae8cd76440bc1aee701",
+  "content_digest": "sha256:f6d1be49e4f964e7fa2c30bfa76b2fc7495ba81c74a5a51b77bf5d4536d67569",
+  "inputs_digest": "sha256:55561a71323b30e53e4f44f6a902a487028505997a35a1f19f67f98a9104e2c1",
   "sections": [
     [
       "Documents",
-      208
+      209
     ],
     [
       "Sections",
-      1685
+      1692
     ],
     [
       "Source blocks",
-      5859
+      5875
     ]
   ],
   "inputs": [
@@ -264,6 +264,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored",
       "hash": "sha256:a4d8c71e62610f704811e42757155af8725a195a9b7f6d47a5af13197be33516"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md@authored",
+      "hash": "sha256:e562395ece2dd83cfd803a27caa6ffb22c98ec857be770f9aec0219368107e2f"
     },
     {
       "content": "documents",
@@ -2909,6 +2914,41 @@
       "content": "headings",
       "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#27",
       "hash": "sha256:e463e158165c518d6c1c9b71cfff777ce1f2c1fdada4d0bbd22f8d39c105dbae"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#1",
+      "hash": "sha256:e2f24ab9ca7709dfcb64d26d20d350a677f76ef27a08cdc83f8fcb5f931fd562"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#2",
+      "hash": "sha256:adea21e2d19af9cd8432eada6506fe74ece9b6bab19f3f150571930185ab7f92"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#4",
+      "hash": "sha256:20b70ba8fe4063427d80f863c7a6a540ce36d33890c88dd814fcdea756cb4502"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#9",
+      "hash": "sha256:cdaf426a5c4edf41a519a72a481e2f3a7a8745ac6649731bd2de777bcf14adc8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#11",
+      "hash": "sha256:8f83a052c9a622c04161e8168c4383ae543e56317b76ce537d21db60812273f8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#13",
+      "hash": "sha256:9a244c563098abdfe5bd92e0cf47c0aa6aeda6a9cc9f48633fd60245ad13dae4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#15",
+      "hash": "sha256:7ad3457087f6c2f2cebd39f52ebd229b982dc93c358759f66a547d719bb32798"
     },
     {
       "content": "headings",
@@ -15864,6 +15904,86 @@
       "content": "blocks",
       "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#28",
       "hash": "sha256:7432c4ebba7aa6fa8361c79ab9e093d72b1ff17844c4a037337b1c59baaf6e6c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#1",
+      "hash": "sha256:8f2901f8aa70ec72fe08c58627a2cfc9ecda1f2b21d6aa43c87a194c145a3486"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#3",
+      "hash": "sha256:ef64d2f5452f3c10578c224731ac571e839edeeaaedb867c391a623aab118b41"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#4",
+      "hash": "sha256:a7275c0469d36a36109ddc7e75dbec963901f8a2e571fccf8481d40fa879a1f7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#5",
+      "hash": "sha256:dad755853fa387e9b08e42de2d7e2087d7b5f7aaf9597435306c8f257a3caeb6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#6",
+      "hash": "sha256:675cd926d8baccbfb18c451e4e229efbacaa4d55909ad3dc5ea4ff9d9dc77554"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#7",
+      "hash": "sha256:d431649dc8e43526a658a3f48cc2a6f6964f62ab1e9b02e29c2614711e353233"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#8",
+      "hash": "sha256:7968d506f96e075bece9ed706a78d3a28b3c2f308730240a84e94302deca2bae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#9",
+      "hash": "sha256:46516f329bef861eaf63b5d0a4e0dd7ad651d137b3be331d36940942c0a3c0a1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#10",
+      "hash": "sha256:1a3758ad779edbf5b0902cd552b89a2ed973accbcec25fe69272945b0c70e973"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#11",
+      "hash": "sha256:21cec897b83e294efc74ae89831efd5f9ada7fcf885eb417967cd9b8a12e50b6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#12",
+      "hash": "sha256:8aa5a811b755f226fd69a4d9839fc9d59daac77e14070d47fec2aa07dc1d45c9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#13",
+      "hash": "sha256:da000cebcbaee6b45134b9df6fe0dd12f8a7fc29d477d0089eefd79e65a9dc4b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#14",
+      "hash": "sha256:8b4b833faf9d7bd81508bcea96cbe737bbf8b88d45324a3c87cfe1319255d3c0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#15",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#16",
+      "hash": "sha256:2124030cefceaf26c00c55a0380c9ed959391bca4abee2b5f6aa0bcad829f8dd"
     },
     {
       "content": "blocks",

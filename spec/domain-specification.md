@@ -59,6 +59,7 @@ profile: domain-specification
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ea548df7de6d318f3946ffc3c153f837e4289c5b25045352897d0221c1c1d3f7 |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:243cd01d0c3a76110de1cec5697fa03f185768f31467662081557f8ccca82386 |
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:a4d8c71e62610f704811e42757155af8725a195a9b7f6d47a5af13197be33516 |
+| docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md@authored | docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md | authored | 16 | 7 | sha256:e562395ece2dd83cfd803a27caa6ffb22c98ec857be770f9aec0219368107e2f |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:15b5d49cfd110c5912afc3312550bed3193d467d2b5f619a78b9b8d9ed1efe01 |
 | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md | authored | 15 | 6 | sha256:ab9189d05ec02e249414c7a358c58dc965d46acbb87964ef26bd2fea4379fe87 |
@@ -593,6 +594,13 @@ profile: domain-specification
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#21 | authored | 2 | Conflicts With Existing Decisions |
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#25 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#27 | authored | 2 | Status |
+| docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#1 | authored | 1 | A review finding carries no outcome and there is only one provider to compare it against |
+| docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#2 | authored | 2 | Question |
+| docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#4 | authored | 2 | What carries a review finding today, checked directly |
+| docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#9 | authored | 2 | Why a disposition is a new fact, not a rewrite of an existing one |
+| docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#11 | authored | 2 | Where it would live |
+| docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#13 | authored | 2 | Why comparing providers is not buildable yet regardless |
+| docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#15 | authored | 2 | Decision |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1 | authored | 1 | Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#2 | authored | 2 | Question |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#5 | authored | 2 | What Was Measured |
@@ -13934,6 +13942,169 @@ and set the evidence and absence rules around it. It discharges the fixture-and-
 question for connector tests ahead of the first connector; a fixture file format, a
 recording tool and a corpus-gate table remain for that first connector's own tests to
 define.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#1
+
+*revision: authored · kind: heading · heading: A review finding carries no outcome and there is only one provider to compare it against · hash: sha256:8f2901f8aa70ec72fe08c58627a2cfc9ecda1f2b21d6aa43c87a194c145a3486*
+
+# A review finding carries no outcome and there is only one provider to compare it against
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#2
+
+*revision: authored · kind: heading · heading: A review finding carries no outcome and there is only one provider to compare it against / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#3
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / Question · hash: sha256:ef64d2f5452f3c10578c224731ac571e839edeeaaedb867c391a623aab118b41*
+
+An external architectural review of this workspace, checked directly against the real tree
+rather than taken on faith, named a stage past ingestion that nothing here builds: once a
+review finding enters nomos, what happens to it — accepted, rejected, judged a duplicate,
+superseded by a later finding, or the correction built from it succeeded or failed — and
+does anything carry that outcome forward as evidence for comparing one review provider
+against another. This record measures the gap directly rather than assuming the review's
+framing is already correct, names why a disposition cannot be bolted onto what exists today,
+and states what would actually need to be true before the comparison the review has in mind
+is buildable.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#4
+
+*revision: authored · kind: heading · heading: A review finding carries no outcome and there is only one provider to compare it against / What carries a review finding today, checked directly · hash: sha256:a7275c0469d36a36109ddc7e75dbec963901f8a2e571fccf8481d40fa879a1f7*
+
+## What carries a review finding today, checked directly
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#5
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / What carries a review finding today, checked directly · hash: sha256:dad755853fa387e9b08e42de2d7e2087d7b5f7aaf9597435306c8f257a3caeb6*
+
+`nomos-connector-coderabbit`'s `FindingPayload`
+(`crates/connectors/nomos-connector-coderabbit/src/payload/finding_payload.rs`) is eight
+fields: `external_system`, `external_id: ReviewFindingId`, `locator`, `category`,
+`severity`, `path`, `line`, `message`. Its own module doc states the boundary this record
+confirms rather than restates: the payload is vendor shape carried forward, kept apart from
+any judgment about validity or bearing. Nothing downstream of `translation.rs` adds a field;
+`Check_Review_Findings` (`crates/rules/nomos-rules/src/checks/review.rs`) relays the payload
+straight into `nomos_contracts::Finding`.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#6
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / What carries a review finding today, checked directly · hash: sha256:675cd926d8baccbfb18c451e4e229efbacaa4d55909ad3dc5ea4ff9d9dc77554*
+
+`Finding` (`crates/contracts/nomos-contracts/src/reporting/finding.rs`) is `rule`, `subject`,
+`subject_name`, `applicability`, `evidence`, `gate`, `summary`, `locations` — eight fields,
+every one documented as load-bearing, and the doc comment for the type states the design
+principle directly: "every field is load-bearing, and the ones that look redundant are the
+ones that are not." None of the eight opens a place for what happened to the finding after
+it arrived. Adding a ninth is not this record's business to decide by omission — see
+"Where it would live," below — but the confirmation itself is real: **today, nothing.**
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#7
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / What carries a review finding today, checked directly · hash: sha256:d431649dc8e43526a658a3f48cc2a6f6964f62ab1e9b02e29c2614711e353233*
+
+`EvidenceClass::AgentJudged` (`crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs`)
+already forbids the nearby shortcut a disposition could be mistaken for. Its own doc:
+"it cannot be promoted afterwards — promotion would have to happen somewhere that no longer
+holds the evidence, which is how 'the agent said the tests pass' becomes 'the tests pass'."
+A disposition is not a promotion of evidence class and must not be built as one: `evidence`
+answers how a claim was *come by*, at the moment the rule produced it, and a later
+acceptance or rejection does not change how it was come by. Conflating the two would let a
+finding's provenance drift after the fact, exactly what `AgentJudged`'s floor exists to
+prevent.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#8
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / What carries a review finding today, checked directly · hash: sha256:7968d506f96e075bece9ed706a78d3a28b3c2f308730240a84e94302deca2bae*
+
+`nomos-corrections`' nearest existing concept, `CorrectionDecision`
+(`crates/corrections/nomos-corrections/src/correction_decision.rs`), answers a different
+question at a different time: whether a *candidate correction* was selected automatically
+or left for review, decided at selection time, before anything is committed or rolled back.
+It says nothing about a finding's own outcome, and nothing in `nomos-corrections` records
+whether a correction that *was* selected and applied later succeeded or was rolled back.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#9
+
+*revision: authored · kind: heading · heading: A review finding carries no outcome and there is only one provider to compare it against / Why a disposition is a new fact, not a rewrite of an existing one · hash: sha256:46516f329bef861eaf63b5d0a4e0dd7ad651d137b3be331d36940942c0a3c0a1*
+
+## Why a disposition is a new fact, not a rewrite of an existing one
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#10
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / Why a disposition is a new fact, not a rewrite of an existing one · hash: sha256:1a3758ad779edbf5b0902cd552b89a2ed973accbcec25fe69272945b0c70e973*
+
+Two identities already exist that a disposition could key on, and neither is the file
+location the review's own framing might suggest. `Finding::subject: SubjectId` is derived
+from `subject_name`, documented explicitly as stable across a file moving — "a universe
+that moves to a different file is the same universe, and a finding keyed on its path would
+read as a finding closed and a new finding opened." Independently,
+`nomos-connector-coderabbit::ReviewFindingId` (`crates/connectors/nomos-connector-coderabbit/src/review_finding_id.rs`)
+already identifies one external review comment durably, at the connector's own layer,
+before translation. A disposition fact keyed on `subject` would compare across providers at
+the level `Finding` already unifies; one keyed on `external_id` would stay provider-scoped.
+Either is a coherent choice, and choosing between them is design work this record does not
+do — the point here is narrower: an identity to key on already exists in both places a
+disposition could live, so "nothing to key on" is not the open question.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#11
+
+*revision: authored · kind: heading · heading: A review finding carries no outcome and there is only one provider to compare it against / Where it would live · hash: sha256:21cec897b83e294efc74ae89831efd5f9ada7fcf885eb417967cd9b8a12e50b6*
+
+## Where it would live
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#12
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / Where it would live · hash: sha256:8aa5a811b755f226fd69a4d9839fc9d59daac77e14070d47fec2aa07dc1d45c9*
+
+Not `Finding` itself, by that type's own stated discipline: every field is load-bearing and
+declared once, and a disposition computed *after* a finding is produced is not something the
+rule that produced the finding can populate — the same reason `evidence` cannot be
+retroactively strengthened applies to adding a ninth field nobody upstream can fill in. The
+natural home is a new fact, addressed by whichever identity is chosen above, written by
+whatever later stage of nomos observes a person's or a correction's action on the finding —
+most plausibly `nomos-corrections`, since it is the crate that already models a correction's
+own staged lifecycle (`CorrectionCandidate`, `CorrectionPlan`, `CorrectionDecision`) and
+would be the natural writer of "the correction built from this finding succeeded" or
+"failed." No such fact, type, or writer exists anywhere in `nomos-contracts`,
+`nomos-connector-coderabbit`, or `nomos-corrections` today; this record does not create one.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#13
+
+*revision: authored · kind: heading · heading: A review finding carries no outcome and there is only one provider to compare it against / Why comparing providers is not buildable yet regardless · hash: sha256:da000cebcbaee6b45134b9df6fe0dd12f8a7fc29d477d0089eefd79e65a9dc4b*
+
+## Why comparing providers is not buildable yet regardless
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#14
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / Why comparing providers is not buildable yet regardless · hash: sha256:8b4b833faf9d7bd81508bcea96cbe737bbf8b88d45324a3c87cfe1319255d3c0*
+
+There is exactly one review connector in this workspace — `nomos-connector-coderabbit` is
+the only implementor `Check_Review_Findings` composes over. A disposition fact would let one
+provider's findings be scored against outcomes, but "comparing providers" needs a second
+provider's findings scored the same way before there is anything to compare against. Building
+a disposition mechanism now would be building a selection mechanism with one candidate to
+select from — real, buildable work stays possible (a disposition fact keyed on `subject`,
+written by a new `nomos-corrections` type), but a *comparison* mechanism is not, and this
+record declines to invent the second provider in order to make one buildable today.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#15
+
+*revision: authored · kind: heading · heading: A review finding carries no outcome and there is only one provider to compare it against / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#16
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / Decision · hash: sha256:2124030cefceaf26c00c55a0380c9ed959391bca4abee2b5f6aa0bcad829f8dd*
+
+No code changes accompany this record. It states, for whoever next reaches for a review
+finding's outcome: the gap is real and exactly where the review named it; a disposition
+belongs beside `nomos-corrections`' existing staged-lifecycle types, keyed on an identity
+that already exists (`Finding::subject` or `ReviewFindingId`, a later choice); it must not be
+folded into `EvidenceClass` or `Finding` itself; and a provider-comparison mechanism built on
+top of it is blocked on a second real review provider existing, not on this decision.
 
 ### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1
 
