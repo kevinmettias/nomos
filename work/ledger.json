@@ -60705,14 +60705,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-review8",
-        "acquired_at": 1788721619,
-        "lease_expires_at": 1788728819
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -60724,7 +60720,29 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest scanner::Test_An_Unfollowable_Re_Export_Should_Be_Reported_While_Its_Siblings_Resolve ... ok\ntest scanner::Test_A_Crate_Visible_Helper_Should_Not_Be_An_Export ... ok\ntest scanner::Test_The_Scanner_Should_Find_Real_Exports_And_Stop_At_Restricted_Ones ... ok\ntest bless::Test_A_Bless_Naming_No_Crate_Should_Be_Refused_Rather_Than_Widened ... ok\ntest snapshots::Test_Every_Snapshot_Should_Belong_To_A_Crate_That_Has_One ... ok\ntest snapshots::Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot ... ok\ntest bless::Test_Blessing_One_Crate_Should_Leave_Another_Crates_Snapshot_Byte_Identical ... ok\ntest snapshots::Test_Every_Member_Should_Be_Snapshotted_Or_Declared_Library_Less ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.90s\n\n    Blocking waiting for file lock on build directory\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.65s\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ba863754c4c3715e.exe)\n",
+        "verified_at": 1788721796,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d0d2ea45caaaaa99b73635080a4b46230ad8d108"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

@@ -5,6 +5,7 @@ pub const fn nomos_capability::Standing::Is_Decided(self) -> bool
 pub const fn nomos_capability::Unmet::Applicability(&self) -> Applicability
 pub enum nomos_capability::OfferRefusal
 pub enum nomos_capability::RegistryErrorKind
+pub enum nomos_capability::Remedy
 pub enum nomos_capability::RequiredResolution
 pub enum nomos_capability::RequiredUnmet
 pub enum nomos_capability::Resolution
@@ -15,6 +16,10 @@ pub enum variant nomos_capability::OfferRefusal::ExceedsCeiling
 pub enum variant nomos_capability::OfferRefusal::ForUndeclared
 pub enum variant nomos_capability::RegistryErrorKind::AlreadyDeclared
 pub enum variant nomos_capability::RegistryErrorKind::Offer { provider: ProviderId, refusal: OfferRefusal, }
+pub enum variant nomos_capability::Remedy::AgreeOnAVersion { offered: ContractVersion, }
+pub enum variant nomos_capability::Remedy::DeclareTheContract
+pub enum variant nomos_capability::Remedy::RegisterAProvider
+pub enum variant nomos_capability::Remedy::StrengthenTheClosestOffer { closest: ProviderId, }
 pub enum variant nomos_capability::RequiredResolution::Satisfied { selection: Selection, }
 pub enum variant nomos_capability::RequiredResolution::Unsatisfied { capability: CapabilityId, reason: RequiredUnmet, }
 pub enum variant nomos_capability::RequiredUnmet::AnsweredByOther { required: ProviderId, answered: ProviderId, }
@@ -46,6 +51,7 @@ pub fn nomos_capability::Selection::Unranked(&self) -> Vec<&ProviderOffer>
 pub fn nomos_capability::Selection::Weaker(&self) -> Vec<&ProviderOffer>
 pub fn nomos_capability::Standing::Of(offered: &Guarantee, against: &Guarantee) -> Self
 pub fn nomos_capability::Unmet::Describe(&self) -> String
+pub fn nomos_capability::Unmet::Remedy(&self) -> Remedy
 pub fn nomos_capability::contract_testing::Assert_Ceiling_Admits( contract: CapabilityContract, capability: CapabilityId, version: ContractVersion, guarantee: Guarantee, )
 pub fn nomos_capability::contract_testing::Assert_Ceiling_Refuses(contract: CapabilityContract, guarantee: Guarantee, why: &str)
 pub fn nomos_capability::contract_testing::Assert_One_Contract_Per_Capability(contract: CapabilityContract, why: &str)
