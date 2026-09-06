@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:c8b62c97b04b2819775051ce539429f4ab5b9b34abf6cc9a4639d4086b91668d",
-  "inputs_digest": "sha256:73f005583c523b124f4646b0b8e8e647cd0af4ddd0795ffb217c6d832ac19a4f",
+  "content_digest": "sha256:0141d47773f9a160a9d69176258e7eef3a21bda90f2efb476d8499e80b4d5ad5",
+  "inputs_digest": "sha256:b233dc209901aced0920d7c0dc9ccde79f3367d75cbc51db4f800705a4048ba4",
   "sections": [
     [
       "Documents",
-      211
+      212
     ],
     [
       "Sections",
-      1707
+      1715
     ],
     [
       "Source blocks",
-      5920
+      5943
     ]
   ],
   "inputs": [
@@ -244,6 +244,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md@authored",
       "hash": "sha256:8464e7bf3a1b75d087bbd7ed1b6608955c4c9bafb6ee1a2d2e8c55c66bf06460"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md@authored",
+      "hash": "sha256:33f282b8156d4f3dd172d5ee4c250a2cb2d4efb04987e2efcae89ba263371d43"
     },
     {
       "content": "documents",
@@ -2734,6 +2739,46 @@
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#22",
       "hash": "sha256:d2f3b859ce3987a7a638b43de6ce40f09d563d7365313f80445f9ec9cea49b36"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#1",
+      "hash": "sha256:f57dcca8a9c98c74676114b9744544ef4b6be55bab6201b495cc3b670b412b43"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#2",
+      "hash": "sha256:5f725bb4a204d6f7fde63b2a2a6604a0d5fdb3e1b98359dc01de04f4f71437f1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#4",
+      "hash": "sha256:0a83310b28bbb1201a30e71fbc6d2f5ad09b8a506a237bc7aa291f703e31f10d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#10",
+      "hash": "sha256:8d9b1eabaae8a59797c7e0cb85995bb1431ac3ab21ad0465d3e42690b10a6670"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#13",
+      "hash": "sha256:880a31f3d908deb2539729c81022e40bd76e2d61e9422a312b76dbdac7535d72"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#16",
+      "hash": "sha256:708ab01eef543cb4e5e5d6d2175a8abd858a4bc9e9c1c64d24c9014cd495cbde"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#18",
+      "hash": "sha256:cf68196767b8729f0437ad0a0b1eea71874c1e32b548e66d1082ad778dcc36f2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#22",
+      "hash": "sha256:87dd687de0e76375d4fc2767bc7443333fe3fbb1f5d399b6667668aae7bfd97f"
     },
     {
       "content": "headings",
@@ -15254,6 +15299,121 @@
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#23",
       "hash": "sha256:1cb4df0e957639e3bef7e59ae32afbfd580b5aeea63951a47dcb16167d0d1baa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#1",
+      "hash": "sha256:212c2a7106614caaa169056fc99502c028d9be95be73e539bd7c2ba56eba147e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#3",
+      "hash": "sha256:dd73cd069458ebd44d25fc45fbaca5b5cc51f58426b9493c17023643632a36ff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#4",
+      "hash": "sha256:fe60d1e7e8b86a33f16c644e292e10e870a8d07170359046c8a92d2b20651c5f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#5",
+      "hash": "sha256:6a66cbc8b37adefa6b5c73b4d38879ac888c71ad49edf160c0492baaf8a2678c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#6",
+      "hash": "sha256:e7033aa0c98d4cba4467228db0fb45ea38ade4d39ea78e0a511fa71de3d01fd0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#7",
+      "hash": "sha256:5b81c2f91912fd3db56d122462f31b51c738098955c86d11a8b0152103ee09f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#8",
+      "hash": "sha256:00618e32abfda514c8e9b8f52a238c9f3ee35c3caa578e0a24c6efe98b26cffc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#9",
+      "hash": "sha256:efb7d271598ef8fbfe4e98a6948afe19c62a70411701549b7d8b957527fcc0ae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#10",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#11",
+      "hash": "sha256:55db394ccf3d8a4279deef11d4f780169dcd37e89f0278b83392fce229c76dbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#12",
+      "hash": "sha256:d4603b349cafa07051be69f0012e126319c0794e231810125fd6386438ccc70d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#13",
+      "hash": "sha256:a8b6031a15f9c82093f81800a675d54d6d8787d4ca833128d12db326eff89382"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#14",
+      "hash": "sha256:7ef2a1b42c8529d258937a3940fee4bb2462e6caba21ef51f64c16750f09a8ee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#15",
+      "hash": "sha256:6b0c007f39bbd8eed549f32be230ed408297bd569e8fe6c0a7655f5d77c37f57"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#16",
+      "hash": "sha256:213a915777751c0c5ea2365ee06ad070771a139fddcc6cc494324af985e9ce70"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#17",
+      "hash": "sha256:659b306362129baff4b790eef2f97bbe3a5edc8b13a710b26071ddeaa7be1f8f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#18",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#19",
+      "hash": "sha256:16ebb7cd43f0c8b515ea3034c5c202aa808219c060110b2f2aad98c3c66dbdfd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#20",
+      "hash": "sha256:4d80b2ea2e0a375a04b9899e24b5db6fc9c0cea55b1cb8669e2ef6cfaab1f923"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#21",
+      "hash": "sha256:f5257659b71eeceebe85a1a0dc7a6f673d8624ccd3864a4884e11f8b45a2f20a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#22",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#23",
+      "hash": "sha256:d4ea10c865d4129a83bf6b16e1277d0320a351ae3a998c1b24cba90908cc62a6"
     },
     {
       "content": "blocks",

@@ -55,6 +55,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md@authored | docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md | authored | 21 | 8 | sha256:97fc27d295d43e88affe791ed4c4facc80e3328cf91125949ee80de1e1bff5c7 |
 | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md@authored | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md | authored | 20 | 6 | sha256:88d25ef06103ea7b630b4cf9e09748244421ae9d293d1030f63bed54f2be8850 |
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md@authored | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md | authored | 23 | 6 | sha256:8464e7bf3a1b75d087bbd7ed1b6608955c4c9bafb6ee1a2d2e8c55c66bf06460 |
+| docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md@authored | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md | authored | 23 | 8 | sha256:33f282b8156d4f3dd172d5ee4c250a2cb2d4efb04987e2efcae89ba263371d43 |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ea548df7de6d318f3946ffc3c153f837e4289c5b25045352897d0221c1c1d3f7 |
@@ -558,6 +559,14 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#12 | authored | 2 | The Decision |
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#17 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#22 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#1 | authored | 1 | An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions |
+| docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#2 | authored | 2 | Question |
+| docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#4 | authored | 2 | What was checked, not assumed |
+| docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#10 | authored | 2 | Decision |
+| docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#13 | authored | 2 | What a second language provider owes |
+| docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#16 | authored | 2 | What happens to the content-addressed encoding |
+| docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#18 | authored | 2 | What this record does not do |
+| docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#22 | authored | 2 | Status |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1 | authored | 1 | A completeness guard is only as complete as the universe it quantifies over |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#2 | authored | 2 | Question |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#5 | authored | 2 | The Shape, Which Is Not The One The Item Assumed |
@@ -12628,6 +12637,221 @@ a second explicit axis, `IN_PROCESS` read by consequence (no external tool to in
 rather than literal mechanism. Applied to today's real eight providers, naming
 `nomos-lang-rust-cargo` and `nomos-lang-go-modules` as the live instance of one family split
 wrongly across two `PackageKind`s by delivery alone. No code moves here.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#1
+
+*revision: authored · kind: heading · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions · hash: sha256:212c2a7106614caaa169056fc99502c028d9be95be73e539bd7c2ba56eba147e*
+
+# An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#2
+
+*revision: authored · kind: heading · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#3
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / Question · hash: sha256:dd73cd069458ebd44d25fc45fbaca5b5cc51f58426b9493c17023643632a36ff*
+
+`P68-SINGLE-LETTER-NAMES-READS-A-BLANKET-IMPLS-GENERIC-PARAMETER` measured this directly
+against a real, ordinary third-party fixture (`hex` 0.4.3's `impl<T: AsRef<[u8]>> ToHex for
+T`): `single-letter-names` reported `T` as an unjustified single-letter name, but `T` is not
+a struct field or an ordinarily-declared identifier a human abbreviated — it is the impl
+block's own already-declared generic parameter, used again as the block's Self type. The
+rule cannot tell this case apart from `impl Trait for X` where `X` is a real, single-letter
+struct name someone chose and still deserves the finding, because nothing in the syntax
+payload says whether an `Implementation` item's own name is one of its own declared generic
+parameters. The question this record answers: does that fact join `OD-CAPABILITY-011`'s
+closed set of typed extensions, the same way an enum's per-variant list and a function's
+parameter list did, or is it a different, larger kind of gap the way `constant_scope.rs`'s
+need was.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#4
+
+*revision: authored · kind: heading · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What was checked, not assumed · hash: sha256:fe60d1e7e8b86a33f16c644e292e10e870a8d07170359046c8a92d2b20651c5f*
+
+## What was checked, not assumed
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#5
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What was checked, not assumed · hash: sha256:6a66cbc8b37adefa6b5c73b4d38879ac888c71ad49edf160c0492baaf8a2678c*
+
+Read the walker and the shape encoding directly rather than trusting the finding's own
+description.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#6
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What was checked, not assumed · hash: sha256:e7033aa0c98d4cba4467228db0fb45ea38ade4d39ea78e0a511fa71de3d01fd0*
+
+**The generic parameter list is already computed at the exact call site that discards it.**
+`nomos-lang-rust/src/syntax/walk.rs`'s `visit_item_impl` receives `node: &'ast
+syn::ItemImpl`, which carries `node.generics` — the impl's own `<T: AsRef<[u8]>>` — and never
+reads it. The function reads exactly two things off `node`: `Type_Head(&node.self_ty)` (the
+name) and `node.trait_.is_some()` (fed to `Impl_Shape`, which encodes only `TRAIT` or
+`INHERENT`). This is `OD-CAPABILITY-011`'s "small, closed, cheap" case, checked directly
+rather than assumed: the fact is sitting in the same `&syn::ItemImpl` the walker already
+holds, at the same call site, the identical shape enum variants and a function's parameter
+list were in before that record's fix — not a walk somewhere the visitor does not walk today
+(`constant_scope.rs`'s harder case, which this record does not resemble).
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#7
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What was checked, not assumed · hash: sha256:5b81c2f91912fd3db56d122462f31b51c738098955c86d11a8b0152103ee09f4*
+
+**A rule-side heuristic with no new data would hide a real case, not just miss one.**
+Checked whether `single-letter-names` could instead exempt every Implementation item whose
+own name is a single uppercase letter, with no payload change at all. Rejected: `impl Trait
+for X` for a real, single-letter-named struct `X` is exactly the case this rule exists to
+catch, and a blanket exemption on shape (`Type_Head` being a bare identifier) cannot tell it
+apart from a blanket impl's own generic parameter without knowing what the impl actually
+declared. The distinction is genuinely a fact about the impl's own generics, not a shape a
+name-only heuristic can approximate.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#8
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What was checked, not assumed · hash: sha256:00618e32abfda514c8e9b8f52a238c9f3ee35c3caa578e0a24c6efe98b26cffc*
+
+**The existing shape encoding for `Implementation` items is a single fixed label, not yet a
+composite.** `Impl_Shape(serves_a_trait: bool) -> String` (`nomos-lang-rust/src/syntax/
+shape.rs`) returns exactly `TRAIT` or `INHERENT` — one of two constants, unlike `Struct_Shape`
+or `Function_Shape`, which already encode a variable-length body behind a header
+(`STRUCT_SHAPE_HEADER` plus a tab/newline-delimited, escaped field list, in
+`nomos-cap-syntax/src/payload/observation.rs`). Extending `Implementation`'s own shape to
+also carry a generic parameter list is the same kind of change `OD-CAPABILITY-011`'s enum and
+function extensions already made to their own item kinds, using the identical
+escape/delimiter machinery this payload already has, not a new mechanism.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#9
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What was checked, not assumed · hash: sha256:efb7d271598ef8fbfe4e98a6948afe19c62a70411701549b7d8b957527fcc0ae*
+
+**No second question is being smuggled in.** `domain_type_alias.rs`'s own nesting check
+already reads `item.scope`, which `visit_item_impl` already pushes the impl's own self-type
+onto — a fact this record's own subject (the impl's *generic parameter list*, not its
+self-type or its nesting) does not touch and does not need to re-decide.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#10
+
+*revision: authored · kind: heading · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#11
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / Decision · hash: sha256:55db394ccf3d8a4279deef11d4f780169dcd37e89f0278b83392fce229c76dbf*
+
+**An `Implementation` item's own declared generic parameter names join `OD-CAPABILITY-011`'s
+closed set of typed shape extensions**, on the same footing as that record's three: a small,
+closed, already-available fact the walker discards today, not a general tree and not a
+second walk. `Impl_Shape`'s encoding gains the impl's own generic type-parameter identifiers
+(the names bound by `<...>` — `T` in `impl<T: AsRef<[u8]>> ToHex for T`, not their trait
+bounds, which nothing measured here needs), alongside the existing `TRAIT`/`INHERENT` label,
+using the same header-plus-escaped-list convention `Struct_Shape` already established for a
+variable-length body. Lifetime and const generic parameters are not part of this extension:
+nothing measured against this record's own subject (a name collision between an
+Implementation item's own name and one of its generics) needs them, and `OD-CAPABILITY-011`'s
+own discipline is to extend for a checked need, not a hypothetical future one.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#12
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / Decision · hash: sha256:d4603b349cafa07051be69f0012e126319c0794e231810125fd6386438ccc70d*
+
+A consumer (`single-letter-names`, or any future rule) can then ask "is this Implementation
+item's own name one of its own declared generic parameters" as a direct comparison against a
+typed list, the same shape `enum_shape.rs`'s consumer will ask "what are this enum's own
+variants" once `OD-CAPABILITY-011`'s extension lands.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#13
+
+*revision: authored · kind: heading · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What a second language provider owes · hash: sha256:a8b6031a15f9c82093f81800a675d54d6d8787d4ca833128d12db326eff89382*
+
+## What a second language provider owes
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#14
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What a second language provider owes · hash: sha256:7ef2a1b42c8529d258937a3940fee4bb2462e6caba21ef51f64c16750f09a8ee*
+
+`nomos-lang-go` has no equivalent construct: Go has no `impl` block and no blanket
+implementation over a bare type parameter the way `impl<T> Trait for T` is method syntax with
+receivers, not a trait/self-type pair. This record names no obligation for it. If a future Go
+construct raises the identical name-collision question (a generic function's own type
+parameter used as some other declared name, say), that is a new, separate measurement against
+Go's own real code, not an extension this record pre-commits to by analogy.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#15
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What a second language provider owes · hash: sha256:6b0c007f39bbd8eed549f32be230ed408297bd569e8fe6c0a7655f5d77c37f57*
+
+`nomos-lang-rust-scan` owes nothing new, the identical reasoning `OD-CAPABILITY-011` already
+gives for its own three extensions: it is not a parser, and its offer stays weaker on this
+field exactly as it is already weaker on the others its own module doc names.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#16
+
+*revision: authored · kind: heading · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What happens to the content-addressed encoding · hash: sha256:213a915777751c0c5ea2365ee06ad070771a139fddcc6cc494324af985e9ce70*
+
+## What happens to the content-addressed encoding
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#17
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What happens to the content-addressed encoding · hash: sha256:659b306362129baff4b790eef2f97bbe3a5edc8b13a710b26071ddeaa7be1f8f*
+
+`Encode_Payload`'s byte format changes for any file declaring a generic `impl` block: the
+extension is a new segment of `Impl_Shape`'s own encoded string, so the bytes for such a file
+change the same way `OD-CAPABILITY-011`'s three extensions already changed bytes for a file
+exercising an enum, a function, or a re-export. The same three declared determinism domains
+that record named (`syntax-fact-production`, `module-index-rollup`,
+`controlflow-reachability-production`, all built on `SyntaxFactProduction::STRENGTH`) need
+their golden bytes re-baselined in the same commit that changes the encoding — no new domain
+is introduced by this extension, since it lands inside the same `shape` field those three
+already cover.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#18
+
+*revision: authored · kind: heading · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What this record does not do · hash: sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4*
+
+## What this record does not do
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#19
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What this record does not do · hash: sha256:16ebb7cd43f0c8b515ea3034c5c202aa808219c060110b2f2aad98c3c66dbdfd*
+
+It does not build the extension, touch `Impl_Shape`, `visit_item_impl`, or
+`single-letter-names` itself, or re-baseline any golden. It names the shape a future
+increment takes, the same way `OD-CAPABILITY-011` named `enum_shape.rs`'s fix before
+`P46`-numbered work built it.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#20
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What this record does not do · hash: sha256:4d80b2ea2e0a375a04b9899e24b5db6fc9c0cea55b1cb8669e2ef6cfaab1f923*
+
+It does not re-open `P70-IMPL-BLOCK-GENERIC-PARAMETERS-NOT-IN-PAYLOAD`'s own sibling
+question — trait bounds, lifetime parameters, or const generics on an impl block — beyond
+naming that none of them are in scope, because nothing measured here needs them.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#21
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / What this record does not do · hash: sha256:f5257659b71eeceebe85a1a0dc7a6f673d8624ccd3864a4884e11f8b45a2f20a*
+
+It does not decide whether `single-letter-names` itself changes, only that the payload gains
+the fact the rule would need to. A follow-up Correction item re-authoring
+`P68-SINGLE-LETTER-NAMES-READS-A-BLANKET-IMPLS-GENERIC-PARAMETER` against this extension is
+real, separate, bounded work once the extension exists.
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#22
+
+*revision: authored · kind: heading · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#23
+
+*revision: authored · kind: prose · heading: An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions / Status · hash: sha256:d4ea10c865d4129a83bf6b16e1277d0320a351ae3a998c1b24cba90908cc62a6*
+
+Accepted. An `Implementation` item's own generic parameter names join `OD-CAPABILITY-011`'s
+closed set of typed shape extensions, using the same encoding convention its `Struct_Shape`
+already established. No code moves here.
 
 ### docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1
 
