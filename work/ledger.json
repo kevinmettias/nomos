@@ -57846,7 +57846,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P62-TRANSPORT-MCP-CORRECTION-SURFACE-2, re-added with corrected territory (added tests/contract/tests/boundaries/transport_registry.rs, whose ADMITTED allow-list a real widening also has to edit) and now done."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -57873,7 +57877,10 @@
         }
       ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-transport-mcp-correction",
+        "declined_at": 1788683227
+      }
     },
     {
       "id": "OD-GATE-022-A-COMPARE-CALLER-NEEDS-A-DECIDED-SHAPE-FOR-THE-TWO-RUNS-IT-DIFFS",
