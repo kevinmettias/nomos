@@ -2,31 +2,12 @@
 
 use super::guarantee::{Declared_Guarantee, PROVIDER};
 use super::reading::{Discover_Workspace, LimitsPolicyError};
-use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
+use crate::scaffolding;
 use nomos_cap_limits_policy::{Capability, Encode_Payload, LimitsPolicyPayload, Payload_Schema, CONTRACT_VERSION};
-use nomos_contracts::{
-    BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, Guarantee, ProviderId, SnapshotId,
-    SubjectId,
-};
 use nomos_platform::FileSystem;
 use std::path::Path;
 
-#[path = "provider/policy_fact.rs"]
-mod policy_fact;
-
-pub use policy_fact::PolicyFact;
-
-/// Where in the workspace's history a fact is being produced — the same four-field shape
-/// `crate::naming::FactContext` carries, for the identical reason: these four always
-/// travel together.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct FactContext
-{
-    pub snapshot: SnapshotId,
-    pub variant: BuildVariantId,
-    pub configuration: ConfigurationId,
-    pub generation: GenerationId,
-}
+pub use crate::scaffolding::{FactContext, PolicyFact};
 
 /// Reads `root`'s own `standards.json` and produces the one fact this capability answers
 /// for the workspace as a whole — a leaf: nothing here reads another fact this or any
@@ -47,45 +28,16 @@ pub fn Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, 
     let subject = nomos_model::Subject_Of_Path("");
     let guarantee = Declared_Guarantee();
     let payload_bytes = Encode_Payload(&payload);
-    let key = Compute_Fact_Key(subject, guarantee, context);
-    let fact = MaterializedFact {
-        identity: key.At(context.generation),
-        snapshot: context.snapshot,
-        evidence: EvidenceClass::Verified,
-        guarantee,
-        payload: FactPayload::New(Payload_Schema(), payload_bytes),
-    };
+    let key = scaffolding::Compute_Fact_Key(Capability(), CONTRACT_VERSION, PROVIDER, CONTRACT_VERSION, subject, guarantee, context);
 
-    return Ok(PolicyFact { subject, fact });
-}
-
-/// The key this fact is filed under.
-///
-/// `semantic_inputs` is empty, deliberately, the same choice
-/// `crate::naming::fact_context::Compute_Fact_Key` already makes for the identical
-/// reason: this provider's real input is `standards.json`'s own current text, which no
-/// caller has independently, so a caller building a lookup key has nothing to reconstruct
-/// it from.
-fn Compute_Fact_Key(subject: SubjectId, guarantee: Guarantee, context: FactContext) -> FactKey
-{
-    return FactKey {
-        contract: Capability(),
-        contract_version: CONTRACT_VERSION,
-        subject,
-        semantic_inputs: InputDigest::Of(&[]),
-        provider: ProviderId::New(PROVIDER),
-        provider_version: CONTRACT_VERSION,
-        guarantee: GuaranteeDigest::Of(&guarantee),
-        variant: context.variant,
-        configuration: context.configuration,
-    };
+    return Ok(scaffolding::Materialize_Fact(subject, guarantee, context, key, Payload_Schema(), payload_bytes));
 }
 
 #[cfg(test)]
 mod tests
 {
     use super::*;
-    use nomos_contracts::Digest128;
+    use nomos_analysis::GuaranteeDigest;
     use nomos_platform::FileSystemError;
 
     /// The declared threshold this fixture's `standards.json` text carries.
@@ -149,27 +101,16 @@ mod tests
             nomos_contracts::IncrementalGranularity::WholeWorkspace,
         );
 
-        let strong_key = Compute_Fact_Key(subject, Declared_Guarantee(), Context());
-        let weak_key = Compute_Fact_Key(subject, weaker, Context());
+        let strong_key = scaffolding::Compute_Fact_Key(Capability(), CONTRACT_VERSION, PROVIDER, CONTRACT_VERSION, subject, Declared_Guarantee(), Context());
+        let weak_key = scaffolding::Compute_Fact_Key(Capability(), CONTRACT_VERSION, PROVIDER, CONTRACT_VERSION, subject, weaker, Context());
 
         assert_ne!(strong_key.Digest(), weak_key.Digest(), "two offers of the same subject at different guarantees must file apart");
     }
 
-    /// Fill bytes distinct enough that `Context()`'s three digests differ from one
-    /// another; each value carries no meaning beyond "not equal to the others".
-    const VARIANT_DIGEST_FILL: u8 = 2;
-    const CONFIGURATION_DIGEST_FILL: u8 = 3;
-
+    /// This test's own fixture, shared with its four siblings -- see
+    /// `crate::scaffolding::test_support::Sample_Context`.
     fn Context() -> FactContext
     {
-        return FactContext {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([
-                CONFIGURATION_DIGEST_FILL;
-                Digest128::BYTE_LENGTH
-            ])),
-            generation: GenerationId::INITIAL,
-        };
+        return scaffolding::test_support::Sample_Context();
     }
 }

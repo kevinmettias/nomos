@@ -16,10 +16,15 @@
 //! [`goals`] are each still their own capability, their own `ProviderId`, their own
 //! registration — reached through a module rather than a `Cargo.toml`. `standards_document`
 //! is the shared read step `OD-RULES-019` decided the five owe, private to this crate since
-//! nothing outside its five siblings ever depended on it alone.
+//! nothing outside its five siblings ever depended on it alone. `scaffolding` is a second,
+//! later extraction beneath the same five: the registration and fact-assembly plumbing every
+//! one of them repeated identically, distinct from what each provider's own `reading.rs`,
+//! `Declared_Guarantee` and `Encode_Payload` still decide independently -- see `scaffolding`'s
+//! own doc for the boundary and why it holds.
 
 #![forbid(unsafe_code)]
 
+mod scaffolding;
 mod standards_document;
 pub mod goals;
 pub mod limits;

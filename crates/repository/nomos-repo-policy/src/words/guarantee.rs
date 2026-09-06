@@ -1,8 +1,9 @@
 //! What this provider offers, and at what guarantee.
 
+use crate::scaffolding;
 use nomos_cap_words_policy::{Capability, CONTRACT_VERSION};
 use nomos_capability::ProviderOffer;
-use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, ProviderId};
+use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
 
 /// This provider's own name.
 ///
@@ -37,12 +38,7 @@ pub const fn Declared_Guarantee() -> Guarantee
 #[must_use]
 pub fn Provider_Offer() -> ProviderOffer
 {
-    return ProviderOffer {
-        provider: ProviderId::New(PROVIDER),
-        capability: Capability(),
-        version: CONTRACT_VERSION,
-        guarantee: Declared_Guarantee(),
-    };
+    return scaffolding::Offer(PROVIDER, Capability(), CONTRACT_VERSION, Declared_Guarantee());
 }
 
 #[cfg(test)]
@@ -64,12 +60,9 @@ mod tests
     fn Test_Provider_Offer_Should_Be_Accepted_Under_The_Capabilitys_Contract()
     {
         use nomos_cap_words_policy::Capability_Contract;
-        use nomos_capability::Registry;
+        use nomos_capability::contract_testing::Declared_Registry;
 
-        let mut registry = Registry::New();
-        registry
-            .Declare(Capability_Contract())
-            .expect("the contract is the first declaration in a fresh registry");
+        let mut registry = Declared_Registry(Capability_Contract());
 
         assert_eq!(registry.Offer(Provider_Offer()), Ok(()));
     }
