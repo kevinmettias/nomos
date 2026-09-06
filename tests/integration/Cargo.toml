@@ -25,6 +25,7 @@ nomos-lang-rust-clippy = { workspace = true }
 nomos-lang-rust-deny = { workspace = true }
 nomos-lang-rust-compiler = { workspace = true }
 nomos-lang-go-modules = { workspace = true }
+nomos-connector-coderabbit = { workspace = true }
 nomos-corrections = { workspace = true }
 nomos-platform-std = { workspace = true }
 nomos-repo-policy = { workspace = true }

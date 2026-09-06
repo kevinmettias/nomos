@@ -1032,6 +1032,7 @@ dependencies = [
  "nomos-cap-syntax",
  "nomos-cap-words-policy",
  "nomos-capability",
+ "nomos-connector-coderabbit",
  "nomos-contracts",
  "nomos-lang-go",
  "nomos-lang-go-modules",
@@ -1077,6 +1078,20 @@ dependencies = [
  "nomos-work-orchestration",
  "nomos-workflow-orchestration",
  "nomos-workspace",
+]
+
+[[package]]
+name = "nomos-connector-coderabbit"
+version = "0.1.0"
+dependencies = [
+ "nomos-analysis",
+ "nomos-capability",
+ "nomos-contracts",
+ "nomos-model",
+ "nomos-platform",
+ "nomos-platform-std",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -1146,6 +1161,7 @@ dependencies = [
  "nomos-cap-syntax",
  "nomos-capability",
  "nomos-check-orchestration",
+ "nomos-connector-coderabbit",
  "nomos-contracts",
  "nomos-corrections",
  "nomos-lang-go",
@@ -1414,6 +1430,7 @@ dependencies = [
  "nomos-cap-syntax",
  "nomos-cap-words-policy",
  "nomos-capability",
+ "nomos-connector-coderabbit",
  "nomos-contracts",
  "nomos-lang-rust",
  "nomos-model",

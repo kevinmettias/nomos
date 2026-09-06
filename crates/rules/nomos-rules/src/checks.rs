@@ -1,4 +1,4 @@
-//! The sixty-seven rules this crate implements, one module each — `naming` holds fourteen,
+//! The sixty-eight rules this crate implements, one module each — `naming` holds fourteen,
 //! `rust_text` holds eight, `go_text` holds five, `structure` holds five, `formatting` holds
 //! five, `security_text` holds three, `concurrency_text` holds three, `error_text` holds
 //! three, `facade` holds three, `placement` holds two, `dependency` holds three, and `goals`
@@ -14,10 +14,12 @@
 //! grows one module per rule forever.
 //!
 //! [`Relay_Findings`] and [`test_support`] are the two pieces of shared plumbing more than
-//! one rule needed by hand before this file existed: [`lint`] and [`policy`] both relay a
-//! `ToolProvider`'s own verdict 1:1 rather than judging it a second time, and every rule's
-//! test module was separately rebuilding the registry/store/fact scaffolding
-//! [`test_support`] now states once.
+//! one rule needed by hand before this file existed: [`lint`], [`policy`] and [`review`]
+//! each relay a tool's own verdict 1:1 rather than judging it a second time, and every
+//! rule's test module was separately rebuilding the registry/store/fact scaffolding
+//! [`test_support`] now states once. `review` holds the sixty-eighth rule,
+//! [`Check_Review_Findings`], the identical relay shape extended from a same-process
+//! `ToolProvider` (`lint`, `policy`) to a connector under `ARC-CONNECTOR-001`.
 
 mod borrowed_container;
 mod closure_bounds;
@@ -44,6 +46,7 @@ mod placement;
 mod policy;
 mod procedural_macro;
 mod reachability;
+mod review;
 mod role_surface_pair;
 mod rust_text;
 mod scalar_range;
@@ -142,6 +145,7 @@ pub use reachability::{
     Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
     UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
 };
+pub use review::{Check_Review_Findings, REVIEW_CONTRACT_RECORD, REVIEW_CONTRACT_RECORD_VERSION, REVIEW_FINDING};
 pub use role_surface_pair::{Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE};
 pub use rust_text::{
     Check_A_Disabled_Test_States_Why, Check_A_Rust_Path_Stays_Within_Its_Own_Subtree,

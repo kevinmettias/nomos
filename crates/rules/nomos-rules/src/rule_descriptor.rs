@@ -44,6 +44,7 @@ pub enum RequiredFact
     ScriptingPolicy,
     GoalsPolicy,
     WordsPolicy,
+    ReviewFindings,
 }
 
 impl RequiredFact
@@ -64,6 +65,7 @@ impl RequiredFact
             Self::ScriptingPolicy => nomos_cap_scripting_policy::Capability(),
             Self::GoalsPolicy => nomos_cap_goals_policy::Capability(),
             Self::WordsPolicy => nomos_cap_words_policy::Capability(),
+            Self::ReviewFindings => nomos_connector_coderabbit::Capability(),
         };
     }
 }
@@ -188,6 +190,7 @@ pub const DESCRIPTORS: &[RuleDescriptor] = &[
     Described(crate::LINT_DIAGNOSTICS, SubjectKind::SourceFacts, &[RequiredFact::LintDiagnostics]).Citing(crate::LINT_CONTRACT_RECORD, crate::LINT_CONTRACT_RECORD_VERSION),
     Described(crate::DEPENDENCY_POLICY, SubjectKind::SourceFacts, &[RequiredFact::DependencyPolicy]).Citing(crate::DEPENDENCY_POLICY_CONTRACT_RECORD, crate::DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION),
     Described(crate::UNREAD_REACHES_FINDING, SubjectKind::SourceFacts, &[RequiredFact::Reachability]).Citing(crate::UNREAD_REACHES_FINDING_CONTRACT_RECORD, crate::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION),
+    Described(crate::REVIEW_FINDING, SubjectKind::SourceFacts, &[RequiredFact::ReviewFindings]).Citing(crate::REVIEW_CONTRACT_RECORD, crate::REVIEW_CONTRACT_RECORD_VERSION),
     Described(crate::CROSS_LANGUAGE_CORRESPONDENCE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems]).Citing(crate::CROSS_LANGUAGE_CONTRACT_RECORD, crate::CROSS_LANGUAGE_CONTRACT_RECORD_VERSION),
     Described(crate::NO_TRAILING_WHITESPACE, SubjectKind::SourceText, &[]),
     Described(crate::TODO_FORMAT, SubjectKind::SourceText, &[]),

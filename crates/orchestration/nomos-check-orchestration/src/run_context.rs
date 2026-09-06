@@ -29,6 +29,7 @@ use nomos_rules::{
     Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths, Check_Closure_Bounds_Are_Minimal,
     Check_No_Wildcard_Imports,
     Check_No_Trailing_Whitespace, Check_Parameter_Count, Check_Relaxed_Not_Used_When_Ordering_Matters,
+    Check_Review_Findings, REVIEW_FINDING,
     Check_Scripts_Use_A_Portable_Shebang, Check_Seqcst_Justified_Explicitly, Check_Shared_Interior_Mutability_Says_Why,
     Check_Sleep_Is_Not_Synchronization, Check_Suppression_Directives_Carry_A_Reason, Check_Todo_Format,
     Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter, Check_Unread_Reaches_A_Finding,
@@ -63,7 +64,8 @@ use crate::composition::{Recognized_Language, Recognized_Syntax_Provider, Regist
 use crate::facts::{
     DependencyMaterialization, Ingested_Workspace, LintMaterialization, Materialize_Dependencies, Materialize_Goals_Policy,
     Materialize_Limits_Policy, Materialize_Lint, Materialize_Naming_Policy, Materialize_Policy, Materialize_Reachability,
-    Materialize_Scripting_Policy, Materialize_Syntax, Materialize_Words_Policy, PolicyMaterialization,
+    Materialize_Review, Materialize_Scripting_Policy, Materialize_Syntax, Materialize_Words_Policy, PolicyMaterialization,
+    ReviewMaterialization,
 };
 use crate::CheckOutcome;
 
@@ -72,7 +74,7 @@ pub use rule_reassessment_cache::RuleReassessmentCache;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 65;
+const RULE_COUNT: usize = 66;
 
 /// [`Run`]'s build variant, its subprocess root, the launcher those subprocesses run
 /// through, the filesystem a repository-declared policy capability (`nomos.cap.naming.
@@ -317,8 +319,9 @@ fn Materialize_Capabilities<Launcher: ProcessLauncher, Fs: FileSystem>(
     Tracking(env, changed, RequiredFact::ScriptingPolicy, |env| Materialize_Scripting_Policy_Section(env, selected));
     Tracking(env, changed, RequiredFact::GoalsPolicy, |env| Materialize_Goals_Policy_Section(env, selected));
     Tracking(env, changed, RequiredFact::WordsPolicy, |env| Materialize_Words_Policy_Section(env, selected));
+    let review = Tracking(env, changed, RequiredFact::ReviewFindings, |_env| return Materialize_Review_Section(selected));
 
-    return Capability_Materialization_Of(dependencies, lint, policy);
+    return Capability_Materialization_Of(dependencies, lint, policy, review);
 }
 
 /// Runs `section`, and records `family` into `changed` if `env.store` gained a new
@@ -399,6 +402,28 @@ fn Materialize_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem>(
     }
 
     return PolicyMaterialization { sources: Vec::new(), findings: Vec::new() };
+}
+
+/// The review-finding section: [`Materialize_Review`] when `selected` feeds on it, an
+/// empty result otherwise.
+///
+/// Unlike [`Materialize_Dependency_Section`], [`Materialize_Lint_Section`] and
+/// [`Materialize_Policy_Section`], this section takes no [`MaterializationEnvironment`]:
+/// [`Materialize_Review`]'s own doc gives the reason -- this connector's one provider
+/// answers about one already-identified external review comment, and nothing in this
+/// call chain names one yet, so there is nothing here for a root, a launcher or a
+/// filesystem to be read through. `Materialize_Capabilities`' own `Tracking` wrapper still
+/// calls this the identical way, through a closure that ignores the environment it is
+/// handed -- the same `|_reader|` idiom this crate's own text-only `ComposedRule` entries
+/// already use for the identical reason.
+fn Materialize_Review_Section(selected: &[RuleId]) -> ReviewMaterialization
+{
+    if Is_Rule_Selected(selected, REVIEW_FINDING)
+    {
+        return Materialize_Review();
+    }
+
+    return ReviewMaterialization { sources: Vec::new(), findings: Vec::new() };
 }
 
 /// The reachability section: [`Materialize_Reachability`] when `selected` feeds on it --
@@ -522,6 +547,7 @@ fn Capability_Materialization_Of(
     dependencies: DependencyMaterialization,
     lint: LintMaterialization,
     policy: PolicyMaterialization,
+    review: ReviewMaterialization,
 ) -> CapabilityMaterialization
 {
     return CapabilityMaterialization {
@@ -531,6 +557,8 @@ fn Capability_Materialization_Of(
         lint_findings: lint.findings,
         policy_sources: policy.sources,
         policy_findings: policy.findings,
+        review_sources: review.sources,
+        review_findings: review.findings,
     };
 }
 
@@ -547,6 +575,8 @@ struct CapabilityMaterialization
     lint_findings: Vec<Finding>,
     policy_sources: Vec<SourceFile>,
     policy_findings: Vec<Finding>,
+    review_sources: Vec<SourceFile>,
+    review_findings: Vec<Finding>,
 }
 
 /// Every finding [`Rule_Findings`] produces over `sources` and `capabilities`' own source
@@ -666,6 +696,7 @@ fn Capability_Findings(capabilities: CapabilityMaterialization) -> Vec<Finding>
     let mut findings = capabilities.dependency_findings;
     findings.extend(capabilities.lint_findings);
     findings.extend(capabilities.policy_findings);
+    findings.extend(capabilities.review_findings);
 
     return findings;
 }
@@ -722,6 +753,8 @@ fn Nothing_Materialized() -> CapabilityMaterialization
         lint_findings: Vec::new(),
         policy_sources: Vec::new(),
         policy_findings: Vec::new(),
+        review_sources: Vec::new(),
+        review_findings: Vec::new(),
     };
 }
 
@@ -816,6 +849,7 @@ fn With_Composed_Rules<Answer>(
         ComposedRule { id: LINT_DIAGNOSTICS, check: &|reader: &mut Reader<'_, '_>| return Check_Lint_Diagnostics(&capabilities.lint_sources, reader) },
         ComposedRule { id: DEPENDENCY_POLICY, check: &|reader: &mut Reader<'_, '_>| return Check_Dependency_Policy(&capabilities.policy_sources, reader) },
         ComposedRule { id: UNREAD_REACHES_FINDING, check: &|reader: &mut Reader<'_, '_>| return Check_Unread_Reaches_A_Finding(sources, reader) },
+        ComposedRule { id: REVIEW_FINDING, check: &|reader: &mut Reader<'_, '_>| return Check_Review_Findings(&capabilities.review_sources, reader) },
         ComposedRule { id: CROSS_LANGUAGE_CORRESPONDENCE, check: &|reader: &mut Reader<'_, '_>| return Check_Cross_Language_Correspondence(sources, reader) },
         ComposedRule { id: NO_TRAILING_WHITESPACE, check: &|_reader: &mut Reader<'_, '_>| return Check_No_Trailing_Whitespace(sources) },
         ComposedRule { id: TODO_FORMAT, check: &|_reader: &mut Reader<'_, '_>| return Check_Todo_Format(sources) },

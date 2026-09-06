@@ -1,0 +1,59 @@
+pub const fn nomos_connector_coderabbit::Ceiling() -> Guarantee
+pub const fn nomos_connector_coderabbit::Declared_Guarantee() -> Guarantee
+pub const nomos_connector_coderabbit::CAPABILITY: &str
+pub const nomos_connector_coderabbit::CONTRACT_VERSION: ContractVersion
+pub const nomos_connector_coderabbit::PROVIDER: &str
+pub const nomos_connector_coderabbit::SCHEMA: &str
+pub enum nomos_connector_coderabbit::ConnectorError
+pub enum variant nomos_connector_coderabbit::ConnectorError::Fetch(FetchError)
+pub enum variant nomos_connector_coderabbit::ConnectorError::Translation(TranslationError)
+pub fn nomos_connector_coderabbit::Capability() -> CapabilityId
+pub fn nomos_connector_coderabbit::Capability_Contract() -> CapabilityContract
+pub fn nomos_connector_coderabbit::ConnectorError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_connector_coderabbit::ConnectorError::from(error: FetchError) -> Self
+pub fn nomos_connector_coderabbit::ConnectorError::from(error: TranslationError) -> Self
+pub fn nomos_connector_coderabbit::Encode_Payload(payload: &FindingPayload) -> Vec<u8>
+pub fn nomos_connector_coderabbit::Fact_Of(payload: &FindingPayload, context: FactContext) -> ReviewFindingFact
+pub fn nomos_connector_coderabbit::FetchError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_connector_coderabbit::Fetch_Review_Comment<P: ProcessLauncher>(repository: &str, comment_id: u64, launcher: &P) -> Result<Vec<u8>, FetchError>
+pub fn nomos_connector_coderabbit::Materialize_Review_Comment<P: ProcessLauncher>( repository: &str, comment_id: u64, context: FactContext, launcher: &P, ) -> Result<ReviewFindingFact, ConnectorError>
+pub fn nomos_connector_coderabbit::Parse_Payload(bytes: &[u8]) -> Result<FindingPayload, PayloadRefusal>
+pub fn nomos_connector_coderabbit::PayloadRefusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_connector_coderabbit::Payload_Schema() -> SchemaId
+pub fn nomos_connector_coderabbit::Provider_Offer() -> ProviderOffer
+pub fn nomos_connector_coderabbit::Sample_Review_Comment_Response() -> &'static [u8]
+pub fn nomos_connector_coderabbit::Translate_Review_Comment(repository: &str, vendor_bytes: &[u8]) -> Result<FindingPayload, TranslationError>
+pub fn nomos_connector_coderabbit::TranslationError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub impl nomos_connector_coderabbit::ConnectorError implements From<FetchError>
+pub impl nomos_connector_coderabbit::ConnectorError implements From<TranslationError>
+pub impl nomos_connector_coderabbit::ConnectorError implements core::fmt::Display
+pub impl nomos_connector_coderabbit::FetchError implements core::fmt::Display
+pub impl nomos_connector_coderabbit::PayloadRefusal implements core::fmt::Display
+pub impl nomos_connector_coderabbit::TranslationError implements core::fmt::Display
+pub struct field nomos_connector_coderabbit::FactContext::configuration: ConfigurationId
+pub struct field nomos_connector_coderabbit::FactContext::generation: GenerationId
+pub struct field nomos_connector_coderabbit::FactContext::snapshot: SnapshotId
+pub struct field nomos_connector_coderabbit::FactContext::variant: BuildVariantId
+pub struct field nomos_connector_coderabbit::FetchError::reason: String
+pub struct field nomos_connector_coderabbit::FindingPayload::category: String
+pub struct field nomos_connector_coderabbit::FindingPayload::external_id: ReviewFindingId
+pub struct field nomos_connector_coderabbit::FindingPayload::external_system: String
+pub struct field nomos_connector_coderabbit::FindingPayload::line: String
+pub struct field nomos_connector_coderabbit::FindingPayload::locator: String
+pub struct field nomos_connector_coderabbit::FindingPayload::message: String
+pub struct field nomos_connector_coderabbit::FindingPayload::path: String
+pub struct field nomos_connector_coderabbit::FindingPayload::severity: String
+pub struct field nomos_connector_coderabbit::PayloadRefusal::reason: String
+pub struct field nomos_connector_coderabbit::ReviewFindingFact::fact: MaterializedFact
+pub struct field nomos_connector_coderabbit::ReviewFindingFact::subject: SubjectId
+pub struct field nomos_connector_coderabbit::TranslationError::reason: String
+pub struct nomos_connector_coderabbit::FactContext
+pub struct nomos_connector_coderabbit::FetchError
+pub struct nomos_connector_coderabbit::FindingPayload
+pub struct nomos_connector_coderabbit::PayloadRefusal
+pub struct nomos_connector_coderabbit::ReviewFindingFact
+pub struct nomos_connector_coderabbit::TranslationError
+
+# re-exports of items declared outside this crate
+pub use determinism::ReviewFindingProduction
+pub use identity::ReviewFindingId

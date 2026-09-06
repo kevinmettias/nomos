@@ -66,6 +66,11 @@ const CITATIONS: &[(&str, &str, u32)] = &[
         nomos_rules::WRITE_AUTHORITY_CONTRACT_RECORD,
         nomos_rules::WRITE_AUTHORITY_CONTRACT_RECORD_VERSION,
     ),
+    (
+        "nomos_rules::REVIEW_CONTRACT_RECORD",
+        nomos_rules::REVIEW_CONTRACT_RECORD,
+        nomos_rules::REVIEW_CONTRACT_RECORD_VERSION,
+    ),
 ];
 
 /// Every cited version must match its record's own front matter, or the citation is a claim
@@ -106,13 +111,14 @@ fn Test_The_Citation_Table_Should_Cover_Every_Cited_Rule()
 {
     assert_eq!(
         CITATIONS.len(),
-        7,
-        "nomos-rules ships many rules, seven of which cite a versioned record: \
+        8,
+        "nomos-rules ships many rules, eight of which cite a versioned record: \
          Check_Completeness_Mirrors cites D-134, Check_Dependency_Direction and \
          Check_Every_Member_Declares_A_Band both cite OD-RULES-003, \
-         Check_Unread_Reaches_A_Finding cites OD-RULES-008, Check_Lint_Diagnostics and \
-         Check_Dependency_Policy both cite OD-RULES-010, Check_Cross_Language_Correspondence \
-         cites OD-CAPABILITY-010, and Check_Write_Authority cites OD-RULES-023. \
+         Check_Unread_Reaches_A_Finding cites OD-RULES-008, Check_Lint_Diagnostics, \
+         Check_Dependency_Policy and Check_Review_Findings all three cite OD-RULES-010, \
+         Check_Cross_Language_Correspondence cites OD-CAPABILITY-010, and \
+         Check_Write_Authority cites OD-RULES-023. \
          Check_Naming_Convention cites README.md prose and has no front matter \
          to compare against. A rule added with a real record needs a row in CITATIONS and \
          this number raised with it."

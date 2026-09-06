@@ -519,6 +519,47 @@ fn Rendered_Dependency_Policy_Fact(fact: &nomos_lang_rust_deny::PolicyFact) -> V
     return rendered;
 }
 
+/// `nomos-connector-coderabbit`'s one fact over its own recorded fixture.
+///
+/// Deliberately not a live `gh api` call, unlike [`Dependency_Policy_Production`]'s live
+/// `cargo deny` call above: `OD-CONNECTOR-002`'s evidence rule forbids a live read of an
+/// external system from being read as a repeatable claim, so this connector's own
+/// `crate::determinism::ReviewFindingProduction` declares over the translation rather than
+/// the fetch. This production exercises exactly that repeatable half, via
+/// `nomos_connector_coderabbit::Fact_Of`, which builds a fact from an already-translated
+/// payload with no process run.
+pub(crate) fn Coderabbit_Review_Finding_Production() -> Vec<u8>
+{
+    let context = Coderabbit_Review_Finding_Context();
+    let payload = nomos_connector_coderabbit::Translate_Review_Comment(
+        "coderabbitai/rabbits-playground",
+        nomos_connector_coderabbit::Sample_Review_Comment_Response(),
+    )
+    .expect("this crate's own recorded fixture");
+    let fact = nomos_connector_coderabbit::Fact_Of(&payload, context);
+
+    return Rendered_Coderabbit_Review_Finding_Fact(&fact);
+}
+
+fn Coderabbit_Review_Finding_Context() -> nomos_connector_coderabbit::FactContext
+{
+    return nomos_connector_coderabbit::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
+        generation: GenerationId::INITIAL,
+    };
+}
+
+fn Rendered_Coderabbit_Review_Finding_Fact(fact: &nomos_connector_coderabbit::ReviewFindingFact) -> Vec<u8>
+{
+    let mut rendered = Vec::new();
+    rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
+    rendered.extend_from_slice(&fact.fact.payload.bytes);
+
+    return rendered;
+}
+
 /// `nomos-lang-rust-compiler`'s one fact over its own small, committed fixture crate.
 ///
 /// Not this repository's own real tree, unlike [`Dependency_Policy_Production`]: a real

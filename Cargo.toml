@@ -152,6 +152,19 @@ members = [
     # graph rather than rows, a scalar or a list: goals, parts, and the edges between them.
     "crates/capabilities/nomos-cap-goals-policy",
 
+    # Capability Contract zone — nomos.cap.review.finding's contract, bundled with its one
+    # provider in the same crate rather than split the way its nine nomos-cap-* siblings
+    # above are: OD-CAPABILITY-002's own criterion is a second real party, and this
+    # capability has exactly one provider and (once nomos-rules' Check_Review_Findings
+    # lands beside it) one reader, so a second crate would buy no independence anybody
+    # spends. Classified Capability Contract rather than Provider — unlike
+    # nomos-lang-rust-clippy et al., whose contract already lives one crate away in
+    # nomos-cap-lint precisely so nomos-rules (Rules zone) can reach the contract without
+    # reaching the Provider zone Permits() forbids it from naming — this crate carries
+    # both halves itself, so Provider zone would make its fact family structurally
+    # unreachable by any rule. ARC-CONNECTOR-001, OD-CONNECTOR-001, OD-CONNECTOR-002.
+    "crates/connectors/nomos-connector-coderabbit",
+
     # Band 2 — package manifests. The Rust installable-unit manifest format: PackageId,
     # PackageKind and PKG-007's four version domains, given a real reader that refuses
     # what it cannot resolve. Wraps nomos-package's generic core with RustEdition
@@ -339,6 +352,7 @@ nomos-cap-limits-policy = { path = "crates/capabilities/nomos-cap-limits-policy"
 nomos-cap-scripting-policy = { path = "crates/capabilities/nomos-cap-scripting-policy" }
 nomos-cap-words-policy = { path = "crates/capabilities/nomos-cap-words-policy" }
 nomos-cap-goals-policy = { path = "crates/capabilities/nomos-cap-goals-policy" }
+nomos-connector-coderabbit = { path = "crates/connectors/nomos-connector-coderabbit" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-lang-go = { path = "crates/languages/nomos-lang-go" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }

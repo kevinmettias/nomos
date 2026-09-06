@@ -398,6 +398,24 @@
 //! workspace's own surface snapshots before any code was written. No new capability, no new
 //! provider: a declared allow-list is judged the same way [`Permits`] already judges a zone
 //! crossing, aimed at authority instead of direction. [`WRITE_DOORS`] is that table.
+//!
+//! [`Check_Review_Findings`] is the sixty-eighth rule, `OD-RULES-010`'s third real instance
+//! and `OD-EXECUTOR-006`'s own measurement carried out: an automated code review tool's own
+//! comment already carries a verdict (a severity, a category, a file and line), so this
+//! rule's whole judgment is "the tool already decided," the identical relay shape
+//! [`Check_Lint_Diagnostics`] and [`Check_Dependency_Policy`] already state for
+//! `cargo clippy` and `cargo deny`. What differs is the transport the fact arrived
+//! through: `nomos.cap.review.finding` is materialized by `nomos-connector-coderabbit`, a
+//! connector under `ARC-CONNECTOR-001` reaching a genuine external peer system (GitHub,
+//! carrying CodeRabbit's own posted judgment) rather than a local subprocess this
+//! workspace's own `ProcessLauncher` runs end to end — `OD-EXECUTOR-006` measured that
+//! difference and found it does not change which shape this rule takes, because the
+//! boundary that actually matters is `OD-RULES-010`'s fact-not-finding split, not the
+//! transport. Its contract lives bundled with its one provider in
+//! `nomos-connector-coderabbit` itself rather than in a `nomos-cap-*` crate of its own —
+//! `OD-CAPABILITY-002` licenses that for a single-provider capability — classified
+//! Capability Contract zone rather than Provider zone specifically so this crate may
+//! depend on it at all, since [`Permits`] forbids Rules zone from naming Provider zone.
 
 #![forbid(unsafe_code)]
 
@@ -456,6 +474,7 @@ pub use checks::{
     UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,
     Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
     UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
+    Check_Review_Findings, REVIEW_CONTRACT_RECORD, REVIEW_CONTRACT_RECORD_VERSION, REVIEW_FINDING,
     Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE,
     Check_A_Disabled_Test_States_Why, Check_A_Rust_Path_Stays_Within_Its_Own_Subtree,
     Check_Every_Allow_Carries_A_Justification, Check_Inline_Always_Justification,

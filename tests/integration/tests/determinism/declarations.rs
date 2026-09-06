@@ -28,8 +28,8 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
     let declared = Declared_Domains();
     assert_eq!(
         declared.len(),
-        19,
-        "nineteen productions are covered by seventeen declarations; a new producer needs a \
+        20,
+        "twenty productions are covered by eighteen declarations; a new producer needs a \
          row in this table and a test of its own, whether or not it also needs a \
          declaration of its own"
     );
@@ -38,9 +38,10 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
 }
 
 /// Every domain this workspace has, with the row of the contracts table it occupies.
-fn Declared_Domains() -> [(&'static str, DeterminismStrength); 19]
+fn Declared_Domains() -> [(&'static str, DeterminismStrength); 20]
 {
     use nomos_analysis::FactReuse;
+    use nomos_connector_coderabbit::ReviewFindingProduction;
     use nomos_corrections::CorrectionStaging;
     use nomos_lang_rust::SyntaxFactProduction;
     use nomos_lang_rust_cargo::DependencyFactProduction;
@@ -91,6 +92,12 @@ fn Declared_Domains() -> [(&'static str, DeterminismStrength); 19]
         ("scripting-policy-fact-production", ScriptingPolicyFactProduction::STRENGTH),
         ("words-policy-fact-production", WordsPolicyFactProduction::STRENGTH),
         ("goals-policy-fact-production", GoalsPolicyFactProduction::STRENGTH),
+        // The one connector's own translation: fixed vendor bytes in, deterministic
+        // canonical bytes out, over the fixture crate::translation reads. OD-CONNECTOR-002's
+        // evidence rule is why this declares over the translation rather than a live `gh`
+        // call, the identical reasoning every same-process ToolProvider row above gives for
+        // declaring CrossRun rather than something a live subprocess result could not honor.
+        ("connector-review-finding-fact-production", ReviewFindingProduction::STRENGTH),
         ("fact-reuse", FactReuse::STRENGTH),
         ("snapshot-serialization", SnapshotSerialization::STRENGTH),
         ("bundle-serialization", BundleSerialization::STRENGTH),
@@ -102,7 +109,7 @@ fn Declared_Domains() -> [(&'static str, DeterminismStrength); 19]
 /// Each declared domain has a test registered under its name, and measures something —
 /// `DeterminismStrength::None` would be an obligation this loop discharges without ever
 /// checking anything.
-fn Each_Domain_Declares_A_Strategy_And_Is_Registered(declared: [(&str, DeterminismStrength); 19])
+fn Each_Domain_Declares_A_Strategy_And_Is_Registered(declared: [(&str, DeterminismStrength); 20])
 {
     use crate::harness::Test_Name_For;
 

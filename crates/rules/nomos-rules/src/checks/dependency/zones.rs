@@ -139,6 +139,13 @@ pub const ZONES: &[(&str, Zone)] = &[
     ("nomos-cap-scripting-policy", Zone::CapabilityContract),
     ("nomos-cap-words-policy", Zone::CapabilityContract),
     ("nomos-cap-goals-policy", Zone::CapabilityContract),
+    // A connector under ARC-CONNECTOR-001, not a nomos-cap-* crate -- but classified
+    // Capability Contract zone rather than Provider zone anyway, because it bundles
+    // nomos.cap.review.finding's contract with its one provider in one crate
+    // (OD-CAPABILITY-002 licenses this while there is only one provider) and Rules zone
+    // may not name Provider zone at all. Provider zone would leave this fact family
+    // structurally unreachable by nomos-rules, not merely misfiled.
+    ("nomos-connector-coderabbit", Zone::CapabilityContract),
     ("nomos-package", Zone::Provider),
     ("nomos-lang-rust", Zone::Provider),
     ("nomos-lang-rust-scan", Zone::Provider),

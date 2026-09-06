@@ -82,6 +82,9 @@ pub const nomos_rules::PARAMETER_COUNT: &str
 pub const nomos_rules::PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS: &str
 pub const nomos_rules::PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str
 pub const nomos_rules::RELAXED_NOT_USED_WHEN_ORDERING_MATTERS: &str
+pub const nomos_rules::REVIEW_CONTRACT_RECORD: &str
+pub const nomos_rules::REVIEW_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::REVIEW_FINDING: &str
 pub const nomos_rules::RUST_LANGUAGE: &str
 pub const nomos_rules::SAME_ZONE_EDGES: &[(&str, &str)]
 pub const nomos_rules::SCRIPTS_USE_A_PORTABLE_SHEBANG: &str
@@ -129,6 +132,7 @@ pub enum variant nomos_rules::RequiredFact::LimitsPolicy
 pub enum variant nomos_rules::RequiredFact::LintDiagnostics
 pub enum variant nomos_rules::RequiredFact::NamingPolicy
 pub enum variant nomos_rules::RequiredFact::Reachability
+pub enum variant nomos_rules::RequiredFact::ReviewFindings
 pub enum variant nomos_rules::RequiredFact::ScriptingPolicy
 pub enum variant nomos_rules::RequiredFact::SyntaxItems
 pub enum variant nomos_rules::RequiredFact::WordsPolicy
@@ -218,6 +222,7 @@ pub fn nomos_rules::Check_Parameters_Borrow_Unless_Ownership_Is_Taken(sources: &
 pub fn nomos_rules::Check_Prefer_Macro_Rules_Over_Procedural_Macros(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Project_Owned_Function_Names_Use_Upper_Snake_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Relaxed_Not_Used_When_Ordering_Matters(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Review_Findings(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Scripts_Use_A_Portable_Shebang(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Seqcst_Justified_Explicitly(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<Finding>

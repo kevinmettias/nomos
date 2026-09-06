@@ -35,6 +35,7 @@ pub fn Registered() -> Result<Registry, RegistryError>
     Declare_Scripting_Policy_Capability(&mut registry)?;
     Declare_Goals_Policy_Capability(&mut registry)?;
     Declare_Words_Policy_Capability(&mut registry)?;
+    Declare_Review_Capability(&mut registry)?;
 
     return Ok(registry);
 }
@@ -228,6 +229,20 @@ fn Declare_Words_Policy_Capability(registry: &mut Registry) -> Result<(), Regist
     return Ok(());
 }
 
+/// An eleventh capability, one offer against it -- the first connector under
+/// `ARC-CONNECTOR-001` wired for real. `nomos-connector-coderabbit` bundles
+/// `nomos.cap.review.finding`'s contract with its own one provider in a single crate
+/// (`OD-CAPABILITY-002` licenses this while there is only one provider), so declaring and
+/// offering it both name that one crate rather than a contract crate and a provider crate
+/// the way `Declare_Lint_Capability` and `Declare_Dependency_Policy_Capability` do.
+fn Declare_Review_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_connector_coderabbit::Capability_Contract())?;
+    registry.Offer(nomos_connector_coderabbit::Provider_Offer())?;
+
+    return Ok(());
+}
+
 /// Which registered `nomos.cap.syntax.items` provider `path` belongs to, if either does --
 /// `OD-CAPABILITY-009`'s corrected fix, and the one function both halves of the pipeline
 /// consult so they cannot independently drift on the answer.
@@ -364,14 +379,14 @@ mod tests
     use super::*;
 
     /// How many `Declare` calls [`Registered`]'s own body wires: syntax, dependency,
-    /// controlflow, lint, dependency-policy, and all five of `OD-RULES-011`'s families --
-    /// naming, limits, scripting, goals and words.
-    const DECLARED_CAPABILITY_COUNT: usize = 10;
+    /// controlflow, lint, dependency-policy, all five of `OD-RULES-011`'s families --
+    /// naming, limits, scripting, goals and words -- and review.
+    const DECLARED_CAPABILITY_COUNT: usize = 11;
 
     /// The composition this crate ships must not be self-contradictory, and it must
-    /// declare exactly the ten capabilities [`Registered`]'s own body wires: syntax,
-    /// dependency, controlflow, lint, dependency-policy, and all five of `OD-RULES-011`'s
-    /// families -- naming, limits, scripting, goals and words.
+    /// declare exactly the eleven capabilities [`Registered`]'s own body wires: syntax,
+    /// dependency, controlflow, lint, dependency-policy, all five of `OD-RULES-011`'s
+    /// families -- naming, limits, scripting, goals and words -- and review.
     #[test]
     fn Test_Registered_Should_Declare_Every_Composed_Capability()
     {

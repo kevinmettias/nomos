@@ -13,7 +13,8 @@ mod policy_materialization;
 
 pub use dependency_materialization::{
     DependencyMaterialization, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
-    Materialize_Policy, Materialize_Reachability, Materialize_Syntax, PolicyMaterialization,
+    Materialize_Policy, Materialize_Reachability, Materialize_Review, Materialize_Syntax,
+    PolicyMaterialization, ReviewMaterialization,
 };
 pub use policy_materialization::{
     Materialize_Goals_Policy, Materialize_Limits_Policy, Materialize_Naming_Policy, Materialize_Scripting_Policy,
