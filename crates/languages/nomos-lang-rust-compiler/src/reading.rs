@@ -29,10 +29,22 @@
 //! in it, sysroot source included. Restricting to files under `root` is what makes this
 //! reader answer for the one crate it was asked about rather than for the standard
 //! library it had to load to answer honestly.
+//!
+//! # `Load_Crate` is shared with a second capability
+//!
+//! Everything above this line is what makes loading a crate through `ra_ap_hir` honest --
+//! sysroot discovery, the Windows verbatim-path trap, restricting to the one crate that
+//! was asked about. None of that is specific to `.clone()`/`Copy`. [`Load_Crate`] is that
+//! shared part, factored out so `crate::nested_lock_reading::Discover_Nested_Locks` asks
+//! the same loaded [`Semantics`] a different question rather than re-solving sysroot
+//! discovery a second time. It hands back [`ra_ap_hir::EditionedFileId`] rather than the
+//! raw `Vfs`/`FileId` pair `ra_ap_load-cargo` returns, because `EditionedFileId` is the
+//! one of the two this crate can name without adding `ra_ap_span` as a direct dependency
+//! only to spell one type.
 
 use crate::payload::cloned_copy_type::ClonedCopyType;
 use line_index::LineIndex;
-use ra_ap_hir::Semantics;
+use ra_ap_hir::{EditionedFileId, Semantics};
 use ra_ap_ide_db::RootDatabase;
 use ra_ap_load_cargo::{LoadCargoConfig, ProcMacroServerChoice, load_workspace_at};
 use ra_ap_project_model::{CargoConfig, RustLibSource};
@@ -54,17 +66,23 @@ impl core::fmt::Display for CompilerError
     }
 }
 
-/// Every `.clone()` call in the crate rooted at `root` whose call expression --
-/// `Clone::clone`'s own `Self` return type, not the receiver's possibly-reference type --
-/// a real compiler frontend resolved to a type that implements `Copy`.
+/// Loads the Cargo project rooted at `root` through `ra_ap_hir` and returns its own
+/// database alongside every real `.rs` file that belongs to it -- sysroot source and
+/// every other crate the sysroot pulled in already excluded, each file already carrying
+/// the edition its own crate resolved to.
+///
+/// Shared by every capability this crate answers: seeing this once, honestly, is what
+/// lets [`Discover_Crate`] and `crate::nested_lock_reading::Discover_Nested_Locks` differ
+/// only in which question they ask the same loaded [`Semantics`], not in how they got
+/// there.
 ///
 /// # Errors
 ///
 /// [`CompilerError`] if `root` cannot be loaded as a Cargo project, or if loading it
-/// could not discover a real sysroot -- without one, [`ra_ap_hir::Type::is_copy`] cannot
-/// resolve the `Copy` lang item for anything, which would make every answer this reader
-/// gives a silent, unearned "no".
-pub fn Discover_Crate(root: &Path) -> Result<Vec<ClonedCopyType>, CompilerError>
+/// could not discover a real sysroot -- without one, a lang-item or well-known-path
+/// lookup resolves nothing for anything, which would make every answer built on this
+/// loader a silent, unearned "no".
+pub(crate) fn Load_Crate(root: &Path) -> Result<(RootDatabase, Vec<(EditionedFileId, String)>), CompilerError>
 {
     // The exact absolutization `ra_ap_load_cargo::load_workspace_at` performs on `root`
     // internally before resolving it -- not `std::fs::canonicalize`, whose Windows
@@ -88,7 +106,7 @@ pub fn Discover_Crate(root: &Path) -> Result<Vec<ClonedCopyType>, CompilerError>
 
     let sema: Semantics<'_, RootDatabase> = Semantics::new(&db);
 
-    let mut locations: Vec<(String, u32, u32)> = Vec::new();
+    let mut files: Vec<(EditionedFileId, String)> = Vec::new();
     for (file_id, vfs_path) in vfs.iter()
     {
         let path_str = vfs_path.to_string();
@@ -103,6 +121,32 @@ pub fn Discover_Crate(root: &Path) -> Result<Vec<ClonedCopyType>, CompilerError>
         {
             continue;
         };
+        files.push((editioned, path_str));
+    }
+
+    files.sort_by(|left, right| return left.1.cmp(&right.1));
+
+    return Ok((db, files));
+}
+
+/// Every `.clone()` call in the crate rooted at `root` whose call expression --
+/// `Clone::clone`'s own `Self` return type, not the receiver's possibly-reference type --
+/// a real compiler frontend resolved to a type that implements `Copy`.
+///
+/// # Errors
+///
+/// [`CompilerError`] if `root` cannot be loaded as a Cargo project, or if loading it
+/// could not discover a real sysroot -- without one, [`ra_ap_hir::Type::is_copy`] cannot
+/// resolve the `Copy` lang item for anything, which would make every answer this reader
+/// gives a silent, unearned "no".
+pub fn Discover_Crate(root: &Path) -> Result<Vec<ClonedCopyType>, CompilerError>
+{
+    let (db, files) = Load_Crate(root)?;
+    let sema: Semantics<'_, RootDatabase> = Semantics::new(&db);
+
+    let mut locations: Vec<(String, u32, u32)> = Vec::new();
+    for (editioned, path_str) in files
+    {
         let source_file = sema.parse(editioned);
         let line_index = LineIndex::new(&source_file.syntax().text().to_string());
 

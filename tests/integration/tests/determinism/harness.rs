@@ -124,6 +124,10 @@ pub(crate) fn Test_Name_For(domain: &str) -> &'static str
         {
             "domains::Test_The_Copy_Clones_Provider_Should_Meet_Its_Declared_Strategy"
         }
+        "nested-locks-fact-production" =>
+        {
+            "domains::Test_The_Nested_Locks_Provider_Should_Meet_Its_Declared_Strategy"
+        }
         "limits-policy-fact-production" =>
         {
             "domains::Test_The_Limits_Policy_Provider_Should_Meet_Its_Declared_Strategy"

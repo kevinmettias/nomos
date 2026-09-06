@@ -53029,16 +53029,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P40-COMPILER-BACKED-PROVIDER"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "claude-loop",
-        "acquired_at": 1788683498,
-        "lease_expires_at": 1788694298
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -53048,7 +53044,27 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "ment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 619 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.46s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-4229d88af1b153aa.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-7bb3e9f1e56bdd7d.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788687247,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5a6e3db2a85834e3028a930d81c63e5a7b42adf5"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -53638,7 +53654,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory names one file in a crate that does not exist yet. The real, precedented shape (nomos-correction-orchestration + nomos-api/src/correction.rs + nomos-cli/src/correct.rs, the P40-CORRECTIONS-CANONICAL-SEAM sibling this item's own why cites) needs a whole new crate directory, the CLI module it thins (crates/host/nomos-cli/src/agent.rs and src/agent/), a new nomos-api/src/agent.rs, both hosts' Cargo.toml dependency edges, a zones.rs entry, a README crate-table row, and surface snapshots for the new crate and nomos-api -- not one lib.rs. Reauthoring with the full territory checked directly against the correction-orchestration precedent."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -53656,7 +53676,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788685853
+      }
     },
     {
       "id": "P43-POLICY-PROVIDER-SCAFFOLDING-DUPLICATION",
@@ -58248,6 +58271,60 @@
         },
         "revision": "e1d3e248c62585a6a8032b82df60a1acce3c3747"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P43-AGENT-CANONICAL-SEAM-2",
+      "title": "Agent is the one verb family with no orchestration seam, so only the binary can reach it",
+      "why": "Work, spec, check, gate and workflow each have an orchestration crate both hosts call. Agent is the exception: the whole family lives in nomos-cli agent.rs and its agent directory (1135 lines), reaches nomos-agent-executor-claude-code and nomos-model-package EffortLevel directly with no crate between, and nomos-api names neither dependency, so the second host cannot dispatch a task envelope, choose a backend or read a result at all. P40-CORRECTIONS-CANONICAL-SEAM already closed the identical hole for correction -- crates/orchestration/nomos-correction-orchestration plus nomos-api/src/correction.rs plus nomos-cli/src/correct.rs, checked directly and confirmed live -- and is this item's exact template. Every later consumer inherits the gap: P40-MCP-SURFACE, P40-API-TRANSPORT and P42-SECOND-HARNESS-EXECUTOR each need an agent seam that is not a CLI module.",
+      "done_when": "Agent dispatch and result handling are reachable through a new nomos-agent-orchestration crate both hosts call, nomos-cli agent is a thin renderer over it the way correct.rs already is over Run_Correction, nomos-api exposes the same verbs the way correction.rs already does, and the new crate carries its zone declaration, README row and blessed surface snapshot rather than leaving them stale.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-agent-orchestration",
+          "crates/host/nomos-cli/src/agent.rs",
+          "crates/host/nomos-cli/src/agent",
+          "crates/host/nomos-cli/Cargo.toml",
+          "crates/host/nomos-api/src/lib.rs",
+          "crates/host/nomos-api/src/agent.rs",
+          "crates/host/nomos-api/Cargo.toml",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "README.md",
+          "Cargo.toml",
+          "Cargo.lock",
+          "tests/contract/surface/nomos-agent-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop",
+        "acquired_at": 1788685872,
+        "lease_expires_at": 1788696672
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null

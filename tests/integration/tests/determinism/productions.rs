@@ -604,6 +604,48 @@ fn Rendered_Copy_Clones_Fact(fact: &nomos_lang_rust_compiler::CloneOnCopyFact) -
     return rendered;
 }
 
+/// `nomos-lang-rust-compiler`'s second fact -- `nomos.cap.rust.nested_locks` -- over its
+/// own small, committed fixture crate. The identical reasoning [`Copy_Clones_Production`]
+/// gives for using its own fixture rather than this repository's own tree applies here
+/// unchanged: a real `ra_ap_hir` analysis loads a full sysroot regardless of which crate
+/// it is pointed at, so a small fixture proves the same claim a hundred-odd-crate run
+/// would, just faster.
+pub(crate) fn Nested_Locks_Production() -> Vec<u8>
+{
+    let context = Nested_Locks_Context();
+    let fact = Discovered_Nested_Locks_Fact(context);
+
+    return Rendered_Nested_Locks_Fact(&fact);
+}
+
+fn Nested_Locks_Context() -> nomos_lang_rust_compiler::FactContext
+{
+    return nomos_lang_rust_compiler::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
+        generation: GenerationId::INITIAL,
+    };
+}
+
+/// This crate's own committed nested-lock fixture, materialized through the door this
+/// provider actually reads a real compiler frontend's analysis through.
+fn Discovered_Nested_Locks_Fact(context: nomos_lang_rust_compiler::FactContext) -> nomos_lang_rust_compiler::NestedLockFact
+{
+    let root = Repository_Root().join("crates/languages/nomos-lang-rust-compiler/fixtures/nested_lock_sample");
+    return nomos_lang_rust_compiler::Materialize_Nested_Locks(&root, context)
+        .expect("this crate's own committed fixture is a real, loadable Cargo project; a provider that cannot see it verifies nothing");
+}
+
+fn Rendered_Nested_Locks_Fact(fact: &nomos_lang_rust_compiler::NestedLockFact) -> Vec<u8>
+{
+    let mut rendered = Vec::new();
+    rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
+    rendered.extend_from_slice(&fact.fact.payload.bytes);
+
+    return rendered;
+}
+
 /// `nomos-lang-go-modules`'s facts over a small, synthetic Go workspace.
 ///
 /// Not this repository's own real tree, unlike [`Dependency_Production`] and
