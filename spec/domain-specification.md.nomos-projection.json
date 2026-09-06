@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:37ef5201adf40f5d9ef88a95117cd88fbb15cf726a79a5e8e70ca84cf4d3d15b",
-  "inputs_digest": "sha256:c6381048bcbe947181d11de7ac09536f4b268acb65af0cfca2b61bba7be96ce5",
+  "content_digest": "sha256:1481134f75d34e1d4eb5d3f3b4d3fa8ddd86df69de3f49ffea8eef40579b1cd5",
+  "inputs_digest": "sha256:8c263f67c5ecb0bfd75f555e745a85139d2bfbe4d69f3c3b78e5e0b142087375",
   "sections": [
     [
       "Documents",
-      195
+      196
     ],
     [
       "Sections",
-      1605
+      1611
     ],
     [
       "Source blocks",
-      5603
+      5624
     ]
   ],
   "inputs": [
@@ -324,6 +324,11 @@
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored",
       "hash": "sha256:0c2b9021270c0e484742945479352a8b2d9d573056158e27d377c6f56433545d"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md@authored",
+      "hash": "sha256:aaa9dd1bb14d99b9df945e287c5e7452b3630a41da0ec8983451f3a9bf1be262"
     },
     {
       "content": "documents",
@@ -3309,6 +3314,36 @@
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#18",
       "hash": "sha256:4e041d27514b96db11abf64559b51962f9b78f84b1af3777eb7c4847a24cb561"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#1",
+      "hash": "sha256:c38924fc616a53fa6c147253f75e49f72ceb53aabc521e08f7c10409dda03aef"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#2",
+      "hash": "sha256:efce5edbda211f9257ec1e1dbd20ad550161072a824f2e7083ddba6219a5ec92"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#5",
+      "hash": "sha256:aab3afd948786e9fe49afe884cc670a19dd3cf9e0bb8de6920057e472cdf7775"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#10",
+      "hash": "sha256:5cbeda5117102a22a543a93e754bf8712ba024d132d625ea0d62bdc41ee437cf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#15",
+      "hash": "sha256:265fd526a5fbb41ad65c2bbfc7c88c5e7a96eaf1ea8568fc21516593621da1a6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#20",
+      "hash": "sha256:8558989acf67b4be5ed2f171b7a8681640026ac69aafc055c8adfb1676986570"
     },
     {
       "content": "headings",
@@ -16874,6 +16909,111 @@
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#19",
       "hash": "sha256:9e1f1bba7473ae1d51568db28cf1853074c501640026b1d95f09b90c302a9cdb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#1",
+      "hash": "sha256:07e2891e15113358df2faafe91a0d6424d3961dd8a0794794ea7ab46cd6b5d0e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#3",
+      "hash": "sha256:6f130e14f3d6826c719bfca705a0f40ac409cb7b78520551dd7aa1a53e00732c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#4",
+      "hash": "sha256:037e245e13953ecdf60e376f28944af176e09f79a8678a0613cfd145481b4df7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#6",
+      "hash": "sha256:b041678df5309c88677d961d8ffe15a9aef21eb21e7ef5befbef150ddf33d044"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#7",
+      "hash": "sha256:2020a7a5d5cf6b6d39e856335d49e85269e3ffa0df166b8dd162cab672926224"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#8",
+      "hash": "sha256:ceac4d4d618d4fc108cc55059ff73ec0b6f718be053e5bbd0f66372e856ad685"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#9",
+      "hash": "sha256:9bf23648663cf36795dc290350041e0ea055aa2f981a11b2fd2a499d7071b8a5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#10",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#11",
+      "hash": "sha256:7c6acc82c4e67bfe1e4ae1c32402561a7aa6e3b5d0d4e42754aca47db252b977"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#12",
+      "hash": "sha256:7e0fd342a7b22c2639efa4037da59daf4f0689ddfc3f783ec194a177f6fdf172"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#13",
+      "hash": "sha256:59d520c3d771f9ec8972813bab757a46faaa0996928d79e3aa7d8883a7afa112"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#14",
+      "hash": "sha256:b3e8b5d1c3fea38eef8d562f04310d01b0ffb23e80371d7a46a29aea274c4b95"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#15",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#16",
+      "hash": "sha256:b7d3649e77cc60e45beb1e60f3cf632d7ab4ddf287b3d31a1bdf10a19eacd381"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#17",
+      "hash": "sha256:3f0b0f5bc2aaaaadea34f68e045594375ced3c2b5c5c08756b2e77b2ce9659ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#18",
+      "hash": "sha256:4e7eaf4d5f79c1bf18f2f8c8bb1b77e0fc51ad62f8232994338f207199a2df4b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#19",
+      "hash": "sha256:522563d234eddf594c956a6ef1e4f3cd0f48b97ac11f3f702cd00fb07b9e89ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#20",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#21",
+      "hash": "sha256:9dc05f2bd8fd8417559c3be069e04f897d140689728cb842412fb3fe3bab6cc4"
     },
     {
       "content": "blocks",

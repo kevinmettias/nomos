@@ -52615,7 +52615,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Investigated before writing code, per OD-EXECUTOR-001's own established rigor of testing\nagainst the real CLI before deciding a mechanism. Two real findings change what this item\ncan responsibly be:\n\n1. Territory (crates/agent/nomos-agent-executor-claude-code/src/lib.rs alone) is too narrow\nfor what done_when needs. Execute_Task/Execute_In take no root path, and TaskEnvelope.scope/\nprohibited_changes are repo-relative Territory paths with nothing to resolve them against.\nStructurally confining reach requires threading a real root parameter through Execute_Task,\nwhich has real callers outside this crate: crates/host/nomos-cli/src/agent/dispatch.rs and\ncrates/orchestration/nomos-workflow-orchestration/src/run.rs, neither in this item's\nterritory.\n\n2. The mechanism itself needed empirical verification the item's own done_when could not\nget from reading code alone. Tested directly against the real claude CLI, adversarially,\nmatching OD-EXECUTOR-001's own methodology: `--restricted --add-dir <path> --allowedTools\nRead Write Edit` confines file-tool reach structurally. A first prompt let the model\nself-decline (permission_denials: []) -- the same \"trust in what the process is asked to\ndo\" false positive OD-EXECUTOR-001's third run already named. A second, more forceful\nprompt reached the real tool call: permission_denials recorded both a Write and a Read\noutside the allowed directory, refused before the filesystem was touched (verified\ndirectly -- the forbidden file was untouched, no new file was created). This is a real,\nworking mechanism for scope, not yet true for the other three fields:\navailable_tools names Nomos CapabilityIds, not CLI tool names or paths, and this crate has\nno MCP wiring to expose a capability to the subprocess at all; prohibited_changes needs a\ncontainment strategy (post-hoc detection, since --add-dir gives an allow-list not a\ncarve-out); applicable_rules needs a decision about what \"reaches the run as context and\nas validation boundary\" means for a bare --print subprocess with no follow-up turn.\n\nRe-authoring as a decision, grounded in this evidence, with implementation left to a\nfollow-up the same way P41-CRATE-BOUNDARY-REVIEW/P41-ZONES-REPLACE-NUMERIC-BANDS both\npreceded their own carried-out items this session."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -52631,9 +52635,18 @@
         "timeout_seconds": 3600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "re-authoring as a decision after real CLI research; see decline reason",
+          "abandoned_at": 1788668495
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788668496
+      }
     },
     {
       "id": "P42-AGENT-STRUCTURED-WORKRESULT",
@@ -56421,6 +56434,59 @@
           "exit_code": 0
         },
         "revision": "00e3b6ddf68a6028c7c699b671281d469bac82d4"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-EXECUTOR-ENVELOPE-MECHANISM",
+      "title": "TaskEnvelope's four unenforced fields each need a decided mechanism before code",
+      "why": "TaskEnvelope carries scope, prohibited_changes, available_tools and applicable_rules; the\nClaude Code executor accepts and ignores all four, matching OD-EXECUTOR-001's own finding\nand its own deferral (\"a later record's question, measured against a real need\"). A person\nrequired this gap closed. Deciding a mechanism for each, verified against the real CLI the\nsame way OD-EXECUTOR-001 itself was, is the record OD-EXECUTOR-001 asked for rather than a\nstraight jump to code, since two of the four fields need a real mechanism that does not\nexist yet (a root path this crate's signature does not carry; an MCP-capability grant this\ncrate has no wiring for) and one field's own enforcement design (post-hoc containment vs.\npreventive denial) is a real choice, not an implementation detail.",
+      "done_when": "A record decides, for each of scope, prohibited_changes, applicable_rules and\navailable_tools: whether and how it is enforced given the real claude CLI's own confirmed\ncapabilities, what new parameter or wiring the enforcement needs, and which of the four (if\nany) stay honestly deferred and why. No code changes under this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md",
+          "crates/spec/nomos-spec-store/records/OD-EXECUTOR-007.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s\n\n\nrunning 15 tests\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788668809,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5f535fd2443e0ed5fd2da71c549471a98b857472"
       },
       "abandoned": [],
       "displaced": [],

@@ -71,6 +71,7 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 33 | 9 | sha256:ca00e8c7e822e64b859ccc7162d52ac2108a9c94b9706595f78c21cd21f546ce |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md | authored | 23 | 7 | sha256:1f668a9c3b8b790d0935f12b8f3350130ac9c388e0f9c0671ef5d57379f74b47 |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md | authored | 19 | 6 | sha256:0c2b9021270c0e484742945479352a8b2d9d573056158e27d377c6f56433545d |
+| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md@authored | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md | authored | 21 | 6 | sha256:aaa9dd1bb14d99b9df945e287c5e7452b3630a41da0ec8983451f3a9bf1be262 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
@@ -673,6 +674,12 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#10 | authored | 2 | The Decision |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#13 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#18 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#1 | authored | 1 | A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI |
+| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#2 | authored | 2 | Question |
+| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#10 | authored | 2 | The Decision |
+| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#15 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#20 | authored | 2 | Status |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1 | authored | 1 | A skipped test reports ok, so the size of the hole is declared rather than the hole being closed |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#5 | authored | 2 | What Was Found |
@@ -16623,6 +16630,230 @@ not this one in advance of it.
 *revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / Status · hash: sha256:9e1f1bba7473ae1d51568db28cf1853074c501640026b1d95f09b90c302a9cdb*
 
 Accepted. Names the shape a future CodeRabbit-style adapter takes; builds nothing.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#1
+
+*revision: authored · kind: heading · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI · hash: sha256:07e2891e15113358df2faafe91a0d6424d3961dd8a0794794ea7ab46cd6b5d0e*
+
+# A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#2
+
+*revision: authored · kind: heading · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#3
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Question · hash: sha256:6f130e14f3d6826c719bfca705a0f40ac409cb7b78520551dd7aa1a53e00732c*
+
+`OD-EXECUTOR-001` measured that `TaskEnvelope.scope`, `.prohibited_changes` and
+`.available_tools` were accepted and read by nothing, and declined to close the gap: "when a
+real task needs a real tool, naming what enforces that field and how a grant is checked is a
+later record's question, measured against a real need rather than designed ahead of one." A
+person has now required exactly that question answered, for those three fields and a fourth
+this record's own why also names, `applicable_rules`.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#4
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Question · hash: sha256:037e245e13953ecdf60e376f28944af176e09f79a8678a0613cfd145481b4df7*
+
+Closing this honestly needs two things reading the code cannot supply. First, whether the
+real `claude` CLI's documented flags actually confine a subprocess the way their own help
+text claims — `OD-EXECUTOR-001`'s own history is that a deny-list which looked complete
+leaked twice before an allow-list was tested and held, so a claim about this CLI's behavior
+is not settled by its `--help` text alone. Second, `Execute_Task`'s own signature has no root
+path to resolve `Territory`'s repo-relative paths against, and widening it reaches real
+callers — `nomos-cli::agent::dispatch` and `nomos-workflow-orchestration::run` — outside any
+one crate's territory. Both are measured before this record decides anything.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#5
+
+*revision: authored · kind: heading · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#6
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / What Was Measured · hash: sha256:b041678df5309c88677d961d8ffe15a9aef21eb21e7ef5befbef150ddf33d044*
+
+**`--restricted` plus `--add-dir` structurally confines file-tool reach, verified
+adversarially against the real CLI.** `claude --help` documents `--restricted` as confining
+"the file tools to the working directories (`--add-dir` included)." A first real invocation —
+`--restricted --add-dir <allowed>` with `Read`/`Write`/`Edit` allowed, prompted to write and
+read a file under a sibling `forbidden` directory — reported `permission_denials: []` and
+completed with a free-text refusal. That is not evidence the boundary holds: it is the exact
+"trust in what the process is asked to do" failure `OD-EXECUTOR-001`'s own third run already
+found — the model chose not to try, which proves nothing about what happens when it does. A
+second invocation, prompted explicitly not to decline and to report the raw tool result,
+reached the real tool calls: `permission_denials` recorded both a `Write` and a `Read`
+outside `allowed`, each with the CLI's own reason ("is outside ...; `--restricted` confines
+the file tools to the working directory"), and the filesystem confirmed it directly — the
+forbidden file was never created, the secret file's contents were unread and unchanged. This
+is the same allow-list-tested-adversarially shape `OD-EXECUTOR-001`'s own rule already uses
+for tool names, now confirmed for path confinement too.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#7
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / What Was Measured · hash: sha256:2020a7a5d5cf6b6d39e856335d49e85269e3ffa0df166b8dd162cab672926224*
+
+**`Execute_Task` cannot use this today: it has no root.** `scope` and `prohibited_changes`
+are `Territory` values — repository-relative path strings — and `Execute_Task(task, launcher)`
+receives nothing to resolve them against. `--add-dir` needs real, absolute directories.
+Threading a root through means changing a signature two real callers outside
+`nomos-agent-executor-claude-code` depend on.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#8
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / What Was Measured · hash: sha256:ceac4d4d618d4fc108cc55059ff73ec0b6f718be053e5bbd0f66372e856ad685*
+
+**`available_tools: Vec<CapabilityId>` names Nomos capabilities, not CLI tools or paths, and
+nothing wires either to the other.** `nomos.cap.syntax.items`, `nomos.cap.dependency.edges`
+and their siblings are facts this workspace's own registry resolves; `--allowedTools` grants
+CLI-native tool names (`Read`, `Bash(git *)`) that have no relationship to a `CapabilityId`.
+The one bridge that could carry a Nomos capability to an external subprocess is MCP —
+`nomos-mcp` exists and serves three Gate verbs — but this executor passes
+`--strict-mcp-config` with no `--mcp-config`, so no MCP server is reachable regardless, and
+`nomos-mcp` does not serve capability facts today in any case. There is no real path from a
+declared `available_tools` list to anything the subprocess could act on without first
+building that bridge.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#9
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / What Was Measured · hash: sha256:9bf23648663cf36795dc290350041e0ea055aa2f981a11b2fd2a499d7071b8a5*
+
+**`applicable_rules: Vec<RuleId>` has no output for a validation boundary to check yet.**
+`OD-CONTRACTS-003` already found this crate does not assemble a `WorkResult`; it returns
+free text. A rule judges code (`nomos_analysis::FactReader` over `&[SourceFile]`), and this
+invocation, even once `scope` is real, produces no `WorkResult.plan` a correction pipeline
+would apply and no code change of its own for a rule to run against — `nomos-corrections`'
+own stage/validate/commit chain still has zero real callers, per `OD-CORRECTIONS-001`.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#10
+
+*revision: authored · kind: heading · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#11
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / The Decision · hash: sha256:7c6acc82c4e67bfe1e4ae1c32402561a7aa6e3b5d0d4e42754aca47db252b977*
+
+**`scope`: enforced by `--restricted` plus one `--add-dir` per path `scope` names, resolved
+against a caller-supplied root.** `Execute_Task` and `Execute_In` gain a `root: &Path`
+parameter. `Command_For` adds `--restricted` and one `--add-dir <root-joined-path>` per entry
+in `task.scope.paths` — the parent directory when an entry names a file, since `--add-dir`
+confines by directory and `Territory::Of_Files` may name either. `Territory::Empty()` (the
+common case today, per every existing caller's own fixture) adds no `--add-dir` at all,
+matching `OD-EXECUTOR-001`'s own "nothing enumerated, nothing granted" reading — an empty
+scope keeps today's exact behavior, structural denial of everything, unchanged. `Read`,
+`Write` and `Edit` join the allow-list once at least one directory is granted; the
+placeholder-only allow-list stays exactly as it is when scope is empty, so a caller that
+never populates `scope` sees no behavior change at all.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#12
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / The Decision · hash: sha256:7e0fd342a7b22c2639efa4037da59daf4f0689ddfc3f783ec194a177f6fdf172*
+
+**`prohibited_changes`: contained by comparison, not prevented by a flag — `--add-dir` has
+no documented carve-out syntax, and this record does not invent one to test unverified.**
+Before dispatch, hash every real file `prohibited_changes.paths` names (root-relative,
+skipping any that do not exist — nothing to protect there yet). After the subprocess
+returns, hash them again. Any difference is not read as `Execute_Task` succeeding with a
+violation buried in a report: it is `AgentExecutionError`'s own new variant,
+`Prohibited_Change`, naming which path changed, so a caller sees a structural refusal rather
+than a `WorkResult` it has to separately audit. `OD-EXECUTOR-001`'s own "read for what
+structurally permitted, never for what free text claims" is the identical principle applied
+to the after-state rather than the invocation.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#13
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / The Decision · hash: sha256:59d520c3d771f9ec8972813bab757a46faaa0996928d79e3aa7d8883a7afa112*
+
+**`available_tools`: enforcement is refusal, not silent tolerance, until MCP carries a real
+capability.** An executor that cannot honor a declared need must say so rather than proceed
+as if it could — the same "unknown is not pass" reading `Applicability`'s own module doc
+already states for a rule's judgment. `Execute_Task` refuses with a new
+`AgentExecutionError::Unsupported_Tools` when `task.available_tools` is non-empty, naming
+the capabilities it cannot grant, rather than dispatching a task whose declared requirement
+this crate silently drops. An empty list — every real caller today — dispatches exactly as
+now. Building the real grant (`nomos-mcp` serving capability facts, this executor supplying
+`--mcp-config` scoped to exactly `available_tools`) is not decided here: it is a
+capability-serving increment `nomos-mcp`'s own territory would need first, not a fact about
+this executor alone.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#14
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / The Decision · hash: sha256:b3e8b5d1c3fea38eef8d562f04310d01b0ffb23e80371d7a46a29aea274c4b95*
+
+**`applicable_rules`: context now, validation deferred.** The rule identifiers `task.
+applicable_rules` names are appended to the invocation via `--append-system-prompt`, so the
+model is told what it is bound by before its one turn runs — real, buildable today, and
+consistent with everything else this crate already does structurally rather than by
+instruction alone: telling the model is not enforcement, and this record does not claim
+otherwise. The validation half — running `nomos check` with exactly `applicable_rules`
+selected over whatever `scope` granted, once a real `WorkResult` exists to check — stays
+undecided; `OD-CONTRACTS-003`'s own gap (no `WorkResult` assembly) is the blocker, not this
+field, and is a different record's question.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#15
+
+*revision: authored · kind: heading · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#16
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / What This Record Does Not Do · hash: sha256:b7d3649e77cc60e45beb1e60f3cf632d7ab4ddf287b3d31a1bdf10a19eacd381*
+
+**No code changes here.** `Execute_Task`'s new `root` parameter, `Command_For`'s new flags,
+the two new `AgentExecutionError` variants, and a test per mechanism that fails when the
+constraint is removed are a follow-up item's own territory — this record states the shape,
+the same way `OD-RULES-020` stated zones before `P41-ZONES-MIGRATION-3` built them.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#17
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / What This Record Does Not Do · hash: sha256:3f0b0f5bc2aaaaadea34f68e045594375ced3c2b5c5c08756b2e77b2ce9659ce*
+
+It does not update `nomos-cli::agent::dispatch` or `nomos-workflow-orchestration::run` to
+supply a real root; both currently have none to give, since no caller in this workspace
+constructs a `TaskEnvelope` with a real `scope` or `prohibited_changes` value today. Naming
+where that root comes from for each real caller is the follow-up item's own measurement, not
+assumed here.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#18
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / What This Record Does Not Do · hash: sha256:4e7eaf4d5f79c1bf18f2f8c8bb1b77e0fc51ad62f8232994338f207199a2df4b*
+
+It does not build MCP capability-serving, `nomos-mcp` wiring, or a `WorkResult`-assembly
+step. Both are named as the real, specific blockers for `available_tools` and the validation
+half of `applicable_rules`, not built toward speculatively.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#19
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / What This Record Does Not Do · hash: sha256:522563d234eddf594c956a6ef1e4f3cd0f48b97ac11f3f702cd00fb07b9e89ce*
+
+It does not claim the mechanism above is exhaustively adversarial-tested. Two real
+invocations verified the one property this record leans hardest on — that `--restricted
+--add-dir` structurally refuses reach outside its own list — over a single path shape (an
+absolute directory, one level of nesting). A follow-up implementing this against real
+`Territory` values with nested paths, nonexistent paths, or nomos-specific edge cases is
+that item's own verification, not re-derived here.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#20
+
+*revision: authored · kind: heading · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#21
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Status · hash: sha256:9dc05f2bd8fd8417559c3be069e04f897d140689728cb842412fb3fe3bab6cc4*
+
+Accepted. `scope` and `prohibited_changes` each have a real, evidence-backed mechanism;
+`available_tools` is refused rather than silently dropped until a capability-serving bridge
+exists; `applicable_rules` reaches the run as context now and stays undecided as a
+validation boundary until a `WorkResult` exists to validate.
 
 ### docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1
 
