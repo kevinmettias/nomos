@@ -52826,7 +52826,13 @@
         "timeout_seconds": 3600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "pivoting to build OD-RULES-023's already-decided write-authority rule first, so a decision actually ships as code before this session accumulates a fifth undelivered decision in a row",
+          "abandoned_at": 1788670310
+        }
+      ],
       "displaced": [],
       "declined": null
     },
