@@ -1,5 +1,6 @@
 pub enum nomos_api::AbandonResponse
 pub enum nomos_api::AddResponse
+pub enum nomos_api::AgentExecutionErrorResponse
 pub enum nomos_api::AuditResponse
 pub enum nomos_api::BlockChangeResponse
 pub enum nomos_api::CheckResponse
@@ -7,6 +8,7 @@ pub enum nomos_api::ClaimResponse
 pub enum nomos_api::CommitResponse
 pub enum nomos_api::CorrectionResponse
 pub enum nomos_api::DeclineResponse
+pub enum nomos_api::DispatchErrorResponse
 pub enum nomos_api::Disposition
 pub enum nomos_api::FinishResponse
 pub enum nomos_api::FreshnessResponse
@@ -15,6 +17,7 @@ pub enum nomos_api::GatePlanResponse
 pub enum nomos_api::ListResponse
 pub enum nomos_api::MarkdownResponse
 pub enum nomos_api::NormativeOutcomeResponse
+pub enum nomos_api::OllamaExecutionErrorResponse
 pub enum nomos_api::OriginResponse
 pub enum nomos_api::PathMatchResponse
 pub enum nomos_api::PreviewResponse
@@ -26,6 +29,7 @@ pub enum nomos_api::ReservationOutcomeResponse
 pub enum nomos_api::SeverityResponse
 pub enum nomos_api::ShowResponse
 pub enum nomos_api::SourcesResponse
+pub enum nomos_api::StepOutcomeResponse
 pub enum nomos_api::SubmissionKindResponse
 pub enum nomos_api::SubmissionStateResponse
 pub enum nomos_api::SubmitResponse
@@ -34,10 +38,13 @@ pub enum nomos_api::TableResponse
 pub enum nomos_api::VacateOutcomeResponse
 pub enum nomos_api::ValidateResponse
 pub enum nomos_api::VerdictResponse
+pub enum nomos_api::WorkflowRunResponse
 pub enum variant nomos_api::AbandonResponse::Abandoned
 pub enum variant nomos_api::AbandonResponse::Refused { cause: String, retryable: bool, }
 pub enum variant nomos_api::AddResponse::Added
 pub enum variant nomos_api::AddResponse::Refused { cause: String, }
+pub enum variant nomos_api::AgentExecutionErrorResponse::Unavailable { reason: String, }
+pub enum variant nomos_api::AgentExecutionErrorResponse::Unparseable { reason: String, }
 pub enum variant nomos_api::AuditResponse::Audited { blocked: Vec<BlockedItem>, now: Timestamp, }
 pub enum variant nomos_api::AuditResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::BlockChangeResponse::Added { ordinal: u32, kind: String }
@@ -68,6 +75,9 @@ pub enum variant nomos_api::CorrectionResponse::UnreadableRoot
 pub enum variant nomos_api::CorrectionResponse::UnreadableWorkspaceState
 pub enum variant nomos_api::DeclineResponse::Declined
 pub enum variant nomos_api::DeclineResponse::Refused { cause: String, retryable: bool, }
+pub enum variant nomos_api::DispatchErrorResponse::ClaudeCode(AgentExecutionErrorResponse)
+pub enum variant nomos_api::DispatchErrorResponse::Gate(GateRunResponse)
+pub enum variant nomos_api::DispatchErrorResponse::Ollama(OllamaExecutionErrorResponse)
 pub enum variant nomos_api::Disposition::Failed
 pub enum variant nomos_api::Disposition::Indeterminate
 pub enum variant nomos_api::Disposition::Passed
@@ -89,6 +99,7 @@ pub enum variant nomos_api::NormativeOutcomeResponse::Gone { from: u32 }
 pub enum variant nomos_api::NormativeOutcomeResponse::Held { block: u32 }
 pub enum variant nomos_api::NormativeOutcomeResponse::Moved { from: u32, to: u32 }
 pub enum variant nomos_api::NormativeOutcomeResponse::Unlocatable
+pub enum variant nomos_api::OllamaExecutionErrorResponse::Unavailable { reason: String, }
 pub enum variant nomos_api::OriginResponse::Clarified
 pub enum variant nomos_api::OriginResponse::Decided
 pub enum variant nomos_api::OriginResponse::Inferred
@@ -121,6 +132,11 @@ pub enum variant nomos_api::ShowResponse::NotFound { item: ItemId, }
 pub enum variant nomos_api::ShowResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::SourcesResponse::Assembled { read: Vec<String>, absent: Vec<AbsenceResponse>, }
 pub enum variant nomos_api::SourcesResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::StepOutcomeResponse::Check(check::CheckResponse)
+pub enum variant nomos_api::StepOutcomeResponse::ClaudeCode(AgentExecutionOutcomeResponse)
+pub enum variant nomos_api::StepOutcomeResponse::Correction(correction::CorrectionResponse)
+pub enum variant nomos_api::StepOutcomeResponse::Gate(GateRunResponse)
+pub enum variant nomos_api::StepOutcomeResponse::Ollama(OllamaExecutionOutcomeResponse)
 pub enum variant nomos_api::SubmissionKindResponse::DesignSpec
 pub enum variant nomos_api::SubmissionKindResponse::FeatureRequest
 pub enum variant nomos_api::SubmissionKindResponse::FeatureResult
@@ -151,6 +167,10 @@ pub enum variant nomos_api::VerdictResponse::BuildFailed { cause: String, }
 pub enum variant nomos_api::VerdictResponse::Compared { fresh: bool, stale: Option<(String, String)>, edited: Option<(String, String)>, diverged: Option<(String, String)>, }
 pub enum variant nomos_api::VerdictResponse::Unbodied
 pub enum variant nomos_api::VerdictResponse::Unstamped
+pub enum variant nomos_api::WorkflowRunResponse::Completed { completed: Vec<StepOutcomeResponse>, }
+pub enum variant nomos_api::WorkflowRunResponse::Failed { completed: Vec<StepOutcomeResponse>, index: usize, error: DispatchErrorResponse, }
+pub enum variant nomos_api::WorkflowRunResponse::Refused { completed: Vec<StepOutcomeResponse>, index: usize, }
+pub enum variant nomos_api::WorkflowRunResponse::UnreadableRoot { reason: String, }
 pub fn nomos_api::Handle_Check_Run(command: &CheckCommand) -> CheckResponse
 pub fn nomos_api::Handle_Correction_Run(command: &CorrectionCommand) -> CorrectionResponse
 pub fn nomos_api::Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse
@@ -177,10 +197,16 @@ pub fn nomos_api::Handle_Work_Renew(directory: &Path, request: &ClaimRequest) ->
 pub fn nomos_api::Handle_Work_Show(directory: &Path, item: &ItemId) -> ShowResponse
 pub fn nomos_api::Handle_Work_TakeOver(directory: &Path, request: &ClaimRequest) -> ReservationOutcomeResponse
 pub fn nomos_api::Handle_Work_Validate(directory: &Path) -> ValidateResponse
+pub fn nomos_api::Handle_Workflow_Run(plan: &WorkflowStepPlan) -> WorkflowRunResponse
 pub struct field nomos_api::AbsenceResponse::cause: String
 pub struct field nomos_api::AbsenceResponse::cost: String
 pub struct field nomos_api::AbsenceResponse::expected: String
 pub struct field nomos_api::AbsenceResponse::subject: String
+pub struct field nomos_api::AgentExecutionOutcomeResponse::cost_usd: f64
+pub struct field nomos_api::AgentExecutionOutcomeResponse::denied_tool_uses: Vec<String>
+pub struct field nomos_api::AgentExecutionOutcomeResponse::duration_ms: u64
+pub struct field nomos_api::AgentExecutionOutcomeResponse::is_error: bool
+pub struct field nomos_api::AgentExecutionOutcomeResponse::response: String
 pub struct field nomos_api::BaselineDebtResponse::rationale: String
 pub struct field nomos_api::BaselineDebtResponse::rule: RuleId
 pub struct field nomos_api::BaselineDebtResponse::subject: SubjectId
@@ -235,6 +261,7 @@ pub struct field nomos_api::NodeSummaryResponse::title: String
 pub struct field nomos_api::NormativeMovementResponse::canonical_hash: String
 pub struct field nomos_api::NormativeMovementResponse::outcome: NormativeOutcomeResponse
 pub struct field nomos_api::NormativeMovementResponse::statement_id: String
+pub struct field nomos_api::OllamaExecutionOutcomeResponse::response: String
 pub struct field nomos_api::ProfileOutcomeResponse::profile: Profile
 pub struct field nomos_api::ProfileOutcomeResponse::verdict: VerdictResponse
 pub struct field nomos_api::RecordRelationResponse::relation: String
@@ -281,6 +308,7 @@ pub struct field nomos_api::TableLineResponse::text: String
 pub struct field nomos_api::VacatedResponse::outcome: VacateOutcomeResponse
 pub struct field nomos_api::VacatedResponse::path: PathBuf
 pub struct nomos_api::AbsenceResponse
+pub struct nomos_api::AgentExecutionOutcomeResponse
 pub struct nomos_api::BaselineDebtResponse
 pub struct nomos_api::BlockedItem
 pub struct nomos_api::CommitReportResponse
@@ -294,6 +322,7 @@ pub struct nomos_api::GateRunResponse
 pub struct nomos_api::IdentityChangeResponse
 pub struct nomos_api::NodeSummaryResponse
 pub struct nomos_api::NormativeMovementResponse
+pub struct nomos_api::OllamaExecutionOutcomeResponse
 pub struct nomos_api::ProfileOutcomeResponse
 pub struct nomos_api::RecordRelationResponse
 pub struct nomos_api::RefusalResponse

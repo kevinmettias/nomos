@@ -100,7 +100,14 @@
 //! `GateCommand`'s suppression, baseline and coverage policy on top of it -- there was no way
 //! for a caller of this crate to run a policy-free Check the way `nomos-cli`'s own, separate
 //! `nomos check` command already lets a person do. `P62-API-CHECK-SEAM` closes that gap with
-//! the same twinned-response shape `correction.rs` already established.
+//! the same twinned-response shape `correction.rs` already established. Its twenty-fourth,
+//! [`workflow::Handle_Workflow_Run`], gives this crate its first Workflow verb:
+//! `nomos_workflow_orchestration::Run` had exactly one real caller anywhere in this
+//! workspace before it, `nomos-cli`'s own `workflow.rs`, kept to a single step per
+//! invocation -- this dispatches the identical single-step shape, reusing
+//! [`check::CheckResponse`], [`correction::CorrectionResponse`] and
+//! [`response::GateRunResponse`] for the three step kinds this crate already twins, rather
+//! than a fourth, divergent projection of the same outcomes.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `Invocation::Run` arm: it walks `command.root` for `.rs` sources
@@ -134,6 +141,7 @@ mod spec;
 #[cfg(test)]
 mod test_support;
 mod work;
+mod workflow;
 
 pub use check::{CheckResponse, ClaimResponse, ExaminedResponse, Handle_Check_Run};
 pub use correction::{CorrectionResponse, Handle_Correction_Run};
@@ -159,5 +167,9 @@ pub use work::{
     Handle_Work_Add, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline, Handle_Work_Finish, Handle_Work_List,
     Handle_Work_Renew, Handle_Work_Show, Handle_Work_TakeOver, Handle_Work_Validate, ListResponse,
     ReservationOutcomeResponse, ReservationResponse, ShowResponse, ValidateResponse,
+};
+pub use workflow::{
+    AgentExecutionErrorResponse, AgentExecutionOutcomeResponse, DispatchErrorResponse, Handle_Workflow_Run,
+    OllamaExecutionErrorResponse, OllamaExecutionOutcomeResponse, StepOutcomeResponse, WorkflowRunResponse,
 };
 

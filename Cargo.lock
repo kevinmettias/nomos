@@ -941,6 +941,7 @@ dependencies = [
 name = "nomos-api"
 version = "0.1.0"
 dependencies = [
+ "nomos-agent-executor-claude-code",
  "nomos-analysis",
  "nomos-check-orchestration",
  "nomos-contracts",
@@ -948,6 +949,7 @@ dependencies = [
  "nomos-gate-orchestration",
  "nomos-ledger",
  "nomos-model",
+ "nomos-model-backend-ollama",
  "nomos-platform",
  "nomos-platform-std",
  "nomos-rules",
@@ -956,6 +958,7 @@ dependencies = [
  "nomos-spec-project",
  "nomos-spec-store",
  "nomos-work-orchestration",
+ "nomos-workflow-orchestration",
  "nomos-workspace",
  "serde",
  "serde_json",

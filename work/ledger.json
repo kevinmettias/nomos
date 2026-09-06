@@ -57778,14 +57778,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-api-workflow-seam",
-        "acquired_at": 1788682371,
-        "lease_expires_at": 1788689571
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -57798,7 +57794,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.83s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-8884851c9a99cbb2.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-c50a3440410f2149.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-22529c44a1265231.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-18ee297b32198073.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-cb4875d92703f027.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-7c2d003869f67560.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2e5b2963b6b6a7e0.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-04dc1f96808ae620.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-62eb7b53f3879784.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0e59ed04f262a84a.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-1fb258a0cc4d7ea7.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-53cfe538a5636859.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-22e345f5b5373ae3.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1788682824,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "cb6c3ce11f5c62ac8c1ed369c2c9b445e7036a4a"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
