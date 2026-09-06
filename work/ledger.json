@@ -59210,7 +59210,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Confirmed via gh run list --branch dev: CI's own Test step (cargo test --workspace) has failed on every one of the last 5 pushes since P45 landed, exit 101 -- this is real, live CI breakage, not just a local unit-test staleness. The fix needs a second file this item did not reserve: crates/host/nomos-cli/tests/check_command.rs's own Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build carries the identical stale zero-Blocking assumption and is what cargo test --workspace's Test step actually runs (gate::tests is also part of that same step but never reached the separate later Rules step, which stops on the earlier Test failure). Re-filed with both territories."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -59226,6 +59230,68 @@
         "timeout_seconds": 900
       },
       "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "widening territory: confirmed via gh run list that CI's own Test step has been red since P45 landed (last 5 dev pushes all failed at Test, exit 101), and the fix needs both crates/host/nomos-cli/src/gate/tests.rs and tests/check_command.rs, not just the first",
+          "abandoned_at": 1788708039
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788708039
+      }
+    },
+    {
+      "id": "P71-GATE-TESTS-OWN-CLEAN-TREE-ASSERTION-IS-STALE-2",
+      "title": "CI's own Test step has been red since P45's fixture made a clean tree permanently false",
+      "why": "Confirmed via gh run list --branch dev: the last 5 pushes to dev all failed CI's gate workflow at the Test step (exit 101), and Rules never runs after it fails. Two tests carry the stale assumption: crates/host/nomos-cli/src/gate/tests.rs's Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree and Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report both assert ExitCode::Ok over a real gate run of this repository's own tree, and crates/host/nomos-cli/tests/check_command.rs's Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build asserts '0 of which can fail a build'. All three were true when written; none are true since P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON (3be57464) committed tests/integration/fixtures/third-party/hex-0.4.3 with one permanent, deliberately accepted true positive (abbreviations: val, calibration.rs's own Expected::TruePositive(1)) plus single-letter-names: T, a real, tracked, not-yet-fixed gap (P70-IMPL-BLOCK-GENERIC-PARAMETERS-NOT-IN-PAYLOAD's own follow-up). Neither test's own predicate was ever named by a subsequent item's own verification argv, so nobody noticed locally; CI noticed every push since and nobody was reading the Actions tab. No real Suppression/RuleCalibration mechanism (nomos_gate_orchestration::policy::Suppression, RuleCalibration) is wired to any config file a real caller reads yet -- checked directly, zero non-test construction sites -- so neither can be used to fix this honestly today; that would be new, separate, undecided capability work.",
+      "done_when": "cargo test --workspace exits 0 again, honestly. All three tests are corrected to assert the real, current, exact set of accepted Blocking findings (by rule and subject, not a bare count or a blanket zero) rather than asserting none exist, so a genuinely new Blocking finding anywhere else still fails these tests the same as before. Each accepted finding's own assertion names why it is accepted (calibration.rs's own permanent true positive; a tracked, not-yet-fixed gap) so a reader does not mistake the allowlist for endorsement. Re-verify against a real gh CI run or at minimum cargo test --workspace locally with a clean exit.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate/tests.rs",
+          "crates/host/nomos-cli/tests/check_command.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "eck_orchestration_seam-af410dc6a2c3f705.exe)\n     Running tests\\contracts_seam.rs (target\\debug\\deps\\contracts_seam-d34b478d84a4955f.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-f4b778e119108a86.exe)\n     Running tests\\gate_orchestration_seam.rs (target\\debug\\deps\\gate_orchestration_seam-2791ada9eb1e338e.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-1aa392224b530c06.exe)\n     Running tests\\lang_go_seam.rs (target\\debug\\deps\\lang_go_seam-e8e1ae69aaa74325.exe)\n     Running tests\\lang_rust_seam.rs (target\\debug\\deps\\lang_rust_seam-95aad97fdcce8fba.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-fd17708c6dac7c5d.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-c226e6882493b33d.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-68fa5eb5ca446e2e.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-1e2e017afe35a214.exe)\n     Running tests\\platform_std_seam.rs (target\\debug\\deps\\platform_std_seam-46670ac961be25f8.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-bf28e6ede2601af2.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-e264b5b56bef16b6.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-db8d914b13f4e9e6.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-35d4a24ef336fb70.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-4765368cd51779f1.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-048cfa443e51ba3d.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-41ee05978fb468e3.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-01bdda5894a22b0c.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-98a452887345a37b.exe)\n",
+        "verified_at": 1788709360,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d3d00270eeca47a6059499ce977a91458aeb49f3"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

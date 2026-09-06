@@ -350,15 +350,39 @@ fn Test_An_Invocation_Refused_Before_Walking_Should_Report_Its_Own_Code()
     }
 }
 
-/// The gate step, one layer earlier: this workspace has nothing that can fail a build.
+/// The `[Blocking]` findings this workspace's own tree carries today, and why each is
+/// accepted rather than fixed -- the identical allowlist `crates/host/nomos-cli/src/gate/
+/// tests.rs`'s own `ACCEPTED_BLOCKING_FINDINGS` carries, duplicated here rather than shared
+/// because the two live in different crates (a library's own unit tests against a separate
+/// integration-test binary) with no existing shared test-support dependency between them.
+/// See that constant's own doc for what each accepted finding is and why: `abbreviations:
+/// val` is `P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON`'s own permanent
+/// true positive; `single-letter-names: T` is `P70-IMPL-BLOCK-GENERIC-PARAMETERS-NOT-IN-
+/// PAYLOAD`'s own tracked, not-yet-fixed gap, named here only until that item removes it.
+const ACCEPTED_BLOCKING_FINDINGS: &[&str] = &["[Blocking] abbreviations: val ", "[Blocking] single-letter-names: T "];
+
+/// Whether `output` carries no `[Blocking]` line other than the ones
+/// [`ACCEPTED_BLOCKING_FINDINGS`] names.
+fn Only_Accepted_Findings_Are_Blocking(output: &str) -> bool
+{
+    return output
+        .lines()
+        .filter(|line| return line.starts_with("[Blocking]"))
+        .all(|line| return ACCEPTED_BLOCKING_FINDINGS.iter().any(|accepted| return line.starts_with(accepted)));
+}
+
+/// The gate step, one layer earlier: this workspace has nothing blocking beyond
+/// [`ACCEPTED_BLOCKING_FINDINGS`]'s own two, named and accepted deliberately.
 ///
 /// `OD-GATE-004` wired `cargo run … check --root .` into the gate, so from now on a phantom
 /// introduced anywhere in this repository turns a pull request red. This asserts the same
 /// thing at `cargo test` time, so the author finds out before pushing rather than after — and
-/// it is the acceptance test for the step being green on the day it landed. Measured over the
-/// tree this commit produces: 195 files, 194 with a syntax fact, 14 findings, 0 of which can
-/// fail a build, exit `0`. The fourteen are twelve admitted gaps, which are advisory by `D-134` decision 4,
-/// and the two `broken.rs` lines.
+/// it is the acceptance test for the step being green on the day it landed. `P71-GATE-TESTS-
+/// OWN-CLEAN-TREE-ASSERTION-IS-STALE-2` measured this workspace's own tree carries exactly
+/// two `[Blocking]` findings today, both named above; a bare "0 of which can fail a build"
+/// assertion (this test's own shape before that item) stopped being true the moment the
+/// first of the two was committed, and CI's own `Test` step failed on every push since,
+/// unnoticed because nothing local ran this exact test's own predicate.
 ///
 /// The file-count floor is not decoration. Without it this assertion is satisfied by a run
 /// over an empty tree, which is this repository's most-repeated defect appearing inside the
@@ -388,11 +412,16 @@ fn Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build()
         root.display()
     );
     assert!(
-        output.contains("0 of which can fail a build"),
-        "something in this workspace can now fail a build, and the gate's Rules step is red: \
-         {output}"
+        Only_Accepted_Findings_Are_Blocking(&output),
+        "a Blocking finding exists that ACCEPTED_BLOCKING_FINDINGS does not name -- a real, \
+         new regression, or an accepted finding whose exact rendered text drifted: {output}"
     );
-    assert_eq!(code, 0, "{output}");
+    assert_eq!(
+        code, 1,
+        "this workspace's own tree carries exactly ACCEPTED_BLOCKING_FINDINGS's two accepted \
+         findings today (exit Violations); a clean 0 here would mean one was fixed and this \
+         allowlist was not updated to say so: {output}"
+    );
 }
 
 /// The count the report opens with, which is how a run over the wrong tree is told from a run

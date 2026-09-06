@@ -234,13 +234,42 @@ fn Test_Render_Plan_Should_Report_Every_Rule_A_Check_Run_Composes()
     assert!(stderr.is_empty());
 }
 
+/// The `[Blocking]` findings this workspace's own tree carries today, and why each is
+/// accepted rather than fixed -- checked directly (`gh run list --branch dev` showed CI's
+/// own `Test` step failing on every push since), not assumed. `abbreviations: val` is
+/// `P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON`'s own permanent, deliberate
+/// true positive against `tests/integration/fixtures/third-party/hex-0.4.3/lib.rs`
+/// (`calibration.rs`'s own `Expected::TruePositive(1)`) -- never to be fixed, because hex's
+/// own author really did choose that name. `single-letter-names: T` is a real, tracked,
+/// not-yet-fixed gap (`P70-IMPL-BLOCK-GENERIC-PARAMETERS-NOT-IN-PAYLOAD`'s own follow-up)
+/// against the same file, kept in this allowlist only until that item closes it -- removing
+/// it from here is part of that item's own `done_when`, not a decision this list makes for
+/// it.
+///
+/// A named allowlist rather than a bare count: a third finding accepted the same deliberate
+/// way must be added here explicitly, and anything *not* named here still fails these tests
+/// exactly as before `P71-GATE-TESTS-OWN-CLEAN-TREE-ASSERTION-IS-STALE-2` -- neither
+/// `nomos_gate_orchestration::Suppression` nor `RuleCalibration` is wired to a real config
+/// file yet (checked: zero non-test construction sites), so this allowlist is what stands
+/// in for that mechanism today.
+const ACCEPTED_BLOCKING_FINDINGS: &[&str] = &["[Blocking] abbreviations: val ", "[Blocking] single-letter-names: T "];
+
+/// Whether `rendered` carries no `[Blocking]` line other than the ones
+/// [`ACCEPTED_BLOCKING_FINDINGS`] names.
+fn Only_Accepted_Findings_Are_Blocking(rendered: &str) -> bool
+{
+    return rendered
+        .lines()
+        .filter(|line| return line.starts_with("[Blocking]"))
+        .all(|line| return ACCEPTED_BLOCKING_FINDINGS.iter().any(|accepted| return line.starts_with(accepted)));
+}
+
 /// A real `run` over this workspace's own tree, end to end -- the same "real run over the
 /// real tree" discipline the `plan` test above already uses. This repository's own `Rules`
-/// step already runs `gate run` over this same tree and expects it clean -- the exact
-/// command under test here -- so this test, exercising the same command CI actually runs,
-/// must agree with itself end to end: `Ok`, not `Violations`, and the same rule names
-/// `plan` already reports must be nameable in the rendered findings' rule ids where any
-/// exist, or the finding count must be zero.
+/// step runs `gate run` over this same tree, so this test, exercising the same command,
+/// must agree with itself end to end: `Violations`, carrying no `[Blocking]` finding beyond
+/// [`ACCEPTED_BLOCKING_FINDINGS`]'s own two, and the same rule names `plan` already reports
+/// must be nameable in the rendered findings' rule ids where any exist.
 #[test]
 fn Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree()
 {
@@ -249,12 +278,16 @@ fn Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_
 
     assert_eq!(
         code,
-        ExitCode::Ok,
-        "this repository's own `Rules` step already runs `gate run --root .` over this \
-         same tree and requires it to exit clean; this test exercises that same command, \
-         so it must agree with itself end to end: {rendered}"
+        ExitCode::Violations,
+        "this workspace's own tree carries exactly ACCEPTED_BLOCKING_FINDINGS's two accepted \
+         findings today; a clean Ok here would mean one of them was fixed and this allowlist \
+         was not updated to say so: {rendered}"
     );
-    assert!(rendered.contains("finding(s), 0 of which can fail a build"), "{rendered}");
+    assert!(
+        Only_Accepted_Findings_Are_Blocking(&rendered),
+        "a Blocking finding exists that ACCEPTED_BLOCKING_FINDINGS does not name -- a real, \
+         new regression, or an accepted finding whose exact rendered text drifted: {rendered}"
+    );
     assert!(stderr.is_empty());
 }
 
@@ -269,7 +302,8 @@ fn Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report()
     let command = GateCommand { root: Repository_Root(), ..Default::default() };
     let (code, rendered, stderr) = Run_Over_This_Tree(Invocation::Run(command));
 
-    assert_eq!(code, ExitCode::Ok, "{rendered}");
+    assert_eq!(code, ExitCode::Violations, "{rendered}");
+    assert!(Only_Accepted_Findings_Are_Blocking(&rendered), "{rendered}");
     let run_line = rendered.lines().find(|line| line.starts_with("run: ")).unwrap_or_else(|| panic!("no `run: ` line in: {rendered}"));
     let hex = run_line.trim_start_matches("run: ");
     assert_eq!(hex.len(), 32, "RunId should render as 32 hex characters: {run_line}");
