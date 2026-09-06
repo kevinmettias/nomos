@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5dadb3e7de5ab1bcbf4f2ddc688b2ffff7ce2418ec4bb36e6aa8eec03832dddb",
-  "inputs_digest": "sha256:534ab882f5178ce6786698d8e003bdc8c96329825cb04c7e64136bf9be4688a0",
+  "content_digest": "sha256:c8b62c97b04b2819775051ce539429f4ab5b9b34abf6cc9a4639d4086b91668d",
+  "inputs_digest": "sha256:73f005583c523b124f4646b0b8e8e647cd0af4ddd0795ffb217c6d832ac19a4f",
   "sections": [
     [
       "Documents",
-      210
+      211
     ],
     [
       "Sections",
-      1699
+      1707
     ],
     [
       "Source blocks",
-      5899
+      5920
     ]
   ],
   "inputs": [
@@ -229,6 +229,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md@authored",
       "hash": "sha256:49347b91e13b7f953160008054dc9e028aef8b1893f14bafbc8e4121ee8b623c"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md@authored",
+      "hash": "sha256:97fc27d295d43e88affe791ed4c4facc80e3328cf91125949ee80de1e1bff5c7"
     },
     {
       "content": "documents",
@@ -2629,6 +2634,46 @@
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#21",
       "hash": "sha256:2b04a20975cd261de6970f6240cf68ea470a337448d19dae047eb298264f9b8d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#1",
+      "hash": "sha256:cdca76fcc6ce4a8e1a219445a63a00e404c21270b4352268f664febbc54c979f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#2",
+      "hash": "sha256:6b94e02b2547e7984726f1cbd6fd1d719ed999efa78396911baac3487c968dbd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#4",
+      "hash": "sha256:463228e8ccdd592b8c013de2d4e74518e7129848bba70f68242ee0e22c789512"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#8",
+      "hash": "sha256:be02f429092d9ff871752e2ff3144ee3077129a6021fc27adbd874233743c44f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#13",
+      "hash": "sha256:b4cf4271a35827ce1f92d666d340b4412ca43a4e05a01e5cdca07090e58d7b61"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#16",
+      "hash": "sha256:47eaddf8932f2754da2ea04c45e63f1fa01f573af2f6aa849ab46335eb9f964d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#18",
+      "hash": "sha256:1911050766a7730a40571d7707fb07e6e2e7f290a7449fc54c73f61b490c8217"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#20",
+      "hash": "sha256:a0c7a19a60a4ae45b89a6186bf47a4b0e69018dad107917f9332e43b832b0b2b"
     },
     {
       "content": "headings",
@@ -14889,6 +14934,111 @@
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#23",
       "hash": "sha256:0c2a046a27c7bbb80979b7b8a5162726062726107d1a5caf6c3e078cb970d2cb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#1",
+      "hash": "sha256:09c6e6aac00fc1e5b8564a1b72b24f91af7dd2b02c108a202adbabe787043e31"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#3",
+      "hash": "sha256:cd589cb09d84e1796569ce3aca64e7a2f53892a2c5d3e1838c0ce7acbe2c917f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#4",
+      "hash": "sha256:fe60d1e7e8b86a33f16c644e292e10e870a8d07170359046c8a92d2b20651c5f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#5",
+      "hash": "sha256:92c4a42c554c482248a457cf20949e547929c36bde496f610c3a9470b52fbcc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#6",
+      "hash": "sha256:4d95c7e852d943a755f91facf81f1b4cfaabd7eb22a3573080b4d6bd404a35fe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#7",
+      "hash": "sha256:754f92c596250968cd983b79656c12ea1c52c9ff198dbd3f1df411c7ea505683"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#8",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#9",
+      "hash": "sha256:14bb287d97f1c13da5f98574c3572e31306d0530f85ba8e8428cb3a7564c6503"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#10",
+      "hash": "sha256:ce89a51839b050d7e1610a70be46485cd0846fea131f1747cc491c57a272ed0c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#11",
+      "hash": "sha256:fba9c089749289fa4c237060daefdde72f0c32bc0f97adeacbd84d82a2603854"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#12",
+      "hash": "sha256:3929c84072f2ed992c324f96c85da317fa03716dada9ed5e633e74efd91d4325"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#13",
+      "hash": "sha256:a8b6031a15f9c82093f81800a675d54d6d8787d4ca833128d12db326eff89382"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#14",
+      "hash": "sha256:db8bf564c52207f4a4ea84eff8830f250e13b1d4af006707df2510b8c9ba2537"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#15",
+      "hash": "sha256:6e04ec48a91f2d4f640f4f950f827345c62a2fbb2f17cffbfdf5531013a6a376"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#16",
+      "hash": "sha256:213a915777751c0c5ea2365ee06ad070771a139fddcc6cc494324af985e9ce70"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#17",
+      "hash": "sha256:a3502b0bc24c31702d2f2cbf68be8b3bc18fd8dbbd0ba4a8110efbe667dd414a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#18",
+      "hash": "sha256:002d3f96bf72abeff53bf69c5d4f63acceb8922c6d71c75deb605ad6d71aef18"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#19",
+      "hash": "sha256:3249ff268ddf5da8062fd36be835d9b00ca5963fb1dcec864b4368610f327e1b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#20",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#21",
+      "hash": "sha256:db82586416c2a00551a687a91381b985cc7f63dbb74ceb322e2ae909a609c73b"
     },
     {
       "content": "blocks",

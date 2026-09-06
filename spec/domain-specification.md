@@ -52,6 +52,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md@authored | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md | authored | 23 | 7 | sha256:940be97fa9f66be4c6fe9fad40c41e939c385a48199a77f48742b07cc90971ad |
 | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md@authored | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md | authored | 36 | 10 | sha256:ebe2fe7a455f06f27dc6a52e573aa98fa57e7b1eb29feb90173c84a3ff266dee |
 | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md@authored | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md | authored | 23 | 6 | sha256:49347b91e13b7f953160008054dc9e028aef8b1893f14bafbc8e4121ee8b623c |
+| docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md@authored | docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md | authored | 21 | 8 | sha256:97fc27d295d43e88affe791ed4c4facc80e3328cf91125949ee80de1e1bff5c7 |
 | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md@authored | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md | authored | 20 | 6 | sha256:88d25ef06103ea7b630b4cf9e09748244421ae9d293d1030f63bed54f2be8850 |
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md@authored | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md | authored | 23 | 6 | sha256:8464e7bf3a1b75d087bbd7ed1b6608955c4c9bafb6ee1a2d2e8c55c66bf06460 |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
@@ -537,6 +538,14 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#9 | authored | 2 | The Decision |
 | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#15 | authored | 2 | What This Does Not Do |
 | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#21 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#1 | authored | 1 | The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree |
+| docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#2 | authored | 2 | Question |
+| docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#4 | authored | 2 | What was checked, not assumed |
+| docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#8 | authored | 2 | Decision |
+| docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#13 | authored | 2 | What a second language provider owes |
+| docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#16 | authored | 2 | What happens to the content-addressed encoding |
+| docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#18 | authored | 2 | Which of the four hand-parsing rules this removes, and which keep their own parser |
+| docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#20 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#1 | authored | 1 | Whether a language server is a provider, and of what |
 | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#4 | authored | 2 | What Was Measured |
@@ -11957,6 +11966,234 @@ families `OD-CAPABILITY-006` named still wait on producers this workspace does n
 no record has yet made the case for a Rust-to-Go type mapping. Revisit if a second
 correspondence family becomes reachable at `Syntactic`, or if a rule needs to compare the two
 sides' field *types* rather than carry them for a person to read.
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#1
+
+*revision: authored · kind: heading · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree · hash: sha256:09c6e6aac00fc1e5b8564a1b72b24f91af7dd2b02c108a202adbabe787043e31*
+
+# The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#2
+
+*revision: authored · kind: heading · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#3
+
+*revision: authored · kind: prose · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / Question · hash: sha256:cd589cb09d84e1796569ce3aca64e7a2f53892a2c5d3e1838c0ce7acbe2c917f*
+
+`nomos.cap.syntax.items`'s payload writes one tab-separated line per item: ordinal, kind,
+visibility, qualified name, documentation and a free-text `shape: Option<String>`. `syn`
+builds a full parse tree in-process before this encoding runs, and most of that tree is
+discarded: an enum's own variants are never recorded as items at all, a function's own
+parameter names and types collapse to an arity count, and a struct field of `u32` and one of
+`String` both collapse to `shape: "value"`. Four rules re-derive structure the discarded tree
+already had, by re-parsing the same raw text a second time by hand: `enum_shape.rs`,
+`constant_scope.rs`, `domain_type_alias.rs` and `facade.rs`. One of those hand parsers
+(`Split_At_Top_Level_Commas`) was checked directly and found wrong on a real, ordinary case
+— a variant holding a function-typed member — because a bracket-depth tracker treats a
+function arrow's own closing angle as a bracket it never opened. The question this record
+answers: does the payload move to carrying a typed tree, or stay a flat item index, and what
+does either answer cost.
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#4
+
+*revision: authored · kind: heading · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / What was checked, not assumed · hash: sha256:fe60d1e7e8b86a33f16c644e292e10e870a8d07170359046c8a92d2b20651c5f*
+
+## What was checked, not assumed
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#5
+
+*revision: authored · kind: prose · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / What was checked, not assumed · hash: sha256:92c4a42c554c482248a457cf20949e547929c36bde496f610c3a9470b52fbcc4*
+
+Read all four rules directly rather than trusting the summary that motivated this item.
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#6
+
+*revision: authored · kind: prose · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / What was checked, not assumed · hash: sha256:4d95c7e852d943a755f91facf81f1b4cfaabd7eb22a3573080b4d6bd404a35fe*
+
+- **`enum_shape.rs`** re-derives, via its own whole-file brace-depth scan, which variants an
+  enum has and whether each is tuple-shaped, with the member type list split by
+  `Split_At_Top_Level_Commas` — the exact function already shown wrong on a callback-typed
+  variant member. `syn`'s own walker (`walk.rs`'s `visit_item_enum`) never emits a per-variant
+  `Item` at all; an enum's own `shape` is always `None`. **Nothing today carries this fact.**
+- **`domain_type_alias.rs`** re-derives a type alias's own visibility (`Strip_Rust_Visibility`)
+  and whether it sits inside a still-open `impl`/`trait` body, via a second whole-file
+  brace-depth scan. Both facts **already exist**, unused by this rule, in every `Item`
+  produced today: `item.visibility` is a first-class typed field, and `walk.rs`'s
+  `visit_item_impl` already pushes the impl's own self-type onto `item.scope` for exactly
+  this nesting question. This rule's re-derivation of these two facts can stop **today**,
+  independent of any payload change — it is not re-parsing something absent, it is
+  re-parsing something already sitting in the payload it was already handed.
+- **`facade.rs`** re-derives `pub mod`/`pub use` declarations, including a re-export's own
+  alias. Checked against `shape.rs`'s own doc comment for the `Use` item's shape: it states
+  directly that what a re-export aliases — the source path being re-exported — is "on the
+  other side of a name resolution this provider does not perform," and is never captured.
+  Unlike the other three, this rule's re-derivation recovers a fact **no version of this
+  payload has ever carried**, not one the tree already had and the encoding dropped.
+- **`constant_scope.rs`** re-derives, via its own frame-stack scan, which function body a
+  local `const` declaration sits inside. This is not module-item structure at all: `syn`'s
+  own `Visit` walker here only visits top-level items, never descends into a function body's
+  own statements, and no `Item` this crate produces today represents a statement inside a
+  function. Fixing this rule's re-derivation is not "expose more of the tree already built
+  per item" — it is "walk somewhere this visitor does not walk today," a materially larger
+  change than adding a field to an existing item shape.
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#7
+
+*revision: authored · kind: prose · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / What was checked, not assumed · hash: sha256:754f92c596250968cd983b79656c12ea1c52c9ff198dbd3f1df411c7ea505683*
+
+Also checked: the payload's determinism footprint. `SyntaxFactProduction`'s own `Strategy`
+declaration is reused, not independently declared, by three domains in
+`tests/integration/tests/determinism/declarations.rs`: `syntax-fact-production`,
+`module-index-rollup`, `controlflow-reachability-production`. A byte-format change touches
+exactly these three goldens, not an unbounded set.
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#8
+
+*revision: authored · kind: heading · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#9
+
+*revision: authored · kind: prose · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / Decision · hash: sha256:14bb287d97f1c13da5f98574c3572e31306d0530f85ba8e8428cb3a7564c6503*
+
+The payload does not become a general typed tree — nothing here needs arbitrary recursive
+structure, and `nomos-lang-rust-scan` exists specifically to answer `nomos.cap.syntax.items`
+*without* a real parser, over files `syn` itself refuses (a stated byte-order-mark case in
+its own module doc). A format that only a real parser could produce would make that crate's
+whole reason for existing — keeping `nomos_capability::Registry`'s fallback and contention
+branches reachable over a corpus a stronger parser cannot fully cover — impossible to
+satisfy honestly.
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#10
+
+*revision: authored · kind: prose · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / Decision · hash: sha256:ce89a51839b050d7e1610a70be46485cd0846fea131f1747cc491c57a272ed0c*
+
+Instead, `shape` stops being free text for the specific item kinds where free text is
+currently standing in for a structure the crate already knows how to write once (`shape.rs`'s
+own `Impl_Shape`/`Type_Shape`/`Struct_Shape`/`Function_Shape` family), and gains three
+concretely named, closed extensions:
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#11
+
+*revision: authored · kind: prose · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / Decision · hash: sha256:fba9c089749289fa4c237060daefdde72f0c32bc0f97adeacbd84d82a2603854*
+
+1. **A real per-variant list for `Enum` items** — name and either an arity (tuple) or a real
+   field list (struct-variant), the fact `enum_shape.rs` re-derives and the one whose hand
+   equivalent (`Split_At_Top_Level_Commas`) is measured wrong today.
+2. **A real parameter list and return type for `Fn` items**, replacing the current bare
+   arity — nothing named in this record's own investigation depends on this one directly
+   today, but `Function_Shape`'s own doc already states the arity-only choice as provisional,
+   and the closed extension costs nothing extra once the `Enum` and struct-field work below
+   establishes the pattern.
+3. **The real, unresolved source path on a `Use` item's own alias** — text only, no name
+   resolution, staying `FactVariant::Syntactic`: `facade.rs` is the one rule of the four
+   recovering a fact this payload has never carried at any point in its history, and the
+   fix is to carry it rather than keep a fifth crate re-deriving it.
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#12
+
+*revision: authored · kind: prose · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / Decision · hash: sha256:3929c84072f2ed992c324f96c85da317fa03716dada9ed5e633e74efd91d4325*
+
+`Struct`/`enum`-field types beyond arity are **not** decided here as a fourth extension:
+`domain_type_alias.rs`'s only genuine unmet need is the alias's own right-hand-side type
+name, which the `Type_Shape` collapse already loses ("every type to either slice or value")
+independent of whether an enum or a function ever gets richer shapes. Whether `Type_Shape`
+itself grows a real type-name field is real, separate, unscoped work this record does not
+commit to; what it does commit to is that `domain_type_alias.rs`'s *other* two
+re-derivations (visibility, impl/trait nesting) have no reason to wait for it.
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#13
+
+*revision: authored · kind: heading · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / What a second language provider owes · hash: sha256:a8b6031a15f9c82093f81800a675d54d6d8787d4ca833128d12db326eff89382*
+
+## What a second language provider owes
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#14
+
+*revision: authored · kind: prose · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / What a second language provider owes · hash: sha256:db8bf564c52207f4a4ea84eff8830f250e13b1d4af006707df2510b8c9ba2537*
+
+`nomos-lang-go` is a real parser (tree-sitter) and owes the equivalent three extensions for
+Go's own shapes it already covers (a Go `type X struct{}`'s own field list, a function's own
+parameter/return list, an import/re-export's own path) wherever Go has an analogous
+construct — decided per-construct when that crate's own provider is next touched, not
+enumerated here.
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#15
+
+*revision: authored · kind: prose · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / What a second language provider owes · hash: sha256:6e04ec48a91f2d4f640f4f950f827345c62a2fbb2f17cffbfdf5531013a6a376*
+
+`nomos-lang-rust-scan` owes nothing new. It is not a parser and was never meant to answer
+what only a parser can; its offer stays weaker on these three fields exactly as it is
+already weaker in the ways its own module doc already states, and `Registry::Resolve`'s
+existing fallback and applicability vocabulary is what already lets a caller ask for the
+richer shape and accept a weaker one when that is the best a subject's own admitted provider
+can honestly give.
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#16
+
+*revision: authored · kind: heading · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / What happens to the content-addressed encoding · hash: sha256:213a915777751c0c5ea2365ee06ad070771a139fddcc6cc494324af985e9ce70*
+
+## What happens to the content-addressed encoding
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#17
+
+*revision: authored · kind: prose · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / What happens to the content-addressed encoding · hash: sha256:a3502b0bc24c31702d2f2cbf68be8b3bc18fd8dbbd0ba4a8110efbe667dd414a*
+
+`Encode_Payload`'s byte format changes: the three extensions above are new fields or a
+richer `shape` encoding, so the bytes for any file exercising an enum, a function, or a
+re-export change. `syntax-fact-production`, `module-index-rollup` and
+`controlflow-reachability-production` — the three declared domains built on
+`SyntaxFactProduction::STRENGTH` — need their golden bytes re-baselined in the same commit
+that changes the encoding. The declared determinism *property* does not change (still
+whatever `DeterminismStrength`/`ReproducibilityScope`/`TraceEquivalence` triple
+`SyntaxFactProduction` states today); only the golden value the goldens compare against
+does, the same re-baselining any byte-format change to a `BitIdentical` producer already
+requires.
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#18
+
+*revision: authored · kind: heading · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / Which of the four hand-parsing rules this removes, and which keep their own parser · hash: sha256:002d3f96bf72abeff53bf69c5d4f63acceb8922c6d71c75deb605ad6d71aef18*
+
+## Which of the four hand-parsing rules this removes, and which keep their own parser
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#19
+
+*revision: authored · kind: prose · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / Which of the four hand-parsing rules this removes, and which keep their own parser · hash: sha256:3249ff268ddf5da8062fd36be835d9b00ca5963fb1dcec864b4368610f327e1b*
+
+- **`enum_shape.rs`**: removed once the per-variant extension exists — the rule reads the
+  typed list instead of re-scanning, and the specific bracket-depth bug measured against
+  `Split_At_Top_Level_Commas` stops mattering because nothing calls that function anymore.
+- **`facade.rs`**: removed once the `Use` source-path extension exists, for the alias half;
+  the `pub mod` half was already redundant with existing typed fields (name, visibility) and
+  did not need to wait.
+- **`domain_type_alias.rs`**: partially removed **now**, independent of any payload change —
+  its visibility and impl/trait-nesting re-derivation should read `item.visibility` and
+  `item.scope` today. Its remaining re-derivation (the alias's own right-hand-side type
+  name) stays a hand parser until `Type_Shape` itself is decided separately.
+- **`constant_scope.rs`**: keeps its own parser. Its need — which function body a local
+  `const` sits inside — is a different kind of gap than the other three: it needs the syntax
+  walker to descend into function bodies at all, which nothing here does today, not a richer
+  shape on an item the walker already visits. Deciding whether and how the walker should
+  visit function-body-local items is real, separate, larger work this record declines to
+  fold in.
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#20
+
+*revision: authored · kind: heading · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md#21
+
+*revision: authored · kind: prose · heading: The syntax payload gains a small, closed set of typed shapes for what four rules already re-derive by hand; it does not become a general tree / Status · hash: sha256:db82586416c2a00551a687a91381b985cc7f63dbb74ceb322e2ae909a609c73b*
+
+Accepted. No code moves under this item. The three named extensions, the two independently
+actionable fixes in `domain_type_alias.rs`, and the standing gap in `constant_scope.rs` are
+each their own future item's scope.
 
 ### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#1
 
