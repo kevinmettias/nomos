@@ -52001,7 +52001,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Its own territory reserves only crates/platform/nomos-platform/src/file_system.rs and the\ntwo OD-PLATFORM-002 record files, but its own done_when requires the standard\nimplementation to provide the new method too (crates/platform/nomos-platform-std/src/\nstd_file_system.rs, a sibling crate this item's territory never names) and at least one\nexisting caller to be migrated onto it. Discovered only after already adding the trait\nmethod and starting the std implementation -- work has no edit verb, so the fix is to\nre-author with the territory the done_when actually needs rather than widen a live claim,\nwhich AGENTS.md and the nomos-task skill both name as the failure this repository has\nalready had twice. The trait addition itself (file_system.rs plus its own new test) is\nsound and carries forward into the re-authored item's same territory; nothing about it is\nreverted."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -52017,9 +52021,18 @@
         "timeout_seconds": 2700
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "re-authoring with complete territory; see decline reason",
+          "abandoned_at": 1788659045
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788659055
+      }
     },
     {
       "id": "P41-WORKSPACE-DISCOVERY-SERVICE",
@@ -56059,6 +56072,126 @@
           "exit_code": 0
         },
         "revision": "9e5044e9b8a9863602beb2d684f4055d2d567a4e"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-PLATFORM-DIRECTORY-ENUMERATION-2",
+      "title": "The filesystem port cannot list a directory, which is why every host walks the tree itself",
+      "why": "The port offers Read_To_String, Replace_Atomically, Exists and Remove_File and nothing\nthat enumerates a directory. Because of that omission every caller that needs to find\nfiles reaches past the port to std::fs directly, and check orchestration documents the\nwalk staying outside for exactly this reason. That was defensible when one host walked;\nit is now the mechanical cause of duplicated walkers in nomos-cli and nomos-api and of the\nhardcoded extension lists in both. A port missing a capability that several real consumers\nneed is a gap in the port, not a reason to keep bypassing it.",
+      "done_when": "The filesystem port enumerates a directory, the standard implementation and the test\ndouble both provide it, at least one existing caller that reached for std::fs directly now\ngoes through the port, and the decision is recorded.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform/src/file_system.rs",
+          "crates/platform/nomos-platform-std/src/std_file_system.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/src/check/sources.rs",
+          "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md",
+          "crates/spec/nomos-spec-store/records/OD-PLATFORM-002.record"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "A second territory gap, found only after the first correction: adding Read_Directory to\nthe trait and StdFileSystem widens both crates' public surface, and\ntests/contract/tests/public_surface's own snapshot test refuses to pass until\ntests/contract/surface/nomos-platform.txt and nomos-platform-std.txt are reblessed --\nneither reserved by this item's territory, the same class of gap the prior decline named\nfor std_file_system.rs and work.rs. All code from the prior attempt carries forward\nunreverted (the trait method, its default-refusal test, the standard implementation and\nits two tests, the Published_Records migration and its two new tests, the check/sources.rs\ndoc correction, and the OD-PLATFORM-002 record and its registration all already exist on\ndisk and are unaffected by this decline)."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "re-authoring again to add the two surface-snapshot paths a widened trait requires blessing",
+          "abandoned_at": 1788659542
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788659551
+      }
+    },
+    {
+      "id": "P41-PLATFORM-DIRECTORY-ENUMERATION-3",
+      "title": "The filesystem port cannot list a directory, which is why every host walks the tree itself",
+      "why": "The port offers Read_To_String, Replace_Atomically, Exists and Remove_File and nothing\nthat enumerates a directory. Because of that omission every caller that needs to find\nfiles reaches past the port to std::fs directly, and check orchestration documents the\nwalk staying outside for exactly this reason. That was defensible when one host walked;\nit is now the mechanical cause of duplicated walkers in nomos-cli and nomos-api and of the\nhardcoded extension lists in both. A port missing a capability that several real consumers\nneed is a gap in the port, not a reason to keep bypassing it.",
+      "done_when": "The filesystem port enumerates a directory, the standard implementation and the test\ndouble both provide it, at least one existing caller that reached for std::fs directly now\ngoes through the port, and the decision is recorded.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform/src/file_system.rs",
+          "crates/platform/nomos-platform-std/src/std_file_system.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/src/check/sources.rs",
+          "tests/contract/surface/nomos-platform.txt",
+          "tests/contract/surface/nomos-platform-std.txt",
+          "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "s (target\\debug\\deps\\gate_step-af6938441b50a34b.exe)\n     Running tests\\lang_go_seam.rs (target\\debug\\deps\\lang_go_seam-d347b5d52cc57f01.exe)\n     Running tests\\lang_rust_seam.rs (target\\debug\\deps\\lang_rust_seam-f1ede5d8d7c948ef.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-f3210cf6df834f63.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-2c679ed6151882b8.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-82538fb1643ae2fb.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-b3f75a7e76b14e4c.exe)\n     Running tests\\platform_std_seam.rs (target\\debug\\deps\\platform_std_seam-fba05311b55b4090.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-de8eced44677201e.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-d78e7b3113333587.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-466d7bb26d9dc950.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-603d86b66f1f114e.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-8b234861d86310e7.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-c21f306cd84f5a3b.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-bc5d5b1040b3cda2.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-a19dfd36a1bd4423.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-78f1d8c38109ec8f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_platform-f3c35ef16427a8d3.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_platform_std-82f6535a7ee5b072.exe)\n     Running tests\\implements_the_platform_ports.rs (target\\debug\\deps\\implements_the_platform_ports-fb796556340da2db.exe)\n   Doc-tests nomos_platform\n   Doc-tests nomos_platform_std\n",
+        "verified_at": 1788659847,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0220a3a36052dde1941af3db606b3a59c8d0561d"
       },
       "abandoned": [],
       "displaced": [],

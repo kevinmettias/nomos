@@ -4,7 +4,7 @@ mod error;
 
 pub use error::Error as FileSystemError;
 
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 /// File access.
 ///
@@ -59,6 +59,33 @@ pub trait FileSystem
             cause: "removal is not supported by this FileSystem implementation".to_owned(),
         });
     }
+
+    /// The immediate children of a directory: every entry's full path, files and
+    /// subdirectories together, in whatever order the filesystem reports them.
+    ///
+    /// Defaulted, for the identical reason [`FileSystem::Remove_File`] is: most implementors
+    /// exist to exercise one narrow, hand-written fixture and have no directory to enumerate.
+    /// An implementor backing a real tree overrides this; one that does not inherits a
+    /// refusal rather than an empty listing, which would read exactly like a real, empty
+    /// directory to a caller that checked only the `Result`.
+    ///
+    /// One level, not a walk: `OD-PLATFORM-002` is this port's floor, not a recursive
+    /// traversal, so a caller that needs to descend composes its own recursion from this
+    /// primitive the same way [`Self::Read_To_String`]'s callers already compose their own
+    /// retry or fallback policy from a single read.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`FileSystemError::NotFound`] when `path` does not exist, and a
+    /// [`FileSystemError::Denied`] or [`FileSystemError::Other`] otherwise -- including when
+    /// this implementation does not support enumeration at all.
+    fn Read_Directory(&self, path: &Path) -> Result<Vec<PathBuf>, FileSystemError>
+    {
+        return Err(FileSystemError::Other {
+            path: path.display().to_string(),
+            cause: "directory enumeration is not supported by this FileSystem implementation".to_owned(),
+        });
+    }
 }
 
 #[cfg(test)]
@@ -86,6 +113,18 @@ mod tests
         {
             unimplemented!("not exercised by this test")
         }
+    }
+
+    #[test]
+    fn Test_An_Implementor_That_Does_Not_Override_Read_Directory_Should_Refuse_Rather_Than_Succeed()
+    {
+        let error = NoOverride.Read_Directory(Path::new("anything")).unwrap_err();
+
+        assert!(
+            matches!(error, FileSystemError::Other { .. }),
+            "a fake that never enumerates anything must say so rather than report an empty \
+             directory for an enumeration it never performed"
+        );
     }
 
     #[test]

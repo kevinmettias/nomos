@@ -103,6 +103,15 @@ impl FileSystem for StdFileSystem
     {
         return std::fs::remove_file(path).map_err(|error| Self::Classify(path, &error));
     }
+
+    fn Read_Directory(&self, path: &Path) -> Result<Vec<std::path::PathBuf>, FileSystemError>
+    {
+        let entries = std::fs::read_dir(path).map_err(|error| Self::Classify(path, &error))?;
+
+        return entries
+            .map(|entry| return entry.map(|entry| return entry.path()).map_err(|error| Self::Classify(path, &error)))
+            .collect();
+    }
 }
 
 #[cfg(test)]
@@ -193,6 +202,37 @@ mod tests
         let filesystem = StdFileSystem;
 
         let error = filesystem.Remove_File(&path).unwrap_err();
+
+        assert!(matches!(error, FileSystemError::NotFound { .. }));
+    }
+
+    #[test]
+    fn Test_Read_Directory_Should_List_Every_Immediate_Child()
+    {
+        let directory = Temporary_Path("read-directory");
+        std::fs::create_dir_all(&directory).unwrap();
+        let filesystem = StdFileSystem;
+        filesystem.Replace_Atomically(&directory.join("a.txt"), "a").unwrap();
+        filesystem.Replace_Atomically(&directory.join("b.txt"), "b").unwrap();
+        std::fs::create_dir_all(directory.join("nested")).unwrap();
+
+        let mut entries = filesystem.Read_Directory(&directory).unwrap();
+        entries.sort();
+
+        assert_eq!(
+            entries,
+            vec![directory.join("a.txt"), directory.join("b.txt"), directory.join("nested")]
+        );
+        let _ignored = std::fs::remove_dir_all(&directory);
+    }
+
+    #[test]
+    fn Test_Read_Directory_Should_Report_A_Missing_Directory_As_Not_Found()
+    {
+        let directory = Temporary_Path("read-directory-absent");
+        let filesystem = StdFileSystem;
+
+        let error = filesystem.Read_Directory(&directory).unwrap_err();
 
         assert!(matches!(error, FileSystemError::NotFound { .. }));
     }

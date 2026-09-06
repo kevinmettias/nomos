@@ -133,8 +133,11 @@ mod tests
 /// A directory that is walked and turns out empty is not this function's decision any
 /// more: `nomos_check_orchestration::CheckOutcome` is where "not a directory" and "found
 /// nothing" become distinguishable typed answers, so this stays the walk and nothing else
-/// -- the same division `nomos-cli::work::Published_Records` draws around the directory
-/// listing `nomos_platform::FileSystem` has no port for.
+/// -- the same division `nomos-cli::work::Published_Records` draws for the identical
+/// reason. This walk itself stays on `std::fs` directly rather than `nomos_platform::
+/// FileSystem::Read_Directory`: it is recursive, and the port's own doc states its
+/// enumeration primitive is one level, not a traversal, so migrating a multi-level walk is
+/// its own increment, not a consequence of the port gaining the primitive.
 pub(super) fn Walked_Sources(root: &Path) -> Option<Vec<SourceFile>>
 {
     if !root.is_dir()

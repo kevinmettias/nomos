@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:b712029863c12e1420850f787f84aad5fed8ea0ed0899daff64c0f24d82376d7",
-  "inputs_digest": "sha256:5c6bd437f6afa76d21379d05ee0b3fd19e50f0db270a9dea5f515aef29ae02f3",
+  "content_digest": "sha256:7efe53a684b1fdc672523647c018cbd705b26cf9520c65bbaad99c19d87ed268",
+  "inputs_digest": "sha256:5cdbcfa59ee96de68eaa17ce9719ff48aae865d9510943c14e958db13424458d",
   "sections": [
     [
       "Relations",
-      1376
+      1378
     ],
     [
       "Decisions",
-      184
+      185
     ]
   ],
   "inputs": [
@@ -5178,8 +5178,18 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PLATFORM-001 relates-to OD-PLATFORM-002",
+      "hash": "sha256:f2b5a289a44be79117731c96f08d5b30b43215cd608d73d31a5c5ea8acab414d"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PLATFORM-001 relates-to OD-SPEC-009",
       "hash": "sha256:54c8a019fc5326eda2ebc3b47239f92fe3464ae991f206633e2d64627af1fb13"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PLATFORM-002 relates-to OD-PLATFORM-001",
+      "hash": "sha256:109b5e63e702a4268dc0347fec28b2f2a5524295c1119e68647f11a90dc49423"
     },
     {
       "content": "relations",
@@ -7560,6 +7570,11 @@
       "content": "nodes",
       "identity": "OD-PLATFORM-001",
       "hash": "sha256:19a7974335572063785e46c45a23af4ba7bc9fd9f1e5f2aaccfd2b44c3f0028f"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-PLATFORM-002",
+      "hash": "sha256:592c29278a4de886903013f77882ee4f6698425264ffdd841c696f0aa1f9a93c"
     },
     {
       "content": "nodes",

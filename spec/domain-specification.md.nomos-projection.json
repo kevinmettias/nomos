@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:1440dbe85a83d68e8e855bd5e72c957ff10cc2961252fb75c81434bd4c0deb36",
-  "inputs_digest": "sha256:a7eccd178a896afe2d69bdbfc941f6760f2b7eccf00babd54d472f5a726e1552",
+  "content_digest": "sha256:9fd0296eb43f09ab8189f0244586577a86b6d92a9b2d7fdf732c4469d740da6a",
+  "inputs_digest": "sha256:fab81800d8c3445c204c3ec1655e980485bb99bbf6b458d901e6a122ab87623c",
   "sections": [
     [
       "Documents",
-      192
+      193
     ],
     [
       "Sections",
-      1587
+      1593
     ],
     [
       "Source blocks",
-      5550
+      5565
     ]
   ],
   "inputs": [
@@ -724,6 +724,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored",
       "hash": "sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored",
+      "hash": "sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840"
     },
     {
       "content": "documents",
@@ -6804,6 +6809,36 @@
       "content": "headings",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#33",
       "hash": "sha256:009196650b4507cc90e7782b209765af896faa1492051dee35a432c9afbdd01e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#1",
+      "hash": "sha256:0beabf2689b263406e5a0217171a8e30a3f3e2d89c80be1383b3bd67b5c2667a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#2",
+      "hash": "sha256:35c94fbfd99babd409eeaf4d1d34ae348d3838c922ba0d608f17827aebad58c7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#4",
+      "hash": "sha256:b632573f0c8dbbd59d8193d3610970f5861071d334df58a5d0088f9ed76bc6b3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#6",
+      "hash": "sha256:679a5c5265894f7b1b8f3ef0dc76f480b5631851ab2fc1aebe1c4e5c53bf0113"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#11",
+      "hash": "sha256:9be59aae07a8080a9e01fb3a535f48309b01a9b009acee7b88608132f918a1c6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#14",
+      "hash": "sha256:bc6d45a8986ae922eae785cab7825b90c88b376ea8770ef69195d7a11b3b3ad7"
     },
     {
       "content": "headings",
@@ -29359,6 +29394,81 @@
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#34",
       "hash": "sha256:03a85d752702f84e2ce9f7ec78da6eba1bb9baff36382862b6777d6f1565029f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#1",
+      "hash": "sha256:f5f1afa33dbd1bfc1e958980684598060607e6d6d3f76cf82653875ce5aee77c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#3",
+      "hash": "sha256:4e4257844803269b6ddd4ff5c90970f3c5a944a803f681e8a26e74c74370910e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#5",
+      "hash": "sha256:a8323bcc3185d4439b6b020f852ea0cd1fd3c905dfe31a20619002d5a0c3b994"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#6",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#7",
+      "hash": "sha256:9d20ecfbf5d9ae01d80a862f73f44c166ac6aa16b3c6d0139e66817437d461ac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#8",
+      "hash": "sha256:7b78e59e33c1f0ae48b9aa2bd1c6cdfee205304fbb1120ddc79ead5b352bf6d2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#9",
+      "hash": "sha256:13d3b4a921beeec742683b913f59db75f007a05e2d223391ca843809e549ff7a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#10",
+      "hash": "sha256:c74917598e93c4f966718ecedb69b1e40d0e3b99827f71967e0dc29f6fb5913e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#11",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#12",
+      "hash": "sha256:953517ee2a2af61554d23c910a47d21942a878a9be2886e0b85008674e505de8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#13",
+      "hash": "sha256:51595e0d4bada4ee7b3e0f36ff30e076da15579b065a51427f9c05e578c17d9c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#14",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#15",
+      "hash": "sha256:2d90a92c652c18befae72a16aea5ed47c2cc0b18e92b7cdb1d7610d7f37ee8fd"
     },
     {
       "content": "blocks",

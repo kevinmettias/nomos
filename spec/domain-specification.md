@@ -151,6 +151,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md@authored | docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md | authored | 18 | 6 | sha256:f17c861d194a9cc9d84cd2a1dd636f2d20cf8f6ce02d03d175153c13487a2288 |
 | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md@authored | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md | authored | 21 | 7 | sha256:ad7db84e0e6c5bd783952fb02f6bde672224a893e8ea7fdf510c2a1ceb6cedd2 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
+| docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
@@ -1372,6 +1373,12 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#22 | authored | 2 | Consequences |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#26 | authored | 2 | Amendment: One Non-Verdict Was Two Facts Wearing The Same Name |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#33 | authored | 2 | Status |
+| docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#1 | authored | 1 | A port that cannot enumerate a directory forces every caller past it |
+| docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#2 | authored | 2 | Question |
+| docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#6 | authored | 2 | The Decision |
+| docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#11 | authored | 2 | What This Does Not Do |
+| docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#14 | authored | 2 | Status |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1 | authored | 1 | The repository's README is not the suite's overview, and stays hand-authored |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#2 | authored | 2 | Question |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#6 | authored | 2 | Two Documents, One Name |
@@ -39594,6 +39601,134 @@ part of that gap — the non-verdict `ExitOutcome` reports is no longer one valu
 jobs — without closing it: the conformance-suite question from the original decision is
 still open, and the idle bound this amendment adds is available to a caller rather than
 applied on the caller's behalf.
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#1
+
+*revision: authored · kind: heading · heading: A port that cannot enumerate a directory forces every caller past it · hash: sha256:f5f1afa33dbd1bfc1e958980684598060607e6d6d3f76cf82653875ce5aee77c*
+
+# A port that cannot enumerate a directory forces every caller past it
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#2
+
+*revision: authored · kind: heading · heading: A port that cannot enumerate a directory forces every caller past it / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#3
+
+*revision: authored · kind: prose · heading: A port that cannot enumerate a directory forces every caller past it / Question · hash: sha256:4e4257844803269b6ddd4ff5c90970f3c5a944a803f681e8a26e74c74370910e*
+
+`nomos_platform::FileSystem` offers `Read_To_String`, `Replace_Atomically`, `Exists` and
+`Remove_File` and nothing that lists a directory's own contents. `crates/host/nomos-cli/src/
+check/sources.rs` documents the consequence directly: its recursive source walk stays on
+`std::fs::read_dir` because "the same division `nomos-cli::work::Published_Records` draws
+around the directory listing `nomos_platform::FileSystem` has no port for" — a defensible
+division while one host walked a tree, and a mechanical cause of duplication once more than
+one did. `nomos-cli` and `nomos-api` each carry their own walker and their own hardcoded
+extension list, and neither reaches the port for the one operation both actually need.
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#4
+
+*revision: authored · kind: heading · heading: A port that cannot enumerate a directory forces every caller past it / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#5
+
+*revision: authored · kind: prose · heading: A port that cannot enumerate a directory forces every caller past it / What Was Measured · hash: sha256:a8323bcc3185d4439b6b020f852ea0cd1fd3c905dfe31a20619002d5a0c3b994*
+
+Grepped across `crates/host/` for `std::fs::read_dir`: `nomos-api/src/sources.rs`,
+`nomos-api/src/work/add_response.rs`, `nomos-cli/src/check/sources.rs`, `nomos-cli/src/
+correct.rs`, `nomos-cli/src/gate/sources.rs`, `nomos-cli/src/work.rs` and `nomos-cli/src/
+workflow.rs` each call it directly. `nomos-cli/src/work.rs::Record_Files` is the simplest of
+the seven — one level, no recursion, already carrying the comment naming the port gap as the
+reason it stayed at the composition root rather than moving into `nomos-work-orchestration`
+with everything else `WorkCommand::Add` needs.
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#6
+
+*revision: authored · kind: heading · heading: A port that cannot enumerate a directory forces every caller past it / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#7
+
+*revision: authored · kind: prose · heading: A port that cannot enumerate a directory forces every caller past it / The Decision · hash: sha256:9d20ecfbf5d9ae01d80a862f73f44c166ac6aa16b3c6d0139e66817437d461ac*
+
+**`FileSystem` gains `Read_Directory(&self, path: &Path) -> Result<Vec<PathBuf>,
+FileSystemError>`**, returning the immediate children of one directory — files and
+subdirectories together, one level, not a recursive walk. A caller that needs to descend
+composes its own recursion from this primitive, the same way every other port method leaves
+retry, fallback and iteration to its caller.
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#8
+
+*revision: authored · kind: prose · heading: A port that cannot enumerate a directory forces every caller past it / The Decision · hash: sha256:7b78e59e33c1f0ae48b9aa2bd1c6cdfee205304fbb1120ddc79ead5b352bf6d2*
+
+**Defaulted, like `Remove_File`, and for the identical reason.** Every existing implementor
+of `FileSystem` in this workspace is a narrow, hand-written fake built to exercise one test's
+own fixture; none has a directory to enumerate. Making the method required would force every
+one of those fakes — scattered across dozens of test files, none of them this record's
+territory — to grow an implementation, or fail to compile, for a capability they do not
+exercise. The default refuses rather than reports an empty listing, so a fake that never
+overrides it says so honestly instead of reading like a real, empty directory.
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#9
+
+*revision: authored · kind: prose · heading: A port that cannot enumerate a directory forces every caller past it / The Decision · hash: sha256:13d3b4a921beeec742683b913f59db75f007a05e2d223391ca843809e549ff7a*
+
+**`nomos-platform-std::StdFileSystem` provides the real implementation**, over
+`std::fs::read_dir`, classifying its failure the same three ways every other method on this
+struct already does.
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#10
+
+*revision: authored · kind: prose · heading: A port that cannot enumerate a directory forces every caller past it / The Decision · hash: sha256:c74917598e93c4f966718ecedb69b1e40d0e3b99827f71967e0dc29f6fb5913e*
+
+**`nomos-cli/src/work.rs::Record_Files` and `Published_Records` are the first real
+caller**, migrated from `std::fs::read_dir` to `filesystem.Read_Directory`, taking a
+`&impl FileSystem` parameter rather than reaching past the port. `Run` passes `&StdFileSystem`
+at the one call site, the same composition root that already chooses every other concrete
+platform type for this binary.
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#11
+
+*revision: authored · kind: heading · heading: A port that cannot enumerate a directory forces every caller past it / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#12
+
+*revision: authored · kind: prose · heading: A port that cannot enumerate a directory forces every caller past it / What This Does Not Do · hash: sha256:953517ee2a2af61554d23c910a47d21942a878a9be2886e0b85008674e505de8*
+
+It does not migrate the other six call sites this record's own measurement found.
+`check/sources.rs`'s own walk is recursive and stated to be its own increment, not a
+consequence of the port gaining a one-level primitive — collapsing a multi-level walk onto
+`Read_Directory` is real work with its own territory, and `nomos-api`'s three call sites are
+a second crate's own item to claim. This record closes the port-level gap and proves it
+against one real, simple caller; it does not claim every caller now goes through it.
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#13
+
+*revision: authored · kind: prose · heading: A port that cannot enumerate a directory forces every caller past it / What This Does Not Do · hash: sha256:51595e0d4bada4ee7b3e0f36ff30e076da15579b065a51427f9c05e578c17d9c*
+
+It does not give the port a recursive walk, a glob, or a filter. `Read_Directory` is the
+same shape `std::fs::read_dir` already has — one directory's own immediate contents — and a
+caller wanting more composes it, the same division this port already draws for every other
+operation.
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#14
+
+*revision: authored · kind: heading · heading: A port that cannot enumerate a directory forces every caller past it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#15
+
+*revision: authored · kind: prose · heading: A port that cannot enumerate a directory forces every caller past it / Status · hash: sha256:2d90a92c652c18befae72a16aea5ed47c2cc0b18e92b7cdb1d7610d7f37ee8fd*
+
+Accepted. `FileSystem::Read_Directory` exists, `StdFileSystem` implements it, and
+`nomos-cli`'s own record-listing function is its first real caller.
 
 ### docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1
 

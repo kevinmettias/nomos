@@ -9,6 +9,7 @@
 //! also taking on how this module renders an answer. `OD-HOST-001`.
 
 use nomos_ledger::{AddRefusal, FileLedger, ItemId, LedgerDocument, LedgerError, LedgerItem, Territory};
+use nomos_platform::FileSystem;
 use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
 use nomos_work_orchestration::{BoardView, ShowView, WorkOutcome};
 use std::path::Path;
@@ -53,7 +54,7 @@ pub fn Run(
         command,
         &mut ledger,
         &StdProcessLauncher,
-        || Published_Records(directory),
+        || Published_Records(directory, &StdFileSystem),
     );
 
     return Render_Outcome(command, outcome, output);
@@ -68,11 +69,12 @@ pub fn Run(
 /// this repository's conventions, and `nomos-ledger` already stretches as far as it should
 /// by knowing what a record filename folds to.
 ///
-/// The same reason this stayed here rather than moving into `nomos-work-orchestration` with
-/// everything else `WorkCommand::Add` needs: [`nomos_platform::FileSystem`] is read,
-/// atomically-replace and exists, not a directory listing, so a generic dispatch function
-/// has no port to reach this through. `nomos_work_orchestration::Run`'s `published`
-/// parameter is where this value is handed across that boundary.
+/// `OD-PLATFORM-002` gave [`nomos_platform::FileSystem`] a directory-listing primitive,
+/// [`FileSystem::Read_Directory`], so a generic dispatch function could now reach this
+/// through the port; this stays a composition-root function regardless, for the reason the
+/// paragraph above already gives — the input this hands across `nomos_work_orchestration::
+/// Run`'s `published` parameter is a repository's own convention about where records live,
+/// not a ledger-agnostic filesystem concern the orchestration crate should own.
 ///
 /// An unreadable or absent directory yields nothing rather than refusing. That is the one
 /// judgement here worth stating, because this repository's usual rule is the opposite: a
@@ -81,7 +83,7 @@ pub fn Run(
 /// tree with no `docs/records` is a ledger being used somewhere that has no records, and
 /// refusing every `add` in it would be this repository's convention refusing everybody
 /// else's.
-fn Published_Records(directory: &Path) -> Territory
+fn Published_Records(directory: &Path, filesystem: &impl FileSystem) -> Territory
 {
     // The ledger lives in `work/`, so the repository is its parent. A `work/` at the root of
     // nothing has no records, which the walk below reports as none.
@@ -91,7 +93,7 @@ fn Published_Records(directory: &Path) -> Territory
         return Territory::Empty();
     };
 
-    let mut published = Record_Files(root);
+    let mut published = Record_Files(root, filesystem);
     // Sorted so that an item colliding with two records is refused against the same one
     // every run. A refusal that names a different file each time reads as two defects.
     published.sort();
@@ -104,18 +106,18 @@ fn Published_Records(directory: &Path) -> Territory
 /// Repository-relative and forward-slashed, which is the spelling a territory is authored
 /// in. `Normalize_Path` would accept either, and handing it the shape it documents keeps the
 /// refusal's text readable by whoever has to act on it.
-fn Record_Files(root: &Path) -> Vec<String>
+fn Record_Files(root: &Path, filesystem: &impl FileSystem) -> Vec<String>
 {
-    let Ok(entries) = std::fs::read_dir(root.join(RECORD_DIRECTORY))
+    let Ok(entries) = filesystem.Read_Directory(&root.join(RECORD_DIRECTORY))
     else
     {
         return Vec::new();
     };
 
     let mut published = Vec::new();
-    for entry in entries.flatten()
+    for entry in entries
     {
-        if let Some(name) = entry.file_name().to_str()
+        if let Some(name) = entry.file_name().and_then(std::ffi::OsStr::to_str)
         {
             published.push(format!("{RECORD_DIRECTORY}/{name}"));
         }
@@ -126,6 +128,54 @@ fn Record_Files(root: &Path) -> Vec<String>
 
 /// Where this repository authors its decision records, relative to the repository root.
 const RECORD_DIRECTORY: &str = "docs/records";
+
+#[cfg(test)]
+mod published_records_tests
+{
+    use super::{Published_Records, RECORD_DIRECTORY};
+    use nomos_ledger::Territory;
+    use nomos_platform_std::StdFileSystem;
+    use std::path::PathBuf;
+
+    #[test]
+    fn Test_Published_Records_Should_List_Every_File_Directly_Under_The_Record_Directory()
+    {
+        let root = Fresh_Root("nomos-cli-work-published-records");
+        std::fs::create_dir_all(root.join(RECORD_DIRECTORY)).unwrap();
+        std::fs::write(root.join(RECORD_DIRECTORY).join("OD-EXAMPLE-001.md"), "# example").unwrap();
+        std::fs::write(root.join(RECORD_DIRECTORY).join("OD-EXAMPLE-002.md"), "# example").unwrap();
+
+        let territory = Published_Records(&root.join("work"), &StdFileSystem);
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        assert_eq!(
+            territory,
+            Territory::Of_Files(vec![
+                format!("{RECORD_DIRECTORY}/OD-EXAMPLE-001.md"),
+                format!("{RECORD_DIRECTORY}/OD-EXAMPLE-002.md"),
+            ])
+        );
+    }
+
+    #[test]
+    fn Test_Published_Records_Should_Be_Empty_For_A_Repository_With_No_Record_Directory()
+    {
+        let root = Fresh_Root("nomos-cli-work-published-records-absent");
+
+        let territory = Published_Records(&root.join("work"), &StdFileSystem);
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        assert_eq!(territory, Territory::Empty());
+    }
+
+    fn Fresh_Root(name: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(name);
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+        return root;
+    }
+}
 
 /// Turns what [`nomos_work_orchestration::Run`] produced into text and an [`ExitCode`].
 ///
