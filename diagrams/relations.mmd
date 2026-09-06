@@ -283,6 +283,7 @@ graph LR
     od_analysis_009 -->|"relates-to"| od_analysis_001
     od_analysis_009 -->|"relates-to"| od_analysis_002
     od_analysis_009 -->|"relates-to"| od_analysis_008
+    od_analysis_009 -->|"relates-to"| od_gate_022["OD-GATE-022"]
     od_analysis_009 -->|"relates-to"| od_host_002["OD-HOST-002"]
     od_analysis_009 -->|"relates-to"| od_host_003["OD-HOST-003"]
     od_analysis_009 -->|"relates-to"| od_roadmap_001
@@ -661,6 +662,10 @@ graph LR
     od_gate_020 -->|"relates-to"| od_rules_008
     od_gate_020 -->|"relates-to"| od_rules_009
     od_gate_020 -->|"relates-to"| od_rules_010
+    od_gate_022 -->|"relates-to"| od_analysis_009
+    od_gate_022 -->|"relates-to"| od_host_002
+    od_gate_022 -->|"relates-to"| od_host_007
+    od_gate_022 -->|"relates-to"| od_workflow_001
     od_host_001["OD-HOST-001"] -->|"relates-to"| od_host_002
     od_host_001 -->|"relates-to"| od_host_003
     od_host_001 -->|"relates-to"| od_host_004
@@ -668,6 +673,7 @@ graph LR
     od_host_001 -->|"relates-to"| od_host_007
     od_host_001 -->|"relates-to"| od_rules_001
     od_host_002 -->|"relates-to"| od_analysis_009
+    od_host_002 -->|"relates-to"| od_gate_022
     od_host_002 -->|"relates-to"| od_host_001
     od_host_002 -->|"relates-to"| od_host_003
     od_host_002 -->|"relates-to"| od_host_004
@@ -703,6 +709,7 @@ graph LR
     od_host_006 -->|"relates-to"| od_ledger_036
     od_host_007 -->|"relates-to"| arc_ecosystem_001
     od_host_007 -->|"relates-to"| arc_roadmap_001
+    od_host_007 -->|"relates-to"| od_gate_022
     od_host_007 -->|"relates-to"| od_host_001
     od_host_007 -->|"relates-to"| od_host_006
     od_host_007 -->|"relates-to"| od_ledger_036
@@ -1433,6 +1440,7 @@ graph LR
     od_workflow_001 -->|"relates-to"| arc_roadmap_001
     od_workflow_001 -->|"relates-to"| od_contracts_001
     od_workflow_001 -->|"relates-to"| od_gate_014
+    od_workflow_001 -->|"relates-to"| od_gate_022
     od_workflow_001 -->|"relates-to"| od_host_002
     od_workflow_001 -->|"relates-to"| od_workflow_002
     od_workflow_001 -->|"relates-to"| od_workflow_003
@@ -1546,6 +1554,7 @@ graph LR
     od_gate_017
     od_gate_018
     od_gate_020
+    od_gate_022
     od_host_001
     od_host_002
     od_host_003

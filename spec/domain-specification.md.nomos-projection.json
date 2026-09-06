@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5f7df0ba71814a3c8e0a8fe348bb098df4b00ffc7fea625507cd04734ccf1dad",
-  "inputs_digest": "sha256:55c93ca0980bb5205cc2cfe21c2d97b094abfc9ac4f5e931a8e09a34f3566a39",
+  "content_digest": "sha256:5ed0bbea2b345b250c36b9ba46aba40ae815f11409380441d185b2e0fd46bdc8",
+  "inputs_digest": "sha256:a4d0a33cb81525805af7fcc5cab686a61fc9e3e36e18bae8cd76440bc1aee701",
   "sections": [
     [
       "Documents",
-      207
+      208
     ],
     [
       "Sections",
-      1679
+      1685
     ],
     [
       "Source blocks",
-      5838
+      5859
     ]
   ],
   "inputs": [
@@ -444,6 +444,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md@authored",
       "hash": "sha256:a1950bc3193e80ab3048937686ee5af16afe5f70f160c318aa0fad2915067313"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md@authored",
+      "hash": "sha256:5e4ffc056879a2325a78cf957dd7e176cd0a0ebc73c27b1b2a8d90553bd65891"
     },
     {
       "content": "documents",
@@ -4369,6 +4374,36 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#18",
       "hash": "sha256:adc11818f805002f05afcf9de96301d04cd165d1d900b0ba30e9323dcd492704"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#1",
+      "hash": "sha256:c0abb7197102d0e9e2bffd1962ae00a90ca5b83eac3f910fa9d330ce53c618ee"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#2",
+      "hash": "sha256:729d1cd0de3b56090e70d949a2e4c32eee253b0734c534dc961a27b6b9d74479"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#5",
+      "hash": "sha256:c762a3edacf6895bc3c15a3ca9cf0b08371d4aaebcd2a9a2462fb421cb6a35ff"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#12",
+      "hash": "sha256:f33b223884ae6e5afab33ecf0c65b94badded17904089f8de65480ff13d334b0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#15",
+      "hash": "sha256:3890cf2075539b57dec04ec13444aef4efc31315b4d702d1814796eea9e35124"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#20",
+      "hash": "sha256:cfab2cac2d85d1f03b7b249f55f22ab1fc3c1e587667d2d0f0843173964fb081"
     },
     {
       "content": "headings",
@@ -20794,6 +20829,111 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#24",
       "hash": "sha256:f23fc6d2d0254ee1aaa4267750303bb70ab073e4d49e9542fcff00ce1504883b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#1",
+      "hash": "sha256:284143b277c8c588c76945cba8f46fc10bdf5c964f04b2a57bdc019c3494e4b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#3",
+      "hash": "sha256:6ade3f36b2333f9e1b08b76eacf0e59c2ab3ead185d42e2edd4796eb3c6b2ad5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#4",
+      "hash": "sha256:6b6d8a2aaeccf7ec5d3b748365f7196e7d73b5103f750093979d2c8ac87fbaeb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#5",
+      "hash": "sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#6",
+      "hash": "sha256:b55d6c87c28c1bdcf6d2959c58362462b18545bdfe80583503bcbc9acbbc9ffc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#7",
+      "hash": "sha256:4019d7c248a7010903d2c6fd857222e18cd82d6dd91e2feec6de852a99313d3b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#8",
+      "hash": "sha256:ef43e2ec7c96e647a62b4699134ec8a07bf06a6a89f4f337131fa8deb8025e3b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#9",
+      "hash": "sha256:0a2410f2645819759fe3435516578913d49ab5ae77344b425cbd0c542b934d5e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#10",
+      "hash": "sha256:fdaa32f6007120038cb8c2a92ca6e08ce8bd04d557842d66c94b6374603385c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#11",
+      "hash": "sha256:d0380466a568a1ec3e67a3a2487f40bc6fd51516ab6dd017c3152f73c69848ef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#12",
+      "hash": "sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#13",
+      "hash": "sha256:63ab481115b3d3c66ad8ff1331b7dc5a9734f799b9e71e2308eec224758f069f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#14",
+      "hash": "sha256:a899ff5a712abc1a0075ca283927bee4b811dd595043d02efda8a6b44c2f15a3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#15",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#16",
+      "hash": "sha256:4b3155371298f910878313d851220dce7c1358e06cdd4f4dda0171db2bd9320c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#17",
+      "hash": "sha256:e540455fbdfc0d4762410beabc2437b367908aee9c6fcab1bde1ce8314a2f4f5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#18",
+      "hash": "sha256:c4c0130abd97958a972dd695bb22136979fe07ea92d227ff4da50d10b98ea775"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#19",
+      "hash": "sha256:79a8e1455400eba2513070ad0a07cf207ce3237ec49754217309ebff13199d30"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#20",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#21",
+      "hash": "sha256:9fa99bed561b7fb9f9d137680b7802965af34353fa42cfc2e4b5119970633453"
     },
     {
       "content": "blocks",

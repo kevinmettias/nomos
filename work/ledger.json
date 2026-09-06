@@ -52709,7 +52709,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Two measured gaps, not a hypothetical. (1) Territory: the declared single file cannot hold a real rule here. Every composed-rule closure in With_Composed_Rules (run_context.rs) captures only pre-walked sources or a pre-materialized capability fact reached through Reader -- none captures root/filesystem raw -- so a rule that enumerates tests/contract/requirements/*.assessment and resolves arbitrary path#symbol citations against the tree needs a new capability family (crate, contract, provider, Materialize_*_Section wiring, RequiredFact variant), matching the nomos-cap-goals-policy template, not one file. (2) done_when's own clause 'the AGT-001 case is caught by it' cannot be honestly satisfied by any citation-existence check: read git show a8215910 -- the pre-fix AGT-001.assessment's site/gap citations (LedgerItem, Territory, RuleSelector, ScopeSelector, Claim, WorkflowStep) all genuinely existed at those paths -- the staleness was in the prose's verdict (Partial vs Met), not a vanished citation. This exact class -- 'semantic drift is meaning and this workspace has no type for it' -- is already named and deliberately accepted as out of scope by OD-TRACE-002, which the six existing, already-wired tests/contract/tests/requirement_trace/*.rs files (a real cargo-test binary target named requirement_trace, not dead code) implement and enforce today. Reauthoring as P42-REQUIREMENT-TRACE-STALENESS-RULE-2 with corrected territory and a done_when that asks for what OD-TRACE-002 leaves achievable: composing the existing citation/gap/record-existence checks into a real nomos-rules rule (promoting OD-TRACE-001's mechanism from unit-tested-only to gate-composed), with a regression fixture built from the real pre-fix AGT-001 content that makes the citation-existence/semantic-drift boundary explicit and tested rather than asserting past it."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -52723,9 +52727,18 @@
         "timeout_seconds": 2700
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "Territory declared one file; investigation shows the real shape needs a new capability crate (no existing composed-rule closure captures root/filesystem raw -- With_Composed_Rules' closures only capture pre-walked sources or a pre-materialized capability fact reached through Reader, per run_context.rs:818-900), plus 4-5 registration sites and a refactor of the six tests/contract/tests/requirement_trace/*.rs files that already implement this exact citation-existence check as a wired, running (not dead) cargo-test binary target. Reauthoring with corrected territory and done_when.",
+          "abandoned_at": 1788681508
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788681522
+      }
     },
     {
       "id": "P42-LSP-PROJECTION",
@@ -57419,7 +57432,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -57434,7 +57447,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?!.*verb has no variant here at all).*\\z",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs"
+        ],
+        "exit_code": 0,
+        "output_tail": "",
+        "verified_at": 1788681845,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7987e8ae0f1c46d3ae37847dbb0fc87d17b2bc39"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -57583,6 +57618,308 @@
         },
         "revision": "a0988a7a2c2f60967d66b7e0bdf3335283565e06"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P64-REVIEW-DISPOSITION-MECHANISM",
+      "title": "A review finding carries no outcome, and there is only one provider to compare it against",
+      "why": "CodeRabbit review findings enter this workspace through nomos-connector-coderabbit as FindingPayload, whose own doc comment says its eight fields are kept apart from any judgment about whether the finding is valid or what it bears on. Check_Review_Findings then relays that fact into the one Finding shape every rule in this workspace uses, and Finding carries rule, subject, subject_name, applicability, evidence, gate, summary and locations, with no field for what happened to a finding after a person or a correction looked at it. EvidenceClass already forbids the nearby shortcut: AgentJudged is a floor that cannot be promoted afterward, because promotion would have to happen somewhere that no longer holds the evidence. An external architectural review of this workspace, checked directly against the real tree rather than taken on faith, named the next stage past ingestion: whether a finding was accepted, rejected, judged a duplicate, superseded, or whether a correction built from it succeeded or failed, becoming benchmark evidence for comparing providers rather than mutating a rule automatically. Nothing in nomos-contracts, nomos-connector-coderabbit, or nomos-corrections carries that outcome today, and there is exactly one review connector in this workspace, so nothing yet needs comparing against it.",
+      "done_when": "A record measures the gap directly: confirms FindingPayload and Finding carry no outcome or disposition field today; states why a disposition must be a new fact rather than a rewrite of the original evidence class, citing the rule already in EvidenceClass against promoting a claim after the fact; names exactly what a disposition fact would need, a closed set of outcomes keyed to a durable identity for the finding rather than its file location, and a home for it, since nomos-contracts documents every field of Finding as load-bearing and none of the eight open a place for one; and states plainly that comparing providers needs a second real review provider before a selection mechanism is buildable, not merely a second finding. No code changes under this item.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P62-TEST-TERRITORY-OVERLAP-PROBE",
+      "title": "probe: does adding a second open item with the same whole-crate territory get refused",
+      "why": "probing ledger overlap semantics before drafting real items, will decline immediately after",
+      "done_when": "n/a, this item is declined immediately",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "probe only, confirmed overlap is a claim-time held state rather than an add-time refusal; not real work"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-q",
+          "nonexistent-probe-pattern-xyz",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude",
+        "declined_at": 1788681163
+      }
+    },
+    {
+      "id": "P62-API-CHECK-SEAM",
+      "title": "nomos-api has no direct Check seam; only Run_Gate reaches nomos-check-orchestration Run, wrapped in gate policy",
+      "why": "nomos-cli exposes check as its own verb, separate from gate (crates/host/nomos-cli/src/check). Checked nomos-api/Cargo.toml directly: it depends on nomos-correction-orchestration, nomos-gate-orchestration, nomos-spec-orchestration and nomos-work-orchestration, never nomos-check-orchestration, and grepping every Cargo.toml in the workspace for nomos-check-orchestration confirms its real callers are nomos-cli, nomos-lsp, nomos-correction-orchestration, nomos-gate-orchestration, tests/contract and tests/integration -- not nomos-api. The only path from nomos-api into nomos_check_orchestration Run is transitively, through Run_Gate, which always applies GateCommand suppression, baseline and coverage policy on top of it. There is no way for a second host to run a bare, policy-free Check the way a person running nomos check on the CLI does. P13-API-star built at least twenty real seams for Work, Spec and Gate; none of them is Check.",
+      "done_when": "nomos-api gains a Handle_Check_Run function calling nomos_check_orchestration Run directly, not through Run_Gate, taking a walked set of sources and a selected rule list the same way nomos-cli check already does, and returning a JSON-serializable response type twinning CheckOutcome the way correction.rs CorrectionResponse twins CorrectionOutcome, since CheckOutcome does not derive Serialize. A real test proves this crate, not nomos-cli, can produce a real judged outcome over a fixture tree. nomos-api Cargo.toml gains nomos-check-orchestration as a dependency. tests/contract/surface/nomos-api.txt is regenerated and current.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P62-API-WORKFLOW-SEAM",
+      "title": "nomos-workflow-orchestration Run has exactly one caller, nomos-cli, and nomos-api cannot dispatch a workflow at all",
+      "why": "Grepped every Cargo.toml in the workspace for nomos-workflow-orchestration: only crates/host/nomos-cli and the crate own root and tests depend on it. nomos-api names no dependency on it and has no workflow.rs file. The crate own lib.rs doc names nomos_cli::workflow, P40-WORKFLOW-CLI-VERB, as the one real caller of Run outside its own tests. P40-CORRECTIONS-CANONICAL-SEAM and P43-AGENT-CANONICAL-SEAM already closed or named this identical hole for Correction and Agent; Workflow is a third, unnamed instance of it, checked directly against the tree rather than assumed.",
+      "done_when": "nomos-api gains a Handle_Workflow_Run function calling nomos_workflow_orchestration Run over a caller-supplied plan of WorkflowStepPlan, with a JSON-serializable response type twinning WorkflowOutcome, since neither WorkflowStepPlan nor WorkflowOutcome derive Serialize today, the same handler-beside-its-own-response locality correction.rs already keeps. A real test proves this crate, not nomos-cli, can run a real one-step workflow. nomos-api Cargo.toml gains nomos-workflow-orchestration as a dependency. tests/contract/surface/nomos-api.txt is regenerated and current.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P62-TRANSPORT-MCP-CORRECTION-SURFACE",
+      "title": "nomos-api-transport and nomos-mcp both hard-cap at the three Gate verbs; Correction has a real nomos-api seam neither one projects",
+      "why": "ServedMethod in nomos-api-transport served_method.rs is a closed three-variant enum, GatePlan, GateRun, GateExplain, and its own doc justifies excluding the twenty-one Handle_Work_star and Handle_Spec_star handlers by name, because README.md marks those crates repo tooling. It gives no such reason for Handle_Correction_Run: that handler is not repo tooling, P40-CORRECTIONS-CANONICAL-SEAM built it as a real end-user seam nomos-cli correct already mirrors, and it is simply absent from the registry with nothing said about why. nomos-mcp ServedTool is a thin, deliberately narrow projection of ServedMethod own three variants, its own doc says widening what a tools/call can reach must first widen ServedMethod in that crate, so it inherits the same gap. Confirmed CorrectionResponse already derives Serialize with a snake_case, outcome-tagged shape ready to serve.",
+      "done_when": "ServedMethod gains a Correction variant, wire name nomos.correction.run matching OperationName convention, dispatch.rs routes it to nomos_api Handle_Correction_Run, and ServedTool REGISTRY gains a matching fourth entry with a real description and JSON Schema for CorrectionCommand fields, root and commit, keeping Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry green by construction rather than by coincidence. cargo test -p nomos-api-transport -p nomos-mcp -p nomos-contract-tests passes.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api-transport",
+          "crates/host/nomos-mcp"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api-transport",
+          "-p",
+          "nomos-mcp",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-GATE-022-A-COMPARE-CALLER-NEEDS-A-DECIDED-SHAPE-FOR-THE-TWO-RUNS-IT-DIFFS",
+      "title": "Gate compare takes two already-produced GateRunResults directly, and nothing decides how a CLI, API or MCP caller is meant to supply them",
+      "why": "gate_compare.rs own module doc states Compare_Gate_Runs takes two already-produced GateRunResult values directly rather than looking either up by RunId from a store this crate does not own, and calls persisting and retrieving a past run by its own identity a composition-root concern. Checked GateRunResult own struct in gate_plan/gate_run_result.rs: it derives only Clone, Debug, PartialEq, Eq, not Serialize or Deserialize, so it cannot round-trip through a file or a wire call today; only nomos-api response.rs projects a single run into a serializable GateRunResponse, and nothing projects one back. gate/parsing.rs still refuses compare entirely as unimplemented usage, verified directly: Gate_Invocation_From_String_Arguments errors on it, and gate/tests.rs asserts exactly that. No composition root, CLI, nomos-api or nomos-mcp, has decided whether a caller names two RunIds against a persisted run history, or supplies two serialized report files directly, or something else; wiring any surface to compare without deciding this first would invent the shape ahead of a real body, the same discipline this crate own doc already states for every verb it has not yet built.",
+      "done_when": "A record is accepted and registered in crates/spec/nomos-spec-store/records/ deciding how a CLI, API or MCP caller supplies the two runs Compare_Gate_Runs diffs, naming at minimum whether GateRunResult or a serializable twin of it is the wire shape, and whether a persisted run history keyed by RunId is required before compare can be wired into any surface or whether two caller-supplied serialized reports are sufficient for a first real increment. Both diagram-set and domain-specification projections are re-rendered and pass their freshness checks.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-022.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Blocking waiting for file lock on build directory\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.29s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-ce814fc2f9e3d93c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ca55a2f4947e1643.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-beddd5687ed92cbc.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-3291cb2c565a0b50.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-69f73670fa64ed7c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-26e1f7e64972d02a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-1e36136fd85d7bc5.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6cf2dfe0f3d1f8a6.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-137b2f9a1e84d8b4.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-9ff7bef337d5a9da.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-08cc88b6ee058291.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1788681820,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7987e8ae0f1c46d3ae37847dbb0fc87d17b2bc39"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-REQUIREMENT-TRACE-STALENESS-RULE-2",
+      "title": "Requirement-assessment citation staleness is unit-tested only; nothing gates on it",
+      "why": "P42-REQUIREMENT-TRACE-STALENESS-RULE's own motivating case (the stale AGT-001.assessment, corrected in a8215910) turned out, on inspection, to be semantic-verdict drift -- every cited site/gap in the pre-fix text genuinely existed at its path -- and OD-TRACE-002 already names that exact class as meaning this workspace has no type for, deliberately out of scope. What OD-TRACE-001 does mechanically check -- a site or gap citation that no longer resolves, a Diverges/NotBinding with no governing record, a Partial with no gap -- is real, working, and running today as tests/contract/tests/requirement_trace/{assessment,registry,predicates,controls,committed,reader}.rs (a wired cargo-test binary target named requirement_trace, not dead code). It only runs there: nothing composes it into nomos-check-orchestration::Run, so it produces no RuleId, no Finding, and does not gate. The original item's territory (one new file) also could not have held this: no closure in With_Composed_Rules (run_context.rs) captures root/filesystem raw, so reading an arbitrary directory of assessment files and resolving path#symbol citations against the tree needs a capability family of its own, the nomos-cap-goals-policy shape (contract, provider reading root+filesystem, Materialize_*_Section wiring, a RequiredFact variant) -- not one file.",
+      "done_when": "A new capability crate materializes the assessment corpus and its resolved/unresolved site, gap and record citations as a fact; a new nomos-rules rule judges that fact and reports an assessment whose cited site, gap or record no longer resolves, exactly what Unresolved_Sites/Unresolved_Gaps/Unresolved_Records/Divergences_With_No_Record/Partials_With_No_Gap already check; the rule is composed into a real Run (RuleDescriptor entry, ComposedRule entry, RULE_COUNT, a real RuleId, real Findings) rather than only unit tested; the six tests/contract/tests/requirement_trace/*.rs files are refactored to call the new crate's own types and predicates rather than maintaining a second, duplicate parser and predicate set; and a regression fixture built from the real pre-fix AGT-001.assessment content (git show a8215910) is asserted against the new rule, proving and documenting -- not asserting past -- the OD-TRACE-002 boundary: this citation-existence check does not and cannot catch that specific historical case, because every one of its citations genuinely resolved.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-requirement-trace",
+          "crates/rules/nomos-rules/src/checks/requirement_trace.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "tests/contract/tests/rule_contract_citation.rs",
+          "tests/contract/tests/rule_descriptors.rs",
+          "tests/contract/tests/requirement_trace/assessment.rs",
+          "tests/contract/tests/requirement_trace/registry.rs",
+          "tests/contract/tests/requirement_trace/predicates.rs",
+          "tests/contract/tests/requirement_trace/controls.rs",
+          "tests/contract/tests/requirement_trace/committed.rs",
+          "tests/contract/tests/requirement_trace/reader.rs",
+          "tests/contract/tests/requirement_trace/main.rs",
+          "tests/contract/Cargo.toml",
+          "tests/contract/surface/nomos-cap-requirement-trace.txt",
+          "tests/contract/surface/nomos-rules.txt",
+          "README.md",
+          "Cargo.toml",
+          "Cargo.lock"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop",
+        "acquired_at": 1788681641,
+        "lease_expires_at": 1788696041
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cap-requirement-trace"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null

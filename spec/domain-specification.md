@@ -95,6 +95,7 @@ profile: domain-specification
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md | authored | 25 | 7 | sha256:6b6d9f41076761c1a5af15719547c1b28ab365e7b4e46ba305c59bc4de3a71b5 |
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md | authored | 20 | 6 | sha256:c69ceac45b63a2a7fdbf575e0aae4e6917ff2f5e7d2ef0497149ca8d811344da |
 | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md@authored | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md | authored | 24 | 6 | sha256:a1950bc3193e80ab3048937686ee5af16afe5f70f160c318aa0fad2915067313 |
+| docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md@authored | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md | authored | 21 | 6 | sha256:5e4ffc056879a2325a78cf957dd7e176cd0a0ebc73c27b1b2a8d90553bd65891 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 36 | 8 | sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -885,6 +886,12 @@ profile: domain-specification
 | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#12 | authored | 2 | Decision |
 | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#16 | authored | 2 | What This Record Does Not Decide |
 | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#18 | authored | 2 | Status |
+| docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#1 | authored | 1 | A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet |
+| docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#5 | authored | 2 | What was measured |
+| docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#12 | authored | 2 | The decision |
+| docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#15 | authored | 2 | What this record does not do |
+| docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#20 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -23354,6 +23361,218 @@ it named as the limit is the number at which it failed.
 against zero -- and the per-rule classification this record left to a correction item came out
 as predicted: seven rules citing a versioned governing record, one citing `README.md`, every
 other rule citing the ported standard, and no third shape found.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#1
+
+*revision: authored · kind: heading · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet · hash: sha256:284143b277c8c588c76945cba8f46fc10bdf5c964f04b2a57bdc019c3494e4b7*
+
+# A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#2
+
+*revision: authored · kind: heading · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#3
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / Question · hash: sha256:6ade3f36b2333f9e1b08b76eacf0e59c2ab3ead185d42e2edd4796eb3c6b2ad5*
+
+`P40-GATE-COMPARE-VERB` built `nomos_gate_orchestration::Compare_Gate_Runs`, a real
+function that diffs two `GateRunResult`s into `added`, `removed` and `changed` findings.
+Nothing calls it outside that crate's own tests: `gate/parsing.rs` still refuses `compare`
+as unrecognized CLI usage, `nomos-api-transport`'s `ServedMethod` and `nomos-mcp`'s
+`ServedTool` both stop at three Gate verbs, and `nomos-gate-orchestration`'s own module doc
+says so directly -- "`GatePlan` still does not vary by... it reports the registry, not a
+walk" is the neighboring sentence to the one naming `compare` as unbuilt. Wiring any of
+those three surfaces to a function requires deciding how its caller obtains the two values
+it takes, and that question was open before this record: `Compare_Gate_Runs`'s own doc says
+it takes "two already-produced `GateRunResult`s directly rather than looking either up by
+`RunId` from a store this crate does not own," and calls persisting and retrieving a past
+run by its own identity "a composition-root concern" -- naming that somebody else must
+decide it, not deciding it.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#4
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / Question · hash: sha256:6b6d8a2aaeccf7ec5d3b748365f7196e7d73b5103f750093979d2c8ac87fbaeb*
+
+Checked directly rather than assumed: `GateRunResult`
+(`crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_run_result.rs:16`)
+derives `Clone, Debug, PartialEq, Eq` and nothing else. It cannot be written to a file or a
+wire message and read back as itself. `nomos-api`'s `response.rs` already answers the
+adjacent question for a single run -- projecting `GateRunResult` into a one-way, serializable
+`GateRunResponse` for `gate.run` -- and its own module doc gives the reason neither
+`GateRunResult` nor any of its siblings gained `Serialize` directly: doing so "would grow
+`nomos-gate-orchestration`'s or `nomos-rules`' own public surface on behalf of one caller's
+shape, before a second transport exists to check that shape against." That projection is
+one-way by construction: nothing converts a `GateRunResponse` back into a `GateRunResult`,
+so it does not by itself answer what `compare` would consume.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#5
+
+*revision: authored · kind: heading · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / What was measured · hash: sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491*
+
+## What was measured
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#6
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / What was measured · hash: sha256:b55d6c87c28c1bdcf6d2959c58362462b18545bdfe80583503bcbc9acbbc9ffc*
+
+**`Compare_Gate_Runs`'s own signature is the actual constraint.**
+`pub fn Compare_Gate_Runs(baseline: &GateRunResult, candidate: &GateRunResult) ->
+GateCompareResult` (`gate_compare.rs:77`) takes two borrowed, already-constructed values. It
+does not take two `RunId`s, two paths, or two file handles. Anything a composition root
+builds to call it must produce two real `GateRunResult`s from *something* -- and the crate's
+own doc is explicit that inventing a lookup-by-`RunId` store is out of scope for it.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#7
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / What was measured · hash: sha256:4019d7c248a7010903d2c6fd857222e18cd82d6dd91e2feec6de852a99313d3b*
+
+**`RunId` already exists and is already threaded through, which answers less than it looks
+like it does.** `GateRunResult.run: RunId` (`OD-WORKFLOW-001`'s first real consumer,
+`P13-GATE-REPORT-RUNID`) gives every run an identity, and the CLI report already prints it.
+But an identity is not a store: nothing persists a `GateRunResult` keyed by the `RunId` it
+carries, so naming a past run's id today gives a caller nothing to retrieve. `RunId` would
+be exactly the right key for a persistence layer if one existed; its existence does not
+imply one does.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#8
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / What was measured · hash: sha256:ef43e2ec7c96e647a62b4699134ec8a07bf06a6a89f4f337131fa8deb8025e3b*
+
+**Both motivating cases `gate_compare.rs`'s own doc names are same-process cases.** That
+doc states the question `compare` answers as "what changed since the run I already
+trusted," and gives two concrete forms: a code change ("what changed since the run I
+already trusted") and a policy change ("did tightening or loosening a policy change what
+can fail this build"). Neither inherently requires a value to outlive the process that
+produced it:
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#9
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / What was measured · hash: sha256:0a2410f2645819759fe3435516578913d49ab5ae77344b425cbd0c542b934d5e*
+
+- A policy comparison holds the tree fixed and varies `GateCommand`'s `suppressions`,
+  `baseline`, `rules` or `adoption` between two calls to `Run_Gate` over the *same* already-
+  walked sources -- both `GateRunResult`s exist in the same process, at the same moment, and
+  neither needs to survive past the call that produces it.
+- A code-change comparison holds policy fixed and varies the tree: walking `root` as it
+  stands now, and walking a second root -- a second working-tree path, or the same path
+  checked out at a named git revision into a scratch directory -- produces the second
+  `GateRunResult` the same way, inside the same invocation.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#10
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / What was measured · hash: sha256:fdaa32f6007120038cb8c2a92ca6e08ce8bd04d557842d66c94b6374603385c2*
+
+Both are answerable today, with the exact function `Compare_Gate_Runs` already has, by a
+composition root that walks (or re-walks) twice and calls it once. Neither needs
+`GateRunResult` to gain `Serialize`, and neither needs a persisted run history keyed by
+`RunId`.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#11
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / What was measured · hash: sha256:d0380466a568a1ec3e67a3a2487f40bc6fd51516ab6dd017c3152f73c69848ef*
+
+**The case that is not answered this way is a real, different one, and it is not today's
+case.** "Diff this run against the one CI produced an hour ago, from a different process or
+a different machine" needs a value that outlives its producing process -- either a
+serialized `GateRunResult` twin (`response.rs`'s premature-surface caution then applies to
+`compare`'s own shape, not only to `run`'s) or a real store keyed by `RunId`. Nothing in
+this workspace needs that today: no CLI flag, API request or MCP tool exists yet for
+`compare` at all, so there is no caller asking for cross-process comparison to leave
+unserved. Building either the serialized twin or the store now, before that caller exists,
+is the same "no invented shape ahead of a real body" `gate_compare.rs`'s own module doc
+already states as the reason it took `GateRunResult`s directly rather than a store lookup --
+applied here to the CLI/API/MCP wiring question rather than to the diff function itself.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#12
+
+*revision: authored · kind: heading · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / The decision · hash: sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0*
+
+## The decision
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#13
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / The decision · hash: sha256:63ab481115b3d3c66ad8ff1331b7dc5a9734f799b9e71e2308eec224758f069f*
+
+**A compare surface's first real increment re-derives both runs inside one process; it
+does not serialize `GateRunResult` and does not persist a run history.** Whichever host
+wires `compare` first -- CLI, `nomos-api`, or `nomos-mcp` -- takes two same-process
+producible things (two roots, one root at two git revisions, or one root under two
+policies) and two calls to `Run_Gate`, and hands both real `GateRunResult`s directly to
+`Compare_Gate_Runs`, the same way `gate run` already composes a single walk today. No new
+serializable type is invented, `GateRunResult` gains no derive, and no run-history store is
+built. This is a narrower, cheaper first increment than a `RunId`-keyed store would be, and
+it answers both cases `gate_compare.rs`'s own doc names.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#14
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / The decision · hash: sha256:a899ff5a712abc1a0075ca283927bee4b811dd595043d02efda8a6b44c2f15a3*
+
+**Cross-process comparison is real, and it is later work, not declined work.** "Compare
+today's run against one a prior invocation produced" needs either a serialized
+`GateRunResult` twin (mirroring `response.rs`'s existing one-way projection, but built for
+round-tripping rather than only rendering) or a persisted run history keyed by `RunId`,
+whichever the composition root that first needs it prefers -- and that choice is deferred to
+whoever builds it, once a real caller needs it, the same way `P40-FACT-STORE-PERSISTENCE`
+defers incremental-analysis persistence until a real long-lived consumer needs it. Naming
+`RunId` as the eventual key, if a store is built, is not a commitment to build the store now.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#15
+
+*revision: authored · kind: heading · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / What this record does not do · hash: sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4*
+
+## What this record does not do
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#16
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / What this record does not do · hash: sha256:4b3155371298f910878313d851220dce7c1358e06cdd4f4dda0171db2bd9320c*
+
+**It does not wire `compare` into the CLI, `nomos-api`, `nomos-api-transport` or
+`nomos-mcp`.** Each is separate implementation territory, and each can now proceed without
+inventing its own answer to the question this record closes.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#17
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / What this record does not do · hash: sha256:e540455fbdfc0d4762410beabc2437b367908aee9c6fcab1bde1ce8314a2f4f5*
+
+**It does not add `Serialize`/`Deserialize` to `GateRunResult`, `GateCompareResult`,
+`FindingDisposition` or `DispositionChange`.** `response.rs`'s existing caution about
+growing `nomos-gate-orchestration`'s public surface on behalf of one caller's shape stays in
+force; a first increment needs none of them serialized.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#18
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / What this record does not do · hash: sha256:c4c0130abd97958a972dd695bb22136979fe07ea92d227ff4da50d10b98ea775*
+
+**It does not decide the CLI's or API's argument shape for naming a second root** (a second
+path, a `--against <git-ref>` flag, or something else) -- that is ordinary implementation
+judgment for whichever item builds the CLI verb, not a question this record needed to settle
+to unblock it.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#19
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / What this record does not do · hash: sha256:79a8e1455400eba2513070ad0a07cf207ce3237ec49754217309ebff13199d30*
+
+**It does not build or schedule a persisted run-history store.** That remains real, future
+work, unblocked by this record rather than started by it.
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#20
+
+*revision: authored · kind: heading · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md#21
+
+*revision: authored · kind: prose · heading: A compare caller re-derives both runs inside one process; no persisted store or serialized GateRunResult is needed yet / Status · hash: sha256:9fa99bed561b7fb9f9d137680b7802965af34353fa42cfc2e4b5119970633453*
+
+Accepted. `Compare_Gate_Runs` needs no new store and no new serializable type to gain a
+first real caller: two same-process walks of `Run_Gate`, over two roots, two revisions, or
+two policies, produce the two `GateRunResult`s it already takes. Cross-process comparison
+against a run a prior invocation produced remains a real, separate, deferred question, with
+`RunId` already in place as the key a future store would use if one is built.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 
