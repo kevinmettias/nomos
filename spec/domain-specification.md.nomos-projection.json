@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:ef632d3c7c742c376094274fd1b9dc407ec710c34d076417141b2ef430cc8a09",
-  "inputs_digest": "sha256:ad1899f9e5142b8d3d1ad0142580575e285ebab07bd886cf12bdac8120bc7446",
+  "content_digest": "sha256:5f7df0ba71814a3c8e0a8fe348bb098df4b00ffc7fea625507cd04734ccf1dad",
+  "inputs_digest": "sha256:55c93ca0980bb5205cc2cfe21c2d97b094abfc9ac4f5e931a8e09a34f3566a39",
   "sections": [
     [
       "Documents",
-      206
+      207
     ],
     [
       "Sections",
-      1672
+      1679
     ],
     [
       "Source blocks",
-      5815
+      5838
     ]
   ],
   "inputs": [
@@ -484,6 +484,11 @@
       "content": "documents",
       "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md@authored",
       "hash": "sha256:69f98af14b7a83532a14a4e3d604fdd9c7070616899302a48f5a09e1ec771a72"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md@authored",
+      "hash": "sha256:68d1d753054542c6d8e57a0ce6d40c300f5bc598959791a06ca99ec7514b97e8"
     },
     {
       "content": "documents",
@@ -4604,6 +4609,41 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#18",
       "hash": "sha256:ea2695e0790c8588b289b6e80c33f797e69c276e3b0f32157efd607d13fdf0e7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#1",
+      "hash": "sha256:eaca66c8d764d5070467a18d2ea31605dbbcff835b7af3b0fd45d14636506d7f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#2",
+      "hash": "sha256:8107cfd5cd96044cd9e1d920aaa21a29d20b2149f1556e537b8238576a0c35b3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#5",
+      "hash": "sha256:36a9b86ec9ecde4139c37e24fad232077b3fa2a098771385bd98860d733c791d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#12",
+      "hash": "sha256:03cf51069582ba99c45e6df040ce0e2bca749391504a760306b71b77e744647e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#16",
+      "hash": "sha256:dc6ce6ec7271d2e1f5e7124bc07f6652613386948d6d67890b640eda92c1dcc3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#20",
+      "hash": "sha256:a0aa963e1bc85056a3775aa0e2b8d21bd2344675bb88861dbd94d198080a8fc1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#22",
+      "hash": "sha256:ef726778b77e1a958527a3cba3f07fd428d0d362366dd739d34604b5bbfbb718"
     },
     {
       "content": "headings",
@@ -21604,6 +21644,121 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#19",
       "hash": "sha256:a1ff44fd445b6c67de374ba51874d95ed926a93356444ae5dcd6ca8221429743"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#1",
+      "hash": "sha256:0c1d3a8b5304bb0c67c676ad71405573baac2d88037fa240388a8df3de5295ac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#3",
+      "hash": "sha256:40d2c84a9a18d85dbc412f65babf77a303fbcb3b4ea8c17cc847096e9a54f8d4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#4",
+      "hash": "sha256:5efb40aa79fa5b877b2322ab2e4b440a6503f67cffc9778425176b2b3c113d82"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#5",
+      "hash": "sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#6",
+      "hash": "sha256:ffb4b44bc5d0d82152d33be7f33859f9da1794f090569f3fa0634f8ff02e68b0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#7",
+      "hash": "sha256:b93182ee988590b2921492b84a309280a507c6b3bc7a93bd96d751cd9d27b67c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#8",
+      "hash": "sha256:6da8aaf0d934bdf8916f8dd536320d1d76a3873efab8cb563cd56e833244cb2e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#9",
+      "hash": "sha256:ccb6f8efca2b91d134e8754f0200d81c83be590ac5feb50d45896c8efab4005d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#10",
+      "hash": "sha256:1b98072fe930eca03fe3c56f96b76ba05a4f9d17bc27e24211879f9617b56624"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#11",
+      "hash": "sha256:c5b669aa397f2a9a8cea2861c1a9989a201a1176bc074a436de58a15ab858812"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#12",
+      "hash": "sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#13",
+      "hash": "sha256:16a7132212a197caa485e132bcb693813365299b8a87b3cd9a3fad7356b51f55"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#14",
+      "hash": "sha256:26e65cb047e46f17cf51d281213576a760fd316f3ca3b2d28ec23c967ecc7868"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#15",
+      "hash": "sha256:5e060bd059ced090eee8dfc6bf8cd824521c406b4acd01836a641acf292c0d91"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#16",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#17",
+      "hash": "sha256:82d3c770d9e4ccaae63dcd66c849f57a6b8a46955bb7b6dd3683f222d7f364db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#18",
+      "hash": "sha256:099562117d4b675dd187406d364d0123d1a93a21ea0e531ec9ed7f2fffd99f71"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#19",
+      "hash": "sha256:a1cfa63c9fb36c1ede9ddba91c2363cea763491b3a711aa0a26a8029306a5721"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#20",
+      "hash": "sha256:99a48f297d74c5ac6a47ec0b5e529eb9740f2bf7c66cb2d9335a1605d06dd4e1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#21",
+      "hash": "sha256:9b26a4af0f9239f71be72d584b4e4fa1c116b65a16cde00f5c2480e14c4663b0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#22",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#23",
+      "hash": "sha256:54038a099a226b53d3362aab4cf8c355ea04f81733b1b767567f82b6159074dc"
     },
     {
       "content": "blocks",

@@ -305,6 +305,12 @@ members = [
     # second one. Above nomos-api-transport because it depends on it. `P40-MCP-SURFACE-4`.
     "crates/host/nomos-mcp",
 
+    # Band 94 — host. A language server over stdio, projecting nomos-check-orchestration's
+    # own real `Run` as `textDocument/publishDiagnostics`: a thin translation from
+    # `nomos_contracts::Finding` to `lsp_types::Diagnostic`, with no rule judgment of its
+    # own. `P42-LSP-PROJECTION`.
+    "crates/host/nomos-lsp",
+
     # Assertions about the workspace itself: dependency bands, the contracts
     # allowlist, and module reachability.
     "tests/contract",
@@ -380,6 +386,7 @@ nomos-gate-orchestration = { path = "crates/orchestration/nomos-gate-orchestrati
 nomos-correction-orchestration = { path = "crates/orchestration/nomos-correction-orchestration" }
 nomos-api = { path = "crates/host/nomos-api" }
 nomos-api-transport = { path = "crates/host/nomos-api-transport" }
+nomos-lsp = { path = "crates/host/nomos-lsp" }
 nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }
@@ -390,6 +397,12 @@ nomos-spec-project = { path = "crates/spec/nomos-spec-project" }
 
 serde = { version = "1", default-features = false, features = ["derive", "std"] }
 serde_json = "1"
+# `nomos-lsp`'s own transport and wire types. `lsp-server` is a synchronous JSON-RPC
+# transport over stdio with no async runtime dependency of its own -- this workspace has
+# none anywhere else (`Cargo.lock` carries no `tokio` or `async-std` today), so this pairing
+# is the one that does not introduce one for a single crate.
+lsp-server = "0.10.0"
+lsp-types = "0.97.0"
 base64 = "0.22"
 blake3 = "1"
 sha2 = "0.10"

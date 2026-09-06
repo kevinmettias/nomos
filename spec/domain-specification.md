@@ -103,6 +103,7 @@ profile: domain-specification
 | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md@authored | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md | authored | 19 | 6 | sha256:c4b59b0c06e3e68eee7656804c4cf4fe6685ba8cf63bc66976ccc67c481f2120 |
 | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md@authored | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md | authored | 25 | 6 | sha256:3e1ca21fa30a1ca546fe40667181bda7de5ca80622a019656889537e6a72d206 |
 | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md@authored | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md | authored | 19 | 6 | sha256:69f98af14b7a83532a14a4e3d604fdd9c7070616899302a48f5a09e1ec771a72 |
+| docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md@authored | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md | authored | 23 | 7 | sha256:68d1d753054542c6d8e57a0ce6d40c300f5bc598959791a06ca99ec7514b97e8 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -932,6 +933,13 @@ profile: domain-specification
 | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#8 | authored | 2 | The Decision |
 | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#13 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#18 | authored | 2 | Status |
+| docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#1 | authored | 1 | Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed |
+| docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#5 | authored | 2 | What was measured |
+| docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#12 | authored | 2 | The decision |
+| docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#16 | authored | 2 | What this record does not do |
+| docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#20 | authored | 2 | Follow-up territory, once either gap is decided |
+| docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#22 | authored | 2 | Status |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -25125,6 +25133,305 @@ cases a report must tell apart already have the vocabulary: `MissingCapability`/
 `ProviderUnavailable` for absent, `ConfigurationDisabled` for declined — its first real
 producer — and `Supported` for ran and clean. `OD-HOST-004`'s own composition-root question
 is untouched. No mechanism is built here.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#1
+
+*revision: authored · kind: heading · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed · hash: sha256:0c1d3a8b5304bb0c67c676ad71405573baac2d88037fa240388a8df3de5295ac*
+
+# Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#2
+
+*revision: authored · kind: heading · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#3
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / Question · hash: sha256:40d2c84a9a18d85dbc412f65babf77a303fbcb3b4ea8c17cc847096e9a54f8d4*
+
+`P42-LSP-PROJECTION` asked for a language server exposing Nomos findings as diagnostics,
+with no analysis logic of its own, where a diagnostic can be walked to its governing rule,
+supporting facts and subject, its requirement, its architectural component, and what
+correction is available. Five targets, and whether each has a real, mechanical answer
+today needed checking directly rather than assumed from the shape of the ask -- the same
+discipline `OD-RULES-023` and `OD-RULES-024` already applied to a declared-architecture
+rule's own two halves.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#4
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / Question · hash: sha256:5efb40aa79fa5b877b2322ab2e4b440a6503f67cffc9778425176b2b3c113d82*
+
+This is not the first record to ask the question. `OD-HOST-003` ("An editor surface is a
+client of the canonical services, not a parser of the CLI's rendered output") already
+described almost this exact diagnostic, before `nomos-check-orchestration` had a caller-
+callable `Run`, and named two of its seven listed projections as gaps rather than claims:
+"the governing requirement or record... `Finding` carries no direct pointer to a record id
+yet" and "the guarantee behind it, where the rule depended on a capability... `Requirement::
+minimum` and the `Guarantee` an installed provider actually offered." `OD-HOST-002`'s state
+families 4 and 8 are the same two gaps by a different name. What this record adds is a
+fresh check, against today's tree, of whether either has closed since -- and a real, partial
+build of the three that have.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#5
+
+*revision: authored · kind: heading · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / What was measured · hash: sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491*
+
+## What was measured
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#6
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / What was measured · hash: sha256:ffb4b44bc5d0d82152d33be7f33859f9da1794f090569f3fa0634f8ff02e68b0*
+
+**The governing rule is real and richly answered.** `nomos_contracts::Finding::rule` is a
+`RuleId` directly, and `nomos_rules::DESCRIPTORS`
+(`crates/rules/nomos-rules/src/rule_descriptor.rs:184`) gives every composed rule's
+`SubjectKind`, its `requires: &[RequiredFact]` (each resolving to a real
+`nomos_contracts::CapabilityId` through `RequiredFact::Capability`), and the governing
+record or ported-standard citation `OD-GATE-020` put on this table. This is the one target
+that was already this well answered before this item, and this record adds nothing to it
+beyond building `crates/host/nomos-lsp/src/walk_outward/governing_rule.rs` to read it.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#7
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / What was measured · hash: sha256:b93182ee988590b2921492b84a309280a507c6b3bc7a93bd96d751cd9d27b67c*
+
+**Supporting facts are not.** `nomos_check_orchestration::CheckOutcome::Judged`
+(`crates/orchestration/nomos-check-orchestration/src/examined/check_outcome.rs:28`) carries
+exactly `findings`, `examined` and `claim` -- no fact store, no per-finding read trail.
+`RunContext.store: &mut MemoryFactStore` is caller-supplied and outlives one `Run` call in
+principle (`OD-ANALYSIS-009`'s own first increment let a caller reuse it), but re-deriving
+which specific fact backed one finding means reconstructing the exact `FactKey` a rule's own
+internal `Reader::Require`/`Require_Any` call resolved -- capability, subject, the
+`InputDigest` of whatever bytes the rule hashed, the chosen provider and its `Guarantee`,
+and, most of all, the `nomos_capability::Requirement` the rule asked for. `RuleDescriptor`
+names the *capability family* a rule reads (`RequiredFact`), never the `Requirement` floor
+or the resolved offer -- that is private to each `Check_*` function's own call in
+`crates/rules/nomos-rules/src/checks/*.rs`. `nomos_analysis::Reader::On`
+(`crates/substrate/nomos-analysis/src/reader.rs:28`) is also built once per `Judged_Findings`
+call and shared across every rule in one run (`run_context.rs:590`), so even its own
+`Into_Dependencies` trail is a flat list for the whole run, not attributable to one finding.
+This is exactly `OD-HOST-003`'s "guarantee behind it" gap, still open: nothing between a
+`Finding` and the fact store lets an outside caller ask "which fact, at what guarantee,
+backed this."
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#8
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / What was measured · hash: sha256:6da8aaf0d934bdf8916f8dd536320d1d76a3873efab8cb563cd56e833244cb2e*
+
+One instance of the same gap surfaced concretely while building the parts that are ready:
+`nomos_cap_lint::LintDiagnostic::line` (`crates/capabilities/nomos-cap-lint/src/payload/
+lint_diagnostic.rs:28`) is the real, tool-reported line this item's own `why` names --
+but `Check_Lint_Diagnostics`'s own `Finding_For_Diagnostic`
+(`crates/rules/nomos-rules/src/checks/lint.rs:135`) files `locations: vec![diagnostic.file.
+clone()]`, the file alone, dropping the line the fact it read a moment earlier already
+carried. The line survives only inside `summary`'s free text
+(`format!("{} [{lint}]: {} ({}:{})", ...)`). This is not a "supporting facts" design gap in
+the abstract; it is a live, first-party rule the LSP crate this record's build produces
+cannot show a precise line for today, and the fix is one line in `checks/lint.rs`, not in
+this record's own territory -- named here as evidence, not corrected here.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#9
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / What was measured · hash: sha256:ccb6f8efca2b91d134e8754f0200d81c83be590ac5feb50d45896c8efab4005d*
+
+**The requirement link does not exist, and `OD-HOST-003` already said it would not.**
+`tests/contract/requirements/*.assessment` files (over 300, one per v14-corpus requirement
+id such as `AGT-007`, `CHK-003`) are hand-authored prose: a `verdict`, an optional `record`,
+and `site:`/`gap:` lines naming `file#Symbol` locations -- never a `RuleId`.
+`tests/contract/tests/requirement_trace/main.rs`'s own module doc states the design
+directly: an assessment is "a declared entry committed to this repository, compared against
+the workspace by this suite, and never derived from the corpus at check time." Grepping
+every rule module under `crates/rules/nomos-rules/src/checks/` for a v14 requirement id
+(`AGT-\d{3}`, `CHK-\d{3}`) finds exactly two incidental prose mentions, neither a
+declared field. There is no reverse index from a `RuleId` to an assessment file, and
+building one is not a detail this item's own single-file territory could invent --
+`OD-HOST-003`'s own words ("that resolution is part of the seam family 4 and family 8 of
+`OD-HOST-002` still need") describe precisely this population, and nothing has closed it
+since that record shipped.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#10
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / What was measured · hash: sha256:1b98072fe930eca03fe3c56f96b76ba05a4f9d17bc27e24211879f9617b56624*
+
+**The architectural component is real today, and it was not when `OD-HOST-002` and
+`OD-HOST-003` were written.** Neither record mentions a zone: `OD-RULES-020`'s eleven named
+zones and `nomos_rules::ZONES` (`crates/rules/nomos-rules/src/checks/dependency/zones.rs`)
+postdate both. `Finding::locations` is repo-relative and forward-slashed, and every crate in
+this workspace lives at `crates/<zone-directory>/<crate-name>/...`, so a location under
+`crates/` resolves to a crate name by the path's third segment, and `Zone_Of(crate_name)`
+(a real, already-externally-read public function -- `tests/contract/tests/boundaries/
+bands.rs` imports it the same way) answers the zone. This is real and mechanical exactly
+when a location is a `crates/...` source path; it is honestly `None` for a package-name
+subject (`dependency/violations.rs`'s own `subject_name`), a doc or test path, or a finding
+with no location at all (`GOALS_AND_PARTS_LINE_UP`'s workspace-level rule, `checks/
+goals.rs:243`, files a fixed declaration-file name that is not a crate path either).
+`crates/host/nomos-lsp/src/walk_outward/architectural_component.rs` is this answer, built
+and tested against both a Rules-zone and a Host-zone real path.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#11
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / What was measured · hash: sha256:c5b669aa397f2a9a8cea2861c1a9989a201a1176bc074a436de58a15ab858812*
+
+**A correction is available for two rules, narrowly, and the mechanism is not the one
+`OD-HOST-003` imagined.** That record's own scope named "an open `nomos_ledger` item of
+`ItemKind::Correction` addressing this finding's subject" as the correction projection --
+a ledger-bookkeeping concept. What was actually built since, `P40-CORRECTIONS-CANONICAL-
+SEAM` and `P40-CORRECTIONS-SECOND-FAMILY-3`, is a different, more concrete mechanism:
+`nomos-correction-orchestration::run::Judged` composes exactly two rules --
+`nomos_rules::COMPLETENESS_MIRROR` and `nomos_rules::NO_TRAILING_WHITESPACE` -- and its own
+private `Phantom_Claim`/`Trailing_Whitespace_Claim` recognizers turn a matching `Finding`
+into a real, staged, previewable `nomos_corrections::CorrectionCandidate`. Neither the two-
+rule membership nor a "does rule X have a family" query is exported from that crate's own
+`lib.rs` (only `CorrectionCommand`, `CorrectionOutcome`, `CorrectionEnvironment` and
+`Run_Correction` are). `crates/host/nomos-lsp/src/walk_outward/available_correction.rs`
+declares the two rule ids directly rather than invent an export that crate does not have --
+a real, narrow, correct-today answer, and a named judgment call: a third rule added to that
+crate's own private `selected` array would not be noticed by this declaration until someone
+updates it by hand. The record of that judgment call is this paragraph and the module's own
+doc comment, not a silent duplication.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#12
+
+*revision: authored · kind: heading · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / The decision · hash: sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0*
+
+## The decision
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#13
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / The decision · hash: sha256:16a7132212a197caa485e132bcb693813365299b8a87b3cd9a3fad7356b51f55*
+
+**Build the three that are ready; name the two that are not, rather than force either.**
+`crates/host/nomos-lsp` is a real crate: `lsp-server` 0.10.0 and `lsp-types` 0.97.0 (neither
+previously in `Cargo.lock`; grepped for `tokio`/`async-std` first and found neither
+anywhere in this workspace, so the synchronous pairing was the one that introduces no
+runtime) over stdio, calling `nomos_check_orchestration::Run` -- the identical seam
+`nomos-cli::check` and `nomos-correction-orchestration::run` already call -- with no rule
+judgment of its own. `Diagnostics_For` translates each `Finding` into an `lsp_types::
+Diagnostic`: severity from `Finding::Can_Fail_A_Build` and `GateCategory`, range from
+`Finding::locations`' own `"path:line"` convention (a whole-line span; `range.rs`'s own doc
+cites `nomos_cap_lint::LintDiagnostic`'s "no span beyond a line" as the design point that
+combination must not cross), and every real walk-outward answer attached at `Diagnostic::
+data` -- LSP's own standard per-diagnostic extension point, so this crate invents no second
+protocol beside LSP's own. `Diagnostics_For` and the three `WalkOutward` sub-answers are
+pure functions with no I/O; `server.rs` is the one impure layer, and it does nothing
+`OD-HOST-002` forbids: it holds a `HashSet` of previously-published paths purely so a
+finding that clears gets its diagnostic cleared too, which is a cache of an answer `Run`
+already gave and can give again, not a fact no other client could reconstruct.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#14
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / The decision · hash: sha256:26e65cb047e46f17cf51d281213576a760fd316f3ca3b2d28ec23c967ecc7868*
+
+**The other two remain undecided, not declined.** Supporting facts need either
+`CheckOutcome` widened to expose a per-finding read trail (a `Reader` built per rule rather
+than once per run, and a decision about whether `RuleDescriptor` should also carry each
+rule's own `Requirement` floor, not only its capability family), or a narrower `FactKey`-
+reconstruction capability nothing in this workspace offers today. The requirement link needs
+a real cross-reference from `RuleId` to a v14 requirement id, which is a design question of
+the same weight `OD-CAPABILITY-010` and `OD-RULES-010` were, not a detail this item's single-
+file territory could invent -- and, per `requirement_trace`'s own module doc, would still
+have to answer for a corpus CI cannot read, the same "a green run is not evidence" caution
+`OD-TRACE-001` already states for every other requirement-shaped check in this workspace.
+Neither is declined: both are real properties a diagnostic could honestly carry once the
+missing fact exists, named here rather than improvised inside `crates/host/nomos-lsp` on the
+way past.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#15
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / The decision · hash: sha256:5e060bd059ced090eee8dfc6bf8cd824521c406b4acd01836a641acf292c0d91*
+
+**This does not reopen `OD-CAPABILITY-012` or `OD-HOST-003`.** `OD-CAPABILITY-012` answered
+the opposite direction -- Nomos calling out to a language server as a provider -- and found
+`nomos_platform` has no port for a long-lived, bidirectional subprocess. `nomos-lsp` needs no
+such port: it is the long-lived process itself, launched once by an editor and speaking over
+the stdio pipes it already owns, the same shape `nomos-mcp`'s own binary already has for
+MCP. `OD-HOST-003`'s own caution -- "does not reimplement... symbol resolution... composes
+with [a language server] rather than replacing it... rides on the coordinates the language
+server the editor is already running supplies" -- is about an editor plugin correlating a
+subject to a live cursor position, and is not crossed here: `nomos-lsp` performs no symbol
+resolution, no completion, and no column-precise span (`range.rs`'s whole-line-only `Range`
+is the same "no editor-grade span" ceiling `LintDiagnostic` already holds itself to, carried
+forward rather than widened). Two independent LSP servers publishing diagnostics for the
+same buffer -- one for language semantics, one for this repository's own norms -- is the
+ordinary shape a real editor already composes (a linter's own LSP beside a language
+server), not the parallel indexer that record warns against.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#16
+
+*revision: authored · kind: heading · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / What this record does not do · hash: sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4*
+
+## What this record does not do
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#17
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / What this record does not do · hash: sha256:82d3c770d9e4ccaae63dcd66c849f57a6b8a46955bb7b6dd3683f222d7f364db*
+
+**No code changes to `nomos-cap-lint`, `nomos-rules`' rule bodies, or `nomos-correction-
+orchestration`.** The `LintDiagnostic` line-drop in `checks/lint.rs` is named as found
+evidence, not fixed here -- it is a one-line, single-rule defect inside a different item's
+territory, and conflating "found while building the LSP crate" with "this record's own
+territory" would be the same false widening `OD-GATE-005` already warns a derived
+projection's commit against, applied to a decision record instead of a rendered one.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#18
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / What this record does not do · hash: sha256:099562117d4b675dd187406d364d0123d1a93a21ea0e531ec9ed7f2fffd99f71*
+
+**No fact-provenance capability and no requirement cross-reference are designed here.**
+Both are named as real, open questions a future item should claim once someone decides the
+shape -- a widened `RuleDescriptor`, a per-rule `Reader`, a `RuleId`-to-requirement-id table
+committed the same way an assessment file is -- not answered by naming that they exist.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#19
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / What this record does not do · hash: sha256:a1cfa63c9fb36c1ede9ddba91c2363cea763491b3a711aa0a26a8029306a5721*
+
+**It does not withdraw either target.** Both remain real, in the same sense `OD-RULES-024`
+kept architecture drift and representation leakage real while declining to build either:
+`P42-LSP-PROJECTION`'s own `done_when` asked for five, and this record's honest answer is
+three built, two named and still open.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#20
+
+*revision: authored · kind: heading · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / Follow-up territory, once either gap is decided · hash: sha256:99a48f297d74c5ac6a47ec0b5e529eb9740f2bf7c66cb2d9335a1605d06dd4e1*
+
+## Follow-up territory, once either gap is decided
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#21
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / Follow-up territory, once either gap is decided · hash: sha256:9b26a4af0f9239f71be72d584b4e4fa1c116b65a16cde00f5c2480e14c4663b0*
+
+A future item closing the fact-provenance gap belongs in `nomos-check-orchestration` (widening
+`CheckOutcome` or adding a second, opt-in return shape) and `nomos-rules` (deciding whether
+`RuleDescriptor` should carry a rule's own `Requirement` floor) together, not inside
+`crates/host/nomos-lsp` -- this crate would then gain one more `walk_outward` module reading
+whatever that seam exposes, the same shape its three siblings already have. A future item
+closing the requirement-link gap belongs wherever `tests/contract/requirements/*.assessment`'s
+own format is decided to carry a `rule:` field (or a sibling table keyed the same way), plus
+whatever mechanism keeps that field from silently drifting the way `OD-TRACE-001`'s own
+motivating case (`AGT-001`'s stale assessment) already showed a citation can. Neither
+follow-up needs to touch `crates/host/nomos-lsp/src/file_diagnostic.rs` itself: `Diagnostics_
+For` already builds its `data` payload from `WalkOutward::Of`, and a sixth field there is an
+addition to that one function, not a redesign of it.
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#22
+
+*revision: authored · kind: heading · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#23
+
+*revision: authored · kind: prose · heading: Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed / Status · hash: sha256:54038a099a226b53d3362aab4cf8c355ea04f81733b1b767567f82b6159074dc*
+
+Accepted. Three of a diagnostic's five walk-outward targets -- governing rule, architectural
+component, and a narrow known-correction-family signal -- are real and shipped in
+`crates/host/nomos-lsp`. The other two, supporting facts and the corpus requirement a
+finding bears on, are `OD-HOST-003`'s own two named gaps from before this seam existed, and
+neither has closed since: both need a real capability or cross-reference decided first, named
+here with the follow-up territory each would claim, not built by improvisation inside this
+item's own single-file territory.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 

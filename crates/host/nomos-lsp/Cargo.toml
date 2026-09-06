@@ -1,0 +1,49 @@
+[package]
+name = "nomos-lsp"
+version = "0.1.0"
+description = "A language server over stdio: translates nomos-check-orchestration's own real Run into LSP diagnostics, with no rule judgment of its own."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "nomos-lsp"
+path = "src/main.rs"
+
+[dependencies]
+# The wire types (`Diagnostic`, `Range`, `Position`, ...) and the synchronous JSON-RPC
+# transport over stdio -- see the workspace `Cargo.toml`'s own comment beside these two for
+# why this pairing rather than `tower-lsp`.
+lsp-types = { workspace = true }
+lsp-server = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+nomos-contracts = { workspace = true }
+# `Zone`, `ZONES` and the composed rule constants (`COMPLETENESS_MIRROR`,
+# `NO_TRAILING_WHITESPACE`, `DESCRIPTORS`) this crate reads to answer "which architectural
+# component" and "which correction family", without judging anything itself.
+nomos-rules = { workspace = true }
+nomos-platform = { workspace = true }
+nomos-platform-std = { workspace = true }
+nomos-workspace = { workspace = true }
+nomos-analysis = { workspace = true }
+nomos-capability = { workspace = true }
+# The seam this crate is a thin adapter over: `Run` composes the registry, materializes
+# facts and judges every rule `nomos-cli::check` already composes. `crates/host/nomos-lsp`
+# owns none of that judgment; it walks a tree the identical way `nomos-cli::check::sources`
+# does (that module is `pub(super)`, so this crate carries its own copy of the same walk
+# rather than reaching into another composition root's private module) and renders what
+# `Run` returns.
+nomos-check-orchestration = { workspace = true }
+# The narrow, real answer to "is a correction available for this finding": exactly the two
+# rule ids (`nomos_rules::COMPLETENESS_MIRROR`, `nomos_rules::NO_TRAILING_WHITESPACE`)
+# `nomos-correction-orchestration::run::Judged` composes today. Not invoked here -- see
+# `walk_outward/available_correction.rs`'s own doc for why this crate declares the
+# membership rather than re-running the pipeline per diagnostic, and for the
+# duplicated-knowledge risk that judgment call carries.
+nomos-correction-orchestration = { workspace = true }
+nomos-model = { workspace = true }
+
+[lints]
+workspace = true
