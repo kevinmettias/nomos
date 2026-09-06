@@ -58530,7 +58530,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory named only nomos-cli's two sources.rs files; the identical skip-list pattern is independently duplicated in four files, each its own composition-root-owned copy per OD-HOST-002: nomos-cli's check and gate, nomos-api, and nomos-lsp. Reauthoring as -2 with all four."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -58544,9 +58548,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-loop",
+          "reason": "Territory named only nomos-cli's two sources.rs files. The identical skip-list pattern (skip a directory named exactly target or .git) is independently duplicated in four files, not two: crates/host/nomos-cli/src/check/sources.rs, crates/host/nomos-cli/src/gate/sources.rs, crates/host/nomos-api/src/sources.rs, crates/host/nomos-lsp/src/sources.rs -- confirmed by direct grep, each its own deliberate composition-root-owned copy (OD-HOST-002's own established division), not a shared function. Reauthoring with all four.",
+          "abandoned_at": 1788697953
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788697961
+      }
     },
     {
       "id": "P43-AGENT-CANONICAL-SEAM-3",
@@ -58728,6 +58741,69 @@
           "exit_code": 0
         },
         "revision": "c425537caee56cf35840a478b162400c5891ab5a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P67-SELF-CHECK-WALK-CROSSES-NESTED-WORKTREE-BOUNDARY-2",
+      "title": "This workspace's own real-tree source walk descends into a nested git worktree as part of the repository",
+      "why": "F:/repos/nomos/.claude/worktrees/agent-a3ebc50c45658854a is a leftover git worktree (created and already fully merged earlier this session for a background-agent build) sitting inside the main repository's own directory tree. It is locked by an unidentified process (git worktree remove and a direct filesystem delete both refused with a busy/permission error, confirmed twice) and could not be removed. Because it lives under the walked root, every real-tree walk in this workspace treats its checked-out files as part of the workspace's own tree, and since that worktree's checkout predates real fixes landed since, it contributes dozens of stale [Blocking] findings under paths prefixed .claude/worktrees/agent-a3ebc50c45658854a/, permanently failing Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build and any work finish whose predicate names nomos-cli, for a reason that has nothing to do with the tree's own real content. The identical skip-list pattern (skip a directory named exactly target or .git) is independently duplicated in four files, each its own composition-root-owned copy per OD-HOST-002: crates/host/nomos-cli/src/check/sources.rs, crates/host/nomos-cli/src/gate/sources.rs, crates/host/nomos-api/src/sources.rs, crates/host/nomos-lsp/src/sources.rs.",
+      "done_when": "None of the four walks descends into a nested git worktree (a directory containing its own .git file, as opposed to a .git directory, pointing elsewhere) -- proven by a fixture reproducing exactly this shape: a subdirectory that is its own git worktree, containing a file that would otherwise fail a rule. Whether the specific locked directory under .claude/worktrees/ is also removed is a separate, non-code, operational step this item does not depend on.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/check/sources.rs",
+          "crates/host/nomos-cli/src/gate/sources.rs",
+          "crates/host/nomos-api/src/sources.rs",
+          "crates/host/nomos-lsp/src/sources.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-lsp"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-lsp"
+        ],
+        "exit_code": 0,
+        "output_tail": "eam-e22e91d7c1d44bc2.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-435c6a4b16b4399f.exe)\n     Running tests\\lang_go_seam.rs (target\\debug\\deps\\lang_go_seam-256a58f5e9313c38.exe)\n     Running tests\\lang_rust_seam.rs (target\\debug\\deps\\lang_rust_seam-790a6af2ab2cc85c.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-081af4076c737199.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-cf34fb55e1687d7a.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-fafc9cb04d254106.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-b82c512787164e9f.exe)\n     Running tests\\platform_std_seam.rs (target\\debug\\deps\\platform_std_seam-1366dc1bcce59f72.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-ff122d8ba95da8c9.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-73f004c67980a882.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-4d4370ce68e9c9d0.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-a7446f2d6a97308a.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-9943aa3a84b85f43.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-c40f4668378588a1.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-7407c0accfebe17e.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-b4638f37477a1aad.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-9299e2f3fb990b3e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lsp-dcde08d47e2c5419.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_lsp-101c3bd422096139.exe)\n     Running tests\\fixture_tree.rs (target\\debug\\deps\\fixture_tree-0beb2885427242a8.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_lsp\n",
+        "verified_at": 1788698359,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "79b1eea7f22389b87f9ec3efebe00a9fc7af524a"
       },
       "abandoned": [],
       "displaced": [],

@@ -24,6 +24,26 @@ mod tests
         assert_eq!(paths, vec!["a.rs", "main.go"], "{paths:?}");
     }
 
+    /// `P67-SELF-CHECK-WALK-CROSSES-NESTED-WORKTREE-BOUNDARY-2`: a subdirectory that is
+    /// itself a git worktree's own root -- a `.git` *file*, not a `.git` directory --
+    /// must not be descended into, the same as `target` already is not.
+    #[test]
+    fn Test_Read_Sources_Should_Not_Descend_Into_A_Nested_Git_Worktree()
+    {
+        let root = Fresh_Root("nomos-cli-gate-sources-nested-worktree");
+        std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("writable");
+        let worktree = root.join("worktree");
+        std::fs::create_dir_all(&worktree).expect("writable");
+        std::fs::write(worktree.join(".git"), "gitdir: /elsewhere/.git/worktrees/example\n").expect("writable");
+        std::fs::write(worktree.join("stale.rs"), "pub fn Stale() {}\n").expect("writable");
+
+        let sources = Read_Sources(&root);
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        let paths: Vec<&str> = sources.iter().map(|source| return source.path.as_str()).collect();
+        assert_eq!(paths, vec!["a.rs"], "{paths:?}");
+    }
+
     #[test]
     fn Test_Read_Entry_Should_Not_Discover_An_Unrelated_Extension()
     {
@@ -143,7 +163,8 @@ pub(super) fn Read_Entry(
     {
         let skipped = path
             .file_name()
-            .is_some_and(|name| return name == "target" || name == ".git");
+            .is_some_and(|name| return name == "target" || name == ".git")
+            || Is_A_Nested_Git_Worktree(&path);
 
         if !skipped
         {
@@ -158,6 +179,18 @@ pub(super) fn Read_Entry(
         let source = Read_Source(root, &path, text);
         sources.push(source);
     }
+}
+
+/// Whether `path` is itself a git worktree's own root — a directory whose immediate `.git`
+/// entry is a file (naming another repository's own `.git/worktrees/<name>` directory)
+/// rather than the ordinary `.git` directory a real checkout has. A linked worktree checked
+/// out under an already-walked root is a second copy of a tree this walk must not descend
+/// into, the same reason `target` already is — `P67-SELF-CHECK-WALK-CROSSES-NESTED-
+/// WORKTREE-BOUNDARY-2` measured exactly this against a leftover build-agent worktree left
+/// under `.claude/worktrees/`.
+fn Is_A_Nested_Git_Worktree(path: &Path) -> bool
+{
+    return path.join(".git").is_file();
 }
 
 /// Rust, Go, or one of `check-script-discipline`'s own script languages -- `standards.json`'s
