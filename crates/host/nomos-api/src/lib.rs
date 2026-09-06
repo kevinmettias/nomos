@@ -94,7 +94,13 @@
 //! planning and lifecycle out of `nomos-cli`'s own `correct.rs` into
 //! `nomos_correction_orchestration::Run_Correction`, a seam both hosts now call -- this
 //! crate's own first real caller outside that orchestration crate's unit tests and
-//! `nomos-cli`.
+//! `nomos-cli`. Its twenty-third, [`check::Handle_Check_Run`], gives this crate its first
+//! bare Check verb: before it, the only path from here into `nomos_check_orchestration::Run`
+//! was transitively, through `Handle_Gate_Run`'s own call to `Run_Gate`, which always applies
+//! `GateCommand`'s suppression, baseline and coverage policy on top of it -- there was no way
+//! for a caller of this crate to run a policy-free Check the way `nomos-cli`'s own, separate
+//! `nomos check` command already lets a person do. `P62-API-CHECK-SEAM` closes that gap with
+//! the same twinned-response shape `correction.rs` already established.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `Invocation::Run` arm: it walks `command.root` for `.rs` sources
@@ -119,6 +125,7 @@
 //! design it against; this increment's job is only to prove the seam is reachable and
 //! projectable from a second composition root at all.
 
+mod check;
 mod composition;
 mod correction;
 mod response;
@@ -128,6 +135,7 @@ mod spec;
 mod test_support;
 mod work;
 
+pub use check::{CheckResponse, ClaimResponse, ExaminedResponse, Handle_Check_Run};
 pub use correction::{CorrectionResponse, Handle_Correction_Run};
 pub use response::{
     BaselineDebtResponse, Disposition, GateExplainResponse, GatePlanResponse, GateRunResponse, Handle_Gate_Explain,

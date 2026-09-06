@@ -8,6 +8,8 @@ license.workspace = true
 publish.workspace = true
 
 [dependencies]
+nomos-analysis = { workspace = true }
+nomos-check-orchestration = { workspace = true }
 nomos-contracts = { workspace = true }
 nomos-correction-orchestration = { workspace = true }
 nomos-gate-orchestration = { workspace = true }
