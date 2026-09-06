@@ -368,19 +368,30 @@ mod local_tests
         return format!("path+file://{rooted}#0.1.0");
     }
 
+    /// The root is a real temp directory rather than a hand-typed literal, and the package
+    /// id is built from it through [`Package_Id_Uri`], because this test needs its root to
+    /// be *absolute* and a drive-lettered literal is only absolute on one platform.
+    ///
+    /// It used to root itself at `F:/repos/nomos`. Windows reads that as absolute and the
+    /// prefix match succeeded; Linux reads it as relative, and
+    /// [`Discover_Workspace`]'s own resolution of a relative root against the real current
+    /// directory then put the root somewhere the hand-typed id could never sit under, so it
+    /// found no first-party member and refused. The test passed on one developer's machine
+    /// and failed in CI on ubuntu alone. `P79`.
     #[test]
     fn Test_Discover_Workspace_Should_Read_A_First_Party_Package_From_The_Json_Stream()
     {
-        let root = Path::new("F:/repos/nomos");
+        let root = std::env::temp_dir().join("nomos-lang-rust-clippy-first-party-fixture");
+        let member = root.join("crates").join("contracts").join("nomos-contracts");
         let stdout = serde_json::json!({
             "reason": "compiler-artifact",
-            "package_id": "path+file:///F:/repos/nomos/crates/contracts/nomos-contracts#0.1.0",
+            "package_id": Package_Id_Uri(&member),
             "target": { "kind": ["lib"] }
         })
         .to_string();
         let launcher = FakeLauncher { stdout };
 
-        let discovered = Discover_Workspace(root, &launcher).expect("the fake launcher reports one package");
+        let discovered = Discover_Workspace(&root, &launcher).expect("the fake launcher reports one package");
 
         assert_eq!(discovered.len(), 1);
         assert_eq!(discovered.first().expect("one package").payload.package, "nomos-contracts");

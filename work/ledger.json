@@ -61030,6 +61030,58 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P79-CLIPPY-FIRST-PARTY-TEST-IS-ABSOLUTE-ONLY-ON-WINDOWS",
+      "title": "A clippy discovery test roots itself at a Windows-only path, so it fails on ubuntu",
+      "why": "Test_Discover_Workspace_Should_Read_A_First_Party_Package_From_The_Json_Stream in clippy_error.rs roots itself at Path::new of F:/repos/nomos and hand-types a matching package_id. On Windows that literal is absolute because of the drive letter, and the prefix match succeeds. On Linux it has no leading slash, so it is a relative path, and P36's own fix resolves a relative root against the real current directory before matching. The resolved root is then the current directory joined with F:/repos/nomos, which the hand-typed package_id cannot be under, so Discover_Workspace finds no first-party member and refuses. The test passes locally on Windows with 18 of 18 and fails on ubuntu-latest only. It was masked until now: earlier CI runs failed further up the pipeline, on the nomos-capability surface snapshot and then on the unclassified CorrectionFamily universe, and the ubuntu Test step never reached this crate. Fixing those two exposed it. The same file already carries the remedy and does not use it here: Package_Id_Uri builds a package id from a real PathBuf so a fixture can name a real absolute directory without hand-encoding a drive letter or separators, and both the P36 and P68 tests beside it use it with a real current directory or temp directory. Only this one test hand-types the literal in a position where the root must be absolute.",
+      "done_when": "The test roots itself at a directory that is absolute on every platform and builds its package id through Package_Id_Uri rather than hand-typing one, the crate's tests pass on a path-independent basis rather than by virtue of the machine being at F:/repos/nomos, and the ubuntu Test step gets past nomos-lang-rust-clippy.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-clippy/src/clippy_error.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-clippy"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-clippy"
+        ],
+        "exit_code": 0,
+        "output_tail": "hould_Refuse_An_Empty_Stream ... ok\ntest reading::tests::Test_A_Registry_Package_Id_Should_Not_Resolve ... ok\ntest reading::tests::Test_A_First_Party_Package_Id_Should_Resolve_Relative_To_Root ... ok\ntest provider::tests::Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Workspace_Member ... ok\n\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.93s\n\n\nrunning 3 tests\ntest Test_The_Ceiling_Should_Satisfy_The_Declared_Guarantee ... ok\ntest Test_An_Offer_Claiming_More_Than_The_Ceiling_Should_Be_Refused ... ok\ntest Test_This_Crates_Offer_Should_Be_Accepted_By_Nomos_Cap_Lints_Own_Registry ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_A_Non_Zero_Exit_Should_Refuse_Rather_Than_Report_A_Clean_Result ... ok\ntest Test_Materialize_Workspace_Should_Produce_A_Fact_Nomos_Analysis_And_Nomos_Model_Both_Recognize ... ok\ntest Test_The_Facts_Key_Should_Depend_On_The_Build_Variant_But_Not_On_The_Generation ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 1 test\ntest Test_Materialize_Workspace_Should_Run_A_Real_Clippy_Pass_Through_The_Real_Std_Process_Launcher ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_clippy-a02c7f5532147368.exe)\n     Running tests\\capability_seam.rs (target\\debug\\deps\\capability_seam-118eae8748dbef6d.exe)\n     Running tests\\materialize_workspace_seam.rs (target\\debug\\deps\\materialize_workspace_seam-1544cf997244cb10.exe)\n     Running tests\\platform_std_seam.rs (target\\debug\\deps\\platform_std_seam-3f0052eea271ea0a.exe)\n   Doc-tests nomos_lang_rust_clippy\n",
+        "verified_at": 1788729602,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8bbf3731e2378ce612fc1bd9e9b3ceecee760e20"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
