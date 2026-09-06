@@ -1,7 +1,7 @@
 [package]
 name = "nomos-lang-rust-deny"
 version = "0.1.0"
-description = "Band 25. The nomos.cap.dependency.policy capability's one provider: runs cargo deny check bans licenses sources and reads the workspace's own resolved-graph verdict out of it. OD-RULES-010."
+description = "The nomos.cap.dependency.policy capability's one provider: runs cargo deny check bans licenses sources and reads the workspace's own resolved-graph verdict out of it. OD-RULES-010."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

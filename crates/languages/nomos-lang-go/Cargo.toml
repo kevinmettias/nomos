@@ -1,7 +1,7 @@
 [package]
 name = "nomos-lang-go"
 version = "0.1.0"
-description = "Band 25. The first real second-language provider: what Go source says on its face, and a declared Guarantee that says how far that goes."
+description = "The first real second-language provider: what Go source says on its face, and a declared Guarantee that says how far that goes."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

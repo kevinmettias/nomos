@@ -1,7 +1,7 @@
 [package]
 name = "nomos-gate-orchestration"
 version = "0.1.0"
-description = "Band 41. The seam for the first-class Gate object ARC-ROADMAP-001 names: Plan wires a real rule registry, Run_Gate composes nomos-check-orchestration into a judged disposition, apart from choosing a platform, selecting scope or rendering the answer."
+description = "The seam for the first-class Gate object ARC-ROADMAP-001 names: Plan wires a real rule registry, Run_Gate composes nomos-check-orchestration into a judged disposition, apart from choosing a platform, selecting scope or rendering the answer."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

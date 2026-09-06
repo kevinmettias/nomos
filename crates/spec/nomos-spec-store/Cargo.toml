@@ -1,7 +1,7 @@
 [package]
 name = "nomos-spec-store"
 version = "0.1.0"
-description = "Band 1. The specification store: schema, migrations and transactions."
+description = "The specification store: schema, migrations and transactions."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

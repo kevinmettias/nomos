@@ -52741,7 +52741,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "declared territory (a single crates/host/nomos-lsp/src/lib.rs) was too narrow for a new crate, and investigation found two of the five walk-outward targets the item's own done_when named (supporting facts, the requirement link) are OD-HOST-003's own two open gaps from before nomos-check-orchestration had a caller-callable Run, unclosed since. Reauthored as P42-LSP-PROJECTION-2 with the complete territory and a scope that builds the three targets that are real (governing rule, architectural component, available correction) while OD-HOST-010 records the other two as undecided rather than forced."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -52757,7 +52761,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop",
+        "declined_at": 1788680516
+      }
     },
     {
       "id": "P42-ARCHITECTURE-AUTHORITY-RULES",
@@ -57330,6 +57337,251 @@
           "exit_code": 0
         },
         "revision": "a9e2aad16d21a8febc1ee410e7f59e90faca91c3"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-LSP-PROJECTION-2",
+      "title": "nomos-lsp: three of a diagnostic's five walk-outward targets, real",
+      "why": "P42-LSP-PROJECTION asked for a language server exposing Nomos findings as diagnostics with a walk outward to five targets: governing rule, supporting facts, requirement, architectural component, and available correction. Investigated first rather than assumed buildable: OD-HOST-003 already named two of these (supporting facts, the requirement link) as open gaps before nomos-check-orchestration had a caller-callable Run, and neither has closed since -- CheckOutcome::Judged exposes findings/examined/claim only, never a per-finding fact-read trail, and tests/contract/requirements/*.assessment is hand-authored prose keyed on no RuleId. The other three are real today: nomos_rules::DESCRIPTORS gives a governing rule's own contract citation, nomos_rules::ZONES resolves a crates/... location to its architectural component (real only since OD-RULES-020, after both prior records were written), and nomos-correction-orchestration's own two composed rules give a narrow, named correction-availability signal.",
+      "done_when": "nomos-lsp exists as a real Host-zone crate: a language server over lsp-server/lsp-types (stdio, no async runtime, matching this workspace's own dependency-free-of-tokio state), calling nomos_check_orchestration::Run with no rule judgment of its own, translating each Finding into an lsp_types::Diagnostic with severity from GateCategory, a whole-line Range (the LintDiagnostic no-span-beyond-a-line ceiling carried forward, not widened), and the three real walk-outward answers attached at Diagnostic::data. OD-HOST-010 records the other two targets as undecided, not declined, naming the follow-up territory each would claim. cargo test -p nomos-lsp -p nomos-contract-tests passes, the surface snapshot is blessed, and cargo clippy --workspace --all-targets introduces no new warning.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-lsp",
+          "tests/contract/surface/nomos-lsp.txt",
+          "crates/spec/nomos-spec-store/records/OD-HOST-010.record",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ing 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 1 test\ntest Test_Diagnostics_For_Should_Translate_A_Real_Run_Result ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-6f4092ff21db2545.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-19352e45f643787b.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-ef1e8fb67824e415.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-5c5e069853f4d91b.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-20ce745c14552f08.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-96e93e478e9f444c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-6bddd63feb203727.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-bd8190d018fc83bc.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-6c5524d2b3fb63e2.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-acf94f3e29ae9ded.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c9c594427bdd8da8.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lsp-7ba4a0821e1ae52c.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_lsp-7607ce966265835a.exe)\n     Running tests\\fixture_tree.rs (target\\debug\\deps\\fixture_tree-5557125602b0929b.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_lsp\n",
+        "verified_at": 1788680549,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a0988a7a2c2f60967d66b7e0bdf3335283565e06"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P62-GATE-COMPARE-LIB-DOC-STALE",
+      "title": "nomos-gate-orchestration lib.rs still says no increment implements compare, but Compare_Gate_Runs is real and exported",
+      "why": "P40-GATE-COMPARE-VERB built gate_compare.rs, and lib.rs pub-uses Compare_Gate_Runs, DispositionChange, FindingDisposition and GateCompareResult from it. The crate module doc, in its What no increment is section, still reads: None implements compare -- that verb has no variant here at all, not a stub one. That sentence contradicts the real, exported implementation in the same file. Found on 2026-09-06 while verifying a third-party architecture review against the tree; the review flagged this exact contradiction and it checked out.",
+      "done_when": "lib.rs no longer claims that no increment implements compare or that the verb has no variant here at all, and cargo test -p nomos-gate-orchestration stays green.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?!.*verb has no variant here at all).*\\z",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P62-README-DEPENDENCY-EDGES-IO-CLAIM-STALE",
+      "title": "README dependency.edges provider row claims cargo metadata is the only I/O any provider performs, but clippy and cargo-deny are subprocess providers now",
+      "why": "README Analysis-Kernel band table row for nomos-lang-rust-cargo reads: runs cargo metadata and reads the filesystem, the only I/O any provider in this workspace performs. nomos-lang-rust-clippy (P14-RULES-010-TOOL-PROVIDER-CLIPPY-FIRST-INCREMENT-5, done) and the cargo-deny provider (P14-RULES-010-TOOL-PROVIDER-DENY-2, done) both shell out through ProcessLauncher as real ToolProviders now, so the claim is stale. Found on 2026-09-06 while verifying a third-party architecture review against the tree; the review flagged this exact contradiction and it checked out.",
+      "done_when": "README.md no longer claims cargo metadata is the only I/O any provider in this workspace performs.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?!.*the only I/O any provider in this workspace performs).*\\z",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P63-MANIFEST-BAND-TEXT-STALE",
+      "title": "57 crate manifests still open their description with a numeric band",
+      "why": "OD-RULES-020 replaced numeric bands with named zones, and P41-ZONES-MIGRATION-3 carried the migration through README.md, nomos-rules' own ZONES and the dependency-graph tests that read them, but never touched a workspace member's own Cargo.toml description -- an external architecture review re-found the same stale label that migration was meant to retire, restating an ordering the rest of the workspace had already stopped believing in.",
+      "done_when": "No workspace member's Cargo.toml description opens with the phrase 'Band <number>', and a contract test in tests/contract/tests/boundaries/ fails the build if one does again.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts/Cargo.toml",
+          "crates/agent/nomos-agent-executor-claude-code/Cargo.toml",
+          "crates/agent/nomos-model-backend-ollama/Cargo.toml",
+          "crates/capabilities/nomos-cap-controlflow/Cargo.toml",
+          "crates/capabilities/nomos-cap-dependency-policy/Cargo.toml",
+          "crates/capabilities/nomos-cap-dependency/Cargo.toml",
+          "crates/capabilities/nomos-cap-goals-policy/Cargo.toml",
+          "crates/capabilities/nomos-cap-limits-policy/Cargo.toml",
+          "crates/capabilities/nomos-cap-lint/Cargo.toml",
+          "crates/capabilities/nomos-cap-naming-policy/Cargo.toml",
+          "crates/capabilities/nomos-cap-scripting-policy/Cargo.toml",
+          "crates/capabilities/nomos-cap-syntax/Cargo.toml",
+          "crates/capabilities/nomos-cap-words-policy/Cargo.toml",
+          "crates/contracts/nomos-contracts/Cargo.toml",
+          "crates/corrections/nomos-corrections/Cargo.toml",
+          "crates/host/nomos-api-transport/Cargo.toml",
+          "crates/host/nomos-api/Cargo.toml",
+          "crates/host/nomos-cli/Cargo.toml",
+          "crates/host/nomos-mcp/Cargo.toml",
+          "crates/host/nomos-surface-provenance/Cargo.toml",
+          "crates/kernel/nomos-model/Cargo.toml",
+          "crates/kernel/nomos-store/Cargo.toml",
+          "crates/languages/nomos-lang-go-modules/Cargo.toml",
+          "crates/languages/nomos-lang-go/Cargo.toml",
+          "crates/languages/nomos-lang-rust-cargo/Cargo.toml",
+          "crates/languages/nomos-lang-rust-clippy/Cargo.toml",
+          "crates/languages/nomos-lang-rust-compiler/Cargo.toml",
+          "crates/languages/nomos-lang-rust-deny/Cargo.toml",
+          "crates/languages/nomos-lang-rust-scan/Cargo.toml",
+          "crates/languages/nomos-lang-rust/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-correction-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-gate-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-spec-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-work-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-workflow-orchestration/Cargo.toml",
+          "crates/packages/nomos-lang-go-package/Cargo.toml",
+          "crates/packages/nomos-lang-rust-package/Cargo.toml",
+          "crates/packages/nomos-model-package/Cargo.toml",
+          "crates/packages/nomos-package/Cargo.toml",
+          "crates/packages/nomos-rule-package/Cargo.toml",
+          "crates/platform/nomos-platform-std/Cargo.toml",
+          "crates/platform/nomos-platform/Cargo.toml",
+          "crates/repository/nomos-repo-policy/Cargo.toml",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/spec/nomos-spec-bundle/Cargo.toml",
+          "crates/spec/nomos-spec-ingest/Cargo.toml",
+          "crates/spec/nomos-spec-model/Cargo.toml",
+          "crates/spec/nomos-spec-project/Cargo.toml",
+          "crates/spec/nomos-spec-store/Cargo.toml",
+          "crates/spec/nomos-spec-validate/Cargo.toml",
+          "crates/substrate/nomos-analysis/Cargo.toml",
+          "crates/substrate/nomos-capability/Cargo.toml",
+          "crates/substrate/nomos-ledger/Cargo.toml",
+          "crates/substrate/nomos-scope-verification/Cargo.toml",
+          "crates/substrate/nomos-workspace/Cargo.toml",
+          "tests/integration/Cargo.toml",
+          "tests/contract/tests/boundaries/main.rs",
+          "tests/contract/tests/boundaries/manifest_bands.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "exit_code": 0,
+        "output_tail": ":tests::Test_A_Genuinely_Undeclared_File_Should_Still_Be_An_Orphan ... ok\ntest band_zero::Test_Band_Zero_Should_Be_Described_In_One_Place ... ok\ntest manifest_bands::tests::Test_A_Lettered_Band_Opening_Should_Still_Be_Detected ... ok\ntest manifest_bands::tests::Test_A_Numeric_Band_Opening_Should_Be_Detected ... ok\ntest reachability::tests::Test_A_Declared_File_Should_Not_Be_An_Orphan ... ok\ntest readme::Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band ... ok\ntest transport_registry::Test_The_Transport_Should_Reach_Nomos_Api_Only_By_Qualified_Path ... ok\ntest transport_registry::Test_The_Registry_Assertion_Should_Have_Subjects_On_Both_Sides ... ok\ntest transport_registry::Test_The_Transport_Should_Name_No_Repo_Tooling_Handler ... ok\ntest graph::Test_Dependencies_Should_Run_Strictly_Downward ... ok\ntest graph::Test_Every_Same_Zone_Edge_Should_Be_A_Real_Dependency ... ok\ntest graph::Test_The_Workspace_Should_Not_Appear_Empty ... ok\ntest graph::Test_Contracts_Should_Depend_On_The_Allowlist_And_Nothing_Else ... ok\ntest graph::Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace ... ok\ntest mcp_registry::Test_The_Assertion_Should_Have_A_Real_Subject ... ok\ntest graph::Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench ... ok\ntest graph::Test_Every_Member_Should_Declare_A_Band ... ok\ntest graph::Test_Every_Write_Door_Should_Be_A_Real_Dependency ... ok\ntest mcp_registry::Test_The_Mcp_Crate_Should_Depend_On_Nothing_But_The_Transport_It_Projects ... ok\ntest manifest_bands::Test_No_Member_Manifest_Should_Open_Its_Description_With_A_Numeric_Band ... ok\ntest capabilities::Test_A_Capability_Id_Should_Be_Written_In_One_Crate ... ok\ntest reachability::Test_Every_Source_File_Should_Be_Reachable ... ok\n\ntest result: ok. 30 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-88acd38323431422.exe)\n",
+        "verified_at": 1788680901,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a0988a7a2c2f60967d66b7e0bdf3335283565e06"
       },
       "abandoned": [],
       "displaced": [],

@@ -1,7 +1,7 @@
 [package]
 name = "nomos-package"
 version = "0.1.0"
-description = "Band 24. The language-agnostic core of an installable-unit manifest -- PKG-007's four version domains, minus any typed version-domain abstraction or provider allowlist a specific language would supply."
+description = "The language-agnostic core of an installable-unit manifest -- PKG-007's four version domains, minus any typed version-domain abstraction or provider allowlist a specific language would supply."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

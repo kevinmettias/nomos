@@ -1,7 +1,7 @@
 [package]
 name = "nomos-workflow-orchestration"
 version = "0.1.0"
-description = "Band 42. The workflow tier's first real execution increment: runs an ordered sequence of WorkflowStep declarations, each paired with a real dispatch to one of this workspace's five real dispatch targets (two AgentExecutor/ModelBackend crates, nomos-check-orchestration::Run, nomos-correction-orchestration::Run_Correction and nomos-gate-orchestration::Run_Gate), refusing whichever step first declares itself incoherent before that step's body ever dispatches. A failing gate step ends the workflow rather than merely completing. OD-WORKFLOW-005, P40-WORKFLOW-CHECK-BODY, P40-WORKFLOW-CORRECTION-BODY, P40-WORKFLOW-GATE-BODY."
+description = "The workflow tier's first real execution increment: runs an ordered sequence of WorkflowStep declarations, each paired with a real dispatch to one of this workspace's five real dispatch targets (two AgentExecutor/ModelBackend crates, nomos-check-orchestration::Run, nomos-correction-orchestration::Run_Correction and nomos-gate-orchestration::Run_Gate), refusing whichever step first declares itself incoherent before that step's body ever dispatches. A failing gate step ends the workflow rather than merely completing. OD-WORKFLOW-005, P40-WORKFLOW-CHECK-BODY, P40-WORKFLOW-CORRECTION-BODY, P40-WORKFLOW-GATE-BODY."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

@@ -1,7 +1,7 @@
 [package]
 name = "nomos-scope-verification"
 version = "0.1.0"
-description = "Band 19. Territory and VerificationPredicate -- moved verbatim from nomos-ledger by OD-LEDGER-037's named follow-on. Neither type encodes a ledger claim, a lease or a holder; nomos-ledger re-exports both for its own claim/overlap and finish logic, and nomos-agent-contracts depends on this crate directly for AGT-007's permitted scope and required verification."
+description = "Territory and VerificationPredicate -- moved verbatim from nomos-ledger by OD-LEDGER-037's named follow-on. Neither type encodes a ledger claim, a lease or a holder; nomos-ledger re-exports both for its own claim/overlap and finish logic, and nomos-agent-contracts depends on this crate directly for AGT-007's permitted scope and required verification."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

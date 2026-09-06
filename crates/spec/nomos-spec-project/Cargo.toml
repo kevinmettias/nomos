@@ -1,7 +1,7 @@
 [package]
 name = "nomos-spec-project"
 version = "0.1.0"
-description = "Band 1. Projections of the specification store: profiles as data, renderers per format."
+description = "Projections of the specification store: profiles as data, renderers per format."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

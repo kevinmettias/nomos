@@ -1,7 +1,7 @@
 [package]
 name = "nomos-cap-dependency"
 version = "0.1.0"
-description = "Band 23. The nomos.cap.dependency.edges contract: the agreed meaning of the question its provider answers, owned by neither it nor any rule that reads it."
+description = "The nomos.cap.dependency.edges contract: the agreed meaning of the question its provider answers, owned by neither it nor any rule that reads it."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

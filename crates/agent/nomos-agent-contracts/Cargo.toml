@@ -1,7 +1,7 @@
 [package]
 name = "nomos-agent-contracts"
 version = "0.1.0"
-description = "Band 36. AGT-001's TaskEnvelope and AGT-002's WorkResult -- the typed input and output shape an agent-assisted operation carries, bundling what today is scattered across nomos-scope-verification, nomos-contracts and nomos-corrections."
+description = "AGT-001's TaskEnvelope and AGT-002's WorkResult -- the typed input and output shape an agent-assisted operation carries, bundling what today is scattered across nomos-scope-verification, nomos-contracts and nomos-corrections."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

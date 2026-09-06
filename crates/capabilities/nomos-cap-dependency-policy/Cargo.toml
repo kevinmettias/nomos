@@ -1,7 +1,7 @@
 [package]
 name = "nomos-cap-dependency-policy"
 version = "0.1.0"
-description = "Band 23. The nomos.cap.dependency.policy contract: a workspace's own bans/licenses/sources verdict from an external policy tool, wrapped behind a capability. OD-RULES-010."
+description = "The nomos.cap.dependency.policy contract: a workspace's own bans/licenses/sources verdict from an external policy tool, wrapped behind a capability. OD-RULES-010."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

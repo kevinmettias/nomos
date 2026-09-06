@@ -1,7 +1,7 @@
 [package]
 name = "nomos-cap-naming-policy"
 version = "0.1.0"
-description = "Band 23. The nomos.cap.naming.policy contract: a repository's own declared naming convention, read as data rather than compiled as a constant. OD-RULES-011."
+description = "The nomos.cap.naming.policy contract: a repository's own declared naming convention, read as data rather than compiled as a constant. OD-RULES-011."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

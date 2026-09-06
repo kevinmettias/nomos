@@ -1,7 +1,7 @@
 [package]
 name = "nomos-api"
 version = "0.1.0"
-description = "Band 90. A second real caller of orchestration seams nomos-cli otherwise has to itself: nomos_gate_orchestration::Run_Gate, nomos_work_orchestration::Run and nomos_spec_orchestration::Profiles, each producing a JSON-serializable response -- apart from choosing a platform or wiring an actual transport over it."
+description = "A second real caller of orchestration seams nomos-cli otherwise has to itself: nomos_gate_orchestration::Run_Gate, nomos_work_orchestration::Run and nomos_spec_orchestration::Profiles, each producing a JSON-serializable response -- apart from choosing a platform or wiring an actual transport over it."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

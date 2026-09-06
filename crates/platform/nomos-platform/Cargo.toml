@@ -1,7 +1,7 @@
 [package]
 name = "nomos-platform"
 version = "0.1.0"
-description = "Band 1p. Port traits for everything Nomos needs from the machine underneath it."
+description = "Port traits for everything Nomos needs from the machine underneath it."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

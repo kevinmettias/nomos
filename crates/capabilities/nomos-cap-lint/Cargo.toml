@@ -1,7 +1,7 @@
 [package]
 name = "nomos-cap-lint"
 version = "0.1.0"
-description = "Band 23. The nomos.cap.lint.diagnostics contract: one external lint tool's own diagnostics over one workspace member, wrapped behind a capability. OD-RULES-010."
+description = "The nomos.cap.lint.diagnostics contract: one external lint tool's own diagnostics over one workspace member, wrapped behind a capability. OD-RULES-010."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

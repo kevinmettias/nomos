@@ -1,7 +1,7 @@
 [package]
 name = "nomos-contracts"
 version = "0.1.0"
-description = "Band 0. The only authoritative statement of Nomos protocol semantics."
+description = "The only authoritative statement of Nomos protocol semantics."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

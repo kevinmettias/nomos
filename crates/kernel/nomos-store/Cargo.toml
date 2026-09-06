@@ -1,7 +1,7 @@
 [package]
 name = "nomos-store"
 version = "0.1.0"
-description = "Band 1. Content-addressed documents with one write door per authority."
+description = "Content-addressed documents with one write door per authority."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

@@ -1,7 +1,7 @@
 [package]
 name = "nomos-model-package"
 version = "0.1.0"
-description = "Band 26. The first ModelBackendPackage/AgentExecutorPackage manifest maturity: identity, PackageKind, PKG-007's first two version domains reused from nomos-package unchanged, and ModelSelection replacing the fourth."
+description = "The first ModelBackendPackage/AgentExecutorPackage manifest maturity: identity, PackageKind, PKG-007's first two version domains reused from nomos-package unchanged, and ModelSelection replacing the fourth."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

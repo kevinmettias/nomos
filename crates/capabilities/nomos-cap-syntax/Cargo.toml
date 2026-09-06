@@ -1,7 +1,7 @@
 [package]
 name = "nomos-cap-syntax"
 version = "0.1.0"
-description = "Band 23. The nomos.cap.syntax.items contract: the agreed meaning of the question both Rust providers answer, owned by neither of them."
+description = "The nomos.cap.syntax.items contract: the agreed meaning of the question both Rust providers answer, owned by neither of them."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

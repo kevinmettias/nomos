@@ -1,7 +1,7 @@
 [package]
 name = "nomos-lang-go-package"
 version = "0.1.0"
-description = "Band 26. The Go LanguagePackage manifest format, wrapping nomos-package's generic core with GoVersion resolution and this workspace's one Go syntax provider -- PKG-007's four version domains, kept distinct."
+description = "The Go LanguagePackage manifest format, wrapping nomos-package's generic core with GoVersion resolution and this workspace's one Go syntax provider -- PKG-007's four version domains, kept distinct."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

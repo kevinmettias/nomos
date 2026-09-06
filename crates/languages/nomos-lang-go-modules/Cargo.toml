@@ -1,7 +1,7 @@
 [package]
 name = "nomos-lang-go-modules"
 version = "0.1.0"
-description = "Band 25. A second provider of nomos.cap.dependency.edges: a Go workspace's own first-party module edges, read from go.work and go.mod directly rather than resolved by a subprocess."
+description = "A second provider of nomos.cap.dependency.edges: a Go workspace's own first-party module edges, read from go.work and go.mod directly rather than resolved by a subprocess."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

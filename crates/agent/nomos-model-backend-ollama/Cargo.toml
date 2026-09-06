@@ -1,7 +1,7 @@
 [package]
 name = "nomos-model-backend-ollama"
 version = "0.1.0"
-description = "Band 37. The first real ModelBackend adapter (OD-PACKAGE-013): dispatches a TaskEnvelope's goal to a local Ollama model as a subprocess, bounded by OD-EXECUTOR-004's structural capability boundary, and reads back an AgentExecutionOutcome. Independent of nomos-agent-executor-claude-code, the one real AgentExecutor -- structurally parallel, no shared trait, and no longer the same package kind."
+description = "The first real ModelBackend adapter (OD-PACKAGE-013): dispatches a TaskEnvelope's goal to a local Ollama model as a subprocess, bounded by OD-EXECUTOR-004's structural capability boundary, and reads back an AgentExecutionOutcome. Independent of nomos-agent-executor-claude-code, the one real AgentExecutor -- structurally parallel, no shared trait, and no longer the same package kind."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

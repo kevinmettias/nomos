@@ -1,7 +1,7 @@
 [package]
 name = "nomos-corrections"
 version = "0.1.0"
-description = "Band 35. CorrectionCandidate, CorrectionPlan and the deterministic stage/validate/commit/rollback door over a workspace change."
+description = "CorrectionCandidate, CorrectionPlan and the deterministic stage/validate/commit/rollback door over a workspace change."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

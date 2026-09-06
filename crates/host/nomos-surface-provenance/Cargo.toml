@@ -1,7 +1,7 @@
 [package]
 name = "nomos-surface-provenance"
 version = "0.1.0"
-description = "Band 91. A report over this repository's own git history: OD-STORE-002's worked-case join between tests/contract/surface/<crate>.txt and docs/records/, for a caller-given commit range. Never gated."
+description = "A report over this repository's own git history: OD-STORE-002's worked-case join between tests/contract/surface/<crate>.txt and docs/records/, for a caller-given commit range. Never gated."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

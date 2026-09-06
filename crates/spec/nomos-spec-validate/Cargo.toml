@@ -1,7 +1,7 @@
 [package]
 name = "nomos-spec-validate"
 version = "0.1.0"
-description = "Band 1. Preservation rules over the specification store."
+description = "Preservation rules over the specification store."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

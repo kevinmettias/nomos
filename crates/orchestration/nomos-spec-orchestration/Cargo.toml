@@ -1,7 +1,7 @@
 [package]
 name = "nomos-spec-orchestration"
 version = "0.1.0"
-description = "Band 40. Composes the specification store from this repository's embedded governing records and a caller-named corpus, and hands back the shipped projection catalogue and what the store was assembled from -- increment 1 of the seam a second adapter calls without also taking nomos-cli's argument parsing, exit codes or rendering."
+description = "Composes the specification store from this repository's embedded governing records and a caller-named corpus, and hands back the shipped projection catalogue and what the store was assembled from -- increment 1 of the seam a second adapter calls without also taking nomos-cli's argument parsing, exit codes or rendering."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

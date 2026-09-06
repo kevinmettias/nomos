@@ -1,7 +1,7 @@
 [package]
 name = "nomos-rule-package"
 version = "0.1.0"
-description = "Band 26. The first RulePackage manifest maturity, measured field by field against OD-PACKAGE-008's four real shipped rules rather than invented."
+description = "The first RulePackage manifest maturity, measured field by field against OD-PACKAGE-008's four real shipped rules rather than invented."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

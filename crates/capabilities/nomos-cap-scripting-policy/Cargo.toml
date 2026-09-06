@@ -1,7 +1,7 @@
 [package]
 name = "nomos-cap-scripting-policy"
 version = "0.1.0"
-description = "Band 23. The nomos.cap.scripting.policy contract: a repository's own declared tooling language and forbidden script extensions, read as data rather than compiled as a constant. OD-RULES-011."
+description = "The nomos.cap.scripting.policy contract: a repository's own declared tooling language and forbidden script extensions, read as data rather than compiled as a constant. OD-RULES-011."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
