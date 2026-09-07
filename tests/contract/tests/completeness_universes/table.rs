@@ -49,7 +49,7 @@ pub(crate) struct Universe
 ///
 /// A number somebody chose. Raising it is the deliberate step that adding an unmirrored
 /// universe is meant to cost, and lowering it is what closing one earns.
-pub(crate) const UNMIRRORED_TOTAL: usize = 4;
+pub(crate) const UNMIRRORED_TOTAL: usize = 5;
 
 /// Every declared universe in this workspace, classified by hand.
 ///
@@ -224,6 +224,19 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         kind: UniverseKind::Constant,
         standing: Standing::Mirrored {
             by: "Test_Every_Correction_Family_Should_Be_Matched_Exhaustively",
+        },
+    },
+    Universe {
+        path: "crates/orchestration/nomos-workspace-discovery/src/lib.rs",
+        name: "SCRIPT_EXTENSIONS",
+        kind: UniverseKind::Constant,
+        standing: Standing::Unmirrored {
+            risk: "check-script-discipline's own five recognized script extensions, restated \
+                   as a literal rather than read from standards.json's own forbidden_extensions \
+                   -- the same risk the three original per-host copies this constant replaces \
+                   already carried, uncaught until this constant's arrival made it module-level \
+                   and this scanner's own subject; a real script extension standards.json adds \
+                   is not picked up here until somebody notices and extends this list by hand",
         },
     },
     Universe {

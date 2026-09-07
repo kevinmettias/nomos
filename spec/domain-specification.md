@@ -108,6 +108,7 @@ profile: domain-specification
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md | authored | 15 | 5 | sha256:0cb15b83d0fb7a58f4a2afda083ac512ba0ac344d15ca0556f3446736cbd7ea9 |
 | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md@authored | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md | authored | 19 | 6 | sha256:c4b59b0c06e3e68eee7656804c4cf4fe6685ba8cf63bc66976ccc67c481f2120 |
 | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md@authored | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md | authored | 25 | 6 | sha256:3e1ca21fa30a1ca546fe40667181bda7de5ca80622a019656889537e6a72d206 |
+| docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md@authored | docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md | authored | 17 | 6 | sha256:352695e42fc3c9e2e1d46f7552ad424db79b4ffe8c08efb7d9bf7696b68b6c81 |
 | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md@authored | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md | authored | 19 | 6 | sha256:69f98af14b7a83532a14a4e3d604fdd9c7070616899302a48f5a09e1ec771a72 |
 | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md@authored | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md | authored | 23 | 7 | sha256:68d1d753054542c6d8e57a0ce6d40c300f5bc598959791a06ca99ec7514b97e8 |
 | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md@authored | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md | authored | 19 | 7 | sha256:361139ee1bbe26b54f84f93988dbf0ccf3488045465fa4f1558161c02d48ba8b |
@@ -981,6 +982,12 @@ profile: domain-specification
 | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#11 | authored | 2 | The Decision |
 | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#16 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#21 | authored | 2 | Status |
+| docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#1 | authored | 1 | Source discovery is a canonical service, not a walker each host keeps its own copy of |
+| docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#9 | authored | 2 | The Decision |
+| docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#13 | authored | 2 | What This Does Not Close |
+| docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#16 | authored | 2 | Status |
 | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#1 | authored | 1 | A repository declares which tool answers a family, and may decline one |
 | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#2 | authored | 2 | Question |
 | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#4 | authored | 2 | What Was Measured |
@@ -26408,6 +26415,182 @@ library, each argued at the site that makes it. None of them reopens what this r
 What stays governing is the exclusion: `P40-MCP-SURFACE-4` projects this same registry over MCP
 framing and is bound by this record rather than by a fresh decision of its own, and a later
 surface making the opposite case about a repo-tooling verb must still make it explicitly.
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#1
+
+*revision: authored · kind: heading · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of · hash: sha256:2bb44fac864fcceab4ed185f30ebdfb27207180cbc1165a8eebd9c37e51a7803*
+
+# Source discovery is a canonical service, not a walker each host keeps its own copy of
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#2
+
+*revision: authored · kind: heading · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#3
+
+*revision: authored · kind: prose · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / Question · hash: sha256:9c17b6af82981ad3ece27a39ce36e20d7ae55cdc960d555ba1c65b1b56de955a*
+
+`nomos-api`'s own `sources.rs` calls itself "a deliberate twin of
+`crates/host/nomos-cli/src/gate/sources.rs`, not a shared dependency of it," and cites
+`OD-HOST-002`'s family 3 ("the directory walk itself stays a composition-root concern") as
+why. `nomos-lsp`'s own `sources.rs` gives the identical reason from the other side:
+`nomos-cli::check::sources` is `pub(super)`, so a second composition root "carries its own
+copy of the same walk rather than reaching into another crate's private module." Four
+citations of the same reasoning, at four sites, is what this record measures rather than
+assumes.
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#4
+
+*revision: authored · kind: heading · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#5
+
+*revision: authored · kind: prose · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / What Was Measured · hash: sha256:ddb999da6e5b2603a755999d3bcf832d3dfcefd7df008d0ac882b0df8ad2fe3d*
+
+Read directly at `c0e5c79f`, all four files in full: `crates/host/nomos-api/src/sources.rs`,
+`crates/host/nomos-cli/src/check/sources.rs`, `crates/host/nomos-cli/src/gate/sources.rs`,
+`crates/host/nomos-lsp/src/sources.rs`.
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#6
+
+*revision: authored · kind: prose · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / What Was Measured · hash: sha256:24b0301beb1feae863196bda2b444dbb59db8a84f9cdebc14588689dab3ccc67*
+
+**The walk is byte-for-byte the same shape four times over.** An explicit `Vec<PathBuf>`
+stack over `std::fs::read_dir`, not `WalkDir`; `target` and `.git` skipped by name; a nested
+git worktree's own root (a `.git` *file*, not a directory) skipped by the identical test
+`P67-SELF-CHECK-WALK-CROSSES-NESTED-WORKTREE-BOUNDARY-2` added to all four independently;
+a `SourceFile::New(relative_forward_slash_path, Subject_Of_Path(&relative), text)`
+construction at the leaf. Three of the four (`nomos-api`, `check::sources`, `gate::sources`)
+additionally hard-code the same five-element `SCRIPT_EXTENSIONS` literal for
+`check-script-discipline`'s own population; `nomos-lsp` alone omits it, a real behavioral
+difference this record does not paper over -- see "What This Does Not Close" below.
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#7
+
+*revision: authored · kind: prose · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / What Was Measured · hash: sha256:d7ba19bac6a441cd60e2ade16ce7c608ccb171c3666245a8508989ad26cf0e59*
+
+**The extension check is a documented, deliberate literal, not an oversight.**
+`check::sources::Is_Recognized_Extension`'s own doc: "The extension check is a literal, the
+same as `nomos_lang_rust::RUST_EXTENSION` and `nomos_lang_go::GO_EXTENSION` already state,
+rather than a dependency on either crate: this walk decides which bytes are worth reading at
+all, not which registered provider answers for them." That reasoning is what this record
+measures against `nomos_lang_rust`/`nomos_lang_go`'s own public surface and finds no longer
+load-bearing: `RUST_EXTENSION`/`GO_EXTENSION` (`pub const &str`) and `Recognition::Of_Path`
+already exist on both crates, and `nomos-check-orchestration::composition::
+Recognized_Syntax_Provider` already depends on both by name to answer the second, real
+recognition question over a path a walk has already let through. A walk consulting the same
+two constants directly is not a new dependency this workspace has avoided elsewhere; it is
+the one this documented rationale argued against without the constants existing to name.
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#8
+
+*revision: authored · kind: prose · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / What Was Measured · hash: sha256:14c68b51a59ebb18817ed53752d2c5d6a2c2e16e27b3eb370c4866ba465a7014*
+
+**`OD-HOST-002` family 3's own claim is narrower than the citation reads it.** Family 3
+(amended by `OD-PLATFORM-002`) asserts two things: a `CheckOutcome` is reconstructable by
+any client that walks the same tree, and the walk is a composition-root concern. The first
+is unaffected by this record -- nothing here changes what a `CheckOutcome` is reconstructable
+from. The second is what this record revises: "composition-root concern" was read at each of
+the four sites as "each composition root's own copy," but nothing in family 3's own text
+requires four separate implementations rather than one shared library both a first and a
+second composition root call. `OD-HOST-001` already established that shape for the work
+group (`nomos-work-orchestration`) and `OD-HOST-002` itself for capability resolution and
+fact/analysis state; this record applies the identical seam to the one family 3 left as a
+composition-root-local walk.
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#9
+
+*revision: authored · kind: heading · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#10
+
+*revision: authored · kind: prose · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / The Decision · hash: sha256:1ef1556466e280b85f73a7508a61d12d4724e5124a79b3bbfae06b72dd7f1af6*
+
+**The walk becomes one crate, `nomos-workspace-discovery` (Zone: Application Service), that
+all four hosts call instead of carrying their own copy.** `Registered_Extensions()` names
+what a registered language package recognizes -- `nomos_lang_rust::RUST_EXTENSION` and
+`nomos_lang_go::GO_EXTENSION`, read from those crates rather than retyped -- the one edit a
+third language package costs this crate instead of a fifth host-side copy. `Walked_Sources`
+takes the recognized extension set as its own parameter rather than baking in
+`Registered_Extensions`'s answer, so a caller needing more than registered-language
+recognition composes its own wider set instead of this crate inventing a second
+registration surface.
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#11
+
+*revision: authored · kind: prose · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / The Decision · hash: sha256:26086ce38f3286803fb7a42fd20e86a8db986fa891d84f158a007ec93cf21ec9*
+
+**`check-script-discipline`'s script extensions are not folded into `Registered_Extensions`.**
+They are a rule's own applicability data (`standards.json`'s `forbidden_extensions`), not a
+registered language package's recognition -- a different kind of "registered" than this
+record's own question asks about. Centralizing them anyway, as a plain, honestly-labeled
+constant (`SCRIPT_EXTENSIONS`) rather than inventing package registration for them, is still
+in scope: it is the same literal three of the four hosts already duplicated, and leaving it
+duplicated a third time while claiming to close this exact class of duplication would be the
+same defect this record exists to close, worn thin.
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#12
+
+*revision: authored · kind: prose · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / The Decision · hash: sha256:7d2d5915e644950c730e7abe86959f83789ec58e2c0db71253bb402d003d9875*
+
+**Each host's own `sources.rs` becomes a thin wrapper**, keeping its existing
+`pub(crate)`/`pub(super)` `Walked_Sources(root: &Path) -> Option<Vec<SourceFile>>` signature
+so no caller elsewhere in that host needed to change -- `nomos-lsp`'s `server.rs`,
+`nomos-cli`'s `check.rs` and `gate.rs`, and `nomos-api`'s five call sites (`agent.rs`,
+`check.rs`, `correction.rs`, `response/gate_explain_response.rs`,
+`response/gate_run_response.rs`, `workflow.rs`) were all grepped directly and confirmed to
+call only `Walked_Sources`, never `Read_Sources`/`Read_Entry`/`Read_Source`/`Relative_Path`
+directly.
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#13
+
+*revision: authored · kind: heading · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / What This Does Not Close · hash: sha256:984ed13c58e095c79d8347d352cbb7c9b820e2d536dd3117e191dbb08aaf5977*
+
+## What This Does Not Close
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#14
+
+*revision: authored · kind: prose · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / What This Does Not Close · hash: sha256:f46d1d5f792edcbbfb14c7b3d84ea027df1ccbf1eb40070f0dd4797beba78a6c*
+
+`nomos-lsp`'s own pre-existing gap -- it alone never recognized `check-script-discipline`'s
+five script extensions -- is unchanged by this record. `nomos-lsp` calls
+`Registered_Extensions()` alone, matching its behavior before this record exactly; giving it
+script recognition too would be a real behavior change to a host this record's own scope is
+architectural consolidation, not a feature addition, and is left for whoever decides
+`nomos-lsp` should surface script-discipline diagnostics at all.
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#15
+
+*revision: authored · kind: prose · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / What This Does Not Close · hash: sha256:f5d1be3cc0cd924e64e8ab2f9471e33271b7edc4f50fd9b678a49080c6163a68*
+
+`check-script-discipline`'s own extension set is not verified against `standards.json`'s
+`forbidden_extensions` by any test -- it never was, at any of the three sites that duplicated
+it before this record, and centralizing the literal into one constant does not by itself
+close that hole. `tests/contract/tests/completeness_universes/table.rs` records it as an
+honest, counted, `Unmirrored` universe rather than a closed one.
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#16
+
+*revision: authored · kind: heading · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#17
+
+*revision: authored · kind: prose · heading: Source discovery is a canonical service, not a walker each host keeps its own copy of / Status · hash: sha256:6ca27dd01000a12c4c47f9ba74cf16811699a4c6fce626f3eaa680ddfa7d5a36*
+
+Accepted. Four independently-maintained copies of one walk, and the "rather than a
+dependency on either crate" reasoning each cited for its own hard-coded extension check,
+are both measured directly against the tree and found to be a real, closeable duplication
+rather than a necessary consequence of `OD-HOST-002`. `nomos-lsp`'s narrower recognition and
+`check-script-discipline`'s own unverified extension list are named as open, not closed, by
+this record.
 
 ### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#1
 

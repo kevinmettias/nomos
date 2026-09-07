@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:4392c7f03dbc90ef8896e47b15bea238f1b03cbd44aab1d14e7f01d2dd580a7d",
-  "inputs_digest": "sha256:e0ae5c5e71dbf2fc45b94559263b66e8fbb591d432888fcacf82a37eb7625fa5",
+  "content_digest": "sha256:59512d365f3f3a9a96152ce02fdfcdc0582eb1f79f44b1731f9de66600041e18",
+  "inputs_digest": "sha256:b525d001906f31a65ef1d8168813f499eb6f4d491141d201ee56c2f5af30432b",
   "sections": [
     [
       "Documents",
-      216
+      217
     ],
     [
       "Sections",
-      1750
+      1756
     ],
     [
       "Source blocks",
-      6064
+      6081
     ]
   ],
   "inputs": [
@@ -509,6 +509,11 @@
       "content": "documents",
       "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md@authored",
       "hash": "sha256:3e1ca21fa30a1ca546fe40667181bda7de5ca80622a019656889537e6a72d206"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md@authored",
+      "hash": "sha256:352695e42fc3c9e2e1d46f7552ad424db79b4ffe8c08efb7d9bf7696b68b6c81"
     },
     {
       "content": "documents",
@@ -4849,6 +4854,36 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#21",
       "hash": "sha256:76a8820567c891c124a1325618fc4f0662959f9d1ae3269cee5738fca6d4748a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#1",
+      "hash": "sha256:bc426661c4db6037e72c7b6b7715cb04b18d7174c08d7aadbc54609561083a77"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#2",
+      "hash": "sha256:999e9af5974975bfc7e7a56a94f28f0a6c3aac1de0b40f291d917f0636931f6e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#4",
+      "hash": "sha256:929184d23108bddb26eb44500e7dcfc5b37446ef4f11a6cc8f6718200821da40"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#9",
+      "hash": "sha256:195c9c79066143ad6c81e79d9589ff570b3725d6aba2239c881c5b2a68d33f18"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#13",
+      "hash": "sha256:068001a89f3a8816890ecf741dd459b55471dce7aee690c5930e14e4ec3af070"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#16",
+      "hash": "sha256:29b5862fc127bb11ebf1387c4c7416debb1c252e24fed5e2afb9b81157b89753"
     },
     {
       "content": "headings",
@@ -22649,6 +22684,91 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md#25",
       "hash": "sha256:8e33db5173e9d29860ea98d7187034f305a88b73815d28e7cfeeb2f9cddf3a08"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#1",
+      "hash": "sha256:2bb44fac864fcceab4ed185f30ebdfb27207180cbc1165a8eebd9c37e51a7803"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#3",
+      "hash": "sha256:9c17b6af82981ad3ece27a39ce36e20d7ae55cdc960d555ba1c65b1b56de955a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#5",
+      "hash": "sha256:ddb999da6e5b2603a755999d3bcf832d3dfcefd7df008d0ac882b0df8ad2fe3d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#6",
+      "hash": "sha256:24b0301beb1feae863196bda2b444dbb59db8a84f9cdebc14588689dab3ccc67"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#7",
+      "hash": "sha256:d7ba19bac6a441cd60e2ade16ce7c608ccb171c3666245a8508989ad26cf0e59"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#8",
+      "hash": "sha256:14c68b51a59ebb18817ed53752d2c5d6a2c2e16e27b3eb370c4866ba465a7014"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#9",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#10",
+      "hash": "sha256:1ef1556466e280b85f73a7508a61d12d4724e5124a79b3bbfae06b72dd7f1af6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#11",
+      "hash": "sha256:26086ce38f3286803fb7a42fd20e86a8db986fa891d84f158a007ec93cf21ec9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#12",
+      "hash": "sha256:7d2d5915e644950c730e7abe86959f83789ec58e2c0db71253bb402d003d9875"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#13",
+      "hash": "sha256:984ed13c58e095c79d8347d352cbb7c9b820e2d536dd3117e191dbb08aaf5977"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#14",
+      "hash": "sha256:f46d1d5f792edcbbfb14c7b3d84ea027df1ccbf1eb40070f0dd4797beba78a6c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#15",
+      "hash": "sha256:f5d1be3cc0cd924e64e8ab2f9471e33271b7edc4f50fd9b678a49080c6163a68"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#16",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md#17",
+      "hash": "sha256:6ca27dd01000a12c4c47f9ba74cf16811699a4c6fce626f3eaa680ddfa7d5a36"
     },
     {
       "content": "blocks",

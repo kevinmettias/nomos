@@ -66,7 +66,6 @@ use nomos_platform::Clock;
 use nomos_platform_std::{StdFileSystem, StdProcessLauncher, SystemClock};
 
 use crate::arguments::Named_Value_From_String_Arguments;
-use nomos_model::Subject_Of_Path;
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::io::Write;

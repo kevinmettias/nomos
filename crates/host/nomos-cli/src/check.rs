@@ -121,7 +121,6 @@ pub(crate) use nomos_check_orchestration::CheckCommand;
 use crate::arguments::Named_Value_From_String_Arguments;
 use nomos_contracts::Finding;
 use nomos_rules::SourceFile;
-use nomos_model::Subject_Of_Path;
 use nomos_workspace::BuildVariant;
 use std::io::Write;
 use std::path::{Path, PathBuf};

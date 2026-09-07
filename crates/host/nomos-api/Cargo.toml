@@ -29,6 +29,7 @@ nomos-spec-store = { workspace = true }
 nomos-work-orchestration = { workspace = true }
 nomos-workflow-orchestration = { workspace = true }
 nomos-workspace = { workspace = true }
+nomos-workspace-discovery = { workspace = true }
 serde = { workspace = true }
 
 [dev-dependencies]

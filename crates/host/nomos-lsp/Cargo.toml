@@ -33,11 +33,11 @@ nomos-analysis = { workspace = true }
 nomos-capability = { workspace = true }
 # The seam this crate is a thin adapter over: `Run` composes the registry, materializes
 # facts and judges every rule `nomos-cli::check` already composes. `crates/host/nomos-lsp`
-# owns none of that judgment; it walks a tree the identical way `nomos-cli::check::sources`
-# does (that module is `pub(super)`, so this crate carries its own copy of the same walk
-# rather than reaching into another composition root's private module) and renders what
-# `Run` returns.
+# owns none of that judgment; it walks a tree through `nomos-workspace-discovery`, the same
+# canonical walk every other host now calls, and renders what `Run` returns.
 nomos-check-orchestration = { workspace = true }
+# The walk this crate's own `sources.rs` is a thin wrapper over -- `OD-HOST-008`.
+nomos-workspace-discovery = { workspace = true }
 # The narrow, real answer to "is a correction available for this finding": `CorrectionFamily`,
 # that crate's own declaration of which rules it composes a correction for, read here rather
 # than copied. This crate declared that membership itself until

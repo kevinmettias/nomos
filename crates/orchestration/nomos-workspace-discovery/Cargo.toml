@@ -1,0 +1,17 @@
+[package]
+name = "nomos-workspace-discovery"
+version = "0.1.0"
+description = "Walks a root for the source this workspace's registered language packages recognize, apart from choosing a platform, judging the result or rendering an answer -- the one walk every composition root shares instead of carrying its own copy."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-lang-go = { workspace = true }
+nomos-lang-rust = { workspace = true }
+nomos-model = { workspace = true }
+nomos-rules = { workspace = true }
+
+[lints]
+workspace = true

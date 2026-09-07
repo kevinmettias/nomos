@@ -267,6 +267,12 @@ members = [
     # answer.
     "crates/orchestration/nomos-gate-orchestration",
 
+    # Application Service — the one walk every composition root shares: recognizes source
+    # by registered language package, not a hand-typed literal, apart from choosing a
+    # platform, judging the result or rendering an answer. Four hosts each carried their
+    # own copy of the identical walk before this; `OD-HOST-008`.
+    "crates/orchestration/nomos-workspace-discovery",
+
     # Band 41 — orchestration. The seam for correction planning and lifecycle both hosts
     # call: Run_Correction composes nomos-check-orchestration and nomos-corrections into
     # a judged, staged, validated (and optionally committed) outcome, apart from choosing
@@ -411,6 +417,7 @@ nomos-workflow-orchestration = { path = "crates/orchestration/nomos-workflow-orc
 nomos-gate-orchestration = { path = "crates/orchestration/nomos-gate-orchestration" }
 nomos-correction-orchestration = { path = "crates/orchestration/nomos-correction-orchestration" }
 nomos-agent-orchestration = { path = "crates/orchestration/nomos-agent-orchestration" }
+nomos-workspace-discovery = { path = "crates/orchestration/nomos-workspace-discovery" }
 nomos-api = { path = "crates/host/nomos-api" }
 nomos-api-transport = { path = "crates/host/nomos-api-transport" }
 nomos-lsp = { path = "crates/host/nomos-lsp" }

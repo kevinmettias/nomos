@@ -1,0 +1,6 @@
+pub const nomos_workspace_discovery::SCRIPT_EXTENSIONS: [&str; 5]
+pub fn nomos_workspace_discovery::Read_Source(root: &Path, path: &Path, text: String) -> SourceFile
+pub fn nomos_workspace_discovery::Read_Sources(root: &Path, recognized: &[&str]) -> Vec<SourceFile>
+pub fn nomos_workspace_discovery::Registered_Extensions() -> Vec<&'static str>
+pub fn nomos_workspace_discovery::Relative_Path(root: &Path, path: &Path) -> String
+pub fn nomos_workspace_discovery::Walked_Sources(root: &Path, recognized: &[&str]) -> Option<Vec<SourceFile>>
