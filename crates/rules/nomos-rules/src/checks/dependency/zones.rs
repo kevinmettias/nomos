@@ -296,6 +296,12 @@ pub fn Permits(from: Zone, to: Zone) -> bool
         // AGT-002's WorkResult and OD-EXECUTOR-001's executor boundary carry.
         Agent => matches!(to, Protocol | Substrate | Provider),
         RepoTooling => matches!(to, Protocol | Substrate),
+        // Agent, measured directly: nomos-agent-orchestration already depends on nomos-
+        // agent-contracts, nomos-agent-executor-claude-code and nomos-model-backend-ollama
+        // for dispatch, and now nomos-corrections too -- OD-LEDGER-038's
+        // P40-AGENT-WORKRESULT-VALIDATED-PATH-4 carries a WorkResult's own plan through the
+        // correction lifecycle that already produced the type, rather than leaving the
+        // permission this arm already granted undocumented.
         ApplicationService => matches!(to, Protocol | Substrate | CapabilityContract | Provider | Rules | Agent),
         Host => matches!(
             to,

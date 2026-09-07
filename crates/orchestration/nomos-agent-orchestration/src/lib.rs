@@ -44,13 +44,21 @@
 //!
 //! `nomos-cli`'s `agent` module and `nomos-api`'s own agent surface both call
 //! [`Run_Agent_Execute`]/[`Run_Agent_Judgment`] now; neither owns this dispatch any more.
+//!
+//! [`validated_correction`] is a second, independent seam this crate owns: carrying a
+//! [`nomos_agent_contracts::WorkResult`]'s own `plan`, once dispatch has produced one,
+//! through `nomos-corrections`' `Preview -> Stage -> Validate -> Commit` lifecycle. It does
+//! not call [`run`] and [`run`] does not call it -- a caller that dispatches a task and
+//! then wants its plan carried through calls both seams itself, in that order.
 
 #![forbid(unsafe_code)]
 
 mod agent_dispatch_outcome;
 mod backend;
 mod run;
+mod validated_correction;
 
 pub use agent_dispatch_outcome::AgentDispatchOutcome;
 pub use backend::Backend;
 pub use run::{AgentEnvironment, DispatchConfig, Run_Agent_Execute, Run_Agent_Judgment};
+pub use validated_correction::{Run_Validated_Correction, ValidatedCorrectionOutcome};

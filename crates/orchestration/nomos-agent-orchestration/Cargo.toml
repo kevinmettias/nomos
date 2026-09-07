@@ -1,7 +1,7 @@
 [package]
 name = "nomos-agent-orchestration"
 version = "0.1.0"
-description = "The seam for dispatching one TaskEnvelope to a chosen backend both hosts call: Run_Agent_Execute and Run_Agent_Judgment compose nomos-agent-executor-claude-code and nomos-model-backend-ollama into a real AgentDispatchOutcome, apart from choosing a platform or rendering the answer."
+description = "The seam for dispatching one TaskEnvelope to a chosen backend both hosts call: Run_Agent_Execute and Run_Agent_Judgment compose nomos-agent-executor-claude-code and nomos-model-backend-ollama into a real AgentDispatchOutcome, apart from choosing a platform or rendering the answer. Run_Validated_Correction is the separate seam that carries a WorkResult's own plan through nomos-corrections' Preview/Stage/Validate/Commit lifecycle."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -11,11 +11,14 @@ publish.workspace = true
 nomos-agent-contracts = { workspace = true }
 nomos-agent-executor-claude-code = { workspace = true }
 nomos-contracts = { workspace = true }
+nomos-corrections = { workspace = true }
+nomos-model = { workspace = true }
 nomos-model-backend-ollama = { workspace = true }
 nomos-model-package = { workspace = true }
 nomos-platform = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-scope-verification = { workspace = true }
+nomos-workspace = { workspace = true }
 
 [dev-dependencies]
 nomos-platform-std = { workspace = true }

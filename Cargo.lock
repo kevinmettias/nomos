@@ -935,12 +935,15 @@ dependencies = [
  "nomos-agent-contracts",
  "nomos-agent-executor-claude-code",
  "nomos-contracts",
+ "nomos-corrections",
+ "nomos-model",
  "nomos-model-backend-ollama",
  "nomos-model-package",
  "nomos-platform",
  "nomos-platform-std",
  "nomos-rules",
  "nomos-scope-verification",
+ "nomos-workspace",
 ]
 
 [[package]]
