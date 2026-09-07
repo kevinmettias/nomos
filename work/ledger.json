@@ -61695,6 +61695,74 @@
         ],
         "patterns": []
       },
+      "state": {
+        "Declined": {
+          "reason": "Territory omitted tests/contract/tests/completeness_universes/table.rs: the new crate's pub const SCRIPT_EXTENSIONS is a real declared universe the completeness_universes scanner catches (module-level pub const array), needing a new Unmirrored row and UNMIRRORED_TOTAL raised from 4 to 5 -- the three original per-host copies never tripped this because each was function-local, not module-level, so the gap only appeared once the walk was centralized. Everything else (the crate, all four hosts, README/zones.rs/Cargo.toml registration, the surface snapshot, and the workspace-wide parameter-count self-check fix already found and fixed) is written and green. Re-authored as P41-WORKSPACE-DISCOVERY-SERVICE-4 with the table added, unchanged in kind, done_when and predicate."
+        }
+      },
+      "depends_on": [
+        "P41-PLATFORM-DIRECTORY-ENUMERATION-3"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-lsp"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-dev-session",
+          "reason": "The new crate's pub const SCRIPT_EXTENSIONS is a real declared universe nomos-contract-tests' own completeness_universes scanner catches (a module-level pub const array claiming to enumerate something) -- the three original per-host copies never tripped it because each was function-local, not module-level. tests/contract/tests/completeness_universes/table.rs needs a new Unmirrored row and UNMIRRORED_TOTAL needs to move from 4 to 5; neither file is in territory. Abandoning to decline and re-author with it added. Running a full cargo test --workspace sweep in the background first to catch anything else in one more pass rather than looping again.",
+          "abandoned_at": 1788762904
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1788762925
+      }
+    },
+    {
+      "id": "P41-WORKSPACE-DISCOVERY-SERVICE-4",
+      "title": "Four hosts walk the tree themselves and each hardcodes the languages Nomos supports",
+      "why": "Re-authored from P41-WORKSPACE-DISCOVERY-SERVICE-3, whose territory omitted tests/contract/tests/completeness_universes/table.rs: the new crate's pub const SCRIPT_EXTENSIONS is a real declared universe the completeness_universes scanner catches (a module-level pub const array claiming to enumerate check-script-discipline's recognized extensions), needing a new Unmirrored row and UNMIRRORED_TOTAL raised from 4 to 5. The three original per-host copies never tripped this scanner because each was function-local, not module-level, so the gap only became visible once the walk was centralized into one real crate. Everything else -- the crate itself, all four hosts' sources.rs wired to it, README/zones.rs/Cargo.toml registration, the surface snapshot, and a real self-inflicted parameter-count violation already found and fixed by nomos-cli's own gate self-check -- is written and green. nomos-api sources.rs calls itself a deliberate twin of the CLI walker, and measured directly at c0e5c79f there are four copies, not two, each hardcoding the same rs and go extensions, the same target and .git exclusions and its own nested-git-worktree detection. Recognition should come from registered packages and providers so that adding a language does not require editing every host.",
+      "done_when": "One canonical discovery service resolves the source set, all four hosts call it and none names a file extension or an excluded directory, recognition comes from package and provider registration, adding a language changes no host, the new crate is registered in the workspace members, the README zone table, the ZONES crate table and its own surface snapshot, and the decision is recorded.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workspace-discovery/src/lib.rs",
+          "crates/orchestration/nomos-workspace-discovery/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "tests/contract/surface/nomos-workspace-discovery.txt",
+          "tests/contract/tests/completeness_universes/table.rs",
+          "crates/host/nomos-api/src/sources.rs",
+          "crates/host/nomos-cli/src/check/sources.rs",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/gate/sources.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-lsp/src/sources.rs",
+          "crates/host/nomos-api/Cargo.toml",
+          "crates/host/nomos-cli/Cargo.toml",
+          "crates/host/nomos-lsp/Cargo.toml",
+          "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-008.record"
+        ],
+        "patterns": []
+      },
       "state": "Claimed",
       "depends_on": [
         "P41-PLATFORM-DIRECTORY-ENUMERATION-3"
@@ -61702,8 +61770,8 @@
       "blocked": null,
       "claim": {
         "holder": "claude-dev-session",
-        "acquired_at": 1788761949,
-        "lease_expires_at": 1788769149
+        "acquired_at": 1788762943,
+        "lease_expires_at": 1788770143
       },
       "verification": {
         "argv": [
