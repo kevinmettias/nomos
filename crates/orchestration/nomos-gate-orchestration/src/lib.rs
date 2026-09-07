@@ -153,7 +153,7 @@
 //! `single-letter-names` are not. `crate::policy::gate_policy_file`'s own doc states that
 //! limit and why it is not papered over with a digest field.
 //!
-//! Its eleventh increment, `P40-GATE-PHASES-APPROVALS-4`, gives [`GateCommand`] real
+//! Its eleventh increment, `P40-GATE-PHASES-APPROVALS-5`, gives [`GateCommand`] real
 //! [`GatePhase`]s and [`PhaseApproval`]s -- `WF-001`'s last three clauses, "required phases
 //! ... thresholds ... approvals," that every increment above deliberately left unbuilt
 //! ([`RuleCalibration`]'s own doc names them absent by name). Unlike every policy before it,
@@ -172,6 +172,15 @@
 //! itself carries no per-phase detail -- a caller that needs to see which phase did what
 //! calls [`Evaluated_Phases`] directly over [`GateRunResult::findings`].
 //!
+//! Its twelfth increment, `P41-GATE-PLAN-IS-A-PLAN-3`, gives [`crate::run::Run`] (the
+//! `plan` verb) its first real narrowing: it reads [`GateCommand::rules`] and filters
+//! [`Registered`]'s offers by it, the same [`RuleSelector::Is_Included`] test
+//! [`crate::Run_Gate`] already applies to a real run's findings. Two `plan` invocations
+//! differing only in `rules` now produce different [`GatePlan`]s, closing the "registry
+//! introspection wearing the name of a plan" gap this record's own earlier text named.
+//! `root` and `scope` remain unread: `Plan` still reports the registry rather than a walk,
+//! so neither has a file to narrow against -- see [`crate::gate_plan::GatePlan`]'s own doc.
+//!
 //! # What no increment is
 //!
 //! `compare` is real as a library verb: [`Compare_Gate_Runs`] takes two already-produced
@@ -182,9 +191,8 @@
 //! parser still refuses a `compare` subcommand outright, the same "no invented shape ahead
 //! of a real body" this crate's own [`command`] module documents for the wiring, if not the
 //! verb itself. `GatePlan`
-//! still does not vary by [`GateCommand::root`], `scope`, `rules`, `suppressions`,
-//! `baseline` or `adoption` -- it
-//! reports the registry, not a walk, so no selection applies to it yet.
+//! still does not vary by [`GateCommand::root`] or `scope` -- it
+//! reports the registry, not a walk, so neither selection applies to it yet.
 
 #![forbid(unsafe_code)]
 

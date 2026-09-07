@@ -19,12 +19,17 @@ use nomos_rules::RuleOffer;
 
 /// What a gate would evaluate, without evaluating it.
 ///
-/// `rules` is every rule [`crate::composition::Registered`] holds, in [`nomos_rules::
-/// RuleRegistry::Offers`]'s own order -- [`nomos_contracts::RuleId`] order, so two runs over
-/// the same registration agree without depending on a hasher. It does not vary by
-/// [`crate::GateCommand::root`], `scope` or `rules`: `Plan` reports the registry, not a
-/// walk, so `ScopeSelector` and `RuleSelector` -- real since `P13-GATE-014-SCOPE-RULE-
-/// SELECTORS`, and consulted by [`crate::Run_Gate`] -- have nothing here to narrow.
+/// `rules` is [`crate::composition::Registered`]'s own offers, filtered by
+/// [`crate::GateCommand::rules`] the same way [`crate::Run_Gate`] narrows a real run's
+/// findings -- an empty [`crate::RuleSelector::include`] plans every registered rule, the
+/// same "select everything" default every existing caller already has, so two invocations
+/// differing only in which rules are selected produce different plans (`P41-GATE-PLAN-IS-A-
+/// PLAN-3`). Registered offers are read in [`nomos_rules::RuleRegistry::Offers`]'s own order
+/// -- [`nomos_contracts::RuleId`] order, so two runs over the same registration and the same
+/// selection agree without depending on a hasher. It still does not vary by
+/// [`crate::GateCommand::root`] or `scope`: `Plan` reports the registry, not a walk, so
+/// `ScopeSelector` -- real since `P13-GATE-014-SCOPE-RULE-SELECTORS`, and consulted by
+/// [`crate::Run_Gate`] -- has no file here to narrow against.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct GatePlan
 {

@@ -47,7 +47,7 @@ pub fn nomos_gate_orchestration::RuleCalibration::Is_Applicable_To(&self, findin
 pub fn nomos_gate_orchestration::RuleCompositionError::from(error: RuleRegistryError) -> Self
 pub fn nomos_gate_orchestration::RuleCompositionError::from(error: RuleResolutionError) -> Self
 pub fn nomos_gate_orchestration::RuleSelector::Is_Included(&self, rule: &RuleId) -> bool
-pub fn nomos_gate_orchestration::Run(_command: &GateCommand) -> GateOutcome
+pub fn nomos_gate_orchestration::Run(command: &GateCommand) -> GateOutcome
 pub fn nomos_gate_orchestration::Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem>( walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, Launcher, Fs>, command: &GateCommand, run: RunId, ) -> GateRunResult
 pub fn nomos_gate_orchestration::ScopeSelector::Is_In_Scope(&self, path: &str) -> bool
 pub fn nomos_gate_orchestration::Suppression::Is_Applicable_To(&self, finding: &Finding) -> bool

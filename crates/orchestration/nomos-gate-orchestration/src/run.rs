@@ -3,13 +3,17 @@
 
 use crate::{GateCommand, GateOutcome};
 
-/// Composes this gate's rule registry and reports what it holds.
+/// Composes this gate's rule registry and reports what a real run would judge from it.
 ///
-/// `command` is accepted in full -- including [`GateCommand::root`], which this increment
-/// does not yet read -- so a caller writes against the shape `nomos gate plan` will keep once
-/// a later increment gives `root` something to do.
+/// `command.rules` narrows the registry the same way [`crate::Run_Gate`] narrows a real
+/// run's findings -- an empty [`crate::RuleSelector::include`] plans every registered rule,
+/// the same "select everything" default every existing caller and CI's own `gate plan`
+/// already have, so nothing about their behavior changes. `command.root` and `command.scope`
+/// are still accepted in full but not yet read: `Plan` reports the registry, not a walk, so
+/// neither has a file to narrow against -- see [`crate::gate_plan::GatePlan`]'s own doc for
+/// why a rule-only registry has nothing for a path-shaped selector to filter.
 #[must_use]
-pub fn Run(_command: &GateCommand) -> GateOutcome
+pub fn Run(command: &GateCommand) -> GateOutcome
 {
     use crate::Registered;
     use crate::gate_plan::GatePlan;
@@ -20,7 +24,7 @@ pub fn Run(_command: &GateCommand) -> GateOutcome
         Err(error) => return GateOutcome::Contradictory(error),
     };
 
-    let rules = registry.Offers().cloned().collect();
+    let rules = registry.Offers().filter(|offer| return command.rules.Is_Included(&offer.rule)).cloned().collect();
 
     return GateOutcome::Planned(GatePlan { rules });
 }
@@ -29,7 +33,8 @@ pub fn Run(_command: &GateCommand) -> GateOutcome
 mod tests
 {
     use super::Run;
-    use crate::{GateCommand, GateOutcome};
+    use crate::{GateCommand, GateOutcome, RuleSelector};
+    use nomos_contracts::RuleId;
     use std::path::PathBuf;
 
     /// Two different roots must plan identically: this increment does not select by scope, so
@@ -53,5 +58,45 @@ mod tests
         };
 
         assert_eq!(here, elsewhere, "root is not read yet, so the plan must not depend on it");
+    }
+
+    #[test]
+    fn Test_Run_Should_Plan_Every_Rule_When_Rules_Is_Unset()
+    {
+        let GateOutcome::Planned(every_rule) = Run(&GateCommand::default())
+        else
+        {
+            panic!("this crate's own registration must not be contradictory");
+        };
+        let GateOutcome::Planned(named_explicitly) = Run(&GateCommand { rules: RuleSelector { include: every_rule.rules.iter().map(|offer| return offer.rule.clone()).collect() }, ..Default::default() })
+        else
+        {
+            panic!("this crate's own registration must not be contradictory");
+        };
+
+        assert_eq!(every_rule, named_explicitly, "an empty RuleSelector must plan every rule, the same as naming every rule explicitly");
+    }
+
+    #[test]
+    fn Test_Run_Should_Plan_Fewer_Rules_When_Rules_Narrows_The_Selection()
+    {
+        let GateOutcome::Planned(every_rule) = Run(&GateCommand::default())
+        else
+        {
+            panic!("this crate's own registration must not be contradictory");
+        };
+        let GateOutcome::Planned(narrowed) = Run(&GateCommand { rules: RuleSelector { include: vec![RuleId::New(nomos_rules::NAMING_CONVENTION)] }, ..Default::default() })
+        else
+        {
+            panic!("this crate's own registration must not be contradictory");
+        };
+
+        assert_ne!(every_rule, narrowed, "narrowing command.rules must produce a different plan");
+        let [only] = narrowed.rules.as_slice()
+        else
+        {
+            panic!("expected exactly one planned rule, got {narrowed:?}");
+        };
+        assert_eq!(only.rule, RuleId::New(nomos_rules::NAMING_CONVENTION));
     }
 }
