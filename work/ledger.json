@@ -61566,13 +61566,61 @@
         ],
         "patterns": []
       },
+      "state": {
+        "Declined": {
+          "reason": "Territory still one file short: making Run() genuinely read its command parameter means renaming it from _command to command, which the public-surface snapshot test records as a signature change (the underscore prefix is part of the checked-in text) -- tests/contract/surface/nomos-gate-orchestration.txt was not reserved. The gate_plan.rs/run.rs/lib.rs implementation itself is already written and its own tests pass; only the snapshot bless remains. Re-authored as P41-GATE-PLAN-IS-A-PLAN-4 with it added, unchanged in kind, done_when and predicate."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-dev-session",
+          "reason": "Making Run actually read its command parameter means renaming it from _command to command, which changes the recorded public signature text and reddens the public-surface snapshot test -- tests/contract/surface/nomos-gate-orchestration.txt was not reserved. Abandoning to decline and re-author with it added.",
+          "abandoned_at": 1788761066
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1788761071
+      }
+    },
+    {
+      "id": "P41-GATE-PLAN-IS-A-PLAN-4",
+      "title": "gate plan describes the registry and does not vary with scope, rules or policy",
+      "why": "Re-authored from P41-GATE-PLAN-IS-A-PLAN-3, whose territory omitted tests/contract/surface/nomos-gate-orchestration.txt: making run.rs's Run() genuinely read command means renaming its parameter from _command to command, and the public-surface snapshot test records that rename as a signature change. The gate_plan.rs/run.rs/lib.rs implementation itself is already written and its own tests pass; only the snapshot bless remains. The plan verb is the one place a person can ask what a gate would do before it does it, and it answered the same way regardless of root, scope, selected rules, suppressions, baseline or adoption -- registry introspection wearing the name of a plan. OD-GATE-023 already freed this item of its inherited planner dependency.",
+      "done_when": "Two gate plan invocations differing only in scope or selected rules produce different plans, and a test pins that correspondence. This does not require the plan to be the same resolved object a run executes, which was the original item's planner-shaped half and is not carried forward.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/run.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
       "state": "Claimed",
       "depends_on": [],
       "blocked": null,
       "claim": {
         "holder": "claude-dev-session",
-        "acquired_at": 1788760887,
-        "lease_expires_at": 1788768087
+        "acquired_at": 1788761086,
+        "lease_expires_at": 1788768286
       },
       "verification": {
         "argv": [
