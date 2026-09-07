@@ -60054,7 +60054,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "OD-LEDGER-038: repointed onto P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4, Done, in place of the declined P42-EXECUTOR-WORKRESULT-IMPLEMENTATION its depends_on still named. Re-authored as P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-2 with depends_on corrected, title, why, done_when, kind, origin, territory and predicate otherwise unchanged."
+        }
+      },
       "depends_on": [
         "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION"
       ],
@@ -60074,7 +60078,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1788766784
+      }
     },
     {
       "id": "P40-AGENT-WORKRESULT-VALIDATED-PATH-3",
@@ -60094,7 +60101,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "OD-LEDGER-038: repointed onto P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4 (Done), in place of the declined P42-EXECUTOR-WORKRESULT-IMPLEMENTATION its depends_on still named; P40-CORRECTIONS-CANONICAL-SEAM is unaffected and stays a dependency. Re-authored as P40-AGENT-WORKRESULT-VALIDATED-PATH-4 with depends_on corrected, everything else unchanged."
+        }
+      },
       "depends_on": [
         "P40-CORRECTIONS-CANONICAL-SEAM",
         "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION"
@@ -60115,7 +60126,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1788766814
+      }
     },
     {
       "id": "P42-SECOND-HARNESS-EXECUTOR-2",
@@ -60136,7 +60150,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "OD-LEDGER-038: repointed onto P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4 (Done) and P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-2, in place of the declined P42-EXECUTOR-WORKRESULT-IMPLEMENTATION and P42-EXECUTOR-ENVELOPE-IMPLEMENTATION its depends_on still named. Re-authored as P42-SECOND-HARNESS-EXECUTOR-3 with depends_on corrected, everything else unchanged."
+        }
+      },
       "depends_on": [
         "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION",
         "P42-EXECUTOR-ENVELOPE-IMPLEMENTATION"
@@ -60157,7 +60175,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1788766799
+      }
     },
     {
       "id": "P73-LSP-CORRECTION-FAMILY-DUPLICATED-2",
@@ -62200,6 +62221,127 @@
           "nomos-work-orchestration",
           "-p",
           "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-2",
+      "title": "OD-EXECUTOR-007 decided a mechanism for each unenforced TaskEnvelope field and no code enforces them",
+      "why": "P42-AGENT-ENVELOPE-ENFORCEMENT was declined for an under-reserved territory and re-authored as a decision, P42-EXECUTOR-ENVELOPE-MECHANISM, whose own title ends in the words before code. That decision is Done and recorded as OD-EXECUTOR-007, which verified a real mechanism against the live CLI: restricted plus add-dir plus an explicit allowed-tools list confines file reach structurally, and a forbidden read and a forbidden write were both refused before the filesystem was touched. The implementation was never filed. TaskEnvelope fields are therefore still accepted and ignored, which is the contract running ahead of enforcement that OD-EXECUTOR-001 warned a first executor decides by default. Enforcing scope needs a real root threaded through Execute_Task, which has callers in nomos-cli agent dispatch.rs and nomos-workflow-orchestration run.rs, so it reaches beyond the executor crate.",
+      "done_when": "Each TaskEnvelope field OD-EXECUTOR-007 gave a mechanism is enforced by that mechanism rather than accepted and ignored; Execute_Task resolves repo-relative Territory paths against a real root threaded from its callers; a test proves a reach outside the declared scope is refused before the filesystem is touched; and the fields that record left without a mechanism are documented as unenforced rather than silently accepted.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+          "crates/agent/nomos-agent-contracts/src/task_envelope.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-claude-code"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-SECOND-HARNESS-EXECUTOR-3",
+      "title": "One agent executor exists, so nothing has shown which of its choices are the contract",
+      "why": "The Claude Code executor is properly bounded: fresh isolated working directory, strict tool configuration, a structural allow-list, one turn, a budget ceiling, timeout and stall handling, and structured parsing rather than trusting prose. A second executor over a richer session or harness runtime, of which Clay is the motivating example, would be an adapter rather than a new execution architecture. Its value is evidence: with one implementation nothing distinguishes what the canonical task contract requires from what one vendor happened to need. It is deliberately sequenced after the envelope constraints and the canonical result are enforced in code rather than merely decided, so the second executor is written against the contract as enforced rather than inheriting the first executor accepted-and-ignored fields. A harness executor gets no scheduler authority, no work-graph authority and no rule authority.",
+      "done_when": "A second executor satisfies the same task contract with the same enforced constraints and produces the same canonical result type, what the two implementations disagree about is recorded, no scheduling, work-graph or rule authority moved into either, and the new crate is registered in the workspace members, the README zone table, the ZONES crate table and its own surface snapshot.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-harness/src/lib.rs",
+          "crates/agent/nomos-agent-executor-harness/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "tests/contract/surface/nomos-agent-executor-harness.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4",
+        "P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-harness"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-AGENT-WORKRESULT-VALIDATED-PATH-4",
+      "title": "No agent run reaches a validated correction, so agent output is never checked before it lands",
+      "why": "A Claude Code executor and an Ollama backend both really run, and typed agent contracts exist, but nothing carries what an agent produced into a correction the system validates before committing. The game plan is explicit that an agent executor should not precede a solid mutation and validation contract; the executor was built first, so closing this restores that ordering rather than adding to the inversion. Sequenced behind the canonical correction seam because a workflow or agent tier calling into a CLI module would invert the layering, and behind the canonical result implementation because the executor does not construct one yet, so this path would otherwise be built on a vendor-shaped response. nomos-agent-orchestration is the seam that should carry this: it already dispatches an executor and it is the application-service peer of the correction orchestration it needs, but it does not name that peer today, so an explicit zone edge is part of the work rather than an accident of it.",
+      "done_when": "An agent run produces a canonical WorkResult that becomes a correction candidate, that candidate goes through Preview, Stage, Validate and Commit, a validation failure leaves the tree untouched, a test covers both outcomes, the new dependency is declared as an explicit allowed zone edge rather than left to the manifest alone, and the public surface snapshot is re-blessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-agent-orchestration/src/validated_correction.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-agent-orchestration/Cargo.toml",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "tests/contract/surface/nomos-agent-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-CORRECTIONS-CANONICAL-SEAM",
+        "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-corrections"
         ],
         "timeout_seconds": 600
       },
