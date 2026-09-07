@@ -61149,7 +61149,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Premise disproven by measurement, and the real defect is the opposite of what this item claimed. I wrote that the duplicates arrive through platform-gated dependencies that do not resolve the same way on Linux. Measured with cargo tree --duplicates --workspace: 35 duplicated packages under the Windows target and 33 under x86_64-unknown-linux-gnu, including bitflags, hashbrown, itertools and rustc-hash, none of them platform-gated. Duplicates plainly exist on Linux, so zero violations is not a legitimate Linux answer and the assertion is not platform-dependent. cargo-deny is also installed on ubuntu CI, its own Test_The_Supply_Chain_Tool_Should_Be_Installed_At_A_Chosen_Version passing in the same run. So the test asserts a true, portable property and caught something real. Superseded by P81-DENY-PROVIDER-CANNOT-TELL-A-FAILED-RUN-FROM-A-CLEAN-ONE, which records what the code actually permits: Require_Ran accepts any Exited outcome regardless of exit code, deliberately, because cargo deny exits non-zero whenever a diagnostic reaches deny and does so locally with exit 4; Run_Cargo_Deny refuses only an empty stderr; and Violations_Of skips every line that is not parseable JSON of type diagnostic, which its own test enshrines. A fatal cargo deny failure that prints anything unreadable on stderr therefore yields Ok of an empty vector and becomes a clean policy fact. Weakening or fixturing the assertion, which is what this item pointed at, would have deleted the only guard that caught a false clean in a supply-chain provider."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -61161,6 +61165,42 @@
           "nomos-lang-rust-deny"
         ],
         "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-lspfam",
+        "declined_at": 1788739415
+      }
+    },
+    {
+      "id": "P81-DENY-PROVIDER-CANNOT-TELL-A-FAILED-RUN-FROM-A-CLEAN-ONE",
+      "title": "The cargo-deny provider reports a clean policy fact when its own run failed unreadably",
+      "why": "Discover_Workspace in deny_error.rs accepts a run it could not read as a run that found nothing. Three decisions combine: Require_Ran accepts any ExitOutcome Exited regardless of exit code, deliberately and documented, because cargo deny exits non-zero whenever a diagnostic reaches deny and does exactly that locally with exit 4; Run_Cargo_Deny refuses only a stderr that is entirely empty; and Violations_Of skips every line that is not parseable JSON carrying type diagnostic, a behaviour its own test Test_Violations_Of_Should_Skip_Non_Diagnostic_Lines_And_Malformed_Ones deliberately enshrines because real runs interleave noise. Each is defensible alone. Together they mean a cargo deny that fails fatally and prints anything unreadable on stderr produces Ok of an empty vector, which Materialize_Workspace then publishes as a clean dependency-policy fact. Nothing distinguishes checked and clean from failed and unread. This is not hypothetical. On ubuntu-latest the real whole-workspace run returned PolicyPayload with violations empty while cargo-deny was installed, its pinning test passing in the same run, and while the workspace demonstrably has duplicates under Linux resolution: cargo tree --duplicates reports 33 duplicated packages for x86_64-unknown-linux-gnu against 35 for Windows, including bitflags, hashbrown, itertools and rustc-hash, none platform-gated. The exact stderr cargo deny produced on that machine is not known from here, because the provider captures it and it never reaches the CI log, so the specific trigger still needs a Linux reproduction. What is already established is that the provider cannot report the difference, and that fact_context.rs's own duplicate assertion is the only thing in the tree that noticed.",
+      "done_when": "The provider distinguishes a cargo deny run whose output it could read from one it could not, and refuses rather than reporting an empty clean result for the second, with the discrimination resting on something cargo deny really emits rather than on an exit code the provider has a stated reason not to judge. The behaviour is covered by a test over a stderr stream that is non-empty and carries no readable diagnostic, which is the case no test covers today. fact_context.rs's whole-workspace duplicate assertion is kept, not weakened and not moved to a fixture, because it is the guard that caught this.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-deny/src/deny_error.rs",
+          "crates/languages/nomos-lang-rust-deny/src/fact_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-deny"
+        ],
+        "timeout_seconds": 900
       },
       "verified": null,
       "abandoned": [],
