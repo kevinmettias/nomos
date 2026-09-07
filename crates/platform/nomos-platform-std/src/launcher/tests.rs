@@ -216,7 +216,30 @@ fn Test_A_Loud_Programs_Output_Should_Arrive_Whole()
 /// The control that stops the fix from being a removed timeout.
 ///
 /// Every assertion above is satisfied by a launcher that simply waits forever, which
-/// is the one remedy this must not be.
+/// is the one remedy this must not be. What this holds is that a program outstaying the
+/// bounds it was given is *ended*, under the bounds [`Command::New`] hands out by default.
+///
+/// # Why the outcome is not asserted to be `TimedOut` specifically
+///
+/// `Command::New` starts the idle and wall bounds equal, and `wait`'s own doc states that
+/// the idle bound is deliberately checked first, so a process which produced nothing at all
+/// reports [`ExitOutcome::Stalled`] rather than [`ExitOutcome::TimedOut`] when the two
+/// expire together. Whether this program produces anything is a property of the program,
+/// and [`A_Slow_Program`] is not the same program on both hosts: Windows runs `ping`, which
+/// prints a reply about once a second and so keeps resetting the idle clock, and Unix runs
+/// `sleep`, which is silent for its whole life.
+///
+/// So `TimedOut` was never the outcome under test here -- it was the outcome on the host
+/// whose fixture happened to be chatty. Asserting it made this fail on Linux permanently
+/// and pass on Windows for a reason the test never stated (`P83`). Both outcomes discharge
+/// the control equally: each one is the launcher ending a program rather than waiting for
+/// it, which `Has_A_Verdict` returning false is the type-level statement of.
+///
+/// The wall bound specifically *is* exercised, deterministically and on both hosts, by
+/// [`Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled`], which asks
+/// for an idle bound longer than its wall bound instead of leaving the two equal. Nothing
+/// is lost here by declining to assert it a second time, on a fixture that cannot deliver
+/// it everywhere.
 #[test]
 fn Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out()
 {
@@ -224,7 +247,11 @@ fn Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out()
     let started = Instant::now();
     let output = StdProcessLauncher.Run(&slow).unwrap();
 
-    assert_eq!(output.outcome, ExitOutcome::TimedOut);
+    assert!(
+        matches!(output.outcome, ExitOutcome::TimedOut | ExitOutcome::Stalled { .. }),
+        "a program outstaying its bounds must be ended by one of them, got {:?}",
+        output.outcome
+    );
     assert!(!output.outcome.Has_A_Verdict());
     assert!(
         started.elapsed() < Duration::from_secs(7),

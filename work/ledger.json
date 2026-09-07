@@ -61391,7 +61391,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -61404,7 +61404,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform-std"
+        ],
+        "exit_code": 0,
+        "output_tail": "uncher::tests::Test_A_Successful_Program_Should_Report_A_Zero_Exit ... ok\ntest std_process_launcher::wait::tests::Test_Waited_For_Child_Should_Report_A_Clean_Exit ... ok\ntest std_process_launcher::tests::Test_A_Loud_Programs_Output_Should_Arrive_Whole ... ok\ntest std_process_launcher::tests::Test_A_Loud_Program_Should_Be_Judged_On_Its_Result_Not_Its_Volume ... ok\ntest std_process_launcher::kill::tests::Test_Killed_And_Reaped_Should_Stop_And_Reap_A_Running_Child ... ok\ntest std_process_launcher::tests::Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled ... ok\ntest std_process_launcher::tests::Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out ... ok\ntest std_process_launcher::tests::Test_A_Silent_Program_Should_Report_Stalled_Rather_Than_Timed_Out ... ok\ntest std_process_launcher::tests::Test_A_Kill_Should_Reach_The_Whole_Process_Tree_Not_Only_The_Direct_Child ... ok\ntest std_process_launcher::tests::Test_A_Grandchild_Holding_The_Pipe_Should_Not_Hold_The_Launcher ... ok\n\ntest result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.07s\n\n\nrunning 4 tests\ntest Test_System_Clock_Should_Produce_Real_Timestamps_The_Real_Trait_Can_Order ... ok\ntest Test_Std_File_System_Should_Round_Trip_A_Real_File_Through_The_Real_Trait ... ok\ntest Test_File_Lock_Should_Exclude_A_Second_Holder_Through_The_Real_Trait ... ok\ntest Test_Std_Process_Launcher_Should_Report_A_Real_Exit_Through_The_Real_Trait ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.22s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_platform_std-9df357ef2edc3eb1.exe)\n     Running tests\\implements_the_platform_ports.rs (target\\debug\\deps\\implements_the_platform_ports-52354990f9f67fea.exe)\n   Doc-tests nomos_platform_std\n",
+        "verified_at": 1788766136,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fe0fac5829affe9cd9268e40a467a532464d6fe9"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
