@@ -3,7 +3,7 @@ id: OD-ANALYSIS-009
 type: decision
 title: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - analysis
@@ -184,10 +184,73 @@ one process each, so the first trigger above ("a real long-lived caller") has st
 fired; this increment is what a real caller of that kind would need to exist, not that
 caller itself.
 
+## Amendment (P40-FACT-STORE-PERSISTENCE-2): The First Trigger Fired, And It Asks For Something Narrower Than This Record's Subject
+
+`P40-FACT-STORE-PERSISTENCE-2` re-measured all four triggers directly against the tree
+rather than trusting this record's own prior "unfired" verdict, the same discipline
+`OD-WORKFLOW-002` already modeled for the workflow tier.
+
+**Trigger 1 has fired, at the letter and largely in substance.** `crates/host/nomos-lsp`
+exists now and did not when this record's "What Was Measured" section searched for a
+long-lived caller. Its `Run_Server` (`crates/host/nomos-lsp/src/server.rs:32`) opens a
+JSON-RPC connection and loops (`Serve`, line 93) for the life of an editor session, calling
+`Recheck_And_Publish` on every `didOpen` or `didSave` -- exactly "a real long-lived caller
+... that would invoke `Run` more than once within its own process lifetime," the concrete
+shape this record's first trigger named and attributed to `OD-HOST-003`'s editor surface
+before either was real.
+
+**But read past the letter, `nomos-lsp` asks for the increment this record already declined
+to build in its own first amendment, not the one this section's subject is about.**
+`Recheck_And_Publish` (`server.rs:122`) constructs `let mut workspace = None;` and
+`let mut store = nomos_analysis::MemoryFactStore::New();` fresh, inline, on every call --
+discarding, on every keystroke's save, the exact reuse `P14-ANALYSIS-009-STORE-WORKSPACE-
+REUSE-FIRST-INCREMENT` (recorded above) already built and proved safe:
+`nomos_check_orchestration::Run` has taken a caller-supplied `workspace: &mut
+Option<Workspace>` and `store: &mut MemoryFactStore` since that increment shipped, and
+`nomos-lsp` is the first real caller with a process lifetime long enough to hold either
+across two calls, but does not. That is a real, concrete, immediately buildable gap -- and
+it is answered entirely by wiring one already-decided shape into one composition root's own
+loop state. It needs nothing this record's subject asks for: no serialization format, no
+on-disk store, no key that survives a build-variant or contract-version change, and no
+eviction policy, because nothing here is asked to outlive the process. `nomos-lsp`'s own
+process still ends when the editor closes it, same as every other caller in this workspace,
+and nothing measured shows that boundary needs crossing.
+
+**Triggers 2 through 4 remain unfired, re-verified directly.** `nomos-workflow-orchestration`
+(`P40-WORKFLOW-*`) now exists and its own `Run` (`crates/orchestration/nomos-workflow-
+orchestration/src/run.rs:46`) does take a whole `&[WorkflowStepPlan]`, but its one real
+caller, `nomos-cli`'s `workflow.rs`, composes exactly one step per invocation by its own
+design -- `Run`'s own doc comment states plainly that "a caller composing more than one step
+links `nomos-workflow-orchestration` directly," and grepped directly, nothing does. Trigger
+2 is unfired in substance, the same "satisfied only at the letter" gap `OD-WORKFLOW-004`
+already named for a different condition, except here not even the letter is satisfied: no
+real plan with two analysis-bearing steps has ever been composed. No corpus-scale timing
+comparison exists anywhere in this workspace for trigger 3. `ARC-ROADMAP-001`, re-read in
+full, still states its near-term tier is "not... a validated ordering," unchanged, so
+trigger 4 is unfired. `OD-ROADMAP-001`'s cluster-scoped override, re-checked, still names
+`AgentExecutor`/`ModelBackend`/`RulePackage`/corrections and nothing about analysis
+persistence, so it still does not reach this question.
+
+**Decision, unchanged in substance, sharpened in reason.** No real caller anywhere in this
+workspace needs a `FactStore` to survive its own process's exit, so this record continues to
+decline building one, its keying and its eviction/invalidation lifecycle now. What changed
+is that the "no real long-lived caller" half of that reasoning is no longer the load-bearing
+half -- a real one now exists -- and the record now rests on the narrower, better-supported
+finding that the caller which exists needs in-process reuse of already-built machinery, not
+cross-process persistence of new machinery. `P40-FACT-STORE-PERSISTENCE-2`'s territory does
+not reach `nomos-lsp`, so this amendment records the gap rather than closing it; wiring
+`nomos-lsp`'s own loop to hold one `Workspace` and one `MemoryFactStore` across its calls is
+real, disjoint, next work, left for a ledger item scoped to that crate.
+
 ## Status
 
-Accepted, amended. The four triggers named above remain unfired on their own evidence.
-Revisit on any of them, on `OD-HOST-003`'s editor surface or `OD-WORKFLOW-002`'s engine
-trigger next changing status, or on either of this section's own two named remainders: a
-materialization step that consults `store` before recomputing a fact, or a real long-lived
-process that could be the caller this record's first trigger describes.
+Accepted, amended a second time. Trigger 1 (a real long-lived caller) has fired with the
+arrival of `nomos-lsp`, but what it asks for is the in-process reuse `P14-ANALYSIS-009-
+STORE-WORKSPACE-REUSE-FIRST-INCREMENT` already built, not the cross-process, on-disk
+persistence this record's own subject is about -- so the decision to decline stands, now for
+a narrower and more precise reason than "no real caller exists." Triggers 2 through 4 remain
+unfired, re-verified directly rather than assumed unchanged. Revisit on `nomos-lsp` (or any
+other caller) needing its `Workspace`/`MemoryFactStore` to survive its own process's exit
+rather than merely to be held across calls within one process, on a real multi-analysis-pass
+workflow plan being composed by a real caller, on a corpus-scale timing measurement, or on
+`ARC-ROADMAP-001`'s near-term tier being internally sequenced.

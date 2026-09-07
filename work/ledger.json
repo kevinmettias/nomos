@@ -59946,16 +59946,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P40-INCREMENTAL-SKIP-UNCHANGED-RULES"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "claude-dev-session",
-        "acquired_at": 1788758702,
-        "lease_expires_at": 1788765902
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -59965,7 +59961,27 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis"
+        ],
+        "exit_code": 0,
+        "output_tail": "sed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest Test_A_Four_Cycle_Should_Condense_Into_One_Group_Naming_All_Four ... ok\ntest Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_Order ... ok\ntest Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group ... ok\ntest Test_A_Chain_One_Hundred_Thousand_Deep_Should_Condense_Without_Overflowing_The_Stack ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.90s\n\n\nrunning 4 tests\ntest Test_A_Fact_Payloads_Digest_Should_Match_Nomos_Models_Own_Content_Digest ... ok\ntest Test_A_Guarantee_Digest_Should_Match_Nomos_Models_Own_Digest_Of_Parts ... ok\ntest Test_An_Input_Digest_Should_Match_Nomos_Models_Own_Digest_Of_Parts ... ok\ntest Test_Different_Payloads_Should_Not_Share_Nomos_Models_Digest ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 2 tests\ntest Test_An_Unrecorded_Dependency_Edge_Leaves_A_Stale_Downstream_Value_That_Disagrees_With_A_Clean_Rebuild ... ok\ntest Test_Incremental_Recomputation_After_A_Change_Agrees_With_A_Clean_Rebuild ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-8ed2b98a0abe7ca2.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-472de15e56a195d2.exe)\n     Running tests\\invalidation_order.rs (target\\debug\\deps\\invalidation_order-5c58ca88752defbc.exe)\n     Running tests\\nomos_model_seam.rs (target\\debug\\deps\\nomos_model_seam-9a36094f371ffa35.exe)\n     Running tests\\recomputation_equivalence.rs (target\\debug\\deps\\recomputation_equivalence-8bcea38aeda441f4.exe)\n   Doc-tests nomos_analysis\n",
+        "verified_at": 1788759102,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1b54b00800e469a99dc7fa16802a488528c996a2"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

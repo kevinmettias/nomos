@@ -40,7 +40,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md | authored | 38 | 8 | sha256:2bd79506c974018e6fbd0be693dfd6a4e5545e674125e589330629657b1d0e44 |
 | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md | authored | 12 | 5 | sha256:7b868459b4901509f831d98949e39dd926a2a649fc7ab419ad983c06f799c1a1 |
 | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md | authored | 22 | 8 | sha256:2a1f9cc14ba7229566dea2754dfbafa91116a43aa78032e04f419cbd3c313272 |
-| docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 22 | 7 | sha256:7d281622d199fb8d91210c9ea37e044767b56494a54464391dcf0c91b572de75 |
+| docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 28 | 8 | sha256:f9c663f27499031ece5e69ff38d7a5b150fb4b9bdd4c34bb112940800b662719 |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md | authored | 16 | 6 | sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a |
 | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md@authored | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md | authored | 18 | 6 | sha256:05eb45335e03a5d62b2c97bb0815702e51852b67c101e91b9c3b852491e0967a |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
@@ -453,7 +453,8 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#10 | authored | 2 | Decision |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#13 | authored | 2 | What Would Decide It |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#15 | authored | 2 | A Direct Override Built The First Real Increment, Narrower Than Any Trigger Above |
-| docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#21 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#21 | authored | 2 | Amendment (P40-FACT-STORE-PERSISTENCE-2): The First Trigger Fired, And It Asks For Something Narrower Than This Record's Subject |
+| docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#27 | authored | 2 | Status |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1 | authored | 1 | The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#2 | authored | 2 | Question |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#4 | authored | 2 | What Was Measured |
@@ -9120,19 +9121,106 @@ caller itself.
 
 ### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#21
 
+*revision: authored · kind: heading · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P40-FACT-STORE-PERSISTENCE-2): The First Trigger Fired, And It Asks For Something Narrower Than This Record's Subject · hash: sha256:9b808095532a1d5d065a93548a358901ada38b5c93648806ba44d569b49e68dd*
+
+## Amendment (P40-FACT-STORE-PERSISTENCE-2): The First Trigger Fired, And It Asks For Something Narrower Than This Record's Subject
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#22
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P40-FACT-STORE-PERSISTENCE-2): The First Trigger Fired, And It Asks For Something Narrower Than This Record's Subject · hash: sha256:d0db1b2fa73bf5b5cff21fa4f054fe8d6e087c42ff8337b3e7539b97185ef511*
+
+`P40-FACT-STORE-PERSISTENCE-2` re-measured all four triggers directly against the tree
+rather than trusting this record's own prior "unfired" verdict, the same discipline
+`OD-WORKFLOW-002` already modeled for the workflow tier.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#23
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P40-FACT-STORE-PERSISTENCE-2): The First Trigger Fired, And It Asks For Something Narrower Than This Record's Subject · hash: sha256:8d6720d1d79a8b7dadea2383935edbee09404a5cf8d2d62615425390b801eddf*
+
+**Trigger 1 has fired, at the letter and largely in substance.** `crates/host/nomos-lsp`
+exists now and did not when this record's "What Was Measured" section searched for a
+long-lived caller. Its `Run_Server` (`crates/host/nomos-lsp/src/server.rs:32`) opens a
+JSON-RPC connection and loops (`Serve`, line 93) for the life of an editor session, calling
+`Recheck_And_Publish` on every `didOpen` or `didSave` -- exactly "a real long-lived caller
+... that would invoke `Run` more than once within its own process lifetime," the concrete
+shape this record's first trigger named and attributed to `OD-HOST-003`'s editor surface
+before either was real.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#24
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P40-FACT-STORE-PERSISTENCE-2): The First Trigger Fired, And It Asks For Something Narrower Than This Record's Subject · hash: sha256:d4983e08c68fc510becee983fa23d6294b69d2243942c9bfa05d6ba6f62404e9*
+
+**But read past the letter, `nomos-lsp` asks for the increment this record already declined
+to build in its own first amendment, not the one this section's subject is about.**
+`Recheck_And_Publish` (`server.rs:122`) constructs `let mut workspace = None;` and
+`let mut store = nomos_analysis::MemoryFactStore::New();` fresh, inline, on every call --
+discarding, on every keystroke's save, the exact reuse `P14-ANALYSIS-009-STORE-WORKSPACE-
+REUSE-FIRST-INCREMENT` (recorded above) already built and proved safe:
+`nomos_check_orchestration::Run` has taken a caller-supplied `workspace: &mut
+Option<Workspace>` and `store: &mut MemoryFactStore` since that increment shipped, and
+`nomos-lsp` is the first real caller with a process lifetime long enough to hold either
+across two calls, but does not. That is a real, concrete, immediately buildable gap -- and
+it is answered entirely by wiring one already-decided shape into one composition root's own
+loop state. It needs nothing this record's subject asks for: no serialization format, no
+on-disk store, no key that survives a build-variant or contract-version change, and no
+eviction policy, because nothing here is asked to outlive the process. `nomos-lsp`'s own
+process still ends when the editor closes it, same as every other caller in this workspace,
+and nothing measured shows that boundary needs crossing.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#25
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P40-FACT-STORE-PERSISTENCE-2): The First Trigger Fired, And It Asks For Something Narrower Than This Record's Subject · hash: sha256:9b1935cd7959fd29ff6dfb5a9452fe1ddeaee13483e6ac58cca37a72226b3f48*
+
+**Triggers 2 through 4 remain unfired, re-verified directly.** `nomos-workflow-orchestration`
+(`P40-WORKFLOW-*`) now exists and its own `Run` (`crates/orchestration/nomos-workflow-
+orchestration/src/run.rs:46`) does take a whole `&[WorkflowStepPlan]`, but its one real
+caller, `nomos-cli`'s `workflow.rs`, composes exactly one step per invocation by its own
+design -- `Run`'s own doc comment states plainly that "a caller composing more than one step
+links `nomos-workflow-orchestration` directly," and grepped directly, nothing does. Trigger
+2 is unfired in substance, the same "satisfied only at the letter" gap `OD-WORKFLOW-004`
+already named for a different condition, except here not even the letter is satisfied: no
+real plan with two analysis-bearing steps has ever been composed. No corpus-scale timing
+comparison exists anywhere in this workspace for trigger 3. `ARC-ROADMAP-001`, re-read in
+full, still states its near-term tier is "not... a validated ordering," unchanged, so
+trigger 4 is unfired. `OD-ROADMAP-001`'s cluster-scoped override, re-checked, still names
+`AgentExecutor`/`ModelBackend`/`RulePackage`/corrections and nothing about analysis
+persistence, so it still does not reach this question.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#26
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P40-FACT-STORE-PERSISTENCE-2): The First Trigger Fired, And It Asks For Something Narrower Than This Record's Subject · hash: sha256:430979f10c0e64f58061d034a07e57ac05bfbd5f7ac7b2b0ad54908c8f895938*
+
+**Decision, unchanged in substance, sharpened in reason.** No real caller anywhere in this
+workspace needs a `FactStore` to survive its own process's exit, so this record continues to
+decline building one, its keying and its eviction/invalidation lifecycle now. What changed
+is that the "no real long-lived caller" half of that reasoning is no longer the load-bearing
+half -- a real one now exists -- and the record now rests on the narrower, better-supported
+finding that the caller which exists needs in-process reuse of already-built machinery, not
+cross-process persistence of new machinery. `P40-FACT-STORE-PERSISTENCE-2`'s territory does
+not reach `nomos-lsp`, so this amendment records the gap rather than closing it; wiring
+`nomos-lsp`'s own loop to hold one `Workspace` and one `MemoryFactStore` across its calls is
+real, disjoint, next work, left for a ledger item scoped to that crate.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#27
+
 *revision: authored · kind: heading · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#22
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#28
 
-*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Status · hash: sha256:4e91c65dcf102f65967e72bc548545593fa390933b4c138aca214bbde0fad298*
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Status · hash: sha256:a67022dd6ae4e38ef1647923430d827dba287d5780be3081d8c2cd8850762486*
 
-Accepted, amended. The four triggers named above remain unfired on their own evidence.
-Revisit on any of them, on `OD-HOST-003`'s editor surface or `OD-WORKFLOW-002`'s engine
-trigger next changing status, or on either of this section's own two named remainders: a
-materialization step that consults `store` before recomputing a fact, or a real long-lived
-process that could be the caller this record's first trigger describes.
+Accepted, amended a second time. Trigger 1 (a real long-lived caller) has fired with the
+arrival of `nomos-lsp`, but what it asks for is the in-process reuse `P14-ANALYSIS-009-
+STORE-WORKSPACE-REUSE-FIRST-INCREMENT` already built, not the cross-process, on-disk
+persistence this record's own subject is about -- so the decision to decline stands, now for
+a narrower and more precise reason than "no real caller exists." Triggers 2 through 4 remain
+unfired, re-verified directly rather than assumed unchanged. Revisit on `nomos-lsp` (or any
+other caller) needing its `Workspace`/`MemoryFactStore` to survive its own process's exit
+rather than merely to be held across calls within one process, on a real multi-analysis-pass
+workflow plan being composed by a real caller, on a corpus-scale timing measurement, or on
+`ARC-ROADMAP-001`'s near-term tier being internally sequenced.
 
 ### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1
 
