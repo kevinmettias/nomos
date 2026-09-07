@@ -61914,6 +61914,79 @@
         ],
         "patterns": []
       },
+      "state": {
+        "Declined": {
+          "reason": "Territory still missed tests/contract/requirements/AGT-002.assessment: this item's own edit to lib.rs's crate doc (removing the now-false 'does not assemble a WorkResult' claim) reddens requirement-trace-staleness against that file's gap: citation, confirmed via the real gate self-check (nomos-cli's own gate::tests). The assessment's content is genuinely stale in substance, not just citation -- AGT-002 said nothing returns a WorkResult through a real agent run, which this item's own work makes false. Every other file's implementation is written and green; nomos-agent-contracts, nomos-agent-executor-claude-code, nomos-agent-orchestration, nomos-workflow-orchestration, nomos-api and nomos-cli's own non-self-check suites all pass. Re-authored as P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4 with the assessment file added, unchanged in kind and done_when."
+        }
+      },
+      "depends_on": [
+        "P42-EXECUTOR-WORKRESULT-MECHANISM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-dev-session",
+          "reason": "Editing lib.rs's crate doc to remove the literal phrase 'does not assemble a' (since it now does) reddens requirement-trace-staleness against tests/contract/requirements/AGT-002.assessment, whose own gap: line cites that exact phrase as an anchor into lib.rs. Confirmed via the real self-check (nomos-cli's own gate::tests, which run nomos gate run over this repository's own tree): with every other file now implemented, this is the only remaining Blocking finding beyond the pre-existing hex-0.4.3 fixture baseline (val/T, unrelated, already present before this item). The assessment's own verdict is genuinely stale in substance too, not just in citation: AGT-002 said 'nothing returns one through a real agent run', which this item's own work makes false. Abandoning to decline and re-author with the assessment file added so its content can be updated honestly rather than just re-anchored to dodge the staleness check.",
+          "abandoned_at": 1788764224
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1788764231
+      }
+    },
+    {
+      "id": "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4",
+      "title": "OD-EXECUTOR-008 decided the canonical WorkResult shape and no code carries it",
+      "why": "Re-authored from P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-3, whose territory omitted tests/contract/requirements/AGT-002.assessment: this item's own lib.rs doc edit (removing the now-false 'does not assemble a WorkResult' claim) reddens requirement-trace-staleness against that assessment's gap: citation, confirmed via the real gate self-check. The assessment's content is genuinely stale in substance too -- it said nothing returns a WorkResult through a real agent run, which this item's own work makes false. Every other file's implementation is written and green. P42-AGENT-STRUCTURED-WORKRESULT was declined for an under-reserved territory and re-authored as a decision, P42-EXECUTOR-WORKRESULT-MECHANISM, whose own title ends in the words before code; that decision is Done and recorded as OD-EXECUTOR-008. The executor returned a vendor-shaped response before this item: AgentExecutionOutcome carried response as a String, and nomos-cli agent dispatch.rs and workflow.rs both read that field directly. Until this lands, no consumer of an agent run reads a canonical type, and any validated-correction path built on top would be built on a vendor shape.",
+      "done_when": "The executor populates the WorkResult fields OD-EXECUTOR-008 decided it can honestly ground, via a narrow JSON schema with additionalProperties false; the fields that record decided must stay structurally absent are absent rather than model-filled; AgentExecutionOutcome carries the canonical type rather than a vendor-shaped String; every existing consumer reads the canonical type; and every affected public surface snapshot is re-blessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts/src/work_result.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/response.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/agent_execution_outcome.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/tests.rs",
+          "crates/agent/nomos-agent-executor-claude-code/tests/integration_seams.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/run.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/agent/dispatch.rs",
+          "crates/host/nomos-cli/src/workflow.rs",
+          "crates/host/nomos-cli/tests/agent_executor_claude_code_seam.rs",
+          "crates/host/nomos-api/src/agent.rs",
+          "crates/host/nomos-api/src/workflow.rs",
+          "tests/contract/requirements/AGT-002.assessment",
+          "tests/contract/surface/nomos-agent-contracts.txt",
+          "tests/contract/surface/nomos-agent-executor-claude-code.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
       "state": "Claimed",
       "depends_on": [
         "P42-EXECUTOR-WORKRESULT-MECHANISM"
@@ -61921,8 +61994,8 @@
       "blocked": null,
       "claim": {
         "holder": "claude-dev-session",
-        "acquired_at": 1788763850,
-        "lease_expires_at": 1788771050
+        "acquired_at": 1788764250,
+        "lease_expires_at": 1788771450
       },
       "verification": {
         "argv": [
