@@ -153,6 +153,25 @@
 //! `single-letter-names` are not. `crate::policy::gate_policy_file`'s own doc states that
 //! limit and why it is not papered over with a digest field.
 //!
+//! Its eleventh increment, `P40-GATE-PHASES-APPROVALS-4`, gives [`GateCommand`] real
+//! [`GatePhase`]s and [`PhaseApproval`]s -- `WF-001`'s last three clauses, "required phases
+//! ... thresholds ... approvals," that every increment above deliberately left unbuilt
+//! ([`RuleCalibration`]'s own doc names them absent by name). Unlike every policy before it,
+//! a phase does not remove a finding from [`GateFindings::blocking_findings`]; it groups
+//! whole rules into an ordered, named stage judged over that list, each with its own
+//! [`PhaseThreshold`], and [`Evaluated_Phases`] stops at the first phase that fails
+//! unapproved -- later phases are reported [`PhaseDisposition::Skipped`] rather than judged,
+//! `WF-001`'s "blocking behavior" read literally. [`Phased_Disposition`] is the seam back
+//! into [`GateRunResult::disposition`]: a run that would otherwise fail can still pass when
+//! every blocking finding is named by some declared phase and no phase failed unapproved,
+//! and stays failed when a blocking finding belongs to no phase at all -- a phase policy
+//! only ever adds a way to still pass, never a silent way to stop blocking. Deliberately
+//! narrower than `WF-001`'s full shape: no CLI flag or config file constructs a [`GatePhase`]
+//! or [`PhaseApproval`] yet, the same "type and its consultation only" restraint
+//! `P13-GATE-015-SUPPRESSION-FIRST-INCREMENT` above already held, and [`GateRunResult`]
+//! itself carries no per-phase detail -- a caller that needs to see which phase did what
+//! calls [`Evaluated_Phases`] directly over [`GateRunResult::findings`].
+//!
 //! # What no increment is
 //!
 //! `compare` is real as a library verb: [`Compare_Gate_Runs`] takes two already-produced
@@ -162,8 +181,7 @@
 //! config file reaches it from a `nomos gate` invocation, and `nomos-cli`'s own gate-command
 //! parser still refuses a `compare` subcommand outright, the same "no invented shape ahead
 //! of a real body" this crate's own [`command`] module documents for the wiring, if not the
-//! verb itself. None touches declared phases, thresholds or approvals -- every other clause
-//! `WF-001` names beyond suppression, baseline, rule calibration and coverage. `GatePlan`
+//! verb itself. `GatePlan`
 //! still does not vary by [`GateCommand::root`], `scope`, `rules`, `suppressions`,
 //! `baseline` or `adoption` -- it
 //! reports the registry, not a walk, so no selection applies to it yet.
@@ -176,6 +194,7 @@ mod finding_query;
 mod gate_command;
 mod gate_compare;
 mod gate_environment;
+mod gate_phase;
 mod gate_plan;
 mod policy;
 mod run;
@@ -190,6 +209,7 @@ pub use finding_query::{Explain_Gate, Explanation, FindingQuery, GateExplainResu
 pub use gate_command::GateCommand;
 pub use gate_compare::{Compare_Gate_Runs, DispositionChange, FindingDisposition, GateCompareResult};
 pub use gate_environment::{GateEnvironment, Run_Gate};
+pub use gate_phase::{Evaluated_Phases, GatePhase, PhaseApproval, PhaseDisposition, PhaseOutcome, PhaseThreshold, Phased_Disposition};
 pub use gate_plan::{Disposition_Of_Findings, GateFindings, GateOutcome, GatePlan, GateRunOutcome, GateRunResult};
 pub use policy::{
     AdoptionPolicy, BaselineDebt, BaselinePolicy, CoveragePolicy, RuleCalibration, RuleSelector, ScopeSelector,

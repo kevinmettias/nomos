@@ -10,8 +10,8 @@ use std::path::Path;
 
 use crate::policy::{GatePolicyFile, Resolve_Gate_Policy};
 use crate::{
-    AdoptionPolicy, BaselinePolicy, CoveragePolicy, Disposition_Of_Findings, GateCommand, GateFindings, GateRunOutcome, GateRunResult, RuleSelector,
-    ScopeSelector, SuppressionPolicy,
+    AdoptionPolicy, BaselinePolicy, CoveragePolicy, Disposition_Of_Findings, Evaluated_Phases, GateCommand, GateFindings, GateRunOutcome, GateRunResult,
+    Phased_Disposition, RuleSelector, ScopeSelector, SuppressionPolicy,
 };
 
 /// Judges `walked` exactly as `nomos check` would.
@@ -124,6 +124,9 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem>(
         effective.coverage,
     );
 
+    let phase_outcomes = Evaluated_Phases(&command.phases, &reduced.findings.blocking_findings, &command.approvals);
+    let disposition = Phased_Disposition(reduced.disposition, &command.phases, &phase_outcomes, &reduced.findings.blocking_findings);
+
     return GateRunResult {
         root: command.root.clone(),
         run,
@@ -135,7 +138,7 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem>(
         // caller sees exactly what the check found; what it does not get is a verdict, because
         // the rules for turning findings into one were unreadable. Reported after judging
         // rather than instead of it so the answer stays as informative as it honestly can be.
-        disposition: if declared.is_err() { GateRunOutcome::Indeterminate } else { reduced.disposition },
+        disposition: if declared.is_err() { GateRunOutcome::Indeterminate } else { disposition },
     };
 }
 
@@ -249,9 +252,9 @@ fn Reduced_With_Coverage(outcome: GateRunOutcome, coverage: CoveragePolicy, sele
 mod tests
 {
     use super::{JudgeContext, Judged_Sources, Run_Gate};
-    use crate::GateCommand;
+    use crate::{GateCommand, GatePhase, GateRunOutcome, PhaseApproval, PhaseThreshold};
     use nomos_check_orchestration::CheckOutcome;
-    use nomos_contracts::{Digest128, RunId};
+    use nomos_contracts::{Digest128, RuleId, RunId};
     use nomos_model::Subject_Of_Path;
     use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
     use nomos_rules::SourceFile;
@@ -261,6 +264,17 @@ mod tests
     fn Source(path: &str, text: &str) -> SourceFile
     {
         return SourceFile::New(path, Subject_Of_Path(path), text);
+    }
+
+    /// One source guaranteed to produce a real `completeness-mirror` blocking finding --
+    /// the same fixture [`Test_Run_Gate_Should_Fail_On_A_Blocking_Finding`] already uses,
+    /// named so the phase tests below do not repeat its literal text.
+    fn Blocking_Sources() -> Vec<SourceFile>
+    {
+        return vec![Source(
+            "a.rs",
+            "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+        )];
     }
 
     #[test]
@@ -285,16 +299,58 @@ mod tests
     fn Test_Run_Gate_Should_Fail_On_A_Blocking_Finding()
     {
         let root = Repository_Root();
-        let sources = vec![Source(
-            "a.rs",
-            "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
-        )];
         let command = GateCommand { root: root.clone(), ..Default::default() };
         let run = RunId::From_Digest(Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]));
 
-        let result = Run_Gate(Some(sources), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, run);
+        let result =
+            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, run);
 
         assert!(!result.findings.blocking_findings.is_empty());
+    }
+
+    #[test]
+    fn Test_Run_Gate_Should_Pass_When_A_Phase_Approval_Covers_Every_Blocking_Finding()
+    {
+        let root = Repository_Root();
+        let unphased = GateCommand { root: root.clone(), ..Default::default() };
+        let baseline = Run_Gate(
+            Some(Blocking_Sources()),
+            super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },
+            &unphased,
+            RunId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH])),
+        );
+        // Every rule the fixture's own blocking findings actually name, read off a real run
+        // rather than hard-coded -- this fixture is shared with `Test_Run_Gate_Should_Fail_
+        // On_A_Blocking_Finding` and may trip more than one rule (`completeness-mirror` and
+        // `single-letter-names` both plausibly apply to `pub const T`), and a phase that
+        // named only one of them would leave the other unphased, which is a different test.
+        let rules: Vec<RuleId> = baseline.findings.blocking_findings.iter().map(|finding| return finding.rule.clone()).collect();
+        assert!(!rules.is_empty(), "the fixture must produce at least one blocking finding for this test to mean anything");
+
+        let phase = GatePhase { name: "completeness".to_owned(), rules, threshold: PhaseThreshold::AnyBlockingFinding };
+        let approval = PhaseApproval { phase: "completeness".to_owned(), rationale: "reviewed and accepted".to_owned() };
+        let command = GateCommand { root: root.clone(), phases: vec![phase], approvals: vec![approval], ..Default::default() };
+        let run = RunId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH]));
+
+        let result =
+            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, run);
+
+        assert!(!result.findings.blocking_findings.is_empty(), "the finding must still be real and reported, not hidden");
+        assert!(matches!(result.disposition, GateRunOutcome::Passed), "an approved phase covering every blocking finding must pass the run");
+    }
+
+    #[test]
+    fn Test_Run_Gate_Should_Stay_Failed_When_A_Blocking_Finding_Belongs_To_No_Declared_Phase()
+    {
+        let root = Repository_Root();
+        let phase = GatePhase { name: "unrelated".to_owned(), rules: vec![RuleId::New("naming-convention")], threshold: PhaseThreshold::AnyBlockingFinding };
+        let command = GateCommand { root: root.clone(), phases: vec![phase], ..Default::default() };
+        let run = RunId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH]));
+
+        let result =
+            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, run);
+
+        assert!(matches!(result.disposition, GateRunOutcome::Failed), "a phase policy must not let a finding outside its own scope silently stop blocking");
     }
 
     fn Test_Variant() -> BuildVariant

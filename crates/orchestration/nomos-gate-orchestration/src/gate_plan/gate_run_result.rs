@@ -28,6 +28,12 @@ pub struct GateRunResult
     pub check_outcome: CheckOutcome,
     /// Every finding this run reduced, grouped by why it does or does not block.
     pub findings: GateFindings,
-    /// The reduced verdict.
+    /// The reduced verdict. When [`crate::GateCommand::phases`] declares a phase policy,
+    /// this is [`crate::Phased_Disposition`]'s own answer rather than the flat
+    /// [`crate::Disposition_Of_Findings`] every earlier increment computed alone -- a phase
+    /// policy can turn a run that would otherwise fail into one that passes, when every
+    /// blocking finding is named by some phase and no phase failed unapproved. `findings`
+    /// still carries every finding this run reduced, in full, regardless of what any phase
+    /// decided about them.
     pub disposition: GateRunOutcome,
 }

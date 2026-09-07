@@ -15,7 +15,7 @@
 //! ahead of a second real case (`OD-PACKAGE-006`, `OD-RULES-005`, `OD-RULES-006`) -- so it
 //! is simply absent, not stubbed, until an increment gives it a real body.
 
-use crate::{AdoptionPolicy, BaselinePolicy, CoveragePolicy, RuleSelector, ScopeSelector, SuppressionPolicy};
+use crate::{AdoptionPolicy, BaselinePolicy, CoveragePolicy, GatePhase, PhaseApproval, RuleSelector, ScopeSelector, SuppressionPolicy};
 use nomos_model_package::ModelExecutionProfile;
 use std::path::PathBuf;
 
@@ -74,4 +74,14 @@ pub struct GateCommand
     /// this field; it is `MODEL-ROUTE-012`'s own first clause: a gate stays valid when no
     /// model is selected.
     pub model: Option<ModelExecutionProfile>,
+    /// This run's own declared phases -- `WF-001`'s "required phases ... thresholds ...
+    /// blocking behavior," judged in the order given over the findings `suppressions`,
+    /// `baseline` and `adoption` have already reduced down to still-blocking. Read by
+    /// [`crate::Run_Gate`] only, the same asymmetry as every field above. Empty is "no phase
+    /// policy," the same behavior every existing caller and CI's own `gate run --root .`
+    /// already have.
+    pub phases: Vec<GatePhase>,
+    /// Approvals that let a phase named in `phases` pass despite exceeding its own
+    /// threshold. Read by [`crate::Run_Gate`] only, the same asymmetry as `phases`.
+    pub approvals: Vec<PhaseApproval>,
 }

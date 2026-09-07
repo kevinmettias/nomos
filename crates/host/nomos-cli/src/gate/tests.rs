@@ -390,6 +390,8 @@ fn Test_Run_Should_Not_Report_Ok_When_Scoped_To_Nothing()
         adoption: nomos_gate_orchestration::AdoptionPolicy::default(),
         coverage: nomos_gate_orchestration::CoveragePolicy::default(),
         model: None,
+        phases: Vec::new(),
+        approvals: Vec::new(),
     });
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();

@@ -129,6 +129,10 @@ fn Plan_Or_Run_Command(root: PathBuf, rest: &[String]) -> GateCommand
         // No flag authors a ModelExecutionProfile yet -- see
         // `nomos_gate_orchestration::GateCommand::model`'s own doc for why.
         model: None,
+        // No flag authors a GatePhase or a PhaseApproval yet -- see
+        // `nomos_gate_orchestration::GateCommand::phases`'s own doc for why.
+        phases: Vec::new(),
+        approvals: Vec::new(),
     };
 }
 

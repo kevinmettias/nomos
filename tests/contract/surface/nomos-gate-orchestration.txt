@@ -3,6 +3,8 @@ pub enum nomos_gate_orchestration::Explanation
 pub enum nomos_gate_orchestration::FindingDisposition
 pub enum nomos_gate_orchestration::GateOutcome
 pub enum nomos_gate_orchestration::GateRunOutcome
+pub enum nomos_gate_orchestration::PhaseDisposition
+pub enum nomos_gate_orchestration::PhaseThreshold
 pub enum nomos_gate_orchestration::RuleCompositionError
 pub enum nomos_gate_orchestration::SuppressionDisposition
 pub enum variant nomos_gate_orchestration::CoveragePolicy::RequireCompleteness
@@ -18,6 +20,11 @@ pub enum variant nomos_gate_orchestration::GateOutcome::Planned(GatePlan)
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Failed
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Indeterminate
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Passed
+pub enum variant nomos_gate_orchestration::PhaseDisposition::Failed
+pub enum variant nomos_gate_orchestration::PhaseDisposition::Passed
+pub enum variant nomos_gate_orchestration::PhaseDisposition::Skipped
+pub enum variant nomos_gate_orchestration::PhaseThreshold::AnyBlockingFinding
+pub enum variant nomos_gate_orchestration::PhaseThreshold::MaxBlockingFindings { max: usize, }
 pub enum variant nomos_gate_orchestration::RuleCompositionError::Registration(RuleRegistryError)
 pub enum variant nomos_gate_orchestration::RuleCompositionError::Resolution(RuleResolutionError)
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::AcceptedBaselineDebt
@@ -31,8 +38,10 @@ pub fn nomos_gate_orchestration::BaselineDebt::Is_Applicable_To(&self, finding: 
 pub fn nomos_gate_orchestration::BaselinePolicy::Tolerating<'a>(&'a self, finding: &Finding) -> Option<&'a BaselineDebt>
 pub fn nomos_gate_orchestration::Compare_Gate_Runs(baseline: &GateRunResult, candidate: &GateRunResult) -> GateCompareResult
 pub fn nomos_gate_orchestration::Disposition_Of_Findings(findings: &[Finding]) -> GateRunOutcome
+pub fn nomos_gate_orchestration::Evaluated_Phases(phases: &[GatePhase], findings: &[Finding], approvals: &[PhaseApproval]) -> Vec<PhaseOutcome>
 pub fn nomos_gate_orchestration::Explain_Gate<Launcher: ProcessLauncher, Fs: FileSystem>( walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, Launcher, Fs>, command: &GateCommand, query: &FindingQuery, ) -> GateExplainResult
 pub fn nomos_gate_orchestration::Fresh_Run_Id(now: Timestamp) -> RunId
+pub fn nomos_gate_orchestration::Phased_Disposition(disposition: crate::GateRunOutcome, phases: &[GatePhase], outcomes: &[PhaseOutcome], blocking: &[Finding]) -> crate::GateRunOutcome
 pub fn nomos_gate_orchestration::Registered() -> Result<RuleRegistry, RuleCompositionError>
 pub fn nomos_gate_orchestration::RuleCalibration::Is_Applicable_To(&self, finding: &Finding) -> bool
 pub fn nomos_gate_orchestration::RuleCompositionError::from(error: RuleRegistryError) -> Self
@@ -58,9 +67,11 @@ pub struct field nomos_gate_orchestration::DispositionChange::subject_name: Stri
 pub struct field nomos_gate_orchestration::FindingQuery::location: String
 pub struct field nomos_gate_orchestration::FindingQuery::rule: RuleId
 pub struct field nomos_gate_orchestration::GateCommand::adoption: AdoptionPolicy
+pub struct field nomos_gate_orchestration::GateCommand::approvals: Vec<PhaseApproval>
 pub struct field nomos_gate_orchestration::GateCommand::baseline: BaselinePolicy
 pub struct field nomos_gate_orchestration::GateCommand::coverage: CoveragePolicy
 pub struct field nomos_gate_orchestration::GateCommand::model: Option<ModelExecutionProfile>
+pub struct field nomos_gate_orchestration::GateCommand::phases: Vec<GatePhase>
 pub struct field nomos_gate_orchestration::GateCommand::root: PathBuf
 pub struct field nomos_gate_orchestration::GateCommand::rules: RuleSelector
 pub struct field nomos_gate_orchestration::GateCommand::scope: ScopeSelector
@@ -80,12 +91,22 @@ pub struct field nomos_gate_orchestration::GateFindings::baselined_findings: Vec
 pub struct field nomos_gate_orchestration::GateFindings::blocking_findings: Vec<Finding>
 pub struct field nomos_gate_orchestration::GateFindings::calibrated_findings: Vec<Finding>
 pub struct field nomos_gate_orchestration::GateFindings::suppressed_findings: Vec<Finding>
+pub struct field nomos_gate_orchestration::GatePhase::name: String
+pub struct field nomos_gate_orchestration::GatePhase::rules: Vec<RuleId>
+pub struct field nomos_gate_orchestration::GatePhase::threshold: PhaseThreshold
 pub struct field nomos_gate_orchestration::GatePlan::rules: Vec<RuleOffer>
 pub struct field nomos_gate_orchestration::GateRunResult::check_outcome: CheckOutcome
 pub struct field nomos_gate_orchestration::GateRunResult::disposition: GateRunOutcome
 pub struct field nomos_gate_orchestration::GateRunResult::findings: GateFindings
 pub struct field nomos_gate_orchestration::GateRunResult::root: PathBuf
 pub struct field nomos_gate_orchestration::GateRunResult::run: RunId
+pub struct field nomos_gate_orchestration::PhaseApproval::phase: String
+pub struct field nomos_gate_orchestration::PhaseApproval::rationale: String
+pub struct field nomos_gate_orchestration::PhaseOutcome::approved: bool
+pub struct field nomos_gate_orchestration::PhaseOutcome::blocking_findings: Vec<Finding>
+pub struct field nomos_gate_orchestration::PhaseOutcome::disposition: PhaseDisposition
+pub struct field nomos_gate_orchestration::PhaseOutcome::name: String
+pub struct field nomos_gate_orchestration::PhaseOutcome::ran: bool
 pub struct field nomos_gate_orchestration::RuleCalibration::rationale: String
 pub struct field nomos_gate_orchestration::RuleCalibration::rule: RuleId
 pub struct field nomos_gate_orchestration::RuleSelector::include: Vec<RuleId>
@@ -107,8 +128,11 @@ pub struct nomos_gate_orchestration::GateCompareResult
 pub struct nomos_gate_orchestration::GateEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem>
 pub struct nomos_gate_orchestration::GateExplainResult
 pub struct nomos_gate_orchestration::GateFindings
+pub struct nomos_gate_orchestration::GatePhase
 pub struct nomos_gate_orchestration::GatePlan
 pub struct nomos_gate_orchestration::GateRunResult
+pub struct nomos_gate_orchestration::PhaseApproval
+pub struct nomos_gate_orchestration::PhaseOutcome
 pub struct nomos_gate_orchestration::RuleCalibration
 pub struct nomos_gate_orchestration::RuleSelector
 pub struct nomos_gate_orchestration::ScopeSelector
