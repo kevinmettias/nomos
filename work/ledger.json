@@ -60611,7 +60611,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory too narrow, caught before implementing rather than after (the same pattern P42-LSP-PROJECTION and P73-LSP-CORRECTION-FAMILY-DUPLICATED both hit). gate_phase.rs alone cannot even become part of this crate's compilation: nothing declares 'mod gate_phase;' anywhere, and only lib.rs can. Read against every prior single-concern increment in this crate (suppression, baseline, adoption, coverage), each wired its policy type into GateCommand (a new field), Run_Gate/gate_environment.rs (consultation) and GateRunResult (a carried field) -- the done_when's own 'reachable from the gate orchestration seam' asks for the same shape here, which this item's one-file territory cannot reach. Re-authored as P40-GATE-PHASES-APPROVALS-4 with gate_command.rs, gate_environment.rs, gate_plan/gate_run_result.rs, lib.rs and the surface snapshot added, unchanged in kind, done_when and predicate."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -60625,9 +60629,18 @@
         "timeout_seconds": 1200
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-dev-session",
+          "reason": "Territory reserves only gate_phase.rs, but a new module cannot even compile into this crate without a mod declaration in lib.rs, and real consultation (the done_when's 'reachable from the gate orchestration seam') needs GateCommand, Run_Gate and GateRunResult to carry it too -- the same too-narrow-territory trap P42-LSP-PROJECTION and P73-LSP-CORRECTION-FAMILY-DUPLICATED already hit. Abandoning to decline and re-author with the complete territory.",
+          "abandoned_at": 1788759444
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1788759451
+      }
     },
     {
       "id": "P40-GATE-POLICY-AUTHORING-3",
@@ -61393,6 +61406,47 @@
           "test",
           "-p",
           "nomos-lsp"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P40-GATE-PHASES-APPROVALS-4",
+      "title": "Declared phases, thresholds and approvals are named as unbuilt WF-001 gate semantics",
+      "why": "A gate today is one undifferentiated pass over every selected rule: no way to say one group of checks must pass before another is attempted, no numeric threshold a run is judged against, no approval a human or agent supplies to let a run proceed despite a finding. These turn a gate from a single verdict into a policy a team can adopt incrementally. Re-authored from P40-GATE-PHASES-APPROVALS-3, which reserved only gate_phase.rs -- too narrow for even a mod declaration to reach it, let alone the GateCommand/Run_Gate/GateRunResult consultation every prior policy increment (suppression, baseline, adoption, coverage) needed for the same 'reachable from the gate orchestration seam' this item's own done_when asks for. OD-GATE-023 already measured that OD-GATE-017 resolved rule selection in one place, so the planner dependency this item's -2 predecessor waited on is satisfied.",
+      "done_when": "A gate run can declare ordered phases whose later phases do not run when an earlier one fails, judge a numeric threshold, and record an approval that changes a disposition, each covered by a test and each reachable from the gate orchestration seam.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_phase.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_command.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_run_result.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-dev-session",
+        "acquired_at": 1788759465,
+        "lease_expires_at": 1788766665
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
         ],
         "timeout_seconds": 600
       },
