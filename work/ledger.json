@@ -61433,13 +61433,65 @@
         ],
         "patterns": []
       },
+      "state": {
+        "Declined": {
+          "reason": "Territory still one file short of complete, caught mid-implementation before committing anything: adding phases/approvals to GateCommand (the seam every prior policy -- suppression, baseline, adoption, coverage -- reaches Run_Gate through) breaks two full GateCommand{...} literals outside this item's territory, crates/host/nomos-cli/src/gate/parsing.rs and crates/host/nomos-cli/src/gate/tests.rs, both enumerating every field rather than spreading a Default. Every other GateCommand construction site in the workspace was grepped and confirmed safe (spreads ..Default::default()/..Command_At(...)). Re-authored as P40-GATE-PHASES-APPROVALS-5 with both files added, unchanged in kind, done_when and predicate. The gate_phase.rs/gate_command.rs/gate_environment.rs/lib.rs implementation itself is already written and compiles; only the two nomos-cli fixture literals remain."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-dev-session",
+          "reason": "Adding phases/approvals fields to GateCommand -- the seam every other policy already reaches Run_Gate through -- breaks two full struct literals outside this item's territory: crates/host/nomos-cli/src/gate/parsing.rs:113 (Plan_Or_Run_Command, which already enumerates every field with a 'no flag authors one yet' comment per field, the same comment this fix needs to add for phases/approvals) and crates/host/nomos-cli/src/gate/tests.rs:381 (a test fixture). Grepped every other GateCommand{...} site in the workspace first; all others already spread ..Default::default() or ..Command_At(...) and are unaffected. Abandoning to decline and re-author with both files added.",
+          "abandoned_at": 1788760065
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1788760072
+      }
+    },
+    {
+      "id": "P40-GATE-PHASES-APPROVALS-5",
+      "title": "Declared phases, thresholds and approvals are named as unbuilt WF-001 gate semantics",
+      "why": "Re-authored from P40-GATE-PHASES-APPROVALS-4, whose territory omitted crates/host/nomos-cli/src/gate/parsing.rs and crates/host/nomos-cli/src/gate/tests.rs -- adding GatePhase/PhaseApproval fields to GateCommand, the seam every prior policy (suppression, baseline, adoption, coverage) already reaches Run_Gate through, breaks two full GateCommand struct literals there that enumerate every field rather than spreading a Default. Every other GateCommand construction site in the workspace was grepped directly and confirmed safe. The gate_phase.rs/gate_command.rs/gate_environment.rs/lib.rs implementation is already written and its own tests pass; only these two files' literals need the same trivial field addition every prior policy field already required of them.",
+      "done_when": "A gate run can declare ordered phases whose later phases do not run when an earlier one fails, judge a numeric threshold, and record an approval that changes a disposition, each covered by a test and each reachable from the gate orchestration seam.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_phase.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_command.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_run_result.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/host/nomos-cli/src/gate/parsing.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
       "state": "Claimed",
       "depends_on": [],
       "blocked": null,
       "claim": {
         "holder": "claude-dev-session",
-        "acquired_at": 1788759465,
-        "lease_expires_at": 1788766665
+        "acquired_at": 1788760085,
+        "lease_expires_at": 1788767285
       },
       "verification": {
         "argv": [
