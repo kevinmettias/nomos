@@ -60579,7 +60579,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory (gate_plan.rs alone) omits where the real fix lives: GatePlan's own struct shape (rules: Vec<RuleOffer>) does not need to change at all -- what needs to change is run.rs's Run(), which currently ignores command entirely (parameter named _command) and would need to read command.rules and filter registry.Offers() by it for two invocations to differ. lib.rs's own doc also states as fact that GatePlan does not vary by root/scope/rules/suppressions/baseline/adoption, which would go stale and undocumented once rules-filtering lands. Re-authored as P41-GATE-PLAN-IS-A-PLAN-3 with run.rs and lib.rs added, unchanged in kind, done_when and predicate. Caught by inspection before claiming, not mid-implementation, following the same lesson P40-GATE-PHASES-APPROVALS learned the hard way twice this session."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -60595,7 +60599,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1788760874
+      }
     },
     {
       "id": "P40-GATE-PHASES-APPROVALS-3",
@@ -61539,6 +61546,44 @@
         },
         "revision": "ab2971fbbcac03d05b51d084fb8ef6fa564b9221"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-GATE-PLAN-IS-A-PLAN-3",
+      "title": "gate plan describes the registry and does not vary with scope, rules or policy",
+      "why": "Re-authored from P41-GATE-PLAN-IS-A-PLAN-2, whose territory (gate_plan.rs alone) omitted run.rs, where Run() actually constructs GatePlan and currently ignores its command parameter entirely (named _command), and lib.rs, whose own crate doc states as fact that GatePlan does not vary by root/scope/rules/suppressions/baseline/adoption -- a claim this item's own done_when falsifies for rules. The plan verb is the one place a person can ask what a gate would do before it does it, and it answers the same way regardless of root, scope, selected rules, suppressions, baseline or adoption -- registry introspection wearing the name of a plan. OD-GATE-023 already freed this item of its inherited planner dependency: making the plan vary needs only RuleSelector, real since P13-GATE-014-SCOPE-RULE-SELECTORS and already consulted by Run_Gate.",
+      "done_when": "Two gate plan invocations differing only in scope or selected rules produce different plans, and a test pins that correspondence. This does not require the plan to be the same resolved object a run executes, which was the original item's planner-shaped half and is not carried forward.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/run.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-dev-session",
+        "acquired_at": 1788760887,
+        "lease_expires_at": 1788768087
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
