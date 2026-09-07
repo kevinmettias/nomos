@@ -60007,7 +60007,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory misses five real consumers, found by grepping every reference to AgentExecutionOutcome and .response across the workspace before claiming: (1) lib.rs itself is not reserved, yet OD-EXECUTOR-008's own decision text says Command_For gains --json-schema and lib.rs's own address_tests module constructs a scripted outcome and reads .response directly -- both live in that one file; (2) crates/orchestration/nomos-agent-orchestration/src/run.rs has three test assertions reading outcome.response directly; (3) crates/host/nomos-api/src/agent.rs's AgentDispatchResponse::ClaudeCode is a serializable wire twin with its own response: String field built from outcome.response; (4) crates/host/nomos-api/src/workflow.rs's AgentExecutionOutcomeResponse is a second such twin, same pattern; (5) tests/contract/surface/nomos-api.txt tracks both twins' exact field shapes (grepped and confirmed: AgentDispatchResponse::ClaudeCode and AgentExecutionOutcomeResponse both listed with response: String), so changing either twin's fields reddens that snapshot too. Re-authored as P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-2 with all five added, unchanged in kind, done_when and predicate."
+        }
+      },
       "depends_on": [
         "P42-EXECUTOR-WORKRESULT-MECHANISM"
       ],
@@ -60029,7 +60033,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1788763531
+      }
     },
     {
       "id": "P42-EXECUTOR-ENVELOPE-IMPLEMENTATION",
@@ -61807,6 +61814,64 @@
         },
         "revision": "60cad4477787e953f504a0c39f6e50c71f8ba6f8"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-2",
+      "title": "OD-EXECUTOR-008 decided the canonical WorkResult shape and no code carries it",
+      "why": "Re-authored from P42-EXECUTOR-WORKRESULT-IMPLEMENTATION, whose territory omitted five real consumers found by grepping AgentExecutionOutcome/.response across the whole workspace before claiming: nomos-agent-executor-claude-code's own lib.rs (Command_For needs --json-schema per OD-EXECUTOR-008's own text, and its address_tests module constructs a scripted outcome and reads .response directly), nomos-agent-orchestration/src/run.rs (three test assertions reading outcome.response), and nomos-api's agent.rs and workflow.rs, each holding a serializable wire twin (AgentDispatchResponse::ClaudeCode, AgentExecutionOutcomeResponse) whose response: String field is tracked verbatim in tests/contract/surface/nomos-api.txt. P42-AGENT-STRUCTURED-WORKRESULT was declined for an under-reserved territory and re-authored as a decision, P42-EXECUTOR-WORKRESULT-MECHANISM, whose own title ends in the words before code; that decision is Done and recorded as OD-EXECUTOR-008. The executor still returns a vendor-shaped response: AgentExecutionOutcome carries response as a String, and nomos-cli agent dispatch.rs and workflow.rs both read that field directly. Until this lands, no consumer of an agent run reads a canonical type, and any validated-correction path built on top would be built on a vendor shape.",
+      "done_when": "The executor populates the WorkResult fields OD-EXECUTOR-008 decided it can honestly ground, via a narrow JSON schema with additionalProperties false; the fields that record decided must stay structurally absent are absent rather than model-filled; AgentExecutionOutcome carries the canonical type rather than a vendor-shaped String; every existing consumer reads the canonical type; and every affected public surface snapshot is re-blessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts/src/work_result.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/response.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/agent_execution_outcome.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/tests.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/run.rs",
+          "crates/host/nomos-cli/src/agent/dispatch.rs",
+          "crates/host/nomos-cli/src/workflow.rs",
+          "crates/host/nomos-api/src/agent.rs",
+          "crates/host/nomos-api/src/workflow.rs",
+          "tests/contract/surface/nomos-agent-contracts.txt",
+          "tests/contract/surface/nomos-agent-executor-claude-code.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [
+        "P42-EXECUTOR-WORKRESULT-MECHANISM"
+      ],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-dev-session",
+        "acquired_at": 1788763553,
+        "lease_expires_at": 1788770753
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
