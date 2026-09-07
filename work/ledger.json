@@ -61844,6 +61844,76 @@
         ],
         "patterns": []
       },
+      "state": {
+        "Declined": {
+          "reason": "Territory still missed three real consumers outside crates/*/src, found by a comprehensive workspace-wide grep: crates/agent/nomos-agent-executor-claude-code/tests/integration_seams.rs, crates/host/nomos-cli/tests/agent_executor_claude_code_seam.rs, and crates/orchestration/nomos-workflow-orchestration/src/tests.rs (three of its six StepOutcome assertions are the ClaudeCode variant). nomos-model-backend-ollama's own same-named, unrelated AgentExecutionOutcome type accounts for the rest of that grep's matches and is confirmed untouched by OD-EXECUTOR-008. All prior territory's implementation is already written and its own crate (nomos-agent-executor-claude-code, nomos-agent-contracts) passes; only these three files and the workflow-orchestration predicate leg remain. Re-authored as P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-3 with them added, unchanged in kind and done_when."
+        }
+      },
+      "depends_on": [
+        "P42-EXECUTOR-WORKRESULT-MECHANISM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-dev-session",
+          "reason": "A comprehensive final grep for AgentExecutionOutcome/.response across the whole workspace (not just src/) found three more real consumers outside src/ directories, which the earlier grep missed by only searching crates/*/src: crates/agent/nomos-agent-executor-claude-code/tests/integration_seams.rs (one assertion), crates/host/nomos-cli/tests/agent_executor_claude_code_seam.rs (one assertion plus a doc comment), and crates/orchestration/nomos-workflow-orchestration/src/tests.rs (three of its six StepOutcome assertions are the ClaudeCode variant, not Ollama). Confirmed by inspection that nomos-model-backend-ollama's own same-named AgentExecutionOutcome type (a separate, unrelated type OD-EXECUTOR-008 explicitly does not touch) accounts for the rest of the grep's matches. Abandoning to decline and re-author with the three real files added and the predicate widened to actually run nomos-workflow-orchestration's suite.",
+          "abandoned_at": 1788763824
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1788763831
+      }
+    },
+    {
+      "id": "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-3",
+      "title": "OD-EXECUTOR-008 decided the canonical WorkResult shape and no code carries it",
+      "why": "Re-authored from P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-2, whose territory omitted three real consumers outside crates/*/src found by a comprehensive workspace-wide grep: crates/agent/nomos-agent-executor-claude-code/tests/integration_seams.rs, crates/host/nomos-cli/tests/agent_executor_claude_code_seam.rs, and crates/orchestration/nomos-workflow-orchestration/src/tests.rs (three of its six StepOutcome assertions are the ClaudeCode variant, not Ollama, which is a separate, unrelated, untouched AgentExecutionOutcome type). All prior territory's implementation is already written and nomos-agent-executor-claude-code/nomos-agent-contracts pass their own tests; only these three files and the workflow-orchestration predicate leg remain. P42-AGENT-STRUCTURED-WORKRESULT was declined for an under-reserved territory and re-authored as a decision, P42-EXECUTOR-WORKRESULT-MECHANISM, whose own title ends in the words before code; that decision is Done and recorded as OD-EXECUTOR-008. The executor still returns a vendor-shaped response before this item's own work: AgentExecutionOutcome carried response as a String, and nomos-cli agent dispatch.rs and workflow.rs both read that field directly. Until this lands, no consumer of an agent run reads a canonical type, and any validated-correction path built on top would be built on a vendor shape.",
+      "done_when": "The executor populates the WorkResult fields OD-EXECUTOR-008 decided it can honestly ground, via a narrow JSON schema with additionalProperties false; the fields that record decided must stay structurally absent are absent rather than model-filled; AgentExecutionOutcome carries the canonical type rather than a vendor-shaped String; every existing consumer reads the canonical type; and every affected public surface snapshot is re-blessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts/src/work_result.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/response.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/agent_execution_outcome.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/tests.rs",
+          "crates/agent/nomos-agent-executor-claude-code/tests/integration_seams.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/run.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/agent/dispatch.rs",
+          "crates/host/nomos-cli/src/workflow.rs",
+          "crates/host/nomos-cli/tests/agent_executor_claude_code_seam.rs",
+          "crates/host/nomos-api/src/agent.rs",
+          "crates/host/nomos-api/src/workflow.rs",
+          "tests/contract/surface/nomos-agent-contracts.txt",
+          "tests/contract/surface/nomos-agent-executor-claude-code.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
       "state": "Claimed",
       "depends_on": [
         "P42-EXECUTOR-WORKRESULT-MECHANISM"
@@ -61851,8 +61921,8 @@
       "blocked": null,
       "claim": {
         "holder": "claude-dev-session",
-        "acquired_at": 1788763553,
-        "lease_expires_at": 1788770753
+        "acquired_at": 1788763850,
+        "lease_expires_at": 1788771050
       },
       "verification": {
         "argv": [
@@ -61864,6 +61934,8 @@
           "nomos-agent-executor-claude-code",
           "-p",
           "nomos-agent-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
           "-p",
           "nomos-cli",
           "-p",
