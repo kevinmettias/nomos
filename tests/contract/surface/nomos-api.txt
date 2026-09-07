@@ -45,7 +45,7 @@ pub enum variant nomos_api::AbandonResponse::Abandoned
 pub enum variant nomos_api::AbandonResponse::Refused { cause: String, retryable: bool, }
 pub enum variant nomos_api::AddResponse::Added
 pub enum variant nomos_api::AddResponse::Refused { cause: String, }
-pub enum variant nomos_api::AgentDispatchResponse::ClaudeCode { response: String, denied_tool_uses: Vec<String>, is_error: bool, cost_usd: f64, duration_ms: u64 }
+pub enum variant nomos_api::AgentDispatchResponse::ClaudeCode { assumptions: Vec<String>, unresolved_questions: Vec<String>, denied_tool_uses: Vec<String>, is_error: bool, cost_usd: f64, duration_ms: u64 }
 pub enum variant nomos_api::AgentDispatchResponse::Ollama { response: String }
 pub enum variant nomos_api::AgentDispatchResponse::Unavailable { reason: String }
 pub enum variant nomos_api::AgentExecutionErrorResponse::Unavailable { reason: String, }
@@ -212,11 +212,12 @@ pub struct field nomos_api::AbsenceResponse::cause: String
 pub struct field nomos_api::AbsenceResponse::cost: String
 pub struct field nomos_api::AbsenceResponse::expected: String
 pub struct field nomos_api::AbsenceResponse::subject: String
+pub struct field nomos_api::AgentExecutionOutcomeResponse::assumptions: Vec<String>
 pub struct field nomos_api::AgentExecutionOutcomeResponse::cost_usd: f64
 pub struct field nomos_api::AgentExecutionOutcomeResponse::denied_tool_uses: Vec<String>
 pub struct field nomos_api::AgentExecutionOutcomeResponse::duration_ms: u64
 pub struct field nomos_api::AgentExecutionOutcomeResponse::is_error: bool
-pub struct field nomos_api::AgentExecutionOutcomeResponse::response: String
+pub struct field nomos_api::AgentExecutionOutcomeResponse::unresolved_questions: Vec<String>
 pub struct field nomos_api::BaselineDebtResponse::rationale: String
 pub struct field nomos_api::BaselineDebtResponse::rule: RuleId
 pub struct field nomos_api::BaselineDebtResponse::subject: SubjectId

@@ -21,10 +21,10 @@
 //! `nomos-agent-executor-claude-code::address_tests` and `nomos-agent-orchestration::run`'s
 //! own tests already use. This proves the real contract the shared seam depends on: a
 //! `TaskEnvelope` shaped the way `nomos_agent_orchestration::run`'s own `Bare_Task` builds
-//! it, in; an `AgentExecutionOutcome` carrying `response`, `denied_tool_uses`, `is_error`,
-//! `cost_usd` and `duration_ms` -- every field `nomos-cli`'s own `agent/dispatch.rs::
-//! Rendered` prints -- out, or an `AgentExecutionError` when the process reports anything
-//! other than a clean exit.
+//! it, in; an `AgentExecutionOutcome` carrying `result` (a real `WorkResult`),
+//! `denied_tool_uses`, `is_error`, `cost_usd` and `duration_ms` -- every field
+//! `nomos-cli`'s own `agent/dispatch.rs::Rendered` prints -- out, or an
+//! `AgentExecutionError` when the process reports anything other than a clean exit.
 
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_agent_executor_claude_code::{AgentExecutionError, Execute_Task};
@@ -76,13 +76,13 @@ fn Test_Execute_Task_Should_Return_Every_Field_The_Cli_Renders_For_A_Clean_Respo
 {
     let launcher = Scripted {
         outcome: ExitOutcome::Exited { code: 0 },
-        stdout: r#"{"result": "PONG", "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
+        stdout: r#"{"result": "PONG", "structured_output": {"assumptions": ["a ping wants a pong"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
             .to_owned(),
     };
 
     let outcome = Execute_Task(&Bare_Task("say PONG"), &launcher).expect("a well-formed scripted response");
 
-    assert_eq!(outcome.response, "PONG");
+    assert_eq!(outcome.result.assumptions, ["a ping wants a pong".to_owned()]);
     assert!(outcome.denied_tool_uses.is_empty());
     assert!(!outcome.is_error);
     assert!((outcome.cost_usd - 0.01).abs() < f64::EPSILON);

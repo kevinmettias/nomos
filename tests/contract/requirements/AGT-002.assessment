@@ -15,18 +15,31 @@
 # both a full response and a judgment-only one (`plan: None`, per `OD-CONTRACTS-003`) that
 # proposes no change.
 #
-# What is not yet true: nothing returns one through a real agent run.
-# `nomos-agent-executor-claude-code`'s own module doc states plainly it "does not assemble a
-# `nomos_agent_contracts::WorkResult`" -- the one real `AgentExecutor` still hands back a
-# free-text response this crate does not attempt to map onto `claims`/`assumptions`/
-# `unresolved_questions`, because no honest general mapping from prose to those fields
-# exists. `P42-AGENT-STRUCTURED-WORKRESULT` is the open item for that gap. So the type this
-# requirement's "structured response" describes is real and bundles what it must, but
-# "Agents shall return" it is not yet true of any agent run in this workspace.
+# `OD-EXECUTOR-008` closed the gap this assessment used to name: a real agent run now
+# returns a real `WorkResult`. `nomos-agent-executor-claude-code` passes a narrow,
+# adversarially-verified JSON schema (`assumptions`, `unresolved_questions`, both string
+# arrays, `additionalProperties: false`) via `--json-schema` on every invocation, and reads
+# the response's own schema-validated `structured_output` into those two fields -- never
+# the free-text `result` field, and a response missing or failing to validate against the
+# schema is refused rather than coerced. `plan`, `claims`, `tests` and
+# `requested_verification` still come back empty on every real invocation, not because
+# nothing tries, but because `OD-EXECUTOR-008` measured that this bare-prompt executor
+# (isolated empty directory, no tool granted, one turn) has no honest, real grounding for
+# any of the four: it has seen no real file and computed no real digest by the time it
+# answers, so a schema could only make their *shape* conform, not their content honest.
+#
+# What is not yet true: only two of this requirement's seven named elements are ever
+# populated by the one real `AgentExecutor` in this workspace. The type bundles all seven
+# and a real run genuinely exercises it, but "Agents shall return ... plans, changes,
+# claims, tests, requested verification" is not yet true of any real run's actual content --
+# it stays true only of `assumptions` and `unresolved_questions`. Closing the rest needs a
+# real executor with real tool access or a real file read to ground them honestly, which
+# `OD-EXECUTOR-008` names as a future increment's question, not this one's.
 verdict: Partial
 site: crates/agent/nomos-agent-contracts/src/work_result.rs#WorkResult
 site: crates/corrections/nomos-corrections/src/correction_plan.rs#CorrectionPlan
 site: crates/corrections/nomos-corrections/src/change_set.rs#ChangeSet
 site: crates/contracts/nomos-contracts/src/reporting/finding.rs#Finding
 site: crates/substrate/nomos-scope-verification/src/verification_predicate.rs#VerificationPredicate
-gap: crates/agent/nomos-agent-executor-claude-code/src/lib.rs#does not assemble a
+site: crates/agent/nomos-agent-executor-claude-code/src/response.rs#Work_Result
+gap: crates/agent/nomos-agent-executor-claude-code/src/lib.rs#stay structurally absent rather

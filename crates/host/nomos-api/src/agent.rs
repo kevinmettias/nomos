@@ -135,13 +135,19 @@ fn Crate_Root(root: &Path, crate_name: &str) -> String
 }
 
 /// A serializable twin of [`AgentDispatchOutcome`].
+///
+/// `ClaudeCode`'s `assumptions`/`unresolved_questions` are
+/// [`nomos_agent_contracts::WorkResult`]'s own two fields this executor can honestly
+/// populate -- `OD-EXECUTOR-008`'s decision. `plan`, `claims`, `tests` and
+/// `requested_verification` are not projected here because they are always structurally
+/// absent for this executor, never because a wire caller could not use them if they existed.
 #[derive(Clone, Debug, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case", tag = "backend")]
 pub enum AgentDispatchResponse
 {
     ClaudeCode
     {
-        response: String, denied_tool_uses: Vec<String>, is_error: bool, cost_usd: f64, duration_ms: u64
+        assumptions: Vec<String>, unresolved_questions: Vec<String>, denied_tool_uses: Vec<String>, is_error: bool, cost_usd: f64, duration_ms: u64
     },
     Ollama
     {
@@ -160,7 +166,8 @@ impl AgentDispatchResponse
         return match outcome
         {
             AgentDispatchOutcome::ClaudeCode(outcome) => Self::ClaudeCode {
-                response: outcome.response,
+                assumptions: outcome.result.assumptions,
+                unresolved_questions: outcome.result.unresolved_questions,
                 denied_tool_uses: outcome.denied_tool_uses,
                 is_error: outcome.is_error,
                 cost_usd: outcome.cost_usd,

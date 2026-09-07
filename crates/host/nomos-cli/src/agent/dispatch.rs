@@ -53,7 +53,8 @@ pub(super) fn Rendered(outcome: &AgentDispatchOutcome, output: &mut impl std::io
     {
         AgentDispatchOutcome::ClaudeCode(outcome) =>
         {
-            let _ = writeln!(output, "{}", outcome.response);
+            let _ = writeln!(output, "assumptions: {:?}", outcome.result.assumptions);
+            let _ = writeln!(output, "unresolved questions: {:?}", outcome.result.unresolved_questions);
             let _ = writeln!(output, "denied tool uses: {:?}", outcome.denied_tool_uses);
             let _ = writeln!(output, "is_error: {}  cost_usd: {}  duration_ms: {}", outcome.is_error, outcome.cost_usd, outcome.duration_ms);
             ExitCode::Ok

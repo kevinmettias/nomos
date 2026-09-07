@@ -119,12 +119,16 @@ impl ProcessLauncher for Scripted
     }
 }
 
+/// `result` also seeds `structured_output.assumptions`, so a test can still correlate
+/// which scripted answer a step received by checking `answer.result.assumptions` --
+/// `OD-EXECUTOR-008`'s decision means `result` itself is no longer read into
+/// `AgentExecutionOutcome` at all.
 fn Clean_Claude_Code_Response(result: &str) -> ProcessOutput
 {
     return ProcessOutput {
         outcome: ExitOutcome::Exited { code: 0 },
         stdout: format!(
-            r#"{{"result": "{result}", "is_error": false, "total_cost_usd": 0.01, "duration_ms": 10, "permission_denials": []}}"#
+            r#"{{"result": "{result}", "structured_output": {{"assumptions": ["{result}"], "unresolved_questions": []}}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 10, "permission_denials": []}}"#
         ),
         stderr: String::new(),
     };
@@ -165,7 +169,7 @@ fn Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes()
     };
     assert_eq!(completed.len(), 1);
     let first = completed.first().expect("asserted len 1 above");
-    assert!(matches!(first, StepOutcome::ClaudeCode(answer) if answer.response == "PONG"));
+    assert!(matches!(first, StepOutcome::ClaudeCode(answer) if answer.result.assumptions == ["PONG".to_owned()]));
 }
 
 #[test]
@@ -205,7 +209,7 @@ fn Test_A_Two_Step_Sequence_Completes_In_Order()
     assert_eq!(completed.len(), 2);
     let first = completed.first().expect("asserted len 2 above");
     let second = completed.get(1).expect("asserted len 2 above");
-    assert!(matches!(first, StepOutcome::ClaudeCode(answer) if answer.response == "first"));
+    assert!(matches!(first, StepOutcome::ClaudeCode(answer) if answer.result.assumptions == ["first".to_owned()]));
     assert!(matches!(second, StepOutcome::Ollama(answer) if answer.response == "second"));
 }
 
@@ -239,7 +243,7 @@ fn Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions()
     assert_eq!(index, 1);
     assert_eq!(completed.len(), 1);
     let first = completed.first().expect("asserted len 1 above");
-    assert!(matches!(first, StepOutcome::ClaudeCode(answer) if answer.response == "first"));
+    assert!(matches!(first, StepOutcome::ClaudeCode(answer) if answer.result.assumptions == ["first".to_owned()]));
 }
 
 #[test]

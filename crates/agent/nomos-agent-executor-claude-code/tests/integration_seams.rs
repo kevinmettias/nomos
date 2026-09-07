@@ -58,14 +58,14 @@ fn Test_Execute_Task_Should_Read_A_Clean_Response_From_A_Real_Task_Envelope()
 {
     let launcher = Scripted {
         outcome: ExitOutcome::Exited { code: 0 },
-        stdout: r#"{"result": "PONG", "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
+        stdout: r#"{"result": "PONG", "structured_output": {"assumptions": ["a ping wants a pong"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
             .to_owned(),
         stderr: String::new(),
     };
 
     let outcome = Execute_Task(&Real_Task("say PONG"), &launcher).expect("a well-formed scripted response");
 
-    assert_eq!(outcome.response, "PONG");
+    assert_eq!(outcome.result.assumptions, ["a ping wants a pong".to_owned()]);
     assert!(outcome.denied_tool_uses.is_empty());
 }
 

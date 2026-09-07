@@ -8,5 +8,5 @@ pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::cost_u
 pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::denied_tool_uses: Vec<String>
 pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::duration_ms: u64
 pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::is_error: bool
-pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::response: String
+pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::result: WorkResult
 pub struct nomos_agent_executor_claude_code::AgentExecutionOutcome

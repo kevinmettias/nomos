@@ -412,7 +412,8 @@ fn Rendered_Step(step: &StepOutcome, stdout: &mut impl Write, stderr: &mut impl 
     {
         StepOutcome::ClaudeCode(answer) =>
         {
-            let _ = writeln!(stdout, "{}", answer.response);
+            let _ = writeln!(stdout, "assumptions: {:?}", answer.result.assumptions);
+            let _ = writeln!(stdout, "unresolved questions: {:?}", answer.result.unresolved_questions);
             ExitCode::Ok
         }
         StepOutcome::Ollama(answer) =>

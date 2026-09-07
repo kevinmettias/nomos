@@ -50,10 +50,31 @@ fn Test_Command_For_Requests_The_Bounded_Invocation()
     assert!(command.argv.contains(&"--print".to_owned()));
     assert!(command.argv.contains(&"say hello".to_owned()));
     assert!(command.argv.windows(2).any(|pair| pair == ["--output-format".to_owned(), "json".to_owned()]));
+    assert!(command.argv.windows(2).any(|pair| pair == ["--json-schema".to_owned(), JSON_SCHEMA.to_owned()]));
     assert!(command.argv.contains(&"--strict-mcp-config".to_owned()));
     assert!(command.argv.windows(2).any(|pair| pair == ["--allowedTools".to_owned(), NO_TOOLS_GRANTED.to_owned()]));
     assert!(command.argv.windows(2).any(|pair| pair == ["--max-budget-usd".to_owned(), MAX_BUDGET_USD.to_owned()]));
     assert_eq!(command.working_directory.as_deref(), Some(directory));
+}
+
+/// `OD-EXECUTOR-008`'s own schema, verified as well-formed JSON naming exactly the two
+/// fields it decided this executor can honestly ground, and nothing richer.
+#[test]
+fn Test_Json_Schema_Names_Exactly_Assumptions_And_Unresolved_Questions()
+{
+    let schema: serde_json::Value = serde_json::from_str(JSON_SCHEMA).expect("the schema itself must be valid JSON");
+
+    assert_eq!(schema.get("additionalProperties").and_then(serde_json::Value::as_bool), Some(false));
+    let required: Vec<&str> = schema
+        .get("required")
+        .and_then(serde_json::Value::as_array)
+        .expect("required is an array")
+        .iter()
+        .map(|value| return value.as_str().expect("a string"))
+        .collect();
+    assert_eq!(required, vec!["assumptions", "unresolved_questions"]);
+    let properties = schema.get("properties").and_then(serde_json::Value::as_object).expect("properties is an object");
+    assert_eq!(properties.len(), 2, "the schema must name no field beyond the two OD-EXECUTOR-008 decided");
 }
 
 /// Every flag or fixed string that would turn the permission boundary off, named by
@@ -89,6 +110,11 @@ fn Test_Command_For_Never_Sets_A_Permission_Bypass()
 /// `cmd.exe`'s own batch-argument tokenizer to re-split the argument before `claude.cmd`
 /// ever sees it as one value), reproduced here as a fast, no-subprocess assertion rather
 /// than re-discovered only by running the real CLI.
+///
+/// Every argument but [`JSON_SCHEMA`] is swept for a stray newline or quote:
+/// `JSON_SCHEMA` legitimately carries `"` as JSON syntax, not as anything `Single_Line`
+/// failed to normalize, so it is excluded from the sweep by name rather than the sweep
+/// being loosened to miss a real regression in the goal itself.
 #[test]
 fn Test_Command_For_Normalizes_Newlines_And_Quotes_In_The_Goal()
 {
@@ -97,7 +123,7 @@ fn Test_Command_For_Normalizes_Newlines_And_Quotes_In_The_Goal()
 
     let command = Command_For(&task, directory);
 
-    assert!(command.argv.iter().all(|argument| !argument.contains(['\n', '\r', '"'])));
+    assert!(command.argv.iter().filter(|argument| return argument.as_str() != JSON_SCHEMA).all(|argument| return !argument.contains(['\n', '\r', '"'])));
     assert!(command.argv.contains(&"line one. line two.  says 'hello'.".to_owned()));
 }
 
@@ -222,7 +248,7 @@ fn Test_Execute_In_Should_Read_A_Scripted_Clean_Response()
 {
     let launcher = Scripted {
         outcome: ExitOutcome::Exited { code: 0 },
-        stdout: r#"{"result": "PONG", "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
+        stdout: r#"{"result": "PONG", "structured_output": {"assumptions": ["a ping wants a pong"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
             .to_owned(),
         stderr: String::new(),
     };
@@ -230,7 +256,8 @@ fn Test_Execute_In_Should_Read_A_Scripted_Clean_Response()
 
     let outcome = Execute_In(&Bare_Task("say PONG"), &launcher, &directory).expect("a well-formed scripted response");
 
-    assert_eq!(outcome.response, "PONG");
+    assert_eq!(outcome.result.assumptions, ["a ping wants a pong".to_owned()]);
+    assert!(outcome.result.unresolved_questions.is_empty());
     assert!(outcome.denied_tool_uses.is_empty());
     assert!(!outcome.is_error);
 }
@@ -243,14 +270,14 @@ fn Test_Execute_Task_Should_Create_Its_Own_Isolated_Directory_And_Delegate_To_Ex
 {
     let launcher = Scripted {
         outcome: ExitOutcome::Exited { code: 0 },
-        stdout: r#"{"result": "PONG", "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
+        stdout: r#"{"result": "PONG", "structured_output": {"assumptions": ["a ping wants a pong"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
             .to_owned(),
         stderr: String::new(),
     };
 
     let outcome = Execute_Task(&Bare_Task("say PONG"), &launcher).expect("a well-formed scripted response");
 
-    assert_eq!(outcome.response, "PONG");
+    assert_eq!(outcome.result.assumptions, ["a ping wants a pong".to_owned()]);
 }
 
 /// The same falsely-claims-success shape `response.rs`'s own tests fix as a canned
@@ -263,6 +290,7 @@ fn Test_Execute_Reports_A_Denied_Write_Structurally_Even_When_The_Text_Claims_Su
         outcome: ExitOutcome::Exited { code: 0 },
         stdout: r#"{
             "result": "Done -- pwned.txt written to the working directory.",
+            "structured_output": {"assumptions": [], "unresolved_questions": ["did the write actually happen?"]},
             "is_error": false,
             "total_cost_usd": 0.37,
             "duration_ms": 46076,
@@ -275,7 +303,7 @@ fn Test_Execute_Reports_A_Denied_Write_Structurally_Even_When_The_Text_Claims_Su
 
     let outcome = Execute_In(&Bare_Task("write a file"), &launcher, &directory).expect("a well-formed scripted response");
 
-    assert!(outcome.response.contains("Done"));
+    assert_eq!(outcome.result.unresolved_questions, ["did the write actually happen?".to_owned()]);
     assert_eq!(outcome.denied_tool_uses, ["Write".to_owned()]);
 }
 

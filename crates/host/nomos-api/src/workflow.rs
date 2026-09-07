@@ -204,10 +204,17 @@ impl DispatchErrorResponse
 }
 
 /// A serializable twin of [`nomos_agent_executor_claude_code::AgentExecutionOutcome`].
+///
+/// `assumptions`/`unresolved_questions` are [`nomos_agent_contracts::WorkResult`]'s own two
+/// fields this executor can honestly populate -- `OD-EXECUTOR-008`'s decision. `plan`,
+/// `claims`, `tests` and `requested_verification` are not projected here because they are
+/// always structurally absent for this executor, never because a wire caller could not use
+/// them if they existed.
 #[derive(Clone, Debug, PartialEq, Serialize)]
 pub struct AgentExecutionOutcomeResponse
 {
-    pub response: String,
+    pub assumptions: Vec<String>,
+    pub unresolved_questions: Vec<String>,
     pub denied_tool_uses: Vec<String>,
     pub is_error: bool,
     pub cost_usd: f64,
@@ -219,7 +226,8 @@ impl AgentExecutionOutcomeResponse
     fn From(outcome: nomos_agent_executor_claude_code::AgentExecutionOutcome) -> Self
     {
         return Self {
-            response: outcome.response,
+            assumptions: outcome.result.assumptions,
+            unresolved_questions: outcome.result.unresolved_questions,
             denied_tool_uses: outcome.denied_tool_uses,
             is_error: outcome.is_error,
             cost_usd: outcome.cost_usd,

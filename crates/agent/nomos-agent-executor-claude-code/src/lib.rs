@@ -13,14 +13,17 @@
 //! small overshoot bounded by one cheap triage call is still possible and nothing caps turn
 //! count directly.
 //!
-//! It does not assemble a `nomos_agent_contracts::WorkResult`. `OD-CONTRACTS-003` made
-//! `WorkResult.plan` an `Option`, so the type itself can now represent a judgment-only
-//! response — but this crate still does not build one, because a free-text `response` has no
-//! honest, general mapping into `claims`/`assumptions`/`unresolved_questions` either.
-//! `TaskEnvelope.expected_output_schema`, paired with Claude Code's own `--json-schema`
-//! support, is the real shape a future increment would use to have the agent produce a
-//! `WorkResult`-shaped response directly rather than have this crate guess one from prose —
-//! not attempted here.
+//! It assembles a real `nomos_agent_contracts::WorkResult`, per `OD-EXECUTOR-008`:
+//! [`Command_For`] passes the narrow, adversarially-verified schema
+//! [`JSON_SCHEMA`] via `--json-schema` on every invocation, and [`response::Parse_Response`]
+//! builds [`WorkResult::assumptions`]/[`WorkResult::unresolved_questions`] from the response's
+//! own schema-validated `structured_output`, never from its free-text `result` field.
+//! `plan`, `claims`, `tests` and `requested_verification` stay structurally absent rather
+//! than model-filled: this executor's own boundary (isolated empty directory, no tool
+//! granted, one turn) means the model has seen no real file and computed no real digest by
+//! the time it answers, so nothing here has an honest, real grounding for any of the four --
+//! a schema can only make the *shape* conform, and a conforming lie is not this record's
+//! goal.
 //!
 //! `TaskEnvelope.goal` and, since `OD-CONTRACTS-004`, `TaskEnvelope.effort` are read. `scope`,
 //! `prohibited_changes`, `available_tools`, `knowledge_context` and `applicable_rules` are
@@ -66,6 +69,16 @@ const NO_TOOLS_GRANTED: &str = "__nomos_agent_executor_denies_all_tools__";
 /// cannot fully close, only bound.
 const MAX_BUDGET_USD: &str = "1.00";
 
+/// `OD-EXECUTOR-008`'s own narrow, honest schema: `assumptions` and `unresolved_questions`,
+/// both string arrays, `additionalProperties: false`. Adversarially verified against the
+/// real CLI: a prompt explicitly instructed to also emit a top-level `plan` field bypassing
+/// the schema still produced a `structured_output` carrying only these two declared fields,
+/// and the model's own text named the reason -- `additionalProperties: false` refused the
+/// extra key structurally. `plan`, `claims`, `tests` and `requested_verification` are not
+/// named here because this executor has no honest way to ground any of them; see this
+/// crate's own doc.
+const JSON_SCHEMA: &str = r#"{"type":"object","properties":{"assumptions":{"type":"array","items":{"type":"string"}},"unresolved_questions":{"type":"array","items":{"type":"string"}}},"required":["assumptions","unresolved_questions"],"additionalProperties":false}"#;
+
 /// Dispatches `task.goal` to Claude Code as a subprocess, bounded by `OD-EXECUTOR-001`'s
 /// structural capability boundary, and reads back what it reported.
 ///
@@ -110,6 +123,8 @@ fn Command_For(task: &TaskEnvelope, working_directory: &std::path::Path) -> Comm
         Single_Line(&task.goal),
         "--output-format".to_owned(),
         "json".to_owned(),
+        "--json-schema".to_owned(),
+        JSON_SCHEMA.to_owned(),
         "--strict-mcp-config".to_owned(),
         "--allowedTools".to_owned(),
         NO_TOOLS_GRANTED.to_owned(),
@@ -272,13 +287,13 @@ mod address_tests
     {
         let launcher = Scripted {
             outcome: ExitOutcome::Exited { code: 0 },
-            stdout: r#"{"result": "PONG", "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
+            stdout: r#"{"result": "PONG", "structured_output": {"assumptions": ["a ping wants a pong"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
                 .to_owned(),
         };
 
         let outcome = Execute_Task(&Bare_Task("say PONG"), &launcher).expect("a well-formed scripted response");
 
-        assert_eq!(outcome.response, "PONG");
+        assert_eq!(outcome.result.assumptions, ["a ping wants a pong".to_owned()]);
     }
 
     #[test]
@@ -286,14 +301,14 @@ mod address_tests
     {
         let launcher = Scripted {
             outcome: ExitOutcome::Exited { code: 0 },
-            stdout: r#"{"result": "PONG", "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
+            stdout: r#"{"result": "PONG", "structured_output": {"assumptions": ["a ping wants a pong"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
                 .to_owned(),
         };
         let directory = std::env::temp_dir();
 
         let outcome = Execute_In(&Bare_Task("say PONG"), &launcher, &directory).expect("a well-formed scripted response");
 
-        assert_eq!(outcome.response, "PONG");
+        assert_eq!(outcome.result.assumptions, ["a ping wants a pong".to_owned()]);
     }
 
     fn Bare_Task(goal: &str) -> TaskEnvelope

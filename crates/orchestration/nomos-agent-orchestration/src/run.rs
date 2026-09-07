@@ -210,7 +210,7 @@ mod tests
 
     fn Claude_Code_Success_Json() -> String
     {
-        return r#"{"result": "PONG", "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#.to_owned();
+        return r#"{"result": "PONG", "structured_output": {"assumptions": ["PONG"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#.to_owned();
     }
 
     fn Config(backend: Backend) -> DispatchConfig
@@ -227,7 +227,7 @@ mod tests
 
         match outcome
         {
-            AgentDispatchOutcome::ClaudeCode(outcome) => assert_eq!(outcome.response, "PONG"),
+            AgentDispatchOutcome::ClaudeCode(outcome) => assert_eq!(outcome.result.assumptions, ["PONG".to_owned()]),
             other => panic!("expected ClaudeCode, got {other:?}"),
         }
     }
@@ -292,7 +292,7 @@ mod tests
 
         match outcome
         {
-            AgentDispatchOutcome::ClaudeCode(outcome) => assert_eq!(outcome.response, "PONG"),
+            AgentDispatchOutcome::ClaudeCode(outcome) => assert_eq!(outcome.result.assumptions, ["PONG".to_owned()]),
             other => panic!("expected ClaudeCode, got {other:?}"),
         }
     }
