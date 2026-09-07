@@ -61368,6 +61368,38 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P40-LSP-STORE-AND-WORKSPACE-REUSE",
+      "title": "nomos-lsp rebuilds a fresh Workspace and MemoryFactStore on every recheck instead of reusing them",
+      "why": "OD-ANALYSIS-009's second amendment (this session) found nomos-lsp is this workspace's first real long-lived caller of Run -- Serve loops for the life of an editor session and calls Recheck_And_Publish on every didOpen/didSave -- but Recheck_And_Publish (server.rs:130-131) constructs let mut workspace = None and let mut store = MemoryFactStore::New() fresh inline on every single call, discarding P14-ANALYSIS-009-STORE-WORKSPACE-REUSE-FIRST-INCREMENT's own reuse machinery instead of using it. That increment already proved a caller can carry one Workspace and one MemoryFactStore across two calls to Run and get IncrementalResult == CleanRecomputation; nomos-lsp is the first real caller with a process lifetime long enough to do that and is the concrete case the machinery was built for, but nothing wires it in.",
+      "done_when": "Serve holds one Option<Workspace> and one MemoryFactStore for the life of one server process and threads the same two values into every call Recheck_And_Publish makes to nomos_check_orchestration::Run, instead of constructing fresh ones inline per call; a test proves reuse across two recheck calls within one server invocation (an untouched file's generation does not advance a second time, mirroring nomos_check_orchestration's own Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomputation).",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-lsp/src/server.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
