@@ -62066,6 +62066,38 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P84-THE-PROGRESS-CONTROL-NEVER-SEES-PROGRESS-ON-LINUX",
+      "title": "The progressing-program control passes on Linux for a reason its own doc denies",
+      "why": "Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled states its premise plainly: a short idle bound must not turn a program that is genuinely still working into a stall, and progress keeps resetting the idle clock, so this must still end at the wall bound. On Windows that is what happens, because A_Slow_Program there is ping, which prints a reply about once a second. On Linux A_Slow_Program is sleep, which produces nothing for its whole life, so no idle clock is ever reset and no progress is ever made. The test still passes there, but only because its idle bound of five seconds is longer than its wall bound of one, so the wall bound was always going to give out first whether the program spoke or not. The property the test is named for, that progress resets the idle clock, is therefore unexercised on Linux and has never been checked on any host but Windows. This is the same asymmetric fixture P83 corrected the other consumer of: A_Slow_Program is chatty on one host and silent on the other, and two tests read it as though it were one program. Closing it needs a Linux program that is both chatty and directly executable, since the fixture's own doc forbids a shell wrapper on the ground that it would put the sleeping process a generation away from the kill.",
+      "done_when": "Either the slow-program fixture produces output on Linux as it does on Windows, so the progress premise is real on both hosts, or the test states that on Linux it rests on the bound ordering rather than on progress and something else exercises progress there. Whichever is chosen, no test claims a property that its fixture cannot produce on the host it runs on.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform-std/src/launcher/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform-std"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

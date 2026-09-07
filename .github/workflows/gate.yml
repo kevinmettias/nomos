@@ -96,9 +96,24 @@ jobs:
       # run from a quiet one (`P81` closed that half, which is what made this visible).
       #
       # The rationale for building it from crates.io, and for pinning the version, is beside
-      # `Supply chain` below where it was published. Only the position moved.
+      # `Supply chain` below where it was published.
+      #
+      # Both hosts, unlike the `Supply chain` step it was written for. That step is Linux-only
+      # because its *verdict* has no host in it; this install is not about a verdict but about
+      # a binary being present for tests that launch it. `Determinism` runs
+      # `nomos-integration-tests` on Windows, whose calibration test materializes every
+      # capability -- `nomos-lang-rust-deny`'s among them -- and it is the only package in that
+      # step's list needing this tool. It appeared to pass there for as long as the provider
+      # answered a missing `cargo deny` with a clean result, so dependency policy has never
+      # actually been judged on Windows; `P81` made that refuse and `P82` pays for it properly
+      # rather than deleting the check.
+      #
+      # The cost is a second build of cargo-deny, which is real. It buys the composed rule set
+      # being exercised on Windows over a real fixture tree, which is where path separators,
+      # filesystem case and directory order reach a rule -- the axis `P36`, `P68`, `P79` and
+      # `P80` were each a bug on. Line endings are *not* the reason: `.gitattributes` pins
+      # `eol=lf`, so both hosts read identical bytes.
       - name: Install cargo-deny
-        if: matrix.os == 'ubuntu-latest'
         run: cargo install cargo-deny --locked --version 0.20.2
 
       - name: Lint
@@ -270,15 +285,14 @@ jobs:
       # of the version it selected and does not select a version. OD-GATE-006 carries the
       # correction, because that is where the reasoning was published.
       #
-      # Linux only, with the step below it. Both read `Cargo.lock` and a policy file, neither
-      # of which has a host in it, and building cargo-deny a second time is the most
-      # expensive way in this workflow to obtain an answer that cannot differ.
+      # Linux only. This reads `Cargo.lock` and a policy file, neither of which has a host in
+      # it, so running it on a second host would re-answer a question that cannot differ.
       #
-      # The install itself now runs before `Lint`/`Test` rather than here -- see its own
-      # comment there for why. That "answer cannot differ by host" reasoning is about *this*
-      # step's verdict and does not extend to a test that needs the binary present to mean
-      # anything: `Determinism` runs `nomos-integration-tests` on Windows, where cargo-deny
-      # is installed by nothing at all. `P82` records that half as still open.
+      # That reasoning is about this step's *verdict*, and `P82` found it had been over-read
+      # into the install: the install moved to before `Lint`/`Test` and now runs on both hosts,
+      # because a test that launches `cargo deny` needs the binary present wherever it runs,
+      # which is a different question from where the verdict is computed. See the install
+      # step's own comment for what that buys and what it costs.
       - name: Supply chain
         if: matrix.os == 'ubuntu-latest'
         run: cargo deny check advisories bans licenses sources
