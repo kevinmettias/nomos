@@ -17,7 +17,9 @@ use crate::uri::{File_Uri_From_Path, Path_From_File_Uri};
 use lsp_server::{Connection, Message};
 use lsp_types::notification::{DidOpenTextDocument, DidSaveTextDocument, Notification, PublishDiagnostics};
 use lsp_types::{Diagnostic, InitializeParams, PublishDiagnosticsParams, ServerCapabilities, TextDocumentSyncCapability, TextDocumentSyncKind};
+use nomos_analysis::MemoryFactStore;
 use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
+use nomos_workspace::Workspace;
 use std::collections::{BTreeMap, HashSet};
 use std::path::{Path, PathBuf};
 
@@ -39,8 +41,8 @@ pub fn Run_Server() -> std::io::Result<()>
         Err(protocol_error) => return Err(std::io::Error::other(protocol_error.to_string())),
     };
 
-    let mut published = HashSet::new();
-    Serve(&connection, &root, &mut published);
+    let mut state = ServerState::New();
+    Serve(&connection, &root, &mut state);
 
     io_threads.join()?;
     return Ok(());
@@ -86,11 +88,38 @@ fn Workspace_Root(params: &InitializeParams) -> PathBuf
     return std::env::current_dir().unwrap_or_else(|_| return PathBuf::from("."));
 }
 
+/// Everything [`Serve`]'s loop carries across calls to [`Recheck_And_Publish`], for the life
+/// of one server process -- grouped into one value so [`Serve`] and [`Recheck_And_Publish`]
+/// each stay within this crate's own parameter-count limit.
+///
+/// `workspace` and `store` are reused across every recheck rather than rebuilt per call --
+/// `P14-ANALYSIS-009-STORE-WORKSPACE-REUSE-FIRST-INCREMENT` gave `nomos_check_orchestration::
+/// Run` a caller-supplied `workspace`/`store` for exactly this, and this server is this
+/// workspace's first real caller with a process lifetime long enough to hold either across
+/// two calls: `OD-ANALYSIS-009`'s own second amendment names this crate as the concrete case
+/// its first trigger was written for. Reused, not persisted -- both still end when this
+/// process does, the same as every other caller in this workspace; nothing here asks either
+/// to survive past that.
+struct ServerState
+{
+    /// The set of files this server has ever sent a diagnostic for, so a file that goes
+    /// clean gets its diagnostics cleared rather than left stale forever.
+    published: HashSet<String>,
+    workspace: Option<Workspace>,
+    store: MemoryFactStore,
+}
+
+impl ServerState
+{
+    fn New() -> Self
+    {
+        return Self { published: HashSet::new(), workspace: None, store: MemoryFactStore::New() };
+    }
+}
+
 /// The main loop: a full re-check and republish on every `didOpen` or `didSave`, and a
-/// clean exit on `shutdown`/`exit`. `published` is the set of files this server has ever
-/// sent a diagnostic for, so a file that goes clean gets its diagnostics cleared rather
-/// than left stale forever.
-fn Serve(connection: &Connection, root: &Path, published: &mut HashSet<String>)
+/// clean exit on `shutdown`/`exit`.
+fn Serve(connection: &Connection, root: &Path, state: &mut ServerState)
 {
     for message in &connection.receiver
     {
@@ -108,7 +137,7 @@ fn Serve(connection: &Connection, root: &Path, published: &mut HashSet<String>)
             {
                 if notification.method == DidOpenTextDocument::METHOD || notification.method == DidSaveTextDocument::METHOD
                 {
-                    Recheck_And_Publish(connection, root, published);
+                    Recheck_And_Publish(connection, root, state);
                 }
             }
             Message::Response(_) => {}
@@ -119,7 +148,10 @@ fn Serve(connection: &Connection, root: &Path, published: &mut HashSet<String>)
 /// Walks `root`, runs every composed rule over it, and publishes what
 /// [`Diagnostics_For`] makes of the result -- one `publishDiagnostics` notification per
 /// file that has a diagnostic now or had one before this call.
-fn Recheck_And_Publish(connection: &Connection, root: &Path, published: &mut HashSet<String>)
+///
+/// `state.workspace` and `state.store` carry across every call this server ever makes,
+/// rather than starting fresh each time -- see [`ServerState`]'s own doc for why.
+fn Recheck_And_Publish(connection: &Connection, root: &Path, state: &mut ServerState)
 {
     let Some(sources) = Walked_Sources(root)
     else
@@ -127,8 +159,6 @@ fn Recheck_And_Publish(connection: &Connection, root: &Path, published: &mut Has
         return;
     };
 
-    let mut workspace = None;
-    let mut store = nomos_analysis::MemoryFactStore::New();
     let outcome = nomos_check_orchestration::Run(
         &sources,
         nomos_check_orchestration::RunContext {
@@ -136,8 +166,8 @@ fn Recheck_And_Publish(connection: &Connection, root: &Path, published: &mut Has
             root,
             launcher: &StdProcessLauncher,
             filesystem: &StdFileSystem,
-            workspace: &mut workspace,
-            store: &mut store,
+            workspace: &mut state.workspace,
+            store: &mut state.store,
         },
         &[],
     );
@@ -163,12 +193,12 @@ fn Recheck_And_Publish(connection: &Connection, root: &Path, published: &mut Has
         Publish(connection, root, path, diagnostics.clone());
         still_published.insert(path.clone());
     }
-    for stale in published.difference(&still_published)
+    for stale in state.published.difference(&still_published)
     {
         Publish(connection, root, stale, Vec::new());
     }
 
-    *published = still_published;
+    state.published = still_published;
 }
 
 /// Sends one `textDocument/publishDiagnostics` notification for `path`, resolved against
@@ -192,4 +222,70 @@ fn Publish(connection: &Connection, root: &Path, path: &str, diagnostics: Vec<Di
 
     let notification = lsp_server::Notification { method: PublishDiagnostics::METHOD.to_owned(), params };
     let _ignored = connection.sender.send(Message::Notification(notification));
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::{Recheck_And_Publish, ServerState};
+    use lsp_server::Connection;
+
+    /// The pair `Connection::memory()` returns is unbounded and this crate's own doc names
+    /// it as this crate's intended test seam ("use this for testing"), so `Recheck_And_
+    /// Publish`'s own `connection.sender.send` calls neither block nor need a reader on the
+    /// other end for this test to observe `state` afterward.
+    fn Root(name: &str) -> std::path::PathBuf
+    {
+        let root = std::env::temp_dir().join(name);
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("creates a fresh directory");
+        return root;
+    }
+
+    #[test]
+    fn Test_Recheck_And_Publish_Should_Reuse_The_Same_Workspace_And_Advance_Its_Generation_On_A_Real_Edit()
+    {
+        let root = Root("nomos-lsp-server-reuse-edited-root");
+        std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("writable");
+
+        let (connection, _client) = Connection::memory();
+        let mut state = ServerState::New();
+
+        Recheck_And_Publish(&connection, &root, &mut state);
+        let generation_after_first = state.workspace.as_ref().expect("a walked tree must leave a workspace behind").Generation();
+
+        std::fs::write(root.join("a.rs"), "pub fn Ok() {}\npub fn Also_Ok() {}\n").expect("writable");
+        Recheck_And_Publish(&connection, &root, &mut state);
+        let generation_after_second = state.workspace.as_ref().expect("a walked tree must leave a workspace behind").Generation();
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        assert!(
+            generation_after_second > generation_after_first,
+            "a real edit reusing the same workspace must advance its generation, not repeat it: \
+             {generation_after_first:?} then {generation_after_second:?}"
+        );
+    }
+
+    #[test]
+    fn Test_Recheck_And_Publish_Should_Not_Advance_Generation_A_Second_Time_Over_An_Untouched_Tree()
+    {
+        let root = Root("nomos-lsp-server-reuse-untouched-root");
+        std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("writable");
+
+        let (connection, _client) = Connection::memory();
+        let mut state = ServerState::New();
+
+        Recheck_And_Publish(&connection, &root, &mut state);
+        let generation_after_first = state.workspace.as_ref().expect("a walked tree must leave a workspace behind").Generation();
+
+        Recheck_And_Publish(&connection, &root, &mut state);
+        let generation_after_second = state.workspace.as_ref().expect("a walked tree must leave a workspace behind").Generation();
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        assert_eq!(
+            generation_after_second, generation_after_first,
+            "an untouched file must not advance the generation a second time: \
+             {generation_after_first:?} then {generation_after_second:?}"
+        );
+    }
 }

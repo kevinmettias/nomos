@@ -61396,7 +61396,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -61409,7 +61409,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lsp"
+        ],
+        "exit_code": 0,
+        "output_tail": "om_Path_Should_Round_Trip_A_Forward_Slash_Path ... ok\ntest walk_outward::governing_rule::tests::Test_Of_Should_Find_A_Real_Composed_Rule ... ok\ntest walk_outward::governing_rule::tests::Test_Of_Should_Report_No_Required_Facts_For_A_Source_Text_Rule ... ok\ntest walk_outward::tests::Test_Of_Should_Carry_Every_Real_Answer_For_A_Correctable_Rules_Zone_Finding ... ok\ntest walk_outward::tests::Test_Of_Should_Report_No_Correction_And_No_Component_For_An_Unlocated_Package_Finding ... ok\ntest sources::tests::Test_Read_Source_Should_File_The_Relative_Path ... ok\ntest sources::tests::Test_Walked_Sources_Should_Return_Sources_For_A_Real_Directory ... ok\ntest sources::tests::Test_Read_Sources_Should_Skip_Target_And_Git_Directories ... ok\ntest sources::tests::Test_Read_Sources_Should_Not_Descend_Into_A_Nested_Git_Worktree ... ok\ntest server::tests::Test_Recheck_And_Publish_Should_Not_Advance_Generation_A_Second_Time_Over_An_Untouched_Tree ... ok\ntest server::tests::Test_Recheck_And_Publish_Should_Reuse_The_Same_Workspace_And_Advance_Its_Generation_On_A_Real_Edit ... ok\n\ntest result: ok. 40 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 1 test\ntest Test_Diagnostics_For_Should_Translate_A_Real_Run_Result ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-lsp v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-lsp)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.93s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lsp-12a71289f691c959.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_lsp-6dec3a0741b433a3.exe)\n     Running tests\\fixture_tree.rs (target\\debug\\deps\\fixture_tree-f6a8ddbc37d8cd6e.exe)\n   Doc-tests nomos_lsp\n",
+        "verified_at": 1788760769,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f6682ae7c1ec0db9e18a80b538dccc652141ac52"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
