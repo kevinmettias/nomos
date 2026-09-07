@@ -150,6 +150,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md@authored | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md | authored | 17 | 5 | sha256:e28fcdcd8881a5405bfd5398964764cd59fa6d45e8340359ca94d9df98a0d732 |
 | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md | authored | 22 | 7 | sha256:3595ed422199d4058d69fa987aa9a1b826a27df82f6e0daa776f250e98ff51a0 |
 | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md@authored | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md | authored | 18 | 6 | sha256:ab5cb902ffef3564343e99f10236808102e5e0f1d3c8374831bc8e8ab0d579ad |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md@authored | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md | authored | 38 | 12 | sha256:cffa2a69329d9e1d534c0ee83672d98b60abe136e368795182a6293ea72c0d93 |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -1365,6 +1366,18 @@ profile: domain-specification
 | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#10 | authored | 2 | The Decision |
 | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#13 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#17 | authored | 2 | Status |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#1 | authored | 1 | An item can be ended honestly and leave other items silently unreachable |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#8 | authored | 2 | What was measured |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#14 | authored | 2 | The decision |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#15 | authored | 3 | 1. Ending an item warns about its dependents; it does not refuse |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#18 | authored | 3 | 2. A decision item may be depended on; `depends_on` binds to `done_when`, not to `kind` |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#21 | authored | 3 | 3. A stated remedy is not honest until it is a filed item |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#23 | authored | 3 | 4. A re-authored successor is named where truncation cannot hide it |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#26 | authored | 2 | What this record does not do |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#30 | authored | 2 | What was considered and rejected |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#35 | authored | 2 | Controls |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#37 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -38207,6 +38220,344 @@ rather than invented ahead of them.
 
 Accepted. The two types are ledger-agnostic and a follow-on extraction is warranted; the move
 itself is not performed by this record.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#1
+
+*revision: authored · kind: heading · heading: An item can be ended honestly and leave other items silently unreachable · hash: sha256:c0b553f04b3930f0ca40df632311cdc6c0687a439326a85ba33e0e3026706946*
+
+# An item can be ended honestly and leave other items silently unreachable
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#2
+
+*revision: authored · kind: heading · heading: An item can be ended honestly and leave other items silently unreachable / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#3
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / Question · hash: sha256:8cd41ecfb8389a927dc793fe27877592487d85bee83feb0de01d5c108dcc6e13*
+
+`OD-LEDGER-020` gave a declined dependency its own refusal arm, `DependencyDeclined`, so a
+dependent pointed at a dead end reads `stranded` instead of the misleading `waiting`. That
+closed the case where the ledger itself can see the problem: the dependency's `state` is
+`Declined`, the comparison is mechanical, and the label is correct the instant it is asked
+for.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#4
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / Question · hash: sha256:f6a8941409795daff2ca3004fcf2774dba720209ec7edde73cf5f0c33d41cb7d*
+
+Two related failures sit outside what that arm can see, because in both of them the
+dependency's state is not `Declined` — it is `Done`, exactly what `depends_on` was built to
+wait for.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#5
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / Question · hash: sha256:d6fcaee2ac819ed23903913218f5bf6040bb851874e09cb01a102b7d037aabec*
+
+**A decision structurally cannot satisfy a dependent that needs code.** `ItemKind::Decision`
+"settles an architectural question and records the answer... whether or not it also touches
+code" — kind alone does not say which. When a decision's own `done_when` asks only that a
+question be answered, finishing it makes every dependent read `Ready`: correctly, by the
+letter of `depends_on`, and uselessly, because the code the dependent actually needs was
+never written and nothing said so.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#6
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / Question · hash: sha256:7badfebfed84727ca5c69efee85fba947d85d35d47e7cf1b6c9c3040e7aedaae*
+
+**A decline's cascade is invisible at the moment it happens.** `nomos work decline` does not
+inspect `depends_on` at all — `Decline_Item` writes the transition and returns
+(`crates/substrate/nomos-ledger/src/store/verbs.rs:75-102`). Every direct and indirect
+dependent still shows up correctly as `stranded` the next time anyone runs `list`, because
+`OD-LEDGER-020`'s arm fires — but nobody is told so at decline time, and a session that does
+not think to re-run `list` over the whole board does not learn what it just orphaned.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#7
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / Question · hash: sha256:8f3ec37ade57bc67090fcd2ec41a5cae241b7c797a9bdf00d0870054cbb2623f*
+
+A third mechanic compounds both: a re-authored successor's id is not reliably discoverable
+from the id it replaced.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#8
+
+*revision: authored · kind: heading · heading: An item can be ended honestly and leave other items silently unreachable / What was measured · hash: sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491*
+
+## What was measured
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#9
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / What was measured · hash: sha256:9329a35912bfc254da7046d7530ab635e8ab56d7f36f1b3e28075f4d97905486*
+
+**Shape one, live on the board right now.** `P42-EXECUTOR-WORKRESULT-IMPLEMENTATION` was
+declined for under-reserved territory and re-authored three times — `-2`, `-3`, `-4` — each
+decline naming its successor, but only at the *end* of the reason:
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#10
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / What was measured · hash: sha256:ed115be8fc8c063048c6d9038533c4e439ef72565889a6aed049259db37858c6*
+
+> Re-authored as P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-2 with all five added, unchanged in
+> kind, done_when and predicate.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#11
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / What was measured · hash: sha256:6ae78eba541af9bb96675e4d4965827d659c8224862c9c4828641d2cc71d7d1a*
+
+`ItemState::Describe` — what a listing and a refusal both render — cuts a `Declined` reason
+to its first line. None of the three reasons name the successor there; all three name it in
+the sentence a listing never shows. `P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4` finished
+(commit `fe0fac58`, this repository's own history), carrying the real implementation. Three
+items authored against the *original*, declined id are still on the board today, reported
+`stranded` by `nomos work list`, and none of them has been repointed to `-4`:
+`P42-EXECUTOR-ENVELOPE-IMPLEMENTATION`, `P42-SECOND-HARNESS-EXECUTOR-2`, and
+`P40-AGENT-WORKRESULT-VALIDATED-PATH-3`. The mechanism `OD-LEDGER-020` built is doing exactly
+what it was built to do — the label is correct — and the work it names is still undone,
+because being told `stranded` and being told what to point at instead are different sentences,
+and only the first one is currently visible in a listing.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#12
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / What was measured · hash: sha256:90d64dafa3f88e01341dbf0218398c6c658c87e952e39f5dc8ab5fe15295b94d*
+
+**Shape two, the decision-before-code instances.** `P42-EXECUTOR-ENVELOPE-MECHANISM` and
+`P42-EXECUTOR-WORKRESULT-MECHANISM` are `Done`, recorded as `OD-EXECUTOR-007` and
+`OD-EXECUTOR-008`. Both records are explicit that they decide a shape and do not carry it:
+`OD-EXECUTOR-008` grounds a `WorkResult` shape; the code that populates one did not exist
+until the `P42-EXECUTOR-WORKRESULT-IMPLEMENTATION` chain above was filed and finished
+separately, in a later session, as its own four-item chain. `OD-GATE-022` is the same shape a
+third time and is not yet closed: it decides that `Compare_Gate_Runs` takes two already-
+produced `GateRunResult`s and says outright, in its own "what this record does not do"
+section, that it does not wire `compare` into any surface. `Compare_Gate_Runs` has zero
+callers today; `P73-GATE-COMPARE-HAS-NO-CALLER` is filed and `Ready`, unclaimed.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#13
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / What was measured · hash: sha256:3a41eaadb5baefc699a2b0a919a9e0cc8efea8dae2b37da431b12befaa99bed0*
+
+**Shape three, a decline's cascade.** Declining `P41-RUN-PLANNER` stranded three dependents
+directly and left four more waiting behind those, in one write, with nothing said at decline
+time about the seven items just made unreachable — the finding that produced the first,
+narrower version of this record (`P73-DECISION-BEFORE-CODE-STRANDS-ITS-DEPENDENTS`) and the
+reason it was declined and re-authored to cover both shapes rather than one.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#14
+
+*revision: authored · kind: heading · heading: An item can be ended honestly and leave other items silently unreachable / The decision · hash: sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0*
+
+## The decision
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#15
+
+*revision: authored · kind: heading · heading: An item can be ended honestly and leave other items silently unreachable / The decision / 1. Ending an item warns about its dependents; it does not refuse · hash: sha256:d2d834c862dc67d5aae7ce87095f67a541694d2501e3be0170e110509733a1c8*
+
+### 1. Ending an item warns about its dependents; it does not refuse
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#16
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / The decision / 1. Ending an item warns about its dependents; it does not refuse · hash: sha256:43d15d77e23cc1f161cb2c419e488312c541ece6659dac6a6769704785397e86*
+
+Neither `nomos work finish` nor `nomos work decline` refuses because live dependents exist.
+Both are legitimate ways to end an item even when dependents are affected — the `P41-RUN-
+PLANNER` decline was correct on its own merits, and a decision that answers a question
+honestly without also shipping code is not thereby wrong. The ledger cannot judge whether
+leaving a dependent's precondition mechanically-satisfied-but-substantively-undone is
+acceptable; only the person ending the item can, and a refusal would block work that is
+often right.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#17
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / The decision / 1. Ending an item warns about its dependents; it does not refuse · hash: sha256:8f8812f0bac261b9460fbc4685b6a5f0b9e037b60cae9b74b1ff1fd683679155*
+
+What is missing is visibility at the moment it matters, not a gate. `nomos work finish` and
+`nomos work decline` are to print, on success, every item on the board whose `depends_on`
+names the one just ended, using the same reachability computation `list` and `audit` already
+use for `Blocking_Refusal` — so the fanout is read once, at the point of the decision,
+instead of requiring a second, separate sweep of the whole board to discover later. This is
+new plumbing across `nomos-work-orchestration`'s `WorkOutcome` and `nomos-cli`'s report
+layer and is not built by this record: it is filed as `P85-LEDGER-038-FANOUT-WARNING-2`,
+`Capability`, `Required`, so the decision does not repeat the exact defect it names — a
+remedy asserted in prose with no item behind it.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#18
+
+*revision: authored · kind: heading · heading: An item can be ended honestly and leave other items silently unreachable / The decision / 2. A decision item may be depended on; `depends_on` binds to `done_when`, not to `kind` · hash: sha256:6c23937c9a47e5f22ac220f459e330549cd2bece7b2621a63c5208991b80277f*
+
+### 2. A decision item may be depended on; `depends_on` binds to `done_when`, not to `kind`
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#19
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / The decision / 2. A decision item may be depended on; `depends_on` binds to `done_when`, not to `kind` · hash: sha256:9048e8a8e24991dd59b7ac0f034cf5534553f697399237ddd3a96999ff23ff99*
+
+`ItemKind::Decision` is explicitly allowed to touch code, so refusing every `depends_on`
+edge onto a `Decision` item on the basis of its kind alone would be both over- and
+under-broad: some decisions do carry an implementation in the same item, and some
+`Capability` items could in principle promise nothing but a written answer. Kind is not the
+signal.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#20
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / The decision / 2. A decision item may be depended on; `depends_on` binds to `done_when`, not to `kind` · hash: sha256:3702e41956dc4e6dfa421d467357b536f0b84d53c068e68fe103ddf721a52b67*
+
+The binding rule instead: an item declares `--depends-on X` only when `X`'s own `done_when`,
+read as written, actually delivers what the dependent needs in order to begin — not because
+`X` is topically related. When a decision's `done_when` asks only that a question be
+answered and recorded (as `OD-EXECUTOR-007`'s, `OD-EXECUTOR-008`'s and `OD-GATE-022`'s each
+do, each saying so in its own "what this record does not do"), nothing may depend on it for
+code, and the implementation is a separate item filed for that purpose.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#21
+
+*revision: authored · kind: heading · heading: An item can be ended honestly and leave other items silently unreachable / The decision / 3. A stated remedy is not honest until it is a filed item · hash: sha256:e3e6f264fba788482d67030e186e9648543064640a26bbc5dd87d95f5135b59e*
+
+### 3. A stated remedy is not honest until it is a filed item
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#22
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / The decision / 3. A stated remedy is not honest until it is a filed item · hash: sha256:f70510dd6bcdaed9bb79395105eb5ee8a28202b72450fac60cc340bcdef138cb*
+
+An item ends — by `decline`, naming a follow-up as its remedy, or by `finish`, as a
+`Decision` whose `done_when` implies further work — honestly only when that follow-up exists
+as a real item id on the board at the moment the ending is recorded, not as prose promising
+one later. This record's own close is held to the same rule: `P85-LEDGER-038-FANOUT-WARNING-2`
+is filed alongside it, and the concrete instance measured above is repointed, not merely
+diagnosed, in the same commit that closes this item — matching the discipline
+`OD-LEDGER-020` decision 5 already set for exactly this act.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#23
+
+*revision: authored · kind: heading · heading: An item can be ended honestly and leave other items silently unreachable / The decision / 4. A re-authored successor is named where truncation cannot hide it · hash: sha256:17c205da7837611886a4917c9fd46547bfe4d10f893952972a6e625d096e7948*
+
+### 4. A re-authored successor is named where truncation cannot hide it
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#24
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / The decision / 4. A re-authored successor is named where truncation cannot hide it · hash: sha256:ed93857cad858b05d6d8e1def0e49d74dfab12ecf4ff49c0077cb538c9d3d9f8*
+
+A `decline` reason that names a successor must name it in its first sentence. `ItemState::
+Describe` cuts a `Declined` reason to its first line for every caller that renders it in a
+listing or a refusal — `OD-LEDGER-014`'s reason for existing — so a successor named only at
+the end of a multi-sentence reason is, for every practical reading path on this board, not
+named at all. This is a convention for `nomos work decline --reason`, not new ledger
+mechanism: enforcing prose shape mechanically is rejected below for the same reason
+`OD-LEDGER-020` rejected a `work re-point` verb — it is a real improvement on its own merits
+and is not what this record's measured defect needs to close.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#25
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / The decision / 4. A re-authored successor is named where truncation cannot hide it · hash: sha256:efcff308cd2760002616afa08cb6cef9be0de3096131cf62b6d128c7769252b5*
+
+`P42-EXECUTOR-ENVELOPE-IMPLEMENTATION`, `P42-SECOND-HARNESS-EXECUTOR-2` and
+`P40-AGENT-WORKRESULT-VALIDATED-PATH-3` are declined and re-authored, each depending on
+`P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4` in place of the declined
+`P42-EXECUTOR-WORKRESULT-IMPLEMENTATION`, territory and `done_when` otherwise unchanged: the
+work each describes was correctly scoped throughout, and only the edge was wrong.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#26
+
+*revision: authored · kind: heading · heading: An item can be ended honestly and leave other items silently unreachable / What this record does not do · hash: sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4*
+
+## What this record does not do
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#27
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / What this record does not do · hash: sha256:bfde6b5f25e0b7e82fc54df2979e5849557dcfdb19e6477df559af424f908fc7*
+
+**It does not build the fanout warning.** Decision 1 is filed as
+`P85-LEDGER-038-FANOUT-WARNING-2`, real implementation territory in
+`nomos-work-orchestration` and `nomos-cli`, left for that item to claim and finish.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#28
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / What this record does not do · hash: sha256:5fe17dde968b2c951c62734f38090779c880b57eeaeab056ab6f6295430c485a*
+
+**It does not add schema linking a declined item to its successor.** A structured
+`superseded_by` field on `Declination` was considered — see below — and rejected for now in
+favor of the first-sentence convention, which needs no schema change and closes the measured
+instance immediately.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#29
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / What this record does not do · hash: sha256:e47938ec158611eaecc3e87d920a447eebac39973e6157bb0895189d42e0df31*
+
+**It does not repoint every stranded item on the board**, only the three the measured
+instance names. Any other dependent pointed at a declined id and not yet repointed is a
+separate finding for whoever next runs `list --state stranded` over the whole board.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#30
+
+*revision: authored · kind: heading · heading: An item can be ended honestly and leave other items silently unreachable / What was considered and rejected · hash: sha256:8f7f0641d3cd5b809218d2d25798211bc5d57fcdce7846941623bef23aa8bd85*
+
+## What was considered and rejected
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#31
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / What was considered and rejected · hash: sha256:06ee9a1daf478d4751c37b06888f19be1e6d5bfa02419e2834e0ad8f2f8a593a*
+
+**Refusing `finish` or `decline` when dependents exist.** Rejected: both worked examples in
+"what was measured" are cases where ending the item was the right call despite the fanout,
+and the ledger has no way to judge acceptability — only visibility is missing, not a gate.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#32
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / What was considered and rejected · hash: sha256:3e2fbb056421ffbe92bade0cd4366eea743ab3981658eea0a2567defd166e47b*
+
+**Refusing `--depends-on` naming any `Decision`-kind item.** Rejected: `ItemKind::Decision`'s
+own documentation allows a decision to carry code, so kind is not a reliable discriminator,
+and a blanket refusal would block the legitimate cases along with the defective ones.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#33
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / What was considered and rejected · hash: sha256:a634a6f8df208511f3996f8f405846f1299119a84427afd149ad13a4ada681fa*
+
+**A structured `superseded_by: Option<ItemId>` field on `Declination`, walked automatically
+by `Claim_Refusal` to name the live tip of a decline chain.** A real mechanism, and a
+stronger fix than a prose convention — but new schema, new serialization, and a new refusal
+rendering path, none of which the measured instance needs: naming the successor in the first
+sentence closes it today. Worth its own item if the first-sentence convention proves
+insufficient across a longer chain than the three-hop one measured here; not decided by this
+record.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#34
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / What was considered and rejected · hash: sha256:7877d54b548c14f73debf882a3a57d12ab843a61e9dd502737ea26c1dc7b39e1*
+
+**A `work re-point` verb that edits `depends_on` in place.** Out of scope for the same reason
+`OD-LEDGER-020` gave it: real on its own merits, not what either measured shape needs, since
+the remedy — decline the dependent, re-author it — already exists and was already the
+convention this record's own decision 4 uses to close its instance.
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#35
+
+*revision: authored · kind: heading · heading: An item can be ended honestly and leave other items silently unreachable / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#36
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / Controls · hash: sha256:4e30b1b8bf6f73c9d87c49d19ed5d1bf06323cffcaf59e93156c20fabcf0a4e0*
+
+| Weakening | What it produces |
+|---|---|
+| refuse instead of warn | legitimate finishes and declines blocked on a fact the ledger cannot judge |
+| refuse `--depends-on` on `Decision` kind alone | blocks decisions that do carry code, and does not catch a `Capability` item that under-delivers the same way |
+| leave decision 1 as prose with no filed item | this record repeats the exact defect it names |
+| leave a successor named only at the end of a decline reason | `ItemState::Describe`'s first line never shows it, on this board or any future one |
+| diagnose the measured instance without repointing it | three items stay `stranded` on a board this record was written to make legible |
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#37
+
+*revision: authored · kind: heading · heading: An item can be ended honestly and leave other items silently unreachable / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#38
+
+*revision: authored · kind: prose · heading: An item can be ended honestly and leave other items silently unreachable / Status · hash: sha256:53e6eb5b044f5f6785aee92d51da8209f2fc646d8133967d40ec04da0dc359a0*
+
+Open. Closed for decision 1 when `P85-LEDGER-038-FANOUT-WARNING-2` finishes; decisions 2
+through 4 are closed by this record and its own repointing commit.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 

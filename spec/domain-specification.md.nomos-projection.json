@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:59512d365f3f3a9a96152ce02fdfcdc0582eb1f79f44b1731f9de66600041e18",
-  "inputs_digest": "sha256:b525d001906f31a65ef1d8168813f499eb6f4d491141d201ee56c2f5af30432b",
+  "content_digest": "sha256:1bcbfd47fb68464d2bf15c89de6f8372c7f56ef018b0d62b8c31aaafaf5c97b6",
+  "inputs_digest": "sha256:5c8c9a32e06af6f3cb8ee425bee8648a93efc9a48c4ef312ea7d65097a646ee3",
   "sections": [
     [
       "Documents",
-      217
+      218
     ],
     [
       "Sections",
-      1756
+      1768
     ],
     [
       "Source blocks",
-      6081
+      6119
     ]
   ],
   "inputs": [
@@ -719,6 +719,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md@authored",
       "hash": "sha256:ab5cb902ffef3564343e99f10236808102e5e0f1d3c8374831bc8e8ab0d579ad"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md@authored",
+      "hash": "sha256:cffa2a69329d9e1d534c0ee83672d98b60abe136e368795182a6293ea72c0d93"
     },
     {
       "content": "documents",
@@ -6769,6 +6774,66 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#17",
       "hash": "sha256:415124b652fd7aa5056e822b437d9af9fb641d04935a3fa28b4d80e0ea824aec"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#1",
+      "hash": "sha256:274d00f8549d44da5e9a5f9e51b5850ae88950db4b4e6a2066d6d3d169cc093a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#2",
+      "hash": "sha256:a62959104cd7eeec17eeda014647cfa18739307b0babb6c1c150ae6df26e7c8a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#8",
+      "hash": "sha256:c3b0bf1efc012c5b19cc66484bac71c4b0a19e67631afd7ae208900832c172d9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#14",
+      "hash": "sha256:5042140cac18472e9b24a6c603f167a2adcafcb275983a68b329ced7707a203e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#15",
+      "hash": "sha256:bd88b9b5aaa26565c96ceec7b1fd56ab5c8dce1991e68c1d10a0886ff1f23e63"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#18",
+      "hash": "sha256:51d95c4d4986a35e73514d1a51a8d056f3b515aacb3bbd3e37496138cdb7d532"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#21",
+      "hash": "sha256:c07276d0cb86c10122b7dd5eda43234bc282c47736d166a7ee6c0c3ed60c2c97"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#23",
+      "hash": "sha256:03574a7fcc9342bae7ffbca28f74c9c9a345f250e5697b538f55dc706f715168"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#26",
+      "hash": "sha256:b154149e4c00eba6e663c20797a827c90fd2255ba7857425346f3e37d964580f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#30",
+      "hash": "sha256:7a5c2d91717ace41283219f28248afe661e1357659af9738e9be334ca8e2003d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#35",
+      "hash": "sha256:0c21544c15cdf5768c5d9634c5c287783b3eea1caeccb097273c175c77fa5abf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#37",
+      "hash": "sha256:96d2218efa949e4cd319bb62aa76f24abcbc2d619d918384f79a9e07e5b60d01"
     },
     {
       "content": "headings",
@@ -29504,6 +29569,196 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#18",
       "hash": "sha256:33251a535bdeae09a6778c4b7eeb2a12589f1e9eccb68133c080917e09f29974"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#1",
+      "hash": "sha256:c0b553f04b3930f0ca40df632311cdc6c0687a439326a85ba33e0e3026706946"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#3",
+      "hash": "sha256:8cd41ecfb8389a927dc793fe27877592487d85bee83feb0de01d5c108dcc6e13"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#4",
+      "hash": "sha256:f6a8941409795daff2ca3004fcf2774dba720209ec7edde73cf5f0c33d41cb7d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#5",
+      "hash": "sha256:d6fcaee2ac819ed23903913218f5bf6040bb851874e09cb01a102b7d037aabec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#6",
+      "hash": "sha256:7badfebfed84727ca5c69efee85fba947d85d35d47e7cf1b6c9c3040e7aedaae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#7",
+      "hash": "sha256:8f3ec37ade57bc67090fcd2ec41a5cae241b7c797a9bdf00d0870054cbb2623f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#8",
+      "hash": "sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#9",
+      "hash": "sha256:9329a35912bfc254da7046d7530ab635e8ab56d7f36f1b3e28075f4d97905486"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#10",
+      "hash": "sha256:ed115be8fc8c063048c6d9038533c4e439ef72565889a6aed049259db37858c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#11",
+      "hash": "sha256:6ae78eba541af9bb96675e4d4965827d659c8224862c9c4828641d2cc71d7d1a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#12",
+      "hash": "sha256:90d64dafa3f88e01341dbf0218398c6c658c87e952e39f5dc8ab5fe15295b94d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#13",
+      "hash": "sha256:3a41eaadb5baefc699a2b0a919a9e0cc8efea8dae2b37da431b12befaa99bed0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#14",
+      "hash": "sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#15",
+      "hash": "sha256:d2d834c862dc67d5aae7ce87095f67a541694d2501e3be0170e110509733a1c8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#16",
+      "hash": "sha256:43d15d77e23cc1f161cb2c419e488312c541ece6659dac6a6769704785397e86"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#17",
+      "hash": "sha256:8f8812f0bac261b9460fbc4685b6a5f0b9e037b60cae9b74b1ff1fd683679155"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#18",
+      "hash": "sha256:6c23937c9a47e5f22ac220f459e330549cd2bece7b2621a63c5208991b80277f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#19",
+      "hash": "sha256:9048e8a8e24991dd59b7ac0f034cf5534553f697399237ddd3a96999ff23ff99"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#20",
+      "hash": "sha256:3702e41956dc4e6dfa421d467357b536f0b84d53c068e68fe103ddf721a52b67"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#21",
+      "hash": "sha256:e3e6f264fba788482d67030e186e9648543064640a26bbc5dd87d95f5135b59e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#22",
+      "hash": "sha256:f70510dd6bcdaed9bb79395105eb5ee8a28202b72450fac60cc340bcdef138cb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#23",
+      "hash": "sha256:17c205da7837611886a4917c9fd46547bfe4d10f893952972a6e625d096e7948"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#24",
+      "hash": "sha256:ed93857cad858b05d6d8e1def0e49d74dfab12ecf4ff49c0077cb538c9d3d9f8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#25",
+      "hash": "sha256:efcff308cd2760002616afa08cb6cef9be0de3096131cf62b6d128c7769252b5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#26",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#27",
+      "hash": "sha256:bfde6b5f25e0b7e82fc54df2979e5849557dcfdb19e6477df559af424f908fc7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#28",
+      "hash": "sha256:5fe17dde968b2c951c62734f38090779c880b57eeaeab056ab6f6295430c485a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#29",
+      "hash": "sha256:e47938ec158611eaecc3e87d920a447eebac39973e6157bb0895189d42e0df31"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#30",
+      "hash": "sha256:8f7f0641d3cd5b809218d2d25798211bc5d57fcdce7846941623bef23aa8bd85"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#31",
+      "hash": "sha256:06ee9a1daf478d4751c37b06888f19be1e6d5bfa02419e2834e0ad8f2f8a593a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#32",
+      "hash": "sha256:3e2fbb056421ffbe92bade0cd4366eea743ab3981658eea0a2567defd166e47b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#33",
+      "hash": "sha256:a634a6f8df208511f3996f8f405846f1299119a84427afd149ad13a4ada681fa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#34",
+      "hash": "sha256:7877d54b548c14f73debf882a3a57d12ab843a61e9dd502737ea26c1dc7b39e1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#35",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#36",
+      "hash": "sha256:4e30b1b8bf6f73c9d87c49d19ed5d1bf06323cffcaf59e93156c20fabcf0a4e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#37",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#38",
+      "hash": "sha256:53e6eb5b044f5f6785aee92d51da8209f2fc646d8133967d40ec04da0dc359a0"
     },
     {
       "content": "blocks",

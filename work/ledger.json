@@ -60448,7 +60448,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -60461,7 +60461,27 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "k\ntest serializers::Test_An_Undeclared_Serializer_Should_Be_Found ... ok\ntest serializers::Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair ... ok\ntest serializers::Test_Every_Universal_Reservation_Should_Be_Declared ... ok\ntest identifier_and_file::Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holder ... ok\ntest sharing_a_record::Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused ... ok\ntest snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once ... ok\ntest serializers::Test_Every_Declared_Serializer_Should_Still_Serialize ... ok\ntest record_exclusion::Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.84s\n\n\nrunning 3 tests\ntest Test_An_Unrunnable_Predicate_Refuses_Rather_Than_Reaching_The_Launcher ... ok\ntest Test_An_Unknown_Intersection_Refuses_A_Claim_Rather_Than_Granting_It ... ok\ntest Test_A_Territory_And_A_Predicate_Cross_The_Boundary_On_The_Happy_Path ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-88a6c5fe6073cb0b.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-93192cf81d1c9610.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-98133f494148dc2a.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-bf5c5263ffdaee25.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-5e772560a64d99e0.exe)\n     Running tests\\scope_verification_integration.rs (target\\debug\\deps\\scope_verification_integration-765bb82c13304631.exe)\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1788766729,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7b567513eac59dbaab5850109335abc90742d25f"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -62091,6 +62111,95 @@
           "test",
           "-p",
           "nomos-platform-std"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P85-LEDGER-038-FANOUT-WARNING",
+      "title": "Finish and decline end an item without saying what it just made unreachable",
+      "why": "OD-LEDGER-038 decision 1: ending an item legitimately leaves dependents affected, and nothing at the moment of ending says so. nomos work list and audit already compute the fanout correctly via Blocking_Refusal/Claim_Refusal -- the same reachability check that renders a dependent Ready, waiting, held, snagged or stranded. finish and decline never call it. Decline_Item (crates/substrate/nomos-ledger/src/store/verbs.rs) writes the transition and returns; the WorkOutcome::Finish and WorkOutcome::Decline variants in nomos-work-orchestration carry only the verification record or unit, not the document a fanout needs. Measured live: the P41-RUN-PLANNER decline stranded seven items in one write with nothing said about it.",
+      "done_when": "nomos work finish and nomos work decline both print, on success, every item on the board whose depends_on names the item just ended, labelled the same way list already labels it (Ready, waiting, held, snagged, stranded) via the existing Blocking_Refusal/Refusal_Label computation and no second implementation of the reachability rule; the fanout line is silent (prints nothing) when the set is empty rather than an empty header.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-work-orchestration/src/run.rs",
+          "crates/orchestration/nomos-work-orchestration/src/work_outcome.rs",
+          "crates/orchestration/nomos-work-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/src/work/report.rs",
+          "crates/host/nomos-cli/src/work/tests.rs",
+          "tests/contract/surface/nomos-work-orchestration.txt",
+          "tests/contract/surface/nomos-cli.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory named crates/orchestration/nomos-work-orchestration/src/work_outcome.rs, which does not exist; WorkOutcome is actually declared at crates/orchestration/nomos-work-orchestration/src/board_view/work_outcome.rs. Re-authored as P85-LEDGER-038-FANOUT-WARNING-2 with the corrected path, unchanged in kind, done_when and predicate."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1788766526
+      }
+    },
+    {
+      "id": "P85-LEDGER-038-FANOUT-WARNING-2",
+      "title": "Finish and decline end an item without saying what it just made unreachable",
+      "why": "OD-LEDGER-038 decision 1: ending an item legitimately leaves dependents affected, and nothing at the moment of ending says so. nomos work list and audit already compute the fanout correctly via Blocking_Refusal/Claim_Refusal -- the same reachability check that renders a dependent Ready, waiting, held, snagged or stranded. finish and decline never call it. Decline_Item (crates/substrate/nomos-ledger/src/store/verbs.rs) writes the transition and returns; the WorkOutcome::Finish and WorkOutcome::Decline variants in nomos-work-orchestration carry only the verification record or unit, not the document a fanout needs. Measured live: the P41-RUN-PLANNER decline stranded seven items in one write with nothing said about it.",
+      "done_when": "nomos work finish and nomos work decline both print, on success, every item on the board whose depends_on names the item just ended, labelled the same way list already labels it (Ready, waiting, held, snagged, stranded) via the existing Blocking_Refusal/Refusal_Label computation and no second implementation of the reachability rule; the fanout line is silent (prints nothing) when the set is empty rather than an empty header.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-work-orchestration/src/run.rs",
+          "crates/orchestration/nomos-work-orchestration/src/board_view/work_outcome.rs",
+          "crates/orchestration/nomos-work-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/src/work/report.rs",
+          "crates/host/nomos-cli/src/work/tests.rs",
+          "tests/contract/surface/nomos-work-orchestration.txt",
+          "tests/contract/surface/nomos-cli.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-cli"
         ],
         "timeout_seconds": 600
       },
