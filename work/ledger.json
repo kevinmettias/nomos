@@ -61278,6 +61278,40 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P82-CARGO-DENY-IS-INSTALLED-AFTER-THE-STEPS-THAT-NEED-IT",
+      "title": "The gate installs cargo-deny after Test and Determinism, so the dependency-policy capability never runs in them",
+      "why": "gate.yml installs cargo-deny in a step named Install cargo-deny at line 262, and that is the only place it is installed; there is no cache step and no earlier install. Test runs at line 98 and Determinism at line 145, both before it. Every test in those two steps that invokes the real cargo deny has therefore been running on a machine where the command does not exist. The ubuntu runner says so in its own words, now that P81 made the provider refuse instead of returning an empty list: cargo deny wrote no summary line, stderr error no such command deny, help find a package to install deny with cargo search cargo-deny. Until P81 the provider reported that as a clean dependency-policy fact, so nothing failed and the gap was invisible. The consequence is not a flaky test: the workspace's own bans, licenses and sources verdict has not been judged in the Test or Determinism steps at all, while reading as judged and clean. That is the false-coverage shape OD-COMPLETENESS-001 exists to refuse, sitting in the gate itself rather than in a rule. The fix is an ordering change and nothing else. Test_The_Supply_Chain_Tool_Should_Be_Installed_At_A_Chosen_Version derives the step by name and asserts only that the install carries --locked and a digit-leading version, so moving the step does not disturb it.",
+      "done_when": "cargo-deny is installed before the first gate step that invokes it, so the dependency-policy capability is genuinely available wherever a test exercises it; the ubuntu Test step and the windows Determinism step both pass with the provider judging a real workspace rather than reporting the capability unavailable; and the reason the install must precede those steps is stated where the next person reordering the workflow will meet it.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".github/workflows/gate.yml"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "gate_step"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
