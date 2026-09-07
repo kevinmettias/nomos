@@ -59946,12 +59946,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P40-INCREMENTAL-SKIP-UNCHANGED-RULES"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-dev-session",
+        "acquired_at": 1788758702,
+        "lease_expires_at": 1788765902
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -61293,10 +61297,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-lspfam",
+        "acquired_at": 1788745239,
+        "lease_expires_at": 1788752439
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -61307,6 +61315,38 @@
           "gate_step"
         ],
         "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P83-THE-TIMEOUT-CONTROL-USES-A-SILENT-PROGRAM-ON-LINUX",
+      "title": "The launcher timeout control asserts TimedOut using a program that is silent on Linux, so it is Stalled instead",
+      "why": "Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out asserts ExitOutcome::TimedOut for a command given a one second timeout. Its fixture is not the same program on both hosts: on Windows it is ping -n 8 127.0.0.1, which prints a reply line roughly once a second, and on Linux it is sleep 7, which prints nothing at all. The launcher distinguishes a run that exceeded its whole timeout from one that went quiet, and a silent program reaches the idle bound first, so Linux returns Stalled with idle_elapsed of about 1.006 seconds where Windows returns TimedOut. It is deterministic rather than flaky: the Linux fixture can never satisfy the assertion. The test is the stated control that stops the timeout fix from being a removed timeout, so on Linux that control has never held. It was masked for as long as the ubuntu Test step died earlier, which P82's ordering fix has now moved past, and it is what that step fails on today.",
+      "done_when": "The slow program the control uses produces output on both hosts, or the assertion admits both outcomes with a stated reason why either satisfies the control, so the timeout is genuinely exercised on Linux rather than the idle bound being exercised in its place. Run directly rather than under a shell, which the fixture's own comment requires and gives its reasons for.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform-std/src/launcher/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform-std"
+        ],
+        "timeout_seconds": 600
       },
       "verified": null,
       "abandoned": [],
