@@ -366,10 +366,18 @@ mod tests
         );
     }
 
+    /// The root is a real scratch directory carrying its own `deny.toml`, not a hand-typed
+    /// literal, because [`Discover_Workspace`] refuses before launching anything unless
+    /// `root`'s own `deny.toml` exists on disk.
+    ///
+    /// It used to root at `F:/repos/nomos`, where that file is real on one developer's
+    /// machine and nowhere else, so the test passed there and failed on ubuntu with the
+    /// refusal rather than the parse it means to exercise. `P80`.
     #[test]
     fn Test_Discover_Workspace_Should_Read_A_Violation_From_The_Json_Stream()
     {
-        let root = Path::new("F:/repos/nomos");
+        let scratch = ScratchDirectory::New("violation-stream");
+        std::fs::write(scratch.Path().join("deny.toml"), "[bans]\nmultiple-versions = \"warn\"\n").expect("writing a scratch deny.toml");
         let stderr = serde_json::json!({
             "type": "diagnostic",
             "fields": {
@@ -383,19 +391,25 @@ mod tests
         .to_string();
         let launcher = FakeLauncher { stderr };
 
-        let violations = Discover_Workspace(root, &launcher).expect("the fake launcher writes a real stderr stream");
+        let violations = Discover_Workspace(scratch.Path(), &launcher).expect("the fake launcher writes a real stderr stream");
 
         assert_eq!(violations.len(), 1);
         assert_eq!(violations.first().expect("one violation").code, "duplicate");
     }
 
+    /// Rooted at a real scratch directory with its own `deny.toml` for the same reason as
+    /// the test above, and for a sharper one here: without that file the refusal this
+    /// asserts arrives, but it is the *wrong refusal*. On ubuntu it failed claiming no
+    /// `deny.toml`, never reaching the empty-stream case the test is named for, so a
+    /// passing run on Windows was evidence about a different code path. `P80`.
     #[test]
     fn Test_Discover_Workspace_Should_Refuse_An_Empty_Stderr_Stream()
     {
-        let root = Path::new("F:/repos/nomos");
+        let scratch = ScratchDirectory::New("empty-stream");
+        std::fs::write(scratch.Path().join("deny.toml"), "[bans]\nmultiple-versions = \"warn\"\n").expect("writing a scratch deny.toml");
         let launcher = FakeLauncher { stderr: String::new() };
 
-        let error = Discover_Workspace(root, &launcher).expect_err("an empty stderr stream is not a real cargo deny run");
+        let error = Discover_Workspace(scratch.Path(), &launcher).expect_err("an empty stderr stream is not a real cargo deny run");
 
         assert!(error.reason.contains("no output"), "{}", error.reason);
     }
