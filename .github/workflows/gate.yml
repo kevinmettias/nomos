@@ -87,6 +87,20 @@ jobs:
       # The `if:` does not disturb `work finish`. `nomos_ledger::Derive_Step` moves between
       # steps on `- name:` / `name:` and returns the first `run:` inside the one it wants,
       # ignoring every other key, so this step still yields the same argv.
+      # Installed here rather than beside the `Supply chain` step it was written for, because
+      # `Test` below runs `nomos-lang-rust-deny`'s own provider against a real `cargo deny`,
+      # and a step cannot use a tool installed after it. It was ordered after `Test` until
+      # `P82`, so that provider ran on a machine with no `cargo deny` on every gate this
+      # workflow has ever run -- and reported the workspace's bans/licenses/sources verdict
+      # as *clean* rather than as unavailable, because the provider could not tell a failed
+      # run from a quiet one (`P81` closed that half, which is what made this visible).
+      #
+      # The rationale for building it from crates.io, and for pinning the version, is beside
+      # `Supply chain` below where it was published. Only the position moved.
+      - name: Install cargo-deny
+        if: matrix.os == 'ubuntu-latest'
+        run: cargo install cargo-deny --locked --version 0.20.2
+
       - name: Lint
         if: matrix.os == 'ubuntu-latest'
         run: cargo clippy --workspace --all-targets
@@ -259,10 +273,12 @@ jobs:
       # Linux only, with the step below it. Both read `Cargo.lock` and a policy file, neither
       # of which has a host in it, and building cargo-deny a second time is the most
       # expensive way in this workflow to obtain an answer that cannot differ.
-      - name: Install cargo-deny
-        if: matrix.os == 'ubuntu-latest'
-        run: cargo install cargo-deny --locked --version 0.20.2
-
+      #
+      # The install itself now runs before `Lint`/`Test` rather than here -- see its own
+      # comment there for why. That "answer cannot differ by host" reasoning is about *this*
+      # step's verdict and does not extend to a test that needs the binary present to mean
+      # anything: `Determinism` runs `nomos-integration-tests` on Windows, where cargo-deny
+      # is installed by nothing at all. `P82` records that half as still open.
       - name: Supply chain
         if: matrix.os == 'ubuntu-latest'
         run: cargo deny check advisories bans licenses sources
