@@ -115,7 +115,98 @@ fn Run_Cargo_Deny<Launcher: ProcessLauncher>(root: &Path, config: &Path, launche
         });
     }
 
+    Require_Summarized(&output.stderr, &command)?;
+
     return Ok(output.stderr);
+}
+
+/// Every check `command`'s own argv asks `cargo deny` to run.
+///
+/// Read back off the command rather than declared a second time, so the set of checks this
+/// provider requests has exactly one home in [`Cargo_Deny_Command`]'s own argv. A second
+/// list here would be two artifacts independently determining one fact, which is the shape
+/// `OD-RULES-025` exists over.
+fn Requested_Checks(command: &Command) -> Vec<String>
+{
+    let Some(position) = command.argv.iter().position(|argument| return argument == "check")
+    else
+    {
+        return Vec::new();
+    };
+
+    return command.argv.iter().skip(position.saturating_add(1)).cloned().collect();
+}
+
+/// What `cargo deny` itself said went wrong, when it wrote a log line saying so.
+///
+/// Beside its diagnostics and its summary, `cargo deny --format json` writes
+/// `{"type":"log"}` lines carrying a `level` and a `message`. A run that dies early says
+/// why in one of those and nowhere else -- measured against a directory holding a
+/// `deny.toml` and no `Cargo.toml`: one `ERROR` log reading "the directory ... doesn't
+/// contain a Cargo.toml file", exit 1, and no summary. Quoting it makes the refusal name
+/// the real cause instead of handing a reader the whole stream to search.
+fn Logged_Error(stream: &str) -> Option<String>
+{
+    return stream
+        .lines()
+        .filter_map(|line| return serde_json::from_str::<serde_json::Value>(line).ok())
+        .filter(|value| return value.get("type").and_then(serde_json::Value::as_str) == Some("log"))
+        .filter(|value| return value.pointer("/fields/level").and_then(serde_json::Value::as_str) == Some("ERROR"))
+        .find_map(|value| return value.pointer("/fields/message").and_then(serde_json::Value::as_str).map(|message| return format!("cargo deny reported: {message}")));
+}
+
+/// Refuses a stream carrying no completed-run summary that accounts for every check
+/// `command` asked for.
+///
+/// `cargo deny --format json` ends a completed run with one `{"type":"summary"}` line whose
+/// `fields` names each check it finished and the counts it reached -- measured directly
+/// against this workspace: `{"fields":{"bans":{...},"licenses":{...},"sources":{...}},
+/// "type":"summary"}`. A run that dies before finishing writes prose or an error and no
+/// such line.
+///
+/// Without this, that difference was invisible. [`Require_Ran`] passes any completed
+/// process whatever its exit code, deliberately and for a real reason of its own; the
+/// emptiness guard above catches only a *silent* failure; and [`Violations_Of`] skips every
+/// line it cannot read, equally deliberately, because real runs interleave noise. Each is
+/// defensible alone, and together they made "checked everything, found nothing" and
+/// "failed, and nothing readable came back" the same value -- `Ok(vec![])`, which
+/// `Materialize_Workspace` publishes as a clean dependency-policy fact. A supply-chain
+/// provider reporting clean because it could not read its own tool is exactly the
+/// false-coverage shape `OD-COMPLETENESS-001` exists to refuse. `P81`.
+///
+/// The summary is what is judged rather than the exit code, because the exit code genuinely
+/// cannot carry this: `cargo deny` exits non-zero whenever a diagnostic reaches `deny` --
+/// this workspace's own real run exits 4 while succeeding completely.
+fn Require_Summarized(stream: &str, command: &Command) -> Result<(), DenyError>
+{
+    let summary = stream
+        .lines()
+        .filter_map(|line| return serde_json::from_str::<serde_json::Value>(line).ok())
+        .find(|value| return value.get("type").and_then(serde_json::Value::as_str) == Some("summary"));
+
+    let Some(summary) = summary
+    else
+    {
+        let said = Logged_Error(stream).unwrap_or_else(|| return format!("stderr: {stream}"));
+
+        return Err(DenyError {
+            reason: format!("cargo deny wrote no summary line, so it did not finish its checks and an empty violation list over it is not a clean result -- {said}"),
+        });
+    };
+
+    let unaccounted: Vec<String> = Requested_Checks(command)
+        .into_iter()
+        .filter(|check| return summary.get("fields").and_then(|fields| return fields.get(check)).is_none())
+        .collect();
+
+    if !unaccounted.is_empty()
+    {
+        return Err(DenyError {
+            reason: format!("cargo deny's own summary accounts for none of {unaccounted:?}, so those checks did not finish and their silence is not evidence of a clean result; stderr: {stream}"),
+        });
+    }
+
+    return Ok(());
 }
 
 /// `config` is passed explicitly rather than left for `cargo deny` to discover on its own
@@ -277,7 +368,7 @@ mod tests
             return Ok(ProcessOutput {
                 outcome: ExitOutcome::Exited { code: 0 },
                 stdout: String::new(),
-                stderr: serde_json::json!({ "type": "summary", "fields": { "errors": 0 } }).to_string(),
+                stderr: Completed_Summary(),
             });
         }
     }
@@ -285,6 +376,25 @@ mod tests
     /// A real scratch directory, removed when the test ends -- [`Required_Deny_Config`]
     /// now reads the real filesystem (`root.join("deny.toml").is_file()`), so proving it
     /// needs a real directory rather than a hardcoded, possibly-nonexistent path.
+    /// The summary line a completed `cargo deny check bans licenses sources` really writes,
+    /// in the shape this workspace's own run produces it.
+    ///
+    /// Every fixture that means "a run that finished" carries this, because
+    /// [`Require_Summarized`] is what separates a finished run from an unreadable one and a
+    /// fixture without it is asserting about the refusal path rather than the parse.
+    fn Completed_Summary() -> String
+    {
+        return serde_json::json!({
+            "type": "summary",
+            "fields": {
+                "bans": { "errors": 0, "helps": 0, "notes": 0, "warnings": 0 },
+                "licenses": { "errors": 0, "helps": 0, "notes": 0, "warnings": 0 },
+                "sources": { "errors": 0, "helps": 0, "notes": 0, "warnings": 0 }
+            }
+        })
+        .to_string();
+    }
+
     struct ScratchDirectory
     {
         root: PathBuf,
@@ -389,6 +499,7 @@ mod tests
             }
         })
         .to_string();
+        let stderr = format!("{stderr}\n{}", Completed_Summary());
         let launcher = FakeLauncher { stderr };
 
         let violations = Discover_Workspace(scratch.Path(), &launcher).expect("the fake launcher writes a real stderr stream");
@@ -412,6 +523,60 @@ mod tests
         let error = Discover_Workspace(scratch.Path(), &launcher).expect_err("an empty stderr stream is not a real cargo deny run");
 
         assert!(error.reason.contains("no output"), "{}", error.reason);
+    }
+
+    /// The case that was silently clean before `P81`, and the one no test covered: stderr
+    /// that is not empty, so the emptiness guard passes, and carries nothing readable, so
+    /// every line is skipped and no violation survives.
+    ///
+    /// This is what a `cargo deny` that dies before finishing looks like from here. It used
+    /// to return `Ok` of an empty vector, indistinguishable from a workspace with no policy
+    /// violations at all, and `Materialize_Workspace` published it as a clean fact.
+    #[test]
+    fn Test_Discover_Workspace_Should_Refuse_A_Non_Empty_Stream_Carrying_No_Summary()
+    {
+        let scratch = ScratchDirectory::New("unreadable-stream");
+        std::fs::write(scratch.Path().join("deny.toml"), "[bans]\nmultiple-versions = \"warn\"\n").expect("writing a scratch deny.toml");
+        let launcher = FakeLauncher {
+            stderr: "error: failed to fetch the advisory database\nnote: run with --offline\n".to_owned(),
+        };
+
+        let error = Discover_Workspace(scratch.Path(), &launcher).expect_err(
+            "a stream with no summary means cargo deny never finished its checks, and an empty violation list over it is not a clean result",
+        );
+
+        assert!(error.reason.contains("no summary"), "{}", error.reason);
+    }
+
+    /// A run that finished *some* checks is not a run that finished the ones this provider
+    /// asked for, and the silence of a check that never ran is not evidence about it.
+    #[test]
+    fn Test_Discover_Workspace_Should_Refuse_A_Summary_That_Skips_A_Requested_Check()
+    {
+        let scratch = ScratchDirectory::New("partial-summary");
+        std::fs::write(scratch.Path().join("deny.toml"), "[bans]\nmultiple-versions = \"warn\"\n").expect("writing a scratch deny.toml");
+        let launcher = FakeLauncher {
+            stderr: serde_json::json!({
+                "type": "summary",
+                "fields": { "bans": { "errors": 0, "helps": 0, "notes": 0, "warnings": 0 } }
+            })
+            .to_string(),
+        };
+
+        let error = Discover_Workspace(scratch.Path(), &launcher).expect_err("a summary accounting for only one of three requested checks is not a completed run");
+
+        assert!(error.reason.contains("licenses"), "{}", error.reason);
+        assert!(error.reason.contains("sources"), "{}", error.reason);
+    }
+
+    /// [`Requested_Checks`] reads the checks back off the command rather than repeating
+    /// them, so this is the assertion that the two stay the same set.
+    #[test]
+    fn Test_Requested_Checks_Should_Name_Every_Check_The_Command_Asks_For()
+    {
+        let command = Cargo_Deny_Command(Path::new("root"), Path::new("root/deny.toml"));
+
+        assert_eq!(Requested_Checks(&command), vec!["bans".to_owned(), "licenses".to_owned(), "sources".to_owned()]);
     }
 
     #[test]

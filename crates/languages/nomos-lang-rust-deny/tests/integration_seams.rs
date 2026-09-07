@@ -46,9 +46,25 @@ fn Sample_Violation_Cases() -> Vec<(&'static str, &'static str, &'static str)>
 /// `cases`, folded into the newline-delimited JSON-diagnostic stream `cargo deny` writes to
 /// stderr -- the exact shape `reading::Violation_Of` reads, reproduced here because that
 /// reader is private to the crate's own module.
+///
+/// The stream ends with the `{"type":"summary"}` line a finished run always writes, naming
+/// every check the provider asks for, because `P81` made that line the difference between a
+/// run whose silence is a clean result and one whose silence is a failure nobody could
+/// read. A fixture standing for a completed run has to be shaped like one; without it these
+/// seams would be asserting about the refusal path while claiming to test the parse.
 fn Diagnostics_Stderr(cases: &[(&str, &str, &str)]) -> String
 {
-    return cases
+    let summary = serde_json::json!({
+        "type": "summary",
+        "fields": {
+            "bans": { "errors": 0, "helps": 0, "notes": 0, "warnings": 0 },
+            "licenses": { "errors": 0, "helps": 0, "notes": 0, "warnings": 0 },
+            "sources": { "errors": 0, "helps": 0, "notes": 0, "warnings": 0 }
+        }
+    })
+    .to_string();
+
+    let diagnostics = cases
         .iter()
         .map(|(code, severity, message)| {
             return serde_json::json!({
@@ -65,6 +81,8 @@ fn Diagnostics_Stderr(cases: &[(&str, &str, &str)]) -> String
         })
         .collect::<Vec<_>>()
         .join("\n");
+
+    return format!("{diagnostics}\n{summary}");
 }
 
 fn Context() -> FactContext
@@ -230,25 +248,43 @@ impl Drop for ScratchDirectory
 
 /// `nomos_platform_std`: `Discover_Workspace` runs a real process through this crate's real
 /// `StdProcessLauncher`, proportionately -- a real `cargo deny` invocation outside any
-/// cargo workspace, which answers in well under a second because it fails to find a
+/// cargo workspace, which returns in well under a second because it fails to find a
 /// manifest before resolving anything, rather than duplicating `fact_context::tests`'s own
 /// real, whole-repository invocation.
+///
+/// # This asserted the opposite until `P81`
+///
+/// It used to `expect` success here and assert the violation list was empty, on the reading
+/// that a run outside a workspace "still answers -- with no diagnostic lines to parse,
+/// rather than a launcher failure". Measured with the real tool, that invocation exits 1
+/// and writes exactly one line: `{"type":"log"}` at level `ERROR` saying the directory
+/// doesn't contain a `Cargo.toml` file. No summary, no diagnostics, nothing judged. It is a
+/// failure that resolved no dependency graph at all, and the old assertion enshrined
+/// reporting it as a clean dependency-policy result -- the exact false clean `P81` closes,
+/// written down as intended behaviour by a test that passed.
+///
+/// The distance between "answers with nothing to say" and "could not look" is the whole
+/// property, and it is worth one real process to hold it.
 #[test]
-fn Test_Discover_Workspace_Should_Run_A_Real_Process_Through_Nomos_Platform_Std_Launcher()
+fn Test_A_Real_Run_That_Resolved_No_Workspace_Should_Be_Refused_Rather_Than_Reported_Clean()
 {
     use nomos_platform_std::StdProcessLauncher;
 
     let scratch = ScratchDirectory::New("no-manifest");
 
-    let violations = Discover_Workspace(scratch.Path(), &StdProcessLauncher).expect(
-        "a real cargo deny invocation outside any cargo workspace still answers -- with no \
-         diagnostic lines to parse, not a launcher failure",
+    let error = Discover_Workspace(scratch.Path(), &StdProcessLauncher).expect_err(
+        "a real cargo deny that could not resolve a workspace at all has not judged this \
+         directory's dependencies, and must be refused rather than reported clean",
     );
 
     assert!(
-        violations.is_empty(),
-        "the scratch directory's own deny.toml is pinned via --config, but it has no \
-         Cargo.toml for cargo deny to resolve a graph against, so no diagnostic lines exist \
-         to parse: {violations:?}"
+        error.reason.contains("no summary line"),
+        "the refusal must rest on cargo deny's own missing summary, not on a guess: {}",
+        error.reason
+    );
+    assert!(
+        error.reason.contains("Cargo.toml"),
+        "and it must quote what cargo deny itself said went wrong: {}",
+        error.reason
     );
 }

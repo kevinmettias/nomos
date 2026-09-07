@@ -61189,7 +61189,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -61202,7 +61202,79 @@
         ],
         "timeout_seconds": 900
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-deny"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Of_Should_Skip_Non_Diagnostic_Lines_And_Malformed_Ones ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Pin_Cargo_Denys_Own_Config_Discovery_To_Roots_Own_Deny_Toml ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_An_Empty_Stderr_Stream ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_Before_Launching_When_Root_Has_No_Deny_Toml ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Read_A_Violation_From_The_Json_Stream ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Summary_That_Skips_A_Requested_Check ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Non_Empty_Stream_Carrying_No_Summary ... ok\ntest provider::tests::Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Policy_Violation ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.60s\n\n\nrunning 6 tests\ntest Test_Provider_Offer_Should_Be_Accepted_By_Nomos_Capabilitys_Own_Registry ... ok\ntest Test_This_Crates_Declared_Guarantee_Should_Satisfy_The_Capabilitys_Own_Ceiling ... ok\ntest Test_Discover_Workspace_Should_Read_A_Real_Diagnostic_Shape_Through_The_Process_Launcher_Port ... ok\ntest Test_The_Materialized_Facts_Subject_Should_Be_Nomos_Models_Subject_Of_Path ... ok\ntest Test_A_Materialized_Fact_Should_Be_Accepted_And_Read_Back_By_Nomos_Analysiss_Own_Store ... ok\ntest Test_A_Real_Run_That_Resolved_No_Workspace_Should_Be_Refused_Rather_Than_Reported_Clean ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_deny-7d95e79b2537890d.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-fac943e9d62c876d.exe)\n   Doc-tests nomos_lang_rust_deny\n",
+        "verified_at": 1788743369,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "27e558126cf19298267d66db773e0ad552f77742"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P81-DENY-INTEGRATION-SEAM-ASSERTS-THE-FALSE-CLEAN",
+      "title": "An integration test asserts that a cargo deny run which found no workspace still answers cleanly",
+      "why": "Test_Discover_Workspace_Should_Run_A_Real_Process_Through_Nomos_Platform_Std_Launcher runs a real cargo deny in a scratch directory holding a deny.toml and no Cargo.toml, and asserts Discover_Workspace succeeds with an empty violation list, explaining in its own prose that this is a real invocation outside any cargo workspace that still answers, with no diagnostic lines to parse rather than a launcher failure. Measured directly with the real tool: that invocation exits 1 and writes one line, a JSON object of type log carrying level ERROR and the message that the directory doesn't contain a Cargo.toml file, and no summary line at all. It is a hard failure, not an answer. The test therefore encodes the false clean P81 exists to close as intended behaviour, which is why the guard breaks it. Two other tests in the same file fail for a duller reason: Diagnostics_Stderr folds cases into diagnostic lines only, so every fixture built through it now lacks the summary a finished run always writes. This file is not in P81's territory, so it is a separate claim rather than a widening.",
+      "done_when": "Diagnostics_Stderr produces the summary line a finished run really writes alongside its diagnostics, so fixtures meaning a completed run are shaped like one; the real-process test asserts that a cargo deny run which could not resolve a workspace is refused rather than reported clean, naming what cargo deny really emitted; and the crate's integration seams pass for reasons that would survive the provider being wrong.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-deny/tests/integration_seams.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-deny"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-deny"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Of_Should_Skip_Non_Diagnostic_Lines_And_Malformed_Ones ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Non_Empty_Stream_Carrying_No_Summary ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Read_A_Violation_From_The_Json_Stream ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_Before_Launching_When_Root_Has_No_Deny_Toml ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Pin_Cargo_Denys_Own_Config_Discovery_To_Roots_Own_Deny_Toml ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_A_Summary_That_Skips_A_Requested_Check ... ok\ntest reading::tests::Test_Discover_Workspace_Should_Refuse_An_Empty_Stderr_Stream ... ok\ntest provider::tests::Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Policy_Violation ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.60s\n\n\nrunning 6 tests\ntest Test_Provider_Offer_Should_Be_Accepted_By_Nomos_Capabilitys_Own_Registry ... ok\ntest Test_This_Crates_Declared_Guarantee_Should_Satisfy_The_Capabilitys_Own_Ceiling ... ok\ntest Test_Discover_Workspace_Should_Read_A_Real_Diagnostic_Shape_Through_The_Process_Launcher_Port ... ok\ntest Test_A_Materialized_Fact_Should_Be_Accepted_And_Read_Back_By_Nomos_Analysiss_Own_Store ... ok\ntest Test_The_Materialized_Facts_Subject_Should_Be_Nomos_Models_Subject_Of_Path ... ok\ntest Test_A_Real_Run_That_Resolved_No_Workspace_Should_Be_Refused_Rather_Than_Reported_Clean ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_deny-7d95e79b2537890d.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-fac943e9d62c876d.exe)\n   Doc-tests nomos_lang_rust_deny\n",
+        "verified_at": 1788743371,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "27e558126cf19298267d66db773e0ad552f77742"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
