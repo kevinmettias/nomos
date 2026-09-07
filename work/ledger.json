@@ -60242,7 +60242,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory omitted crates/host/nomos-cli/src/check.rs and gate.rs: each imports nomos_model::Subject_Of_Path only for its own now-moved sources.rs, which no longer calls it once nomos-workspace-discovery owns the walk, leaving a confirmed-dead use line (grepped: it appears nowhere else in either file). The crate itself, its wiring into all four hosts, README/zones.rs/Cargo.toml registration and every host's sources.rs are already written and their own tests pass; only these two now-dead imports remain. Re-authored as P41-WORKSPACE-DISCOVERY-SERVICE-3 with both files added, unchanged in kind, done_when and predicate."
+        }
+      },
       "depends_on": [
         "P41-PLATFORM-DIRECTORY-ENUMERATION-3"
       ],
@@ -60262,9 +60266,18 @@
         "timeout_seconds": 7200
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-dev-session",
+          "reason": "Moving the walk into nomos-workspace-discovery leaves nomos_model::Subject_Of_Path unused in crates/host/nomos-cli/src/check.rs and gate.rs (each only used it through the now-moved sources.rs), a real compiler warning neither file's own territory covers. Abandoning to decline and re-author with both added, so the two now-dead use lines can be removed rather than left as debris this item's own edit caused.",
+          "abandoned_at": 1788761920
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1788761930
+      }
     },
     {
       "id": "P41-SOURCE-ARTIFACT-OWNERSHIP-2",
@@ -61648,6 +61661,64 @@
         },
         "revision": "d86e3ad76e8c79a135ac424a1ac7a7b868a1136b"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-WORKSPACE-DISCOVERY-SERVICE-3",
+      "title": "Four hosts walk the tree themselves and each hardcodes the languages Nomos supports",
+      "why": "Re-authored from P41-WORKSPACE-DISCOVERY-SERVICE-2, whose territory omitted crates/host/nomos-cli/src/check.rs and gate.rs: each imports nomos_model::Subject_Of_Path only for its own sources.rs, which stops calling it once the walk moves to nomos-workspace-discovery, leaving a confirmed-dead use line in each (grepped directly: no other reference in either file). nomos-api sources.rs calls itself a deliberate twin of the CLI walker, and measured directly at c0e5c79f there are four copies, not two: nomos-api sources.rs, nomos-cli check/sources.rs, nomos-cli gate/sources.rs and nomos-lsp sources.rs. Each hardcodes the same rs and go extensions, the same target and .git exclusions and its own nested-git-worktree detection, and each reaches std::fs directly. nomos-lsp says in its own manifest that it carries its own copy rather than reaching into another composition root private module, because nomos-cli check sources is pub(super) -- so the duplication is a documented consequence of the missing service, not an oversight, and a fifth copy appears the moment a daemon exists. Recognition should come from registered packages and providers so that adding a language does not require editing every host.",
+      "done_when": "One canonical discovery service resolves the source set, all four hosts call it and none names a file extension or an excluded directory, recognition comes from package and provider registration, adding a language changes no host, the new crate is registered in the workspace members, the README zone table, the ZONES crate table and its own surface snapshot, and the decision is recorded.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workspace-discovery/src/lib.rs",
+          "crates/orchestration/nomos-workspace-discovery/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "tests/contract/surface/nomos-workspace-discovery.txt",
+          "crates/host/nomos-api/src/sources.rs",
+          "crates/host/nomos-cli/src/check/sources.rs",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/gate/sources.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-lsp/src/sources.rs",
+          "crates/host/nomos-api/Cargo.toml",
+          "crates/host/nomos-cli/Cargo.toml",
+          "crates/host/nomos-lsp/Cargo.toml",
+          "docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-008.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [
+        "P41-PLATFORM-DIRECTORY-ENUMERATION-3"
+      ],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-dev-session",
+        "acquired_at": 1788761949,
+        "lease_expires_at": 1788769149
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-lsp"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
