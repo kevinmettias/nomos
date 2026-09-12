@@ -62,6 +62,11 @@ impl ProcessLauncher for Scripted
     }
 }
 
+/// The root this seam passes, matching what `nomos-agent-orchestration` passes for the
+/// same envelope: none. `Bare_Task` names no `prohibited_changes`, so nothing resolves
+/// against it and the executor never reads it.
+const NO_ROOT: &str = "";
+
 /// The bare envelope `agent/dispatch.rs::Execute_Task` builds for `nomos agent execute
 /// --goal <text>` -- only `goal` and `effort` carry real content.
 fn Bare_Task(goal: &str) -> TaskEnvelope
@@ -90,7 +95,7 @@ fn Test_Execute_Task_Should_Return_Every_Field_The_Cli_Renders_For_A_Clean_Respo
             .to_owned(),
     };
 
-    let outcome = Execute_Task(&Bare_Task("say PONG"), &launcher).expect("a well-formed scripted response");
+    let outcome = Execute_Task(&Bare_Task("say PONG"), &launcher, std::path::Path::new(NO_ROOT)).expect("a well-formed scripted response");
 
     assert_eq!(outcome.result.assumptions, ["a ping wants a pong".to_owned()]);
     assert!(outcome.denied_tool_uses.is_empty());
@@ -112,7 +117,7 @@ fn Test_Execute_Task_Should_Refuse_A_Non_Zero_Exit_Rather_Than_Read_It_As_A_Resp
 {
     let launcher = Scripted { outcome: ExitOutcome::Exited { code: 1 }, stdout: String::new() };
 
-    let error = Execute_Task(&Bare_Task("say PONG"), &launcher).expect_err("a non-zero exit must not be read as success");
+    let error = Execute_Task(&Bare_Task("say PONG"), &launcher, std::path::Path::new(NO_ROOT)).expect_err("a non-zero exit must not be read as success");
 
     assert!(matches!(error, AgentExecutionError::Unavailable(_)), "{error}");
 }

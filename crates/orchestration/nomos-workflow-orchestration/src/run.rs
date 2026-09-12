@@ -2,6 +2,8 @@
 //! `AgentExecutor`, `ModelBackend`, `nomos-check-orchestration::Run`,
 //! `nomos-correction-orchestration::Run_Correction`, or `nomos-gate-orchestration::Run_Gate`.
 
+use std::path::Path;
+
 use nomos_analysis::MemoryFactStore;
 use nomos_check_orchestration::RunContext;
 use nomos_contracts::RunId;
@@ -64,6 +66,17 @@ pub fn Run<Launcher: ProcessLauncher, Fs: FileSystem>(plan: &[WorkflowStepPlan],
     return WorkflowOutcome::Completed { completed };
 }
 
+/// The root a [`Body::ClaudeCode`] step resolves `prohibited_changes` against: none.
+///
+/// Every other body that needs one carries its own — `check.root`, `correction.root` — and
+/// a `TaskEnvelope` has no such field, so there is nothing here to pass. Naming the absence
+/// rather than passing a dot is what keeps a step that declares paths to protect from
+/// silently comparing some other checkout's: the executor refuses an undecidable root
+/// instead of resolving it against whatever directory this process happens to be in. Giving
+/// `Body::ClaudeCode` a root of its own, the way `Body::Check` already has, is that change's
+/// own work and reaches this crate's surface snapshot.
+const NO_ROOT: &str = "";
+
 /// Runs `body`'s task through whichever real dispatch target it names, and reports which
 /// one answered. The entire dispatch, not a stand-in for a shared trait — the same
 /// restraint `nomos_cli::agent::Dispatch` already holds for a person's own single call.
@@ -80,7 +93,7 @@ fn Dispatch<Launcher: ProcessLauncher, Fs: FileSystem>(body: &Body, platform: &P
 {
     return match body
     {
-        Body::ClaudeCode(task) => match nomos_agent_executor_claude_code::Execute_Task(task, platform.launcher)
+        Body::ClaudeCode(task) => match nomos_agent_executor_claude_code::Execute_Task(task, platform.launcher, Path::new(NO_ROOT))
         {
             Ok(outcome) => Ok(StepOutcome::ClaudeCode(outcome)),
             Err(error) => Err(DispatchError::ClaudeCode(error)),

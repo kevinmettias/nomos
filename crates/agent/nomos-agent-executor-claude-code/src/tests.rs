@@ -14,8 +14,9 @@
 
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use std::cell::RefCell;
+use std::path::PathBuf;
 
-use nomos_contracts::SchemaId;
+use nomos_contracts::{CapabilityId, RuleId, SchemaId};
 use nomos_ledger::Territory;
 use nomos_platform::{Command, ExitOutcome, ProcessOutput};
 use xvpe_agent_execution::{AgentWorkspace, ToolGrant};
@@ -53,6 +54,19 @@ const RESULT_CLAIMS_ONLY_WHAT_IS_GROUNDED: &str =
 const MALFORMED_IS_REFUSED: &str = "an answer that is not the promised document is refused";
 /// A caller-chosen directory must actually be used.
 const CHOSEN_DIRECTORY_IS_USED: &str = "a caller-chosen directory is the one dispatched into";
+/// A prohibited path that changed must be a refusal, not a note inside an outcome.
+const PROHIBITED_CHANGE_IS_REFUSED: &str =
+    "a path prohibited_changes names and the dispatch changed is refused by name";
+/// A prohibited path left alone must not be reported as changed.
+const UNTOUCHED_IS_NOT_A_CHANGE: &str = "a prohibited path the dispatch left alone is not a change";
+/// A tool grant this crate cannot make must be refused before anything runs.
+const UNGRANTABLE_TOOLS_ARE_REFUSED: &str =
+    "available_tools this crate cannot grant refuses instead of dispatching";
+/// Paths to protect against a root that names no tree must be refused.
+const UNDECIDABLE_ROOT_IS_REFUSED: &str =
+    "prohibited paths against a relative root refuse rather than resolve against the process";
+/// The rules the envelope declares must reach the model.
+const RULES_REACH_THE_MODEL: &str = "applicable_rules are named in the goal the model is given";
 
 /// A launcher that answers from a script and remembers what it was asked.
 struct Scripted
@@ -89,6 +103,37 @@ impl ProcessLauncher for Scripted
         });
     }
 }
+
+/// A launcher that changes a file on disk before answering, the way a real
+/// dispatch granted edits could.
+struct Meddling
+{
+    writes_to: PathBuf,
+}
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for Meddling
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
+
+impl ProcessLauncher for Meddling
+{
+    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    {
+        std::fs::write(&self.writes_to, b"changed by the dispatch").expect("the fixture file");
+        return Ok(ProcessOutput {
+            outcome: ExitOutcome::Exited { code: 0 },
+            stdout: A_VALID_RESPONSE.to_owned(),
+            stderr: String::new(),
+        });
+    }
+}
+
+/// A root for the cases that declare nothing to protect, so none resolves against it.
+const NO_ROOT: &str = "";
 
 /// An envelope carrying nothing but a goal and an effort.
 fn Bare_Task(goal: &str, effort: EffortLevel) -> TaskEnvelope
@@ -151,7 +196,7 @@ fn Test_A_Validated_Answer_Should_Build_The_Work_Result()
 {
     let launcher = Scripted::Saying(A_VALID_RESPONSE);
 
-    let outcome = Execute_Task(&Bare_Task(A_GOAL, EffortLevel::BackendDefault), &launcher)
+    let outcome = Execute_Task(&Bare_Task(A_GOAL, EffortLevel::BackendDefault), &launcher, Path::new(NO_ROOT))
         .expect(ANSWER_BECOMES_A_RESULT);
 
     assert_eq!(
@@ -177,7 +222,7 @@ fn Test_An_Answer_That_Never_Validated_Should_Be_Refused()
         r#"{"result":"done","is_error":false,"total_cost_usd":0.01,"duration_ms":5}"#,
     );
 
-    let failure = Execute_Task(&Bare_Task(A_GOAL, EffortLevel::BackendDefault), &launcher);
+    let failure = Execute_Task(&Bare_Task(A_GOAL, EffortLevel::BackendDefault), &launcher, Path::new(NO_ROOT));
 
     assert!(matches!(failure, Err(AgentExecutionError::Unparseable(_))), "{MALFORMED_IS_REFUSED}");
 }
@@ -189,7 +234,7 @@ fn Test_A_Caller_Chosen_Directory_Should_Be_The_One_Dispatched_Into()
     let directory = std::env::temp_dir();
 
     let outcome =
-        Execute_In(&Bare_Task(A_GOAL, EffortLevel::BackendDefault), &launcher, &directory)
+        Execute_In(&Bare_Task(A_GOAL, EffortLevel::BackendDefault), &launcher, &directory, Path::new(NO_ROOT))
             .expect(CHOSEN_DIRECTORY_IS_USED);
 
     assert_eq!(
@@ -204,4 +249,107 @@ fn Test_A_Caller_Chosen_Directory_Should_Be_The_One_Dispatched_Into()
         Some(directory.as_path()),
         "{CHOSEN_DIRECTORY_IS_USED}"
     );
+}
+
+#[test]
+fn Test_A_Prohibited_Path_The_Dispatch_Changed_Should_Be_Refused_By_Name()
+{
+    let root = std::env::temp_dir().join("nomos-prohibited-change-is-refused");
+    std::fs::create_dir_all(&root).expect("the fixture directory");
+    let protected = root.join("protected.txt");
+    std::fs::write(&protected, b"as it was before").expect("the fixture file");
+
+    let launcher = Meddling { writes_to: protected.clone() };
+    let mut task = Bare_Task(A_GOAL, EffortLevel::BackendDefault);
+    task.prohibited_changes = Territory::Of_Files(["protected.txt"]);
+
+    let refusal = Execute_Task(&task, &launcher, &root);
+
+    // By name, so a caller reads which path went rather than that something did.
+    assert_eq!(
+        refusal,
+        Err(AgentExecutionError::ProhibitedChange("protected.txt".to_owned())),
+        "{PROHIBITED_CHANGE_IS_REFUSED}"
+    );
+    std::fs::remove_dir_all(&root).ok();
+}
+
+#[test]
+fn Test_A_Prohibited_Path_Left_Alone_Should_Not_Be_Reported_As_Changed()
+{
+    let root = std::env::temp_dir().join("nomos-prohibited-untouched-is-clean");
+    std::fs::create_dir_all(&root).expect("the fixture directory");
+    let protected = root.join("protected.txt");
+    std::fs::write(&protected, b"as it was before").expect("the fixture file");
+
+    // Writes somewhere else entirely, so the comparison has a real chance to be wrong.
+    let launcher = Meddling { writes_to: root.join("untracked.txt") };
+    let mut task = Bare_Task(A_GOAL, EffortLevel::BackendDefault);
+    task.prohibited_changes = Territory::Of_Files(["protected.txt"]);
+
+    let outcome = Execute_Task(&task, &launcher, &root).expect(UNTOUCHED_IS_NOT_A_CHANGE);
+
+    assert_eq!(
+        outcome.result.assumptions,
+        [THE_ASSUMPTION.to_owned()],
+        "{UNTOUCHED_IS_NOT_A_CHANGE}"
+    );
+    std::fs::remove_dir_all(&root).ok();
+}
+
+#[test]
+fn Test_Declared_Tools_This_Crate_Cannot_Grant_Should_Refuse_Before_Dispatching()
+{
+    let launcher = Scripted::Saying(A_VALID_RESPONSE);
+    let mut task = Bare_Task(A_GOAL, EffortLevel::BackendDefault);
+    task.available_tools = vec![CapabilityId::New("nomos.cap.syntax.items")];
+
+    let refusal = Execute_Task(&task, &launcher, Path::new(NO_ROOT));
+
+    assert_eq!(
+        refusal,
+        Err(AgentExecutionError::UnsupportedTools("nomos.cap.syntax.items".to_owned())),
+        "{UNGRANTABLE_TOOLS_ARE_REFUSED}"
+    );
+    // Before anything runs, not after: a refused grant must not have dispatched.
+    assert!(launcher.seen.borrow().is_empty(), "{UNGRANTABLE_TOOLS_ARE_REFUSED}");
+}
+
+#[test]
+fn Test_Paths_To_Protect_Against_A_Root_Naming_No_Tree_Should_Be_Refused()
+{
+    let launcher = Scripted::Saying(A_VALID_RESPONSE);
+    let mut task = Bare_Task(A_GOAL, EffortLevel::BackendDefault);
+    task.prohibited_changes = Territory::Of_Files(["protected.txt"]);
+
+    let refusal = Execute_Task(&task, &launcher, Path::new("relative/root"));
+
+    assert!(
+        matches!(refusal, Err(AgentExecutionError::UnresolvableRoot(_))),
+        "{UNDECIDABLE_ROOT_IS_REFUSED}"
+    );
+    assert!(launcher.seen.borrow().is_empty(), "{UNDECIDABLE_ROOT_IS_REFUSED}");
+}
+
+#[test]
+fn Test_The_Declared_Rules_Should_Be_Named_In_The_Goal_The_Model_Is_Given()
+{
+    let mut envelope = Bare_Task(A_GOAL, EffortLevel::BackendDefault);
+    envelope.applicable_rules =
+        vec![RuleId::New("check-naming-convention"), RuleId::New("check-file-size")];
+
+    let task = Task_For(&envelope);
+
+    assert!(task.goal.contains(A_GOAL), "{RULES_REACH_THE_MODEL}");
+    assert!(task.goal.contains("check-naming-convention"), "{RULES_REACH_THE_MODEL}");
+    assert!(task.goal.contains("check-file-size"), "{RULES_REACH_THE_MODEL}");
+}
+
+#[test]
+fn Test_An_Envelope_Declaring_No_Rules_Should_Reach_The_Model_Unchanged()
+{
+    // The common case today, and it must not grow a trailing clause about nothing.
+    let task = Task_For(&Bare_Task(A_GOAL, EffortLevel::BackendDefault));
+
+    assert_eq!(task.goal, A_GOAL, "{GOAL_MUST_SURVIVE}");
 }

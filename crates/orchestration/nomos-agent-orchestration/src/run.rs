@@ -35,6 +35,8 @@
 //! through whichever launcher a caller supplies; only the substitutable launcher parameter
 //! is.
 
+use std::path::Path;
+
 use crate::{AgentDispatchOutcome, Backend};
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_contracts::{Finding, SchemaId};
@@ -105,6 +107,16 @@ pub fn Run_Agent_Judgment<Launcher: ProcessLauncher>(
     return Dispatched(&task, config.backend, environment);
 }
 
+/// The root this seam has to resolve `prohibited_changes` against: none.
+///
+/// [`Bare_Task`] and [`Judgment_Task`] both name an empty `prohibited_changes`, so no path
+/// resolves against this and the value is never read. It is not a stand-in for the
+/// repository root, and the executor refuses rather than uses it should either task ever
+/// declare a path to protect -- which is the point of naming it here rather than passing a
+/// dot. Threading a real root is `AgentEnvironment`'s own change, and reaches this crate's
+/// surface snapshot and `nomos-cli`'s construction of it.
+const NO_ROOT: &str = "";
+
 /// Runs `task` against `backend` and reports whichever of the two outcome shapes it
 /// produces, or why neither could answer. The two crates share no trait --
 /// `OD-EXECUTOR-001`/`OD-EXECUTOR-004` both decline to invent one ahead of a real need, and
@@ -116,7 +128,7 @@ fn Dispatched<Launcher: ProcessLauncher>(task: &TaskEnvelope, backend: Backend, 
 {
     return match backend
     {
-        Backend::ClaudeCode => match nomos_agent_executor_claude_code::Execute_Task(task, environment.launcher)
+        Backend::ClaudeCode => match nomos_agent_executor_claude_code::Execute_Task(task, environment.launcher, Path::new(NO_ROOT))
         {
             Ok(outcome) => AgentDispatchOutcome::ClaudeCode(outcome),
             Err(error) => AgentDispatchOutcome::Unavailable(error.to_string()),

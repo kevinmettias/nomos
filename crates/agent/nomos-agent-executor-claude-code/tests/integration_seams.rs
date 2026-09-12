@@ -5,6 +5,8 @@
 //! does: build a real [`TaskEnvelope`], hand it a real [`ProcessLauncher`], and read back
 //! a real [`AgentExecutionOutcome`] or [`AgentExecutionError`].
 
+use std::path::PathBuf;
+
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_agent_contracts::{Isolated_Working_Directory, TaskEnvelope};
 use nomos_agent_executor_claude_code::{AgentExecutionError, Execute_Task};
@@ -44,6 +46,11 @@ impl ProcessLauncher for Scripted
 /// `nomos_ledger`'s own re-exported `Territory` for scope (the same type
 /// `nomos-agent-contracts` itself declares `TaskEnvelope.scope` as), `nomos_model_package`
 /// for effort.
+///
+/// `available_tools` is empty, and that is a real value rather than an omission:
+/// `OD-EXECUTOR-007` decided this crate refuses a declared capability it cannot grant, so a
+/// non-empty list here would test the refusal rather than the dispatch. It has its own case
+/// below.
 fn Real_Task(goal: &str) -> TaskEnvelope
 {
     return TaskEnvelope {
@@ -52,10 +59,20 @@ fn Real_Task(goal: &str) -> TaskEnvelope
         knowledge_context: vec![KnowledgeReferenceId::New("kwb:decision:integration-seam-test")],
         applicable_rules: vec![RuleId::New("check-naming-convention")],
         prohibited_changes: Territory::Of_Files(["work/ledger.json"]),
-        available_tools: vec![CapabilityId::New("nomos.cap.example.integration_seam_test_only")],
+        available_tools: Vec::new(),
         expected_output_schema: SchemaId::New("nomos.agent.executor.v1"),
         effort: EffortLevel::BackendDefault,
     };
+}
+
+/// A real, absolute root for `prohibited_changes` to resolve against.
+///
+/// Absolute because this crate refuses to compare paths against a root that does not say
+/// which tree, and the temporary directory is a real one that holds no `work/ledger.json`
+/// -- so the seam exercises the comparison without protecting the developer's own checkout.
+fn A_Real_Root() -> PathBuf
+{
+    return std::env::temp_dir();
 }
 
 /// The happy path across the whole boundary: a real `TaskEnvelope` (`nomos_agent_contracts`
@@ -72,7 +89,7 @@ fn Test_Execute_Task_Should_Read_A_Clean_Response_From_A_Real_Task_Envelope()
         stderr: String::new(),
     };
 
-    let outcome = Execute_Task(&Real_Task("say PONG"), &launcher).expect("a well-formed scripted response");
+    let outcome = Execute_Task(&Real_Task("say PONG"), &launcher, &A_Real_Root()).expect("a well-formed scripted response");
 
     assert_eq!(outcome.result.assumptions, ["a ping wants a pong".to_owned()]);
     assert!(outcome.denied_tool_uses.is_empty());
@@ -101,7 +118,7 @@ fn Test_Execute_Task_Should_Report_A_Launcher_Failure_As_Unavailable()
         }
     }
 
-    let error = Execute_Task(&Real_Task("say hello"), &Unavailable).expect_err("the launcher never even started");
+    let error = Execute_Task(&Real_Task("say hello"), &Unavailable, &A_Real_Root()).expect_err("the launcher never even started");
 
     assert!(matches!(error, AgentExecutionError::Unavailable(_)));
 }
@@ -117,9 +134,29 @@ fn Test_Execute_Task_Should_Report_A_Non_Zero_Exit_As_Unavailable()
         stderr: "authentication required".to_owned(),
     };
 
-    let error = Execute_Task(&Real_Task("say hello"), &launcher).expect_err("a non-zero exit is not a result");
+    let error = Execute_Task(&Real_Task("say hello"), &launcher, &A_Real_Root()).expect_err("a non-zero exit is not a result");
 
     assert!(matches!(error, AgentExecutionError::Unavailable(_)));
+}
+
+/// A `CapabilityId` this crate cannot grant crosses the boundary as a refusal, from outside
+/// the crate, the way a real consumer would meet it. `OD-EXECUTOR-007`: an executor that
+/// cannot honor a declared need says so rather than dispatching as if it could, so this is
+/// the seam where a caller learns the field is enforced rather than accepted and dropped.
+#[test]
+fn Test_Execute_Task_Should_Refuse_A_Capability_It_Has_No_Way_To_Grant()
+{
+    let launcher = Scripted {
+        outcome: ExitOutcome::Exited { code: 0 },
+        stdout: String::new(),
+        stderr: String::new(),
+    };
+    let mut task = Real_Task("say PONG");
+    task.available_tools = vec![CapabilityId::New("nomos.cap.dependency.edges")];
+
+    let error = Execute_Task(&task, &launcher, &A_Real_Root()).expect_err("a capability with no grant is refused");
+
+    assert_eq!(error, AgentExecutionError::UnsupportedTools("nomos.cap.dependency.edges".to_owned()));
 }
 
 /// The `nomos_ledger` seam is more than borrowing its re-exported `Territory` type: a

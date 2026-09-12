@@ -48,8 +48,11 @@ pub enum variant nomos_api::AddResponse::Refused { cause: String, }
 pub enum variant nomos_api::AgentDispatchResponse::ClaudeCode { assumptions: Vec<String>, unresolved_questions: Vec<String>, denied_tool_uses: Vec<String>, is_error: bool, cost_usd: f64, duration_ms: u64 }
 pub enum variant nomos_api::AgentDispatchResponse::Ollama { response: String }
 pub enum variant nomos_api::AgentDispatchResponse::Unavailable { reason: String }
+pub enum variant nomos_api::AgentExecutionErrorResponse::ProhibitedChange { path: String, }
 pub enum variant nomos_api::AgentExecutionErrorResponse::Unavailable { reason: String, }
 pub enum variant nomos_api::AgentExecutionErrorResponse::Unparseable { reason: String, }
+pub enum variant nomos_api::AgentExecutionErrorResponse::UnresolvableRoot { root: String, }
+pub enum variant nomos_api::AgentExecutionErrorResponse::UnsupportedTools { capabilities: String, }
 pub enum variant nomos_api::AgentJudgeRoleResponse::Dispatched { dispatch: AgentDispatchResponse }
 pub enum variant nomos_api::AgentJudgeRoleResponse::NoDeclaredRoleOrSurface
 pub enum variant nomos_api::AgentJudgeRoleResponse::NoFinding
