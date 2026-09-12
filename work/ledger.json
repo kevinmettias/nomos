@@ -62269,7 +62269,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "OD-EXECUTOR-007 (accepted 2026-09-05) decided scope/prohibited_changes enforcement as --restricted plus one --add-dir per Territory path, verified against the real claude CLI as invoked directly by this crate's own Command_For. Commit 9b3e9683 (2026-09-12, same day, OD-PLATFORM-003/OD-HOST-013) moved this crate's dispatch into xvpe-agent-backend-claude-code and replaced that CLI construction wholesale: the engine's AgentCapability now offers only AgentWorkspace::{Isolated, Existing(single PathBuf)} and ToolGrant::{Nothing, Edits}, with no per-path add-dir primitive anywhere in xvpe (grepped crates/backends/agent and xvpe-agent-execution: zero hits for restricted/add-dir outside stale comments in unrelated backends). This item's done_when requires enforcing the mechanism OD-EXECUTOR-007 decided, and that mechanism's primitive no longer exists to build against. Every real production caller (nomos-cli::workflow.rs, nomos-agent-orchestration::run.rs) already passes Territory::Of_Files(empty) today, so nothing regresses by declining, but implementing OD-EXECUTOR-007 literally is impossible post-migration, and re-deciding a coarser mechanism (whole-directory Existing() confinement, or a copy-to-staging root nomos assembles itself) is a decision question, not this item's Capability-only scope. Re-authoring as a Decision item to re-measure against the current engine surface."
+        }
+      },
       "depends_on": [
         "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4"
       ],
@@ -62287,9 +62291,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-dev-session",
+          "reason": "Re-measured: OD-EXECUTOR-007's decided mechanism (--restricted plus per-path --add-dir) was removed from the codebase by commit 9b3e9683 (2026-09-12, same day) which moved dispatch into xvpe-agent-backend-claude-code; that engine surface offers no per-path directory grant. Declining rather than implementing against a stale premise; re-authoring as a decision item.",
+          "abandoned_at": 1789249916
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1789249923
+      }
     },
     {
       "id": "P42-SECOND-HARNESS-EXECUTOR-3",
@@ -62310,7 +62323,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Stranded by P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-2's decline (its own depends_on target). OD-EXECUTOR-007 v2 measured that three of the four fields it decided (prohibited_changes, available_tools, applicable_rules via goal-text folding) survive the 2026-09-12 XVPE migration unaffected and remain buildable; only scope reverted to undecided. The precondition this item names -- a first real enforced mechanism to compare a second executor's choices against -- is therefore not gone. Re-authored as P42-SECOND-HARNESS-EXECUTOR-4, depending on P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-3 (the re-authored successor to the declined -2) in place of it."
+        }
+      },
       "depends_on": [
         "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4",
         "P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-2"
@@ -62331,7 +62348,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1789250381
+      }
     },
     {
       "id": "P40-AGENT-WORKRESULT-VALIDATED-PATH-4",
@@ -63779,6 +63799,144 @@
           "nomos-lang-rust-compiler"
         ],
         "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P90-XVPE-MIGRATION-COLLAPSED-OD-EXECUTOR-007-MECHANISM",
+      "title": "OD-EXECUTOR-007's decided scope/prohibited_changes mechanism no longer exists after today's XVPE dispatch migration",
+      "why": "P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-2 (implementing OD-EXECUTOR-007) was declined this session on measurement: OD-EXECUTOR-007, accepted 2026-09-05, decided scope and prohibited_changes are enforced by --restricted plus one --add-dir per Territory path, verified adversarially against the real claude CLI as invoked directly by nomos-agent-executor-claude-code's own Command_For. Commit 9b3e9683 (2026-09-12, same day, OD-PLATFORM-003/OD-HOST-013) moved this crate's dispatch down into xvpe-agent-backend-claude-code and rewrote its command construction: the engine's AgentCapability now offers only AgentWorkspace::Isolated or AgentWorkspace::Existing(one PathBuf), and ToolGrant::Nothing or ToolGrant::Edits -- no per-path directory grant exists anywhere in xvpe (grepped crates/backends/agent and xvpe-agent-execution: zero real hits for restricted or add-dir, only stale comments in unrelated backends explaining why nothing is restricted). OD-EXECUTOR-007's own decided mechanism is therefore unbuildable as written. Declining P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-2 stranded P42-SECOND-HARNESS-EXECUTOR-3, which depended on a real first enforcement mechanism existing before a second executor's choices could be compared against it.",
+      "done_when": "OD-EXECUTOR-007 is amended (version 2) to state the post-migration engine surface (AgentWorkspace::{Isolated,Existing(single directory)}, ToolGrant::{Nothing,Edits}, no per-path grant) and either names a mechanism buildable against exactly those primitives for scope and prohibited_changes, or states honestly that none exists without further engine changes and enforcement stays deferred; the round trip and preservation checks both hold; both derived projections are re-rendered and fresh; and P42-SECOND-HARNESS-EXECUTOR-3 is disposed by name, on its own measured claim, rather than left silently stranded.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s\n\n\nrunning 15 tests\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789250762,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "9b3e9683a71f28e2364725b376475edcb8b5d51d"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-3",
+      "title": "OD-EXECUTOR-007 v2 decided three of four TaskEnvelope field mechanisms are still buildable, and no code carries them",
+      "why": "OD-EXECUTOR-007 v2 (P90-XVPE-MIGRATION-COLLAPSED-OD-EXECUTOR-007-MECHANISM) measured that the 2026-09-12 XVPE dispatch migration removed only scope's primitive (--restricted/--add-dir no longer exist anywhere in the engine); prohibited_changes' hash-before/after mechanism, available_tools' refusal, and applicable_rules' advisory context (now folded into task.goal's own text rather than the removed --append-system-prompt flag) all remain exactly as decided and buildable without further engine change. TaskEnvelope fields are still accepted and ignored in nomos-agent-executor-claude-code today.",
+      "done_when": "prohibited_changes is enforced: Execute_Task and Execute_In gain a root: &Path parameter, hash every real file prohibited_changes.paths names before dispatch and again after, and a new AgentExecutionError::Prohibited_Change variant is returned naming the changed path on any difference, with a test proving a touched prohibited path is caught. available_tools is enforced: a non-empty list refuses with a new AgentExecutionError::Unsupported_Tools naming the capabilities, verified by a test, and an empty list dispatches exactly as today. applicable_rules reaches the model: its rule ids are folded into task.goal's own text before an AgentTask is built, verified by a test that the built goal contains them. scope stays documented in this crate's own module doc as accepted and structurally unenforced, per OD-EXECUTOR-007 v2's finding that no primitive exists to enforce it. Every real caller (nomos-cli::workflow.rs, nomos-agent-orchestration::run.rs) is updated to supply a real root wherever it constructs a non-empty prohibited_changes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+          "crates/agent/nomos-agent-contracts/src/task_envelope.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/run.rs",
+          "crates/host/nomos-cli/src/workflow.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P42-SECOND-HARNESS-EXECUTOR-4",
+      "title": "One agent executor exists, so nothing has shown which of its choices are the contract",
+      "why": "The Claude Code executor is properly bounded: fresh isolated working directory, strict tool configuration, a structural allow-list, one turn, a budget ceiling, timeout and stall handling, and structured parsing rather than trusting prose. A second executor over a richer session or harness runtime, of which Clay is the motivating example, would be an adapter rather than a new execution architecture. Its value is evidence: with one implementation nothing distinguishes what the canonical task contract requires from what one vendor happened to need. It is deliberately sequenced after the envelope constraints and the canonical result are enforced in code rather than merely decided, so the second executor is written against the contract as enforced rather than inheriting the first executor accepted-and-ignored fields. A harness executor gets no scheduler authority, no work-graph authority and no rule authority. Re-authored from P42-SECOND-HARNESS-EXECUTOR-3, declined when its depends_on target, P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-2, was declined; OD-EXECUTOR-007 v2 found the underlying precondition still satisfiable once the re-authored -3 implementation lands.",
+      "done_when": "A second executor satisfies the same task contract with the same enforced constraints and produces the same canonical result type, what the two implementations disagree about is recorded, no scheduling, work-graph or rule authority moved into either, and the new crate is registered in the workspace members, the README zone table, the ZONES crate table and its own surface snapshot.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-harness/src/lib.rs",
+          "crates/agent/nomos-agent-executor-harness/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "tests/contract/surface/nomos-agent-executor-harness.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4",
+        "P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-3"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-harness"
+        ],
+        "timeout_seconds": 600
       },
       "verified": null,
       "abandoned": [],

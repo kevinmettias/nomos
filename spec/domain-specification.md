@@ -78,7 +78,7 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 33 | 9 | sha256:ca00e8c7e822e64b859ccc7162d52ac2108a9c94b9706595f78c21cd21f546ce |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md | authored | 23 | 7 | sha256:1f668a9c3b8b790d0935f12b8f3350130ac9c388e0f9c0671ef5d57379f74b47 |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md | authored | 19 | 6 | sha256:0c2b9021270c0e484742945479352a8b2d9d573056158e27d377c6f56433545d |
-| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md@authored | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md | authored | 21 | 6 | sha256:aaa9dd1bb14d99b9df945e287c5e7452b3630a41da0ec8983451f3a9bf1be262 |
+| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md@authored | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md | authored | 33 | 10 | sha256:a8a606ac572d71702792163128caae171168c9e6e5f00c3b012b0675b5d7bc8d |
 | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md@authored | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md | authored | 19 | 6 | sha256:2b4a9d2bb3daa50e11f78a921b819c109cbcab767766c84970181f3873081454 |
 | docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md@authored | docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md | authored | 18 | 6 | sha256:45cf84c5f564bbf8c10b18bf9bcfd793f0fb284d663a48bda04e8376577f3728 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
@@ -753,7 +753,11 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#5 | authored | 2 | What Was Measured |
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#10 | authored | 2 | The Decision |
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#15 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#20 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#20 | authored | 2 | Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing |
+| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#22 | authored | 3 | What actually broke |
+| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#27 | authored | 3 | The Decision, Revised |
+| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#30 | authored | 3 | Disposition of the stranded dependent |
+| docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#32 | authored | 2 | Status |
 | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#1 | authored | 1 | A canonical WorkResult carries only the fields a bare-prompt executor can honestly populate |
 | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#2 | authored | 2 | Question |
 | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#5 | authored | 2 | What Was Measured |
@@ -18596,18 +18600,146 @@ that item's own verification, not re-derived here.
 
 ### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#20
 
+*revision: authored · kind: heading · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing · hash: sha256:27221069344990f68d711ceb574ffcf9c2fadfb0fab2273609e31ccedfd40b2e*
+
+## Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#21
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing · hash: sha256:ee6f5936c5b586f821d03fdb1c818447bcade6cbdc45319f90167cce1d9b6a2f*
+
+Added at version 2. Commit `9b3e9683` (2026-09-12, same day as this amendment,
+`OD-PLATFORM-003`/`OD-HOST-013`) moved this crate's dispatch down into
+`xvpe-agent-backend-claude-code` and rewrote its command-line construction wholesale.
+`P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-2`, filed to build this record's four mechanisms,
+found this before writing any code and declined rather than build against a stale premise.
+This amendment measures which of the four mechanisms that migration actually broke, rather
+than let the decline's own broad claim stand unexamined.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#22
+
+*revision: authored · kind: heading · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing / What actually broke · hash: sha256:f099c7e3ad96fcd6de45d818f3b4e5b829d38a92d92e3ab370171346795f0313*
+
+### What actually broke
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#23
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing / What actually broke · hash: sha256:601776cb3268c4e798679f34817031f6dbfdb3a126adb824d2a1fa6c5b9a9d3a*
+
+**`scope`, and only `scope`.** The engine's `AgentCapability` now offers exactly
+`AgentWorkspace::{Isolated, Existing(one PathBuf)}` and `ToolGrant::{Nothing, Edits}` --
+grepped across `crates/backends/agent` and `xvpe-agent-execution` in the sibling `xvpe`
+checkout: zero real hits for `restricted` or `add-dir` anywhere, only two stale comments in
+unrelated backends (`deepseek`, `kimi`) explaining why nothing is restricted in *their*
+adapters. `Push_Capability_Flags` in `claude_code_executor.rs` emits only
+`--allowedTools`/`--permission-mode`/`--permission-prompts`/`--max-budget-usd` -- no flag
+grants or confines a subset of a directory's contents. `AgentWorkspace::Existing`'s own doc
+says plainly: "An existing directory, with whatever it already contains" -- the directory
+itself is the entire boundary, not a list of paths within it. `Territory`'s shape (an
+arbitrary file list, possibly scattered across unrelated directories) has no primitive left
+to translate onto.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#24
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing / What actually broke · hash: sha256:cd59b446b73d0d07655d84e16d74f1d05401e4d5d7c07af295f0262511b9637d*
+
+**`prohibited_changes` did not break.** Its decided mechanism -- hash every real file it
+names before dispatch, hash again after, and report `AgentExecutionError::Prohibited_Change`
+on any difference -- is nomos's own file comparison around whichever dispatch call runs. It
+never depended on `--restricted`, `--add-dir`, or any other flag this migration touched.
+Threading `root: &Path` through `Execute_Task`/`Execute_In` to resolve `Territory`'s
+repo-relative paths is exactly as buildable today as it was on 2026-09-05.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#25
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing / What actually broke · hash: sha256:3e557939cb1e090467ef9c4b61b711d9d09c4bbe669c4e4ea54a6588f19331d5*
+
+**`available_tools`'s refusal did not break either.** "Refuse with
+`AgentExecutionError::Unsupported_Tools` when `task.available_tools` is non-empty" is a
+check against the envelope's own field, made before any dispatch happens. It reads nothing
+from `AgentCapability` and needed no flag this migration removed.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#26
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing / What actually broke · hash: sha256:8cd01020584aa1e6637c674f6bf467d47e742f241e6e33930baa3ee8a9081d12*
+
+**`applicable_rules` lost its named channel, not its disposition.** `--append-system-prompt`
+does not exist anywhere in `xvpe-agent-backend-claude-code` (grepped: zero hits). `AgentTask`
+itself, in the engine's own module doc, now states the boundary explicitly: "which files are
+in scope, which rules apply, what it must not change" are meaningful "only if something
+enforces" them, and names exactly two homes for anything else -- `AgentCapability`, where it
+is structural, "or in the goal's own text, where it is plainly advisory." `applicable_rules`
+was already decided as advisory context, never enforcement (`OD-CONTRACTS-003`'s
+`WorkResult`-assembly gap still blocks the validation half, unchanged). Folding the named
+rule ids into `task.goal`'s own text reaches the same disposition this record already
+decided, through the one channel the engine still offers for it.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#27
+
+*revision: authored · kind: heading · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing / The Decision, Revised · hash: sha256:c66c8648e7d1c81275baa6613020ec9eab68681c1c048a6d2679b732e3ecf065*
+
+### The Decision, Revised
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#28
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing / The Decision, Revised · hash: sha256:61bf4678e5d45c29424e9b8101f4222b9cdb2f23f1f04fa10e412e8b2c189129*
+
+`prohibited_changes`, `available_tools`, and `applicable_rules` (via goal-text folding
+rather than `--append-system-prompt`) stand exactly as this record originally decided them
+and remain buildable without further engine change.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#29
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing / The Decision, Revised · hash: sha256:b0445b0ae4d427298f7974355062b9c42b6755618aa7c17a0b5e5288d2e7ec1f*
+
+`scope` has no mechanism left to build against. This record does not invent one now. A
+staging mechanism -- nomos copies exactly `scope`'s named files into an isolated directory
+it owns, dispatches `AgentWorkspace::Existing` over that copy, and reconciles only what
+comes back -- is a plausible next candidate, but this record's own opening measurement
+insisted a mechanism claim here is not settled by design alone, only by adversarial
+verification against the real CLI, the same discipline that caught the deny-list leaking
+twice before an allow-list was tested and held. Electing a replacement without that
+verification would be exactly the mistake this record's own history warns against, so
+`scope` reverts to undecided: accepted and structurally unenforced, same as `available_tools`
+was left before this record, until a future record measures a real candidate the way this
+one measured `--restricted`/`--add-dir`.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#30
+
+*revision: authored · kind: heading · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing / Disposition of the stranded dependent · hash: sha256:231ac64d000de6cfa8db6b035bd311abd4ea22089a969f1a3d7117664dbb378d*
+
+### Disposition of the stranded dependent
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#31
+
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing / Disposition of the stranded dependent · hash: sha256:5caf11a5835c0174e0bbc30fdb8c7462cff164343d42ddc466e68ac28e91fa11*
+
+`P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-2`'s decline stranded `P42-SECOND-HARNESS-EXECUTOR-3`,
+whose own precondition needed a first real enforced mechanism to compare a second executor's
+choices against. That precondition is not gone -- three of the four fields are still
+buildable exactly as decided -- so `P42-SECOND-HARNESS-EXECUTOR-3` is declined and
+re-authored as `P42-SECOND-HARNESS-EXECUTOR-4`, depending on
+`P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-3` (this amendment's own re-authored successor to the
+declined `-2`) rather than left stranded behind an id that will never finish.
+
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#32
+
 *revision: authored · kind: heading · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#21
+### docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#33
 
-*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Status · hash: sha256:9dc05f2bd8fd8417559c3be069e04f897d140689728cb842412fb3fe3bab6cc4*
+*revision: authored · kind: prose · heading: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI / Status · hash: sha256:3f69d57c5d472540f6e693765a6dcc28dcc53428cd7e7c11b799b732caac8748*
 
-Accepted. `scope` and `prohibited_changes` each have a real, evidence-backed mechanism;
-`available_tools` is refused rather than silently dropped until a capability-serving bridge
-exists; `applicable_rules` reaches the run as context now and stays undecided as a
-validation boundary until a `WorkResult` exists to validate.
+Accepted. `prohibited_changes` and `available_tools` each have a real, evidence-backed
+mechanism unaffected by the 2026-09-12 XVPE dispatch migration; `applicable_rules` reaches
+the run as advisory context, now via `task.goal`'s own text rather than
+`--append-system-prompt`, and stays undecided as a validation boundary until a `WorkResult`
+exists to validate. `scope` is amended to undecided as of version 2: the migration removed
+`--restricted`/`--add-dir`, the only primitive this record's mechanism translated onto, and
+no replacement is elected without the same adversarial verification this record's own
+version-1 measurement required.
 
 ### docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md#1
 

@@ -3,7 +3,7 @@ id: OD-EXECUTOR-007
 type: decision
 title: A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - agent
@@ -151,9 +151,89 @@ absolute directory, one level of nesting). A follow-up implementing this against
 `Territory` values with nested paths, nonexistent paths, or nomos-specific edge cases is
 that item's own verification, not re-derived here.
 
+## Amendment: The XVPE Dispatch Migration Removed `scope`'s Primitive, Left The Rest Standing
+
+Added at version 2. Commit `9b3e9683` (2026-09-12, same day as this amendment,
+`OD-PLATFORM-003`/`OD-HOST-013`) moved this crate's dispatch down into
+`xvpe-agent-backend-claude-code` and rewrote its command-line construction wholesale.
+`P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-2`, filed to build this record's four mechanisms,
+found this before writing any code and declined rather than build against a stale premise.
+This amendment measures which of the four mechanisms that migration actually broke, rather
+than let the decline's own broad claim stand unexamined.
+
+### What actually broke
+
+**`scope`, and only `scope`.** The engine's `AgentCapability` now offers exactly
+`AgentWorkspace::{Isolated, Existing(one PathBuf)}` and `ToolGrant::{Nothing, Edits}` --
+grepped across `crates/backends/agent` and `xvpe-agent-execution` in the sibling `xvpe`
+checkout: zero real hits for `restricted` or `add-dir` anywhere, only two stale comments in
+unrelated backends (`deepseek`, `kimi`) explaining why nothing is restricted in *their*
+adapters. `Push_Capability_Flags` in `claude_code_executor.rs` emits only
+`--allowedTools`/`--permission-mode`/`--permission-prompts`/`--max-budget-usd` -- no flag
+grants or confines a subset of a directory's contents. `AgentWorkspace::Existing`'s own doc
+says plainly: "An existing directory, with whatever it already contains" -- the directory
+itself is the entire boundary, not a list of paths within it. `Territory`'s shape (an
+arbitrary file list, possibly scattered across unrelated directories) has no primitive left
+to translate onto.
+
+**`prohibited_changes` did not break.** Its decided mechanism -- hash every real file it
+names before dispatch, hash again after, and report `AgentExecutionError::Prohibited_Change`
+on any difference -- is nomos's own file comparison around whichever dispatch call runs. It
+never depended on `--restricted`, `--add-dir`, or any other flag this migration touched.
+Threading `root: &Path` through `Execute_Task`/`Execute_In` to resolve `Territory`'s
+repo-relative paths is exactly as buildable today as it was on 2026-09-05.
+
+**`available_tools`'s refusal did not break either.** "Refuse with
+`AgentExecutionError::Unsupported_Tools` when `task.available_tools` is non-empty" is a
+check against the envelope's own field, made before any dispatch happens. It reads nothing
+from `AgentCapability` and needed no flag this migration removed.
+
+**`applicable_rules` lost its named channel, not its disposition.** `--append-system-prompt`
+does not exist anywhere in `xvpe-agent-backend-claude-code` (grepped: zero hits). `AgentTask`
+itself, in the engine's own module doc, now states the boundary explicitly: "which files are
+in scope, which rules apply, what it must not change" are meaningful "only if something
+enforces" them, and names exactly two homes for anything else -- `AgentCapability`, where it
+is structural, "or in the goal's own text, where it is plainly advisory." `applicable_rules`
+was already decided as advisory context, never enforcement (`OD-CONTRACTS-003`'s
+`WorkResult`-assembly gap still blocks the validation half, unchanged). Folding the named
+rule ids into `task.goal`'s own text reaches the same disposition this record already
+decided, through the one channel the engine still offers for it.
+
+### The Decision, Revised
+
+`prohibited_changes`, `available_tools`, and `applicable_rules` (via goal-text folding
+rather than `--append-system-prompt`) stand exactly as this record originally decided them
+and remain buildable without further engine change.
+
+`scope` has no mechanism left to build against. This record does not invent one now. A
+staging mechanism -- nomos copies exactly `scope`'s named files into an isolated directory
+it owns, dispatches `AgentWorkspace::Existing` over that copy, and reconciles only what
+comes back -- is a plausible next candidate, but this record's own opening measurement
+insisted a mechanism claim here is not settled by design alone, only by adversarial
+verification against the real CLI, the same discipline that caught the deny-list leaking
+twice before an allow-list was tested and held. Electing a replacement without that
+verification would be exactly the mistake this record's own history warns against, so
+`scope` reverts to undecided: accepted and structurally unenforced, same as `available_tools`
+was left before this record, until a future record measures a real candidate the way this
+one measured `--restricted`/`--add-dir`.
+
+### Disposition of the stranded dependent
+
+`P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-2`'s decline stranded `P42-SECOND-HARNESS-EXECUTOR-3`,
+whose own precondition needed a first real enforced mechanism to compare a second executor's
+choices against. That precondition is not gone -- three of the four fields are still
+buildable exactly as decided -- so `P42-SECOND-HARNESS-EXECUTOR-3` is declined and
+re-authored as `P42-SECOND-HARNESS-EXECUTOR-4`, depending on
+`P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-3` (this amendment's own re-authored successor to the
+declined `-2`) rather than left stranded behind an id that will never finish.
+
 ## Status
 
-Accepted. `scope` and `prohibited_changes` each have a real, evidence-backed mechanism;
-`available_tools` is refused rather than silently dropped until a capability-serving bridge
-exists; `applicable_rules` reaches the run as context now and stays undecided as a
-validation boundary until a `WorkResult` exists to validate.
+Accepted. `prohibited_changes` and `available_tools` each have a real, evidence-backed
+mechanism unaffected by the 2026-09-12 XVPE dispatch migration; `applicable_rules` reaches
+the run as advisory context, now via `task.goal`'s own text rather than
+`--append-system-prompt`, and stays undecided as a validation boundary until a `WorkResult`
+exists to validate. `scope` is amended to undecided as of version 2: the migration removed
+`--restricted`/`--add-dir`, the only primitive this record's mechanism translated onto, and
+no replacement is elected without the same adversarial verification this record's own
+version-1 measurement required.
