@@ -75,6 +75,7 @@ pub(super) const fn Code_For_Refusal(refusal: &AddRefusal) -> ExitCode
 }
 
 pub(super) fn Report_Finish(
+    ended: &Ended<'_>,
     result: Result<nomos_ledger::VerificationRecord, FinishRefusal>,
     output: &mut impl std::io::Write,
 ) -> ExitCode
@@ -89,6 +90,7 @@ pub(super) fn Report_Finish(
                 record.argv.join(" "),
                 record.verified_at.Unix_Seconds()
             );
+            Report_Fanout(ended, output);
             ExitCode::Ok
         }
         Err(refusal) =>
@@ -138,6 +140,74 @@ pub(super) fn Blocking_Refusal(
     }
 
     return Claim_Refusal(document, &item.id, now);
+}
+
+/// An item that was just ended, and the board it was ended on.
+///
+/// The two travel together because neither answers the question alone: the id says which
+/// item's dependents to look for, and the board says what those dependents are now. Grouped
+/// rather than passed as two parameters because both reporters need both, and `finish`'s own
+/// signature is already at this crate's `parameter-count` limit.
+pub(super) struct Ended<'a>
+{
+    pub item: &'a ItemId,
+    /// `None` when the transition refused, or when the board could not be re-read after it
+    /// succeeded — see `nomos_work_orchestration::WorkOutcome::Finish`'s own doc.
+    pub board: Option<&'a LedgerDocument>,
+    /// Read by the composition root rather than here, the same division `OD-HOST-002` draws
+    /// everywhere else: a lease is `held` or `lapsed` depending on it, so a report that
+    /// picked its own clock could label an item differently from the `list` beside it.
+    pub now: Timestamp,
+}
+
+/// Names every item whose `depends_on` names the one just ended, and what each is now.
+///
+/// # Why this is printed at the moment of ending
+///
+/// `OD-LEDGER-038` decision 1: ending an item legitimately changes what other items can be
+/// claimed, and until now nothing said so at the moment it happened. A `finish` frees its
+/// dependents; a `decline` strands them permanently, and the measured case was seven items
+/// made unreachable in one write with nothing printed. Both are correct operations whose
+/// consequences were invisible.
+///
+/// # Why it labels through `Listing_Label`
+///
+/// So that an item cannot read `stranded` here and something else in `nomos work list`. The
+/// reachability rule is `Claim_Refusal`'s, the word for it is `Refusal_Label`'s, and this
+/// function implements neither — it selects which items to ask about and prints the answer.
+///
+/// Silent when nothing depends on the ended item, rather than a header over an empty list:
+/// most endings free nobody, and a line saying so every time is noise that would teach a
+/// reader to skip the line that matters.
+fn Report_Fanout(ended: &Ended<'_>, output: &mut impl std::io::Write)
+{
+    let Some(document) = ended.board
+    else
+    {
+        return;
+    };
+
+    let dependents: Vec<&LedgerItem> = document
+        .items
+        .iter()
+        .filter(|item| return item.depends_on.contains(ended.item))
+        .collect();
+
+    if dependents.is_empty()
+    {
+        return;
+    }
+
+    let _ = writeln!(output, "depending on {}:", ended.item);
+    for dependent in dependents
+    {
+        let _ = writeln!(
+            output,
+            "  {} {}",
+            super::listing::Listing_Label(document, dependent, ended.now),
+            dependent.id
+        );
+    }
 }
 
 /// The word for a refusal.
@@ -216,7 +286,7 @@ pub(super) fn Report_Claim(
 /// The refusal names the item first and then prints [`ClaimRefusal::Describe`] beneath it,
 /// which is the composition `OD-LEDGER-014` phrased those sentences for.
 pub(super) fn Report_Decline(
-    item: &ItemId,
+    ended: &Ended<'_>,
     result: Result<(), ClaimRefusal>,
     output: &mut impl std::io::Write,
 ) -> ExitCode
@@ -225,7 +295,8 @@ pub(super) fn Report_Decline(
     {
         Ok(()) =>
         {
-            let _ = writeln!(output, "{item} declined");
+            let _ = writeln!(output, "{} declined", ended.item);
+            Report_Fanout(ended, output);
             ExitCode::Ok
         }
         Err(refusal) =>
@@ -459,12 +530,20 @@ mod tests
         );
     }
 
+    /// An ending with no board behind it, for the cases that assert the line the verb
+    /// always prints rather than the fanout that depends on one.
+    fn Ended_Without_A_Board(item: &ItemId) -> Ended<'_>
+    {
+        return Ended { item, board: None, now: Timestamp::From_Unix_Seconds(0) };
+    }
+
     #[test]
     fn Test_Report_Finish_Should_Print_The_Verified_Command_On_Success()
     {
         let mut output = Vec::new();
 
         let code = Report_Finish(
+            &Ended_Without_A_Board(&ItemId::New("T-1")),
             Ok(nomos_ledger::VerificationRecord {
                 argv: vec!["cargo".to_owned(), "test".to_owned()],
                 exit_code: 0,
@@ -489,6 +568,7 @@ mod tests
         let mut output = Vec::new();
 
         let code = Report_Finish(
+            &Ended_Without_A_Board(&ItemId::New("T-1")),
             Err(FinishRefusal::PredicateFailed {
                 item: ItemId::New("T-1"),
                 exit_code: 1,
@@ -591,7 +671,7 @@ mod tests
     {
         let mut output = Vec::new();
 
-        let code = Report_Decline(&ItemId::New("T-1"), Ok(()), &mut output);
+        let code = Report_Decline(&Ended_Without_A_Board(&ItemId::New("T-1")), Ok(()), &mut output);
 
         assert_eq!(code, ExitCode::Ok);
         assert_eq!(String::from_utf8(output).unwrap(), "T-1 declined\n");
@@ -603,7 +683,7 @@ mod tests
         let mut output = Vec::new();
 
         let code = Report_Decline(
-            &ItemId::New("T-1"),
+            &Ended_Without_A_Board(&ItemId::New("T-1")),
             Err(ClaimRefusal::NotClaimable {
                 item: ItemId::New("T-1"),
                 state: "Done".to_owned(),
@@ -701,6 +781,95 @@ mod tests
     }
 
     /// A minimal, ready item: enough to give [`Print_Blocked`] something to print.
+    /// A board where `T-2` depends on `T-1`, with `T-1` already ended the given way.
+    ///
+    /// Both halves matter: a dependent that names the ended item is what the fanout is for,
+    /// and whether the ending freed or stranded it is exactly what the label has to say.
+    fn A_Board_Where_T2_Depends_On_T1(end: impl FnOnce(&mut LedgerItem)) -> LedgerDocument
+    {
+        let mut ended = Item("T-1");
+        end(&mut ended);
+        let mut dependent = Item("T-2");
+        dependent.depends_on = vec![ItemId::New("T-1")];
+
+        return LedgerDocument { schema_version: SCHEMA_VERSION, items: vec![ended, dependent] };
+    }
+
+    /// A decline strands every dependent permanently, and the whole point of
+    /// `OD-LEDGER-038` is that the person who typed it finds out then rather than later.
+    #[test]
+    fn Test_Report_Decline_Should_Name_The_Dependent_It_Just_Stranded()
+    {
+        let document = A_Board_Where_T2_Depends_On_T1(|item| {
+            item.Decline("not work after all", "agent-a", Timestamp::From_Unix_Seconds(1));
+        });
+        let item = ItemId::New("T-1");
+        let ended =
+            Ended { item: &item, board: Some(&document), now: Timestamp::From_Unix_Seconds(2) };
+        let mut output = Vec::new();
+
+        let code = Report_Decline(&ended, Ok(()), &mut output);
+
+        let printed = String::from_utf8(output).expect("utf-8");
+        assert_eq!(code, ExitCode::Ok);
+        assert!(printed.contains("depending on T-1:"), "{printed}");
+        // `stranded`, the word `list` already uses for a dependency that will never finish,
+        // rather than a second vocabulary invented at the point of ending.
+        assert!(printed.contains("stranded T-2"), "{printed}");
+    }
+
+    /// The same line for the ending that frees rather than strands: a dependent that was
+    /// waiting is claimable now, and saying so is what tells a reader what to pick up next.
+    #[test]
+    fn Test_Report_Finish_Should_Name_The_Dependent_It_Just_Freed()
+    {
+        let document = A_Board_Where_T2_Depends_On_T1(|item| {
+            item.state = ItemState::Done;
+        });
+        let item = ItemId::New("T-1");
+        let ended =
+            Ended { item: &item, board: Some(&document), now: Timestamp::From_Unix_Seconds(2) };
+        let mut output = Vec::new();
+
+        let code = Report_Finish(&ended, Ok(A_Verification_Record()), &mut output);
+
+        let printed = String::from_utf8(output).expect("utf-8");
+        assert_eq!(code, ExitCode::Ok);
+        assert!(printed.contains("depending on T-1:"), "{printed}");
+        assert!(printed.contains("ready T-2"), "{printed}");
+    }
+
+    /// Most endings free nobody. A header over an empty list every time would teach a
+    /// reader to skip the line, which is the one place it has to be read.
+    #[test]
+    fn Test_An_Ending_Nothing_Depends_On_Should_Print_No_Fanout_At_All()
+    {
+        let document = LedgerDocument { schema_version: SCHEMA_VERSION, items: vec![Item("T-1")] };
+        let item = ItemId::New("T-1");
+        let ended =
+            Ended { item: &item, board: Some(&document), now: Timestamp::From_Unix_Seconds(2) };
+        let mut output = Vec::new();
+
+        let code = Report_Decline(&ended, Ok(()), &mut output);
+
+        assert_eq!(code, ExitCode::Ok);
+        assert_eq!(String::from_utf8(output).expect("utf-8"), "T-1 declined
+");
+    }
+
+    /// A verification record, for the cases that care about what was printed after it.
+    fn A_Verification_Record() -> nomos_ledger::VerificationRecord
+    {
+        return nomos_ledger::VerificationRecord {
+            argv: vec!["cargo".to_owned(), "test".to_owned()],
+            exit_code: 0,
+            output_tail: String::new(),
+            verified_at: Timestamp::From_Unix_Seconds(5),
+            gate: None,
+            revision: None,
+        };
+    }
+
     fn Item(id: &str) -> LedgerItem
     {
         return LedgerItem {

@@ -148,8 +148,32 @@ fn Finish_Outcome<
 {
     let finishing = Finishing { item, holder };
     let finished = Finish_Item(ledger, launcher, &finishing, None);
+    let board = Board_After(ledger, finished.is_ok());
 
-    return WorkOutcome::Finish(finished);
+    return WorkOutcome::Finish { finished, board };
+}
+
+/// The board as it stands after a transition, for the caller that has to say what the
+/// transition just made reachable or unreachable.
+///
+/// A second read rather than a value the transition returns: `Finish_Item` and `Decline`
+/// each answer what they did, not what the board looks like afterwards, and widening either
+/// to carry a document would make every caller pay for a report only one of them writes.
+///
+/// `None` when nothing was ended, and `None` when the re-read failed. The second is
+/// deliberate: the transition is already committed by this point, and failing the verb over
+/// a report it could not assemble would turn a succeeded ending into a reported failure.
+fn Board_After<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+    ledger: &FileLedger<Filesystem, ClockSource, Lock>,
+    ended: bool,
+) -> Option<LedgerDocument>
+{
+    if !ended
+    {
+        return None;
+    }
+
+    return ledger.Load().ok();
 }
 
 /// The outcome of granting `request`, for [`WorkCommand::Claim`].
@@ -207,8 +231,9 @@ fn Decline_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProces
 ) -> WorkOutcome
 {
     let declined = ledger.Decline(&request.item, &request.holder, &request.reason);
+    let board = Board_After(ledger, declined.is_ok());
 
-    return WorkOutcome::Decline(declined);
+    return WorkOutcome::Decline { declined, board };
 }
 
 /// The board, once it is known to satisfy its own invariants.

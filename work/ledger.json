@@ -62253,7 +62253,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -62268,7 +62268,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "     Running tests\\freshness.rs (target\\debug\\deps\\freshness-e17d0fa080d874d2.exe)\n     Running tests\\gate_orchestration_seam.rs (target\\debug\\deps\\gate_orchestration_seam-8e9eb4a21f706799.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-f433a0f326ac20cd.exe)\n     Running tests\\lang_go_seam.rs (target\\debug\\deps\\lang_go_seam-126a051e70ec8789.exe)\n     Running tests\\lang_rust_seam.rs (target\\debug\\deps\\lang_rust_seam-21e4d711588fa8dc.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-eb881b37502cc056.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-6e4edc82a01dbde3.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-ae0b617102dd3009.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-04ea16aad0fabd75.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-3280349c95fefea2.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-5e1c9f4878575f71.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-938ce3bf1a5089c5.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-94d7292345d520d6.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-813c14e0af29f347.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-edce0034430d69a3.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-1da870d5dcc7bd73.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-cb3e049ca967cf9a.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-586b71f69871fb5c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_work_orchestration-d4f48c0702cb8142.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-1d217352b8a08388.exe)\n   Doc-tests nomos_work_orchestration\n",
+        "verified_at": 1789257024,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d603f80679596ffec2809e94f430298e1f8d8283"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -64278,6 +64300,111 @@
           "exit_code": 0
         },
         "revision": "86568bc6994f9e5456fb3fb8d401ecb8608a1d7f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P85-FANOUT-WARNING-SEAM-TEST",
+      "title": "The work-orchestration seam test patterns WorkOutcome::Decline as a tuple variant",
+      "why": "P85-LEDGER-038-FANOUT-WARNING-2 gives WorkOutcome::Finish and WorkOutcome::Decline a second field carrying the board the fanout is computed from, which makes both struct variants. crates/orchestration/nomos-work-orchestration/tests/integration_seams.rs patterns Decline as a tuple variant and stops compiling. That file is not in P85-LEDGER-038-FANOUT-WARNING-2's territory and the two do not overlap, so this is a second disjoint claim rather than a decline and re-author, which would strand the work already done under the first.",
+      "done_when": "The seam test patterns the struct variant, still asserts what it asserted about a declined item crossing the orchestration boundary, and cargo test -p nomos-work-orchestration passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-work-orchestration/tests/integration_seams.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-work-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-work-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 6 tests\ntest tests::Test_List_Should_Read_An_Empty_Board ... ok\ntest run::tests::Test_Run_Should_Dispatch_List_To_An_Empty_Board ... ok\ntest tests::Test_Add_Then_Show_Should_Find_What_Add_Wrote ... ok\ntest tests::Test_Validate_Should_Accept_A_Board_This_Run_Wrote ... ok\ntest tests::Test_Decline_Should_End_An_Unclaimed_Item ... ok\ntest tests::Test_Claim_Then_Second_Claim_Should_Be_Refused_As_Held ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 3 tests\ntest Test_Run_Should_Add_Then_Show_An_Item_Through_A_Real_Ledger ... ok\ntest Test_Run_Should_Surface_A_Real_Ledger_Claim_Refusal ... ok\ntest Test_Run_Should_Make_A_Decline_Visible_To_A_Later_Audit ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.29s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_work_orchestration-e2defdc34022bb59.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-56b47c93eb048cbb.exe)\n   Doc-tests nomos_work_orchestration\n",
+        "verified_at": 1789256949,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d603f80679596ffec2809e94f430298e1f8d8283"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P85-FANOUT-WARNING-API-RESPONSES",
+      "title": "Two nomos-api response builders pattern WorkOutcome::Finish and Decline as tuple variants",
+      "why": "P85-LEDGER-038-FANOUT-WARNING-2 gives both variants a second field carrying the board a fanout is computed from, which makes them struct variants. nomos-api builds its own HTTP-shaped responses from the same outcomes and patterns both as tuple variants, at crates/host/nomos-api/src/work/finish_response.rs and crates/host/nomos-api/src/work/decline_response.rs. Neither file is in that item's territory nor in P85-FANOUT-WARNING-SEAM-TEST's, and the workspace lint is red until they compile, which is the gate step work finish runs before any predicate. A third disjoint claim rather than a decline and re-author, for the same reason as the second: the work already done under the first claim would be stranded. nomos-api is a second host over the same seam, so it gets the same board the CLI does rather than a narrower one -- whether it renders a fanout of its own is its own question, and this item does not answer it.",
+      "done_when": "Both response builders pattern the struct variants and still answer exactly what they answered before; nothing about the API's own response shape changes, because this is a pattern fix and not a feature; cargo clippy --workspace --all-targets is green again; and cargo test -p nomos-api passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/work/finish_response.rs",
+          "crates/host/nomos-api/src/work/decline_response.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api"
+        ],
+        "exit_code": 0,
+        "output_tail": "response::tests::Test_Handle_Spec_Table_Should_Report_No_Such_Document_For_An_Unknown_Document ... ok\ntest spec::render_response::tests::Test_From_Should_Round_Trip_As_Json ... ok\ntest spec::preview_response::tests::Test_From_Should_Round_Trip_As_Json ... ok\ntest spec::preview_response::tests::Test_Handle_Spec_Preview_Should_Report_Wording_Moved_For_A_Heading_Rename ... ok\ntest spec::commit_response::tests::Test_Handle_Spec_Commit_Should_Write_The_Record_And_Close_The_Round_Trip ... ok\ntest spec::committed_preview_response::tests::Test_From_Should_Carry_Wording_Moved_For_A_Real_Heading_Rename ... ok\ntest spec::commit_response::tests::Test_From_Should_Round_Trip_As_Json ... ok\n\ntest result: ok. 140 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.90s\n\n\nrunning 8 tests\ntest Test_Handle_Spec_Profiles_Should_List_Real_Nomos_Spec_Project_Profiles ... ok\ntest Test_Handle_Work_Claim_Should_Grant_A_Reservation_Whose_Expiry_Is_A_Real_System_Clock_Lease ... ok\ntest Test_Handle_Gate_Explain_Should_Find_A_Real_Blocking_Finding_Over_A_Real_Walked_Directory ... ok\ntest Test_Handle_Gate_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers ... ok\ntest Test_An_Incomplete_Submission_Should_Be_Refused ... ok\ntest Test_Handle_Spec_Submit_Should_Accept_A_Complete_Submission_With_Submitted_Origin ... ok\ntest Test_Handle_Spec_Record_Should_Resolve_The_Same_Document_On_Repeated_Real_Reads ... ok\ntest Test_This_Packages_Build_Variant_Should_Be_Well_Formed_For_A_Real_Gate_Run ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.17s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.29s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-7367b8147e17f21c.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-b5bb8905d34f6ccc.exe)\n   Doc-tests nomos_api\n",
+        "verified_at": 1789256947,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d603f80679596ffec2809e94f430298e1f8d8283"
       },
       "abandoned": [],
       "displaced": [],

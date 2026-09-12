@@ -245,7 +245,8 @@ fn Test_Decline_Should_End_An_Unclaimed_Item()
         &Unreached,
         Territory::Empty,
     );
-    assert!(matches!(declined, WorkOutcome::Decline(Ok(()))));
+    assert!(matches!(declined, WorkOutcome::Decline { declined: Ok(()), board: Some(_) }),
+        "a decline that ended an item carries the board its fanout is read from");
 
     let found = On_Board(&mut ledger, &item.id);
     assert!(found.declined.is_some());

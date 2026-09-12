@@ -11,7 +11,7 @@
 //! also taking on how this module renders an answer. `OD-HOST-001`.
 
 use nomos_ledger::{AddRefusal, Board_In, FileLedger, ItemId, LedgerDocument, LedgerError, LedgerItem, Territory};
-use nomos_platform::FileSystem;
+use nomos_platform::{Clock, FileSystem};
 use nomos_composer_std::{CLOCK, FILE_SYSTEM, LAUNCHER, Lock_At};
 use nomos_work_orchestration::{BoardView, ShowView, WorkOutcome};
 use std::path::Path;
@@ -32,7 +32,7 @@ use listing::{
     Listed_As, Listing_Label, Nothing_Listed, Print_Claim, Print_History, Print_Listing,
 };
 use report::{
-    Amendment_Note, Blocking_Refusal, Code_For_Refusal, Print_Blocked, Report_Claim,
+    Amendment_Note, Blocking_Refusal, Code_For_Refusal, Ended, Print_Blocked, Report_Claim,
     Report_Decline, Report_Error, Report_Finish, Report_Release, Report_Validation,
 };
 
@@ -197,14 +197,19 @@ fn Render_Outcome(command: &WorkCommand, outcome: WorkOutcome, output: &mut impl
         {
             Render_Add(item, amending, result, output)
         }
-        (WorkCommand::Finish { .. }, WorkOutcome::Finish(result)) => Report_Finish(result, output),
+        (WorkCommand::Finish { item, .. }, WorkOutcome::Finish { finished, board }) =>
+        {
+            Report_Finish(&Ended { item, board: board.as_ref(), now: CLOCK.Now() }, finished, output)
+        }
         (WorkCommand::Claim(_), WorkOutcome::Claim(result))
         | (WorkCommand::Renew(_), WorkOutcome::Renew(result))
         | (WorkCommand::TakeOver(_), WorkOutcome::TakeOver(result)) => Report_Claim(result, output),
         (WorkCommand::Abandon(_), WorkOutcome::Abandon(result)) => Report_Release(result, output),
-        (WorkCommand::Decline(request), WorkOutcome::Decline(result)) =>
+        (WorkCommand::Decline(request), WorkOutcome::Decline { declined, board }) =>
         {
-            Report_Decline(&request.item, result, output)
+            let ended =
+                Ended { item: &request.item, board: board.as_ref(), now: CLOCK.Now() };
+            Report_Decline(&ended, declined, output)
         }
         (WorkCommand::Validate, WorkOutcome::Validate(result)) => Report_Validation(result, output),
         (WorkCommand::Audit, WorkOutcome::Audit(result)) => Render_Audit(result, output),

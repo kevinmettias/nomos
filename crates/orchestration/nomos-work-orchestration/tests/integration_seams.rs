@@ -128,7 +128,8 @@ fn Test_Run_Should_Make_A_Decline_Visible_To_A_Later_Audit()
         &Unreached,
         Territory::Empty,
     );
-    assert!(matches!(declined, WorkOutcome::Decline(Ok(()))));
+    assert!(matches!(declined, WorkOutcome::Decline { declined: Ok(()), board: Some(_) }),
+        "a decline that ended an item carries the board its fanout is read from");
 
     let audited = Run(&WorkCommand::Audit, &mut ledger, &Unreached, Territory::Empty);
     let WorkOutcome::Audit(Ok(view)) = audited

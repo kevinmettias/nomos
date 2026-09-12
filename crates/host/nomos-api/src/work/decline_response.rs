@@ -22,7 +22,7 @@ pub fn Handle_Work_Decline(directory: &Path, request: &EndingRequest) -> Decline
         || Territory::Of_Files(std::iter::empty::<String>()),
     );
 
-    let nomos_work_orchestration::WorkOutcome::Decline(declined) = outcome
+    let nomos_work_orchestration::WorkOutcome::Decline { declined, .. } = outcome
     else
     {
         // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant

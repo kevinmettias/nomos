@@ -29,7 +29,7 @@ pub fn Handle_Work_Finish(directory: &Path, item: &ItemId, holder: &str) -> Fini
         || Territory::Of_Files(std::iter::empty::<String>()),
     );
 
-    let nomos_work_orchestration::WorkOutcome::Finish(finished) = outcome
+    let nomos_work_orchestration::WorkOutcome::Finish { finished, .. } = outcome
     else
     {
         // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant

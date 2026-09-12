@@ -15,8 +15,8 @@ pub enum variant nomos_work_orchestration::WorkOutcome::Abandon(Result<(), Claim
 pub enum variant nomos_work_orchestration::WorkOutcome::Add(Result<(), AddRefusal>)
 pub enum variant nomos_work_orchestration::WorkOutcome::Audit(Result<BoardView, LedgerError>)
 pub enum variant nomos_work_orchestration::WorkOutcome::Claim(Result<Reservation, ClaimRefusal>)
-pub enum variant nomos_work_orchestration::WorkOutcome::Decline(Result<(), ClaimRefusal>)
-pub enum variant nomos_work_orchestration::WorkOutcome::Finish(Result<VerificationRecord, FinishRefusal>)
+pub enum variant nomos_work_orchestration::WorkOutcome::Decline { declined: Result<(), ClaimRefusal>, board: Option<LedgerDocument>, }
+pub enum variant nomos_work_orchestration::WorkOutcome::Finish { finished: Result<VerificationRecord, FinishRefusal>, board: Option<LedgerDocument>, }
 pub enum variant nomos_work_orchestration::WorkOutcome::List(Result<BoardView, LedgerError>)
 pub enum variant nomos_work_orchestration::WorkOutcome::Renew(Result<Reservation, ClaimRefusal>)
 pub enum variant nomos_work_orchestration::WorkOutcome::Show(Result<ShowView, LedgerError>)
