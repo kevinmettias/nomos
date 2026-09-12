@@ -15,12 +15,12 @@ use super::{Build_Corpus_Request, DocumentSourceResponse, PathMatchResponse, Row
 #[must_use]
 pub fn Handle_Spec_Table(request: &TableRequest) -> TableResponse
 {
-    use nomos_platform_std::StdFileSystem;
+    use nomos_composer_std::FILE_SYSTEM;
 
     let corpus_request = Build_Corpus_Request();
 
     let outcome =
-        nomos_spec_orchestration::Run(&SpecCommand::Table(request.clone()), &corpus_request, &StdFileSystem);
+        nomos_spec_orchestration::Run(&SpecCommand::Table(request.clone()), &corpus_request, &FILE_SYSTEM);
 
     let nomos_spec_orchestration::SpecOutcome::Table(result) = outcome
     else

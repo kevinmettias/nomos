@@ -19,7 +19,7 @@
 //! 2. read what this binary was compiled as — [`composition::Host_Variant`] — because
 //!    `env!` resolves against the crate that calls it and cannot be read correctly from
 //!    inside the orchestration crate;
-//! 3. choose a [`nomos_platform::ProcessLauncher`] — [`nomos_platform_std::StdProcessLauncher`]
+//! 3. choose a [`nomos_platform::ProcessLauncher`] — [`nomos_composer_std::LAUNCHER`]
 //!    — for the one provider in that composition that runs a process, the same choice
 //!    `work.rs` already makes for `nomos work`.
 //!
@@ -156,15 +156,15 @@ fn Outcome_For(root: &Path) -> nomos_check_orchestration::CheckOutcome
 fn Judged_Sources(root: &Path, sources: &[SourceFile]) -> nomos_check_orchestration::CheckOutcome
 {
     use composition::Host_Variant;
-    use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
+    use nomos_composer_std::{FILE_SYSTEM, LAUNCHER};
 
     return nomos_check_orchestration::Run(
         sources,
         nomos_check_orchestration::RunContext {
             variant: Host_Variant(),
             root,
-            launcher: &StdProcessLauncher,
-            filesystem: &StdFileSystem,
+            launcher: &LAUNCHER,
+            filesystem: &FILE_SYSTEM,
             workspace: &mut None,
             store: &mut nomos_analysis::MemoryFactStore::New(),
         },

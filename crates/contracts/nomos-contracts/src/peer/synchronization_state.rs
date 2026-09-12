@@ -1,3 +1,5 @@
+
+
 use serde::{Deserialize, Serialize};
 
 const CURRENT_LABEL: &str = "Current";
@@ -67,6 +69,7 @@ impl core::fmt::Display for SynchronizationState
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     #[test]

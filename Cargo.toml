@@ -10,9 +10,19 @@ members = [
     "crates/kernel/nomos-store",
 
     # Band 1p — platform port. Traits in `nomos-platform`, implementations beside it.
-    # `nomos-platform-xvpe` is deliberately absent until XVPE stabilizes.
+    # `nomos-platform-xvpe` arrived 2026-09-10, when the agent dispatch this
+    # workspace had built moved down into XVPE: nomos is an application over that
+    # engine, and a general capability sitting up here was unreachable by
+    # everything down there. It is one adapter, not a replacement for the port.
     "crates/platform/nomos-platform",
     "crates/platform/nomos-platform-std",
+    "crates/platform/nomos-platform-xvpe",
+
+    # Band 1c - composer. Which backend set a composition root runs on, named once so a
+    # host expresses a platform rather than an implementation of each port. Above the
+    # platform tier because it selects from it; below every host because it decides
+    # nothing a host has not asked for, and orchestrates nothing at all. `P88`.
+    "crates/composer/nomos-composer-std",
 
     # Band 19 — substrate. Territory and VerificationPredicate, the two ledger-agnostic
     # primitives `OD-LEDGER-037` found underneath nomos-agent-contracts' reuse of
@@ -373,6 +383,8 @@ nomos-model = { path = "crates/kernel/nomos-model" }
 nomos-store = { path = "crates/kernel/nomos-store" }
 nomos-platform = { path = "crates/platform/nomos-platform" }
 nomos-platform-std = { path = "crates/platform/nomos-platform-std" }
+nomos-platform-xvpe = { path = "crates/platform/nomos-platform-xvpe" }
+nomos-composer-std = { path = "crates/composer/nomos-composer-std" }
 nomos-scope-verification = { path = "crates/substrate/nomos-scope-verification" }
 nomos-ledger = { path = "crates/substrate/nomos-ledger" }
 nomos-capability = { path = "crates/substrate/nomos-capability" }
@@ -431,12 +443,9 @@ nomos-spec-project = { path = "crates/spec/nomos-spec-project" }
 
 serde = { version = "1", default-features = false, features = ["derive", "std"] }
 serde_json = "1"
-# `nomos-lsp`'s own transport and wire types. `lsp-server` is a synchronous JSON-RPC
-# transport over stdio with no async runtime dependency of its own -- this workspace has
-# none anywhere else (`Cargo.lock` carries no `tokio` or `async-std` today), so this pairing
-# is the one that does not introduce one for a single crate.
-lsp-server = "0.10.0"
-lsp-types = "0.97.0"
+# The LSP transport and wire types used to be pinned here. They moved to
+# `xvpe-language-server-backend-lsp` on 2026-09-10 with the server itself: `nomos-lsp` now
+# supplies only the thing that judges, and names no protocol library at all.
 base64 = "0.22"
 blake3 = "1"
 sha2 = "0.10"

@@ -123,6 +123,7 @@ fn Compute_Fact_Key(subject: SubjectId, guarantee: Guarantee, context: FactConte
 #[cfg(test)]
 mod tests
 {
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use crate::payload::{Parse_Payload, Problem, ProblemKind};
     use nomos_contracts::Digest128;
@@ -163,6 +164,14 @@ mod tests
     /// apart without this test changing.
     struct NoDirectory;
 
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for NoDirectory
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
+
     impl FileSystem for NoDirectory
     {
         fn Read_To_String(&self, path: &Path) -> Result<String, FileSystemError>
@@ -201,6 +210,14 @@ mod tests
     {
         listing: Vec<std::path::PathBuf>,
         files: std::collections::BTreeMap<std::path::PathBuf, String>,
+    }
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for FakeFileSystem
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
     impl FileSystem for FakeFileSystem
@@ -299,6 +316,14 @@ mod tests
         directory: std::path::PathBuf,
         file: std::path::PathBuf,
         text: String,
+    }
+
+    /// Falls through to the real filesystem, so it promises what the real one does: nothing.
+    impl Strategy for RealTreeExceptRequirements
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::None;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::NotApplicable;
     }
 
     impl FileSystem for RealTreeExceptRequirements

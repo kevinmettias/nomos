@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:1bcbfd47fb68464d2bf15c89de6f8372c7f56ef018b0d62b8c31aaafaf5c97b6",
-  "inputs_digest": "sha256:5c8c9a32e06af6f3cb8ee425bee8648a93efc9a48c4ef312ea7d65097a646ee3",
+  "content_digest": "sha256:c40f854662899413befa0608764a67702b25bb25044773b156c09dfeca4ab1fe",
+  "inputs_digest": "sha256:29d0820c2ecebcf2365790b801a88dbf34e4f4fb8d7d284fd26483ad087107b7",
   "sections": [
     [
       "Documents",
-      218
+      221
     ],
     [
       "Sections",
-      1768
+      1791
     ],
     [
       "Source blocks",
-      6119
+      6188
     ]
   ],
   "inputs": [
@@ -537,6 +537,11 @@
     },
     {
       "content": "documents",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md@authored",
+      "hash": "sha256:5a4499b293dcf3cd5427520182b60d4f21d816e6a0f1733e35cfaee37721a099"
+    },
+    {
+      "content": "documents",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored",
       "hash": "sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30"
     },
@@ -723,7 +728,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md@authored",
-      "hash": "sha256:cffa2a69329d9e1d534c0ee83672d98b60abe136e368795182a6293ea72c0d93"
+      "hash": "sha256:5c7849568533836d07c6844c09979f45b1d256845c3b09136bb51a9a9d5137f5"
     },
     {
       "content": "documents",
@@ -819,6 +824,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored",
       "hash": "sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored",
+      "hash": "sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc"
     },
     {
       "content": "documents",
@@ -943,7 +953,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md@authored",
-      "hash": "sha256:7c00cbb230b504b22e7922e6d767d0c0a9bd413158db489b9c851c70d34f83fe"
+      "hash": "sha256:457437d835ee6b4b56539ca48bf573783f4502b074bc23802d2abc3ed1386884"
     },
     {
       "content": "documents",
@@ -974,6 +984,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md@authored",
       "hash": "sha256:66d2427694c21ad26b870820393f14285fbb1678448d0a33f4490a61fd0f1118"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md@authored",
+      "hash": "sha256:eef4a3f365ef12f634f1fee88c3cf1b2ad45aad74e471e1daf8c8c26603a4228"
     },
     {
       "content": "documents",
@@ -5022,6 +5037,51 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#1",
+      "hash": "sha256:ecbeb26ac0bfb89eef452a141354fe5616e525b20a592d5745d56a13f8cf417a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#2",
+      "hash": "sha256:b1091e03d9fb4326f060523443a76076f7f6e4c1d24b377b83628f75d8e0ee76"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#6",
+      "hash": "sha256:a53f92e2888af81cbbd030212cc1f9e61b99b2b9f76d9ada37d51747ed246eeb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#11",
+      "hash": "sha256:a6ddfa98452496a8c082842f3b4a0a29be38697bb7db16230c3dd2a570641ade"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#13",
+      "hash": "sha256:6ea12fc0f9e12c27f4373b3467cf518aae43b332bf2525ed72c37865d09fb580"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#15",
+      "hash": "sha256:4295502db3bdb6acdf63af03acdeadd08a627e3ed254f60d1cea84c643869c17"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#18",
+      "hash": "sha256:e489574eb20c9bf9bc1f36460a2685fcd934599abc951ac8b751d37438211785"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#21",
+      "hash": "sha256:086e13afacb22bdc26d9bf6fb84caa8f16dd44fb7b051337e85a03563bf498bc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#24",
+      "hash": "sha256:e29527d8074275a311fa60280ba4853007b19a60a017e2c0fb8ca5196cf979cb"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1",
       "hash": "sha256:b83c25bd2b95b9da20e7382897fc29949ece08f9aca4068545ec8950751b9201"
     },
@@ -7602,6 +7662,41 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#1",
+      "hash": "sha256:f676e921ae15b773e5af486a572d471f7b77a5f0a395c525725e739386929ae0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#2",
+      "hash": "sha256:358bac311f11d33dc8942e5fe764966e389cd8967ea2fb54b3a8932bbc595c3a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#6",
+      "hash": "sha256:d1395c7bb1cde1c2465a21983ade28f0afa9c6c9825f2b748421f619b43a7acf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#11",
+      "hash": "sha256:eafb37c383ff58281d7eec5472f7038f1d46295222aaefb8778b7fe5b3c2af6f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#15",
+      "hash": "sha256:0f30016d6c5ad4504e851db3e177bcf529f40ac2b03402fa33319a23d80eed8f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#18",
+      "hash": "sha256:f43ca094c12a53cf93e41357a00b63960c99079f73e3d228afb62153cf72c31c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#20",
+      "hash": "sha256:af38d383b4c8b0b26e95bbb7d192fa44e916fcc52469fc4edb4ff47026dbf531"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1",
       "hash": "sha256:d324032c57e2c4b9c73c3f4175595a244c033765aecf8976d4c11a0343f037fc"
     },
@@ -8557,8 +8652,8 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#17",
-      "hash": "sha256:0734889e917c5ac645e61b9f46a2c813e114c286d4d225732e4be8b0274987bb"
+      "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#18",
+      "hash": "sha256:3141849b3c566021820971a75259df393e9e56565ccae0e1c41d53c929d70361"
     },
     {
       "content": "headings",
@@ -8739,6 +8834,41 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#15",
       "hash": "sha256:0a572a0bea627e7cf59cdd91b47f651fff081974091e095253bd3002b457862b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#1",
+      "hash": "sha256:8805ca849f2b0b2208f96b518d34302f592e83ecdf5f11898adcf532f5684ebd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#2",
+      "hash": "sha256:0528fe67d2bbc09d489c5e3961e94b34850d802c5994039c762fd9640c6fd2cb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#5",
+      "hash": "sha256:075cd710a82bffb31c8318035b51b60d84565b6dd8b245df90795bf44ac261e5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#10",
+      "hash": "sha256:d234870019a91374132dee8f421bce2661fb4e2e73f2636ddf64a115a6904432"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#14",
+      "hash": "sha256:07a6c884a7cad1bac48a04664fb2b591f3b720d7e113cedd9925cf7d156c5fc8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#18",
+      "hash": "sha256:989d635956ca923a2368ec473faa9d7ab424b178d44277ee6d60d6d52fdb6f8d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#21",
+      "hash": "sha256:c8a0feb3e2ca0085782e66191825ff62dbf977c40d290a6ebdbc33e50c53da74"
     },
     {
       "content": "headings",
@@ -23232,6 +23362,131 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#1",
+      "hash": "sha256:9e46375f88477f6834c623b5eca0209340469559627608b75813ee0859ed4f25"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#3",
+      "hash": "sha256:070460b7e7d32334a7eb1a4fb6ff18ceeeaa11f6df93e791a45576f2f0d2d053"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#4",
+      "hash": "sha256:fe647b542e4162bc6c407c50de034e6d40c5265df5cddb6c32584171a698b9bd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#5",
+      "hash": "sha256:a4029fa6beefa96477b2f79b493e12a54a668ff7c8e49832dc26c7f3d5a0a700"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#6",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#7",
+      "hash": "sha256:dc1bb11e24a4d196176a2e7792cc0a1e55a048d77ecf26596c1ae85fe3460e2f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#8",
+      "hash": "sha256:3ab26787dd542bb3139c8f021cd71065ab3d0657f750f9fac73a26be175fac88"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#9",
+      "hash": "sha256:841399df2b8430e5d8e39df0264a062a66e765b8ba22f8643693cffe3bb6f81c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#10",
+      "hash": "sha256:06449856349229e80e6cfad63802e032491eee888063157ece0c2c9852867c15"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#11",
+      "hash": "sha256:b329b5254cc9d267c86bc04c05f56a24fad14051f8b6258628b7edc2b02a1a56"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#12",
+      "hash": "sha256:b36701d56a7988f9b893fda37653a4b37388b2f6af6e32afb863c4e30102f6c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#13",
+      "hash": "sha256:2bafb1778f8f4884ffa5100bd9ea3582cae908a084734c96d7aa4f6c901e3d5e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#14",
+      "hash": "sha256:aa8daa9b90c5e2d2d95bd43966ae01a773278f5e2babf5702e8fa060c4e955f5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#15",
+      "hash": "sha256:5fe3511627a480bc11ab64fad05ac4265ea4e1c635e2813c56ed417929915996"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#16",
+      "hash": "sha256:799a20e565d57a00bf7a727895203006ee26fbbf3ed89ca6be419477ff4a3e12"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#17",
+      "hash": "sha256:cf9584db9757ad99540f4626003558c0daffcf6494121726653185e1f0457d74"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#18",
+      "hash": "sha256:de0681fb2a14c90548676ce8da45885de9207c99fe642769b71ab66b5e8dc74b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#19",
+      "hash": "sha256:05a1a27a22489450a433ef5ac896681f9713c3f0dca83582f8fddfc73f2fe087"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#20",
+      "hash": "sha256:a919761a13a76748a4ff205cb7bb9dd4e6b20638ae1e4de1a378df7a590ce707"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#21",
+      "hash": "sha256:c333252f320a990056a25f5e8a0d902261e3909f69318c7c939b4c74bf7e3f41"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#22",
+      "hash": "sha256:103a5d6b0bbbca011439e6883f0860eb7722820046f748bfe82c1ec1265f19bb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#23",
+      "hash": "sha256:fcd531f9b529ed429676eadccd26d9befc58b59c0dd27b0fb99914fac3bb1a03"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#24",
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#25",
+      "hash": "sha256:989097b0be905b9ad283a2a659cb164d945378363b1b6f962a656d003fa56d9a"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1",
       "hash": "sha256:84c92233c65230ede8aaf2bbb88c77437278652b8a9b50cd6e8e9f906a83853b"
     },
@@ -32477,6 +32732,111 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#1",
+      "hash": "sha256:975db7fc6a5c39019b0d6e1ab31b9327e5787f9e75dcc3c0b93e91fc2cf5f68e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#3",
+      "hash": "sha256:c8c8840e90855ae217efeaa00625fc0f76e2cf6a9862252b582ff2b088e9d9c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#4",
+      "hash": "sha256:362fb35069e87d020f4be07e4161e86eb34fb656188e76b8ef28bfcc46ec8d5f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#5",
+      "hash": "sha256:e2bc585c256140fadcefdf2355c4977fdd95803ddb9b1c702e69df7aca456228"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#6",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#7",
+      "hash": "sha256:d8d7a24eea5408ac00d63497960e0cee2b9415dc4a1c7efd03b682c5d8ffeeac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#8",
+      "hash": "sha256:6d092c9c2d15c6f56f6321159c5c811dc73e80bfc3a4ac63798a8c3f3db71324"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#9",
+      "hash": "sha256:9fe52b13aea4f0996201354097092dcb6fd21a9b1c650083ef5a41c37949533c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#10",
+      "hash": "sha256:8458fbcb6355bcbaf49ba949da3b384b916e4bfa87dc2260bf7b0122708f10c0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#11",
+      "hash": "sha256:ebf40e77b43609d53abf05f82717136875eb64339a63de52ee128059ca6a5d8f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#12",
+      "hash": "sha256:160211cb11db68c3578e0d0d47b4e058f64e64f37749c8533395558efb6cf807"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#13",
+      "hash": "sha256:8d61264d1d50d76631b8ad34bc5160592139ebbcf42c725cfd876b242722485f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#14",
+      "hash": "sha256:1c066d41b850e89f9579376ee65ac52ba08dc87e75955af59ca9bbbd330fc7fe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#15",
+      "hash": "sha256:fda237b8e7a395cf894b51fe6dec2ec51706684eeab1930818a1fce47ac73633"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#16",
+      "hash": "sha256:a122b6297c416d19ab2efa88d1fbdce14d195cf7a0e1097e62db5a94c272a238"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#17",
+      "hash": "sha256:6b5ca0d3a5430a8673ec7c7c8c67277051493531747e02d19d33334021429ad7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#18",
+      "hash": "sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#19",
+      "hash": "sha256:15848bc32a885f12d14cc821412fe817b2a861002ac01c434e7e9fdbcfe17c61"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#20",
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#21",
+      "hash": "sha256:e98f99ea2475cc1541ee8bb8ed12af0d4e33b42f8137c0552a95e3478904375f"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1",
       "hash": "sha256:7bf1e20e5f29d80bee481f92dc4737e3280a5df74f5ec13751da6d82be38adc0"
     },
@@ -35948,7 +36308,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#9",
-      "hash": "sha256:b438acec01c544ddb2a463e3ebc8b12469a9446500ab0953d4d5d1a642ce8cc0"
+      "hash": "sha256:3439dc4f73188bd421f21d8b8f3c3bf88b26dfeef3ad22566b38166e0b604865"
     },
     {
       "content": "blocks",
@@ -35958,7 +36318,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#11",
-      "hash": "sha256:48c800f8b2845afecd6720a0d6d91bd35af106f841f915388c1ef7d653ee2067"
+      "hash": "sha256:27624445a9289bf16720a47df1b83cf3911311d3a44383717494f2c88ab5b330"
     },
     {
       "content": "blocks",
@@ -35983,17 +36343,22 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#16",
-      "hash": "sha256:5ba9c966fe369777b70b1b3613559c5ee45813fbf002c18e525ea45b7710c571"
+      "hash": "sha256:d443f2a05a109b6d21ada967b1cc4b16e37a79270c1dae674dab712fdcc6aa94"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#17",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:e52bbf7c497f52857af86a3a3bd9c1e4b2417637c59c95cdf2c8d49ad52a767b"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#18",
-      "hash": "sha256:83b203aa734ddea741238982f4df0bd2df55d70dac21bec81a6e5da661070532"
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#19",
+      "hash": "sha256:3e9c2a5f755f95ecc07686ab29b61a4958b842e6f651cd1c1ad8dd7c94b9fda6"
     },
     {
       "content": "blocks",
@@ -36579,6 +36944,116 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#16",
       "hash": "sha256:c0d2e9482b993beebbee813f801d24e18320e86a63d7a258d43c0c0ca445e14b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#1",
+      "hash": "sha256:2b4f3306c5e46895e010bd3fb5240e25aa3d10c5daeae07402543bbb65eabba7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#3",
+      "hash": "sha256:79fc6356e96e662dcec09a0814fa9c59c38132460c23c4002fd05887dfbe01c8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#4",
+      "hash": "sha256:505a410ecbcf4e736585dffff233e62a5202be3e71eda112fe658d7b04aabfae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#6",
+      "hash": "sha256:59b8fb4eb0169826074d95a507f717bd273afe78f95f040e2f14686095a5958f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#7",
+      "hash": "sha256:1f4463ad7fc03d445ab26288f63ac526d07dda77bc8668d6e2e8aaaa98de5496"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#8",
+      "hash": "sha256:7fea3f384c37f28cbd003ecb6129f62690ceb44e73bf97c15e7f35dbb5375d7f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#9",
+      "hash": "sha256:148cda94ba713c0687c95477f68c75a3d41dc34f0e8ad16d8210ad869537adeb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#10",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#11",
+      "hash": "sha256:b2c3a91fcd77b2db107bf9a6d04f6ecfe6a59520a607e7208754ebd08707f2f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#12",
+      "hash": "sha256:7108f50fc68c56f3effbc30296d56ed42276b43aa5e23a36db910b3d2206d5a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#13",
+      "hash": "sha256:abf5582d76cdcf96e04ae0ad859ac76aca9b362fe57b9ed7e95fedfc15343b87"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#14",
+      "hash": "sha256:96611d595b0b2a92fa2c42cc84af2bd38b19d56e5ed8b6a500aa7da3300fd4b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#15",
+      "hash": "sha256:584e1a670f646eed337071293f1c7c61824df684b418ffedb313aff90cbc765b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#16",
+      "hash": "sha256:27d5115acfe713330d9500a8aae93adadfaa1260227e71be5dfec5c0b0cfdb77"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#17",
+      "hash": "sha256:d5df779fc5b7f25bbd68e9723ef54ab61e65137420a143f2e4be7cb347ef917c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#18",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#19",
+      "hash": "sha256:f23deeb2d33c74758baad1ef8197b1f7e0ca380b647dc4cc9f7c50b4c8e3d8c9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#20",
+      "hash": "sha256:99b309c1cae2327c743f467a8295031c5fdaa7015e6b718bfb81a2b3ca29ea90"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#21",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#22",
+      "hash": "sha256:b3a2b3505e31ee9fcf45053e5afadfa8c25844a1b8e32eda8d5176abfcf8fd64"
     },
     {
       "content": "blocks",

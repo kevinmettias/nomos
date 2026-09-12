@@ -5,7 +5,7 @@ use std::num::NonZeroU32;
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_contracts::{
     Cacheability, CancellationBehavior, Compensation, DeterminismStrength, EvidenceClass, ReproducibilityScope, RetryPolicy, RuleId, RunId,
-    SchemaId, Timeout, TraceEquivalence, WorkflowStep,
+    SchemaId, Strategy, Timeout, TraceEquivalence, WorkflowStep,
 };
 use nomos_gate_orchestration::{GateCommand, GateRunOutcome, RuleSelector};
 use nomos_ledger::Territory;
@@ -105,6 +105,14 @@ impl Scripted
     {
         return Self { answers: RefCell::new(answers.into_iter().collect()) };
     }
+}
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for Scripted
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
 impl ProcessLauncher for Scripted

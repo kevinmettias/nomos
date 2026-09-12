@@ -8,6 +8,7 @@
 //! instead, and a run against no scripted answer is a bug in the test rather than a
 //! silent stub.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
 
 /// The stdout a scripted answer hands back. A distinct type from [`Stderr`] only so the
@@ -55,6 +56,14 @@ impl Scripted
 
         return self;
     }
+}
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for Scripted
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
 impl ProcessLauncher for Scripted

@@ -11,6 +11,11 @@ publish.workspace = true
 nomos-agent-contracts = { workspace = true }
 nomos-model-package = { workspace = true }
 nomos-platform = { workspace = true }
+# The dispatch itself, and the bridge from this workspace's launcher onto the
+# surface the engine's adapters take.
+nomos-platform-xvpe = { workspace = true }
+xvpe-agent-execution = { path = "../../../../xvpe/crates/subsystems/xvpe-agent-execution" }
+xvpe-agent-backend-claude-code = { path = "../../../../xvpe/crates/backends/agent/xvpe-agent-backend-claude-code" }
 serde_json = { workspace = true }
 
 [dev-dependencies]

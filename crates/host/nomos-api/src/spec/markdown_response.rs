@@ -15,12 +15,12 @@ use serde::Serialize;
 pub fn Handle_Spec_Markdown(request: &RecordRequest) -> MarkdownResponse
 {
     use super::Build_Corpus_Request;
-    use nomos_platform_std::StdFileSystem;
+    use nomos_composer_std::FILE_SYSTEM;
 
     let corpus_request = Build_Corpus_Request();
 
     let outcome =
-        nomos_spec_orchestration::Run(&SpecCommand::Markdown(request.clone()), &corpus_request, &StdFileSystem);
+        nomos_spec_orchestration::Run(&SpecCommand::Markdown(request.clone()), &corpus_request, &FILE_SYSTEM);
 
     let nomos_spec_orchestration::SpecOutcome::Markdown(result) = outcome
     else

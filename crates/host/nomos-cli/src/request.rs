@@ -99,7 +99,7 @@ mod run_coverage
 
 /// Assembles the store `request` names, and dispatches `submit` against it through
 /// `nomos-spec-orchestration::Submit_Corpus_Request` -- the same composition-root choice `nomos-cli::spec`
-/// already makes for the other nine `SpecCommand` verbs, `nomos_platform_std::StdFileSystem`
+/// already makes for the other nine `SpecCommand` verbs, `nomos_composer_std::FILE_SYSTEM`
 /// as the concrete platform.
 fn Assemble_And_Submit(
     submit: &SubmitRequest,
@@ -141,9 +141,9 @@ fn Submission_Exit_Code(
     notes: &mut impl std::io::Write,
 ) -> ExitCode
 {
-    use nomos_platform_std::StdFileSystem;
+    use nomos_composer_std::FILE_SYSTEM;
 
-    return match nomos_spec_orchestration::Submit_Corpus_Request(assembly, submit, &StdFileSystem)
+    return match nomos_spec_orchestration::Submit_Corpus_Request(assembly, submit, &FILE_SYSTEM)
     {
         Ok(answer) => Report_Accepted(&answer, output),
         Err(SubmitRefusal::Refused(refusal)) =>

@@ -1,13 +1,20 @@
 [package]
 name = "nomos-api-transport"
 version = "0.1.0"
-description = "The transport nomos-api deliberately does not wire: JSON-RPC 2.0 over a TCP socket, serving Gate's three handlers plus Correction's one that OD-HOST-007 and P62-TRANSPORT-MCP-CORRECTION-SURFACE-2 admit, and none of the twenty-one repo-tooling handlers it excludes."
+description = "What this workspace serves over a wire: Gate's three handlers plus Correction's one that OD-HOST-007 and P62-TRANSPORT-MCP-CORRECTION-SURFACE-2 admit, and none of the twenty-one repo-tooling handlers it excludes. The wire itself is XVPE's as of 2026-09-10."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 publish.workspace = true
 
 [dependencies]
+# The engine's service contract, and the strategy vocabulary it declares
+# against. Every byte of the JSON-RPC envelope, the line framing and the socket
+# is `xvpe-remote-call-backend-json`'s; this crate names only the contract, so nothing
+# here can quietly grow a second opinion about the wire.
+xvpe-remote-call = { path = "../../../../xvpe/crates/mechanisms/xvpe-remote-call" }
+xvpe-primitives = { path = "../../../../xvpe/crates/foundations/contracts/xvpe-primitives" }
+
 nomos-api = { workspace = true }
 nomos-contracts = { workspace = true }
 nomos-correction-orchestration = { workspace = true }

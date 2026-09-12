@@ -43,6 +43,12 @@ mod verbs;
 #[path = "store/constants.rs"]
 mod constants;
 
+// The two files a board is kept in, beside the type that reads one of them. Not in
+// `constants.rs`: that file is this ledger's tunable numbers, and these are a published
+// format rather than a number anyone may turn.
+#[path = "store/board_files.rs"]
+mod board_files;
+
 use claiming::{Install_Claim, With_Own_Claim};
 use file::{Decide_Under_Lock, Load_Document, Save_Document};
 use verbs::{Add_Item, Decline_Item, Take_Over, Validate_Current};
@@ -50,6 +56,7 @@ use verbs::{Add_Item, Decline_Item, Take_Over, Validate_Current};
 pub use refusal::{Claim_Refusal, Eligible_Items};
 pub use validation::Validate_Document;
 pub use constants::{LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, SCHEMA_VERSION};
+pub use board_files::{BoardFiles, Board_In, DOCUMENT_FILENAME, LOCK_FILENAME};
 
 use std::path::{Path, PathBuf};
 use std::time::Duration;
@@ -510,6 +517,7 @@ for FileLedger<Files, TimeSource, Lock>
 #[cfg(test)]
 mod tests
 {
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use crate::{ItemKind, ItemOrigin, ItemState};
     use nomos_platform_std::{FileLock, StdFileSystem};
@@ -517,6 +525,14 @@ mod tests
     /// A clock that never moves, so a test's fixture and its assertions read the same
     /// instant the ledger did.
     struct FixedClock(i64);
+
+    /// Fixed instants, so both the values and their timing reproduce.
+    impl Strategy for FixedClock
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::StateTemporal;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
 
     impl Clock for &FixedClock
     {

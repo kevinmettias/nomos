@@ -188,6 +188,7 @@ fn Record_From_Argv(argv: &[String], ran: &Ran, gate: GateOutcome, context: Reco
 #[cfg(test)]
 mod local_tests
 {
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     // A SEPARATE, literal `#[cfg(test)] mod tests` (`finish/tests.rs`) already exercises this
     // module's exported behaviour in depth. It cannot address `Finish_Item` itself:
     // `check-test-coverage` keys a test's companion unit off the file it is textually written
@@ -201,6 +202,14 @@ mod local_tests
     use std::path::PathBuf;
 
     struct FixedClock(i64);
+
+    /// Fixed instants, so both the values and their timing reproduce.
+    impl Strategy for FixedClock
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::StateTemporal;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
 
     impl Clock for &FixedClock
     {
@@ -227,6 +236,14 @@ mod local_tests
     /// A launcher that always exits zero, standing in for a lint step and a predicate that
     /// both pass.
     struct AlwaysZero;
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for AlwaysZero
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
 
     impl ProcessLauncher for &AlwaysZero
     {

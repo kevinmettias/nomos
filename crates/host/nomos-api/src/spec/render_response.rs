@@ -12,7 +12,7 @@ use std::path::PathBuf;
 /// `Table`, `Markdown`, `Freshness` and `Preview`, this verb does write: `run::render::Rendered_Projection`
 /// places a built projection's body and its sidecar under `request.into` through
 /// `nomos_platform::FileSystem::Replace_Atomically`, unconditionally overwriting whatever
-/// was there. This crate already performs real, unauthenticated `StdFileSystem`-backed
+/// was there. This crate already performs real, unauthenticated filesystem-backed
 /// writes over a wire call today -- [`crate::Handle_Work_Claim`] writes a real ledger file at
 /// a caller-named directory -- and `request.into` here plays the same role `directory` does
 /// there: a caller-named root, with the leaf path underneath it chosen by this crate's own
@@ -23,12 +23,12 @@ use std::path::PathBuf;
 pub fn Handle_Spec_Render(request: &RenderRequest) -> RenderResponse
 {
     use super::Build_Corpus_Request;
-    use nomos_platform_std::StdFileSystem;
+    use nomos_composer_std::FILE_SYSTEM;
 
     let corpus_request = Build_Corpus_Request();
 
     let outcome =
-        nomos_spec_orchestration::Run(&SpecCommand::Render(request.clone()), &corpus_request, &StdFileSystem);
+        nomos_spec_orchestration::Run(&SpecCommand::Render(request.clone()), &corpus_request, &FILE_SYSTEM);
 
     let nomos_spec_orchestration::SpecOutcome::Render(result) = outcome
     else

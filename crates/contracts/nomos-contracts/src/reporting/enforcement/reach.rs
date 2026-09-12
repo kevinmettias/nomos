@@ -1,3 +1,7 @@
+
+
+use alloc::vec::Vec;
+
 use serde::{Deserialize, Serialize};
 
 use super::{EnforcementBreach, EnforcerRef, GateCategory};
@@ -81,6 +85,8 @@ impl Reach
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec;
+    use alloc::borrow::ToOwned;
     use super::*;
 
     #[test]

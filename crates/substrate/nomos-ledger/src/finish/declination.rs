@@ -26,5 +26,6 @@ pub struct Declination
     /// Who ended it.
     pub holder: String,
     /// When they ended it.
+    #[serde(with = "nomos_platform::timestamp_serde")]
     pub declined_at: Timestamp,
 }

@@ -1,5 +1,8 @@
 //! Whether a step's result may be reused for a later execution over the same inputs.
 
+use alloc::string::String;
+use alloc::vec::Vec;
+
 use serde::{Deserialize, Serialize};
 
 /// Whether a step's result may be reused for a later execution over the same inputs.
@@ -36,6 +39,8 @@ impl Cacheability
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec;
+    use alloc::borrow::ToOwned;
     use super::*;
 
     #[test]

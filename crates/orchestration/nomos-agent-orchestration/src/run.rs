@@ -181,6 +181,7 @@ fn Judgment_Task(pair: &RoleSurfacePair, finding: &Finding, effort: EffortLevel)
 #[cfg(test)]
 mod tests
 {
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use nomos_platform::{Command, ExitOutcome, ProcessOutput};
 
@@ -188,6 +189,14 @@ mod tests
     {
         outcome: ExitOutcome,
         stdout: String,
+    }
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for Scripted
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
     impl ProcessLauncher for Scripted
@@ -199,6 +208,14 @@ mod tests
     }
 
     struct Unreachable;
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for Unreachable
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
 
     impl ProcessLauncher for Unreachable
     {

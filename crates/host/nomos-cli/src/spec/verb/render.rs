@@ -1,7 +1,7 @@
 //! Rendering `nomos spec render`'s answer, or the refusal saying why it has none.
 //!
 //! Building the profile and placing its two files is `nomos-spec-orchestration::Rendered_Projection`'s
-//! job now, through `nomos-platform-std::StdFileSystem` -- the same composition-root choice
+//! job now, through `nomos-composer-std`'s `FILE_SYSTEM` -- the same composition-root choice
 //! `nomos-cli::work` already makes for the ledger. This module keeps only the writing and
 //! the `ExitCode` a rendering layer is responsible for.
 
@@ -13,9 +13,9 @@ use nomos_spec_project::ProjectError;
 /// Phase 4's renderers, run.
 pub(in crate::spec) fn Render_Profile(assembly: &Assembly, request: &RenderRequest, channels: &mut Channels<'_>) -> ExitCode
 {
-    use nomos_platform_std::StdFileSystem;
+    use nomos_composer_std::FILE_SYSTEM;
 
-    return match nomos_spec_orchestration::Rendered_Projection(assembly, request, &StdFileSystem)
+    return match nomos_spec_orchestration::Rendered_Projection(assembly, request, &FILE_SYSTEM)
     {
         Ok(answer) => Placed_Render(&answer, channels),
         Err(RenderRefusal::Store(error)) => Report_Store_Error(&error, channels.notes),

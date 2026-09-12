@@ -11,6 +11,7 @@
 //! that ends an item (`decline`) — with nothing about `nomos-platform-std` baked into how it
 //! got there.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use std::time::Duration;
 
 use nomos_ledger::{
@@ -72,6 +73,14 @@ fn Item(id: &str) -> LedgerItem
 /// [`nomos_platform::ProcessLauncher`] would do; a launcher that panics if called is the one
 /// that also proves it.
 struct Unreached;
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for Unreached
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
 
 impl nomos_platform::ProcessLauncher for Unreached
 {

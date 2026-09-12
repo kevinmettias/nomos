@@ -1,6 +1,6 @@
 //! Rendering `nomos spec freshness`'s answer, or the refusal saying why it examined nothing.
 //!
-//! `D-128`'s check, run over what `nomos-platform-std::StdFileSystem` holds. Resolving which
+//! `D-128`'s check, run over what `nomos-composer-std`'s `FILE_SYSTEM` holds. Resolving which
 //! profiles to look at and comparing each one against the store is
 //! `nomos-spec-orchestration::Freshness_Of_Render`'s job now; this module keeps the census over the
 //! answer -- how many were checked, which requirements were kept -- and the `ExitCode` a
@@ -21,9 +21,9 @@ pub(in crate::spec) fn Freshness_Of(
     channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    use nomos_platform_std::StdFileSystem;
+    use nomos_composer_std::FILE_SYSTEM;
 
-    return match nomos_spec_orchestration::Freshness_Of_Render(assembly, request, &StdFileSystem)
+    return match nomos_spec_orchestration::Freshness_Of_Render(assembly, request, &FILE_SYSTEM)
     {
         Ok(answer) => Reported_Freshness(assembly, &answer, request, channels),
         Err(FreshnessRefusal::Store(error)) => Report_Store_Error(&error, channels.notes),

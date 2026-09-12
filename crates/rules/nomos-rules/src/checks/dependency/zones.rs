@@ -1,4 +1,4 @@
-//! This workspace's own declared architecture: eleven named zones, which crate belongs to
+//! This workspace's own declared architecture: twelve named zones, which crate belongs to
 //! each, which zones a zone may reach, and the few same-zone edges a real crate needs.
 //!
 //! `OD-RULES-020` decided the shape: a total order over band numbers forces two crates
@@ -17,7 +17,7 @@
 //! line-by-line audit result; this migration carries that population over unchanged; a
 //! misclassification found later is fixed here, the same way a wrong band entry was.
 
-/// One of this workspace's eleven architectural zones.
+/// One of this workspace's twelve architectural zones.
 ///
 /// Ordered so that `derive(PartialOrd)` is never reached for — a zone's own position in
 /// this list means nothing; [`Permits`] is the only source of truth for what a zone may
@@ -29,8 +29,15 @@ pub enum Zone
     /// The shared identity and protocol vocabulary. `nomos-contracts` alone.
     Protocol,
     /// Foundational primitives: subjects, documents, ports, snapshots, exclusion, the
-    /// capability registry, the fact store.
+    /// capability registry, the fact store. The ports live here; an implementation of one
+    /// does not.
     Substrate,
+    /// One concrete implementation of Substrate's platform ports — a real clock, a real
+    /// filesystem, a real subprocess. Its own zone rather than Substrate's so that
+    /// [`Permits`] can say who may reach one: a composer may, and a host may not, which is
+    /// the whole difference between naming a platform and naming an implementation of every
+    /// port in it. `OD-RULES-028`.
+    Backend,
     /// The specification database and its own orchestration layer — sits beside the
     /// kernel rather than above it, per `ARC-ECOSYSTEM-001` and `OD-PROJECT-004`.
     Specification,
@@ -61,9 +68,10 @@ pub enum Zone
 /// Mirrored by `Test_Every_Zone_Should_Be_Matched_Exhaustively`: an exhaustive match over
 /// every variant with no wildcard arm, below. It fails to compile, not merely to pass, if a
 /// variant is added to [`Zone`] without being added there.
-pub const ALL: [Zone; 11] = [
+pub const ALL: [Zone; 12] = [
     Zone::Protocol,
     Zone::Substrate,
+    Zone::Backend,
     Zone::Specification,
     Zone::CapabilityContract,
     Zone::Provider,
@@ -86,6 +94,7 @@ impl core::fmt::Display for Zone
         {
             Self::Protocol => "Protocol",
             Self::Substrate => "Substrate",
+            Self::Backend => "Backend",
             Self::Specification => "Specification",
             Self::CapabilityContract => "Capability Contract",
             Self::Provider => "Provider",
@@ -117,7 +126,22 @@ pub const ZONES: &[(&str, Zone)] = &[
     ("nomos-model", Zone::Substrate),
     ("nomos-store", Zone::Substrate),
     ("nomos-platform", Zone::Substrate),
-    ("nomos-platform-std", Zone::Substrate),
+    // The one crate in this workspace that really opens a file, reads the clock and
+    // starts a process. Backend rather than Substrate so that `Permits` can keep a host
+    // away from it: the four hosts each reached it directly until `P88` gave them a
+    // composer to reach it through, and the manifest edge they dropped is a guard only
+    // until somebody adds the line back. `OD-RULES-028`.
+    ("nomos-platform-std", Zone::Backend),
+    // Not Backend, and the difference is measured rather than assumed: `XvpeLauncher` is
+    // generic over an injected `nomos_platform::ProcessLauncher` and implements no port
+    // itself, so it composes nothing and cannot hand a caller a platform. A bridge between
+    // two port vocabularies is Substrate's kind of thing, and `README.md` already called it
+    // one adapter and not a replacement for the port.
+    ("nomos-platform-xvpe", Zone::Substrate),
+    // The std backend set, named once so a host expresses a platform rather than an
+    // implementation of each port. Substrate because it reaches nothing above the port and
+    // its implementations -- it selects and re-exports, and orchestrates nothing; `P88`.
+    ("nomos-composer-std", Zone::Substrate),
     ("nomos-workspace", Zone::Substrate),
     ("nomos-scope-verification", Zone::Substrate),
     ("nomos-capability", Zone::Substrate),
@@ -211,7 +235,13 @@ pub const SAME_ZONE_EDGES: &[(&str, &str)] = &[
     // anything that snapshots or verifies over them — the same structure the band numbers
     // 10 through 22 used to carry one crate at a time.
     ("nomos-store", "nomos-model"),
-    ("nomos-platform-std", "nomos-platform"),
+    // `nomos-platform-std` -> `nomos-platform` and `nomos-composer-std` ->
+    // `nomos-platform-std` were both named here until `OD-RULES-028` moved the
+    // implementation into `Zone::Backend`. Neither is a same-zone edge any more, so
+    // `Permits` answers both and naming them here would fail
+    // `Test_Same_Zone_Edges_Should_Each_Name_Two_Members_Of_The_Same_Zone`.
+    ("nomos-platform-xvpe", "nomos-platform"),
+    ("nomos-composer-std", "nomos-platform"),
     ("nomos-workspace", "nomos-model"),
     ("nomos-workspace", "nomos-store"),
     ("nomos-scope-verification", "nomos-model"),
@@ -283,12 +313,22 @@ pub fn Zone_Of(name: &str) -> Option<Zone>
 #[must_use]
 pub fn Permits(from: Zone, to: Zone) -> bool
 {
-    use Zone::{Agent, ApplicationService, CapabilityContract, Host, Protocol, Provider, RepoTooling, Rules, Specification, Substrate, Verification};
+    use Zone::{Agent, ApplicationService, Backend, CapabilityContract, Host, Protocol, Provider, RepoTooling, Rules, Specification, Substrate, Verification};
 
     return match from
     {
         Protocol => false,
-        Substrate => matches!(to, Protocol),
+        // Substrate reaches Backend, and only Substrate does. `nomos-composer-std` is the
+        // one member that uses the permission -- measured 2026-09-12, it is the only crate
+        // in this workspace with a production dependency on `nomos-platform-std`, every
+        // other edge being a dev-dependency `violations::Is_Dev_Dependency` already
+        // excludes. Granted zone-wide rather than to the composer alone because `Permits`
+        // answers by zone and a per-crate permission is `SAME_ZONE_EDGES`'s shape, which
+        // does not apply across zones; a `Zone::Composer` would narrow it, and
+        // `OD-RULES-028` records why one member is not yet worth a row.
+        Substrate => matches!(to, Protocol | Backend),
+        // A real clock and a real subprocess still need the port they implement.
+        Backend => matches!(to, Protocol | Substrate),
         Specification | CapabilityContract => matches!(to, Protocol | Substrate),
         Provider | Rules => matches!(to, Protocol | Substrate | CapabilityContract),
         // Measured directly, not proposed: nomos-agent-contracts and nomos-agent-executor-
@@ -303,6 +343,9 @@ pub fn Permits(from: Zone, to: Zone) -> bool
         // correction lifecycle that already produced the type, rather than leaving the
         // permission this arm already granted undocumented.
         ApplicationService => matches!(to, Protocol | Substrate | CapabilityContract | Provider | Rules | Agent),
+        // Backend is deliberately absent, and is the only zone below Host that is. A host
+        // names a platform through `nomos-composer-std` (Substrate); reaching an
+        // implementation directly is the edge `OD-RULES-028` closed.
         Host => matches!(
             to,
             Protocol | Substrate | Specification | CapabilityContract | Provider | Rules | Agent | ApplicationService | RepoTooling
@@ -363,15 +406,16 @@ mod tests
             {
                 Zone::Protocol => 0,
                 Zone::Substrate => 1,
-                Zone::Specification => 2,
-                Zone::CapabilityContract => 3,
-                Zone::Provider => 4,
-                Zone::Rules => 5,
-                Zone::Agent => 6,
-                Zone::ApplicationService => 7,
-                Zone::RepoTooling => 8,
-                Zone::Host => 9,
-                Zone::Verification => 10,
+                Zone::Backend => 2,
+                Zone::Specification => 3,
+                Zone::CapabilityContract => 4,
+                Zone::Provider => 5,
+                Zone::Rules => 6,
+                Zone::Agent => 7,
+                Zone::ApplicationService => 8,
+                Zone::RepoTooling => 9,
+                Zone::Host => 10,
+                Zone::Verification => 11,
             };
         }
 

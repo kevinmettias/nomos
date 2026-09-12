@@ -32,8 +32,30 @@
 //! workspace entirely. A dependency added here makes the protocol Nomos-shaped and
 //! forces those peers to vendor a Rust crate in order to agree with us. `serde` is the
 //! single exception, because the artifact a peer really reads is the JSON Schema
-//! generated from these declarations. `tests/contract/contracts_names_nothing.rs`
-//! holds the line.
+//! generated from these declarations.
+//! `tests/contract/tests/boundaries/graph.rs` holds the line.
+//!
+//! # What machine can run this
+//!
+//! `core` plus an allocator, and nothing else. The crate declares `#![no_std]` unless its
+//! default `std` feature is on, and both freestanding triples the gate compiles --
+//! `x86_64-unknown-none` and `thumbv7em-none-eabihf` -- build it.
+//!
+//! This follows from what the crate already is rather than adding a constraint to it. A
+//! peer that must agree with this vocabulary may be a service in another language, a
+//! client in TypeScript, or a platform with no operating system under it; a protocol
+//! vocabulary that cannot be stated without a host is one such a peer cannot hold. The
+//! only capability it genuinely needs is allocation, because its names are owned strings
+//! and its collections owned vectors.
+//!
+//! **The floor is declared in `Cargo.toml`, not inherited.** This is the one crate here
+//! that does not take `serde` through `workspace = true`, and the reason is a trap worth
+//! naming: inheriting a workspace dependency *unions* its feature list with the member's,
+//! so `default-features = false` does not remove a feature the workspace entry names --
+//! and that entry names `std`. Inherited, this crate compiles clean under
+//! `cargo check --no-default-features` on a host and fails with nearly two thousand errors
+//! on a target that has no `std`, because `serde` was built with it. Measured directly,
+//! both ways. A host check is not a portability check.
 //!
 //! # The honesty vocabularies
 //!
@@ -68,12 +90,15 @@
 //! a subsystem, and no reference graph can see intent.
 //!
 //! The intent here is the band. `OD-CONTRACTS-001` admits a type when peers on both sides
-//! of a boundary need one stable representation of it, and `contracts_names_nothing`
+//! of a boundary need one stable representation of it, and `boundaries/graph.rs`
 //! asserts this crate depends on serde and nothing else. Five crates would make every
 //! consumer name five, and would give five places for the answer to "is this vocabulary
 //! authoritative" to drift apart.
 
+#![cfg_attr(not(feature = "std"), no_std)]
 #![forbid(unsafe_code)]
+
+extern crate alloc;
 
 mod authority;
 mod contract_version;

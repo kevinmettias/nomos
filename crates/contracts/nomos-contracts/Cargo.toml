@@ -7,15 +7,29 @@ rust-version.workspace = true
 license.workspace = true
 publish.workspace = true
 
-# This dependency list is a contract, not a convenience, and `contracts_names_nothing`
-# in tests/contract asserts it. Every type here is copied into a KnowledgeWorkbench or
+# This dependency list is a contract, not a convenience, and
+# `tests/contract/tests/boundaries/graph.rs` asserts it. Every type here is copied into a KnowledgeWorkbench or
 # XVPE implementation that has never seen this repository; a dependency added here makes
 # the protocol Nomos-shaped and forces a peer to vendor a Rust crate in order to speak it.
 #
 # `serde` earns its place because the neutral artifact a peer actually reads is the JSON
 # Schema generated from these types, not the Rust. `serde_json` is deliberately NOT here.
 [dependencies]
-serde = { workspace = true }
+# The one crate in this workspace that does NOT inherit the workspace serde entry, and
+# the exception is the whole point. Inheriting a workspace dependency UNIONS its feature
+# list with the member's, so `default-features = false` does not remove a feature the
+# workspace entry names explicitly -- and that entry names `std`. Inheriting here would
+# leave a crate that declares `#![no_std]`, compiles on the host, and fails on a target
+# that has no `std`, because serde would have been built with it. Declared directly so
+# this crate's floor is stated here rather than decided by the workspace entry.
+serde = { version = "1", default-features = false, features = ["derive", "alloc"] }
+
+# A peer that must agree with this vocabulary may have no operating system under it.
+# `std` is on by default, so a hosted build is unchanged; turning it off leaves a crate
+# that needs only `core` and an allocator.
+[features]
+default = ["std"]
+std = ["serde/std"]
 
 [lints]
 workspace = true

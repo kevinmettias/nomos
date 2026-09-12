@@ -8,6 +8,7 @@ pub use lock_acquisition::LockAcquisition;
 pub use lock_error::LockError;
 pub use stale_takeover::StaleTakeover;
 
+use nomos_contracts::Strategy;
 use std::time::Duration;
 
 /// Exclusion across processes that share a filesystem and nothing else.
@@ -31,7 +32,17 @@ use std::time::Duration;
 /// would put two unrelated time bases on either side of one subtraction — which is a
 /// bug that presents as a lock that is never stale, or as one that is always stale, and
 /// which does so only on the machine where the two happen to disagree.
-pub trait CrossProcessLock
+/// # What an implementor promises
+///
+/// The supertrait is [`nomos_contracts::Strategy`], so every implementor states its
+/// determinism triple. This is the seam where that question is sharpest and where it had
+/// no answer: the twenty-nine types in this workspace that declared a triple were rules,
+/// providers and formats, and not one of them was a port -- while the implementations
+/// that actually cross the machine boundary, and the doubles that stand in for them,
+/// declared nothing. The real one promises nothing and says so; a double built from fixed
+/// data reproduces and says that. A caller reading `S::STRENGTH` can tell them apart
+/// without knowing either type.
+pub trait CrossProcessLock: Strategy
 {
     /// The guard type released on drop.
     type Guard;

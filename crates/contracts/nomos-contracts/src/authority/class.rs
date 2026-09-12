@@ -1,3 +1,5 @@
+
+
 use serde::{Deserialize, Serialize};
 
 const READ_LABEL: &str = "Read";
@@ -81,6 +83,7 @@ impl core::fmt::Display for Class
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     #[test]

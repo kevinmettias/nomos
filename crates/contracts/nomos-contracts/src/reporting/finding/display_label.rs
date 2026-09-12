@@ -71,6 +71,7 @@ impl core::fmt::Display for DisplayLabel
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     /// `Label` is the `Display` form every variant renders through. `NotApplicable`'s

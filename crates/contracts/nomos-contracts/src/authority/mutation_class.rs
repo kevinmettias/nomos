@@ -1,3 +1,5 @@
+
+
 use serde::{Deserialize, Serialize};
 
 use super::AuthorityClass;
@@ -76,6 +78,7 @@ impl core::fmt::Display for MutationClass
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     #[test]

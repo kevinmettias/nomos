@@ -1,28 +1,23 @@
 pub const fn nomos_api_transport::ServedMethod::Name(self) -> &'static str
+pub const nomos_api_transport::NomosApiService::SCOPE: ReproducibilityScope
+pub const nomos_api_transport::NomosApiService::STRENGTH: DeterminismStrength
+pub const nomos_api_transport::NomosApiService::TRACE: TraceEquivalence
 pub const nomos_api_transport::ServedMethod::REGISTRY: [Self; 4]
-pub const nomos_api_transport::WireError::INTERNAL_ERROR: i32
-pub const nomos_api_transport::WireError::INVALID_PARAMETERS: i32
-pub const nomos_api_transport::WireError::INVALID_REQUEST: i32
-pub const nomos_api_transport::WireError::METHOD_NOT_FOUND: i32
-pub const nomos_api_transport::WireError::PARSE_ERROR: i32
-pub const nomos_api_transport::WireResponse::VERSION: &'static str
 pub enum nomos_api_transport::ServedMethod
 pub enum variant nomos_api_transport::ServedMethod::Correction
 pub enum variant nomos_api_transport::ServedMethod::GateExplain
 pub enum variant nomos_api_transport::ServedMethod::GatePlan
 pub enum variant nomos_api_transport::ServedMethod::GateRun
-pub fn nomos_api_transport::Answer(line: &str) -> WireResponse
 pub fn nomos_api_transport::CorrectionParameters::Command(&self) -> CorrectionCommand
 pub fn nomos_api_transport::FindingParameters::Query(&self) -> FindingQuery
 pub fn nomos_api_transport::FindingParameters::Root(&self) -> PathBuf
 pub fn nomos_api_transport::GateParameters::Command(&self) -> GateCommand
-pub fn nomos_api_transport::Serve(listener: &TcpListener) -> std::io::Result<()>
-pub fn nomos_api_transport::Serve_Connection(stream: &TcpStream) -> std::io::Result<()>
+pub fn nomos_api_transport::NomosApiService::Answer(&self, method: &str, parameters: &str) -> RemoteCallOutcome
+pub fn nomos_api_transport::NomosApiService::Served_Methods(&self) -> Vec<&'static str>
 pub fn nomos_api_transport::ServedMethod::Named(name: &str) -> Option<Self>
 pub fn nomos_api_transport::ServedMethod::Operation(self) -> OperationName
-pub fn nomos_api_transport::WireError::New(code: i32, message: impl Into<String>) -> Self
-pub fn nomos_api_transport::WireResponse::Answering(id: serde_json::Value, result: serde_json::Value) -> Self
-pub fn nomos_api_transport::WireResponse::Refusing(id: serde_json::Value, error: WireError) -> Self
+pub impl nomos_api_transport::NomosApiService implements RemoteCallStrategy
+pub impl nomos_api_transport::NomosApiService implements Strategy
 pub struct field nomos_api_transport::CorrectionParameters::commit: bool
 pub struct field nomos_api_transport::CorrectionParameters::root: Option<PathBuf>
 pub struct field nomos_api_transport::FindingParameters::location: String
@@ -32,19 +27,7 @@ pub struct field nomos_api_transport::GateParameters::exclude: Vec<String>
 pub struct field nomos_api_transport::GateParameters::include: Vec<String>
 pub struct field nomos_api_transport::GateParameters::root: Option<PathBuf>
 pub struct field nomos_api_transport::GateParameters::rules: Vec<String>
-pub struct field nomos_api_transport::WireError::code: i32
-pub struct field nomos_api_transport::WireError::message: String
-pub struct field nomos_api_transport::WireRequest::id: serde_json::Value
-pub struct field nomos_api_transport::WireRequest::jsonrpc: String
-pub struct field nomos_api_transport::WireRequest::method: String
-pub struct field nomos_api_transport::WireRequest::parameters: serde_json::Value
-pub struct field nomos_api_transport::WireResponse::error: Option<WireError>
-pub struct field nomos_api_transport::WireResponse::id: serde_json::Value
-pub struct field nomos_api_transport::WireResponse::jsonrpc: &'static str
-pub struct field nomos_api_transport::WireResponse::result: Option<serde_json::Value>
 pub struct nomos_api_transport::CorrectionParameters
 pub struct nomos_api_transport::FindingParameters
 pub struct nomos_api_transport::GateParameters
-pub struct nomos_api_transport::WireError
-pub struct nomos_api_transport::WireRequest
-pub struct nomos_api_transport::WireResponse
+pub struct nomos_api_transport::NomosApiService

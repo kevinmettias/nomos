@@ -32,3 +32,18 @@ impl core::fmt::Display for AgentExecutionError
         };
     }
 }
+
+impl AgentExecutionError
+{
+    /// The engine's own reason for producing no answer, as this workspace's.
+    ///
+    /// The wildcard is not laziness: the engine's error is `#[non_exhaustive]`,
+    /// so a variant added down there arrives here as something this workspace
+    /// has not yet decided about, and the honest reading of "we do not know what
+    /// this is" is that no answer was produced.
+    #[must_use]
+    pub fn From_Engine(error: xvpe_agent_execution::AgentExecutionError) -> Self
+    {
+        return Self::Unavailable(error.to_string());
+    }
+}

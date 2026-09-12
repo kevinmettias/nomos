@@ -63,7 +63,7 @@ mod exit_code;
 pub(crate) use exit_code::ExitCode;
 pub(crate) use nomos_gate_orchestration::{FindingQuery, GateCommand};
 use nomos_platform::Clock;
-use nomos_platform_std::{StdFileSystem, StdProcessLauncher, SystemClock};
+use nomos_composer_std::{CLOCK, FILE_SYSTEM, LAUNCHER};
 
 use crate::arguments::Named_Value_From_String_Arguments;
 use nomos_rules::SourceFile;
@@ -89,8 +89,8 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
                 walked,
                 nomos_gate_orchestration::GateEnvironment {
                     variant: composition::Host_Variant(),
-                    launcher: &StdProcessLauncher,
-                    filesystem: &StdFileSystem,
+                    launcher: &LAUNCHER,
+                    filesystem: &FILE_SYSTEM,
                 },
                 command,
                 query,
@@ -105,13 +105,13 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
 fn Run_Verb(command: &GateCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
     let walked = sources::Walked_Sources(&command.root);
-    let run = nomos_gate_orchestration::Fresh_Run_Id(SystemClock.Now());
+    let run = nomos_gate_orchestration::Fresh_Run_Id(CLOCK.Now());
     let result = nomos_gate_orchestration::Run_Gate(
         walked,
         nomos_gate_orchestration::GateEnvironment {
             variant: composition::Host_Variant(),
-            launcher: &StdProcessLauncher,
-            filesystem: &StdFileSystem,
+            launcher: &LAUNCHER,
+            filesystem: &FILE_SYSTEM,
         },
         command,
         run,

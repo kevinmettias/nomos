@@ -4,8 +4,13 @@
 //! `nomos-mcp`'s own module doc draws a stricter boundary than its sibling
 //! `nomos-api-transport` needs: rather than calling `nomos_api::Handle_*` directly and
 //! having to be policed by name the way `transport_registry.rs` polices that crate, it
-//! depends on `nomos-api-transport` alone and reaches every Gate verb by re-serializing a
-//! `tools/call` as the identical JSON-RPC line that crate's own `Answer` already reads. A
+//! depends on `nomos-api-transport` alone and reaches every Gate verb through that crate's
+//! own `NomosApiService`, under the name the client asked for. (Until `OD-HOST-013` it did
+//! that by re-serializing each `tools/call` into a synthetic JSON-RPC line and handing it
+//! to that crate's own parser -- a round trip through a wire format neither side was
+//! reading off a wire, which existed only because the two had no shared contract to meet
+//! at. The boundary this module asserts is the same either way: it is the dependency edge,
+//! not the calling convention.) A
 //! dependency on `nomos-api` or on any orchestration crate would be the only way that
 //! boundary could quietly widen -- there would be no call to grep for the way
 //! `transport_registry.rs` greps for one, because the crate would not need a call to reach a
@@ -35,10 +40,11 @@ fn Test_The_Mcp_Crate_Should_Depend_On_Nothing_But_The_Transport_It_Projects()
         internal,
         vec![TRANSPORT],
         "{CRATE} depends on {internal:?} inside this workspace; it must depend on {TRANSPORT} \
-         alone. A tools/call reaches a Gate handler only by re-serializing the call as the \
-         line {TRANSPORT}'s own Answer already reads -- a second internal dependency here is \
-         the only way that could quietly widen, since there would be no call to police the \
-         way nomos-api-transport's own registry already is."
+         alone. A tools/call reaches a Gate handler only through {TRANSPORT}'s own served \
+         surface, under a name that crate's own registry admits -- a second internal \
+         dependency here is the only way that could quietly widen, since there \
+         would be no call to police the way nomos-api-transport's own registry \
+         already is."
     );
 }
 

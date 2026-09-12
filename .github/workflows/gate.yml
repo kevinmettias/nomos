@@ -98,6 +98,13 @@ jobs:
       # The rationale for building it from crates.io, and for pinning the version, is beside
       # `Supply chain` below where it was published.
       #
+      # The ordering is held by a test now, not by this comment:
+      # `nomos-cli`'s `tests/gate_step/step_order.rs` asserts that every `cargo install` here
+      # precedes the first step running `cargo test`, and its own doc records why the obvious
+      # assertion -- that the install precedes every step *naming* the tool -- is vacuous:
+      # `Test` never names it, because the launch happens inside a provider. Moving this step
+      # back below now fails that test rather than going unnoticed for another year.
+      #
       # Both hosts, unlike the `Supply chain` step it was written for. That step is Linux-only
       # because its *verdict* has no host in it; this install is not about a verdict but about
       # a binary being present for tests that launch it. `Determinism` runs
@@ -174,6 +181,41 @@ jobs:
       - name: Determinism
         if: matrix.os == 'windows-latest'
         run: cargo test --no-fail-fast -p nomos-analysis -p nomos-workspace -p nomos-spec-bundle -p nomos-spec-project -p nomos-lang-rust -p nomos-lang-rust-scan -p nomos-integration-tests -p nomos-spec-store
+
+      # A crate that declares a `no_std` floor and is never compiled where there is no
+      # `std` has an unchecked claim, not a portable crate. `cargo check
+      # --no-default-features` on the host does not test it: the host `std` is still
+      # linked, so the crate passes while depending on something that requires it. Only a
+      # target without a standard library answers the question, and two are used because
+      # they disagree -- `x86_64-unknown-none` has 64-bit atomics and the MCU triple does
+      # not, so the first passing is not evidence for the second.
+      #
+      # The crate list is derived from the source rather than written here, so a crate that
+      # declares a floor is gated the day it lands instead of the day somebody remembers to
+      # add it. An empty derived list fails the step: a gate that cannot find its subject
+      # must say so rather than report a clean result over nothing.
+      #
+      # Linux only, for the reason the compatibility floor above gives: this workspace has
+      # no conditionally-compiled code, so a compilability question has no host in it.
+      - name: Install freestanding targets
+        if: matrix.os == 'ubuntu-latest'
+        run: rustup target add x86_64-unknown-none thumbv7em-none-eabihf
+
+      - name: Portability floor
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          set -euo pipefail
+          crates=$(grep -rlE '^#!\[(cfg_attr\(.*)?no_std' --include=lib.rs crates | sed 's#/src/lib.rs##' | xargs -r -n1 basename)
+          if [ -z "$crates" ]; then
+            echo "No crate declares a no_std floor; this gate has lost its subject." >&2
+            exit 1
+          fi
+          for crate in $crates; do
+            for triple in x86_64-unknown-none thumbv7em-none-eabihf; do
+              echo "== $crate on $triple"
+              cargo check -p "$crate" --no-default-features --target "$triple"
+            done
+          done
 
       # The boundary assertions run as ordinary tests above. This step names them
       # separately so a failure is legible in the job list rather than buried among

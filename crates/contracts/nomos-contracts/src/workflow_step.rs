@@ -16,6 +16,9 @@
 //! boundary and for `nomos-gate-orchestration`'s own first real declaration against
 //! this shape, over the one real execution this workspace has today.
 
+use alloc::string::String;
+use alloc::vec::Vec;
+
 mod cacheability;
 mod cancellation_behavior;
 mod compensation;
@@ -92,7 +95,11 @@ impl WorkflowStep
     #[must_use]
     pub fn Is_Coherent(&self) -> bool
     {
-        if !Declaration_Is_Coherent(self.determinism_strength, self.trace_equivalence)
+        if !Declaration_Is_Coherent(
+            self.determinism_strength,
+            self.reproducibility_scope,
+            self.trace_equivalence,
+        )
         {
             return false;
         }
@@ -116,7 +123,7 @@ impl WorkflowStep
 mod tests
 {
     use super::*;
-    use std::num::NonZeroU32;
+    use core::num::NonZeroU32;
 
     #[test]
     fn Test_Is_Coherent_Should_Accept_A_Step_With_No_Retry()

@@ -16,6 +16,7 @@
 //! Every test drives `nomos_scope_verification` through `nomos_ledger`'s public surface:
 //! [`FileLedger::Add`], [`ExclusionLedger::Claim`] and [`Finish_Item`].
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_ledger::{
     ExclusionLedger, FileLedger, Finish_Item, Finishing, FinishRefusal, ItemId, ItemKind,
     ItemOrigin, ItemState, LedgerDocument, LedgerItem, ClaimRefusal, AddRefusal, SCHEMA_VERSION,
@@ -27,6 +28,14 @@ use std::path::{Path, PathBuf};
 use std::time::Duration;
 
 struct FixedClock(i64);
+
+/// Fixed instants, so both the values and their timing reproduce.
+impl Strategy for FixedClock
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::StateTemporal;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
 
 impl Clock for &FixedClock
 {
@@ -108,6 +117,14 @@ fn Item_Reserving(id: &str, territory: Territory, verification: Option<Verificat
 /// pass -- what is under test is that the predicate crosses the boundary and gets run at all,
 /// not what a real `cargo test` reports.
 struct AlwaysZero;
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for AlwaysZero
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
 
 impl ProcessLauncher for &AlwaysZero
 {

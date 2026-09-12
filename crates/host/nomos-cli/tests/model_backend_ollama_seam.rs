@@ -2,7 +2,7 @@
 //!
 //! `P43-AGENT-CANONICAL-SEAM-2` moved the call this file once documented --
 //! `agent/dispatch.rs::Dispatch_Task` calling `nomos_model_backend_ollama::
-//! Execute_Task(task, &StdProcessLauncher)` directly for `--model-backend ollama` -- into
+//! Execute_Task(task, &LAUNCHER)` directly for `--model-backend ollama` -- into
 //! `nomos-agent-orchestration`'s own `Run_Agent_Execute`/`Run_Agent_Judgment`, generic over
 //! `ProcessLauncher` rather than fixed here. `nomos-cli` no longer names this crate in its
 //! own production dependencies; it reaches it only transitively, through the shared seam.
@@ -22,6 +22,7 @@
 //! backend has no `denied_tool_uses` or dollar cost to report -- out, or an
 //! `AgentExecutionError` otherwise.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_model_backend_ollama::{AgentExecutionError, Execute_Task};
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
@@ -37,6 +38,14 @@ struct Scripted
 {
     outcome: ExitOutcome,
     stdout: String,
+}
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for Scripted
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
 impl ProcessLauncher for Scripted

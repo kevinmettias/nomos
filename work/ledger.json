@@ -61394,14 +61394,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-lspfam",
-        "acquired_at": 1788745239,
-        "lease_expires_at": 1788752439
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -61413,9 +61409,37 @@
         ],
         "timeout_seconds": 900
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "gate_step"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 13 tests\ntest lint_step::Test_Only_One_Step_Should_Be_Named_Lint ... ok\ntest excuses::Test_No_Step_In_The_Gate_Should_Excuse_Itself ... ok\ntest vacuity::Test_The_Workflow_Should_Not_Appear_Empty ... ok\ntest pinning::Test_The_Supply_Chain_Tool_Should_Be_Installed_At_A_Chosen_Version ... ok\ntest pinning::Test_Every_Action_Should_Be_Pinned_To_A_Commit ... ok\ntest lint_step::Test_The_Derived_Lint_Step_Should_Still_Be_Clippy ... ok\ntest excuses::Test_The_Excuse_Check_Should_Reject_An_Excused_Step ... ok\ntest lint_step::Test_The_Rules_Step_Should_Not_Be_The_Lint_Step ... ok\ntest pinning::Test_The_Gate_Should_Declare_The_Token_It_Runs_With ... ok\ntest rules_step::Test_A_Scripted_Rules_Step_Should_Not_Satisfy_That_Assertion ... ok\ntest rules_step::Test_This_Repository_Gate_Should_Run_The_Rules ... ok\ntest pinning::Test_The_Pin_Check_Should_Reject_An_Action_On_A_Tag ... ok\ntest rules_step::Test_The_Rules_Step_Should_Judge_The_Whole_Workspace ... ok\n\ntest result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s\n     Running tests\\gate_step\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\gate_step-f433a0f326ac20cd.exe)\n",
+        "verified_at": 1789232638,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "335af4aeb806d88db471d83a7ab4bc37cafb17f9"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "nomos-lspfam",
+          "acquired_at": 1788745239,
+          "lease_expires_at": 1788752439
+        }
+      ],
       "declined": null
     },
     {
@@ -62368,6 +62392,1395 @@
         },
         "revision": "1cf785a5f80fcfd6de2b9951451a6d94a682145c"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-HOST-013-PROTOCOL-SURFACES-TO-XVPE",
+      "title": "OD-HOST-013: the three protocol surfaces are the engine's, and these crates keep only their verbs",
+      "why": "OD-PLATFORM-003 settled that this workspace is an application over XVPE and moved the agent dispatch down on that basis, but left the same test unasked of everything else up here. Three crates were complete general protocol implementations with no XVPE consumer: nomos-api-transport held JSON-RPC 2.0, nomos-mcp held an MCP server, nomos-lsp held a language server. 'No consumer over there yet' is not a reason to keep a general capability here -- what decides is what the thing is. The line runs between carrying a message and knowing what it says, and all three had both halves welded together. Two duplications fell out of separating them: the line framing and the unrenderable-response constant were written twice, once per crate, and nomos-mcp reached its sibling by re-serializing every tools/call into a synthetic JSON-RPC line for that crate's own parser -- a round trip through a wire format neither side was reading off a wire.",
+      "done_when": "The JSON-RPC envelope, the line framing, the MCP handshake and the LSP server loop live in XVPE (xvpe-remote-call, xvpe-remote-call-backend-json, xvpe-diagnostics, xvpe-language-server-backend-lsp); nomos-api-transport keeps ServedMethod and NomosApiService, nomos-mcp keeps ServedTool and NomosToolCatalog, nomos-lsp keeps the walk, Diagnostics_For, WalkOutward and Severity_Of; lsp-server and lsp-types are gone from the workspace manifest; the three public surfaces are re-blessed; OD-HOST-013 is written and registered; and the crates the territory names are green.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api-transport",
+          "crates/host/nomos-mcp",
+          "crates/host/nomos-lsp",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-013.record",
+          "tests/contract/src/fact_domain.rs",
+          "tests/contract/tests/boundaries/mcp_registry.rs",
+          "tests/contract/surface/nomos-api-transport.txt",
+          "tests/contract/surface/nomos-mcp.txt",
+          "tests/contract/surface/nomos-lsp.txt",
+          "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api-transport",
+          "-p",
+          "nomos-mcp",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api-transport",
+          "-p",
+          "nomos-mcp",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "deps\\completeness_universes-845534e5261ca0bd.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-1a296a822920dacb.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f2d2eb9ba191951f.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-93c7223b4ba4dcf1.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-26900c86dd54eca2.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-fdbd851dbbd1a375.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-c3861665c1746a27.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-33db5e914bbe0e2d.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-435a3e2617aa9c09.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lsp-e74f2cb3983c0d98.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_lsp-b37bdd785724a77a.exe)\n     Running tests\\fixture_tree.rs (target\\debug\\deps\\fixture_tree-7214fab76b60879e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_mcp-2f8eaf8446615ee9.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_mcp-c5d346010d2c4ddb.exe)\n     Running tests\\stdio.rs (target\\debug\\deps\\stdio-f7669bef3f7961df.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-a16942e4229ae112.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-32fc3ad4a44393b3.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-3271026488d62a3d.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-380eb5bfe873c9a3.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-53c9e74bbab372f6.exe)\n   Doc-tests nomos_api_transport\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_lsp\n   Doc-tests nomos_mcp\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789142191,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "335af4aeb806d88db471d83a7ab4bc37cafb17f9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-PLATFORM-003-AGENT-DISPATCH-TO-XVPE",
+      "title": "OD-PLATFORM-003: the agent dispatch is the engine's, and AGT-006's no-dependency clause is retired for the XVPE crossing",
+      "why": "This workspace had built a bounded agent dispatch -- a freshly created isolated working directory, an allow-list granting nothing real rather than a deny-list always one release behind, one non-interactive turn, a spend ceiling verified to abort before the expensive model call, a wall bound that kills, and an answer read from schema-validated structured_output rather than free text. XVPE's own reference miner had a three-line agent launch with no bound, no spend ceiling and inherited rather than captured output: a strictly worse version of something that already existed one repository away and that it could not reach. A general capability sitting up here was unreachable by everything down there. AGT-006's 'neither system shall depend on the other at runtime' was written on the premise of two peer systems; that is not the relationship these two have, and the clause is retired for this crossing only.",
+      "done_when": "The dispatch, the capability boundary and the process port live in XVPE (xvpe-agent-execution, xvpe-agent-backend-claude-code, xvpe-agent-backend-ollama, xvpe-process, xvpe-process-backend-system); nomos-agent-executor-claude-code keeps the TaskEnvelope, the WorkResult and the schema, nomos-model-backend-ollama keeps its envelope adapter; nomos-platform-xvpe bridges any ProcessLauncher onto the engine's launcher surface rather than replacing the port's 33 implementors and 559 use-sites; Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace is deleted rather than widened into an allow-list that reads as a boundary while enforcing nothing; AGT-006 is assessed Diverges governed by OD-PLATFORM-003; the KWB crossing is untouched; and the crates the territory names are green.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform-xvpe",
+          "crates/agent/nomos-agent-executor-claude-code",
+          "crates/agent/nomos-model-backend-ollama",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "tests/contract/tests/boundaries/graph.rs",
+          "tests/contract/requirements/AGT-006.assessment",
+          "crates/spec/nomos-spec-store/records/OD-PLATFORM-003.record",
+          "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-model-backend-ollama",
+          "-p",
+          "nomos-platform-xvpe",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-cap-requirement-trace"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-model-backend-ollama",
+          "-p",
+          "nomos-platform-xvpe",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-cap-requirement-trace"
+        ],
+        "exit_code": 0,
+        "output_tail": "claude_code-9d8255ae317fe7ac.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-e259b33b23b46397.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_requirement_trace-89a105a15c88c324.exe)\n     Running tests\\contract.rs (target\\debug\\deps\\contract-b6228ade9386ca60.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-16e615bb37a4a1ec.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ef0bd87c115cd295.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-8ff4e3a3fd094dbe.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-332b02430de25338.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-3a2e25bc2b8bfe04.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d2f2e642d2aef2b6.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-7089c28f684be5e1.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-5fa436e674a5cf4f.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-e20425296da48884.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-1972881a060431b6.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-0b8b171bb5985861.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-6f5a01be825763e4.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_model_backend_ollama-ac819fcb0e133f41.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-e8735a7130f252ed.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_platform_xvpe-5b5bd982d2411066.exe)\n   Doc-tests nomos_agent_executor_claude_code\n   Doc-tests nomos_cap_requirement_trace\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_model_backend_ollama\n   Doc-tests nomos_platform_xvpe\n",
+        "verified_at": 1789142497,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "335af4aeb806d88db471d83a7ab4bc37cafb17f9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P86-ENVIRONMENT-IS-READ-PAST-THE-PORTS",
+      "title": "Three providers inject a process launcher and then read the environment past it",
+      "why": "nomos-lang-rust-clippy, -cargo and -deny each build a Command for the injected ProcessLauncher and then decide that Command name with a bare std::env::var(\"CARGO\"), byte-identical in all three. clippy_error.rs does both in one file: Run_Cargo_Clippy takes a Launcher parameter, while Absolutized twenty lines above it reads std::env::current_dir() directly. A test that injects a fake launcher therefore still cannot say which cargo is run or what the root is resolved against, and nomos-platform has no port that could answer either. Measured 2026-09-12: 12 production std::env sites, 3 of them the identical CARGO lookup and 3 more current_dir; the 22 further sites an earlier count reported were inside out-of-line #[cfg(test)] modules.",
+      "done_when": "nomos_platform::Environment declares Variable and Working_Directory, StdEnvironment implements it in nomos-platform-std with a Strategy triple like the other ports, and nomos-lang-rust-clippy reaches both through the port rather than past it, with a test that proves an injected environment decides the command name and the absolutized root.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform",
+          "crates/platform/nomos-platform-std",
+          "crates/languages/nomos-lang-rust-clippy",
+          "tests/contract/surface/nomos-platform.txt",
+          "tests/contract/surface/nomos-platform-std.txt",
+          "tests/contract/surface/nomos-lang-rust-clippy.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P86-SURFACE-PROVENANCE-READS-THE-ENVIRONMENT-PAST-A-PORT. The finding stands and the port is unchanged; only the first caller was wrong. nomos-lang-rust-clippy cannot be the first caller because its provider is reached through nomos-check-orchestration public RunContext<Launcher, Fs>, and a third port parameter there means 45 construction sites across four crates. That migration is its own item."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-lang-rust-clippy"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-opus-5-step3",
+          "reason": "The first caller this item named cannot be migrated inside any defensible territory. nomos-lang-rust-clippy::Materialize_Workspace is called by nomos-check-orchestration::Materialize_Lint, which reaches it through the public RunContext<Launcher, Fs> generic; giving that a third port parameter means editing 45 RunContext construction sites across nomos-api, nomos-cli, nomos-lsp and the orchestrator own tests, in crates three live board items are already working. Superseded by P86-SURFACE-PROVENANCE-READS-THE-ENVIRONMENT-PAST-A-PORT, which keeps the same finding and the same port and picks a first caller whose composition root is two hops away inside one binary crate. The port and its std implementation were written and compile; the clippy migration was reverted surgically rather than by git checkout, because those files also carry uncommitted step-2 work.",
+          "abandoned_at": 1789199089
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-opus-5-step3",
+        "declined_at": 1789199095
+      }
+    },
+    {
+      "id": "P86-SURFACE-PROVENANCE-READS-THE-ENVIRONMENT-PAST-A-PORT",
+      "title": "Nothing in this workspace can state what the environment says, so nine production reads go straight to std::env",
+      "why": "nomos-platform has ports for the clock, the filesystem, the lock and the process launcher, and none for the environment, so every read of it goes past the seam. Measured 2026-09-12: 12 production std::env sites, of which 3 are a main.rs choosing reality legitimately and 9 are leaks; 3 of those 9 are a byte-identical std::env::var(\"CARGO\") in nomos-lang-rust-cargo, -clippy and -deny, each deciding the name of a Command it then hands to an injected ProcessLauncher. clippy_error.rs does both within twenty lines. The consequence is that injecting a launcher does not make those providers testable: a fake launcher can say what a command produced but not which cargo was going to run, nor what a relative root resolved against. nomos-surface-provenance/src/arguments.rs is the simplest of the nine -- one pub(crate) function, one caller in the same binary main.rs -- which is why it is the first caller here rather than the three providers that motivated the port.",
+      "done_when": "nomos_platform::Environment declares Variable and Working_Directory; nomos-platform-std::StdEnvironment implements it with a Strategy triple like the other ports; nomos-surface-provenance resolves its --root default through the port rather than std::env::current_dir, with its composition root passing StdEnvironment; and a test states a working directory the test process is not standing in and proves the default resolves against it.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform",
+          "crates/platform/nomos-platform-std",
+          "crates/host/nomos-surface-provenance",
+          "tests/contract/surface/nomos-platform.txt",
+          "tests/contract/surface/nomos-platform-std.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "exit_code": 0,
+        "output_tail": "der_Report_Should_Name_A_Finding_With_Its_Commits ... ok\ntest evaluate::tests::Test_Records_Touched_Should_Suppress_A_Finding_Despite_A_Changed_Surface ... ok\ntest arguments::tests::Test_An_Unreadable_Working_Directory_Refuses_With_Usage_And_A_Reason ... ok\ntest tests::Test_An_Unknown_Crate_Name_Is_A_Usage_Error ... ok\ntest tests::Test_A_Finding_Reaches_The_Rendered_Report_And_Still_Exits_Ok ... ok\n\ntest result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_A_Real_Bad_Revision_Fails_The_Query_Rather_Than_Reporting_A_Finding ... ok\ntest Test_A_Real_Records_Commit_In_Range_Suppresses_The_Finding ... ok\ntest Test_A_Real_Surface_Change_With_No_Records_Commit_Is_A_Finding ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.51s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-platform-std v0.1.0 (F:\\repos\\nomos\\crates\\platform\\nomos-platform-std)\n   Compiling nomos-surface-provenance v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-surface-provenance)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.73s\n     Running unittests src\\lib.rs (F:/tmp/nomos-step3-target\\debug\\deps\\nomos_platform-3f7ee324043119df.exe)\n     Running unittests src\\lib.rs (F:/tmp/nomos-step3-target\\debug\\deps\\nomos_platform_std-5d04e036ab2c0cac.exe)\n     Running tests\\implements_the_platform_ports.rs (F:/tmp/nomos-step3-target\\debug\\deps\\implements_the_platform_ports-f101759916f5c35c.exe)\n     Running unittests src\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\nomos_surface_provenance-dab4a8ebc39d1e43.exe)\n     Running tests\\platform_integration.rs (F:/tmp/nomos-step3-target\\debug\\deps\\platform_integration-6254eca1dd3e0b4b.exe)\n   Doc-tests nomos_platform\n   Doc-tests nomos_platform_std\n",
+        "verified_at": 1789199757,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "335af4aeb806d88db471d83a7ab4bc37cafb17f9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P87-A-NARROWED-GATE-RUN-INVENTS-AN-ORPHAN-MODULE-FINDING",
+      "title": "A gate run narrowed by --include reports files as orphan modules because the lib.rs that declares them was not judged",
+      "why": "Measured 2026-09-12 while finishing P86. `nomos gate run --include crates/platform/nomos-platform/src/environment.rs --include crates/platform/nomos-platform-std/src/std_environment.rs ...` reported three Blocking `no-orphan-modules` findings against those exact files, each saying \"no declaration names it, so rustc never parses it and nothing in it compiles\". All three were declared -- `mod environment;` and `mod std_environment;` were already in their crates lib.rs, the crates compiled, and their tests passed. Re-running the same gate with `--include crates/platform/nomos-platform/src` (the directory, so lib.rs is judged too) reported zero Blocking findings and exited 0. The rule decides reachability from the files in the judged set rather than from the crate module tree, so narrowing the set narrows what can declare a module. This is the worst direction for a narrowing flag to fail in: a caller reaches for --include to judge less, and gets a Blocking finding that a full run does not produce, about code that is correct. A reader who trusts it deletes or re-declares a module that was already fine.",
+      "done_when": "A gate run narrowed to a single source file no longer reports that file as an orphan when its crate declares it, with a test that pins the case: the narrowed run and the whole-crate run agree on no-orphan-modules findings for a declared module. Whether the rule reads the module tree regardless of the judged set, or declines to judge reachability when the declaring file is excluded, is the implementation choice this item makes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/orphan_modules.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Framed and territoried too narrowly, found while finishing P88. A second rule has the identical narrowing sensitivity: gate run --include crates/rules/nomos-rules/src/checks/dependency/zones.rs reports two Blocking completeness-mirror findings (SAME_ZONE_EDGES and ZONES, each \"resolves to no check, so this rule is declared enforced and never runs\") alongside the orphan one, and all three clear when the include widens to the crate. completeness-mirror lives in checks/mirror.rs, not checks/orphan_modules.rs, so this items territory would have excluded its own fix, and its done_when named one rule when the shared cause is more likely the judged file set than either rule. Re-added as -2."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-opus-5-axis5",
+        "declined_at": 1789201506
+      }
+    },
+    {
+      "id": "P87-THE-SPECIFICATION-STORE-HANDS-OUT-ITS-CONNECTION",
+      "title": "Whether the specification store seals its rusqlite connection, given that 107 production call sites hold it",
+      "why": "SpecificationStore::Connection(&self) -> &Connection is public, and measured 2026-09-12 there are 107 production calls to it outside the owning crate: nomos-spec-bundle 52, nomos-spec-ingest 34, nomos-spec-project 18, nomos-spec-validate 3 (137 including tests). Those four crates therefore write SQL against SQLite own handle and each names rusqlite in its manifest. OD-SPEC-001 says the test that keeps the store trait honest is store-backend equivalence -- in-memory, SQLite and Postgres yielding the same store hash over the same corpus -- and that test is unreachable while callers hold the connection, because a query written against a rusqlite handle cannot be satisfied by any other backend. The record already declines to build Postgres and that is not in question here; what is in question is whether the seam it names can exist at all in the current shape. Note the escape is a method on the store, not a mention of the library, so a grep for rusqlite:: undercounts it badly -- that grep finds 65 sites where the real figure is 107.",
+      "done_when": "A record stating whether the connection stays public, is sealed behind named operations, or is replaced by a narrower query seam -- and if it is to be sealed, what the first increment is and why 107 call sites is or is not worth paying. The measurement above is the input; the decision is which of those three the workspace takes, with the cost of each named rather than implied. Sealing is not assumed to be the answer: a store that grows one method per query is a different problem, and the record should say so if that is the conclusion.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/src/store/specification_store.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P87-RUST-PROVIDERS-READ-THE-ENVIRONMENT-PAST-THE-INJECTED-LAUNCHER",
+      "title": "Three rust providers inject a process launcher and then decide the command name with a bare std::env::var",
+      "why": "The finding P86 was written for, left unclosed by it on purpose. nomos-lang-rust-cargo/src/metadata_error.rs:150, nomos-lang-rust-clippy/src/clippy_error.rs:102 and nomos-lang-rust-deny/src/deny_error.rs:217 each carry the identical line `let cargo = std::env::var(\"CARGO\").unwrap_or_else(|_| \"cargo\".to_owned());` inside a function that builds a nomos_platform::Command for an injected ProcessLauncher. clippy_error.rs also reads std::env::current_dir in Absolutized, twenty lines above Run_Cargo_Clippy which takes the launcher as a parameter. A fake launcher receives the command already built, so no test of these providers can say which cargo would run, nor what a relative root resolves against. nomos_platform::Environment now exists (P86) and nothing here uses it. P86 attempted this migration first and reverted it: nomos_lang_rust_clippy::Materialize_Workspace is reached from nomos-check-orchestration::Materialize_Lint through the public RunContext<Launcher, Fs>, so giving the providers an Environment parameter means a third generic on RunContext and its MaterializationEnvironment/RunEnvironment, and editing 45 RunContext construction sites across nomos-api, nomos-cli, nomos-lsp and the orchestrator own tests. That is why this is one large item rather than three small ones: the cascade is a single change and cannot be split by crate without leaving the tree uncompilable in between.",
+      "done_when": "The three providers read CARGO and the current directory through nomos_platform::Environment; nomos-check-orchestration threads it beside the launcher it already threads; every composition root that builds a RunContext supplies StdEnvironment; and at least one provider has a test proving an injected environment decides the command name, the way nomos-surface-provenance now proves it for its own --root default. Consider whether the ports belong bundled -- P86 hit the parameter-count cap of 4 and bundled them as a Machine value rather than widening every signature, and RunContext is already that shape.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-cargo",
+          "crates/languages/nomos-lang-rust-clippy",
+          "crates/languages/nomos-lang-rust-deny",
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/host/nomos-api/src/check.rs",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-lsp"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Malformed on my part: --timeout 30m was written after the -- so it became two predicate arguments instead of the flag that bounds it. The stored argv is `cargo test ... --timeout 30m`, which cargo refuses, and timeout_seconds stayed at the 600s default that a clippy-heavy four-crate suite will not fit in. Re-added verbatim as P87-RUST-PROVIDERS-READ-THE-ENVIRONMENT-PAST-THE-INJECTED-LAUNCHER-2 with the flag in the right place. Nothing about the finding changed."
+        }
+      },
+      "depends_on": [
+        "P86-SURFACE-PROVENANCE-READS-THE-ENVIRONMENT-PAST-A-PORT"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-lang-rust-deny",
+          "-p",
+          "nomos-check-orchestration",
+          "--timeout",
+          "30m"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-opus-5-step3",
+        "declined_at": 1789200092
+      }
+    },
+    {
+      "id": "P87-RUST-PROVIDERS-READ-THE-ENVIRONMENT-PAST-THE-INJECTED-LAUNCHER-2",
+      "title": "Three rust providers inject a process launcher and then decide the command name with a bare std::env::var",
+      "why": "The finding P86 was written for, left unclosed by it on purpose. nomos-lang-rust-cargo/src/metadata_error.rs:150, nomos-lang-rust-clippy/src/clippy_error.rs:102 and nomos-lang-rust-deny/src/deny_error.rs:217 each carry the identical line `let cargo = std::env::var(\"CARGO\").unwrap_or_else(|_| \"cargo\".to_owned());` inside a function that builds a nomos_platform::Command for an injected ProcessLauncher. clippy_error.rs also reads std::env::current_dir in Absolutized, twenty lines above Run_Cargo_Clippy which takes the launcher as a parameter. A fake launcher receives the command already built, so no test of these providers can say which cargo would run, nor what a relative root resolves against. nomos_platform::Environment now exists (P86) and nothing here uses it. P86 attempted this migration first and reverted it: nomos_lang_rust_clippy::Materialize_Workspace is reached from nomos-check-orchestration::Materialize_Lint through the public RunContext<Launcher, Fs>, so giving the providers an Environment parameter means a third generic on RunContext and its MaterializationEnvironment/RunEnvironment, and editing 45 RunContext construction sites across nomos-api, nomos-cli, nomos-lsp and the orchestrator own tests. That is why this is one large item rather than three small ones: the cascade is a single change and cannot be split by crate without leaving the tree uncompilable in between.",
+      "done_when": "The three providers read CARGO and the current directory through nomos_platform::Environment; nomos-check-orchestration threads it beside the launcher it already threads; every composition root that builds a RunContext supplies StdEnvironment; and at least one provider has a test proving an injected environment decides the command name, the way nomos-surface-provenance now proves it for its own --root default. Consider whether the ports belong bundled -- P86 hit the parameter-count cap of 4 and bundled them as a Machine value rather than widening every signature, and RunContext is already that shape.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-cargo",
+          "crates/languages/nomos-lang-rust-clippy",
+          "crates/languages/nomos-lang-rust-deny",
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/host/nomos-api/src/check.rs",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-lsp"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory cannot compile the change it asks for, and the cascade it describes is measured wrong in a way that matters. Measured 2026-09-12: 45 RunContext construction sites is right as a total, but 38 of them are inside nomos-check-orchestration itself (31 in src/tests.rs, 4 in run_context.rs, 3 in tests/run_seam.rs). Only six are production sites elsewhere, and three of those are in crates this territory does not name -- nomos-gate-orchestration/src/gate_environment.rs, nomos-correction-orchestration/src/run.rs and nomos-workflow-orchestration/src/run.rs each build one -- so the tree cannot compile with the reserved paths alone. The item also names three providers and there are four production std::env reads across four crates: nomos-lang-rust-compiler/src/reading.rs reads current_dir in Load_Crate, and it is not reached through RunContext at all, so it is its own item rather than a fourth crate here. Four surface snapshots change with the signatures and none is reserved. Re-added as -3 with the measurement and the full path set."
+        }
+      },
+      "depends_on": [
+        "P86-SURFACE-PROVENANCE-READS-THE-ENVIRONMENT-PAST-A-PORT"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-lang-rust-deny",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "opus-axis3",
+        "declined_at": 1789233024
+      }
+    },
+    {
+      "id": "P88-BOTH-HOSTS-ASSEMBLE-THE-SAME-PLATFORM-AND-NEITHER-CAN-STOP",
+      "title": "Two hosts each assemble the same std platform, and nothing exists for either to assemble it through",
+      "why": "Measured 2026-09-12, inline and out-of-line #[cfg(test)] excluded: nomos-api names a concrete nomos-platform-std type at 34 production sites across 24 files and nomos-cli at 22 across 11. OD-HOST-001 permits a composition root to name a concrete provider and that is not in question; what is missing is anything for a root to name it *through*, so the same assembly is restated per host and per handler. The recurring shapes are the same in both: the pair `{ launcher: &StdProcessLauncher, filesystem: &StdFileSystem }` at 8 production sites, `AgentEnvironment { launcher: &StdProcessLauncher, .. }` at 4, `SystemClock.Now()` feeding Fresh_Run_Id at 4, and CorrectionEnvironment at 2. The sharpest one carries a correctness edge rather than mere repetition: nomos-api/src/work/ledger_at.rs:16 and nomos-cli/src/work.rs:46 each build FileLedger::At(directory.join(\"ledger.json\"), StdFileSystem, SystemClock, FileLock::At(directory.join(\"ledger.lock\"))) -- substantively identical, and each independently knows that a board is ledger.json beside ledger.lock. nomos-ledger owns that pairing and does not encode it (FileLedger::At takes a path, and cannot construct the lock because it is generic over CrossProcessLock), so a host that changed one of the two names would take a lock guarding nothing. Checked and NOT a defect: nomos-work-orchestration/src/run.rs:286 names the quartet inside its own #[cfg(test)] module, so OD-HOST-001s invariant that the orchestration crate names no concrete platform type still holds; and nomos-api/src/composition.rs is a deliberate twin of nomos-clis, because env! resolves against the calling crate.",
+      "done_when": "A library crate under crates/composer assembles the std platform once -- at minimum the work-ledger composition that carries the ledger.json/ledger.lock pairing, and the launcher/filesystem pair -- re-exporting what a caller needs so a host names no nomos-platform-std type to use it. It is registered the way any crate is: workspace members, the README band row, a ZONES row and its SAME_ZONE_EDGES, and a public-surface snapshot. nomos-api work group is the first consumer and names no nomos-platform-std type afterwards, with its existing tests unchanged in what they assert. The other consumers -- nomos-cli, the gate and agent environments, nomos-lsp, nomos-surface-provenance -- are named as separate items and not migrated here, the same increment shape OD-PLATFORM-002 used. A Zone::Composer that would *forbid* a host naming a backend is deliberately not part of this: it would fail immediately against three hosts this item does not migrate, and belongs to whichever item migrates the last of them.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/composer",
+          "crates/host/nomos-api/src/work",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "tests/contract/surface/nomos-composer-std.txt",
+          "Cargo.toml",
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P88-BOTH-HOSTS-ASSEMBLE-THE-SAME-PLATFORM-AND-NEITHER-CAN-STOP-2, identical except that it reserves crates/host/nomos-api rather than crates/host/nomos-api/src/work. Nothing about the finding or the plan changed."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-composer-std",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-opus-5-axis5",
+          "reason": "Territory was drawn one path too narrow: it reserved crates/host/nomos-api/src/work, but making that group use the composer needs a dependency edge in crates/host/nomos-api/Cargo.toml, which the claim did not cover. Re-added as -2 reserving the nomos-api crate rather than one module of it. The composer crate itself is written, registered and green.",
+          "abandoned_at": 1789201063
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-opus-5-axis5",
+        "declined_at": 1789201064
+      }
+    },
+    {
+      "id": "P88-BOTH-HOSTS-ASSEMBLE-THE-SAME-PLATFORM-AND-NEITHER-CAN-STOP-2",
+      "title": "Two hosts each assemble the same std platform, and nothing exists for either to assemble it through",
+      "why": "Measured 2026-09-12, inline and out-of-line #[cfg(test)] excluded: nomos-api names a concrete nomos-platform-std type at 34 production sites across 24 files and nomos-cli at 22 across 11. OD-HOST-001 permits a composition root to name a concrete provider and that is not in question; what is missing is anything for a root to name it *through*, so the same assembly is restated per host and per handler. The recurring shapes are the same in both: the pair `{ launcher: &StdProcessLauncher, filesystem: &StdFileSystem }` at 8 production sites, `AgentEnvironment { launcher: &StdProcessLauncher, .. }` at 4, `SystemClock.Now()` feeding Fresh_Run_Id at 4, CorrectionEnvironment at 2. Checked and NOT defects: nomos-work-orchestration/src/run.rs:286 names the quartet inside its own #[cfg(test)] module, so OD-HOST-001s invariant that the orchestration crate names no concrete platform type still holds; and nomos-api/src/composition.rs is a deliberate twin of nomos-clis because env! resolves against the calling crate. Separately found and NOT taken here: nomos-api/src/work/ledger_at.rs:16 and nomos-cli/src/work.rs:46 each independently know a board is ledger.json beside ledger.lock, knowledge nomos-ledger owns and does not encode -- that is its own item against nomos-ledger, not this one, because this item reserves neither.",
+      "done_when": "A library crate under crates/composer names the std backend set once and re-exports nomos-platform port vocabulary beside it, registered the way any crate is: workspace members, a README band row, a ZONES row with its SAME_ZONE_EDGES, and a public-surface snapshot. nomos-api work group is the first consumer and names no nomos-platform-std type afterwards, with its existing tests unchanged in what they assert. Other consumers -- nomos-cli, the gate and agent environments, nomos-lsp, nomos-surface-provenance -- are named as separate items and not migrated here, the increment shape OD-PLATFORM-002 set. A Zone::Composer that would forbid a host naming a backend is deliberately not part of this: it would fail immediately against three hosts this item does not migrate, and belongs to whichever item migrates the last of them.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/composer",
+          "crates/host/nomos-api",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "tests/contract/surface/nomos-composer-std.txt",
+          "Cargo.toml",
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-composer-std",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-composer-std",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "     Running unittests src\\lib.rs (F:/tmp/nomos-step3-target\\debug\\deps\\nomos_composer_std-c48ee2052f407ead.exe)\n     Running unittests src\\lib.rs (F:/tmp/nomos-step3-target\\debug\\deps\\nomos_contract_tests-2798a4de35a5285e.exe)\n     Running tests\\agent_harness.rs (F:/tmp/nomos-step3-target\\debug\\deps\\agent_harness-9605e43a7ba4051e.exe)\n     Running tests\\boundaries\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\boundaries-0d2658cfef36e1ed.exe)\n     Running tests\\completeness_universes\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\completeness_universes-dd110170cf7576e4.exe)\n     Running tests\\corpus_gates.rs (F:/tmp/nomos-step3-target\\debug\\deps\\corpus_gates-a074b1410fc3b879.exe)\n     Running tests\\determinism_declarations.rs (F:/tmp/nomos-step3-target\\debug\\deps\\determinism_declarations-c1ad6c81408d535b.exe)\n     Running tests\\determinism_vocabulary.rs (F:/tmp/nomos-step3-target\\debug\\deps\\determinism_vocabulary-c8aa96e5af235abe.exe)\n     Running tests\\public_surface\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\public_surface-b03dbd257c9bac3c.exe)\n     Running tests\\requirement_trace\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\requirement_trace-2ca57c1c434e3b40.exe)\n     Running tests\\rule_composition.rs (F:/tmp/nomos-step3-target\\debug\\deps\\rule_composition-725dffee8029b64d.exe)\n     Running tests\\rule_contract_citation.rs (F:/tmp/nomos-step3-target\\debug\\deps\\rule_contract_citation-c0ca678df5530871.exe)\n     Running tests\\rule_descriptors.rs (F:/tmp/nomos-step3-target\\debug\\deps\\rule_descriptors-d1f727837388cfcb.exe)\n     Running tests\\toolchain_floor.rs (F:/tmp/nomos-step3-target\\debug\\deps\\toolchain_floor-6a26573367b28197.exe)\n     Running unittests src\\lib.rs (F:/tmp/nomos-step3-target\\debug\\deps\\nomos_rules-8b6db6463184b33f.exe)\n     Running tests\\integration_seams.rs (F:/tmp/nomos-step3-target\\debug\\deps\\integration_seams-2b7d9d61e0d2a859.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_composer_std\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1789201471,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "335af4aeb806d88db471d83a7ab4bc37cafb17f9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P87-A-NARROWED-GATE-RUN-INVENTS-FINDINGS-A-FULL-RUN-DOES-NOT-2",
+      "title": "A gate run narrowed by --include reports Blocking findings about correct code, because the files that would answer them were not judged",
+      "why": "Measured 2026-09-12 twice, in two different rules. First, while finishing P86: `nomos gate run --include crates/platform/nomos-platform/src/environment.rs --include crates/platform/nomos-platform-std/src/std_environment.rs` reported three Blocking no-orphan-modules findings against those files, each saying \"no declaration names it, so rustc never parses it and nothing in it compiles\". All three were declared -- `mod environment;` and `mod std_environment;` were already in their crates lib.rs, the crates compiled, their tests passed. Second, while finishing P88: `--include crates/rules/nomos-rules/src/checks/dependency/zones.rs` reported two Blocking completeness-mirror findings (SAME_ZONE_EDGES and ZONES, each \"resolves to no check, so this rule is declared enforced and never runs\") plus one more orphan finding. In both cases every finding cleared and the run exited 0 once --include named the containing crate instead of the file. Two rules in two different files share this, so the cause is more likely the judged file set than either rule: a rule decides reachability or mirror-resolution from the files in that set, and narrowing the set narrows what is able to answer. This is the worst direction for a narrowing flag to fail in -- a caller reaches for --include to judge less and gets Blocking findings a full run does not produce, about code that is correct. A reader who trusts them deletes or re-declares something that was already fine.",
+      "done_when": "A gate run narrowed to a single source file no longer reports that file as an orphan, and no longer reports its declarations as mirroring no check, when the containing crate supplies the answer -- with a test pinning both: a narrowed run and a whole-crate run agree on no-orphan-modules and on completeness-mirror findings for the same file. Whether the fix is that these rules read the crate regardless of the judged set, or that they decline to judge when the answering file is excluded, is this items choice. Territory names crates/rules/nomos-rules/src/checks because both rules live there; if the cause turns out to sit in how the judged file set is assembled rather than in the rules, this item needs re-territorying before it can be finished rather than widening quietly.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Wrong kind and wrong territory, both established by measurement. It is filed as a Correction against crates/rules/nomos-rules/src/checks, and neither rule is where the cause is: nomos-gate-orchestration's Scoped_Sources narrows the source set before judging, so every rule that answers a cross-file question answers it against a truncated world. no-orphan-modules cannot be fixed in place either, because Test_Check_No_Orphan_Modules_Should_Report_Every_File_Of_A_Rootless_Source_Tree deliberately decides that a source tree with no crate root reports every file, and the rule cannot tell that real defect apart from a judged set that merely excludes the root. The item's second claim is also wrong: completeness-mirror does not clear at crate scope, it clears only at whole-workspace scope, because the tests that would resolve its named checks live in tests/contract, outside the crate. Re-filed as a Decision with the three candidate mechanisms and their costs."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "opus-axis5",
+          "reason": "Diagnosed. The cause is not in either rule and the territory cannot hold the fix, which this item's own done_when said would require re-territorying. Releasing rather than widening quietly.",
+          "abandoned_at": 1789231133
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "opus-axis5",
+        "declined_at": 1789231144
+      }
+    },
+    {
+      "id": "P88-TWO-HOSTS-EACH-KNOW-A-BOARD-IS-LEDGER-JSON-BESIDE-LEDGER-LOCK",
+      "title": "The ledger owns the pairing of its document and its lock file, and does not encode it",
+      "why": "Found while measuring P88 and deliberately left to its own item, because P88 reserved neither crate involved. nomos-api/src/work/ledger_at.rs:16 and nomos-cli/src/work.rs:46 each build the same composition from scratch, and each independently knows that a board is ledger.json beside ledger.lock in one directory. nomos-ledger owns that pairing -- it is the crate whose format it is -- but FileLedger::At takes a whole path and nothing else, so there is nowhere for the convention to live and every caller restates it. The hazard is not repetition: a caller that changed one of the two names would take a lock that guards nothing, and both files would still compile and both test suites would still pass, because no test in this workspace asserts that the lock a ledger takes is the lock for that ledger. The literals also appear in nomos-work-orchestration and nomos-ledger own test fixtures, which is where a rename would first look green. Note FileLedger cannot construct the lock itself: it is generic over CrossProcessLock and the concrete FileLock is nomos-platform-std, so the fix is to name the two files rather than to build them -- constants on the ledger that callers join against, not a constructor.",
+      "done_when": "nomos-ledger names its own document and lock filenames once, and nomos-api and nomos-cli join against those names rather than restating the literals. A test asserts the pairing the composition depends on -- that the lock a FileLedger is given is derived from the same directory and stem as the document it loads -- so that renaming one and not the other fails rather than silently taking an unrelated lock.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/file_ledger.rs",
+          "crates/host/nomos-cli/src/work.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory short three paths, and its own done_when names one of them. It reserved file_ledger.rs and nomos-cli/src/work.rs, but done_when says nomos-api joins against the names too (crates/host/nomos-api/src/work/ledger_at.rs), the new names must be exported from nomos-ledger/src/lib.rs line 77's pub use store list, and naming them publicly changes that crate's surface, so tests/contract/surface/nomos-ledger.txt must be blessed in the same change. Re-added as -2 with all four, and with nomos-api and nomos-contract-tests added to the predicate."
+        }
+      },
+      "depends_on": [
+        "P88-BOTH-HOSTS-ASSEMBLE-THE-SAME-PLATFORM-AND-NEITHER-CAN-STOP-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "opus-axis5",
+        "declined_at": 1789230538
+      }
+    },
+    {
+      "id": "P88-THREE-HOSTS-STILL-NAME-A-BACKEND-DIRECTLY",
+      "title": "nomos-cli, nomos-lsp and nomos-surface-provenance still name nomos-platform-std, now that there is something to name instead",
+      "why": "P88 built nomos-composer-std and migrated nomos-api, which now names no nomos-platform-std type in code, prose or manifest. The other three hosts were deliberately left, the increment shape OD-PLATFORM-002 set: build the seam, prove it against one real consumer, name the rest. Measured 2026-09-12 with inline and out-of-line #[cfg(test)] excluded: nomos-cli 22 production sites across 11 files, nomos-lsp 3, nomos-surface-provenance 2. The nomos-cli shapes are the same ones nomos-api had -- the { launcher, filesystem } pair in gate.rs (twice), check.rs and workflow.rs, SystemClock.Now() feeding Fresh_Run_Id, AgentEnvironment in agent/dispatch.rs and agent/judge_role.rs, CorrectionEnvironment in correct.rs, and the work-ledger composition in work.rs -- so this is the same migration a second time and not a new question. nomos-surface-provenance is two sites: StdProcessLauncher and StdEnvironment, both in its main.rs, already bundled there as a Machine value by P86.",
+      "done_when": "nomos-cli, nomos-lsp and nomos-surface-provenance each take nomos-composer-std and name no nomos-platform-std type, in code, in prose or in their manifests, with their existing tests unchanged in what they assert. Where a host has its own composition helper -- nomos-clis work.rs builds a ledger inline, nomos-surface-provenances main.rs builds a Machine -- it keeps it and sources the parts from the composer, the same way nomos-api work/ledger_at.rs now does.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli",
+          "crates/host/nomos-lsp",
+          "crates/host/nomos-surface-provenance"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [
+        "P88-BOTH-HOSTS-ASSEMBLE-THE-SAME-PLATFORM-AND-NEITHER-CAN-STOP-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "exit_code": 0,
+        "output_tail": "unning tests\\model_backend_ollama_seam.rs (F:/tmp/nomos-step3-target\\debug\\deps\\model_backend_ollama_seam-4cd2fd180fb2541d.exe)\n     Running tests\\model_seam.rs (F:/tmp/nomos-step3-target\\debug\\deps\\model_seam-e8f0343b499c0a6b.exe)\n     Running tests\\platform_seam.rs (F:/tmp/nomos-step3-target\\debug\\deps\\platform_seam-3b93867dce6f908f.exe)\n     Running tests\\read_surface.rs (F:/tmp/nomos-step3-target\\debug\\deps\\read_surface-1d25dda2561c7a5b.exe)\n     Running tests\\request_submit.rs (F:/tmp/nomos-step3-target\\debug\\deps\\request_submit-ddcca0fde8424ebd.exe)\n     Running tests\\spec_model_seam.rs (F:/tmp/nomos-step3-target\\debug\\deps\\spec_model_seam-d70f741ed86ef0b8.exe)\n     Running tests\\spec_orchestration_seam.rs (F:/tmp/nomos-step3-target\\debug\\deps\\spec_orchestration_seam-1743aad3031dc95c.exe)\n     Running tests\\spec_store_seam.rs (F:/tmp/nomos-step3-target\\debug\\deps\\spec_store_seam-f246341cf5250576.exe)\n     Running tests\\stale_writer_is_refused.rs (F:/tmp/nomos-step3-target\\debug\\deps\\stale_writer_is_refused-b213a4137128ff1e.exe)\n     Running tests\\takeover_is_recorded.rs (F:/tmp/nomos-step3-target\\debug\\deps\\takeover_is_recorded-70b9a4910723b784.exe)\n     Running tests\\work_orchestration_seam.rs (F:/tmp/nomos-step3-target\\debug\\deps\\work_orchestration_seam-feb2104d6cbd42b8.exe)\n     Running tests\\workspace_seam.rs (F:/tmp/nomos-step3-target\\debug\\deps\\workspace_seam-25982c616007cc6e.exe)\n     Running unittests src\\lib.rs (F:/tmp/nomos-step3-target\\debug\\deps\\nomos_lsp-7c67cb1d37424678.exe)\n     Running unittests src\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\nomos_lsp-fa4449598fd183b5.exe)\n     Running tests\\fixture_tree.rs (F:/tmp/nomos-step3-target\\debug\\deps\\fixture_tree-af397d8b9dae8884.exe)\n     Running unittests src\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\nomos_surface_provenance-f3ef9e522097a271.exe)\n     Running tests\\platform_integration.rs (F:/tmp/nomos-step3-target\\debug\\deps\\platform_integration-b0cbd9aec1dbd042.exe)\n   Doc-tests nomos_lsp\n",
+        "verified_at": 1789229255,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "335af4aeb806d88db471d83a7ab4bc37cafb17f9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P88-NOTHING-STOPS-A-HOST-NAMING-A-BACKEND-AGAIN",
+      "title": "Whether a zone rule should forbid a host naming a platform implementation, once no host does",
+      "why": "P88 gave this workspace a composer and migrated one host; P88-THREE-HOSTS migrates the rest. Nothing then keeps them migrated. ZONES puts nomos-composer-std, nomos-platform and nomos-platform-std all in Zone::Substrate, and Permits lets Host reach Substrate, so a host naming nomos-platform-std directly is exactly as legal after this work as before it -- the composer is a convention with no rule behind it, which is this repositorys own written-but-never-wired shape one level up. A Zone::Composer, with Host permitted to reach it and not permitted to reach the platform implementations, is the mechanism that would hold it. It could not have been added by P88: it would have failed immediately against three unmigrated hosts, and a rule that must be suppressed on the day it lands is not a rule. OD-HOST-001 is the tension to resolve rather than ignore -- it states plainly that naming a concrete provider in a composition root was never the defect, so a rule forbidding it needs an argument that record does not already answer, and \"so that a second backend set can be swapped in\" is that argument only if a second set is real.",
+      "done_when": "A record deciding whether the composer is enforced or left a convention, naming what it costs either way. If enforced: a Zone::Composer with its Permits row, nomos-composer-std moved into it, the README zone table and its contract test updated together, and a measurement showing no host violates it on the day it lands. If not enforced: the record says so and says what would change the answer, so that the next reader finds a decision rather than an absence.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory too narrow, and the mechanism it proposed does not work. It reserved only zones.rs, but enforcing this needs README.md's zone table, a governing record, that record's registration, both derived projections, and an amendment to OD-RULES-020, whose own table declares the zone set. The mechanism is also wrong as written: a Zone::Composer holding nomos-composer-std forbids nothing, because nomos-platform-std would stay in Substrate and Permits already lets Host reach Substrate for nomos-model, nomos-workspace and five others. Enforcement requires moving the implementation out, not the composer in. Re-added as -2 with the measurement that decides it and the correct mechanism."
+        }
+      },
+      "depends_on": [
+        "P88-THREE-HOSTS-STILL-NAME-A-BACKEND-DIRECTLY"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "opus-axis5",
+        "declined_at": 1789229659
+      }
+    },
+    {
+      "id": "P88-NOTHING-STOPS-A-HOST-NAMING-A-BACKEND-AGAIN-2",
+      "title": "A platform implementation sits in the same zone as the ports, so nothing stops a host reaching one directly",
+      "why": "P88 gave this workspace a composer and migrated all four hosts; nothing keeps them migrated. Measured 2026-09-12 after that migration: nomos-composer-std is the only crate in this workspace with a production dependency on nomos-platform-std, and all eighteen remaining edges are dev-dependencies, which violations.rs's own Is_Dev_Dependency already excludes by name. So a rule would land against zero real violations. Dropping the manifest edge is already a real guard -- injecting a use of nomos_platform_std into nomos-cli fails to compile, E0432 -- so the residual gap is exactly one line in a Cargo.toml, which is a smaller gap than P88 first claimed but is still the gap that four hosts independently fell into. The mechanism the declined item named does not close it: nomos-platform-std would stay in Substrate and Permits lets Host reach Substrate. Moving the implementation into its own zone does. nomos-platform-xvpe is not part of that move: XvpeLauncher is a generic bridge over an injected ProcessLauncher rather than a backend, the README already calls it one adapter and not a replacement for the port, and two Agent-zone crates depend on it in production, so moving it would fire on the day it landed.",
+      "done_when": "A Zone::Backend holding nomos-platform-std alone, with Permits letting Substrate reach it and Host not, and the two SAME_ZONE_EDGES entries the move makes cross-zone removed. README.md's zone table names the new zone for that crate and its own eleven-zone sentence is corrected. A governing record decides it, naming what it costs: a single-member zone, and a permission Substrate-wide rather than composer-only until a second composer makes Zone::Composer worth its own row. OD-RULES-020 is amended, because its own table is where the zone set is declared. Both derived projections re-rendered.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "README.md",
+          "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-028.record",
+          "diagrams/relations.mmd",
+          "spec/domain-specification.md",
+          "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory short one path. Re-added as -3 also reserving tests/contract/surface/nomos-rules.txt: Zone::Backend is a new public variant, so the snapshot has to be blessed in the same change as zones.rs or Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot is red, and every prior surface-changing item on this board reserves its snapshot by name."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "opus-axis5",
+          "reason": "Territory short one path: adding Zone::Backend changes nomos-rules' public surface, so tests/contract/surface/nomos-rules.txt must be blessed in the same change or the contract suite is red. Every prior surface-changing item on this board reserves its own snapshot by name.",
+          "abandoned_at": 1789229851
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "opus-axis5",
+        "declined_at": 1789229858
+      }
+    },
+    {
+      "id": "P88-NOTHING-STOPS-A-HOST-NAMING-A-BACKEND-AGAIN-3",
+      "title": "A platform implementation sits in the same zone as the ports, so nothing stops a host reaching one directly",
+      "why": "P88 gave this workspace a composer and migrated all four hosts; nothing keeps them migrated. Measured 2026-09-12 after that migration: nomos-composer-std is the only crate in this workspace with a production dependency on nomos-platform-std, and all eighteen remaining edges are dev-dependencies, which violations.rs's own Is_Dev_Dependency already excludes by name. So a rule lands against zero real violations. Dropping the manifest edge is already a real guard -- injecting a use of nomos_platform_std into nomos-cli fails to compile, E0432 -- so the residual gap is exactly one line in a Cargo.toml, which is a smaller gap than P88 first claimed but is still the gap four hosts independently fell into. The mechanism the first two spellings of this item named does not close it: nomos-platform-std would stay in Substrate and Permits lets Host reach Substrate. Moving the implementation into its own zone does. nomos-platform-xvpe is not part of that move: XvpeLauncher is generic over an injected nomos_platform::ProcessLauncher and implements no port itself, README.md already calls it one adapter and not a replacement for the port, and two Agent-zone crates depend on it in production, so moving it would fire on the day it landed.",
+      "done_when": "A Zone::Backend holding nomos-platform-std alone, with Permits letting Substrate reach it and Host not, and the two SAME_ZONE_EDGES entries the move makes cross-zone removed. README.md's zone table names the new zone for that crate and its own eleven-zone sentence is corrected. tests/contract/surface/nomos-rules.txt blessed for the new variant. A governing record decides it, naming what it costs: a single-member zone, and a permission Substrate-wide rather than composer-only until a second composer makes Zone::Composer worth its own row. OD-RULES-020 is amended, because its own table is where the zone set is declared. Both derived projections re-rendered.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "README.md",
+          "tests/contract/surface/nomos-rules.txt",
+          "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-028.record",
+          "diagrams/relations.mmd",
+          "spec/domain-specification.md",
+          "docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "0d740.exe)\n     Running tests\\corpus_gates.rs (F:/tmp/nomos-step3-target\\debug\\deps\\corpus_gates-8254a6b5f6431f50.exe)\n     Running tests\\determinism_declarations.rs (F:/tmp/nomos-step3-target\\debug\\deps\\determinism_declarations-cf6e36c36d037e40.exe)\n     Running tests\\determinism_vocabulary.rs (F:/tmp/nomos-step3-target\\debug\\deps\\determinism_vocabulary-034e305d44a847b6.exe)\n     Running tests\\public_surface\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\public_surface-f387f696b8cfebb0.exe)\n     Running tests\\requirement_trace\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\requirement_trace-0a4692c4cbfcec17.exe)\n     Running tests\\rule_composition.rs (F:/tmp/nomos-step3-target\\debug\\deps\\rule_composition-f1852e2cbea5810d.exe)\n     Running tests\\rule_contract_citation.rs (F:/tmp/nomos-step3-target\\debug\\deps\\rule_contract_citation-8e059077af6f0169.exe)\n     Running tests\\rule_descriptors.rs (F:/tmp/nomos-step3-target\\debug\\deps\\rule_descriptors-4300d372b7250eea.exe)\n     Running tests\\toolchain_floor.rs (F:/tmp/nomos-step3-target\\debug\\deps\\toolchain_floor-6ec6b83b147b7fd0.exe)\n     Running unittests src\\lib.rs (F:/tmp/nomos-step3-target\\debug\\deps\\nomos_rules-29c5b49b1b0371bb.exe)\n     Running tests\\integration_seams.rs (F:/tmp/nomos-step3-target\\debug\\deps\\integration_seams-5015aef4565908a5.exe)\n     Running unittests src\\lib.rs (F:/tmp/nomos-step3-target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\governing_records_are_present-fb1c20a2af433cc4.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\round_trip_holds-91dbb605c0c2c1f6.exe)\n     Running tests\\store_holds.rs (F:/tmp/nomos-step3-target\\debug\\deps\\store_holds-ed30fea2b99fbd8e.exe)\n     Running tests\\table_rows\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\table_rows-e8c56575d59b7830.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789230397,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "335af4aeb806d88db471d83a7ab4bc37cafb17f9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P88-TWO-HOSTS-EACH-KNOW-A-BOARD-IS-LEDGER-JSON-BESIDE-LEDGER-LOCK-2",
+      "title": "The ledger owns the pairing of its document and its lock file, and does not encode it",
+      "why": "nomos-api/src/work/ledger_at.rs and nomos-cli/src/work.rs each build the same composition from scratch, and each independently knows that a board is ledger.json beside ledger.lock in one directory. nomos-ledger owns that pairing -- it is the crate whose format it is -- but FileLedger::At takes a whole path and nothing else, so there is nowhere for the convention to live and every caller restates it. The hazard is not repetition: a caller that changed one of the two names would take a lock that guards nothing, and both files would still compile and both test suites would still pass, because no test in this workspace asserts that the lock a ledger takes is the lock for that ledger. Measured 2026-09-12: sixty-nine occurrences of the two literals across the workspace, the great majority in nomos-ledger's own fixtures and nomos-api's tests_support, which is where a rename would first look green. FileLedger cannot construct the lock itself: it is generic over CrossProcessLock and the concrete FileLock is nomos-platform-std's, now Zone::Backend under OD-RULES-028 and unreachable from Substrate's nomos-ledger. So the fix names the two files rather than building them.",
+      "done_when": "nomos-ledger names the two files of a board once and hands them back together, so a caller cannot obtain one without the other, and nomos-api and nomos-cli both compose from that rather than restating the literals. A test asserts the pairing the composition depends on -- same directory, the two names differing only in filename -- so that renaming one and not the other fails rather than silently taking an unrelated lock. The existing fixtures that write ledger.json directly are left alone: they are asserting about a file on disk, not composing a ledger, and rewriting them would be a second change hiding inside this one.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-api/src/work/ledger_at.rs",
+          "tests/contract/surface/nomos-ledger.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "nomos-step3-target\\debug\\deps\\completeness_universes-dd110170cf7576e4.exe)\n     Running tests\\corpus_gates.rs (F:/tmp/nomos-step3-target\\debug\\deps\\corpus_gates-a074b1410fc3b879.exe)\n     Running tests\\determinism_declarations.rs (F:/tmp/nomos-step3-target\\debug\\deps\\determinism_declarations-c1ad6c81408d535b.exe)\n     Running tests\\determinism_vocabulary.rs (F:/tmp/nomos-step3-target\\debug\\deps\\determinism_vocabulary-c8aa96e5af235abe.exe)\n     Running tests\\public_surface\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\public_surface-b03dbd257c9bac3c.exe)\n     Running tests\\requirement_trace\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\requirement_trace-2ca57c1c434e3b40.exe)\n     Running tests\\rule_composition.rs (F:/tmp/nomos-step3-target\\debug\\deps\\rule_composition-725dffee8029b64d.exe)\n     Running tests\\rule_contract_citation.rs (F:/tmp/nomos-step3-target\\debug\\deps\\rule_contract_citation-c0ca678df5530871.exe)\n     Running tests\\rule_descriptors.rs (F:/tmp/nomos-step3-target\\debug\\deps\\rule_descriptors-d1f727837388cfcb.exe)\n     Running tests\\toolchain_floor.rs (F:/tmp/nomos-step3-target\\debug\\deps\\toolchain_floor-6a26573367b28197.exe)\n     Running unittests src\\lib.rs (F:/tmp/nomos-step3-target\\debug\\deps\\nomos_ledger-0fe4577065c5f238.exe)\n     Running tests\\declining_ends_an_item.rs (F:/tmp/nomos-step3-target\\debug\\deps\\declining_ends_an_item-a4c580f5f4e07fa0.exe)\n     Running tests\\exclusion_holds\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\exclusion_holds-c2ff04d6078661b9.exe)\n     Running tests\\gate_covers_finish\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\gate_covers_finish-600bb9d904e3ddd2.exe)\n     Running tests\\records_do_not_serialize\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\records_do_not_serialize-e501df974a7977c4.exe)\n     Running tests\\scope_verification_integration.rs (F:/tmp/nomos-step3-target\\debug\\deps\\scope_verification_integration-d9841bb6c61f3cb8.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1789230889,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "335af4aeb806d88db471d83a7ab4bc37cafb17f9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P87-A-NARROWED-GATE-RUN-INVENTS-FINDINGS-A-FULL-RUN-DOES-NOT-3",
+      "title": "Whether --include selects what a gate run judges or only what it reports, given that narrowing the file set changes what rules conclude",
+      "why": "Measured 2026-09-12. nomos gate run --include <one file> reports Blocking findings about correct code that a full run does not: no-orphan-modules says the file is unreachable when its lib.rs declares it, and completeness-mirror says its tables resolve to no check when tests/contract resolves them. A caller reaches for --include to judge less and gets invented Blocking findings; a reader who trusts them deletes or re-declares something already fine. The cause is nomos-gate-orchestration's Scoped_Sources, which filters the walk before nomos_check_orchestration::Run sees it, so a rule answering a cross-file question answers it against a truncated world. no-orphan-modules' own module doc states the assumption that makes narrowing safe -- the two answers move together, a file the walk did not collect can neither back a declaration nor be reported as an orphan -- and --include is precisely what falsifies it: the file is collected, its root is not. The decisive asymmetry against OD-GATE-017's precedent is that selecting fewer rules cannot change a remaining rule's answer, and selecting fewer files can. Three mechanisms, each with a real cost. One: scope selects what is reported, judging stays whole -- fixes every rule at once and every future one, contradicts Test_A_Scoped_Out_Source_Should_Not_Be_Judged and OD-GATE-017's selection-is-real direction, and costs --include its role as a speed lever. Two: the run tells the rules its source set is partial, and a rule whose answer needs completeness declines instead of concluding -- preserves both, costs a parameter through RunContext, which P87-RUST-PROVIDERS measured at roughly 45 construction sites. Three: Scoped_Sources keeps each selected file's crate roots -- cheap and narrow, fixes no-orphan-modules only, leaves completeness-mirror lying, which is worse than leaving both, because a half-fixed instrument is harder to distrust.",
+      "done_when": "A record deciding what --include means, answering OD-GATE-017's selection-is-real precedent rather than ignoring it, and naming which rules answer cross-file questions today. The mechanism it chooses, built. A test pinning the property in both directions: a narrowed run and a whole-workspace run agree on no-orphan-modules and completeness-mirror findings for the same file, and a genuinely rootless source tree is still reported, so the fix does not buy quiet by blinding the rule to the defect it exists for.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src",
+          "crates/rules/nomos-rules/src/checks/orphan_modules.rs",
+          "crates/rules/nomos-rules/src/checks/mirror.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P89-THE-ENGINES-EXACT-COST-IS-THROWN-AWAY-AT-THE-FIRST-STEP",
+      "title": "A dispatch's cost is exact integer money in the engine and becomes an f64 dollar figure before anything in this workspace reads it",
+      "why": "Measured 2026-09-12, the whole float surface of this workspace's own data is five sites and this is four of them. xvpe holds a dispatch's cost as MicroDollars, exact integer money, and nomos-agent-executor-claude-code's own budget cap is one -- MAXIMUM_SPEND: MicroDollars::From_Micros(1_000_000), enforced by the engine against the same exact type. response.rs:39 then throws that exactness away on the first line that reads it: cost_usd: outcome.cost.Micros() as f64 / MICROS_IN_A_DOLLAR, carrying an as-cast-justified marker. From there the f64 is the only cost this workspace has: AgentExecutionOutcome.cost_usd, nomos-api's agent.rs parameter and its AgentExecutionOutcomeResponse, and nomos-cli's dispatch rendering. Nothing can compare a reported cost against MAXIMUM_SPEND exactly any more, and nomos-cli's own seam test already pays the price -- assert!((outcome.cost_usd - 0.01).abs() < f64::EPSILON), an epsilon dance around a value that was an integer two crates ago and only became inexact because this workspace made it so. The conversion is not wrong where a protocol demands it: AgentExecutionOutcomeResponse is Serialize and cost_usd is its published wire field. It is wrong as the internal representation, which is the numerical-abstraction convention this program is about.",
+      "done_when": "AgentExecutionOutcome carries the engine's exact money rather than a float, and every internal consumer carries it unchanged. The f64 appears once, at each boundary that genuinely requires it: AgentExecutionOutcomeResponse's published cost_usd field, whose JSON shape does not change, and nomos-cli's rendering. The seam test's epsilon comparison is replaced by an exact assertion, which is the observable proof the exactness survived the trip. Prose in nomos-agent-orchestration, nomos-workflow-orchestration and nomos-model-backend-ollama that names cost_usd as the field carried between crates is corrected to name what is actually carried.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-claude-code/src",
+          "crates/agent/nomos-agent-executor-claude-code/tests",
+          "crates/agent/nomos-model-backend-ollama/src/agent_execution_outcome.rs",
+          "crates/host/nomos-api/src/agent.rs",
+          "crates/host/nomos-api/src/workflow.rs",
+          "crates/host/nomos-cli/src/agent",
+          "crates/host/nomos-cli/tests/agent_executor_claude_code_seam.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/agent_dispatch_outcome.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/workflow_outcome/step_outcome.rs",
+          "tests/contract/surface/nomos-agent-executor-claude-code.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "\\takeover_is_recorded.rs (F:/tmp/nomos-step3-target\\debug\\deps\\takeover_is_recorded-1da870d5dcc7bd73.exe)\n     Running tests\\work_orchestration_seam.rs (F:/tmp/nomos-step3-target\\debug\\deps\\work_orchestration_seam-cb3e049ca967cf9a.exe)\n     Running tests\\workspace_seam.rs (F:/tmp/nomos-step3-target\\debug\\deps\\workspace_seam-586b71f69871fb5c.exe)\n     Running unittests src\\lib.rs (F:/tmp/nomos-step3-target\\debug\\deps\\nomos_contract_tests-2798a4de35a5285e.exe)\n     Running tests\\agent_harness.rs (F:/tmp/nomos-step3-target\\debug\\deps\\agent_harness-9605e43a7ba4051e.exe)\n     Running tests\\boundaries\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\boundaries-0d2658cfef36e1ed.exe)\n     Running tests\\completeness_universes\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\completeness_universes-dd110170cf7576e4.exe)\n     Running tests\\corpus_gates.rs (F:/tmp/nomos-step3-target\\debug\\deps\\corpus_gates-a074b1410fc3b879.exe)\n     Running tests\\determinism_declarations.rs (F:/tmp/nomos-step3-target\\debug\\deps\\determinism_declarations-c1ad6c81408d535b.exe)\n     Running tests\\determinism_vocabulary.rs (F:/tmp/nomos-step3-target\\debug\\deps\\determinism_vocabulary-c8aa96e5af235abe.exe)\n     Running tests\\public_surface\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\public_surface-b03dbd257c9bac3c.exe)\n     Running tests\\requirement_trace\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\requirement_trace-2ca57c1c434e3b40.exe)\n     Running tests\\rule_composition.rs (F:/tmp/nomos-step3-target\\debug\\deps\\rule_composition-725dffee8029b64d.exe)\n     Running tests\\rule_contract_citation.rs (F:/tmp/nomos-step3-target\\debug\\deps\\rule_contract_citation-c0ca678df5530871.exe)\n     Running tests\\rule_descriptors.rs (F:/tmp/nomos-step3-target\\debug\\deps\\rule_descriptors-d1f727837388cfcb.exe)\n     Running tests\\toolchain_floor.rs (F:/tmp/nomos-step3-target\\debug\\deps\\toolchain_floor-6a26573367b28197.exe)\n   Doc-tests nomos_agent_executor_claude_code\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789231773,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "335af4aeb806d88db471d83a7ab4bc37cafb17f9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P89-CONFIDENCE-GRADES-A-TRANSITION-NOTHING-EVER-MAKES",
+      "title": "Confidence and the identity transition it grades have no consumer anywhere in this workspace",
+      "why": "Found while measuring the float surface for this program's numerics axis, and it is a different defect from the one that axis went looking for. nomos-model's Confidence(f64) is the workspace's one bounded-ratio type and the obvious candidate for a numeric abstraction. Measured 2026-09-12: its only consumer is nomos-model's own Transition<Kind>.confidence, re-exported as IdentityTransition, and IdentityTransition has no consumer outside nomos-model at all -- the only Confidence::Of calls anywhere are the two in transition.rs's own test module. So the whole chain is complete, documented, tested and connected to nothing, which this repository's own record of its most common defect names exactly. Deciding whether Confidence should be a float, a rational, or a bounded integer is not answerable while nothing produces or reads one: every candidate representation is equally adequate for zero callers, and picking one now would be choosing a shape for a use nobody has stated. That is why this is filed as a validation rather than folded into the numerics work.",
+      "done_when": "A decision on whether IdentityTransition is work this workspace is still doing. If it is, the item that will produce or read one is named, and the Confidence representation question is answered against that use rather than in the abstract. If it is not, the chain is deleted, including Confidence, which exists only to grade it -- and nomos-model's public surface snapshot is re-blessed to match.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel/nomos-model/src/confidence.rs",
+          "crates/kernel/nomos-model/src/transition.rs",
+          "crates/kernel/nomos-model/src/identity",
+          "tests/contract/surface/nomos-model.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-model",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P82-NOTHING-STOPS-THE-TOOL-INSTALL-BEING-ORDERED-AFTER-ITS-USERS-AGAIN",
+      "title": "A gate step's install can be reordered after the steps that launch the tool, and only a comment says not to",
+      "why": "P82 moved the cargo-deny install ahead of Test and Determinism and left a long comment at gate.yml:90-115 saying why it must stay there. A comment is what failed the first time. The step was ordered after Test for the entire life of this workflow, the provider reported a missing cargo deny as a clean bans/licenses/sources verdict, and nobody noticed until P81 made the provider refuse instead of returning an empty list -- so the defect was invisible for as long as it existed and the thing that finally surfaced it was unrelated. P82's own why states that the existing guard does not cover this: Test_The_Supply_Chain_Tool_Should_Be_Installed_At_A_Chosen_Version derives the step by name and asserts only that the install carries --locked and a digit-leading version, so moving the step does not disturb it. Nothing in tests/gate_step asserts step order at all -- the suite checks pinning, excuses, vacuity, and which step is the lint step and which the rules step, all order-free. The workflow is a file people reorder, and the cost of getting it wrong is a step that reports clean for a judgment it never made, which is the false-coverage shape OD-COMPLETENESS-001 exists to refuse.",
+      "done_when": "A test in tests/gate_step asserts that the step installing a tool precedes every step whose command launches that tool, derived from gate.yml rather than from a list written in the test -- so a second tool added later is covered the day it lands rather than the day someone remembers. Proven by injection in both directions: the assertion fails against a workflow with the install moved back after Test, and passes against the real one. The comment at gate.yml:90-115 stays, and gains a sentence naming the test that now holds what it argues, so a reader reordering the file meets the guard and not only the reasoning.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/tests/gate_step"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Its done_when describes a vacuous test. It asks that the install precede every step whose command launches the tool, derived from gate.yml -- but measured 2026-09-12, exactly one step textually runs cargo deny (Supply chain, line 333) and it already follows the install at line 116. That assertion passes today for the wrong reason and would have passed on the broken workflow too, because the step that actually needed the binary was Test, whose command is cargo test --workspace and never names the tool: the launch is indirect, through nomos-lang-rust-deny's provider. A test built to this done_when would be the vacuous gate this repository refuses. Re-added as -2 with the invariant that would have caught it."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "gate_step"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "opus-p82",
+        "declined_at": 1789232703
+      }
+    },
+    {
+      "id": "P82-NOTHING-STOPS-THE-TOOL-INSTALL-BEING-ORDERED-AFTER-ITS-USERS-AGAIN-2",
+      "title": "Nothing asserts that a gate tool is installed before the step whose tests launch it",
+      "why": "P82 moved the cargo-deny install ahead of Test and Determinism and left a long comment at gate.yml:90-115 saying why it must stay there. A comment is what failed the first time: the step sat after Test for the entire life of this workflow, the provider reported a missing cargo deny as a clean bans/licenses/sources verdict, and what finally surfaced it was P81 making that provider refuse -- unrelated work. Nothing in tests/gate_step asserts step order; the suite checks pinning, excuses, vacuity and step identity, all order-free, and P82's own why records that Test_The_Supply_Chain_Tool_Should_Be_Installed_At_A_Chosen_Version derives the step by name and asserts only --locked and a digit-leading version, so moving the step does not disturb it. The obvious assertion is vacuous and this item exists having already measured that: only one step textually runs cargo deny (Supply chain, line 333), which already follows the install, so a test asserting the install precedes every step naming the tool passes today for the wrong reason and would have passed on the broken workflow too. The step that needed the binary was Test, whose command is cargo test --workspace and never names it -- the launch is indirect, through nomos-lang-rust-deny's provider. The invariant that holds is about test execution rather than about naming: a step running this workspace's tests may launch any tool this workspace knows how to launch.",
+      "done_when": "A test in tests/gate_step asserts that every cargo install step in gate.yml precedes the first step whose command runs the workspace's tests, with both the install steps and the test-running steps derived from gate.yml rather than listed in the test, so a second installed tool is covered the day it lands. Proven by injection in both directions and recorded in the test's own doc: it must fail against a workflow with the install moved back after Test -- the real historical shape, not an invented one -- and pass against the workflow as it stands. Its doc states why the naming-based assertion was rejected, so the next reader does not replace this with the vacuous one. The comment at gate.yml:90-115 gains a sentence naming the test that now holds what it argues.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/tests/gate_step",
+          ".github/workflows/gate.yml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "gate_step"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "gate_step"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 16 tests\ntest lint_step::Test_The_Derived_Lint_Step_Should_Still_Be_Clippy ... ok\ntest pinning::Test_Every_Action_Should_Be_Pinned_To_A_Commit ... ok\ntest lint_step::Test_The_Rules_Step_Should_Not_Be_The_Lint_Step ... ok\ntest excuses::Test_The_Excuse_Check_Should_Reject_An_Excused_Step ... ok\ntest step_order::Test_The_Doctored_Workflow_Should_Differ_From_The_Real_One ... ok\ntest vacuity::Test_The_Workflow_Should_Not_Appear_Empty ... ok\ntest excuses::Test_No_Step_In_The_Gate_Should_Excuse_Itself ... ok\ntest pinning::Test_The_Supply_Chain_Tool_Should_Be_Installed_At_A_Chosen_Version ... ok\ntest lint_step::Test_Only_One_Step_Should_Be_Named_Lint ... ok\ntest rules_step::Test_This_Repository_Gate_Should_Run_The_Rules ... ok\ntest pinning::Test_The_Gate_Should_Declare_The_Token_It_Runs_With ... ok\ntest rules_step::Test_The_Rules_Step_Should_Judge_The_Whole_Workspace ... ok\ntest pinning::Test_The_Pin_Check_Should_Reject_An_Action_On_A_Tag ... ok\ntest step_order::Test_The_Ordering_Check_Should_Reject_An_Install_Placed_After_The_Tests ... ok\ntest step_order::Test_Every_Tool_Should_Be_Installed_Before_The_Step_That_Runs_The_Tests ... ok\ntest rules_step::Test_A_Scripted_Rules_Step_Should_Not_Satisfy_That_Assertion ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s\n     Running tests\\gate_step\\main.rs (F:/tmp/nomos-step3-target\\debug\\deps\\gate_step-f433a0f326ac20cd.exe)\n",
+        "verified_at": 1789232923,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "335af4aeb806d88db471d83a7ab4bc37cafb17f9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P87-RUST-PROVIDERS-READ-THE-ENVIRONMENT-PAST-THE-INJECTED-LAUNCHER-3",
+      "title": "Three rust providers inject a process launcher and then decide the command name with a bare std::env::var",
+      "why": "The finding P86 was written for, left unclosed on purpose. nomos-lang-rust-cargo/src/metadata_error.rs:150, nomos-lang-rust-clippy/src/clippy_error.rs:102 and nomos-lang-rust-deny/src/deny_error.rs:217 each carry the identical line reading CARGO from std::env inside a function that builds a nomos_platform::Command for an injected ProcessLauncher, and clippy_error.rs:77 reads std::env::current_dir in Absolutized, which decides what a relative root resolves against. A fake launcher receives the command already built, so no test of these providers can state which cargo would run. nomos_platform::Environment exists since P86 and nothing here uses it. Measured 2026-09-12, correcting the count P87-...-2 carried: there are 45 RunContext construction sites, but 38 are inside nomos-check-orchestration itself -- 31 in src/tests.rs, 4 in run_context.rs, 3 in tests/run_seam.rs -- and those are one mechanical field each. Only six are production sites in other crates, one line apiece: nomos-gate-orchestration/src/gate_environment.rs, nomos-correction-orchestration/src/run.rs, nomos-workflow-orchestration/src/run.rs, nomos-lsp/src/nomos_diagnostic_provider.rs, nomos-cli/src/check.rs and nomos-api/src/check.rs. The first three were absent from the previous territory, which is why that spelling could not have compiled. RunContext is a struct with named fields, so this is a third generic and a field rather than a widened parameter list, and the parameter-count cap P86 hit does not apply. nomos-lang-rust-compiler reads current_dir too and is deliberately excluded: it is composed into nothing that takes a RunContext, so it is a separate item rather than a fourth crate in this cascade.",
+      "done_when": "The three providers read CARGO and the current directory through nomos_platform::Environment rather than std::env; nomos-check-orchestration's RunContext carries it beside the launcher and filesystem it already carries; all six production construction sites supply one, four of them through nomos-composer-std's ENVIRONMENT and nomos-lsp's the same way; and at least one provider has a test proving an injected environment decides the command name, the way nomos-surface-provenance now proves it for its own --root default -- watched failing against the std reads before it is believed. Every affected surface snapshot blessed in the same change.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-cargo",
+          "crates/languages/nomos-lang-rust-clippy",
+          "crates/languages/nomos-lang-rust-deny",
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/run.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs",
+          "crates/host/nomos-api/src/check.rs",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-lsp",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/contract/surface/nomos-lang-rust-cargo.txt",
+          "tests/contract/surface/nomos-lang-rust-clippy.txt",
+          "tests/contract/surface/nomos-lang-rust-deny.txt",
+          "tests/contract/surface/nomos-lsp.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory short again, now measured to the end. Re-added as -4 with every path the change must edit and with the shared-tree hazard stated, which is the thing that makes this item different in kind from the others rather than merely larger."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-lang-rust-deny",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-correction-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "opus-axis3",
+          "reason": "Mapped the full cascade and the territory is still short. A third generic on RunContext reaches three further environment structs -- GateEnvironment, CorrectionEnvironment and workflow-orchestration's Platform -- and their construction sites in nomos-api's correction.rs, workflow.rs and two response files, and nomos-cli's gate.rs, correct.rs and workflow.rs, none of which is reserved. Releasing rather than widening quietly.",
+          "abandoned_at": 1789233174
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "opus-axis3",
+        "declined_at": 1789233174
+      }
+    },
+    {
+      "id": "P87-RUST-PROVIDERS-READ-THE-ENVIRONMENT-PAST-THE-INJECTED-LAUNCHER-4",
+      "title": "Three rust providers inject a process launcher and then decide the command name with a bare std::env::var",
+      "why": "The finding P86 was written for. nomos-lang-rust-cargo/src/metadata_error.rs:150, nomos-lang-rust-clippy/src/clippy_error.rs:102 and nomos-lang-rust-deny/src/deny_error.rs:217 each read CARGO from std::env inside a function building a nomos_platform::Command for an injected ProcessLauncher, and clippy_error.rs:77 reads std::env::current_dir in Absolutized, which decides what a relative root resolves against. A fake launcher receives the command already built, so no test can state which cargo would run. nomos_platform::Environment exists since P86 and nothing uses it. Mapped end to end 2026-09-12, after two earlier spellings of this item both reserved territory that could not compile. The cascade: RunContext gains a third generic and a field; that reaches RunEnvironment and MaterializationEnvironment inside nomos-check-orchestration and its 38 internal construction sites (31 in src/tests.rs, 4 in run_context.rs, 3 in tests/run_seam.rs); and it reaches three further environment structs that each carry a platform for a caller -- nomos-gate-orchestration's GateEnvironment, nomos-correction-orchestration's CorrectionEnvironment and nomos-workflow-orchestration's Platform -- each of which must gain the same field, with 14 more test sites in workflow-orchestration alone. Their production construction sites are nomos-api's check.rs, correction.rs, workflow.rs and two response files, and nomos-cli's check.rs, gate.rs (twice), correct.rs and workflow.rs. Roughly ten crates and eight surface snapshots. The orchestration crates must gain the field rather than name a backend themselves: OD-HOST-001 leaves the platform choice to the composition root, and an orchestration crate reaching for StdEnvironment would be the defect this item exists to close, one layer up. nomos-lang-rust-compiler reads current_dir too and is excluded deliberately: nothing composes it through a RunContext, so it is its own item.",
+      "done_when": "The three providers read CARGO and the current directory through nomos_platform::Environment; RunContext, GateEnvironment, CorrectionEnvironment and Platform each carry one beside the launcher they already carry; every production construction site supplies it from its own composition root through nomos-composer-std; and at least one provider has a test proving an injected environment decides the command name, watched failing against the std reads before it is believed. Every affected surface snapshot blessed in the same change. Because this cannot compile part-way and the tree is shared and auto-committed, it is done in one sitting or abandoned back to a compiling tree -- a half-threaded generic committed here blocks every other session, which is a cost none of the other open items carry.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-cargo",
+          "crates/languages/nomos-lang-rust-clippy",
+          "crates/languages/nomos-lang-rust-deny",
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/orchestration/nomos-correction-orchestration",
+          "crates/orchestration/nomos-workflow-orchestration",
+          "crates/host/nomos-lsp",
+          "crates/host/nomos-api/src/check.rs",
+          "crates/host/nomos-api/src/correction.rs",
+          "crates/host/nomos-api/src/workflow.rs",
+          "crates/host/nomos-api/src/response",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/correct.rs",
+          "crates/host/nomos-cli/src/workflow.rs",
+          "tests/contract/surface"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-lang-rust-deny",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-correction-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P87-THE-COMPILER-PROVIDER-RESOLVES-A-ROOT-AGAINST-THE-REAL-CURRENT-DIRECTORY",
+      "title": "The compiler-backed provider absolutizes its root against the process's own current directory",
+      "why": "Found while mapping the environment cascade and deliberately kept out of it. nomos-lang-rust-compiler/src/reading.rs reads std::env::current_dir in Load_Crate to absolutize the root it was handed, the same shape as nomos-lang-rust-clippy's Absolutized, which P87-...-4 is closing through nomos_platform::Environment. This one is not part of that cascade and must not be folded into it: nothing composes this crate through a RunContext, and nothing launches a subprocess for it either -- Load_Crate drives ra_ap_hir in process, so there is no injected launcher here to read past. It is the port question standing alone. Filed low-value on purpose and the reason is worth stating rather than leaving as a silence: this crate has no dependents at all. Measured 2026-09-12, no Cargo.toml in the workspace lists it, and its only callers anywhere are three files under tests/integration/tests/determinism. README.md already records that state in its own row -- not yet composed into a real gate run. So the defect is real and currently unreachable, which is an argument for doing it cheaply when the crate is composed rather than for doing it now.",
+      "done_when": "Load_Crate resolves a relative root through nomos_platform::Environment rather than std::env::current_dir, with a test proving a stated working directory decides what a relative root resolves to -- the same proof nomos-surface-provenance already carries for its own --root default. If the crate is retired instead, this item is declined naming the item that retired it, because the read goes with it.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-compiler/src/reading.rs",
+          "tests/contract/surface/nomos-lang-rust-compiler.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-compiler"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null

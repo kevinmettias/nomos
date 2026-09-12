@@ -1,10 +1,14 @@
-pub fn nomos_lsp::Diagnostics_For(finding: &Finding) -> Vec<FileDiagnostic>
-pub fn nomos_lsp::Run_Server() -> std::io::Result<()>
+pub const nomos_lsp::NomosDiagnosticProvider::SCOPE: ReproducibilityScope
+pub const nomos_lsp::NomosDiagnosticProvider::STRENGTH: DeterminismStrength
+pub const nomos_lsp::NomosDiagnosticProvider::TRACE: TraceEquivalence
+pub fn nomos_lsp::Diagnostics_For(finding: &Finding) -> Vec<SourceDiagnostic>
+pub fn nomos_lsp::NomosDiagnosticProvider::Diagnose(&mut self, root: &Path) -> Vec<SourceDiagnostic>
+pub fn nomos_lsp::NomosDiagnosticProvider::New() -> Self
+pub impl nomos_lsp::NomosDiagnosticProvider implements DiagnosticProviderStrategy
+pub impl nomos_lsp::NomosDiagnosticProvider implements Strategy
 pub struct field nomos_lsp::ArchitecturalComponent::crate_name: String
 pub struct field nomos_lsp::ArchitecturalComponent::zone: String
 pub struct field nomos_lsp::AvailableCorrection::family: String
-pub struct field nomos_lsp::FileDiagnostic::diagnostic: Diagnostic
-pub struct field nomos_lsp::FileDiagnostic::path: String
 pub struct field nomos_lsp::GoverningRule::contract_record: &'static str
 pub struct field nomos_lsp::GoverningRule::contract_record_version: u32
 pub struct field nomos_lsp::GoverningRule::required_facts: Vec<String>
@@ -18,6 +22,6 @@ pub struct field nomos_lsp::WalkOutward::evidence: &'static str
 pub struct field nomos_lsp::WalkOutward::governing_rule: Option<GoverningRule>
 pub struct nomos_lsp::ArchitecturalComponent
 pub struct nomos_lsp::AvailableCorrection
-pub struct nomos_lsp::FileDiagnostic
 pub struct nomos_lsp::GoverningRule
+pub struct nomos_lsp::NomosDiagnosticProvider
 pub struct nomos_lsp::WalkOutward

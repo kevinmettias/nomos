@@ -7,6 +7,7 @@
 //! supplies through the `nomos_platform::ProcessLauncher` port. Each test below exercises
 //! the actual call this crate makes into one of them.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
 use nomos_lang_rust_deny::{
     Declared_Guarantee, Discover_Workspace, FactContext, Materialize_Workspace, PolicyFact, Provider_Offer,
@@ -21,6 +22,14 @@ use std::path::{Path, PathBuf};
 struct FakeLauncher
 {
     stderr: String,
+}
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for FakeLauncher
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
 impl ProcessLauncher for FakeLauncher

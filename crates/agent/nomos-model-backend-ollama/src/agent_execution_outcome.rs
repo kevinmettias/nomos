@@ -9,7 +9,7 @@
 /// `denied_tool_uses` field here the way that crate has one: this backend has no tool-use
 /// subsystem at all absent `--experimental` (never passed by [`crate::Execute_Task`]), so there is
 /// no structural denial signal to read -- the absence of any tool subsystem *is* the entire
-/// boundary, not a signal a caller checks after the fact. There is no `cost_usd` either:
+/// boundary, not a signal a caller checks after the fact. There is no `cost` either:
 /// inference is local, so there is no per-call dollar figure to report.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct AgentExecutionOutcome

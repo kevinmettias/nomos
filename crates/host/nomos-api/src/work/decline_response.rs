@@ -11,14 +11,14 @@ use std::path::Path;
 pub fn Handle_Work_Decline(directory: &Path, request: &EndingRequest) -> DeclineResponse
 {
     use super::Ledger_At;
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_composer_std::LAUNCHER;
 
     let mut ledger = Ledger_At(directory);
 
     let outcome = nomos_work_orchestration::Run(
         &WorkCommand::Decline(request.clone()),
         &mut ledger,
-        &StdProcessLauncher,
+        &LAUNCHER,
         || Territory::Of_Files(std::iter::empty::<String>()),
     );
 

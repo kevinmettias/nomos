@@ -4,35 +4,59 @@
 //! swapping the implementation cannot recompile the bands above and so that exactly one
 //! crate in the workspace names a platform dependency.
 //!
-//! # Why this exists before there is a second implementation
+//! # What the seam bought, now that it has been used
 //!
-//! The sibling xvpe workspace supplies most of these capabilities and Nomos will
-//! eventually consume them. It is mid-refactor and does not currently compile, so
-//! taking a path dependency on it today would make Nomos's buildability a function of
-//! another product's work in progress. That is not a boundary problem, it is a schedule
-//! problem, and it is worse.
+//! This crate was written before XVPE could be depended on, so that adopting it later
+//! would be a new implementation behind an existing seam rather than a refactor of
+//! every caller. That is what happened, twice, and the seam is why neither move
+//! touched a caller:
 //!
-//! The seam exists now, with a std implementation behind it, precisely so that adopting
-//! xvpe later is a new implementation rather than a refactor of every caller. A
-//! `tests/contract` assertion holds the other half of the bargain: no crate below the
-//! host band may name an `xvpe-*` dependency except the adapter that will implement
-//! these traits.
+//! - [`ProcessLauncher`]'s design went *down* into `xvpe-subprocess-execution` on
+//!   2026-09-10, with `nomos-platform-xvpe` bridging this workspace's launchers onto
+//!   it. This trait is unchanged and its 33 implementors never learned.
+//! - [`Timestamp`] went down on 2026-09-11 and this crate now re-exports XVPE's. Its
+//!   46 use-sites never learned either; only the nine serde fields that write it into
+//!   the work ledger name anything new, and they name
+//!   [`timestamp_serde`] — the wire format, which stays this workspace's own.
+//!
+//! Both are `OD-PLATFORM-003`: Nomos is an application over that engine, so a
+//! domain-neutral capability sitting up here is unreachable by everything down there.
+//! The rule that once said only `nomos-platform-xvpe` may name `xvpe-` is retired with
+//! that record — naming `xvpe-` is ordinary now, and the `tests/contract` assertion
+//! that enforced it was deleted rather than widened, so no rule here reads as a
+//! boundary while enforcing nothing.
 //!
 //! # Scope
 //!
 //! This crate declares what has a consumer today: [`Clock`], [`FileSystem`],
-//! [`CrossProcessLock`] and [`ProcessLauncher`]. Blob storage, task hosting and
-//! capability discovery are named in the architecture and are deliberately absent until
-//! something needs them — a trait nothing implements and nothing calls is a claim about
-//! the future, and this workspace has a rule against those.
+//! [`CrossProcessLock`], [`ProcessLauncher`] and [`Environment`]. Blob storage, task
+//! hosting and capability discovery are named in the architecture and are deliberately
+//! absent until something needs them — a trait nothing implements and nothing calls is a
+//! claim about the future, and this workspace has a rule against those.
+//!
+//! [`Environment`] is the one added by that rule rather than despite it. Three providers
+//! were injecting a [`ProcessLauncher`] and then reading `std::env` past it to decide what
+//! the launched command was called, so the seam existed and was being stepped around;
+//! `P86` measured the three identical reads. Its two operations are the two that had
+//! callers, and `std::env::args` is not among them for the same reason the absent ports
+//! above are absent: every production call site of it is a `main.rs`.
+//!
+//! [`Clock`] stays this workspace's own rather than becoming XVPE's
+//! `WallClockStrategy`. The two are the same design — [`Timestamp`] is now literally
+//! the same type — but XVPE additionally requires every strategy surface to declare
+//! its determinism, and adopting that here would mean touching every implementor for
+//! no behavioural change. That is the same trade `nomos-platform-xvpe` already made
+//! for the launcher, and the answer is the same: bridge at the crossing, not at the
+//! port.
 //!
 //! # Why `check-crate-split` reports this crate, and why it stays one
 //!
-//! The four ports never reference each other -- a clock has nothing to say to a lock --
-//! so that check reads four groups sharing a manifest. The sealing is the point and it is
-//! stated above: exactly one crate in this workspace names a platform dependency, and a
-//! `tests/contract` assertion holds every crate below the host band to it. Four port
-//! crates would be four places that rule has to be restated and checked.
+//! The five ports never reference each other -- a clock has nothing to say to a lock --
+//! so that check reads five groups sharing a manifest. The sealing is the point and it is
+//! stated above: exactly one crate in this workspace names a dependency on the machine
+//! underneath it. Five port crates would be five manifests for that one fact, and
+//! [`Environment`] — the next port added after that sentence was written — would have had
+//! to pick between them.
 
 #![forbid(unsafe_code)]
 
@@ -43,8 +67,18 @@ mod clock;
 mod file_system;
 mod process_launcher;
 mod cross_process_lock;
+mod environment;
 
-pub use clock::{Clock, Timestamp};
+// The determinism vocabulary the four ports declare in, re-exported so that an
+// implementor names it through the crate whose trait it is implementing. Every implementor
+// already depends on this crate -- that is what implementing its port means -- so this is
+// the difference between one import and a new dependency edge in each of the eighteen
+// crates that stand something up behind a port. The authority is still `nomos-contracts`;
+// this is a re-export, not a second copy.
+pub use nomos_contracts::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
+
+pub use clock::{Clock, Timestamp, timestamp_serde};
 pub use file_system::{FileSystem, FileSystemError};
 pub use process_launcher::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
 pub use cross_process_lock::{CrossProcessLock, LockAcquisition, LockError, StaleTakeover};
+pub use environment::{Environment, EnvironmentError};

@@ -168,6 +168,7 @@ fn Idle_Timeout(timeout: std::time::Duration) -> std::time::Duration
 #[cfg(test)]
 mod tests
 {
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use crate::{ItemKind, ItemOrigin, ItemState, LedgerItem, Territory};
     use nomos_platform::ProcessOutput;
@@ -220,6 +221,14 @@ mod tests
         code: i32,
         stdout: String,
         stderr: String,
+    }
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for Scripted
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
     impl ProcessLauncher for &Scripted

@@ -53,7 +53,7 @@ pub enum variant nomos_api::AgentExecutionErrorResponse::Unparseable { reason: S
 pub enum variant nomos_api::AgentJudgeRoleResponse::Dispatched { dispatch: AgentDispatchResponse }
 pub enum variant nomos_api::AgentJudgeRoleResponse::NoDeclaredRoleOrSurface
 pub enum variant nomos_api::AgentJudgeRoleResponse::NoFinding
-pub enum variant nomos_api::AuditResponse::Audited { blocked: Vec<BlockedItem>, now: Timestamp, }
+pub enum variant nomos_api::AuditResponse::Audited { blocked: Vec<BlockedItem>, #[serde(with = "nomos_platform::timestamp_serde")] now: Timestamp, }
 pub enum variant nomos_api::AuditResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::BlockChangeResponse::Added { ordinal: u32, kind: String }
 pub enum variant nomos_api::BlockChangeResponse::Moved { from: u32, to: u32 }
@@ -99,7 +99,7 @@ pub enum variant nomos_api::GateExplainResponse::Found { finding: Box<Finding>, 
 pub enum variant nomos_api::GateExplainResponse::NotFound
 pub enum variant nomos_api::GatePlanResponse::Contradictory { cause: String, }
 pub enum variant nomos_api::GatePlanResponse::Planned { rules: Vec<RuleOfferResponse>, }
-pub enum variant nomos_api::ListResponse::Listed { document: LedgerDocument, now: Timestamp, }
+pub enum variant nomos_api::ListResponse::Listed { document: LedgerDocument, #[serde(with = "nomos_platform::timestamp_serde")] now: Timestamp, }
 pub enum variant nomos_api::ListResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::MarkdownResponse::Refused { cause: String, }
 pub enum variant nomos_api::MarkdownResponse::Resolved { node_id: String, path: String, revision: String, markdown: String, source_hash: String, projected_hash: String, matches_source: bool, }
@@ -135,7 +135,7 @@ pub enum variant nomos_api::ReservationOutcomeResponse::Refused { cause: String,
 pub enum variant nomos_api::ReservationOutcomeResponse::Reserved { reservation: ReservationResponse, }
 pub enum variant nomos_api::SeverityResponse::Blocking
 pub enum variant nomos_api::SeverityResponse::NonBlocking
-pub enum variant nomos_api::ShowResponse::Found { item: Box<LedgerItem>, current_revision: Option<String>, now: Timestamp, }
+pub enum variant nomos_api::ShowResponse::Found { item: Box<LedgerItem>, current_revision: Option<String>, #[serde(with = "nomos_platform::timestamp_serde")] now: Timestamp, }
 pub enum variant nomos_api::ShowResponse::NotFound { item: ItemId, }
 pub enum variant nomos_api::ShowResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::SourcesResponse::Assembled { read: Vec<String>, absent: Vec<AbsenceResponse>, }

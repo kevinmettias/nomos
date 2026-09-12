@@ -113,7 +113,7 @@ pub const nomos_rules::WRITE_AUTHORITY_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::WRITE_DOORS: &[(&str, &[&str])]
 pub const nomos_rules::ZERO_FLAKE_POLICY: &str
 pub const nomos_rules::ZONES: &[(&str, Zone)]
-pub const nomos_rules::ZONE_LIST: [Zone; 11]
+pub const nomos_rules::ZONE_LIST: [Zone; 12]
 pub enum nomos_rules::FunctionAritySource
 pub enum nomos_rules::Reading
 pub enum nomos_rules::ReceiverAllowance
@@ -148,6 +148,7 @@ pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
 pub enum variant nomos_rules::Zone::Agent
 pub enum variant nomos_rules::Zone::ApplicationService
+pub enum variant nomos_rules::Zone::Backend
 pub enum variant nomos_rules::Zone::CapabilityContract
 pub enum variant nomos_rules::Zone::Host
 pub enum variant nomos_rules::Zone::Protocol

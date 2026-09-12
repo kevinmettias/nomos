@@ -75,6 +75,7 @@ pub fn Read_Standards_Document<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> 
 #[cfg(test)]
 mod tests
 {
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use nomos_platform_std::StdFileSystem;
     use std::path::PathBuf;
@@ -117,6 +118,14 @@ mod tests
     struct FakeFileSystem
     {
         text: String,
+    }
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for FakeFileSystem
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
     impl FileSystem for FakeFileSystem

@@ -12,6 +12,9 @@
 //! represented rather than defaulted; [`KnowledgeContextItem::Is_Unresolved`] is the
 //! corpus's own "shall not be treated as normative" test.
 
+use alloc::string::String;
+use alloc::vec::Vec;
+
 use serde::{Deserialize, Serialize};
 
 use super::KnowledgeSourceRole;
@@ -46,6 +49,8 @@ impl KnowledgeContextItem
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec;
+    use alloc::borrow::ToOwned;
     use super::*;
 
     #[test]

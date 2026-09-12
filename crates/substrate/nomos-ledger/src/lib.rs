@@ -75,4 +75,5 @@ pub use item::{DEFAULT_LEASE, DeclineReason, Holder, ItemId, ItemKind, ItemOrigi
 pub use ledger_error::LedgerError;
 pub use nomos_scope_verification::{Normalize_Path, Territory};
 pub use store::{AddRefusal, Claim_Refusal, Eligible_Items, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, SCHEMA_VERSION, Validate_Document};
+pub use store::{BoardFiles, Board_In, DOCUMENT_FILENAME, LOCK_FILENAME};
 pub use verification::{VerificationPredicate, VerificationRecord};

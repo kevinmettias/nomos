@@ -20,7 +20,7 @@ nomos-model = { workspace = true }
 nomos-model-backend-ollama = { workspace = true }
 nomos-model-package = { workspace = true }
 nomos-platform = { workspace = true }
-nomos-platform-std = { workspace = true }
+nomos-composer-std = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-spec-model = { workspace = true }
 nomos-spec-orchestration = { workspace = true }

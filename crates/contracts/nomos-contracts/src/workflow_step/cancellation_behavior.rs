@@ -58,6 +58,7 @@ impl core::fmt::Display for CancellationBehavior
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     #[test]

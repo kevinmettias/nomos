@@ -1,8 +1,14 @@
-pub const nomos_mcp::PROTOCOL_VERSION: &str
+pub const nomos_mcp::NomosToolCatalog::SCOPE: ReproducibilityScope
+pub const nomos_mcp::NomosToolCatalog::STRENGTH: DeterminismStrength
+pub const nomos_mcp::NomosToolCatalog::TRACE: TraceEquivalence
 pub const nomos_mcp::ServedTool::REGISTRY: [Self; 4]
-pub fn nomos_mcp::Answer(line: &str) -> Option<WireResponse>
-pub fn nomos_mcp::Serve(input: impl BufRead, mut output: impl Write) -> std::io::Result<()>
-pub fn nomos_mcp::ServedTool::Listing(self) -> Value
+pub fn nomos_mcp::NomosToolCatalog::Call_With_Json_Arguments(&self, name: &str, arguments: &str) -> ToolAnswer
+pub fn nomos_mcp::NomosToolCatalog::Identity(&self) -> ServerIdentity
+pub fn nomos_mcp::NomosToolCatalog::Tools(&self) -> Vec<ToolDescriptor>
+pub fn nomos_mcp::ServedTool::Descriptor(self) -> ToolDescriptor
 pub fn nomos_mcp::ServedTool::Name(self) -> &'static str
 pub fn nomos_mcp::ServedTool::Named(name: &str) -> Option<Self>
+pub impl nomos_mcp::NomosToolCatalog implements Strategy
+pub impl nomos_mcp::NomosToolCatalog implements ToolCatalogStrategy
+pub struct nomos_mcp::NomosToolCatalog
 pub struct nomos_mcp::ServedTool(ServedMethod)

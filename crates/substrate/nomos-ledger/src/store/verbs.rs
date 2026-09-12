@@ -164,11 +164,20 @@ fn Take_Over_Locked(
 #[cfg(test)]
 mod tests
 {
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use crate::{Claim, ItemKind, ItemOrigin, ItemState, Territory};
     use nomos_platform_std::{FileLock, StdFileSystem};
 
     struct FixedClock(i64);
+
+    /// Fixed instants, so both the values and their timing reproduce.
+    impl Strategy for FixedClock
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::StateTemporal;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
 
     impl Clock for &FixedClock
     {

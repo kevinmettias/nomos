@@ -4,13 +4,13 @@
 //! Staging the edit, checking it against the store and -- for a commit -- applying the
 //! transaction and writing its bytes where the record belongs is
 //! `nomos-spec-orchestration::{Preview_Staged_Edit, Commit_Staged_Edit}`'s job now, through
-//! `nomos-platform-std::StdFileSystem` -- the same composition-root choice `nomos-cli::work`
+//! `nomos-composer-std`'s `FILE_SYSTEM` -- the same composition-root choice `nomos-cli::work`
 //! already makes for the ledger. This module keeps only the writing of *text about* what
 //! happened and the `ExitCode` a rendering layer is responsible for.
 
 use crate::spec::{Assembly, EditRequest, Channels, ExitCode, EPHEMERAL, CommitRequest, EditPreview, CommitReport, Path, EditError, Absent_Or};
 use nomos_platform::FileSystemError;
-use nomos_platform_std::StdFileSystem;
+use nomos_composer_std::FILE_SYSTEM;
 use nomos_spec_orchestration::{
     CommitAnswer, CommitRefusal, CommitRefusalError, CommitRefusalKind, PreviewRefusal, Reproduction, VacateOutcome,
     Vacated,
@@ -19,7 +19,7 @@ use nomos_spec_orchestration::{
 /// The preview, printed, changing nothing.
 pub(in crate::spec) fn Preview_Edit(assembly: &Assembly, request: &EditRequest, channels: &mut Channels<'_>) -> ExitCode
 {
-    return match nomos_spec_orchestration::Preview_Staged_Edit(assembly, request, &StdFileSystem)
+    return match nomos_spec_orchestration::Preview_Staged_Edit(assembly, request, &FILE_SYSTEM)
     {
         Ok(preview) => Described_Preview(&preview, channels),
         Err(PreviewRefusal::Unreadable { path, error }) => Unreadable_Source(&path, &error, channels.notes),
@@ -43,7 +43,7 @@ pub(in crate::spec) fn Commit_Edit(
     channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    return match nomos_spec_orchestration::Commit_Staged_Edit(assembly, request, &StdFileSystem)
+    return match nomos_spec_orchestration::Commit_Staged_Edit(assembly, request, &FILE_SYSTEM)
     {
         Ok(answer) => Reported_Commit(assembly, &answer, channels),
         Err(CommitRefusal { kind: CommitRefusalKind::Unreadable { path }, error }) =>

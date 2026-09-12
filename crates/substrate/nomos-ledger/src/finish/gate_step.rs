@@ -73,11 +73,20 @@ pub(super) fn Run_Gate_Step<Files: FileSystem, TimeSource: Clock, Lock: CrossPro
 #[cfg(test)]
 mod tests
 {
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use nomos_platform::{Command, ExitOutcome, ProcessOutput, Timestamp};
     use nomos_platform_std::{FileLock, StdFileSystem};
 
     struct FixedClock(i64);
+
+    /// Fixed instants, so both the values and their timing reproduce.
+    impl Strategy for FixedClock
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::StateTemporal;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
 
     impl Clock for &FixedClock
     {
@@ -100,6 +109,14 @@ mod tests
 
     /// A launcher standing in for a lint step that finds a problem.
     struct AlwaysFails;
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for AlwaysFails
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
 
     impl ProcessLauncher for &AlwaysFails
     {

@@ -15,6 +15,7 @@
 //! `nomos_model` seam below reuse the same fabricated document instead of shelling out
 //! again.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
 use nomos_lang_rust_cargo::{Declared_Guarantee, Discover_Workspace, FactContext, Materialize_Workspace, Provider_Offer};
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
@@ -49,6 +50,14 @@ impl FakeLauncher
             stderr: stderr.to_owned(),
         };
     }
+}
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for FakeLauncher
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
 impl ProcessLauncher for FakeLauncher

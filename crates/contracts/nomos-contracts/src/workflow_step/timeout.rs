@@ -1,7 +1,7 @@
 //! How long a step may run before it is no longer waited on.
 
 use serde::{Deserialize, Serialize};
-use std::num::NonZeroU32;
+use core::num::NonZeroU32;
 
 /// How long a step may run before it is no longer waited on.
 ///

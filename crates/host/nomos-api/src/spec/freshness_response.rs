@@ -12,17 +12,17 @@ use super::{Build_Corpus_Request, ProfileOutcomeResponse};
 /// Freshness` is generic over `FileSystem` (it reads a rendered body and its sidecar at
 /// `request.into`, through `nomos_platform::FileSystem::Read_To_String`), but never writes --
 /// unlike `Render`, `Preview` and `Commit`, exposing it carries none of the "does a wire call
-/// write to this host's disk" hazard those three do, since `StdFileSystem` here only ever
+/// write to this host's disk" hazard those three do, since the composed filesystem here only ever
 /// reads paths the caller already named.
 #[must_use]
 pub fn Handle_Spec_Freshness(request: &FreshnessRequest) -> FreshnessResponse
 {
-    use nomos_platform_std::StdFileSystem;
+    use nomos_composer_std::FILE_SYSTEM;
 
     let corpus_request = Build_Corpus_Request();
 
     let outcome =
-        nomos_spec_orchestration::Run(&SpecCommand::Freshness(request.clone()), &corpus_request, &StdFileSystem);
+        nomos_spec_orchestration::Run(&SpecCommand::Freshness(request.clone()), &corpus_request, &FILE_SYSTEM);
 
     let nomos_spec_orchestration::SpecOutcome::Freshness(result) = outcome
     else

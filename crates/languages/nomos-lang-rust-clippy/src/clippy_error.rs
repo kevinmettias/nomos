@@ -333,6 +333,7 @@ fn Require_Nonempty(discovered: Vec<DiscoveredDiagnostics>) -> Result<Vec<Discov
 #[cfg(test)]
 mod local_tests
 {
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use nomos_platform::ProcessOutput;
 
@@ -342,6 +343,14 @@ mod local_tests
     struct FakeLauncher
     {
         stdout: String,
+    }
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for FakeLauncher
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
     impl ProcessLauncher for FakeLauncher

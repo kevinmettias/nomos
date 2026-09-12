@@ -129,12 +129,21 @@ pub(super) fn Load_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossPro
 #[cfg(test)]
 mod tests
 {
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use crate::{AddRefusal, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, Territory};
     use nomos_platform_std::{FileLock, StdFileSystem};
     use std::path::{Path, PathBuf};
 
     struct FixedClock(i64);
+
+    /// Fixed instants, so both the values and their timing reproduce.
+    impl Strategy for FixedClock
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::StateTemporal;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
 
     impl Clock for &FixedClock
     {

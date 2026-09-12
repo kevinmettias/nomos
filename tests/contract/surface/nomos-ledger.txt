@@ -89,9 +89,13 @@ pub use item::MAXIMUM_LEASE
 pub use nomos_scope_verification::Normalize_Path
 pub use nomos_scope_verification::Territory
 pub use store::AddRefusal
+pub use store::BoardFiles
+pub use store::Board_In
 pub use store::Claim_Refusal
+pub use store::DOCUMENT_FILENAME
 pub use store::Eligible_Items
 pub use store::FileLedger
+pub use store::LOCK_FILENAME
 pub use store::LOCK_STALE_AFTER
 pub use store::LOCK_WAIT_LIMIT
 pub use store::LedgerDocument

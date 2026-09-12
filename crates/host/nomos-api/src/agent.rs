@@ -6,9 +6,10 @@
 //! `P43-AGENT-CANONICAL-SEAM-2` gives this crate its first Agent verbs: deliberate twins of
 //! `nomos-cli`'s own `agent execute`/`agent judge-role`, calling the identical
 //! `nomos_agent_orchestration::Run_Agent_Execute`/`Run_Agent_Judgment` seam those commands
-//! now dispatch through, using this crate's own `StdProcessLauncher` rather than sharing
-//! one with `nomos-cli` -- a platform choice is a composition-root concern, `OD-HOST-002`'s
-//! own division. Before this crate, `nomos-agent-executor-claude-code` and
+//! now dispatch through, naming its own platform through `nomos-composer-std` rather than
+//! reaching into `nomos-cli` for one -- a platform choice is a composition-root concern,
+//! `OD-HOST-002`'s own division, and two roots naming the same platform is not the same
+//! thing as one of them borrowing the other's. Before this crate, `nomos-agent-executor-claude-code` and
 //! `nomos-model-backend-ollama` reached this workspace only through `nomos-cli`'s own
 //! `agent` group and through `nomos_workflow_orchestration`'s own `Body::ClaudeCode`/
 //! `Body::Ollama` step dispatch (rendered here as `workflow::AgentExecutionOutcomeResponse`/
@@ -34,7 +35,8 @@
 //! that fold, not a structure this seam does not keep.
 
 use nomos_agent_orchestration::{AgentDispatchOutcome, AgentEnvironment, DispatchConfig, Run_Agent_Execute, Run_Agent_Judgment};
-use nomos_platform_std::StdProcessLauncher;
+use nomos_agent_executor_claude_code::MicroDollars;
+use nomos_composer_std::LAUNCHER;
 use nomos_rules::RoleSurfacePair;
 use serde::Serialize;
 use std::path::Path;
@@ -44,7 +46,7 @@ use std::path::Path;
 #[must_use]
 pub fn Handle_Agent_Execute(goal: &str, config: DispatchConfig) -> AgentDispatchResponse
 {
-    let outcome = Run_Agent_Execute(goal, config, &AgentEnvironment { launcher: &StdProcessLauncher });
+    let outcome = Run_Agent_Execute(goal, config, &AgentEnvironment { launcher: &LAUNCHER });
 
     return AgentDispatchResponse::From(outcome);
 }
@@ -69,7 +71,7 @@ pub fn Handle_Agent_Judge_Role(root: &Path, crate_name: &str, config: DispatchCo
         return AgentJudgeRoleResponse::NoFinding;
     };
 
-    let outcome = Run_Agent_Judgment(&pair, finding, config, &AgentEnvironment { launcher: &StdProcessLauncher });
+    let outcome = Run_Agent_Judgment(&pair, finding, config, &AgentEnvironment { launcher: &LAUNCHER });
 
     return AgentJudgeRoleResponse::Dispatched { dispatch: AgentDispatchResponse::From(outcome) };
 }
@@ -159,6 +161,31 @@ pub enum AgentDispatchResponse
     },
 }
 
+/// `cost` as the dollar figure the wire publishes.
+///
+/// The one place in this workspace where the engine's exact money becomes a float, and it
+/// is here because `cost_usd` is a published field of two `Serialize` response types --
+/// [`AgentDispatchResponse::ClaudeCode`] and [`crate::workflow::AgentExecutionOutcomeResponse`].
+/// A caller reading that number off a JSON-RPC or MCP reply already has a float, and
+/// changing the field to integer micros would change a shape this workspace publishes
+/// rather than one it merely holds.
+///
+/// `P89` moved this conversion here from `nomos-agent-executor-claude-code`'s own
+/// `response.rs`, where it ran on the first line that read the engine's answer and left
+/// every crate between there and here holding a value nothing could compare exactly
+/// against `nomos_agent_executor_claude_code::MAXIMUM_SPEND`, which is the same integer
+/// type the engine enforces the cap with.
+#[expect(
+    clippy::cast_precision_loss,
+    reason = "a dispatch's cost in micros is far below f64's exact-integer range --               MAXIMUM_SPEND is 1_000_000 micros and 2^53 is nine orders of magnitude above it"
+)]
+pub(crate) fn Dollars_Of(cost: MicroDollars) -> f64
+{
+    const MICROS_IN_A_DOLLAR: f64 = 1_000_000.0;
+
+    return cost.Micros() as f64 / MICROS_IN_A_DOLLAR;
+}
+
 impl AgentDispatchResponse
 {
     fn From(outcome: AgentDispatchOutcome) -> Self
@@ -170,7 +197,7 @@ impl AgentDispatchResponse
                 unresolved_questions: outcome.result.unresolved_questions,
                 denied_tool_uses: outcome.denied_tool_uses,
                 is_error: outcome.is_error,
-                cost_usd: outcome.cost_usd,
+                cost_usd: Dollars_Of(outcome.cost),
                 duration_ms: outcome.duration_ms,
             },
             AgentDispatchOutcome::Ollama(outcome) => Self::Ollama { response: outcome.response },

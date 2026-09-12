@@ -63,6 +63,7 @@ impl core::fmt::Display for TraceEquivalence
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     #[test]

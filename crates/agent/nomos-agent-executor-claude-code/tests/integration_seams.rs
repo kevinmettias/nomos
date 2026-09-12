@@ -5,6 +5,7 @@
 //! does: build a real [`TaskEnvelope`], hand it a real [`ProcessLauncher`], and read back
 //! a real [`AgentExecutionOutcome`] or [`AgentExecutionError`].
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_agent_contracts::{Isolated_Working_Directory, TaskEnvelope};
 use nomos_agent_executor_claude_code::{AgentExecutionError, Execute_Task};
 use nomos_contracts::{CapabilityId, KnowledgeReferenceId, RuleId, SchemaId};
@@ -20,6 +21,14 @@ struct Scripted
     outcome: ExitOutcome,
     stdout: String,
     stderr: String,
+}
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for Scripted
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
 impl ProcessLauncher for Scripted
@@ -76,6 +85,14 @@ fn Test_Execute_Task_Should_Read_A_Clean_Response_From_A_Real_Task_Envelope()
 fn Test_Execute_Task_Should_Report_A_Launcher_Failure_As_Unavailable()
 {
     struct Unavailable;
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for Unavailable
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
+
     impl ProcessLauncher for Unavailable
     {
         fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>

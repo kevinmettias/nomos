@@ -1,3 +1,5 @@
+
+
 use serde::{Deserialize, Serialize};
 
 const BLOCKING_LABEL: &str = "Blocking";
@@ -72,6 +74,7 @@ impl core::fmt::Display for GateCategory
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     #[test]

@@ -7,20 +7,21 @@
 //! two outcome shapes it produces -- into `nomos_agent_orchestration::Run_Agent_Execute`
 //! (and, for `judge-role`, `Run_Agent_Judgment`), so `nomos-api` could reach the same
 //! dispatch without depending on this crate. What is left here is choosing a
-//! [`nomos_platform_std::StdProcessLauncher`] for the seam's own one platform port and
+//! [`nomos_composer_std::LAUNCHER`] for the seam's own one platform port and
 //! rendering an [`nomos_agent_orchestration::AgentDispatchOutcome`] into the exact text and
 //! [`ExitCode`] this command has always reported.
 //!
 //! # A deliberate change from what this file's own comment used to defend
 //!
-//! The former `Dispatch_Task` here was fixed to `StdProcessLauncher` rather than generic,
+//! The former `Dispatch_Task` here was fixed to one concrete launcher rather than generic,
 //! matching `check.rs`'s and `work.rs`'s own composition-root choice for their own
 //! subprocesses -- correct advice for a CLI-only module with exactly one caller. It stopped
 //! being correct the moment this dispatch moved into a crate two hosts call:
 //! `nomos_agent_orchestration::Run_Agent_Execute`/`Run_Agent_Judgment` are generic over
 //! `nomos_platform::ProcessLauncher`, the identical reason
 //! `nomos_correction_orchestration::Run_Correction` already is, so `nomos-api` supplies its
-//! own `StdProcessLauncher` at its own call site rather than depending on this crate's
+//! own launcher, through `nomos-composer-std`, at its own call site rather than depending
+//! on this crate's
 //! choice, or on this crate at all. Genericizing also retires the `// check-test-coverage:
 //! allow-untested` exclusion this file's own two match arms used to carry: they were
 //! untestable here only because they were fixed to a real launcher, and
@@ -32,9 +33,9 @@ use nomos_agent_orchestration::{AgentDispatchOutcome, AgentEnvironment, Run_Agen
 
 pub(super) fn Execute_Goal(goal: &str, config: DispatchConfig, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
 {
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_composer_std::LAUNCHER;
 
-    let outcome = Run_Agent_Execute(goal, config, &AgentEnvironment { launcher: &StdProcessLauncher });
+    let outcome = Run_Agent_Execute(goal, config, &AgentEnvironment { launcher: &LAUNCHER });
 
     return Rendered(&outcome, output, notes);
 }
@@ -56,7 +57,14 @@ pub(super) fn Rendered(outcome: &AgentDispatchOutcome, output: &mut impl std::io
             let _ = writeln!(output, "assumptions: {:?}", outcome.result.assumptions);
             let _ = writeln!(output, "unresolved questions: {:?}", outcome.result.unresolved_questions);
             let _ = writeln!(output, "denied tool uses: {:?}", outcome.denied_tool_uses);
-            let _ = writeln!(output, "is_error: {}  cost_usd: {}  duration_ms: {}", outcome.is_error, outcome.cost_usd, outcome.duration_ms);
+            let _ = writeln!(
+                output,
+                "is_error: {}  cost_usd: {}.{:06}  duration_ms: {}",
+                outcome.is_error,
+                outcome.cost.Whole_Dollars(),
+                outcome.cost.Fractional_Micros(),
+                outcome.duration_ms
+            );
             ExitCode::Ok
         }
         AgentDispatchOutcome::Ollama(outcome) =>

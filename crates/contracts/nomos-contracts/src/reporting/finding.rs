@@ -17,6 +17,11 @@
 //! system — nothing is identified by its path and line, ever — and a finding is the
 //! type most likely to break it, because a location is the field a human wants first.
 
+use alloc::string::String;
+use alloc::vec::Vec;
+use alloc::borrow::ToOwned;
+use alloc::format;
+
 // What a finding says beyond its text: whether the rule applied, what class of evidence
 // backs it, and how each of those is labelled for a reader.
 mod applicability;
@@ -134,6 +139,7 @@ impl Finding
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec;
     use super::*;
     use crate::Digest128;
 

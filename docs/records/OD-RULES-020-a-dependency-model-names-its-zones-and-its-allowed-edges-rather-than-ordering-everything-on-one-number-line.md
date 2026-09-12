@@ -3,7 +3,7 @@ id: OD-RULES-020
 type: decision
 title: A dependency model names its zones and its allowed edges rather than ordering everything on one number line
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - rules
@@ -11,6 +11,8 @@ tags:
   - layering
 relations:
   - target: OD-PROJECT-004
+    type: relates-to
+  - target: OD-RULES-028
     type: relates-to
   - target: ARC-ECOSYSTEM-001
     type: relates-to
@@ -64,8 +66,9 @@ numbers pretend to be a strict stack.
 
 ## The Decision
 
-**Numeric bands are replaced by eleven named zones, each with an explicit, declared set of
-zones it may depend on.** A crate belongs to exactly one zone; two crates in the same zone
+**Numeric bands are replaced by named zones, each with an explicit, declared set of
+zones it may depend on.** Eleven of them when this record was written; twelve since
+`OD-RULES-028`. A crate belongs to exactly one zone; two crates in the same zone
 are peers by default — neither may depend on the other — unless a specific edge between
 them is declared by name, the same way `tests/contract/tests/boundaries/graph.rs` already
 declares `PLATFORM_ADAPTER` and `KNOWLEDGE_ADAPTER` as named exceptions rather than
@@ -80,7 +83,8 @@ relocations:
 | Zone | Crates | May depend on |
 |---|---|---|
 | Protocol | `nomos-contracts` | nothing but `serde` |
-| Substrate | `nomos-model`, `nomos-store`, `nomos-platform`, `nomos-platform-std`, `nomos-workspace`, `nomos-scope-verification`, `nomos-capability`, `nomos-analysis` | Protocol |
+| Substrate | `nomos-model`, `nomos-store`, `nomos-platform`, `nomos-workspace`, `nomos-scope-verification`, `nomos-capability`, `nomos-analysis` | Protocol, Backend |
+| Backend | `nomos-platform-std` | Protocol, Substrate — added by `OD-RULES-028`; see the amendment below |
 | Specification | `nomos-spec-model`, `nomos-spec-store`, `nomos-spec-bundle`, `nomos-spec-ingest`, `nomos-spec-validate`, `nomos-spec-project`, `nomos-spec-orchestration` | Protocol, Substrate |
 | Capability Contract | the ten `nomos-cap-*` crates | Protocol, Substrate |
 | Provider | `nomos-package`, every `nomos-lang-*`, `nomos-repo-policy`, every `*-package` manifest crate | Protocol, Substrate, Capability Contract |
@@ -127,16 +131,29 @@ every real crate's classification and every same-zone edge against the actual de
 graph rather than trusting the proposal below. This section originally deferred that audit
 to a future item; the amendment above is that audit's own finding.
 
-It does not decide whether the eleven zones named above are the final set. `OD-PROJECT-004`
+It did not decide whether the eleven zones named above were the final set. `OD-PROJECT-004`
 already reserved `Repo Tooling`'s population; if that record's own move happens, the
 crates land where this record already put them. A zone with population one (`Protocol`) or
 population four (several) is not itself a defect this record found reason to flatten
 further.
 
+`OD-RULES-028` took that opening and added a twelfth: `Backend`, holding
+`nomos-platform-std` alone, so that `Permits` can keep a `Host` away from a platform
+implementation now that `nomos-composer-std` exists for it to name a platform through. The
+classification is the argument — a port declaration and an implementation of it are not the
+same kind of thing — and the enforcement follows from it, which is the order this record
+required after band renumbers had reversed it. That record also names what the move costs:
+a zone with one member, and a `Substrate → Backend` permission wider than the one crate that
+uses it, because `Permits` answers by zone and `SAME_ZONE_EDGES`' per-pair shape does not
+cross zones.
+
 ## Status
 
-Accepted, version 2. Eleven named zones replace the numeric band table's role, each with a
+Accepted, version 3. Named zones replace the numeric band table's role, each with a
 declared set of zones it may reach and, for the seven zones the real migration measured to
 need it, a named list of same-zone edges. Amended by `P41-RULES-020-RECONCILE-REAL-
 MEASUREMENT` once `P41-ZONES-MIGRATION-3`'s own exhaustive cross-check found this record's
-"one zone" claim incomplete; the zone model itself is unchanged, only the count.
+"one zone" claim incomplete; the zone model itself is unchanged, only the count. Amended
+again by `OD-RULES-028`, which added a twelfth zone (`Backend`) and moved
+`nomos-platform-std` into it; the model is again unchanged, and again only the count and
+one crate's classification.

@@ -52,22 +52,27 @@ mod evaluate;
 #[cfg(test)]
 mod fake_launcher;
 mod git;
+mod machine;
 mod report;
+#[cfg(test)]
+mod stated_environment;
 
 mod exit_code;
 
 use exit_code::ExitCode;
-use nomos_platform::ProcessLauncher;
+use machine::Machine;
+use nomos_platform::{Environment, ProcessLauncher};
 
 fn main() -> std::process::ExitCode
 {
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_composer_std::{ENVIRONMENT, LAUNCHER};
 
     let arguments: Vec<String> = std::env::args().skip(1).collect();
     let mut stdout = std::io::stdout();
     let mut stderr = std::io::stderr();
 
-    let code = Run_From_String_Arguments(&arguments, &StdProcessLauncher, &mut stdout, &mut stderr);
+    let machine = Machine { launcher: &LAUNCHER, environment: &ENVIRONMENT };
+    let code = Run_From_String_Arguments(&arguments, &machine, &mut stdout, &mut stderr);
 
     return std::process::ExitCode::from(u8::try_from(code.Value()).unwrap_or(1));
 }
@@ -75,18 +80,19 @@ fn main() -> std::process::ExitCode
 /// Parses the command line, runs every query it names through `launcher`, and renders
 /// what came back.
 ///
-/// Generic over [`ProcessLauncher`] and over `impl Write` for the same reason:
-/// [`main`] is the only caller that needs a real `git` and a real `stdout`, and a test
-/// that wants either replaced should not have to reach through a process boundary to do
-/// it — the same shape `nomos-cli::check::Run` already uses for the `Write` half.
+/// Generic over [`ProcessLauncher`], over [`Environment`] and over `impl Write` for the
+/// same reason: [`main`] is the only caller that needs a real `git`, a real working
+/// directory and a real `stdout`, and a test that wants any of them replaced should not
+/// have to reach through a process boundary to do it — the same shape
+/// `nomos-cli::check::Run` already uses for the `Write` half.
 fn Run_From_String_Arguments(
     arguments: &[String],
-    launcher: &impl ProcessLauncher,
+    machine: &Machine<'_, impl ProcessLauncher, impl Environment>,
     stdout: &mut impl std::io::Write,
     stderr: &mut impl std::io::Write,
 ) -> ExitCode
 {
-    return match Report_Text_From_String_Arguments(arguments, launcher, stderr)
+    return match Report_Text_From_String_Arguments(arguments, machine, stderr)
     {
         Ok(text) =>
         {
@@ -101,11 +107,11 @@ fn Run_From_String_Arguments(
 /// answer: parse, select, query, render.
 fn Report_Text_From_String_Arguments(
     arguments: &[String],
-    launcher: &impl ProcessLauncher,
+    machine: &Machine<'_, impl ProcessLauncher, impl Environment>,
     stderr: &mut impl std::io::Write,
 ) -> Result<String, ExitCode>
 {
-    let parsed = match self::arguments::Parsed_From_String_Arguments(arguments)
+    let parsed = match self::arguments::Parsed_From_String_Arguments(arguments, machine.environment)
     {
         Ok(parsed) => parsed,
         Err(message) =>
@@ -116,7 +122,7 @@ fn Report_Text_From_String_Arguments(
     };
 
     let selected = Selected_Crates(&parsed, stderr)?;
-    let findings = Findings_For_Selected_Crates(launcher, &parsed, &selected, stderr)?;
+    let findings = Findings_For_Selected_Crates(machine.launcher, &parsed, &selected, stderr)?;
 
     return Ok(report::Render_Report(git::Since(&parsed.since), git::Until(&parsed.until), &findings));
 }
@@ -218,6 +224,18 @@ mod tests
 {
     use super::*;
     use fake_launcher::{Scripted, Stderr, Stdout};
+    use stated_environment::Stated;
+
+    /// Every test below passes `--root` explicitly (through [`Arguments_With_Extra`]), so
+    /// none of them exercises the working-directory default — `arguments.rs`'s own tests
+    /// do that directly. This fixture exists so the port is supplied, not so it decides
+    /// anything here, and it stands somewhere deliberately unusable as a root to keep that
+    /// honest: any test that started depending on the default would fail rather than pass
+    /// against a directory that happens to exist.
+    fn Nowhere_In_Particular() -> Stated
+    {
+        return Stated::At(std::path::Path::new("/not/a/real/root"));
+    }
 
     /// A usage error is rendered and exits `2` before any query is attempted — proven
     /// with no launcher scripted at all, since none should be asked to run anything.
@@ -228,7 +246,12 @@ mod tests
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
 
-        let code = Run_From_String_Arguments(&["--until".to_owned(), "HEAD".to_owned()], &launcher, &mut stdout, &mut stderr);
+        let code = Run_From_String_Arguments(
+            &["--until".to_owned(), "HEAD".to_owned()],
+            &Machine { launcher: &launcher, environment: &Nowhere_In_Particular() },
+            &mut stdout,
+            &mut stderr,
+        );
 
         assert_eq!(code, ExitCode::Usage);
         assert!(stdout.is_empty());
@@ -252,7 +275,8 @@ mod tests
         let mut stderr = Vec::new();
         let arguments = Arguments_With_Extra(&root, &[]);
 
-        let code = Run_From_String_Arguments(&arguments, &launcher, &mut stdout, &mut stderr);
+        let machine = Machine { launcher: &launcher, environment: &Nowhere_In_Particular() };
+        let code = Run_From_String_Arguments(&arguments, &machine, &mut stdout, &mut stderr);
 
         assert_eq!(code, ExitCode::Ok, "stderr: {}", String::from_utf8_lossy(&stderr));
         let text = String::from_utf8(stdout).expect("report is text");
@@ -275,7 +299,8 @@ mod tests
         let mut stderr = Vec::new();
         let arguments = Arguments_With_Extra(&root, &["--crate", "no-such-crate"]);
 
-        let code = Run_From_String_Arguments(&arguments, &launcher, &mut stdout, &mut stderr);
+        let machine = Machine { launcher: &launcher, environment: &Nowhere_In_Particular() };
+        let code = Run_From_String_Arguments(&arguments, &machine, &mut stdout, &mut stderr);
 
         assert_eq!(code, ExitCode::Usage);
         assert!(String::from_utf8_lossy(&stderr).contains("no-such-crate"));

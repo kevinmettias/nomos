@@ -25,7 +25,7 @@ use super::{BlockedItem, Ledger_At};
 #[must_use]
 pub fn Handle_Work_Audit(directory: &Path) -> AuditResponse
 {
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_composer_std::LAUNCHER;
     use nomos_work_orchestration::WorkCommand;
 
     let mut ledger = Ledger_At(directory);
@@ -33,7 +33,7 @@ pub fn Handle_Work_Audit(directory: &Path) -> AuditResponse
     let outcome = nomos_work_orchestration::Run(
         &WorkCommand::Audit,
         &mut ledger,
-        &StdProcessLauncher,
+        &LAUNCHER,
         || Territory::Of_Files(std::iter::empty::<String>()),
     );
 
@@ -63,6 +63,7 @@ pub enum AuditResponse
         /// Every `Ready` item something stands between and an agent that would take it.
         blocked: Vec<BlockedItem>,
         /// The moment the board was read.
+        #[serde(with = "nomos_platform::timestamp_serde")]
         now: Timestamp,
     },
     /// The ledger file could not be read at all.

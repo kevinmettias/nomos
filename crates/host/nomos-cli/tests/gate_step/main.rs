@@ -28,4 +28,5 @@ mod excuses;
 mod lint_step;
 mod pinning;
 mod rules_step;
+mod step_order;
 mod vacuity;

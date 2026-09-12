@@ -13,6 +13,7 @@
 //! analysis` and `nomos_platform` had no suite anywhere; both are exercised here for the first
 //! time.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_analysis::GuaranteeDigest;
 use nomos_cap_lint::{Parse_Payload, Payload_Schema};
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
@@ -59,6 +60,14 @@ impl FakeLauncher
     {
         return Self { stdout, outcome: ExitOutcome::Exited { code: 0 }, stderr: String::new() };
     }
+}
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for FakeLauncher
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
 impl ProcessLauncher for FakeLauncher

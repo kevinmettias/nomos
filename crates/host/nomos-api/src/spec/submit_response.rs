@@ -15,14 +15,14 @@ use super::{Build_Corpus_Request, RefusalResponse, RenderedProjectionResponse, S
 /// takes an already-assembled `&mut Assembly` directly rather than being dispatched through
 /// `Run`. This function therefore assembles the store itself, the one step every other
 /// `Handle_Spec_*` function in this crate gets from `Run`. Writes real bytes through
-/// `StdFileSystem` when `request.into` is given, the same `Render`-shaped write
+/// `nomos_composer_std::FILE_SYSTEM` when `request.into` is given, the same `Render`-shaped write
 /// [`crate::spec::render_response::Handle_Spec_Render`] already performs (`Submit_Corpus_Request` calls
 /// `run::render::Rendered_Projection` internally for exactly that reason, addressed at the submission's
 /// own id under the same `into` root).
 #[must_use]
 pub fn Handle_Spec_Submit(request: &SubmitRequest) -> SubmitResponse
 {
-    use nomos_platform_std::StdFileSystem;
+    use nomos_composer_std::FILE_SYSTEM;
     use nomos_spec_orchestration::corpus::Assemble_Corpus;
 
     let corpus_request = Build_Corpus_Request();
@@ -33,7 +33,7 @@ pub fn Handle_Spec_Submit(request: &SubmitRequest) -> SubmitResponse
         Err(error) => return SubmitResponse::Unreadable { cause: error.to_string() },
     };
 
-    let submitted = nomos_spec_orchestration::Submit_Corpus_Request(&mut assembly, request, &StdFileSystem);
+    let submitted = nomos_spec_orchestration::Submit_Corpus_Request(&mut assembly, request, &FILE_SYSTEM);
     return SubmitResponse::From(submitted);
 }
 

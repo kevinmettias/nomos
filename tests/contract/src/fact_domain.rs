@@ -105,11 +105,13 @@ fn Domain_Of(name: &str, root: &Path, fact_type: &str) -> Option<FactDomain>
         .iter()
         .filter_map(|file| return std::fs::read_to_string(file).ok())
         .map(|text| return Without_Test_Modules(&text))
+        .filter(|text| return Speaks_This_Workspaces_Vocabulary(text))
         .collect();
     let produces = sources.iter().any(|text| return Constructs(text, fact_type));
     let declarations: BTreeSet<Declaration> = sources
         .iter()
         .flat_map(|text| return Declarations_In(text))
+        .filter(|declaration| return !Forwards_Its_Axes(declaration))
         .collect();
     if !produces && declarations.is_empty()
     {
@@ -121,6 +123,23 @@ fn Domain_Of(name: &str, root: &Path, fact_type: &str) -> Option<FactDomain>
         produces,
         declarations,
     });
+}
+
+/// Whether a declaration inherits all three axes from another type rather than naming any.
+///
+/// `impl<Referent: Strategy> Strategy for &Referent` writes `Referent::STRENGTH` into each
+/// axis, so the value this scanner reads back is the axis's own name. That is a forwarding
+/// implementation -- a reference promises exactly what it refers to -- and it is not a
+/// domain: it occupies no row, owes no harness test, and registering one would be
+/// registering the language's own indirection.
+///
+/// The same distinction this module already draws for a declaration inside a unit-test
+/// module, which is an example of the trait rather than a domain occupying a row.
+fn Forwards_Its_Axes(declaration: &Declaration) -> bool
+{
+    return declaration.strength == "STRENGTH"
+        && declaration.scope == "SCOPE"
+        && declaration.trace == "TRACE";
 }
 
 /// Whether a source file builds the named type rather than mentioning it.
@@ -145,6 +164,38 @@ fn Constructs(text: &str, fact_type: &str) -> bool
     }
 
     return false;
+}
+
+/// Whether a file's `Strategy` is the one this table is about.
+///
+/// `Strategy` is a trait name two vocabularies share. This workspace's is
+/// `nomos_contracts::Strategy`, and the rows of the domain table are its rows. The sibling
+/// engine has a trait of the same name and the same three axes, and since 2026-09-10 this
+/// workspace implements it in several places -- `nomos-platform-xvpe`'s launcher bridge,
+/// and the three host adapters that serve a protocol -- because the engine's own surfaces
+/// require it of anything plugged into them.
+///
+/// Those are real declarations and they are held to something; they are simply held to it
+/// *there*, by the engine's own suites, against the engine's own table. Counting them here
+/// would demand that `tests/integration` discharge a promise made in another workspace's
+/// vocabulary, against a harness whose `Assert_Meets_Declared_Strategy` is generic over
+/// this workspace's trait and could not accept them.
+///
+/// Read from the file's own imports rather than from a list of type names: a list would
+/// have to be edited every time an adapter arrives, and the edit that was forgotten would
+/// look exactly like a domain that was never declared.
+fn Speaks_This_Workspaces_Vocabulary(text: &str) -> bool
+{
+    for line in text.lines()
+    {
+        let trimmed = line.trim();
+        if trimmed.starts_with("use xvpe_primitives::") && trimmed.contains("Strategy")
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /// Every `impl Strategy for` block in one file, with the triple each declares.
@@ -173,7 +224,7 @@ fn Read_One_Line(trimmed: &str, strategy_impl: &str, found: &mut Vec<Declaration
     {
         return;
     }
-    if let Some(rest) = trimmed.strip_prefix(strategy_impl)
+    if let Some(rest) = Implemented_Type(trimmed, strategy_impl)
     {
         Open_A_Declaration(rest, found);
     }
@@ -181,6 +232,32 @@ fn Read_One_Line(trimmed: &str, strategy_impl: &str, found: &mut Vec<Declaration
     {
         Fill_In_An_Axis(trimmed, found);
     }
+}
+
+/// What follows `Strategy for` on a line that opens a declaration, or `None`.
+///
+/// Two spellings reach this, and only the first used to: the bare `impl Strategy for X`,
+/// and the generic `impl<T: Bound> Strategy for X<'_, T>`. A prefix match saw only the
+/// bare one, so a generic declaration was invisible to every assertion in this file --
+/// found 2026-09-11, when a bare one arrived in a crate that already had a generic one
+/// nothing had ever reported.
+fn Implemented_Type<'line>(trimmed: &'line str, strategy_impl: &str) -> Option<&'line str>
+{
+    if !trimmed.starts_with("impl")
+    {
+        return None;
+    }
+
+    if let Some(rest) = trimmed.strip_prefix(strategy_impl)
+    {
+        return Some(rest);
+    }
+
+    // The generic form. The marker is assembled rather than written out for the reason
+    // `Strategy_Impl` is: this file must not match itself.
+    let infix = concat!(" Strategy ", "for ");
+
+    return trimmed.split_once(infix).map(|(_generics, rest)| return rest);
 }
 
 /// A new declaration, with every axis still empty.
@@ -191,6 +268,10 @@ fn Open_A_Declaration(rest: &str, found: &mut Vec<Declaration>)
     {
         return;
     };
+
+    // `XvpeLauncher<'_, Launcher>` is the same declaration as `XvpeLauncher`: the type's
+    // own parameters are not part of the name the harness registers it under.
+    let name = name.split('<').next().unwrap_or(name);
 
     found.push(Declaration {
         strategy: name.to_owned(),

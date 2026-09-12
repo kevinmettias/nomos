@@ -18,12 +18,12 @@ use super::{AbsenceResponse, Build_Corpus_Request};
 #[must_use]
 pub fn Handle_Spec_Sources() -> SourcesResponse
 {
-    use nomos_platform_std::StdFileSystem;
+    use nomos_composer_std::FILE_SYSTEM;
     use nomos_spec_orchestration::SpecCommand;
 
     let request = Build_Corpus_Request();
 
-    let outcome = nomos_spec_orchestration::Run(&SpecCommand::Sources, &request, &StdFileSystem);
+    let outcome = nomos_spec_orchestration::Run(&SpecCommand::Sources, &request, &FILE_SYSTEM);
 
     let nomos_spec_orchestration::SpecOutcome::Sources(sourced) = outcome
     else

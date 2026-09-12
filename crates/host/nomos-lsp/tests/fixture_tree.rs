@@ -5,7 +5,7 @@
 //! `Walked` is a small, local, top-level-only walk -- the same shape
 //! `nomos-correction-orchestration::run`'s own test module carries for the identical
 //! reason: `nomos_lsp::sources` is `pub(crate)`, by design, since nothing outside this
-//! crate's own `server.rs` should walk a tree the way this crate does.
+//! crate's own provider should walk a tree the way this crate does.
 
 use nomos_contracts::RuleId;
 use nomos_rules::SourceFile;
@@ -61,8 +61,8 @@ fn Test_Diagnostics_For_Should_Translate_A_Real_Run_Result()
         nomos_check_orchestration::RunContext {
             variant: Test_Variant(),
             root: &root,
-            launcher: &nomos_platform_std::StdProcessLauncher,
-            filesystem: &nomos_platform_std::StdFileSystem,
+            launcher: &nomos_composer_std::LAUNCHER,
+            filesystem: &nomos_composer_std::FILE_SYSTEM,
             workspace: &mut workspace,
             store: &mut store,
         },
@@ -83,12 +83,16 @@ fn Test_Diagnostics_For_Should_Translate_A_Real_Run_Result()
     let only = diagnostics.first().expect("one location, one diagnostic");
 
     assert_eq!(only.path, "a.rs");
-    assert_eq!(only.diagnostic.range.start.line, 0, "the trailing whitespace is on the fixture's first line");
-    assert_eq!(only.diagnostic.severity, Some(lsp_types::DiagnosticSeverity::ERROR), "no-trailing-whitespace is a real blocking rule");
+    // One-based, as every rule in this workspace reports it. Turning that into a zero-based
+    // editor position is the engine's, at projection time, and is asserted there.
+    assert_eq!(only.line, Some(1), "the trailing whitespace is on the fixture's first line");
+    assert_eq!(only.severity, xvpe_diagnostics::DiagnosticSeverity::Error, "no-trailing-whitespace is a real blocking rule");
+    assert_eq!(only.code, nomos_rules::NO_TRAILING_WHITESPACE);
 
-    let data = only.diagnostic.data.as_ref().expect("walk-outward data is attached");
-    assert_eq!(At(data, "governing_rule", "rule"), Some(nomos_rules::NO_TRAILING_WHITESPACE));
-    assert_eq!(At(data, "available_correction", "family"), Some(nomos_rules::NO_TRAILING_WHITESPACE));
+    let carried = only.detail.as_ref().expect("walk-outward data is attached");
+    let data: serde_json::Value = serde_json::from_str(carried).expect("walk-outward data is a document");
+    assert_eq!(At(&data, "governing_rule", "rule"), Some(nomos_rules::NO_TRAILING_WHITESPACE));
+    assert_eq!(At(&data, "available_correction", "family"), Some(nomos_rules::NO_TRAILING_WHITESPACE));
 }
 
 /// `data.first.second`, read through `Value::get` rather than `Value`'s own `Index` --

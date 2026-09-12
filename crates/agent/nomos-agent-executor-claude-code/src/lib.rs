@@ -1,35 +1,34 @@
-//! Band 37 — the first real `AgentExecutor`: `nomos-agent-contracts::TaskEnvelope` in, a
-//! bounded Claude Code subprocess dispatched through it, [`AgentExecutionOutcome`] out.
+//! Band 37 — this workspace's Claude Code dispatch.
 //!
-//! `OD-EXECUTOR-001` decided what this dispatch is permitted to do before this crate existed
-//! to do it: a freshly created, empty, isolated working directory; no MCP configuration; tool
-//! access granted through an allow-list naming no real tool rather than denied through a list
-//! that will always be one release behind the real tool set; one `--print` turn; and a result
-//! read for what it structurally permitted, never for what its own free text claims happened.
-//! [`Execute_Task`] is that record's rule, and nothing more. A second, distinct concern —
-//! bounding what the dispatch may *cost*, not what it may *touch* — is not that record's
-//! question; `Command_For` requests `--max-budget-usd`, verified empirically to abort before
-//! the expensive model call runs rather than merely reporting overspend afterward, though a
-//! small overshoot bounded by one cheap triage call is still possible and nothing caps turn
-//! count directly.
+//! The dispatch itself is **XVPE's** as of 2026-09-10: an isolated working
+//! directory, an allow-list granting nothing real rather than a deny-list that is
+//! always one release behind, one `--print` turn, a spend ceiling, a wall bound
+//! that kills, and an answer read from schema-validated `structured_output`
+//! rather than from free text. Every one of those clauses, and the adversarial
+//! verification behind them, moved down into `xvpe-agent-backend-claude-code`.
+//! Nomos is an application over that engine, and a general capability sitting up
+//! here was unreachable by everything down there.
 //!
-//! It assembles a real `nomos_agent_contracts::WorkResult`, per `OD-EXECUTOR-008`:
-//! [`Command_For`] passes the narrow, adversarially-verified schema
-//! [`JSON_SCHEMA`] via `--json-schema` on every invocation, and [`response::Parse_Response`]
-//! builds [`WorkResult::assumptions`]/[`WorkResult::unresolved_questions`] from the response's
-//! own schema-validated `structured_output`, never from its free-text `result` field.
-//! `plan`, `claims`, `tests` and `requested_verification` stay structurally absent rather
-//! than model-filled: this executor's own boundary (isolated empty directory, no tool
-//! granted, one turn) means the model has seen no real file and computed no real digest by
-//! the time it answers, so nothing here has an honest, real grounding for any of the four --
-//! a schema can only make the *shape* conform, and a conforming lie is not this record's
-//! goal.
+//! What stays is what is genuinely this workspace's: the [`TaskEnvelope`] it
+//! dispatches from, the `WorkResult` it assembles, and the schema that says what
+//! a work result may honestly claim.
 //!
-//! `TaskEnvelope.goal` and, since `OD-CONTRACTS-004`, `TaskEnvelope.effort` are read. `scope`,
-//! `prohibited_changes`, `available_tools`, `knowledge_context` and `applicable_rules` are
-//! accepted and ignored, matching `OD-EXECUTOR-001`'s own finding that nothing in this
-//! workspace enforces them yet — this crate does not pretend otherwise by silently honoring
-//! some of them and not others.
+//! # What this crate reads from an envelope, and what it does not
+//!
+//! `goal` and `effort` are read. `scope`, `prohibited_changes`,
+//! `available_tools`, `knowledge_context` and `applicable_rules` are accepted and
+//! ignored, because nothing in this workspace enforces them yet — and this crate
+//! does not pretend otherwise by honoring some and not others. Scope that *is*
+//! enforced travels as the engine's capability boundary instead, which is
+//! structural rather than advisory.
+//!
+//! # Why the work result stays narrow
+//!
+//! `plan`, `claims`, `tests` and `requested_verification`
+//! stay structurally absent rather than model-filled. Under this boundary the model has seen no
+//! real file and computed no real digest by the time it answers, so nothing here
+//! has an honest grounding for any of the four. A schema can only make the
+//! *shape* conform, and a conforming lie is not the goal.
 
 #![forbid(unsafe_code)]
 
@@ -39,289 +38,144 @@ mod response;
 
 pub use agent_execution_error::AgentExecutionError;
 pub use agent_execution_outcome::AgentExecutionOutcome;
+// The engine's exact money, re-exported so a caller reading `AgentExecutionOutcome::cost`
+// or comparing one against `MAXIMUM_SPEND` can name its type without taking a dependency
+// on the engine crate that declares it. `MAXIMUM_SPEND` below was already this type in
+// this crate's public surface; only the name was missing.
+pub use xvpe_agent_execution::MicroDollars;
+
+use std::path::Path;
 
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_model_package::EffortLevel;
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher};
-use std::path::PathBuf;
-use std::time::Duration;
+use nomos_platform::ProcessLauncher;
+use nomos_platform_xvpe::XvpeLauncher;
+use xvpe_agent_backend_claude_code::{ClaudeCodeDispatch, DEFAULT_TIMEOUT};
+use xvpe_agent_execution::{
+    AgentCapability, AgentExecutorStrategy, AgentTask, AgentWorkspace,
+    EffortLevel as EngineEffort,
+};
 
-/// A prompt this repository has already run against the real CLI takes well under a
-/// minute; five minutes is headroom for a longer real task without leaving a hung
-/// subprocess to wait out an unbounded timeout.
-const TIMEOUT: Duration = Duration::from_secs(300);
+/// The narrow, honest schema a work result is read from: `assumptions` and
+/// `unresolved_questions`, both string arrays, additional properties refused.
+///
+/// Adversarially verified against the real command line: a prompt explicitly
+/// instructed to also emit a top-level `plan` field bypassing the schema still
+/// produced a `structured_output` carrying only these two declared fields, and
+/// the model's own text named the reason — `additionalProperties: false` refused
+/// the extra key structurally.
+pub const JSON_SCHEMA: &str = r#"{"type":"object","properties":{"assumptions":{"type":"array","items":{"type":"string"}},"unresolved_questions":{"type":"array","items":{"type":"string"}}},"required":["assumptions","unresolved_questions"],"additionalProperties":false}"#;
 
-/// Names no real tool, by construction. `--allowedTools` set to only this value grants
-/// nothing: `OD-EXECUTOR-001`'s amendment measured a deny-list leaking twice — once for a
-/// platform-specific tool name the list's author did not know to include, once for a
-/// tool this crate never anticipated at all — before an allow-list naming this same kind
-/// of placeholder held under an adversarial prompt. The leading underscores and the name
-/// itself are chosen so a reader, or a future real tool, can never mistake this for
-/// something meant to match.
-const NO_TOOLS_GRANTED: &str = "__nomos_agent_executor_denies_all_tools__";
+/// A starting bound on what one dispatch may spend.
+///
+/// Real invocations cost between under a cent and a few tens of cents. A dollar
+/// is generous headroom for a single judgment-only turn while still being a real
+/// ceiling on what a runaway sequence of refused-capability retries could cost —
+/// verified empirically: capped at an unreachably low budget, the command line
+/// aborted before its expensive model call ran, incurring only a small triage
+/// cost first. That overshoot is what this bounds rather than closes.
+pub const MAXIMUM_SPEND: MicroDollars = MicroDollars::From_Micros(1_000_000);
 
-/// A starting bound, not a derived one — real invocations this crate has run cost between
-/// under a cent and a few tens of cents. A dollar is generous headroom for a single
-/// judgment-only turn while still being a real, structural ceiling on what a runaway
-/// sequence of denied-tool retries could cost, verified empirically: capped at an
-/// unreachably low budget, `claude` aborted with exit code 1 before its expensive model
-/// call ran, incurring only a small triage-model cost first — the overshoot this default
-/// cannot fully close, only bound.
-const MAX_BUDGET_USD: &str = "1.00";
-
-/// `OD-EXECUTOR-008`'s own narrow, honest schema: `assumptions` and `unresolved_questions`,
-/// both string arrays, `additionalProperties: false`. Adversarially verified against the
-/// real CLI: a prompt explicitly instructed to also emit a top-level `plan` field bypassing
-/// the schema still produced a `structured_output` carrying only these two declared fields,
-/// and the model's own text named the reason -- `additionalProperties: false` refused the
-/// extra key structurally. `plan`, `claims`, `tests` and `requested_verification` are not
-/// named here because this executor has no honest way to ground any of them; see this
-/// crate's own doc.
-const JSON_SCHEMA: &str = r#"{"type":"object","properties":{"assumptions":{"type":"array","items":{"type":"string"}},"unresolved_questions":{"type":"array","items":{"type":"string"}}},"required":["assumptions","unresolved_questions"],"additionalProperties":false}"#;
-
-/// Dispatches `task.goal` to Claude Code as a subprocess, bounded by `OD-EXECUTOR-001`'s
-/// structural capability boundary, and reads back what it reported.
+/// Dispatches `task.goal` into its own isolated directory, and reads back what
+/// it reported.
 ///
 /// # Errors
 ///
-/// [`AgentExecutionError::Unavailable`] if the isolated working directory could not be
-/// created, the process could not be started, exited non-zero, or was killed for timing
-/// out or stalling. [`AgentExecutionError::Unparseable`] if its stdout was not the JSON
-/// document `--output-format json` promises.
-pub fn Execute_Task<Launcher: ProcessLauncher>(task: &TaskEnvelope, launcher: &Launcher) -> Result<AgentExecutionOutcome, AgentExecutionError>
-{
-    let working_directory = Isolated_Working_Directory()?;
-
-    return Execute_In(task, launcher, &working_directory);
-}
-
-/// [`Execute_Task`], over a caller-chosen `working_directory` rather than a freshly generated
-/// one — the seam this crate's own real, adversarial integration test uses to inspect
-/// that directory afterward, since `Execute_Task`'s own isolated directory is otherwise
-/// generated and discarded where no caller could ever name it.
-pub(crate) fn Execute_In<Launcher: ProcessLauncher>(
+/// [`AgentExecutionError::Unavailable`] if the dispatch produced no answer at
+/// all — the working directory could not be created, the process could not be
+/// started, it exited non-zero, or a bound killed it.
+/// [`AgentExecutionError::Unparseable`] if it answered and the answer could not
+/// be read.
+pub fn Execute_Task<Launcher: ProcessLauncher>(
     task: &TaskEnvelope,
     launcher: &Launcher,
-    working_directory: &std::path::Path,
 ) -> Result<AgentExecutionOutcome, AgentExecutionError>
 {
-    let command = Command_For(task, working_directory);
-    let output = launcher.Run(&command).map_err(AgentExecutionError::Unavailable)?;
-
-    Require_Clean_Exit(&output.outcome, &output.stderr)?;
-
-    return response::Parse_Response(&output.stdout);
+    return Dispatch(task, launcher, Capability());
 }
 
-/// The invocation `OD-EXECUTOR-001`'s rule describes, over `task.goal`, run from
-/// `working_directory`, with `task.effort` appended per [`Effort_Flag`].
-fn Command_For(task: &TaskEnvelope, working_directory: &std::path::Path) -> Command
-{
-    let mut argv = vec![
-        CLAUDE_PROGRAM.to_owned(),
-        "--print".to_owned(),
-        Single_Line(&task.goal),
-        "--output-format".to_owned(),
-        "json".to_owned(),
-        "--json-schema".to_owned(),
-        JSON_SCHEMA.to_owned(),
-        "--strict-mcp-config".to_owned(),
-        "--allowedTools".to_owned(),
-        NO_TOOLS_GRANTED.to_owned(),
-        "--max-budget-usd".to_owned(),
-        MAX_BUDGET_USD.to_owned(),
-    ];
-    if let Some(value) = Effort_Flag(task.effort)
-    {
-        argv.push("--effort".to_owned());
-        argv.push(value.to_owned());
-    }
-
-    let mut command = Command::New(argv, TIMEOUT);
-    command.working_directory = Some(working_directory.to_path_buf());
-
-    return command;
-}
-
-/// `task.effort`, mapped to the real `--effort` value `claude --help` documents today —
-/// verified directly against the installed CLI, not assumed: `low`, `medium`, `high`,
-/// `xhigh`, `max`. `None` for [`EffortLevel::BackendDefault`]: the flag is omitted
-/// entirely rather than passed a value naming "the default," which is exactly this
-/// crate's own behavior for every caller before `OD-CONTRACTS-004` existed to name an
-/// effort at all.
+/// [`Execute_Task`], over a caller-chosen directory rather than a freshly
+/// generated one.
 ///
-/// [`EffortLevel::Minimal`] has no distinct native control below `low` — mapped there as
-/// this crate's own approximation, not a claim of an exact match, `MODEL-ROUTE-015`'s own
-/// `MappingQuality::Approximate` shape for exactly this case. `claude`'s own `xhigh` tier
-/// has no `EffortLevel` counterpart: `MODEL-ROUTE-004` closes the canonical enumeration at
-/// six values, so this crate cannot request it, and does not fold it into `high` or `max`
-/// to pretend otherwise.
-#[must_use]
-fn Effort_Flag(effort: EffortLevel) -> Option<&'static str>
+/// Public because it is a real capability rather than a testing hook: a caller
+/// that already has a directory it wants inspected afterward cannot use
+/// [`Execute_Task`], whose isolated directory is created and then removed where
+/// nothing could name it. It is also what a real, adversarial integration test
+/// needs in order to look at what the dispatch left behind.
+///
+/// # Errors
+///
+/// The same as [`Execute_Task`].
+pub fn Execute_In<Launcher: ProcessLauncher>(
+    task: &TaskEnvelope,
+    launcher: &Launcher,
+    working_directory: &Path,
+) -> Result<AgentExecutionOutcome, AgentExecutionError>
+{
+    let mut capability = Capability();
+    capability.workspace = AgentWorkspace::Existing(working_directory.to_path_buf());
+    return Dispatch(task, launcher, capability);
+}
+
+/// The one call into the engine, over a boundary already decided on.
+fn Dispatch<Launcher: ProcessLauncher>(
+    task: &TaskEnvelope,
+    launcher: &Launcher,
+    capability: AgentCapability,
+) -> Result<AgentExecutionOutcome, AgentExecutionError>
+{
+    let bridged = XvpeLauncher::Wrapping(launcher);
+
+    let outcome = ClaudeCodeDispatch::Through(&bridged)
+        .Execute(&Task_For(task), &capability)
+        .map_err(AgentExecutionError::From_Engine)?;
+
+    return response::Outcome_For(&outcome);
+}
+
+/// The envelope, as the engine's own task.
+pub(crate) fn Task_For(task: &TaskEnvelope) -> AgentTask
+{
+    let asked = AgentTask::Of(task.goal.clone()).Answering(String::from(JSON_SCHEMA));
+    return match Effort_For(task.effort)
+    {
+        Some(effort) => asked.With_Effort(effort),
+        None => asked,
+    };
+}
+
+/// The boundary this dispatch runs inside.
+///
+/// The tightest the engine offers, plus a spend ceiling: an empty directory that
+/// goes away afterward, and no capability granted at all. This crate has never
+/// dispatched under anything wider, and stating it here rather than leaning on a
+/// default is what keeps that visible.
+pub(crate) fn Capability() -> AgentCapability
+{
+    return AgentCapability::Isolated(DEFAULT_TIMEOUT).Spending_At_Most(MAXIMUM_SPEND);
+}
+
+/// This workspace's effort, as the engine's.
+///
+/// [`EffortLevel::BackendDefault`] maps to `None`, which omits the request
+/// entirely rather than naming a value meaning "the default".
+///
+/// [`EffortLevel::Minimal`] has no distinct counterpart below `Low` and is mapped
+/// there — this crate's own approximation, not a claim of an exact match. The
+/// engine's own `ExtraHigh` has no counterpart here, because this workspace's
+/// enumeration closes at six values; it is not folded into `High` or `Maximum` to
+/// pretend otherwise.
+pub(crate) fn Effort_For(effort: EffortLevel) -> Option<EngineEffort>
 {
     return match effort
     {
         EffortLevel::BackendDefault => None,
-        EffortLevel::Minimal | EffortLevel::Low => Some("low"),
-        EffortLevel::Medium => Some("medium"),
-        EffortLevel::High => Some("high"),
-        EffortLevel::Maximum => Some("max"),
+        EffortLevel::Minimal | EffortLevel::Low => Some(EngineEffort::Low),
+        EffortLevel::Medium => Some(EngineEffort::Medium),
+        EffortLevel::High => Some(EngineEffort::High),
+        EffortLevel::Maximum => Some(EngineEffort::Maximum),
     };
 }
-
-/// Refuses every outcome a launched process can report other than a clean, zero exit —
-/// the same shape `nomos_lang_rust_cargo`'s own `Require_Clean_Exit` uses for the one
-/// other subprocess this workspace ever runs through `ProcessLauncher`.
-fn Require_Clean_Exit(outcome: &ExitOutcome, stderr: &str) -> Result<(), AgentExecutionError>
-{
-    return match outcome
-    {
-        ExitOutcome::Exited { code: 0 } => Ok(()),
-        ExitOutcome::Exited { code } => {
-            Err(AgentExecutionError::Unavailable(format!("claude exited {code}: {stderr}")))
-        }
-        ExitOutcome::TimedOut => {
-            Err(AgentExecutionError::Unavailable(format!("claude was still running after {TIMEOUT:?} and was killed")))
-        }
-        ExitOutcome::Stalled { idle_elapsed } => Err(AgentExecutionError::Unavailable(format!(
-            "claude produced no output for {idle_elapsed:?} and was judged stalled"
-        ))),
-        ExitOutcome::Terminated => {
-            Err(AgentExecutionError::Unavailable("claude was terminated before it could finish".to_owned()))
-        }
-    };
-}
-
-/// A newline (`\n` or `\r`) collapsed to a space and a double quote turned into a single
-/// one, so `task.goal` survives `Command_For` regardless of platform.
-///
-/// Both verified directly against the real CLI, as two distinct failures, not one.
-/// `StdProcessLauncher` spawns `claude.cmd` through Rust's own `std::process::Command`
-/// with no shell, and a goal carrying an embedded newline failed there with "batch file
-/// arguments are invalid" — the Windows-only hardening `std` added for CVE-2024-24576,
-/// which refuses certain argument content when the target is a `.bat`/`.cmd` file rather
-/// than risk it being used to inject a second command when `cmd.exe` re-parses it. Once
-/// that was fixed, a goal carrying an embedded `"` no longer triggered a refusal but
-/// produced a *different* failure — `claude`'s own stdout was not the JSON it promised —
-/// consistent with `cmd.exe`'s own batch-argument tokenizer, a second and separate layer
-/// from `std`'s CVE fix, re-splitting the argument on the quote before `claude.cmd` ever
-/// saw it, rather than passing it through as one value. Routing around either by
-/// hand-escaping would be reproducing the exact class of bug the first fix exists to
-/// close, so this crate does not try; a goal is free text for a model to read, not a
-/// document whose exact punctuation this invocation depends on, and normalizing both is
-/// honest rather than a workaround. Applied on every platform, not only Windows, so
-/// `Command_For`'s output does not depend on which one built it.
-///
-/// The quote substitution has a real, observed cost, named rather than hidden: run
-/// end-to-end against the real CLI with a goal quoting a Rust string literal
-/// (`const X: &str = "1.00";`), the substitution turned it into `'1.00'` — a char literal,
-/// not a string — and the model correctly reported the resulting snippet as broken code.
-/// A goal embedding source code that itself uses double quotes will read differently to
-/// the model than the caller wrote it. No fix for that is attempted here; it is a real
-/// limitation of this invocation path, not a case this crate silently gets right.
-fn Single_Line(goal: &str) -> String
-{
-    return goal.replace(['\n', '\r'], " ").replace('"', "'");
-}
-
-/// A freshly created, empty directory under the system temp root, never this repository's
-/// own tree and never one carrying its own `.claude/settings*` or `CLAUDE.md` — the first
-/// clause of `OD-EXECUTOR-001`'s rule.
-///
-/// Delegates to `nomos_agent_contracts::Isolated_Working_Directory`, shared with
-/// `nomos-model-backend-ollama`'s own isolation step; this crate's only distinct part is
-/// the prefix its directories are named from.
-fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
-{
-    return nomos_agent_contracts::Isolated_Working_Directory("nomos-agent-executor").map_err(|error| {
-        return AgentExecutionError::Unavailable(error.to_string());
-    });
-}
-
-/// `claude` on every platform this workspace's own `StdProcessLauncher` runs on but
-/// Windows, where the real entry point on `PATH` is an npm-generated `claude.cmd` shim
-/// (confirmed directly against this machine: `where claude` names both an extensionless
-/// POSIX shell script and `claude.cmd`, in that order). `StdProcessLauncher` spawns
-/// `argv[0]` through `CreateProcess` directly, by its own deliberate "no shell, ever"
-/// design — the same reason it does not attempt `PATHEXT` resolution a shell would do
-/// silently, so the correct name is this crate's own responsibility to supply, once, here,
-/// rather than a capability every caller of the shared launcher would otherwise need.
-#[cfg(windows)]
-const CLAUDE_PROGRAM: &str = "claude.cmd";
-
-/// See [`CLAUDE_PROGRAM`]'s Windows doc.
-#[cfg(not(windows))]
-const CLAUDE_PROGRAM: &str = "claude";
 
 #[cfg(test)]
 mod tests;
-
-/// The direct address for `Execute_Task`/`Execute_In`. `tests.rs`'s own suite exercises
-/// both extensively -- Rust's own coverage attribution keys a test to the FILE that
-/// physically contains it, and this crate deliberately keeps its behavioural suite in its
-/// own file (`tests.rs`) rather than inline, so a test living there cannot address a
-/// function declared here. These two are the address that file cannot supply.
-#[cfg(test)]
-mod address_tests
-{
-    use super::*;
-    use nomos_ledger::Territory;
-    use nomos_platform::ProcessOutput;
-
-    struct Scripted
-    {
-        outcome: ExitOutcome,
-        stdout: String,
-    }
-
-    impl ProcessLauncher for Scripted
-    {
-        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
-        {
-            return Ok(ProcessOutput { outcome: self.outcome, stdout: self.stdout.clone(), stderr: String::new() });
-        }
-    }
-
-    #[test]
-    fn Test_Execute_Task_Should_Create_Its_Own_Isolated_Directory_And_Read_A_Clean_Response()
-    {
-        let launcher = Scripted {
-            outcome: ExitOutcome::Exited { code: 0 },
-            stdout: r#"{"result": "PONG", "structured_output": {"assumptions": ["a ping wants a pong"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
-                .to_owned(),
-        };
-
-        let outcome = Execute_Task(&Bare_Task("say PONG"), &launcher).expect("a well-formed scripted response");
-
-        assert_eq!(outcome.result.assumptions, ["a ping wants a pong".to_owned()]);
-    }
-
-    #[test]
-    fn Test_Execute_In_Should_Run_Over_A_Caller_Chosen_Directory()
-    {
-        let launcher = Scripted {
-            outcome: ExitOutcome::Exited { code: 0 },
-            stdout: r#"{"result": "PONG", "structured_output": {"assumptions": ["a ping wants a pong"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
-                .to_owned(),
-        };
-        let directory = std::env::temp_dir();
-
-        let outcome = Execute_In(&Bare_Task("say PONG"), &launcher, &directory).expect("a well-formed scripted response");
-
-        assert_eq!(outcome.result.assumptions, ["a ping wants a pong".to_owned()]);
-    }
-
-    fn Bare_Task(goal: &str) -> TaskEnvelope
-    {
-        return TaskEnvelope {
-            goal: goal.to_owned(),
-            scope: Territory::Of_Files(Vec::<String>::new()),
-            knowledge_context: Vec::new(),
-            applicable_rules: Vec::new(),
-            prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
-            available_tools: Vec::new(),
-            expected_output_schema: nomos_contracts::SchemaId::New("nomos.agent.executor.v1"),
-            effort: EffortLevel::BackendDefault,
-        };
-    }
-}

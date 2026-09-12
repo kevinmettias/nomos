@@ -1,5 +1,18 @@
-//! Band 94 — host. A language server over stdio, projecting `nomos-check-orchestration`'s
-//! own real `Run` as `textDocument/publishDiagnostics`.
+//! Band 94 — host. What this workspace tells an editor, and nothing about the protocol
+//! that carries it.
+//!
+//! # What changed on 2026-09-10
+//!
+//! **The whole server is XVPE's now.** The handshake, the workspace root, the capability
+//! declaration, the `file://` URI conversion, the whole-line spans, and the stale-marker
+//! clearing an editor needs all moved down into `xvpe-language-server-backend-lsp`, over
+//! the `xvpe-diagnostics` provider contract. Nomos is an application over that engine, and
+//! a general capability sitting up here was unreachable by everything down there.
+//!
+//! What stays is what was always this workspace's: the walk, the judgement, which severity
+//! each of its own rule categories deserves ([`severity`]), and what a finding carries with
+//! it ([`WalkOutward`]). [`NomosDiagnosticProvider`] is the one seam, and `src/main.rs`
+//! hands it to the engine.
 //!
 //! `P42-LSP-PROJECTION` named the shape this crate must not become: not another analyzer.
 //! Every finding published here was judged by `nomos_check_orchestration::Run`, the
@@ -8,12 +21,12 @@
 //! crates' own composition roots each carry, since `nomos-check-orchestration` composes no
 //! [`nomos_platform::FileSystem`] and the port's own `Read_Directory` is one level) and a
 //! translation ([`file_diagnostic::Diagnostics_For`]) from [`nomos_contracts::Finding`] to
-//! [`lsp_types::Diagnostic`], never a second judgment.
+//! `xvpe_diagnostics::SourceDiagnostic`, never a second judgment.
 //!
 //! # What "walk outward from a diagnostic" answers today, and what it does not
 //!
-//! [`walk_outward::WalkOutward`] is attached to every diagnostic's own `data` field --
-//! LSP's standard per-diagnostic extension point. Three of the five targets the ledger
+//! [`walk_outward::WalkOutward`] is attached to every diagnostic's own detail -- the
+//! standard per-diagnostic extension point. Three of the five targets the ledger
 //! item's own `done_when` named have a real, mechanical answer, carried there: which rule
 //! governs a finding ([`walk_outward::GoverningRule`], read straight off
 //! `nomos_rules::DESCRIPTORS`), which architectural component it belongs to
@@ -37,20 +50,18 @@
 //! # The `LintDiagnostic` contract is unchanged
 //!
 //! Nothing here reaches into `nomos-cap-lint`, and its payload schema is untouched.
-//! [`range::Range_For`] is where a tool-reported line becomes an editor-grade span, at
-//! projection time, exactly where `nomos_cap_lint::LintDiagnostic`'s own doc says that
+//! The engine is where a tool-reported line becomes an editor-grade span, at projection
+//! time, exactly where `nomos_cap_lint::LintDiagnostic`'s own doc says that
 //! combination belongs (`OD-HOST-003`).
 
 mod build_variant;
 mod file_diagnostic;
 mod location;
-mod range;
-mod server;
+mod nomos_diagnostic_provider;
 mod severity;
 mod sources;
-mod uri;
 mod walk_outward;
 
-pub use file_diagnostic::{Diagnostics_For, FileDiagnostic};
-pub use server::Run_Server;
+pub use file_diagnostic::Diagnostics_For;
+pub use nomos_diagnostic_provider::NomosDiagnosticProvider;
 pub use walk_outward::{ArchitecturalComponent, AvailableCorrection, GoverningRule, WalkOutward};

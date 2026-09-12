@@ -53,6 +53,15 @@ governing.
 These are the facts that have no other home. Each is a rule for working here, not an
 architectural claim; where a *why* exists, it is named.
 
+**This workspace does not build without the `xvpe` checkout beside it.** Six crates name an
+`xvpe-*` dependency by a relative path that climbs out of this repository into a sibling
+directory named `xvpe`, and ten reach one transitively (measured 2026-09-11). That checkout
+must be present and must itself compile. A missing or broken one fails the build at manifest
+resolution, before any code of this workspace's is read, which reads nothing like the real
+cause. `OD-PLATFORM-003` accepted that cost deliberately -- this workspace is an application
+over that engine, not its peer -- and `OD-HOST-013` extended it to the editor surface;
+`docs/records/` holds both.
+
 **Never run `cargo fmt`.** It cannot produce this workspace's style and rewrites the tree
 every time. `README.md` and `rustfmt.toml` carry the reason. `cargo fmt --check` is
 deliberately not a gate step.

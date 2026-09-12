@@ -1,59 +1,59 @@
-//! Translating one `nomos_contracts::Finding` into the `lsp_types::Diagnostic`(s) it
-//! becomes -- the one function this crate's own module doc calls "no analysis logic of its
-//! own": every field below is read off `finding` or a table `nomos-rules` /
-//! `nomos-correction-orchestration` already declares, never computed by judging anything.
+//! Translating one `nomos_contracts::Finding` into the judgement(s) it becomes -- the one
+//! function this crate's own module doc calls "no analysis logic of its own": every field
+//! below is read off `finding` or a table `nomos-rules` / `nomos-correction-orchestration`
+//! already declares, never computed by judging anything.
+//!
+//! The target is `xvpe_diagnostics::SourceDiagnostic` rather than an editor's own wire type,
+//! which is what lets every case below be asserted without a client anywhere near it.
 
 use crate::location::Location;
-use crate::range::Range_For;
 use crate::severity::Severity_Of;
 use crate::walk_outward::WalkOutward;
-use lsp_types::{Diagnostic, NumberOrString};
 use nomos_contracts::Finding;
+use xvpe_diagnostics::SourceDiagnostic;
 
-/// One diagnostic, addressed to the file it belongs in -- `lsp_types::Diagnostic` itself
-/// carries no file, since LSP groups diagnostics by document at the transport layer
-/// (`textDocument/publishDiagnostics`), not inside the diagnostic value.
-#[derive(Clone, Debug, PartialEq)]
-pub struct FileDiagnostic
-{
-    /// Repo-relative, forward slashes -- the same convention `Finding::locations` itself
-    /// carries, so a caller resolves this against the same root the check walked.
-    pub path: String,
-    pub diagnostic: Diagnostic,
-}
+/// What this workspace calls itself in a diagnostic, so a reader looking at several
+/// producers at once can tell which one spoke.
+const PRODUCER: &str = "nomos";
 
-/// `finding`, as the diagnostics an editor renders for it -- one per location, since a
-/// location is where LSP requires a diagnostic to live and `Finding::locations` allows more
-/// than one. A finding with no location produces none: a text-document diagnostic cannot
-/// exist without a document position, and `docs/records/OD-HOST-010-*.md` names which
-/// composed rules that excludes from ever surfacing as a buffer diagnostic (`nomos.cap.
-/// goals.policy`'s own workspace-level rule among them) as an honest, structural limit
-/// rather than a bug this function could fix.
+/// `finding`, as the judgements an editor renders for it -- one per location, since a
+/// location is where a diagnostic has to live and `Finding::locations` allows more than
+/// one. A finding with no location produces none: a text-document diagnostic cannot exist
+/// without a document position, and `docs/records/OD-HOST-010-*.md` names which composed
+/// rules that excludes from ever surfacing as a buffer diagnostic (`nomos.cap.goals.policy`'s
+/// own workspace-level rule among them) as an honest, structural limit rather than a bug
+/// this function could fix.
 #[must_use]
-pub fn Diagnostics_For(finding: &Finding) -> Vec<FileDiagnostic>
+pub fn Diagnostics_For(finding: &Finding) -> Vec<SourceDiagnostic>
 {
     return finding.locations.iter().map(|raw| return Diagnostic_For_Location(finding, raw)).collect();
 }
 
-/// One [`FileDiagnostic`] for one of `finding`'s own locations.
-fn Diagnostic_For_Location(finding: &Finding, raw: &str) -> FileDiagnostic
+/// One judgement for one of `finding`'s own locations.
+fn Diagnostic_For_Location(finding: &Finding, raw: &str) -> SourceDiagnostic
 {
     let location = Location::Parse(raw);
-    let walked = WalkOutward::Of(finding);
 
-    let diagnostic = Diagnostic {
-        range: Range_For(location.line),
-        severity: Some(Severity_Of(finding)),
-        code: Some(NumberOrString::String(finding.rule.As_Str().to_owned())),
-        code_description: None,
-        source: Some("nomos".to_owned()),
-        message: finding.summary.clone(),
-        related_information: None,
-        tags: None,
-        data: serde_json::to_value(&walked).ok(),
+    let judgement = SourceDiagnostic::At(location.path, Severity_Of(finding), finding.summary.clone())
+        .Produced_By(PRODUCER, finding.rule.As_Str());
+
+    let judgement = match location.line
+    {
+        Some(line) => judgement.On_Line(line),
+        // Carried through unparsed rather than defaulted: `Location`'s own doc names the
+        // rules whose locations are a package or a declaration rather than a file position,
+        // and giving one of those line one would point an editor at a line it does not mean.
+        None => judgement,
     };
 
-    return FileDiagnostic { path: location.path, diagnostic };
+    return match serde_json::to_string(&WalkOutward::Of(finding))
+    {
+        Ok(walked) => judgement.Carrying(walked),
+        // Not reachable over `WalkOutward`, which is a plain derived `Serialize` over owned
+        // data. A finding still reaches the reader without its walk-outward extras rather
+        // than being dropped for the sake of them.
+        Err(_) => judgement,
+    };
 }
 
 #[cfg(test)]
@@ -61,6 +61,7 @@ mod tests
 {
     use super::*;
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
+    use xvpe_diagnostics::DiagnosticSeverity;
 
     #[test]
     fn Test_Diagnostics_For_Should_Produce_One_Diagnostic_Per_Location()
@@ -82,8 +83,10 @@ mod tests
         let first = diagnostics.first().expect("asserted len 2 above");
         let second = diagnostics.get(1).expect("asserted len 2 above");
         assert_eq!(first.path, "a.rs");
-        assert_eq!(first.diagnostic.range.start.line, 2, "one-based line 3 is zero-based line 2");
-        assert_eq!(second.diagnostic.range.start.line, 8);
+        // One-based, as every rule in this workspace reports it. Turning that into a
+        // zero-based editor position is the engine's, at projection time.
+        assert_eq!(first.line, Some(3));
+        assert_eq!(second.line, Some(9));
     }
 
     #[test]
@@ -104,6 +107,27 @@ mod tests
     }
 
     #[test]
+    fn Test_A_Location_Naming_No_Line_Should_Carry_None_Rather_Than_A_Guess()
+    {
+        let finding = Finding {
+            rule: RuleId::New(nomos_rules::COMPLETENESS_MIRROR),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([6; Digest128::BYTE_LENGTH])),
+            subject_name: "a-package".to_owned(),
+            applicability: Applicability::Supported,
+            evidence: EvidenceClass::Derived,
+            gate: GateCategory::Blocking,
+            summary: "names no line".to_owned(),
+            locations: vec!["crates/spec/nomos-spec-store".to_owned()],
+        };
+
+        let diagnostics = Diagnostics_For(&finding);
+        let only = diagnostics.first().expect("one location, one diagnostic");
+
+        assert_eq!(only.line, None, "a location with no line must not be given one");
+        assert_eq!(only.path, "crates/spec/nomos-spec-store");
+    }
+
+    #[test]
     fn Test_Diagnostic_Should_Carry_The_Rule_As_Its_Code_And_The_Summary_As_Its_Message()
     {
         let finding = Finding {
@@ -121,14 +145,17 @@ mod tests
         let only = diagnostics.first().expect("one location, one diagnostic");
 
         assert_eq!(only.path, "crates/spec/nomos-spec-store/src/store.rs");
-        assert_eq!(only.diagnostic.message, "declares no mirror");
-        assert_eq!(only.diagnostic.code, Some(NumberOrString::String(nomos_rules::COMPLETENESS_MIRROR.to_owned())));
-        assert_eq!(only.diagnostic.severity, Some(lsp_types::DiagnosticSeverity::ERROR));
+        assert_eq!(only.message, "declares no mirror");
+        assert_eq!(only.code, nomos_rules::COMPLETENESS_MIRROR);
+        assert_eq!(only.source, PRODUCER);
+        assert_eq!(only.severity, DiagnosticSeverity::Error);
 
-        let data = only.diagnostic.data.as_ref().expect("walk-outward data is attached");
-        assert_eq!(At(data, "governing_rule", "rule"), Some(nomos_rules::COMPLETENESS_MIRROR));
-        assert_eq!(At(data, "architectural_component", "crate_name"), Some("nomos-spec-store"));
-        assert_eq!(At(data, "available_correction", "family"), Some(nomos_rules::COMPLETENESS_MIRROR));
+        let carried = only.detail.as_ref().expect("walk-outward data is attached");
+        let data: serde_json::Value =
+            serde_json::from_str(carried).expect("walk-outward data is a document");
+        assert_eq!(At(&data, "governing_rule", "rule"), Some(nomos_rules::COMPLETENESS_MIRROR));
+        assert_eq!(At(&data, "architectural_component", "crate_name"), Some("nomos-spec-store"));
+        assert_eq!(At(&data, "available_correction", "family"), Some(nomos_rules::COMPLETENESS_MIRROR));
     }
 
     /// `data.first.second`, read through `Value::get` rather than `Value`'s own `Index` --

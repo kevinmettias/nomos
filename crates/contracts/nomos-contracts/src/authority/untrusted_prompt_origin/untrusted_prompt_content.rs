@@ -3,6 +3,8 @@
 //! type carries no way to satisfy `AGT-EXEC-003`'s negative constraint, which is the
 //! constraint enforced.
 
+use alloc::string::String;
+
 use serde::{Deserialize, Serialize};
 
 use super::UntrustedPromptOrigin;

@@ -5,6 +5,25 @@
 //! by the word "deterministic" and a divergent second spelling would be worse than no
 //! spelling at all.
 //!
+//! # What keeps the two spellings the same
+//!
+//! Not a dependency. This crate may name `serde` and nothing else -- the allowlist in
+//! `tests/contract/tests/boundaries/graph.rs` is what makes "reimplemented by peers that
+//! never compile it" true rather than aspirational -- so re-exporting XVPE's copy is
+//! refused here for the same reason it would be refused for any other crate.
+//!
+//! `tests/contract/tests/determinism_vocabulary.rs` closes the gap that leaves. It is
+//! the one place both definitions are in scope at once, and it asserts they agree on
+//! every variant's spelling, on the order of all three axes, and on
+//! [`Declaration_Is_Coherent`]'s verdict for all thirty-six triples -- the whole input
+//! space, not a sample. Adding a variant on either side stops that file compiling.
+//!
+//! It was written after the copies were measured apart. `TraceEquivalence` is declared
+//! in the opposite order in the two workspaces; they agree on which end is stronger only
+//! because XVPE derives no `Ord` and ranks its variants explicitly. That is the kind of
+//! divergence this module's own first paragraph warns about, and nothing had been
+//! watching for it.
+//!
 //! # Why three axes and not one bit
 //!
 //! "Is it deterministic?" is three questions wearing a trench coat:

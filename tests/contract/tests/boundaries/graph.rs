@@ -9,19 +9,15 @@ use nomos_contract_tests::Workspace;
 /// made here.
 const CONTRACTS_ALLOWLIST: &[&str] = &["serde", "serde_core", "serde_derive"];
 
-/// The only crate permitted to name the sibling platform workspace.
-///
-/// It does not exist yet. Naming it here now means that when it arrives, the exception
-/// is already a decision somebody wrote down rather than a line added to make a failing
-/// test pass.
-const PLATFORM_ADAPTER: &[&str] = &["nomos-platform-xvpe"];
-
 /// The crates permitted to name the sibling knowledge workspace.
 ///
-/// Empty: no such adapter exists yet, and unlike the platform crossing this repository
-/// has not even provisionally named one. When one arrives it belongs here explicitly, the
-/// same way `PLATFORM_ADAPTER` already names `nomos-platform-xvpe` before that crate
-/// exists — AGT-006 names this as the one enforced crossing missing its `kwb-` twin.
+/// Empty: no such adapter exists, and this repository has never provisionally named one.
+/// When one arrives it belongs here explicitly, so the exception is a decision somebody
+/// wrote down rather than a line added to make a failing test pass.
+///
+/// The platform crossing once had this same shape. It no longer does — nomos is built on
+/// top of XVPE, so naming `xvpe-` is ordinary rather than an exception. That says nothing
+/// about this crossing, which remains closed.
 const KNOWLEDGE_ADAPTER: &[&str] = &[];
 
 /// Guards every other test in this suite against passing vacuously.
@@ -89,37 +85,21 @@ fn Test_Contracts_Should_Depend_On_The_Allowlist_And_Nothing_Else()
     );
 }
 
-/// Nothing below the host band may reach the sibling platform workspace.
-///
-/// When `nomos-platform-xvpe` exists it will be the single exception, and it will be
-/// named here explicitly so that the exception is a decision rather than an oversight.
-#[test]
-fn Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace()
-{
-    let workspace = Workspace::Load();
-
-    for member in workspace.Members()
-    {
-        if PLATFORM_ADAPTER.contains(&member.name.as_str())
-        {
-            continue;
-        }
-
-        let leaked: Vec<String> = workspace
-            .Transitive_Dependencies(&member.name)
-            .into_iter()
-            .filter(|dependency| dependency.starts_with("xvpe-"))
-            .collect();
-
-        assert!(
-            leaked.is_empty(),
-            "{} reaches {leaked:?}.\n\
-             The sibling workspace is a downward implementation dependency behind the \
-             platform port, not something the domain may name directly.",
-            member.name
-        );
-    }
-}
+// `Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` was here, and is
+// retired as of 2026-09-10 by the owner's decision.
+//
+// It forbade any crate but a single named adapter from transitively reaching an `xvpe-`
+// dependency, on AGT-006's premise that neither system depends on the other. That premise
+// is no longer this project's: **nomos is built on top of XVPE**, as the knowledge
+// workbench is. XVPE is the engine; this workspace is an application over it. A rule
+// forbidding that dependency does not describe an architecture worth keeping.
+//
+// Retired rather than widened, deliberately. Adding nine crates to an allow-list would
+// have left a rule that still reads as a boundary while enforcing nothing, which is worse
+// than no rule: the next reader would take it for a constraint that holds.
+//
+// The knowledge crossing below is a different question and is untouched. Nothing here says
+// this workspace may name `kwb-`; only that it may name `xvpe-`.
 
 /// Nothing may depend on the sibling knowledge workspace at runtime.
 ///

@@ -85,13 +85,14 @@ pub fn Verify<S: Strategy>(domain: &str, produce: &dyn Fn() -> Vec<u8>) -> Verif
     };
 }
 
-/// A strength and a trace that cannot both be true is a declaration nothing can discharge.
+/// A triple whose three axes cannot all be true is a declaration nothing can discharge.
 fn Assert_The_Declaration_Is_Coherent<S: Strategy>(domain: &str)
 {
     assert!(
-        Declaration_Is_Coherent(S::STRENGTH, S::TRACE),
-        "{domain} declares {} with a trace of {}, which is not a coherent claim",
+        Declaration_Is_Coherent(S::STRENGTH, S::SCOPE, S::TRACE),
+        "{domain} declares {} across {} with a trace of {}, which is not a coherent claim",
         S::STRENGTH,
+        S::SCOPE,
         S::TRACE
     );
 }

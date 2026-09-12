@@ -102,6 +102,7 @@ impl core::fmt::Display for EvidenceClass
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     #[test]

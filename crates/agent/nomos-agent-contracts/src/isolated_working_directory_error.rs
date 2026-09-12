@@ -1,5 +1,17 @@
-//! A freshly created, empty working directory under the system temp root, for a
-//! subprocess-based agent dispatch to run inside.
+//! A freshly created, empty working directory under the system temp root.
+//!
+//! # No longer on the dispatch path
+//!
+//! As of 2026-09-10 both adapters isolate through XVPE's own `IsolatedWorkspace`
+//! instead, which arrived with the dispatch when it moved down. This is kept
+//! because it is **not the same contract**: XVPE's owns its directory and removes
+//! it when dropped, which is what a dispatch wants and what makes the boundary
+//! end exactly when the run does. This one hands back a path that persists, which
+//! is what a test inspecting what a dispatch left behind wants instead.
+//!
+//! Its remaining callers are all tests. That is stated here rather than left to
+//! be discovered, because a helper whose production callers have quietly gone is
+//! otherwise indistinguishable from one that never had any.
 //!
 //! Shared by every `AgentExecutor`/`ModelBackend` adapter that isolates its subprocess
 //! this way -- `nomos-agent-executor-claude-code` and `nomos-model-backend-ollama` each

@@ -55,7 +55,7 @@ mod tests
 {
     use super::*;
     use crate::test_support::{Staged_Heading_Rename, Unique_Scratch_Directory};
-    use nomos_platform_std::StdFileSystem;
+    use nomos_composer_std::FILE_SYSTEM;
     use nomos_spec_orchestration::{EditRequest, SpecCommand};
 
     /// Mirrors [`crate::spec::preview_response::Handle_Spec_Preview`]'s own fixture: a real
@@ -69,7 +69,7 @@ mod tests
         let request = EditRequest { id: "D-132".to_owned(), from: staged, rename: None };
         let corpus_request = crate::spec::Build_Corpus_Request();
 
-        let outcome = nomos_spec_orchestration::Run(&SpecCommand::Preview(request), &corpus_request, &StdFileSystem);
+        let outcome = nomos_spec_orchestration::Run(&SpecCommand::Preview(request), &corpus_request, &FILE_SYSTEM);
 
         let nomos_spec_orchestration::SpecOutcome::Preview(Ok(preview)) = outcome
         else

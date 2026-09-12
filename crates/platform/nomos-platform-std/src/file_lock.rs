@@ -1,6 +1,7 @@
 //! A cross-process lock built from the one filesystem primitive that is atomic
 //! everywhere.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use crate::FileLockGuard;
 
 use nomos_platform::{CrossProcessLock, LockAcquisition, LockError, StaleTakeover};
@@ -204,6 +205,14 @@ impl FileLock
             age,
         });
     }
+}
+
+/// Reaches the real machine, so it reproduces nothing and says so.
+impl Strategy for FileLock
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::None;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::NotApplicable;
 }
 
 impl CrossProcessLock for FileLock

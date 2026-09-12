@@ -1,12 +1,12 @@
 //! The real seam between `nomos_surface_provenance` and `nomos_platform` /
-//! `nomos_platform_std`, proven from outside the crate rather than through the
+//! `nomos_composer_std`, proven from outside the crate rather than through the
 //! private `fake_launcher::Scripted` every unit test in `src/` uses.
 //!
 //! `src/main.rs`'s own doc comment explains why those unit tests never run a real `git`:
 //! `.github/workflows/gate.yml`'s checkout carries no `fetch-depth`, so this repository's
 //! own history is not a fixture a CI run can promise. That is a good reason to keep the
 //! join logic's own tests scripted -- it is not a reason the actual wiring should go
-//! unproven. Nobody anywhere calls `nomos_platform_std::StdProcessLauncher` from a test,
+//! unproven. Nobody anywhere calls `nomos_composer_std::LAUNCHER` from a test,
 //! and nobody proves `git.rs`'s commands are something a real `git` actually accepts, so
 //! `main()`'s composition of the two could be broken and every `cargo test` in this crate
 //! would still stay green.
@@ -111,7 +111,7 @@ struct Ran
     stderr: String,
 }
 
-/// Runs the real binary -- and through it, the real `StdProcessLauncher` this crate wires
+/// Runs the real binary -- and through it, the real `nomos_composer_std::LAUNCHER` this crate wires
 /// into the real `nomos_platform::ProcessLauncher` contract -- against `repository`.
 fn Run(repository: &Repository, arguments: &[&str]) -> Ran
 {
@@ -131,7 +131,7 @@ fn Run(repository: &Repository, arguments: &[&str]) -> Ran
 }
 
 /// The happy-path flow across the boundary: a real git repository, a real `git diff` and
-/// `git log` run through `nomos_platform_std::StdProcessLauncher`, and a real finding
+/// `git log` run through `nomos_composer_std::LAUNCHER`, and a real finding
 /// rendered from exactly what they printed -- none of it scripted.
 #[test]
 fn Test_A_Real_Surface_Change_With_No_Records_Commit_Is_A_Finding()

@@ -1,7 +1,7 @@
-//! Everything a diagnostic can be walked outward to, attached at `lsp_types::Diagnostic::
-//! data` -- LSP's own standard extension point for exactly this: per-diagnostic data a
-//! client may read back on a code-action or hover request without this server inventing a
-//! second protocol beside LSP's.
+//! Everything a diagnostic can be walked outward to, carried on
+//! `xvpe_diagnostics::SourceDiagnostic::detail` and projected by the engine onto LSP's own
+//! standard per-diagnostic extension point -- data a client may read back on a code-action
+//! or hover request without this server inventing a second protocol beside LSP's.
 //!
 //! Three of the five targets `P42-LSP-PROJECTION`'s own `done_when` names have a real,
 //! mechanical answer today and are carried here: the governing rule

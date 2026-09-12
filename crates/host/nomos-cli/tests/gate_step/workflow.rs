@@ -202,3 +202,108 @@ pub(crate) fn With_An_Excused_Rules_Step(workflow: &str) -> String
         "      - name: Rules\n        continue-on-error: true\n",
     );
 }
+
+/// One step of the workflow: the name it is listed under, and everything it runs.
+///
+/// `commands` is every line of the step after its own `- name:` and before the next one,
+/// which is what makes a block scalar (`run: |`) read the same as a one-line `run:`. The
+/// alternative -- reading the `run:` line itself -- is the shape
+/// `Test_A_Scripted_Rules_Step_Should_Not_Satisfy_That_Assertion` already exists to refuse.
+pub(crate) struct Step
+{
+    pub(crate) name: String,
+    pub(crate) commands: String,
+}
+
+/// Every step this workflow runs, in the order it runs them, comments not counted.
+pub(crate) fn Steps_In(workflow: &str) -> Vec<Step>
+{
+    let mut steps: Vec<Step> = Vec::new();
+
+    for line in Executable_Part(workflow).lines()
+    {
+        let trimmed = line.trim();
+
+        if let Some(name) = trimmed.strip_prefix("- name:")
+        {
+            steps.push(Step { name: name.trim().to_owned(), commands: String::new() });
+            continue;
+        }
+
+        if let Some(current) = steps.last_mut()
+        {
+            current.commands.push_str(trimmed);
+            current.commands.push('\n');
+        }
+    }
+
+    return steps;
+}
+
+/// The marker that a step puts a tool on the runner.
+const TOOL_INSTALL: &str = "cargo install";
+
+/// The marker that a step runs this workspace's own tests.
+const TEST_RUN: &str = "cargo test";
+
+/// The position of every step that installs a tool, and of the first that runs the tests.
+///
+/// Positions rather than names, because the question is an ordering and a name cannot be
+/// compared. Both halves are derived from the same [`Steps_In`] walk, so a step renamed or
+/// rewritten moves both together instead of one silently matching nothing.
+pub(crate) fn Installs_After_The_First_Test_Run(workflow: &str) -> Vec<String>
+{
+    let steps = Steps_In(workflow);
+
+    let Some(first_test_run) = steps.iter().position(|step| return step.commands.contains(TEST_RUN))
+    else
+    {
+        // No step runs the tests at all. Reported as a violation rather than as nothing to
+        // check: this assertion is about a tool being present before the tests need it, and
+        // a workflow with no test step has lost the subject rather than satisfied the rule.
+        return vec![format!("no step runs `{TEST_RUN}`, so this workflow has lost the subject of the ordering")];
+    };
+
+    return steps
+        .iter()
+        .enumerate()
+        .filter(|(position, step)| return *position > first_test_run && step.commands.contains(TOOL_INSTALL))
+        .map(|(_, step)| return step.name.clone())
+        .collect();
+}
+
+/// The same workflow with every tool install moved after every other step.
+///
+/// Built by partitioning the steps this file's own [`Steps_In`] derives, rather than by
+/// moving the one step that is there today, so it keeps working when a second tool is
+/// installed and cannot silently rewrite nothing -- the arrangement [`With_A_Tagged_Action`]
+/// uses for its own subject.
+///
+/// The result is a step list rather than a runnable workflow: the `jobs:` preamble is not
+/// reproduced, because the only thing read back out of it is the step order, and writing a
+/// second copy of the workflow's own header here would be a fixture that could drift from
+/// the file it stands in for.
+pub(crate) fn With_Tool_Installs_After_The_Tests(workflow: &str) -> String
+{
+    let steps = Steps_In(workflow);
+    let (installs, others): (Vec<&Step>, Vec<&Step>) =
+        steps.iter().partition(|step| return step.commands.contains(TOOL_INSTALL));
+
+    let mut rewritten = String::new();
+
+    for step in others.into_iter().chain(installs)
+    {
+        rewritten.push_str("      - name: ");
+        rewritten.push_str(&step.name);
+        rewritten.push('\n');
+
+        for command in step.commands.lines()
+        {
+            rewritten.push_str("        ");
+            rewritten.push_str(command);
+            rewritten.push('\n');
+        }
+    }
+
+    return rewritten;
+}

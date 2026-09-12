@@ -14,6 +14,7 @@ pub struct ReservationResponse
     /// Who holds it.
     pub holder: String,
     /// When the lease lapses.
+    #[serde(with = "nomos_platform::timestamp_serde")]
     pub expires_at: Timestamp,
 }
 

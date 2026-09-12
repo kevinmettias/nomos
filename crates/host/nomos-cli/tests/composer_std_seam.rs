@@ -1,23 +1,32 @@
-//! The `nomos_platform_std` seam `check-integration-coverage` found with no suite.
+//! The `nomos_composer_std` seam `check-integration-coverage` found with no suite.
 //!
-//! `nomos_platform_std::StdFileSystem` is the one concrete filesystem adapter every verb
-//! group in this binary composes over `nomos_platform::FileSystem` — `work.rs`, `gate.rs`,
-//! `check.rs`, `spec/verb/render.rs` and `spec/verb/freshness.rs` all choose it. Nothing
-//! under `tests/` ever named the crate directly: every existing suite drives the compiled
-//! binary as a subprocess and only ever sees the *effect* of `StdFileSystem`'s calls (a
-//! ledger file written, a rendered projection on disk), never the type itself.
+//! `nomos_composer_std::FILE_SYSTEM` is the one filesystem every verb group in this binary
+//! composes over `nomos_platform::FileSystem` — `work.rs`, `gate.rs`, `check.rs`,
+//! `spec/verb/render.rs` and `spec/verb/freshness.rs` all choose it. Nothing under `tests/`
+//! ever named the crate directly: every existing suite drives the compiled binary as a
+//! subprocess and only ever sees the *effect* of that filesystem's calls (a ledger file
+//! written, a rendered projection on disk), never the value itself.
 //!
-//! This constructs the real adapter directly and proves the two operations nomos-cli's own
-//! production code depends on — an atomic replace that a plain read then observes, and a
-//! `Read_To_String` that reports a missing file distinguishably rather than panicking —
-//! then runs the real binary over a scratch tree so the same kind of file I/O is proven to
-//! work through the shipped program too, not only through the adapter in isolation.
+//! This uses the real composed filesystem directly and proves the two operations
+//! nomos-cli's own production code depends on — an atomic replace that a plain read then
+//! observes, and a `Read_To_String` that reports a missing file distinguishably rather than
+//! panicking — then runs the real binary over a scratch tree so the same kind of file I/O
+//! is proven to work through the shipped program too, not only through the adapter in
+//! isolation.
+//!
+//! # This suite changed its subject and not its assertions
+//!
+//! It was `platform_std_seam.rs` until this crate stopped naming a platform implementation
+//! directly. `FILE_SYSTEM` *is* the adapter it always exercised, reached through the
+//! composer rather than by name, so all three facts below are the same facts about the same
+//! implementation. Had the migration been wrong, these are the tests that would have said
+//! so first, which is why the suite moved with the seam rather than being rewritten for it.
 
 #[path = "support/mod.rs"]
 mod support;
 
 use nomos_platform::{FileSystem, FileSystemError};
-use nomos_platform_std::StdFileSystem;
+use nomos_composer_std::FILE_SYSTEM;
 use support::{Run, Tree};
 
 /// A scratch path under the system temp directory, cleared before use and named for the
@@ -29,7 +38,7 @@ fn Scratch_File(name: &str) -> std::path::PathBuf
     return path;
 }
 
-/// `StdFileSystem` is a plain, directly constructible unit type — the same concrete adapter
+/// `FILE_SYSTEM` is a plain, directly usable value — the same concrete adapter
 /// `nomos-cli::work::Run` hands `nomos_work_orchestration::Run` and `nomos-cli::check::Run`
 /// hands `nomos_check_orchestration::Run` as the platform's own `FileSystem`. A round trip
 /// through `Replace_Atomically` and `Read_To_String` is the exact contract every one of
@@ -38,7 +47,7 @@ fn Scratch_File(name: &str) -> std::path::PathBuf
 fn Test_Std_File_System_Should_Round_Trip_A_Real_File()
 {
     let path = Scratch_File("round-trip");
-    let filesystem = StdFileSystem;
+    let filesystem = FILE_SYSTEM;
 
     assert!(!filesystem.Exists(&path), "the scratch path must start absent");
 
@@ -63,7 +72,7 @@ fn Test_Std_File_System_Should_Round_Trip_A_Real_File()
 fn Test_Std_File_System_Should_Report_A_Missing_File_As_Not_Found()
 {
     let path = Scratch_File("absent");
-    let filesystem = StdFileSystem;
+    let filesystem = FILE_SYSTEM;
 
     let error = filesystem.Read_To_String(&path).expect_err("nothing was ever written here");
 
@@ -72,7 +81,7 @@ fn Test_Std_File_System_Should_Report_A_Missing_File_As_Not_Found()
 
 /// The same kind of file I/O, proven through the shipped binary: `nomos check` walks a real
 /// scratch tree and must be able to read the file this test wrote into it, the same
-/// operation `StdFileSystem::Read_To_String` performs above -- production code's own choice
+/// operation `FILE_SYSTEM.Read_To_String` performs above -- production code's own choice
 /// of adapter, exercised end to end rather than only in isolation.
 #[test]
 fn Test_The_Shipped_Binary_Should_Read_A_Real_File_Through_The_Same_Kind_Of_Access()

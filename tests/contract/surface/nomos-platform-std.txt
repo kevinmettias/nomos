@@ -1,7 +1,24 @@
+pub const nomos_platform_std::FileLock::SCOPE: ReproducibilityScope
+pub const nomos_platform_std::FileLock::STRENGTH: DeterminismStrength
+pub const nomos_platform_std::FileLock::TRACE: TraceEquivalence
+pub const nomos_platform_std::StdEnvironment::SCOPE: ReproducibilityScope
+pub const nomos_platform_std::StdEnvironment::STRENGTH: DeterminismStrength
+pub const nomos_platform_std::StdEnvironment::TRACE: TraceEquivalence
+pub const nomos_platform_std::StdFileSystem::SCOPE: ReproducibilityScope
+pub const nomos_platform_std::StdFileSystem::STRENGTH: DeterminismStrength
+pub const nomos_platform_std::StdFileSystem::TRACE: TraceEquivalence
+pub const nomos_platform_std::StdProcessLauncher::SCOPE: ReproducibilityScope
+pub const nomos_platform_std::StdProcessLauncher::STRENGTH: DeterminismStrength
+pub const nomos_platform_std::StdProcessLauncher::TRACE: TraceEquivalence
+pub const nomos_platform_std::SystemClock::SCOPE: ReproducibilityScope
+pub const nomos_platform_std::SystemClock::STRENGTH: DeterminismStrength
+pub const nomos_platform_std::SystemClock::TRACE: TraceEquivalence
 pub fn nomos_platform_std::FileLock::Acquire( &self, holder: &str, wait_limit: Duration, stale_after: Duration, ) -> Result<LockAcquisition<Self::Guard>, LockError>
 pub fn nomos_platform_std::FileLock::At(path: impl Into<PathBuf>) -> Self
 pub fn nomos_platform_std::FileLock::Path(&self) -> &Path
 pub fn nomos_platform_std::FileLockGuard::drop(&mut self)
+pub fn nomos_platform_std::StdEnvironment::Variable(&self, name: &str) -> Option<OsString>
+pub fn nomos_platform_std::StdEnvironment::Working_Directory(&self) -> Result<PathBuf, EnvironmentError>
 pub fn nomos_platform_std::StdFileSystem::Exists(&self, path: &Path) -> bool
 pub fn nomos_platform_std::StdFileSystem::Read_Directory(&self, path: &Path) -> Result<Vec<std::path::PathBuf>, FileSystemError>
 pub fn nomos_platform_std::StdFileSystem::Read_To_String(&self, path: &Path) -> Result<String, FileSystemError>
@@ -10,12 +27,19 @@ pub fn nomos_platform_std::StdFileSystem::Replace_Atomically(&self, path: &Path,
 pub fn nomos_platform_std::StdProcessLauncher::Run(&self, command: &Command) -> Result<ProcessOutput, String>
 pub fn nomos_platform_std::SystemClock::Now(&self) -> Timestamp
 pub impl nomos_platform_std::FileLock implements CrossProcessLock
+pub impl nomos_platform_std::FileLock implements Strategy
 pub impl nomos_platform_std::FileLockGuard implements Drop
+pub impl nomos_platform_std::StdEnvironment implements Environment
+pub impl nomos_platform_std::StdEnvironment implements Strategy
 pub impl nomos_platform_std::StdFileSystem implements FileSystem
+pub impl nomos_platform_std::StdFileSystem implements Strategy
 pub impl nomos_platform_std::StdProcessLauncher implements ProcessLauncher
+pub impl nomos_platform_std::StdProcessLauncher implements Strategy
 pub impl nomos_platform_std::SystemClock implements Clock
+pub impl nomos_platform_std::SystemClock implements Strategy
 pub struct nomos_platform_std::FileLock
 pub struct nomos_platform_std::FileLockGuard
+pub struct nomos_platform_std::StdEnvironment
 pub struct nomos_platform_std::StdFileSystem
 pub struct nomos_platform_std::StdProcessLauncher
 pub struct nomos_platform_std::SystemClock

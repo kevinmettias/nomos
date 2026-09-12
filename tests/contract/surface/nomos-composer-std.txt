@@ -1,0 +1,31 @@
+pub const nomos_composer_std::CLOCK: ClockType
+pub const nomos_composer_std::ENVIRONMENT: EnvironmentType
+pub const nomos_composer_std::FILE_SYSTEM: FileSystemType
+pub const nomos_composer_std::LAUNCHER: LauncherType
+pub fn nomos_composer_std::Lock_At(path: impl Into<PathBuf>) -> LockType
+pub type nomos_composer_std::ClockType
+pub type nomos_composer_std::EnvironmentType
+pub type nomos_composer_std::FileSystemType
+pub type nomos_composer_std::LauncherType
+pub type nomos_composer_std::LockType
+
+# re-exports of items declared outside this crate
+pub use nomos_platform::Clock
+pub use nomos_platform::Command
+pub use nomos_platform::CrossProcessLock
+pub use nomos_platform::DeterminismStrength
+pub use nomos_platform::Environment
+pub use nomos_platform::EnvironmentError
+pub use nomos_platform::ExitOutcome
+pub use nomos_platform::FileSystem
+pub use nomos_platform::FileSystemError
+pub use nomos_platform::LockAcquisition
+pub use nomos_platform::LockError
+pub use nomos_platform::ProcessLauncher
+pub use nomos_platform::ProcessOutput
+pub use nomos_platform::ReproducibilityScope
+pub use nomos_platform::StaleTakeover
+pub use nomos_platform::Strategy
+pub use nomos_platform::Timestamp
+pub use nomos_platform::TraceEquivalence
+pub use nomos_platform::timestamp_serde

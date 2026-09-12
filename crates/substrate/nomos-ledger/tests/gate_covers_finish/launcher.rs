@@ -1,6 +1,7 @@
 //! The apparatus every test here shares: a repository with a board, a ledger over it, and
 //! a launcher whose exit codes are the thing each test actually varies.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_ledger::{
     Finishing,
     Claim, FileLedger, Finish_Item, FinishRefusal, ItemId, ItemKind, ItemOrigin, ItemState,
@@ -30,6 +31,14 @@ pub(crate) const WORKFLOW: &str = "name: gate\n\
                         \x20       run: cargo test --workspace\n";
 
 pub(crate) struct FixedClock(i64);
+
+/// Fixed instants, so both the values and their timing reproduce.
+impl Strategy for FixedClock
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::StateTemporal;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
 
 impl Clock for &FixedClock
 {
@@ -66,6 +75,14 @@ impl Scripted
     {
         return self.calls.borrow().clone();
     }
+}
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for Scripted
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
 impl ProcessLauncher for &Scripted

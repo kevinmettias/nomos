@@ -207,6 +207,7 @@ fn Strings_Of(entries: &[serde_json::Value], where_named: WhereNamed<'_>) -> Res
 #[cfg(test)]
 mod tests
 {
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use nomos_platform::FileSystemError;
     use nomos_platform_std::StdFileSystem;
@@ -251,6 +252,14 @@ mod tests
     struct FakeFileSystem
     {
         text: String,
+    }
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for FakeFileSystem
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
     impl FileSystem for FakeFileSystem

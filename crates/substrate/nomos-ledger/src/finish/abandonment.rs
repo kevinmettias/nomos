@@ -19,5 +19,6 @@ pub struct Abandonment
     /// Why, in the words they gave.
     pub reason: String,
     /// When they gave it up.
+    #[serde(with = "nomos_platform::timestamp_serde")]
     pub abandoned_at: Timestamp,
 }

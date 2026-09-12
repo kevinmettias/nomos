@@ -5,20 +5,18 @@
 //! the one part of those three functions that was not itself the `WorkCommand` each names or
 //! the `WorkOutcome` variant each destructures.
 
-use nomos_ledger::{FileLedger, Territory};
-use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
+use nomos_ledger::{Board_In, FileLedger, Territory};
+use nomos_composer_std::{CLOCK, FILE_SYSTEM, LAUNCHER, Lock_At};
+use nomos_composer_std::{ClockType, FileSystemType, LockType};
 use nomos_work_orchestration::{WorkCommand, WorkOutcome};
 use std::path::Path;
 
 /// The `FileLedger` composition every `Handle_Work_*` function in this crate builds.
-pub(crate) fn Ledger_At(directory: &Path) -> FileLedger<StdFileSystem, SystemClock, FileLock>
+pub(crate) fn Ledger_At(directory: &Path) -> FileLedger<FileSystemType, ClockType, LockType>
 {
-    return FileLedger::At(
-        directory.join("ledger.json"),
-        StdFileSystem,
-        SystemClock,
-        FileLock::At(directory.join("ledger.lock")),
-    );
+    let board = Board_In(directory);
+
+    return FileLedger::At(board.document, FILE_SYSTEM, CLOCK, Lock_At(board.lock));
 }
 
 /// Runs `command` against the board at `directory`, exactly as [`super::claim::Handle_Work_Claim`],
@@ -34,7 +32,7 @@ pub(crate) fn Run_Reservation_Command(directory: &Path, command: WorkCommand) ->
     return nomos_work_orchestration::Run(
         &command,
         &mut ledger,
-        &StdProcessLauncher,
+        &LAUNCHER,
         || Territory::Of_Files(std::iter::empty::<String>()),
     );
 }

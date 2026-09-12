@@ -7,6 +7,7 @@
 //!
 //! The harness is read by `concurrency.rs`, which is where the claims it supports are made.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use crate::board::*;
 
 /// How long the harness lets the second writer run before it releases the first one.
@@ -132,6 +133,14 @@ impl Interleaving
     {
         return self.stopped.load(Ordering::SeqCst);
     }
+}
+
+/// Falls through to the real filesystem, so it promises what the real one does: nothing.
+impl Strategy for Interleaving
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::None;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::NotApplicable;
 }
 
 impl FileSystem for &Interleaving

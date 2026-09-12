@@ -22,13 +22,13 @@
 //!
 //! Before this item, `dispatch`/`judge_role` assembled a `TaskEnvelope`, matched on
 //! `Backend`, called `nomos_agent_executor_claude_code::Execute_Task`/
-//! `nomos_model_backend_ollama::Execute_Task` directly with a `StdProcessLauncher` fixed
+//! `nomos_model_backend_ollama::Execute_Task` directly with one concrete launcher fixed
 //! here, and rendered whichever outcome came back -- the only major verb family in this
 //! workspace with no orchestration crate between it and this binary, so `nomos-api` had no
 //! way to dispatch an agent task, choose a backend, or read a result at all. That
 //! composition now lives in `nomos-agent-orchestration`, the identical migration
 //! `P40-CORRECTIONS-CANONICAL-SEAM` already made for `correct.rs`. This module supplies
-//! `nomos_platform_std::StdProcessLauncher` for the seam's own one platform port -- still
+//! `nomos_composer_std::LAUNCHER` for the seam's own one platform port -- still
 //! this crate's own choice, the same reason `check.rs` and `work.rs` make theirs -- and
 //! renders an `nomos_agent_orchestration::AgentDispatchOutcome` into the exact text this
 //! command has always produced. [`Backend`] and [`DispatchConfig`] are both

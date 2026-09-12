@@ -13,6 +13,9 @@
 //! workspace, so naming it here would type a field against an identity that does not
 //! exist yet rather than reuse one.
 
+use alloc::string::String;
+use alloc::vec::Vec;
+
 use serde::{Deserialize, Serialize};
 
 use super::SemanticChangeClass;
@@ -38,6 +41,8 @@ pub struct SemanticChangeAuthorityResolution
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec;
+    use alloc::borrow::ToOwned;
     use super::*;
 
     #[test]

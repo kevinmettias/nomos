@@ -82,6 +82,7 @@ impl core::fmt::Display for KnowledgeSourceRole
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     const ALL: [KnowledgeSourceRole; 8] = [

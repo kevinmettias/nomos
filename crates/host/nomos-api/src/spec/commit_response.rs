@@ -13,9 +13,9 @@ use super::{Build_Corpus_Request, CommitReportResponse, CommittedPreviewResponse
 ///
 /// Follows [`crate::spec::record_response::Handle_Spec_Record`]'s own composition. Like
 /// [`crate::spec::render_response::Handle_Spec_Render`], this verb writes real bytes through
-/// `StdFileSystem` -- `run::commit::Commit_Staged_Edit` writes the committed record at
+/// `nomos_composer_std::FILE_SYSTEM` -- `run::commit::Commit_Staged_Edit` writes the committed record at
 /// `request.into.join(&report.path)` via `Replace_Atomically`, the same shape `Render`'s own
-/// write already has, and this crate already has real, unauthenticated `StdFileSystem` writes
+/// write already has, and this crate already has real, unauthenticated filesystem writes
 /// as precedent (`Handle_Work_Claim`, `Handle_Spec_Render`). Unlike `Render`, a commit's write
 /// is not a derived, regenerable artifact: it replaces the governing record's own bytes, and
 /// a rename's old path is permanently unlinked via a raw `std::fs::remove_file` with no
@@ -24,12 +24,12 @@ use super::{Build_Corpus_Request, CommitReportResponse, CommittedPreviewResponse
 #[must_use]
 pub fn Handle_Spec_Commit(request: &CommitRequest) -> CommitResponse
 {
-    use nomos_platform_std::StdFileSystem;
+    use nomos_composer_std::FILE_SYSTEM;
 
     let corpus_request = Build_Corpus_Request();
 
     let outcome =
-        nomos_spec_orchestration::Run(&SpecCommand::Commit(request.clone()), &corpus_request, &StdFileSystem);
+        nomos_spec_orchestration::Run(&SpecCommand::Commit(request.clone()), &corpus_request, &FILE_SYSTEM);
 
     let nomos_spec_orchestration::SpecOutcome::Commit(result) = outcome
     else

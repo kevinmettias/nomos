@@ -4,6 +4,7 @@ mod error;
 
 pub use error::Error as FileSystemError;
 
+use nomos_contracts::Strategy;
 use std::path::{Path, PathBuf};
 
 /// File access.
@@ -12,7 +13,17 @@ use std::path::{Path, PathBuf};
 /// set of operations Nomos's durable state actually needs: read, atomically replace, check
 /// existence, and remove. The fourth is defaulted rather than required, so it does not
 /// widen what every implementor must supply — see [`FileSystem::Remove_File`].
-pub trait FileSystem
+/// # What an implementor promises
+///
+/// The supertrait is [`nomos_contracts::Strategy`], so every implementor states its
+/// determinism triple. This is the seam where that question is sharpest and where it had
+/// no answer: the twenty-nine types in this workspace that declared a triple were rules,
+/// providers and formats, and not one of them was a port -- while the implementations
+/// that actually cross the machine boundary, and the doubles that stand in for them,
+/// declared nothing. The real one promises nothing and says so; a double built from fixed
+/// data reproduces and says that. A caller reading `S::STRENGTH` can tell them apart
+/// without knowing either type.
+pub trait FileSystem: Strategy
 {
     /// Reads a file's entire contents as text.
     ///
@@ -92,10 +103,19 @@ pub trait FileSystem
 mod tests
 {
     use super::*;
+    use nomos_contracts::{DeterminismStrength, ReproducibilityScope, TraceEquivalence};
 
     /// An implementor that overrides none of `FileSystem`'s three required operations
     /// meaningfully, so that `Remove_File`'s own default is the only behaviour under test.
     struct NoOverride;
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for NoOverride
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
 
     impl FileSystem for NoOverride
     {

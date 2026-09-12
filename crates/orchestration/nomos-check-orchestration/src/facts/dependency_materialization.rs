@@ -558,6 +558,7 @@ mod tests
     //! What this module promises, exercised.
 
     use super::*;
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use nomos_platform::Command;
     use nomos_workspace::BuildVariant;
     use std::path::PathBuf;
@@ -646,6 +647,14 @@ mod tests
     /// silently read as "zero findings", which is exactly the vacuity
     /// [`Materialize_Syntax`]'s own `NoFacts` case exists to catch one layer over.
     struct RefusingLauncher;
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for RefusingLauncher
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
 
     impl nomos_platform::ProcessLauncher for RefusingLauncher
     {

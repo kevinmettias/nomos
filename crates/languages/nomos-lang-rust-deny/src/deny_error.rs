@@ -315,6 +315,7 @@ fn Violation_Of(diagnostic: &serde_json::Value) -> Option<PolicyViolation>
 #[cfg(test)]
 mod tests
 {
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use nomos_platform::ProcessOutput;
     use std::cell::RefCell;
@@ -325,6 +326,14 @@ mod tests
     struct FakeLauncher
     {
         stderr: String,
+    }
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for FakeLauncher
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
     impl ProcessLauncher for FakeLauncher
@@ -357,6 +366,14 @@ mod tests
         {
             return Self { received: RefCell::new(Vec::new()) };
         }
+    }
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for RecordingLauncher
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
     impl ProcessLauncher for RecordingLauncher

@@ -37,7 +37,7 @@
 //! specifically earned that seam. `spec/verb/{listing,record,table,markdown,render,freshness,
 //! editing}.rs` all delegate resolution (and, for `render` and `editing::Commit`, writing) to
 //! it and keep only the `ExitCode` a rendering layer is responsible for, over
-//! `nomos_platform_std::StdFileSystem` as the concrete platform this composition root
+//! `nomos_composer_std::FILE_SYSTEM` as the concrete platform this composition root
 //! chooses — the same choice `nomos-cli::work` already makes for the ledger.
 //! [`Note_Absences`] stays here too — it writes text, and writing text is this crate's job,
 //! not the orchestration crate's.

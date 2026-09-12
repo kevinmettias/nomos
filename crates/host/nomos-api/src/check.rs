@@ -16,7 +16,7 @@
 use crate::{composition, sources};
 use nomos_check_orchestration::{CheckCommand, CheckOutcome, Run, RunContext};
 use nomos_contracts::Finding;
-use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
+use nomos_composer_std::{FILE_SYSTEM, LAUNCHER};
 use serde::Serialize;
 
 /// Walks `command.root` and runs every registered rule over it -- `nomos-cli::check`'s own
@@ -41,8 +41,8 @@ pub fn Handle_Check_Run(command: &CheckCommand) -> CheckResponse
         RunContext {
             variant: composition::Host_Variant(),
             root: &command.root,
-            launcher: &StdProcessLauncher,
-            filesystem: &StdFileSystem,
+            launcher: &LAUNCHER,
+            filesystem: &FILE_SYSTEM,
             workspace: &mut None,
             store: &mut store,
         },

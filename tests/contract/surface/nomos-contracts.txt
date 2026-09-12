@@ -14,7 +14,7 @@ pub const fn nomos_contracts::Compensation::Is_Present(self) -> bool
 pub const fn nomos_contracts::Compensation::Label(self) -> &'static str
 pub const fn nomos_contracts::ContractVersion::Can_Read(self, other: Self) -> bool
 pub const fn nomos_contracts::ContractVersion::New(major: u16, minor: u16) -> Self
-pub const fn nomos_contracts::Declaration_Is_Coherent( strength: DeterminismStrength, trace: TraceEquivalence, ) -> bool
+pub const fn nomos_contracts::Declaration_Is_Coherent( strength: DeterminismStrength, scope: ReproducibilityScope, trace: TraceEquivalence, ) -> bool
 pub const fn nomos_contracts::DeterminismStrength::Can_Claim_Reproducibility(self) -> bool
 pub const fn nomos_contracts::DeterminismStrength::Label(self) -> &'static str
 pub const fn nomos_contracts::Digest128::Bytes(&self) -> &[u8; Self::BYTE_LENGTH]

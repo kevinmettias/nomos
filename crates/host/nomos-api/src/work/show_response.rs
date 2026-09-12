@@ -17,7 +17,7 @@ use std::path::Path;
 pub fn Handle_Work_Show(directory: &Path, item: &ItemId) -> ShowResponse
 {
     use super::Ledger_At;
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_composer_std::LAUNCHER;
     use nomos_work_orchestration::WorkCommand;
 
     let mut ledger = Ledger_At(directory);
@@ -25,7 +25,7 @@ pub fn Handle_Work_Show(directory: &Path, item: &ItemId) -> ShowResponse
     let outcome = nomos_work_orchestration::Run(
         &WorkCommand::Show { item: item.clone() },
         &mut ledger,
-        &StdProcessLauncher,
+        &LAUNCHER,
         || Territory::Of_Files(std::iter::empty::<String>()),
     );
 
@@ -62,6 +62,7 @@ pub enum ShowResponse
         /// This tree's revision right now, or `None` if it could not be read.
         current_revision: Option<String>,
         /// The moment the board was read.
+        #[serde(with = "nomos_platform::timestamp_serde")]
         now: Timestamp,
     },
     /// The board read cleanly, but no item on it carries this id.

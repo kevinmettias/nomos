@@ -9,8 +9,8 @@
 //! left is the compiled binary itself.
 //!
 //! `crate::gate::Run_Verb` (`src/gate.rs`) is the real, production seam:
-//! `nomos_gate_orchestration::Fresh_Run_Id(SystemClock.Now())`, where `SystemClock` is
-//! `nomos_platform_std::SystemClock` implementing `nomos_platform::Clock` and returning a
+//! `nomos_gate_orchestration::Fresh_Run_Id(CLOCK.Now())`, where `CLOCK` is
+//! `nomos_composer_std::CLOCK` implementing `nomos_platform::Clock` and returning a
 //! `nomos_platform::Timestamp`. That `RunId`'s `Display` is exactly what `nomos gate run`
 //! prints on its `run: ` line (`gate/tests.rs`'s own
 //! `Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report` asserts the same shape in
@@ -36,7 +36,7 @@ fn Test_Gate_Runs_RunId_Line_Should_Share_Its_Shape_With_A_RunId_Built_From_Nomo
     assert_ne!(
         earlier, later,
         "a later nomos_platform::Timestamp must change the RunId Fresh_Run_Id builds -- the \
-         same seam crate::gate::Run_Verb drives with SystemClock.Now()"
+         same seam crate::gate::Run_Verb drives with CLOCK.Now()"
     );
 
     let built_directly = earlier.to_string();

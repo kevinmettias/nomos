@@ -2,7 +2,7 @@
 //!
 //! `P43-AGENT-CANONICAL-SEAM-2` moved the call this file once documented --
 //! `agent/dispatch.rs::Dispatch_Task` calling `nomos_agent_executor_claude_code::
-//! Execute_Task(task, &StdProcessLauncher)` directly -- into `nomos-agent-orchestration`'s
+//! Execute_Task(task, &LAUNCHER)` directly -- into `nomos-agent-orchestration`'s
 //! own `Run_Agent_Execute`/`Run_Agent_Judgment`, generic over `ProcessLauncher` rather than
 //! fixed here. `nomos-cli` no longer names this crate in its own production dependencies;
 //! it reaches it only transitively, through the shared seam. This suite is kept anyway,
@@ -22,13 +22,15 @@
 //! own tests already use. This proves the real contract the shared seam depends on: a
 //! `TaskEnvelope` shaped the way `nomos_agent_orchestration::run`'s own `Bare_Task` builds
 //! it, in; an `AgentExecutionOutcome` carrying `result` (a real `WorkResult`),
-//! `denied_tool_uses`, `is_error`, `cost_usd` and `duration_ms` -- every field
+//! `denied_tool_uses`, `is_error`, `cost` and `duration_ms` -- every field
 //! `nomos-cli`'s own `agent/dispatch.rs::Rendered` prints -- out, or an
 //! `AgentExecutionError` when the process reports anything other than a clean exit.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_agent_executor_claude_code::{AgentExecutionError, Execute_Task};
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+use nomos_agent_executor_claude_code::MicroDollars;
 
 #[path = "support/mod.rs"]
 mod support;
@@ -42,6 +44,14 @@ struct Scripted
 {
     outcome: ExitOutcome,
     stdout: String,
+}
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for Scripted
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
 impl ProcessLauncher for Scripted
@@ -85,7 +95,11 @@ fn Test_Execute_Task_Should_Return_Every_Field_The_Cli_Renders_For_A_Clean_Respo
     assert_eq!(outcome.result.assumptions, ["a ping wants a pong".to_owned()]);
     assert!(outcome.denied_tool_uses.is_empty());
     assert!(!outcome.is_error);
-    assert!((outcome.cost_usd - 0.01).abs() < f64::EPSILON);
+    // Exact, not within an epsilon. The response above reports one cent, the engine
+    // measures money as an integer, and nothing between there and here turns it into a
+    // float any more -- so the assertion that used to need a tolerance no longer does,
+    // which is the observable proof the exactness survived the trip.
+    assert_eq!(outcome.cost, MicroDollars::From_Micros(10_000));
     assert_eq!(outcome.duration_ms, 500);
 }
 

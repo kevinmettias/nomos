@@ -179,6 +179,7 @@ impl core::fmt::Display for Applicability
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     /// Every state, once. A test that builds its own list checks the states it happened

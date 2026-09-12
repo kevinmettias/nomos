@@ -1,5 +1,6 @@
 //! File access, with a replace that cannot be observed half-done.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_platform::{FileSystem, FileSystemError};
 use std::io::Write;
 use std::path::Path;
@@ -66,6 +67,14 @@ fn Write_Fully(temporary: &Path, contents: &str) -> Result<(), FileSystemError>
         .map_err(|error| return StdFileSystem::Classify(temporary, &error))?;
 
     return Ok(());
+}
+
+/// Reaches the real machine, so it reproduces nothing and says so.
+impl Strategy for StdFileSystem
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::None;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::NotApplicable;
 }
 
 impl FileSystem for StdFileSystem

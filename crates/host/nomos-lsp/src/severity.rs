@@ -1,14 +1,18 @@
-//! What an editor should do with one finding, translated from the two vocabularies
+//! How loudly one finding should speak, translated from the two vocabularies
 //! `nomos_contracts` already keeps apart: what a violation *deserves*
 //! ([`nomos_contracts::GateCategory`]) and whether the rule actually reached its subject
 //! ([`nomos_contracts::Applicability`]).
 //!
 //! No judgment happens here. [`Finding::Can_Fail_A_Build`] already decided which findings
-//! are real, gated defects; this only chooses which of LSP's four severities renders that
-//! decision, and the finer distinction `GateCategory` still carries for a finding that
+//! are real, gated defects; this only chooses which of the engine's four severities renders
+//! that decision, and the finer distinction `GateCategory` still carries for a finding that
 //! cannot fail a build.
+//!
+//! This mapping is the half of a language server that is genuinely this workspace's. What a
+//! severity *means* is a property of this workspace's own rule categories, and no shared
+//! vocabulary could know it -- which is exactly why `xvpe-diagnostics` declines to.
 
-use lsp_types::DiagnosticSeverity;
+use xvpe_diagnostics::DiagnosticSeverity;
 use nomos_contracts::{Finding, GateCategory};
 
 /// The severity an editor should render `finding` at.
@@ -25,19 +29,19 @@ pub(crate) fn Severity_Of(finding: &Finding) -> DiagnosticSeverity
 {
     if finding.Can_Fail_A_Build()
     {
-        return DiagnosticSeverity::ERROR;
+        return DiagnosticSeverity::Error;
     }
 
     if !finding.applicability.Is_Evaluated()
     {
-        return DiagnosticSeverity::HINT;
+        return DiagnosticSeverity::Hint;
     }
 
     return match finding.gate
     {
-        GateCategory::Blocking | GateCategory::Advisory => DiagnosticSeverity::WARNING,
-        GateCategory::Review => DiagnosticSeverity::INFORMATION,
-        GateCategory::Unreachable => DiagnosticSeverity::HINT,
+        GateCategory::Blocking | GateCategory::Advisory => DiagnosticSeverity::Warning,
+        GateCategory::Review => DiagnosticSeverity::Information,
+        GateCategory::Unreachable => DiagnosticSeverity::Hint,
     };
 }
 
@@ -52,7 +56,7 @@ mod tests
     {
         let finding = Example_Finding(Applicability::Supported, GateCategory::Blocking);
 
-        assert_eq!(Severity_Of(&finding), DiagnosticSeverity::ERROR);
+        assert_eq!(Severity_Of(&finding), DiagnosticSeverity::Error);
     }
 
     #[test]
@@ -60,7 +64,7 @@ mod tests
     {
         let finding = Example_Finding(Applicability::Supported, GateCategory::Advisory);
 
-        assert_eq!(Severity_Of(&finding), DiagnosticSeverity::WARNING);
+        assert_eq!(Severity_Of(&finding), DiagnosticSeverity::Warning);
     }
 
     #[test]
@@ -68,7 +72,7 @@ mod tests
     {
         let finding = Example_Finding(Applicability::Supported, GateCategory::Review);
 
-        assert_eq!(Severity_Of(&finding), DiagnosticSeverity::INFORMATION);
+        assert_eq!(Severity_Of(&finding), DiagnosticSeverity::Information);
     }
 
     #[test]
@@ -76,7 +80,7 @@ mod tests
     {
         let finding = Example_Finding(Applicability::MissingCapability, GateCategory::Blocking);
 
-        assert_eq!(Severity_Of(&finding), DiagnosticSeverity::HINT);
+        assert_eq!(Severity_Of(&finding), DiagnosticSeverity::Hint);
     }
 
     #[test]
@@ -84,7 +88,7 @@ mod tests
     {
         let finding = Example_Finding(Applicability::Supported, GateCategory::Unreachable);
 
-        assert_eq!(Severity_Of(&finding), DiagnosticSeverity::HINT);
+        assert_eq!(Severity_Of(&finding), DiagnosticSeverity::Hint);
     }
 
     fn Example_Finding(applicability: Applicability, gate: GateCategory) -> Finding

@@ -12,11 +12,12 @@ name = "nomos-lsp"
 path = "src/main.rs"
 
 [dependencies]
-# The wire types (`Diagnostic`, `Range`, `Position`, ...) and the synchronous JSON-RPC
-# transport over stdio -- see the workspace `Cargo.toml`'s own comment beside these two for
-# why this pairing rather than `tower-lsp`.
-lsp-types = { workspace = true }
-lsp-server = { workspace = true }
+# The engine's provider contract, and the server that speaks the protocol over it. The wire
+# types and the stdio transport are that crate's; nothing here names either, which is what
+# lets every case in this crate be asserted without a client.
+xvpe-diagnostics = { path = "../../../../xvpe/crates/mechanisms/xvpe-diagnostics" }
+xvpe-language-server-backend-lsp = { path = "../../../../xvpe/crates/backends/language-server/xvpe-language-server-backend-lsp" }
+xvpe-primitives = { path = "../../../../xvpe/crates/foundations/contracts/xvpe-primitives" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 nomos-contracts = { workspace = true }
@@ -27,7 +28,7 @@ nomos-contracts = { workspace = true }
 # this crate's tests as fixture rule ids and nowhere in what it compiles for a real run.
 nomos-rules = { workspace = true }
 nomos-platform = { workspace = true }
-nomos-platform-std = { workspace = true }
+nomos-composer-std = { workspace = true }
 nomos-workspace = { workspace = true }
 nomos-analysis = { workspace = true }
 nomos-capability = { workspace = true }

@@ -8,6 +8,7 @@
 //! same paths again through the compiled binary; this file is the crate's own guarantee,
 //! independent of that caller ever existing.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use crate::{CheckOutcome, Claim, Composed_Rules, Run, RunContext};
 use nomos_analysis::{MemoryFactStore, Reader};
 use nomos_contracts::{Finding, GateCategory, RuleId};
@@ -393,6 +394,14 @@ impl CountingLauncher
     {
         return self.calls.get();
     }
+}
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for CountingLauncher
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
 impl ProcessLauncher for CountingLauncher

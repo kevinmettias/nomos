@@ -11,7 +11,7 @@
 
 use crate::{composition, sources};
 use nomos_correction_orchestration::{CorrectionCommand, CorrectionEnvironment, CorrectionOutcome, Run_Correction};
-use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
+use nomos_composer_std::{FILE_SYSTEM, LAUNCHER};
 use serde::Serialize;
 
 /// Walks `command.root` and runs the correction exactly as `nomos correct phantom-mirrors`
@@ -22,7 +22,7 @@ pub fn Handle_Correction_Run(command: &CorrectionCommand) -> CorrectionResponse
     let walked = sources::Walked_Sources(&command.root);
     let outcome = Run_Correction(
         walked,
-        CorrectionEnvironment { variant: composition::Host_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },
+        CorrectionEnvironment { variant: composition::Host_Variant(), launcher: &LAUNCHER, filesystem: &FILE_SYSTEM },
         command,
     );
 

@@ -45,6 +45,15 @@ nomos-cap-requirement-trace = { workspace = true }
 # against.
 nomos-platform = { workspace = true }
 nomos-platform-std = { workspace = true }
+# The sibling engine's copy of the determinism vocabulary, for
+# `tests/determinism_vocabulary.rs` alone. `nomos-contracts` may not name it -- that
+# crate's dependency list is a contract asserted by `tests/boundaries/graph.rs`, and its
+# types are reimplemented by peers that never compile it -- so the two definitions of
+# `Strategy` and its three axes are deliberately separate. A dev dependency here is the
+# one place both can be seen at once, which is what makes their agreement checkable
+# instead of assumed.
+xvpe-primitives = { path = "../../../xvpe/crates/foundations/contracts/xvpe-primitives" }
+
 
 [lints]
 workspace = true

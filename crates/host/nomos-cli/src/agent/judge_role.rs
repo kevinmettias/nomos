@@ -39,7 +39,7 @@ pub(super) fn Judge_Role(
 ) -> ExitCode
 {
     use nomos_agent_orchestration::{AgentEnvironment, Run_Agent_Judgment};
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_composer_std::LAUNCHER;
 
     let pair = match Role_Surface_Pair(request, notes)
     {
@@ -53,7 +53,7 @@ pub(super) fn Judge_Role(
         Err(code) => return code,
     };
 
-    let outcome = Run_Agent_Judgment(&pair, &finding, config, &AgentEnvironment { launcher: &StdProcessLauncher });
+    let outcome = Run_Agent_Judgment(&pair, &finding, config, &AgentEnvironment { launcher: &LAUNCHER });
 
     return super::dispatch::Rendered(&outcome, output, notes);
 }

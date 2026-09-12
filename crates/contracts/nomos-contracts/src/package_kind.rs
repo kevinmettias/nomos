@@ -209,6 +209,8 @@ impl core::fmt::Display for PackageKind
 #[cfg(test)]
 mod tests
 {
+    use alloc::string::ToString;
+    use alloc::vec::Vec;
     use super::*;
 
     /// The sixteen kinds the corpus names, in the order it names them, each paired with

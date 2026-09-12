@@ -1,3 +1,7 @@
+
+
+use alloc::string::String;
+
 use serde::{Deserialize, Serialize};
 
 /// A named enforcer of a rule.
@@ -46,6 +50,8 @@ impl core::fmt::Display for EnforcerRef
 #[cfg(test)]
 mod tests
 {
+    use alloc::string::ToString;
+    use alloc::borrow::ToOwned;
     use super::*;
 
     #[test]

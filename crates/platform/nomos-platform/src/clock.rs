@@ -1,8 +1,11 @@
 //! Time, as a dependency rather than as an ambient fact.
 
+use nomos_contracts::Strategy;
+
 mod timestamp;
 
 pub use timestamp::Timestamp;
+pub use timestamp::serialization as timestamp_serde;
 
 /// The source of the current time.
 ///
@@ -13,7 +16,17 @@ pub use timestamp::Timestamp;
 /// source: anything on the analysis path that reads a clock directly cannot honestly
 /// declare a reproducibility claim, and routing every read through this trait is what
 /// makes that checkable rather than aspirational.
-pub trait Clock
+/// # What an implementor promises
+///
+/// The supertrait is [`nomos_contracts::Strategy`], so every implementor states its
+/// determinism triple. This is the seam where that question is sharpest and where it had
+/// no answer: the twenty-nine types in this workspace that declared a triple were rules,
+/// providers and formats, and not one of them was a port -- while the implementations
+/// that actually cross the machine boundary, and the doubles that stand in for them,
+/// declared nothing. The real one promises nothing and says so; a double built from fixed
+/// data reproduces and says that. A caller reading `S::STRENGTH` can tell them apart
+/// without knowing either type.
+pub trait Clock: Strategy
 {
     /// The current time.
     fn Now(&self) -> Timestamp;

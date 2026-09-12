@@ -1,5 +1,6 @@
 //! Running a program directly, with a timeout that actually terminates it.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_platform::{Command, ProcessLauncher, ProcessOutput};
 
 // Kept under `launcher/` rather than `std_process_launcher/`: the directory name is not
@@ -40,6 +41,14 @@ const DRAIN_GRACE: std::time::Duration = std::time::Duration::from_secs(5);
 /// file to become a command somebody else's process runs.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct StdProcessLauncher;
+
+/// Reaches the real machine, so it reproduces nothing and says so.
+impl Strategy for StdProcessLauncher
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::None;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::NotApplicable;
+}
 
 impl ProcessLauncher for StdProcessLauncher
 {

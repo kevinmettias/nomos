@@ -113,6 +113,7 @@ profile: domain-specification
 | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md@authored | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md | authored | 23 | 7 | sha256:68d1d753054542c6d8e57a0ce6d40c300f5bc598959791a06ca99ec7514b97e8 |
 | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md@authored | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md | authored | 19 | 7 | sha256:361139ee1bbe26b54f84f93988dbf0ccf3488045465fa4f1558161c02d48ba8b |
 | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md@authored | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md | authored | 18 | 6 | sha256:1f5a1bfd574bfb0b43f9b1b360bd932f8c620d390cb1eb9a0931804fbc9d76db |
+| docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md@authored | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md | authored | 25 | 9 | sha256:5a4499b293dcf3cd5427520182b60d4f21d816e6a0f1733e35cfaee37721a099 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -150,7 +151,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md@authored | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md | authored | 17 | 5 | sha256:e28fcdcd8881a5405bfd5398964764cd59fa6d45e8340359ca94d9df98a0d732 |
 | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md | authored | 22 | 7 | sha256:3595ed422199d4058d69fa987aa9a1b826a27df82f6e0daa776f250e98ff51a0 |
 | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md@authored | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md | authored | 18 | 6 | sha256:ab5cb902ffef3564343e99f10236808102e5e0f1d3c8374831bc8e8ab0d579ad |
-| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md@authored | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md | authored | 38 | 12 | sha256:cffa2a69329d9e1d534c0ee83672d98b60abe136e368795182a6293ea72c0d93 |
+| docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md@authored | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md | authored | 38 | 12 | sha256:5c7849568533836d07c6844c09979f45b1d256845c3b09136bb51a9a9d5137f5 |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -170,6 +171,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md@authored | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md | authored | 21 | 7 | sha256:ad7db84e0e6c5bd783952fb02f6bde672224a893e8ea7fdf510c2a1ceb6cedd2 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 21 | 7 | sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
@@ -194,13 +196,14 @@ profile: domain-specification
 | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md@authored | docs/records/OD-RULES-017-a-word-missing-from-the-ported-vocabulary-may-be-added-a-banned-one-stays-banned.md | authored | 21 | 6 | sha256:ecd850bb6c29efe9ac6e25ef920c7e6492a59d5e6fe177709d05c01a8bbef25f |
 | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md@authored | docs/records/OD-RULES-018-env-doc-and-docs-are-resolved-by-a-descriptive-rename-not-a-words-policy-addition.md | authored | 16 | 6 | sha256:be774faf1f653161ca537fca09f49287c8b993c75d9f1cc9385f73849c3136ae |
 | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md@authored | docs/records/OD-RULES-019-whether-the-five-repo-policy-providers-owe-standards-json-one-shared-read-or-independent-parsing-stays-accepted.md | authored | 16 | 6 | sha256:2021593cf5f8734035d023e39e1f1fc3fabf8ee21b2ddd4dd7322195e9ff483f |
-| docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md@authored | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md | authored | 18 | 6 | sha256:7c00cbb230b504b22e7922e6d767d0c0a9bd413158db489b9c851c70d34f83fe |
+| docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md@authored | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md | authored | 19 | 6 | sha256:457437d835ee6b4b56539ca48bf573783f4502b074bc23802d2abc3ed1386884 |
 | docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md@authored | docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md | authored | 20 | 6 | sha256:ea313379a437b3b5e7ba623617be84b08618537398e039ce978a91cec5a88df3 |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md@authored | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md | authored | 30 | 6 | sha256:ee25e5bafb0ab46ae96890e572a96aa4a970f0f854957c7e2474998c6a5949ad |
 | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md@authored | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md | authored | 16 | 6 | sha256:ce866cdba1b609d99736475258c51c1342b6274867a9c2e8f8703946cec253c3 |
 | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md@authored | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md | authored | 17 | 6 | sha256:06d7276cc87daf98d5315060d60a9a8b745eb6a1e1af5b124691dc7e3ea0f097 |
 | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md@authored | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md | authored | 18 | 6 | sha256:93c4319371053698f6d4700251affa8044f571891fe4fe6831535c4d7cecbbc9 |
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md@authored | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md | authored | 16 | 6 | sha256:66d2427694c21ad26b870820393f14285fbb1678448d0a33f4490a61fd0f1118 |
+| docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md@authored | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md | authored | 22 | 7 | sha256:eef4a3f365ef12f634f1fee88c3cf1b2ad45aad74e471e1daf8c8c26603a4228 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1015,6 +1018,15 @@ profile: domain-specification
 | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#10 | authored | 2 | The Decision |
 | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#15 | authored | 2 | What Would Decide It Differently |
 | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#17 | authored | 2 | Status |
+| docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#1 | authored | 1 | A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs |
+| docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#6 | authored | 2 | Decision |
+| docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#11 | authored | 2 | What each crate here kept |
+| docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#13 | authored | 2 | `OD-HOST-007` is unaffected, and is now cheaper to keep |
+| docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#15 | authored | 2 | What this closed that was not the point |
+| docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#18 | authored | 2 | What it cost |
+| docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#21 | authored | 2 | A guard this repaired |
+| docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#24 | authored | 2 | Consequences |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -1531,6 +1543,13 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#6 | authored | 2 | The Decision |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#11 | authored | 2 | What This Does Not Do |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#14 | authored | 2 | Status |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#1 | authored | 1 | Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#2 | authored | 2 | Question |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#6 | authored | 2 | Decision |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#11 | authored | 2 | What Moved, And Why It Had To |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#15 | authored | 2 | Why The Test Was Deleted Rather Than Widened |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#18 | authored | 2 | What This Costs |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#20 | authored | 2 | Consequences |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1 | authored | 1 | The repository's README is not the suite's overview, and stays hand-authored |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#2 | authored | 2 | Question |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#6 | authored | 2 | Two Documents, One Name |
@@ -1722,7 +1741,7 @@ profile: domain-specification
 | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#8 | authored | 2 | The Decision |
 | docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#14 | authored | 2 | What This Does Not Do |
-| docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#17 | authored | 2 | Status |
+| docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#18 | authored | 2 | Status |
 | docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#1 | authored | 1 | What artifact discharges a justification requirement, and whether it must say anything |
 | docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#4 | authored | 2 | What Was Measured |
@@ -1759,6 +1778,13 @@ profile: domain-specification
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#10 | authored | 2 | The verdict |
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#12 | authored | 2 | What this record does not do |
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#15 | authored | 2 | Status |
+| docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#1 | authored | 1 | A platform implementation is its own zone, so a composition root reaches one only through a composer |
+| docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#10 | authored | 2 | The Decision |
+| docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#14 | authored | 2 | What It Costs |
+| docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#18 | authored | 2 | What This Does Not Do |
+| docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#21 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -27409,6 +27435,210 @@ that `ServedMethod` is an incremental frontier excluding four product verbs alon
 repo-tooling families, not a containment line. Revisit on a second host wanting the product
 half alone.
 
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#1
+
+*revision: authored · kind: heading · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs · hash: sha256:9e46375f88477f6834c623b5eca0209340469559627608b75813ee0859ed4f25*
+
+# A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#2
+
+*revision: authored · kind: heading · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#3
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Question · hash: sha256:070460b7e7d32334a7eb1a4fb6ff18ceeeaa11f6df93e791a45576f2f0d2d053*
+
+`OD-PLATFORM-003` settled that this workspace is an application over XVPE and moved the agent
+dispatch down on that basis. It left a test behind it: **what else up here was never this
+workspace's?**
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#4
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Question · hash: sha256:fe647b542e4162bc6c407c50de034e6d40c5265df5cddb6c32584171a698b9bd*
+
+Three crates were the obvious candidates and were nearly left alone. `nomos-api-transport`
+held a complete JSON-RPC 2.0 implementation, `nomos-mcp` a complete MCP server, and
+`nomos-lsp` a complete language server — all three general, none of them about code
+conformance, and **none of them with an XVPE consumer asking for them**.
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#5
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Question · hash: sha256:a4029fa6beefa96477b2f79b493e12a54a668ff7c8e49832dc26c7f3d5a0a700*
+
+Is "no consumer over there yet" a reason to keep a general capability up here?
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#6
+
+*revision: authored · kind: heading · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#7
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Decision · hash: sha256:dc1bb11e24a4d196176a2e7792cc0a1e55a048d77ecf26596c1ae85fe3460e2f*
+
+**No. What decides is what the thing *is*, not who currently calls it.**
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#8
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Decision · hash: sha256:3ab26787dd542bb3139c8f021cd71065ab3d0657f750f9fac73a26be175fac88*
+
+A protocol belongs to the engine. What this workspace knows — which verbs it serves, what a
+tool means, which severity one of its own rule categories deserves — stays here. The line
+runs between *carrying a message* and *knowing what the message says*, and all three crates
+had both halves welded together.
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#9
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Decision · hash: sha256:841399df2b8430e5d8e39df0264a062a66e765b8ba22f8643693cffe3bb6f81c*
+
+The three protocol implementations moved to XVPE on 2026-09-11, into four crates:
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#10
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Decision · hash: sha256:06449856349229e80e6cfad63802e032491eee888063157ece0c2c9852867c15*
+
+| XVPE crate | What it took |
+|---|---|
+| `xvpe-remote-call` | The contract: `RemoteCallStrategy`, `ToolCatalogStrategy`, the five reserved refusal codes, `ToolDescriptor` / `ToolAnswer` / `ServerIdentity` |
+| `xvpe-remote-call-backend-json` | The JSON-RPC 2.0 envelope, the one-object-per-line framing, the tool handshake (`initialize`, `tools/list`, `tools/call`, `ping`), notification suppression, the socket and its accept loop |
+| `xvpe-diagnostics` | `SourceDiagnostic`, the four severities, `DiagnosticProviderStrategy` |
+| `xvpe-language-server-backend-lsp` | The handshake, workspace-root resolution, `file://` conversion, whole-line spans, and stale-marker clearing |
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#11
+
+*revision: authored · kind: heading · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / What each crate here kept · hash: sha256:b329b5254cc9d267c86bc04c05f56a24fad14051f8b6258628b7edc2b02a1a56*
+
+## What each crate here kept
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#12
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / What each crate here kept · hash: sha256:b36701d56a7988f9b893fda37653a4b37388b2f6af6e32afb863c4e30102f6c4*
+
+- **`nomos-api-transport`** — `ServedMethod` (the four admitted verbs), the three parameter
+  types, and `NomosApiService`, which is the dispatch into `nomos_api::Handle_*`. It is an
+  `xvpe_remote_call::RemoteCallStrategy`.
+- **`nomos-mcp`** — `ServedTool`: which four tools exist, the sentence each publishes and the
+  JSON Schema each accepts. It is an `xvpe_remote_call::ToolCatalogStrategy`, and `src/main.rs`
+  hands it to the engine's `Serve_Tools` over this process's own pipes.
+- **`nomos-lsp`** — the walk, the judgement, `Diagnostics_For`, `WalkOutward`, and
+  `severity::Severity_Of`. That last one is the clearest case for the line this record draws:
+  what `GateCategory::Advisory` *deserves* is a fact about this workspace's rule taxonomy and
+  no shared vocabulary could know it, which is exactly why `xvpe-diagnostics` declines to
+  decide it.
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#13
+
+*revision: authored · kind: heading · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / `OD-HOST-007` is unaffected, and is now cheaper to keep · hash: sha256:2bafb1778f8f4884ffa5100bd9ea3582cae908a084734c96d7aa4f6c901e3d5e*
+
+## `OD-HOST-007` is unaffected, and is now cheaper to keep
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#14
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / `OD-HOST-007` is unaffected, and is now cheaper to keep · hash: sha256:aa8daa9b90c5e2d2d95bd43966ae01a773278f5e2babf5702e8fa060c4e955f5*
+
+That record required the repo-tooling exclusion to be **structural rather than advisory**.
+It still is, and in one fewer place: `ServedMethod::REGISTRY` is the single list, `nomos-mcp`
+projects it rather than keeping a second one, and
+`Test_The_Transport_Should_Name_No_Repo_Tooling_Handler` still reads `nomos-api`'s own blessed
+surface. Nothing about which handlers are reachable changed.
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#15
+
+*revision: authored · kind: heading · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / What this closed that was not the point · hash: sha256:5fe3511627a480bc11ab64fad05ac4265ea4e1c635e2813c56ed417929915996*
+
+## What this closed that was not the point
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#16
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / What this closed that was not the point · hash: sha256:799a20e565d57a00bf7a727895203006ee26fbbf3ed89ca6be419477ff4a3e12*
+
+**The framing was written twice.** `nomos-api-transport` and `nomos-mcp` each carried their
+own line loop and a byte-identical `UNRENDERABLE` constant, because the two surfaces sat side
+by side with no shared floor under them. There is one of each now, one repository down.
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#17
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / What this closed that was not the point · hash: sha256:cf9584db9757ad99540f4626003558c0daffcf6494121726653185e1f0457d74*
+
+**A call was travelling as a wire line between two crates in one process.** `nomos-mcp`
+reached its sibling by re-serializing every `tools/call` into a synthetic JSON-RPC line and
+handing it to that crate's own parser — a round trip through a wire format neither side was
+reading off a wire, which existed only because the two had no contract to meet at. They have
+one now, and a call is a call.
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#18
+
+*revision: authored · kind: heading · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / What it cost · hash: sha256:de0681fb2a14c90548676ce8da45885de9207c99fe642769b71ab66b5e8dc74b*
+
+## What it cost
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#19
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / What it cost · hash: sha256:05a1a27a22489450a433ef5ac896681f9713c3f0dca83582f8fddfc73f2fe087*
+
+**`nomos-lsp` no longer names a protocol library.** `lsp-server` and `lsp-types` are gone from
+this workspace's manifest entirely. That is a real reduction and also a real coupling: the
+editor surface now cannot be built without XVPE checked out beside this repository —
+`OD-PLATFORM-003` already accepted that for the workspace as a whole, and this extends it to
+the one host that could previously have been built alone.
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#20
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / What it cost · hash: sha256:a919761a13a76748a4ff205cb7bb9dd4e6b20638ae1e4de1a378df7a590ce707*
+
+**Three public surfaces changed and were re-blessed.** The wire types
+(`WireRequest`/`WireResponse`/`WireError`), `Answer`, `Serve`, `Serve_Connection`,
+`PROTOCOL_VERSION`, `ServedTool::Listing`, `FileDiagnostic` and `Run_Server` are all gone from
+this workspace's exports.
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#21
+
+*revision: authored · kind: heading · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / A guard this repaired · hash: sha256:c333252f320a990056a25f5e8a0d902261e3909f69318c7c939b4c74bf7e3f41*
+
+## A guard this repaired
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#22
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / A guard this repaired · hash: sha256:103a5d6b0bbbca011439e6883f0860eb7722820046f748bfe82c1ec1265f19bb*
+
+`Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness` failed on the three new
+`impl Strategy` blocks, because `tests/contract/src/fact_domain.rs` matches that text without
+being able to tell `xvpe_primitives::Strategy` from `nomos_contracts::Strategy` — two traits
+that share a name and three axes. The scanner now reads which vocabulary a file speaks from
+its own imports.
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#23
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / A guard this repaired · hash: sha256:fcd531f9b529ed429676eadccd26d9befc58b59c0dd27b0fb99914fac3bb1a03*
+
+Fixing it exposed a second defect nobody had noticed: the scanner only matched a bare
+`impl Strategy for X`, so **every generic declaration had been invisible to it since it was
+written** — `nomos-platform-xvpe`'s own `impl<Launcher: ProcessLauncher> Strategy for
+XvpeLauncher<'_, Launcher>` among them. Both directions of that completeness check had been
+quietly under-quantified.
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#24
+
+*revision: authored · kind: heading · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#25
+
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Consequences · hash: sha256:989097b0be905b9ad283a2a659cb164d945378363b1b6f962a656d003fa56d9a*
+
+- The three crates are adapters over engine protocol surfaces. A change to the wire, the
+  framing, the handshake or the editor loop is made in XVPE, not here.
+- `lsp-server` and `lsp-types` are removed from `Cargo.toml`'s workspace dependencies.
+- `tests/contract/src/fact_domain.rs` scopes its scan to this workspace's own determinism
+  vocabulary, and sees generic implementations.
+- `tests/contract/tests/boundaries/mcp_registry.rs` still holds: `nomos-mcp` depends on
+  `nomos-api-transport` and no other workspace member.
+
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 
 *revision: authored · kind: heading · heading: Territory is declared but not enforced, and nothing yet notices the difference · hash: sha256:84c92233c65230ede8aaf2bbb88c77437278652b8a9b50cd6e8e9f906a83853b*
@@ -43904,6 +44134,168 @@ operation.
 Accepted. `FileSystem::Read_Directory` exists, `StdFileSystem` implements it, and
 `nomos-cli`'s own record-listing function is its first real caller.
 
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#1
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing · hash: sha256:975db7fc6a5c39019b0d6e1ab31b9327e5787f9e75dcc3c0b93e91fc2cf5f68e*
+
+# Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#2
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#3
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Question · hash: sha256:c8c8840e90855ae217efeaa00625fc0f76e2cf6a9862252b582ff2b088e9d9c4*
+
+`AGT-006` states: *"Neither system shall depend on the other at runtime for its core
+function; integration shall occur through neutral versioned contracts and MCP tools."* It
+was assessed `Met`, and mechanically enforced by
+`Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace`, which failed the build if
+any crate's transitive dependencies reached an `xvpe-` prefix outside one named adapter.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#4
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Question · hash: sha256:362fb35069e87d020f4be07e4161e86eb34fb656188e76b8ef28bfcc46ec8d5f*
+
+That test's own comment recorded the intent precisely: when an adapter arrived it would be
+"named here explicitly so that the exception is a decision rather than an oversight."
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#5
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Question · hash: sha256:e2bc585c256140fadcefdf2355c4977fdd95803ddb9b1c702e69df7aca456228*
+
+The decision has now been asked for. Does the no-dependency clause still bind?
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#6
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#7
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Decision · hash: sha256:d8d7a24eea5408ac00d63497960e0cee2b9415dc4a1c7efd03b682c5d8ffeeac*
+
+**No, for the XVPE crossing. Nomos is built on top of XVPE.**
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#8
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Decision · hash: sha256:6d092c9c2d15c6f56f6321159c5c811dc73e80bfc3a4ac63798a8c3f3db71324*
+
+XVPE is the engine. This workspace is an application over it, in the same sense the
+knowledge workbench is. The clause was written on the premise of two peer systems that must
+not entangle; that is not the relationship these two have.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#9
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Decision · hash: sha256:9fe52b13aea4f0996201354097092dcb6fd21a9b1c650083ef5a41c37949533c*
+
+The clause is **retired for this crossing only**. AGT-006's other two clauses —
+integration through neutral versioned contracts, and an MCP tool surface — are unaffected
+and remain true: `nomos-contracts` is still band 0 with no dependencies, and `nomos-mcp` is
+still a real MCP server over stdio.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#10
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Decision · hash: sha256:8458fbcb6355bcbaf49ba949da3b384b916e4bfa87dc2260bf7b0122708f10c0*
+
+**The KWB crossing is untouched.** `Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench`
+still fails the build if any crate reaches a `kwb-` prefix, with an empty
+`KNOWLEDGE_ADAPTER`. Nothing here says this workspace may name `kwb-`; both systems being
+built on XVPE says nothing about either naming the other.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#11
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / What Moved, And Why It Had To · hash: sha256:ebf40e77b43609d53abf05f82717136875eb64339a63de52ee128059ca6a5d8f*
+
+## What Moved, And Why It Had To
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#12
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / What Moved, And Why It Had To · hash: sha256:160211cb11db68c3578e0d0d47b4e058f64e64f37749c8533395558efb6cf807*
+
+The agent dispatch this workspace had built — a freshly created isolated working directory,
+an allow-list granting nothing real rather than a deny-list that is always one release
+behind the real capability set, one non-interactive turn, a spend ceiling verified to abort
+before the expensive model call, a wall bound that kills, and an answer read from
+schema-validated `structured_output` rather than from free text — moved down into
+`xvpe-agent-backend-claude-code` and `xvpe-agent-backend-ollama`, over a capability
+contract in `xvpe-agent-execution`.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#13
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / What Moved, And Why It Had To · hash: sha256:8d61264d1d50d76631b8ad34bc5160592139ebbcf42c725cfd876b242722485f*
+
+It had to move because a general capability sitting up here was **unreachable by everything
+down there**. XVPE's own reference miner had a three-line agent launch with no bound, no
+spend ceiling, and inherited rather than captured output — a strictly worse version of
+something this workspace had already built well, which it could not reach.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#14
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / What Moved, And Why It Had To · hash: sha256:1c066d41b850e89f9579376ee65ac52ba08dc87e75955af59ca9bbbd330fc7fe*
+
+The same argument applies to the process port underneath it, which moved to `xvpe-process`
+and `xvpe-process-backend-system`.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#15
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Why The Test Was Deleted Rather Than Widened · hash: sha256:fda237b8e7a395cf894b51fe6dec2ec51706684eeab1930818a1fce47ac73633*
+
+## Why The Test Was Deleted Rather Than Widened
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#16
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Why The Test Was Deleted Rather Than Widened · hash: sha256:a122b6297c416d19ab2efa88d1fbdce14d195cf7a0e1097e62db5a94c272a238*
+
+Nine crates now reach `xvpe-` transitively: both agent adapters, `nomos-agent-orchestration`,
+`nomos-workflow-orchestration`, `nomos-api-transport`, and the three hosts.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#17
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Why The Test Was Deleted Rather Than Widened · hash: sha256:6b5ca0d3a5430a8673ec7c7c8c67277051493531747e02d19d33334021429ad7*
+
+Adding nine names to `PLATFORM_ADAPTER` would have left a rule that still *read* as a
+boundary while enforcing nothing. That is worse than no rule: the next reader takes it for a
+constraint that holds, and the allow-list becomes the place a failing test goes to die. A
+retired rule states its own retirement; a gutted one lies.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#18
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / What This Costs · hash: sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4*
+
+## What This Costs
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#19
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / What This Costs · hash: sha256:15848bc32a885f12d14cc821412fe817b2a861002ac01c434e7e9fdbcfe17c61*
+
+**This workspace no longer builds standalone.** It requires XVPE checked out beside it,
+because XVPE is not published and the dependency is a path dependency across repositories.
+That is a real cost, accepted deliberately rather than discovered later.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#20
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#21
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Consequences · hash: sha256:e98f99ea2475cc1541ee8bb8ed12af0d4e33b42f8137c0552a95e3478904375f*
+
+- `AGT-006` is assessed `Diverges`, governed by this record.
+- `Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` and `PLATFORM_ADAPTER`
+  are deleted from `tests/contract/tests/boundaries/graph.rs`, with a comment in their place
+  recording what was there and why it is not.
+- `nomos-platform-xvpe` exists as the launcher bridge, in the Substrate zone. It is **one
+  adapter, not a replacement** for `nomos-platform`'s port: adopting XVPE's launcher trait
+  workspace-wide would mean touching 33 implementors and 559 use-sites for no behavioural
+  change.
+
 ### docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1
 
 *revision: authored · kind: heading · heading: The repository's README is not the suite's overview, and stays hand-authored · hash: sha256:7bf1e20e5f29d80bee481f92dc4737e3280a5df74f5ec13751da6d82be38adc0*
@@ -50576,10 +50968,11 @@ numbers pretend to be a strict stack.
 
 ### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#9
 
-*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / The Decision · hash: sha256:b438acec01c544ddb2a463e3ebc8b12469a9446500ab0953d4d5d1a642ce8cc0*
+*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / The Decision · hash: sha256:3439dc4f73188bd421f21d8b8f3c3bf88b26dfeef3ad22566b38166e0b604865*
 
-**Numeric bands are replaced by eleven named zones, each with an explicit, declared set of
-zones it may depend on.** A crate belongs to exactly one zone; two crates in the same zone
+**Numeric bands are replaced by named zones, each with an explicit, declared set of
+zones it may depend on.** Eleven of them when this record was written; twelve since
+`OD-RULES-028`. A crate belongs to exactly one zone; two crates in the same zone
 are peers by default — neither may depend on the other — unless a specific edge between
 them is declared by name, the same way `tests/contract/tests/boundaries/graph.rs` already
 declares `PLATFORM_ADAPTER` and `KNOWLEDGE_ADAPTER` as named exceptions rather than
@@ -50597,12 +50990,13 @@ relocations:
 
 ### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#11
 
-*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / The Decision · hash: sha256:48c800f8b2845afecd6720a0d6d91bd35af106f841f915388c1ef7d653ee2067*
+*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / The Decision · hash: sha256:27624445a9289bf16720a47df1b83cf3911311d3a44383717494f2c88ab5b330*
 
 | Zone | Crates | May depend on |
 |---|---|---|
 | Protocol | `nomos-contracts` | nothing but `serde` |
-| Substrate | `nomos-model`, `nomos-store`, `nomos-platform`, `nomos-platform-std`, `nomos-workspace`, `nomos-scope-verification`, `nomos-capability`, `nomos-analysis` | Protocol |
+| Substrate | `nomos-model`, `nomos-store`, `nomos-platform`, `nomos-workspace`, `nomos-scope-verification`, `nomos-capability`, `nomos-analysis` | Protocol, Backend |
+| Backend | `nomos-platform-std` | Protocol, Substrate — added by `OD-RULES-028`; see the amendment below |
 | Specification | `nomos-spec-model`, `nomos-spec-store`, `nomos-spec-bundle`, `nomos-spec-ingest`, `nomos-spec-validate`, `nomos-spec-project`, `nomos-spec-orchestration` | Protocol, Substrate |
 | Capability Contract | the ten `nomos-cap-*` crates | Protocol, Substrate |
 | Provider | `nomos-package`, every `nomos-lang-*`, `nomos-repo-policy`, every `*-package` manifest crate | Protocol, Substrate, Capability Contract |
@@ -50667,9 +51061,9 @@ to a future item; the amendment above is that audit's own finding.
 
 ### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#16
 
-*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / What This Does Not Do · hash: sha256:5ba9c966fe369777b70b1b3613559c5ee45813fbf002c18e525ea45b7710c571*
+*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / What This Does Not Do · hash: sha256:d443f2a05a109b6d21ada967b1cc4b16e37a79270c1dae674dab712fdcc6aa94*
 
-It does not decide whether the eleven zones named above are the final set. `OD-PROJECT-004`
+It did not decide whether the eleven zones named above were the final set. `OD-PROJECT-004`
 already reserved `Repo Tooling`'s population; if that record's own move happens, the
 crates land where this record already put them. A zone with population one (`Protocol`) or
 population four (several) is not itself a defect this record found reason to flatten
@@ -50677,19 +51071,36 @@ further.
 
 ### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#17
 
+*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / What This Does Not Do · hash: sha256:e52bbf7c497f52857af86a3a3bd9c1e4b2417637c59c95cdf2c8d49ad52a767b*
+
+`OD-RULES-028` took that opening and added a twelfth: `Backend`, holding
+`nomos-platform-std` alone, so that `Permits` can keep a `Host` away from a platform
+implementation now that `nomos-composer-std` exists for it to name a platform through. The
+classification is the argument — a port declaration and an implementation of it are not the
+same kind of thing — and the enforcement follows from it, which is the order this record
+required after band renumbers had reversed it. That record also names what the move costs:
+a zone with one member, and a `Substrate → Backend` permission wider than the one crate that
+uses it, because `Permits` answers by zone and `SAME_ZONE_EDGES`' per-pair shape does not
+cross zones.
+
+### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#18
+
 *revision: authored · kind: heading · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#18
+### docs/records/OD-RULES-020-a-dependency-model-names-its-zones-and-its-allowed-edges-rather-than-ordering-everything-on-one-number-line.md#19
 
-*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / Status · hash: sha256:83b203aa734ddea741238982f4df0bd2df55d70dac21bec81a6e5da661070532*
+*revision: authored · kind: prose · heading: A dependency model names its zones and its allowed edges rather than ordering everything on one number line / Status · hash: sha256:3e9c2a5f755f95ecc07686ab29b61a4958b842e6f651cd1c1ad8dd7c94b9fda6*
 
-Accepted, version 2. Eleven named zones replace the numeric band table's role, each with a
+Accepted, version 3. Named zones replace the numeric band table's role, each with a
 declared set of zones it may reach and, for the seven zones the real migration measured to
 need it, a named list of same-zone edges. Amended by `P41-RULES-020-RECONCILE-REAL-
 MEASUREMENT` once `P41-ZONES-MIGRATION-3`'s own exhaustive cross-check found this record's
-"one zone" claim incomplete; the zone model itself is unchanged, only the count.
+"one zone" claim incomplete; the zone model itself is unchanged, only the count. Amended
+again by `OD-RULES-028`, which added a twelfth zone (`Backend`) and moved
+`nomos-platform-std` into it; the model is again unchanged, and again only the count and
+one crate's classification.
 
 ### docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md#1
 
@@ -51877,6 +52288,210 @@ its three worked examples need infrastructure categories with no instance in thi
 workspace; the third is already a live, composed, reproducible check
 (`dependency-policy`/`cargo deny check bans`), whose evidence, read honestly, was never
 historical in the first place.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#1
+
+*revision: authored · kind: heading · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer · hash: sha256:2b4f3306c5e46895e010bd3fb5240e25aa3d10c5daeae07402543bbb65eabba7*
+
+# A platform implementation is its own zone, so a composition root reaches one only through a composer
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#2
+
+*revision: authored · kind: heading · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#3
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / Question · hash: sha256:79fc6356e96e662dcec09a0814fa9c59c38132460c23c4002fd05887dfbe01c8*
+
+`P88` built `nomos-composer-std` — the std backend set named once — and migrated all four
+hosts onto it, so that no host names `StdFileSystem`, `SystemClock`, `FileLock`,
+`StdProcessLauncher` or `StdEnvironment` any more. Nothing keeps them migrated.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#4
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / Question · hash: sha256:505a410ecbcf4e736585dffff233e62a5202be3e71eda112fe658d7b04aabfae*
+
+`ZONES` put `nomos-platform`, `nomos-platform-std` and `nomos-composer-std` all in
+`Zone::Substrate`, and `Permits` lets `Host` reach `Substrate` — it must, for
+`nomos-model`, `nomos-workspace`, `nomos-capability` and four others. So a host reaching a
+platform implementation directly was exactly as legal the day after the migration as the
+day before it. The question is whether that should be closed by a rule, and if so by which
+one.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#5
+
+*revision: authored · kind: heading · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#6
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What Was Measured · hash: sha256:59b8fb4eb0169826074d95a507f717bd273afe78f95f040e2f14686095a5958f*
+
+**The composer is the only production consumer of the implementation.** Measured
+2026-09-12, after the four-host migration: nineteen crates name `nomos-platform-std` in a
+manifest, and `nomos-composer-std` is the only one that names it under `[dependencies]`.
+The other eighteen — seven orchestration crates, three rust language providers, two agent
+executors, `nomos-ledger`, `nomos-repo-policy`, `nomos-cap-requirement-trace`,
+`nomos-connector-coderabbit`, `tests/contract` and `tests/integration` — all name it under
+`[dev-dependencies]`, which `violations::Is_Dev_Dependency` already excludes from this
+judgment by name and for a stated reason. A rule therefore lands against zero real
+violations, which is what `done_when` asked to see before one was written.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#7
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What Was Measured · hash: sha256:1f4463ad7fc03d445ab26288f63ac526d07dda77bc8668d6e2e8aaaa98de5496*
+
+**The manifest edge was already a guard, and a stronger one than `P88` claimed.** `P88`
+reported the composer as "a convention with no rule behind it." That was too weak.
+Injecting `use nomos_platform_std::StdFileSystem` into `nomos-cli::work` after the
+migration fails to compile — `E0432`, unresolved import — because the crate no longer
+carries the dependency. What is unguarded is not the use; it is the one
+`[dependencies]` line that would restore it. That is a smaller gap than first stated, and
+it is still the exact gap four hosts independently fell into when there was nothing else
+to do.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#8
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What Was Measured · hash: sha256:7fea3f384c37f28cbd003ecb6129f62690ceb44e73bf97c15e7f35dbb5375d7f*
+
+**The mechanism the item first proposed does not close it.** The original spelling of this
+item proposed a `Zone::Composer` holding `nomos-composer-std`. That forbids nothing:
+`nomos-platform-std` would stay in `Substrate`, and `Host → Substrate` stays permitted for
+seven other crates. Closing the edge requires moving the implementation *out*, not the
+composer *in*.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#9
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What Was Measured · hash: sha256:148cda94ba713c0687c95477f68c75a3d41dc34f0e8ad16d8210ad869537adeb*
+
+**`nomos-platform-xvpe` is not a backend, measured rather than assumed.** It was the
+obvious second member of any such zone, and it is not one. `XvpeLauncher` is
+`XvpeLauncher<'a, Launcher: ProcessLauncher>` — generic over an *injected* launcher,
+implementing `xvpe`'s `ProcessLauncherStrategy` over whatever it is handed. It implements
+no `nomos-platform` port and can hand no caller a platform; `README.md` already called it
+"one adapter, not a replacement for the port." Two Agent-zone crates
+(`nomos-agent-executor-claude-code`, `nomos-model-backend-ollama`) depend on it under
+`[dependencies]`, so moving it would have fired against real code on the day it landed —
+the thing `P88` refused to do and the reason this item existed separately at all.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#10
+
+*revision: authored · kind: heading · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#11
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / The Decision · hash: sha256:b2c3a91fcd77b2db107bf9a6d04f6ecfe6a59520a607e7208754ebd08707f2f4*
+
+**`Zone::Backend` holds `nomos-platform-std` alone.** `Permits` grants `Substrate →
+Backend` and `Backend → Protocol | Substrate`, and grants `Backend` to nobody else —
+`Host`'s arm is the only one below it that names every other zone and deliberately omits
+this one. Two entries leave `SAME_ZONE_EDGES`, because the move makes them cross-zone and
+`Test_Same_Zone_Edges_Should_Each_Name_Two_Members_Of_The_Same_Zone` would reject them:
+`nomos-platform-std → nomos-platform` and `nomos-composer-std → nomos-platform-std`.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#12
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / The Decision · hash: sha256:7108f50fc68c56f3effbc30296d56ed42276b43aa5e23a36db910b3d2206d5a6*
+
+The zone is an identity claim, which is the bar `OD-RULES-020` set when it replaced the
+band numbers precisely because renumbering had become "an arithmetic side effect" rather
+than "a decision about what the crate *is*." `nomos-platform-std` is the one crate in this
+workspace that really opens a file, reads the clock and starts a process. A port
+declaration and an implementation of it are not the same kind of thing, and the enforcement
+follows from the classification rather than motivating it.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#13
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / The Decision · hash: sha256:abf5582d76cdcf96e04ae0ad859ac76aca9b362fe57b9ed7e95fedfc15343b87*
+
+**This does not contradict `OD-HOST-001`.** That record states that naming a concrete
+provider in a composition root was never the defect, and nothing here forbids it: a host
+still names a concrete platform in its own composition root — `nomos_composer_std::
+FILE_SYSTEM` is as concrete as `StdFileSystem` was. What is forbidden is reaching *past*
+the composer to the implementation crate, a distinction `OD-HOST-001` never drew because no
+composer existed when it was written.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#14
+
+*revision: authored · kind: heading · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What It Costs · hash: sha256:96611d595b0b2a92fa2c42cc84af2bd38b19d56e5ed8b6a500aa7da3300fd4b3*
+
+## What It Costs
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#15
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What It Costs · hash: sha256:584e1a670f646eed337071293f1c7c61824df684b418ffedb313aff90cbc765b*
+
+**A zone with one member.** `Zone::Protocol` has had one member since it was declared, so
+this is not a new shape, but it is worth naming rather than leaving a reader to notice.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#16
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What It Costs · hash: sha256:27d5115acfe713330d9500a8aae93adadfaa1260227e71be5dfec5c0b0cfdb77*
+
+**A permission wider than the fact it protects.** `Permits` answers by zone, so `Substrate
+→ Backend` grants the edge to all eight Substrate crates when only `nomos-composer-std`
+uses it. A per-crate permission is `SAME_ZONE_EDGES`' shape and does not apply across
+zones. Narrowing it means a `Zone::Composer` as well, which would be two new zones to carry
+one member each; that is not worth its own row while there is one composer, and it becomes
+worth it the moment a second backend set — an in-memory platform for a harness, or one over
+`nomos-platform-xvpe` — gives `Composer` a second member. That is the trigger to revisit,
+stated so the next reader finds a decision rather than an absence.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#17
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What It Costs · hash: sha256:d5df779fc5b7f25bbd68e9723ef54ab61e65137420a143f2e4be7cb347ef917c*
+
+**The gate reports the violation as Advisory, not Blocking.** Verified by injection: adding
+`nomos-platform-std` to `nomos-cli`'s `[dependencies]` produces
+`[Advisory] dependency-direction: nomos-cli (Host) depends on nomos-platform-std (Backend)`
+from the rule, which alone would not fail a build. What fails is
+`tests/contract/tests/boundaries/graph.rs`'s
+`Test_Dependencies_Should_Run_Strictly_Downward`, which reads the same `ZONES` table from
+outside `nomos-rules` and panics with the same sentence. CI catches the regression through
+the Test step rather than the rule's own severity. Both readers were watched failing on the
+same injection and watched passing after it was reverted; neither was reasoned about.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#18
+
+*revision: authored · kind: heading · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#19
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What This Does Not Do · hash: sha256:f23deeb2d33c74758baad1ef8197b1f7e0ca380b647dc4cc9f7c50b4c8e3d8c9*
+
+It does not classify any crate other than `nomos-platform-std`. `nomos-platform-xvpe` stays
+in `Substrate` for the reason measured above, and if a real backend under the XVPE ports
+ever appears it is a new crate and a new row, not a reclassification of that one.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#20
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What This Does Not Do · hash: sha256:99b309c1cae2327c743f467a8295031c5fdaa7015e6b718bfb81a2b3ca29ea90*
+
+It does not make the composer mandatory by type. A host could still declare its own
+`StdFileSystem`-shaped unit struct and implement the ports itself; nothing here prevents
+that, and nothing should, because a host that writes its own platform has made a visible
+decision rather than an invisible one.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#21
+
+*revision: authored · kind: heading · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#22
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / Status · hash: sha256:b3a2b3505e31ee9fcf45053e5afadfa8c25844a1b8e32eda8d5176abfcf8fd64*
+
+Accepted, version 1. Twelve named zones; `nomos-platform-std` moves from `Substrate` to
+`Backend`. Amends `OD-RULES-020`, whose own "What This Does Not Do" left open whether the
+eleven zones it named were the final set.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

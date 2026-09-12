@@ -16,6 +16,7 @@ pub struct Record
     /// The tail of its output, for a human reading the ledger later.
     pub output_tail: String,
     /// When it ran.
+    #[serde(with = "nomos_platform::timestamp_serde")]
     pub verified_at: Timestamp,
     /// The gate step that ran first, when one could be derived.
     ///

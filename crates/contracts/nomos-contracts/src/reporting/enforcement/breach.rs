@@ -1,3 +1,9 @@
+
+
+use alloc::string::String;
+use alloc::vec::Vec;
+use alloc::format;
+
 use serde::{Deserialize, Serialize};
 
 use super::EnforcerRef;
@@ -102,6 +108,8 @@ impl Breach
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec;
+    use alloc::borrow::ToOwned;
     use super::*;
 
     const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 20;

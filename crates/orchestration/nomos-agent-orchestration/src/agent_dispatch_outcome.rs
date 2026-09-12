@@ -5,7 +5,7 @@
 /// Names each backend's own outcome type directly, the same no-shared-trait shape
 /// `nomos_workflow_orchestration::StepOutcome` already uses for the identical reason: the
 /// two crates' outcome shapes are not interchangeable. `ClaudeCode` carries
-/// `denied_tool_uses`, `is_error`, `cost_usd` and `duration_ms`; `Ollama` honestly does
+/// `denied_tool_uses`, `is_error`, `cost` and `duration_ms`; `Ollama` honestly does
 /// not have any of those -- `nomos-model-backend-ollama`'s own module doc says why, and
 /// this type does not fabricate them to make the two variants look more alike than they
 /// are. `Unavailable` folds both backends' own error type down to the text either one's

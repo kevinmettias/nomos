@@ -9,6 +9,7 @@
 //! `nomos-platform-std`, exactly the way `nomos-cli`'s own composition root does -- compiled
 //! as a separate crate that can reach nothing but `nomos_work_orchestration`'s public API.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use std::time::Duration;
 
 use nomos_ledger::{ClaimRefusal, FileLedger, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, Territory};
@@ -29,6 +30,14 @@ fn Scratch_Ledger(name: &str) -> FileLedger<StdFileSystem, SystemClock, FileLock
 /// No command dispatched by this suite launches a real process, so a launcher that panics if
 /// called both satisfies the type and proves that claim.
 struct Unreached;
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for Unreached
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
 
 impl nomos_platform::ProcessLauncher for Unreached
 {

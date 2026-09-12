@@ -28,3 +28,26 @@ impl core::fmt::Display for AgentExecutionError
         };
     }
 }
+
+impl AgentExecutionError
+{
+    /// The engine's own reason for producing no answer, as this workspace's.
+    ///
+    /// The two sides draw the same distinction and always have — it moved down
+    /// with the dispatch. The wildcard is not laziness: the engine's error is
+    /// `#[non_exhaustive]`, so a variant added down there arrives here as
+    /// something this workspace has not yet decided about, and the honest
+    /// reading of "we do not know what this is" is that no answer was produced.
+    #[must_use]
+    pub fn From_Engine(error: xvpe_agent_execution::AgentExecutionError) -> Self
+    {
+        return match error
+        {
+            xvpe_agent_execution::AgentExecutionError::Unparseable(reason) =>
+            {
+                Self::Unparseable(reason)
+            }
+            other => Self::Unavailable(other.to_string()),
+        };
+    }
+}

@@ -10,6 +10,11 @@ publish.workspace = true
 [dependencies]
 nomos-agent-contracts = { workspace = true }
 nomos-platform = { workspace = true }
+# The dispatch itself, and the bridge from this workspace's launcher onto the
+# surface the engine's adapters take.
+nomos-platform-xvpe = { workspace = true }
+xvpe-agent-execution = { path = "../../../../xvpe/crates/subsystems/xvpe-agent-execution" }
+xvpe-agent-backend-ollama = { path = "../../../../xvpe/crates/backends/agent/xvpe-agent-backend-ollama" }
 
 [dev-dependencies]
 nomos-contracts = { workspace = true }

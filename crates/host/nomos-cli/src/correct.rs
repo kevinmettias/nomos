@@ -12,7 +12,7 @@
 //! neither group's item reserved), reading what this binary was compiled as
 //! ([`Correction_Variant`]), choosing a
 //! [`nomos_platform::ProcessLauncher`]/[`nomos_platform::FileSystem`]
-//! ([`nomos_platform_std::StdProcessLauncher`]/[`nomos_platform_std::StdFileSystem`]) for
+//! ([`nomos_composer_std::LAUNCHER`]/[`nomos_composer_std::FILE_SYSTEM`]) for
 //! the seam's own two platform ports, and rendering a
 //! [`nomos_correction_orchestration::CorrectionOutcome`] into the exact text and
 //! [`ExitCode`] this command always reported -- verified unchanged against this module's
@@ -28,7 +28,7 @@ pub use parsing::Parse;
 
 use crate::arguments::Named_Value_From_String_Arguments;
 use nomos_correction_orchestration::{CorrectionCommand as SeamCommand, CorrectionEnvironment, CorrectionOutcome, Run_Correction};
-use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
+use nomos_composer_std::{FILE_SYSTEM, LAUNCHER};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::io::Write;
@@ -49,7 +49,7 @@ pub fn Run(command: &CorrectCommand, stdout: &mut impl Write, stderr: &mut impl 
 {
     let walked = Walked(&command.root);
     let seam_command = SeamCommand { root: command.root.clone(), commit: command.commit };
-    let environment = CorrectionEnvironment { variant: Correction_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem };
+    let environment = CorrectionEnvironment { variant: Correction_Variant(), launcher: &LAUNCHER, filesystem: &FILE_SYSTEM };
 
     let outcome = Run_Correction(walked, environment, &seam_command);
 

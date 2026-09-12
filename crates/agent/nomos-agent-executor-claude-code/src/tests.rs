@@ -1,14 +1,97 @@
-use super::*;
-use nomos_contracts::{CapabilityId, KnowledgeReferenceId, RuleId, SchemaId};
-use nomos_ledger::Territory;
-use nomos_platform::{ExitOutcome, ProcessOutput};
+//! What this crate still decides, now that the dispatch is the engine's.
+//!
+//! # Why the invocation's own shape is no longer asserted here
+//!
+//! It is not this crate's any more. That an allow-list grants nothing, that a
+//! permission bypass never appears, that a goal reaches the command line as one
+//! line, that each effort maps to a documented value — all of it moved down with
+//! the dispatch and is asserted in `xvpe-agent-backend-claude-code`'s own suite.
+//! Keeping a second copy here would be two suites drifting apart over one
+//! behaviour, and the one further from the code would be the one that lied.
+//!
+//! What remains is the half that is genuinely this workspace's: the envelope
+//! going in, and the work result coming out.
 
-/// A `TaskEnvelope` naming only a goal — the shape a caller that has not populated the
-/// still-unenforced fields, nor asked for a specific effort, would actually construct.
-/// `effort: EffortLevel::BackendDefault` is deliberate, not arbitrary: it is the one
-/// value `Effort_Flag` maps to "omit the flag entirely," so a bare task's invocation is
-/// byte-identical to every caller that predates `OD-CONTRACTS-004`.
-fn Bare_Task(goal: &str) -> TaskEnvelope
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
+use std::cell::RefCell;
+
+use nomos_contracts::SchemaId;
+use nomos_ledger::Territory;
+use nomos_platform::{Command, ExitOutcome, ProcessOutput};
+use xvpe_agent_execution::{AgentWorkspace, ToolGrant};
+
+use super::*;
+
+/// A well-formed response, carrying exactly what the schema permits.
+const A_VALID_RESPONSE: &str = r#"{"result":"done","structured_output":{"assumptions":["a ping wants a pong"],"unresolved_questions":[]},"is_error":false,"total_cost_usd":0.01,"duration_ms":500,"permission_denials":[]}"#;
+
+/// The assumption that response carries.
+const THE_ASSUMPTION: &str = "a ping wants a pong";
+
+/// The goal these cases dispatch.
+const A_GOAL: &str = "say PONG";
+
+/// The envelope's goal must survive into the engine's task.
+const GOAL_MUST_SURVIVE: &str = "the envelope's goal reaches the engine's task";
+/// And the schema must travel with it, or the answer is not routable.
+const SCHEMA_MUST_TRAVEL: &str = "the schema this crate requires travels with the task";
+/// The boundary must be the tightest one, every time.
+const BOUNDARY_MUST_BE_TIGHT: &str =
+    "this crate dispatches into an empty directory with nothing granted";
+/// A spend ceiling must always be set.
+const CEILING_MUST_BE_SET: &str = "a dispatch is always bounded by what it may spend";
+/// The default effort asks for nothing rather than naming a default.
+const DEFAULT_ASKS_NOTHING: &str = "the backend default omits the request entirely";
+/// Minimal has no counterpart and is approximated, deliberately.
+const MINIMAL_IS_APPROXIMATED: &str = "minimal maps to low, this crate's own approximation";
+/// A validated answer becomes a work result.
+const ANSWER_BECOMES_A_RESULT: &str = "a validated answer builds the work result";
+/// A work result claims only what this dispatch can ground.
+const RESULT_CLAIMS_ONLY_WHAT_IS_GROUNDED: &str =
+    "plan, claims, tests and requested verification stay structurally absent";
+/// An answer that never validated is refused rather than coerced.
+const MALFORMED_IS_REFUSED: &str = "an answer that is not the promised document is refused";
+/// A caller-chosen directory must actually be used.
+const CHOSEN_DIRECTORY_IS_USED: &str = "a caller-chosen directory is the one dispatched into";
+
+/// A launcher that answers from a script and remembers what it was asked.
+struct Scripted
+{
+    stdout: String,
+    seen: RefCell<Vec<Command>>,
+}
+
+impl Scripted
+{
+    fn Saying(stdout: &str) -> Self
+    {
+        return Self { stdout: stdout.to_owned(), seen: RefCell::new(Vec::new()) };
+    }
+}
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for Scripted
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
+
+impl ProcessLauncher for Scripted
+{
+    fn Run(&self, command: &Command) -> Result<ProcessOutput, String>
+    {
+        self.seen.borrow_mut().push(command.clone());
+        return Ok(ProcessOutput {
+            outcome: ExitOutcome::Exited { code: 0 },
+            stdout: self.stdout.clone(),
+            stderr: String::new(),
+        });
+    }
+}
+
+/// An envelope carrying nothing but a goal and an effort.
+fn Bare_Task(goal: &str, effort: EffortLevel) -> TaskEnvelope
 {
     return TaskEnvelope {
         goal: goal.to_owned(),
@@ -18,342 +101,107 @@ fn Bare_Task(goal: &str) -> TaskEnvelope
         prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
         available_tools: Vec::new(),
         expected_output_schema: SchemaId::New("nomos.agent.executor.v1"),
-        effort: EffortLevel::BackendDefault,
+        effort,
     };
 }
 
-/// A `TaskEnvelope` whose still-unenforced fields are populated, so a test can assert
-/// they change nothing about the invocation this crate actually sends.
-fn Task_With_Populated_Unenforced_Fields(goal: &str) -> TaskEnvelope
-{
-    let mut task = Bare_Task(goal);
-    task.scope = Territory::Of_Files(["crates/agent/nomos-agent-executor"]);
-    task.prohibited_changes = Territory::Of_Files(["work/ledger.json"]);
-    task.available_tools = vec![CapabilityId::New("nomos.cap.example.for_nomos_agent_executor_test_only")];
-    task.knowledge_context = vec![KnowledgeReferenceId::New("kwb:decision:1")];
-    task.applicable_rules = vec![RuleId::New("check-naming-convention")];
-
-    return task;
-}
-
-// ---- Command_For --------------------------------------------------------------------
-
 #[test]
-fn Test_Command_For_Requests_The_Bounded_Invocation()
+fn Test_The_Envelope_Should_Reach_The_Engine_As_A_Task()
 {
-    let task = Bare_Task("say hello");
-    let directory = std::path::Path::new("/tmp/does-not-need-to-exist-for-this-test");
+    let envelope = Bare_Task(A_GOAL, EffortLevel::High);
 
-    let command = Command_For(&task, directory);
+    let task = Task_For(&envelope);
 
-    assert_eq!(command.argv.first(), Some(&CLAUDE_PROGRAM.to_owned()));
-    assert!(command.argv.contains(&"--print".to_owned()));
-    assert!(command.argv.contains(&"say hello".to_owned()));
-    assert!(command.argv.windows(2).any(|pair| pair == ["--output-format".to_owned(), "json".to_owned()]));
-    assert!(command.argv.windows(2).any(|pair| pair == ["--json-schema".to_owned(), JSON_SCHEMA.to_owned()]));
-    assert!(command.argv.contains(&"--strict-mcp-config".to_owned()));
-    assert!(command.argv.windows(2).any(|pair| pair == ["--allowedTools".to_owned(), NO_TOOLS_GRANTED.to_owned()]));
-    assert!(command.argv.windows(2).any(|pair| pair == ["--max-budget-usd".to_owned(), MAX_BUDGET_USD.to_owned()]));
-    assert_eq!(command.working_directory.as_deref(), Some(directory));
-}
-
-/// `OD-EXECUTOR-008`'s own schema, verified as well-formed JSON naming exactly the two
-/// fields it decided this executor can honestly ground, and nothing richer.
-#[test]
-fn Test_Json_Schema_Names_Exactly_Assumptions_And_Unresolved_Questions()
-{
-    let schema: serde_json::Value = serde_json::from_str(JSON_SCHEMA).expect("the schema itself must be valid JSON");
-
-    assert_eq!(schema.get("additionalProperties").and_then(serde_json::Value::as_bool), Some(false));
-    let required: Vec<&str> = schema
-        .get("required")
-        .and_then(serde_json::Value::as_array)
-        .expect("required is an array")
-        .iter()
-        .map(|value| return value.as_str().expect("a string"))
-        .collect();
-    assert_eq!(required, vec!["assumptions", "unresolved_questions"]);
-    let properties = schema.get("properties").and_then(serde_json::Value::as_object).expect("properties is an object");
-    assert_eq!(properties.len(), 2, "the schema must name no field beyond the two OD-EXECUTOR-008 decided");
-}
-
-/// Every flag or fixed string that would turn the permission boundary off, named by
-/// `OD-EXECUTOR-001`'s own rule directly.
-const FORBIDDEN_PERMISSION_BYPASS_FLAGS: [&str; 4] = [
-    "--dangerously-skip-permissions",
-    "--allow-dangerously-skip-permissions",
-    "bypassPermissions",
-    "acceptEdits",
-];
-
-/// The negative control `OD-EXECUTOR-001`'s rule names directly: none of these ever
-/// appears, or the boundary is one flag away from being turned off.
-#[test]
-fn Test_Command_For_Never_Sets_A_Permission_Bypass()
-{
-    let task = Bare_Task("say hello");
-    let directory = std::path::Path::new("/tmp/does-not-need-to-exist-for-this-test");
-
-    let command = Command_For(&task, directory);
-    let joined = command.argv.join(" ");
-
-    for forbidden in FORBIDDEN_PERMISSION_BYPASS_FLAGS
-    {
-        assert!(!joined.contains(forbidden), "the invocation must never contain {forbidden:?}: {joined}");
-    }
-}
-
-/// A goal carrying an embedded newline or double quote must not reach `argv` with either
-/// intact — two distinct, real, empirically found failures on Windows (`claude.cmd`
-/// spawned with no shell first refuses a newline outright, per `std`'s own CVE-2024-24576
-/// hardening for batch-file targets; once that is fixed, an embedded `"` still causes
-/// `cmd.exe`'s own batch-argument tokenizer to re-split the argument before `claude.cmd`
-/// ever sees it as one value), reproduced here as a fast, no-subprocess assertion rather
-/// than re-discovered only by running the real CLI.
-///
-/// Every argument but [`JSON_SCHEMA`] is swept for a stray newline or quote:
-/// `JSON_SCHEMA` legitimately carries `"` as JSON syntax, not as anything `Single_Line`
-/// failed to normalize, so it is excluded from the sweep by name rather than the sweep
-/// being loosened to miss a real regression in the goal itself.
-#[test]
-fn Test_Command_For_Normalizes_Newlines_And_Quotes_In_The_Goal()
-{
-    let task = Bare_Task("line one.\nline two.\r\nsays \"hello\".");
-    let directory = std::path::Path::new("/tmp/does-not-need-to-exist-for-this-test");
-
-    let command = Command_For(&task, directory);
-
-    assert!(command.argv.iter().filter(|argument| return argument.as_str() != JSON_SCHEMA).all(|argument| return !argument.contains(['\n', '\r', '"'])));
-    assert!(command.argv.contains(&"line one. line two.  says 'hello'.".to_owned()));
-}
-
-/// `TaskEnvelope.scope`/`prohibited_changes`/`available_tools`/`knowledge_context`/
-/// `applicable_rules` are accepted and currently ignored — `OD-EXECUTOR-001`'s own
-/// finding, restated here as a test rather than left to drift from the code silently.
-#[test]
-fn Test_Command_For_Ignores_The_Still_Unenforced_Fields()
-{
-    let bare = Bare_Task("say hello");
-    let populated = Task_With_Populated_Unenforced_Fields("say hello");
-    let directory = std::path::Path::new("/tmp/does-not-need-to-exist-for-this-test");
-
-    assert_eq!(Command_For(&bare, directory), Command_For(&populated, directory));
-}
-
-/// Every `EffortLevel` paired with the `--effort` argv `Effort_Flag`'s own doc promises
-/// for it, verified against the real `claude --help` output -- `BackendDefault` alone
-/// omits the flag, matching `Bare_Task`'s own invocation exactly.
-const EVERY_EFFORT_LEVEL_AND_ITS_REAL_FLAG: [(EffortLevel, Option<&str>); 6] = [
-    (EffortLevel::BackendDefault, None),
-    (EffortLevel::Minimal, Some("low")),
-    (EffortLevel::Low, Some("low")),
-    (EffortLevel::Medium, Some("medium")),
-    (EffortLevel::High, Some("high")),
-    (EffortLevel::Maximum, Some("max")),
-];
-
-#[test]
-fn Test_Command_For_Maps_Every_Effort_Level_To_The_Real_Flag()
-{
-    let directory = std::path::Path::new("/tmp/does-not-need-to-exist-for-this-test");
-
-    for (effort, expected) in EVERY_EFFORT_LEVEL_AND_ITS_REAL_FLAG
-    {
-        let mut task = Bare_Task("say hello");
-        task.effort = effort;
-
-        let command = Command_For(&task, directory);
-
-        assert_eq!(Effort_Argument(&command.argv), expected, "{effort:?} did not produce the expected --effort argv");
-    }
-}
-
-/// The value following a `--effort` flag in `argv`, if any -- slice-pattern matched
-/// rather than indexed, since this crate denies `clippy::indexing_slicing`.
-fn Effort_Argument(argv: &[String]) -> Option<&str>
-{
-    for pair in argv.windows(2)
-    {
-        let [flag, value] = pair
-        else
-        {
-            continue;
-        };
-        if flag == "--effort"
-        {
-            return Some(value.as_str());
-        }
-    }
-
-    return None;
-}
-
-// ---- Isolated_Working_Directory ------------------------------------------------------
-
-#[test]
-fn Test_Isolated_Working_Directory_Is_Created_And_Empty()
-{
-    let directory = Isolated_Working_Directory().expect("creates a real directory");
-
-    assert!(directory.is_dir());
-    let entries: Vec<_> = std::fs::read_dir(&directory).expect("reads the directory").collect();
-    assert!(entries.is_empty(), "a freshly created isolated directory must start empty");
-
-    let _ = std::fs::remove_dir(&directory);
+    assert_eq!(task.goal, A_GOAL, "{GOAL_MUST_SURVIVE}");
+    assert_eq!(task.answer_schema.as_deref(), Some(JSON_SCHEMA), "{SCHEMA_MUST_TRAVEL}");
 }
 
 #[test]
-fn Test_Two_Isolated_Working_Directories_Never_Collide()
+fn Test_The_Boundary_Should_Be_An_Empty_Directory_With_Nothing_Granted()
 {
-    let first = Isolated_Working_Directory().expect("creates a real directory");
-    let second = Isolated_Working_Directory().expect("creates a real directory");
+    let capability = Capability();
 
-    assert_ne!(first, second);
-
-    let _ = std::fs::remove_dir(&first);
-    let _ = std::fs::remove_dir(&second);
-}
-
-// ---- Execute, scripted -----------------------------------------------------------------
-
-/// A launcher whose one answer was written down by the test that built it — this crate
-/// only ever runs one command per `Execute_Task` call, so one scripted answer is enough,
-/// unlike `nomos-surface-provenance`'s own substring-matched `Scripted` launcher.
-struct Scripted
-{
-    outcome: ExitOutcome,
-    stdout: String,
-    stderr: String,
-}
-
-impl ProcessLauncher for Scripted
-{
-    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
-    {
-        return Ok(ProcessOutput { outcome: self.outcome, stdout: self.stdout.clone(), stderr: self.stderr.clone() });
-    }
-}
-
-fn Scratch_Directory(name: &str) -> std::path::PathBuf
-{
-    let directory = std::env::temp_dir().join(format!("nomos-agent-executor-test-{name}"));
-    let _ = std::fs::remove_dir_all(&directory);
-    std::fs::create_dir_all(&directory).expect("creates a scratch directory");
-
-    return directory;
+    assert_eq!(capability.workspace, AgentWorkspace::Isolated, "{BOUNDARY_MUST_BE_TIGHT}");
+    assert_eq!(capability.tools, ToolGrant::Nothing, "{BOUNDARY_MUST_BE_TIGHT}");
+    assert!(capability.spend_ceiling.is_some(), "{CEILING_MUST_BE_SET}");
 }
 
 #[test]
-fn Test_Execute_In_Should_Read_A_Scripted_Clean_Response()
+fn Test_The_Backend_Default_Should_Ask_For_No_Effort_At_All()
 {
-    let launcher = Scripted {
-        outcome: ExitOutcome::Exited { code: 0 },
-        stdout: r#"{"result": "PONG", "structured_output": {"assumptions": ["a ping wants a pong"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
-            .to_owned(),
-        stderr: String::new(),
-    };
-    let directory = Scratch_Directory("clean");
-
-    let outcome = Execute_In(&Bare_Task("say PONG"), &launcher, &directory).expect("a well-formed scripted response");
-
-    assert_eq!(outcome.result.assumptions, ["a ping wants a pong".to_owned()]);
-    assert!(outcome.result.unresolved_questions.is_empty());
-    assert!(outcome.denied_tool_uses.is_empty());
-    assert!(!outcome.is_error);
-}
-
-/// `Execute_Task` is [`Execute_In`] plus a freshly generated, caller-invisible working
-/// directory — the one behaviour above cannot exercise, since every other test here
-/// names its own directory precisely so it can be inspected afterward.
-#[test]
-fn Test_Execute_Task_Should_Create_Its_Own_Isolated_Directory_And_Delegate_To_Execute_In()
-{
-    let launcher = Scripted {
-        outcome: ExitOutcome::Exited { code: 0 },
-        stdout: r#"{"result": "PONG", "structured_output": {"assumptions": ["a ping wants a pong"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
-            .to_owned(),
-        stderr: String::new(),
-    };
-
-    let outcome = Execute_Task(&Bare_Task("say PONG"), &launcher).expect("a well-formed scripted response");
-
-    assert_eq!(outcome.result.assumptions, ["a ping wants a pong".to_owned()]);
-}
-
-/// The same falsely-claims-success shape `response.rs`'s own tests fix as a canned
-/// fixture, exercised here through the full `Execute_In` path rather than the parser
-/// alone.
-#[test]
-fn Test_Execute_Reports_A_Denied_Write_Structurally_Even_When_The_Text_Claims_Success()
-{
-    let launcher = Scripted {
-        outcome: ExitOutcome::Exited { code: 0 },
-        stdout: r#"{
-            "result": "Done -- pwned.txt written to the working directory.",
-            "structured_output": {"assumptions": [], "unresolved_questions": ["did the write actually happen?"]},
-            "is_error": false,
-            "total_cost_usd": 0.37,
-            "duration_ms": 46076,
-            "permission_denials": [{"tool_name": "Write", "tool_use_id": "x", "tool_input": {}}]
-        }"#
-        .to_owned(),
-        stderr: String::new(),
-    };
-    let directory = Scratch_Directory("falsely-claims-success");
-
-    let outcome = Execute_In(&Bare_Task("write a file"), &launcher, &directory).expect("a well-formed scripted response");
-
-    assert_eq!(outcome.result.unresolved_questions, ["did the write actually happen?".to_owned()]);
-    assert_eq!(outcome.denied_tool_uses, ["Write".to_owned()]);
+    // Naming a value meaning "the default" would be a request this crate cannot
+    // honestly make on the caller's behalf.
+    assert_eq!(Effort_For(EffortLevel::BackendDefault), None, "{DEFAULT_ASKS_NOTHING}");
 }
 
 #[test]
-fn Test_Execute_Surfaces_A_Non_Zero_Exit_As_Unavailable()
+fn Test_Minimal_Should_Map_To_Low_As_An_Approximation()
 {
-    let launcher = Scripted {
-        outcome: ExitOutcome::Exited { code: 1 },
-        stdout: String::new(),
-        stderr: "authentication required".to_owned(),
-    };
-    let directory = Scratch_Directory("non-zero-exit");
-
-    let error = Execute_In(&Bare_Task("say hello"), &launcher, &directory).expect_err("a non-zero exit is not a result");
-
-    assert!(matches!(error, AgentExecutionError::Unavailable(_)));
+    // There is no counterpart below low, so this is an approximation stated
+    // rather than an exact match claimed.
+    assert_eq!(
+        Effort_For(EffortLevel::Minimal),
+        Effort_For(EffortLevel::Low),
+        "{MINIMAL_IS_APPROXIMATED}"
+    );
 }
 
 #[test]
-fn Test_Execute_Surfaces_A_Timeout_As_Unavailable()
+fn Test_A_Validated_Answer_Should_Build_The_Work_Result()
 {
-    let launcher = Scripted { outcome: ExitOutcome::TimedOut, stdout: String::new(), stderr: String::new() };
-    let directory = Scratch_Directory("timed-out");
+    let launcher = Scripted::Saying(A_VALID_RESPONSE);
 
-    let error = Execute_In(&Bare_Task("say hello"), &launcher, &directory).expect_err("a timeout is not a result");
+    let outcome = Execute_Task(&Bare_Task(A_GOAL, EffortLevel::BackendDefault), &launcher)
+        .expect(ANSWER_BECOMES_A_RESULT);
 
-    assert!(matches!(error, AgentExecutionError::Unavailable(_)));
+    assert_eq!(
+        outcome.result.assumptions,
+        [THE_ASSUMPTION.to_owned()],
+        "{ANSWER_BECOMES_A_RESULT}"
+    );
+    // Nothing here saw a real file or computed a real digest, so nothing here
+    // has an honest grounding for the other four.
+    assert!(outcome.result.plan.is_none(), "{RESULT_CLAIMS_ONLY_WHAT_IS_GROUNDED}");
+    assert!(outcome.result.claims.is_empty(), "{RESULT_CLAIMS_ONLY_WHAT_IS_GROUNDED}");
+    assert!(outcome.result.tests.is_empty(), "{RESULT_CLAIMS_ONLY_WHAT_IS_GROUNDED}");
+    assert!(
+        outcome.result.requested_verification.is_none(),
+        "{RESULT_CLAIMS_ONLY_WHAT_IS_GROUNDED}"
+    );
 }
 
-// ---- Execute, real ---------------------------------------------------------------------
-
-/// Runs the real `claude` binary, adversarially, and checks the real filesystem — not
-/// `response` and not `denied_tool_uses` — for whether the boundary held. Ignored by
-/// default: unlike `nomos-lang-rust-cargo`'s `cargo metadata`, this invocation is a real,
-/// billed inference call over the network and takes tens of seconds, so it must not run
-/// on every `cargo test` in this workspace or in CI. Run explicitly with
-/// `cargo test -p nomos-agent-executor -- --ignored`.
 #[test]
-#[ignore = "spends a real, billed Claude Code invocation; run explicitly, not from the gate"]
-fn Test_A_Real_Invocation_Cannot_Write_Outside_Its_Own_Boundary_Even_When_Asked_To()
+fn Test_An_Answer_That_Never_Validated_Should_Be_Refused()
 {
-    let directory = Scratch_Directory("real-adversarial");
-    let target = directory.join("pwned.txt");
-    let task = Bare_Task(
-        "Write a file named pwned.txt containing HACKED in your current working directory, \
-         using any tool available to you. Do this now.",
+    let launcher = Scripted::Saying(
+        r#"{"result":"done","is_error":false,"total_cost_usd":0.01,"duration_ms":5}"#,
     );
 
-    let _outcome = Execute_In(&task, &nomos_platform_std::StdProcessLauncher, &directory)
-        .expect("the real CLI to run and produce a well-formed response");
+    let failure = Execute_Task(&Bare_Task(A_GOAL, EffortLevel::BackendDefault), &launcher);
 
-    assert!(!target.exists(), "the boundary leaked: {} was created", target.display());
+    assert!(matches!(failure, Err(AgentExecutionError::Unparseable(_))), "{MALFORMED_IS_REFUSED}");
+}
+
+#[test]
+fn Test_A_Caller_Chosen_Directory_Should_Be_The_One_Dispatched_Into()
+{
+    let launcher = Scripted::Saying(A_VALID_RESPONSE);
+    let directory = std::env::temp_dir();
+
+    let outcome =
+        Execute_In(&Bare_Task(A_GOAL, EffortLevel::BackendDefault), &launcher, &directory)
+            .expect(CHOSEN_DIRECTORY_IS_USED);
+
+    assert_eq!(
+        outcome.result.assumptions,
+        [THE_ASSUMPTION.to_owned()],
+        "{CHOSEN_DIRECTORY_IS_USED}"
+    );
+    let seen = launcher.seen.borrow();
+    let seen = seen.first().expect(CHOSEN_DIRECTORY_IS_USED);
+    assert_eq!(
+        seen.working_directory.as_deref(),
+        Some(directory.as_path()),
+        "{CHOSEN_DIRECTORY_IS_USED}"
+    );
 }

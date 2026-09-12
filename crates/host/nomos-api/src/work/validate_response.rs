@@ -10,7 +10,7 @@ use std::path::Path;
 pub fn Handle_Work_Validate(directory: &Path) -> ValidateResponse
 {
     use super::Ledger_At;
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_composer_std::LAUNCHER;
     use nomos_work_orchestration::WorkCommand;
 
     let mut ledger = Ledger_At(directory);
@@ -18,7 +18,7 @@ pub fn Handle_Work_Validate(directory: &Path) -> ValidateResponse
     let outcome = nomos_work_orchestration::Run(
         &WorkCommand::Validate,
         &mut ledger,
-        &StdProcessLauncher,
+        &LAUNCHER,
         || Territory::Of_Files(std::iter::empty::<String>()),
     );
 

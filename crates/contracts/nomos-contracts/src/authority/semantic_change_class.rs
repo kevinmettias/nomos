@@ -1,3 +1,5 @@
+
+
 // The policy-resolved decision this classification feeds, kept in its own file.
 mod semantic_change_authority_resolution;
 
@@ -79,6 +81,7 @@ impl core::fmt::Display for SemanticChangeClass
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     const ALL: [SemanticChangeClass; 11] = [

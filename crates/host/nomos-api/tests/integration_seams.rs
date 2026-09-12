@@ -3,7 +3,7 @@
 //! reaches its neighbours as an ordinary dependency, not as the wire consumer this crate exists
 //! to serve. Compiled here instead, this file can only reach `nomos_gate_orchestration`,
 //! `nomos_contracts`, `nomos_rules`, `nomos_model`, `nomos_ledger`, `nomos_work_orchestration`,
-//! `nomos_platform`, `nomos_platform_std`, `nomos_spec_orchestration`, `nomos_spec_model`,
+//! `nomos_platform`, `nomos_composer_std`, `nomos_spec_orchestration`, `nomos_spec_model`,
 //! `nomos_spec_project`, `nomos_spec_store` and `nomos_workspace` through `nomos-api`'s own
 //! public `Handle_*` functions and response types -- the same view a real caller has.
 //!
@@ -103,15 +103,15 @@ fn Scratch_Source_Tree(label: &str, file_name: &str, content: &str) -> PathBuf
 }
 
 // ---------------------------------------------------------------------------------------------
-// Work: nomos_ledger, nomos_work_orchestration, nomos_platform, nomos_platform_std.
+// Work: nomos_ledger, nomos_work_orchestration, nomos_platform, nomos_composer_std.
 // ---------------------------------------------------------------------------------------------
 
-/// `nomos_work_orchestration`, `nomos_ledger`, `nomos_platform` and `nomos_platform_std`,
+/// `nomos_work_orchestration`, `nomos_ledger`, `nomos_platform` and `nomos_composer_std`,
 /// exercised through `Handle_Work_Claim` -- its own `request` parameter is a real
 /// `nomos_work_orchestration::ClaimRequest` naming a real `nomos_ledger::ItemId`, and the
 /// `nomos_ledger::Reservation` it grants (through `ReservationResponse`, this crate's own public
 /// twin of it) carries a real `nomos_platform::Timestamp` expiry, bound to a real
-/// `nomos_platform_std::SystemClock` reading plus the requested lease -- not a value this crate
+/// `nomos_composer_std::CLOCK` reading plus the requested lease -- not a value this crate
 /// invented, but a real clock's answer plus real arithmetic on it. Both `Clock` readings bracket
 /// the call, so the granted expiry is checked against a real window rather than an exact,
 /// flaky-by-construction instant.
@@ -129,9 +129,9 @@ fn Test_Handle_Work_Claim_Should_Grant_A_Reservation_Whose_Expiry_Is_A_Real_Syst
         lease,
     };
 
-    let before = nomos_platform_std::SystemClock.Now();
+    let before = nomos_composer_std::CLOCK.Now();
     let response = nomos_api::Handle_Work_Claim(&directory, &request);
-    let after = nomos_platform_std::SystemClock.Now();
+    let after = nomos_composer_std::CLOCK.Now();
 
     let _ignored = std::fs::remove_dir_all(&directory);
 

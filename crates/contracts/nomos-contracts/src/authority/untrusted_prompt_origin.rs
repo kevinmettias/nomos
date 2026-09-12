@@ -1,3 +1,5 @@
+
+
 // The content wrapper this vocabulary marks as untrusted, kept in its own file.
 mod untrusted_prompt_content;
 
@@ -66,6 +68,7 @@ impl core::fmt::Display for UntrustedPromptOrigin
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     const ALL: [UntrustedPromptOrigin; 5] = [

@@ -6,6 +6,8 @@
 //! prototype, where every comparative feature (diffing, history, trajectories,
 //! co-change, transformation tracking) turned out to be a join with no key.
 
+use alloc::string::String;
+
 // The generation an identity was minted in.
 mod generation_id;
 
@@ -256,6 +258,8 @@ Named_Identity!
 #[cfg(test)]
 mod tests
 {
+    use alloc::string::ToString;
+    use alloc::format;
     use super::*;
 
     const RENDER_SAMPLE_BYTE: u8 = 0x0a;

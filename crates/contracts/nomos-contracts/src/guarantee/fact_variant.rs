@@ -55,6 +55,7 @@ impl core::fmt::Display for FactVariant
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     /// `Label` is the `Display` form every variant renders through.

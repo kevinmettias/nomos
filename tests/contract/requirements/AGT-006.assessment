@@ -6,15 +6,23 @@
 # AGT-006: "Neither system shall depend on the other at runtime for its core function;
 # integration shall occur through neutral versioned contracts and MCP tools."
 #
-# 'Neither system shall depend on the other' is true today by construction for both
-# crossings, and now mechanically enforced for both:
-# `Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` fails the build if any
-# crate's transitive dependencies leak an `xvpe-` prefix outside the one named adapter.
-# This assessment's own first pass found no equivalent check scoped to a `kwb-` prefix; that
-# gap is closed in the same commit as this entry by
-# `Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench`, the twin check, with an empty
-# `KNOWLEDGE_ADAPTER` list since no such adapter crate exists yet -- the same pattern
-# `PLATFORM_ADAPTER` already used to pre-name `nomos-platform-xvpe` before it existed.
+# 'Neither system shall depend on the other' NO LONGER HOLDS for the XVPE crossing, and
+# this requirement is retired for it by the owner's decision on 2026-09-10. Nomos is built
+# on top of XVPE: XVPE is the engine, and this workspace is an application over it. The
+# agent dispatch this workspace had built -- an isolated working directory, an allow-list
+# granting nothing, a spend ceiling, a wall bound, a schema-validated answer -- moved down
+# into XVPE, because a general capability sitting up here was unreachable by everything
+# down there. Nine crates now name `xvpe-` transitively, by design.
+#
+# `Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` enforced the old premise
+# and is deleted rather than widened. Adding those nine crates to its allow-list would have
+# left a rule that still read as a boundary while enforcing nothing, which is worse than no
+# rule.
+#
+# The KWB crossing is untouched and still holds: `Test_No_Crate_May_Name_The_Sibling_
+# Knowledge_Workbench` still fails the build if any crate reaches a `kwb-` prefix, with an
+# empty `KNOWLEDGE_ADAPTER` since no such adapter exists. Nothing about the XVPE decision
+# says this workspace may name `kwb-`.
 #
 # 'Integration through neutral versioned contracts' is real and well-grounded: `nomos-contracts`
 # is band 0, versioned, and its own crate root states directly why no dependency may be added
@@ -31,10 +39,10 @@
 # exposing `nomos-api-transport`'s own three Gate verbs as MCP tools (`tools/list`,
 # `tools/call`), proven against a real spawned subprocess talking to it over its own stdin
 # and stdout, not merely against a direct dispatch call.
-verdict: Met
+verdict: Diverges
+record: OD-PLATFORM-003
 site: crates/contracts/nomos-contracts/Cargo.toml#Every type here is copied into a KnowledgeWorkbench
 site: crates/contracts/nomos-contracts/src/digest128.rs#KnowledgeReferenceId
-site: tests/contract/tests/boundaries/graph.rs#Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace
 site: tests/contract/tests/boundaries/graph.rs#Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench
 site: crates/host/nomos-mcp/src/lib.rs#An MCP server over stdio
 site: crates/host/nomos-mcp/tests/stdio.rs#Test_A_Real_Subprocess_Should_Answer_A_Real_Conversation_Over_Its_Own_Stdio

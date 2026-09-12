@@ -1,6 +1,7 @@
 //! What a bounded Claude Code invocation reported, kept apart from what it claimed.
 
 use nomos_agent_contracts::WorkResult;
+use xvpe_agent_execution::MicroDollars;
 
 /// What one `Execute` call reported.
 ///
@@ -20,6 +21,13 @@ pub struct AgentExecutionOutcome
     pub result: WorkResult,
     pub denied_tool_uses: Vec<String>,
     pub is_error: bool,
-    pub cost_usd: f64,
+    /// What the dispatch cost, exactly as the engine measured it.
+    ///
+    /// [`MicroDollars`] rather than a dollar figure, and that is the whole of the
+    /// difference: the engine measures money as an integer and this crate's own
+    /// [`crate::MAXIMUM_SPEND`] is one, so a float here would make the reported cost and
+    /// the cap it is bounded by two incomparable kinds of number. The float belongs to the
+    /// wire types that publish a `cost_usd`, and is made there.
+    pub cost: MicroDollars,
     pub duration_ms: u64,
 }

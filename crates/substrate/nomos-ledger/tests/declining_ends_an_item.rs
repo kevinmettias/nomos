@@ -9,6 +9,7 @@
 //! guard nobody has watched fail is a test that would pass just as happily if the thing it
 //! checks were deleted.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_ledger::{
     ClaimRefusal, ExclusionLedger, FileLedger, ItemId, ItemKind, ItemOrigin, ItemState,
     LedgerDocument, LedgerItem, ReleaseOutcome, SCHEMA_VERSION, VerificationRecord,
@@ -20,6 +21,14 @@ use std::time::Duration;
 
 /// Held still, so that "when it was declined" is arithmetic rather than a sleep.
 struct FixedClock(i64);
+
+/// Fixed instants, so both the values and their timing reproduce.
+impl Strategy for FixedClock
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::StateTemporal;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
 
 impl Clock for &FixedClock
 {

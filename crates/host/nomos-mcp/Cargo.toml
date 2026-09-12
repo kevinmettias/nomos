@@ -1,7 +1,7 @@
 [package]
 name = "nomos-mcp"
 version = "0.1.0"
-description = "An MCP server over stdio, projecting the same Gate and Correction verbs nomos-api-transport already serves -- as MCP tools, dispatched through that crate's own JSON-RPC handler rather than a second one."
+description = "What this workspace offers a model-facing client: the same Gate and Correction verbs nomos-api-transport serves, each with the sentence and the JSON Schema a tool listing needs. The MCP handshake itself is XVPE's as of 2026-09-10."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -12,6 +12,12 @@ name = "nomos-mcp"
 path = "src/main.rs"
 
 [dependencies]
+# The engine's catalogue contract and the server that speaks the handshake over
+# it. This crate names no method of the protocol itself.
+xvpe-remote-call = { path = "../../../../xvpe/crates/mechanisms/xvpe-remote-call" }
+xvpe-remote-call-backend-json = { path = "../../../../xvpe/crates/backends/remote-call/xvpe-remote-call-backend-json" }
+xvpe-primitives = { path = "../../../../xvpe/crates/foundations/contracts/xvpe-primitives" }
+
 nomos-api-transport = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

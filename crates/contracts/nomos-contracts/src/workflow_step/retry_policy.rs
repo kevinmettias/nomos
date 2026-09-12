@@ -1,7 +1,7 @@
 //! Whether -- and how -- a step's execution may be retried after a failure.
 
 use serde::{Deserialize, Serialize};
-use std::num::NonZeroU32;
+use core::num::NonZeroU32;
 
 /// Whether -- and how -- a step's execution may be retried after a failure.
 ///

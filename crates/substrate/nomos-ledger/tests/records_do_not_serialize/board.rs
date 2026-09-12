@@ -1,6 +1,7 @@
 //! The board every test here reads, the scratch copy it claims against, and the two
 //! path questions the ledger's own rule answers.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_ledger::{
     ClaimRefusal, ExclusionLedger, FileLedger, ItemId, ItemState, LedgerDocument, LedgerItem,
     Normalize_Path, Territory,
@@ -14,6 +15,14 @@ use std::time::Duration;
 pub(crate) const RECORD_DIRECTORY: &str = "docs/records";
 
 pub(crate) struct FixedClock(i64);
+
+/// Fixed instants, so both the values and their timing reproduce.
+impl Strategy for FixedClock
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::StateTemporal;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
 
 impl Clock for &FixedClock
 {

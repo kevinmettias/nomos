@@ -1,5 +1,6 @@
 //! The system clock.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_platform::{Clock, Timestamp};
 
 /// Reads the operating system's wall clock.
@@ -10,6 +11,14 @@ use nomos_platform::{Clock, Timestamp};
 /// read from appearing on a path that has declared a reproducibility guarantee.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct SystemClock;
+
+/// Reaches the real machine, so it reproduces nothing and says so.
+impl Strategy for SystemClock
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::None;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::NotApplicable;
+}
 
 impl Clock for SystemClock
 {

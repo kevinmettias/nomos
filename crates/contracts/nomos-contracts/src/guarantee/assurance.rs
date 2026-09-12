@@ -59,6 +59,7 @@ impl core::fmt::Display for Assurance
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     /// `Label` is the `Display` form every variant renders through.

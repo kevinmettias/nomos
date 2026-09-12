@@ -4,6 +4,8 @@
 //! reads as the claim it makes rather than as the fixture it needs. A suite whose fixtures
 //! are restated per file drifts into several boards that agree only by coincidence.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
+
 pub(crate) use nomos_ledger::{
     Finishing,
     Abandonment, AddRefusal, Blocker, Claim, ClaimRefusal, Declination, ExclusionLedger, FileLedger, Finish_Item,
@@ -24,6 +26,14 @@ pub(crate) use std::time::Duration;
 /// sleeping. A suite that sleeps to reach a deadline is a suite that is slow and
 /// intermittently wrong.
 pub(crate) struct FixedClock(pub(crate) i64);
+
+/// Fixed instants, so both the values and their timing reproduce.
+impl Strategy for FixedClock
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::StateTemporal;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
 
 impl Clock for FixedClock
 {

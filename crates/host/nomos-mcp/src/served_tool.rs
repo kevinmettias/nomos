@@ -2,6 +2,7 @@
 
 use nomos_api_transport::ServedMethod;
 use serde_json::{json, Value};
+use xvpe_remote_call::ToolDescriptor;
 
 /// One operation this server exposes as an MCP tool.
 ///
@@ -51,15 +52,17 @@ impl ServedTool
         return ServedMethod::Named(name).map(Self);
     }
 
-    /// This tool's entry in an MCP `tools/list` response.
+    /// This tool, as the engine's own described entry.
+    ///
+    /// The schema is rendered here rather than authored as text: written as a
+    /// literal it would be one long unreadable line per tool, and a typo in it
+    /// would be a schema nothing rejects. Built as a document and rendered at
+    /// this one boundary, it is readable where it is written and text where it
+    /// crosses.
     #[must_use]
-    pub fn Listing(self) -> Value
+    pub fn Descriptor(self) -> ToolDescriptor
     {
-        return json!({
-            "name": self.Name(),
-            "description": self.Description(),
-            "inputSchema": self.Input_Schema(),
-        });
+        return ToolDescriptor::Of(self.Name(), self.Description(), self.Input_Schema().to_string());
     }
 
     /// What a client reads before deciding whether to call this tool.
@@ -188,10 +191,12 @@ mod tests
     {
         for tool in ServedTool::REGISTRY
         {
-            let listing = tool.Listing();
-            assert_eq!(At(&listing, "/name"), tool.Name(), "{listing}");
-            assert!(At(&listing, "/description").as_str().is_some_and(|text| return !text.is_empty()), "{listing}");
-            assert_eq!(At(&listing, "/inputSchema/type"), "object", "{listing}");
+            let descriptor = tool.Descriptor();
+            let schema: serde_json::Value =
+                serde_json::from_str(&descriptor.input_schema).expect("a schema is a document");
+            assert_eq!(descriptor.name, tool.Name(), "{descriptor:?}");
+            assert!(!descriptor.description.is_empty(), "{descriptor:?}");
+            assert_eq!(At(&schema, "/type"), "object", "{schema}");
         }
     }
 

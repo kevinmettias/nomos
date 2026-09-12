@@ -93,15 +93,36 @@ fn Assert_Every_Producer_Declares(producers: &[&FactDomain])
 /// and a list that grows every time the check is right is a list that will one day be
 /// wrong. The question worth asking is not what a declaring crate does; it is whether
 /// anything would notice if the declaration were false.
+///
+/// # Why a `None` declaration is not asked for one
+///
+/// Only declarations that *claim* reproducibility are required here, the same
+/// distinction `DomainRow::Claims_Reproducibility` already draws on the row side and
+/// for the same reason: there is nothing for a harness test to discharge. The
+/// harness's own `Assert_Agrees` matches `DeterminismStrength::None` to an empty arm,
+/// so registering one would run a production, repeat it three times and compare
+/// nothing -- a test that passes over a dead component, which is the shape this
+/// directory exists to refuse.
+///
+/// What a `None` declaration is still held to is its coherence, which the compiler
+/// checks by requiring all three constants and
+/// [`Test_Every_Declaration_Should_Occupy_A_Row_Of_The_Table`] checks against the
+/// published table. Its claim is "no promise", and running the thing twice cannot
+/// falsify that.
 #[test]
 fn Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness()
 {
+    let claiming = Declared_Strategies_Claiming_Reproducibility();
     let declared = Declared_Strategies();
     let harnessed = Harnessed_Strategies();
 
-    Assert_Both_Scans_Found_Something(&declared, &harnessed);
+    Assert_Both_Scans_Found_Something(&claiming, &harnessed);
 
-    let unchecked: Vec<&String> = declared.difference(&harnessed).collect();
+    // The two directions do not quantify over the same set, and that is deliberate. Only a
+    // claiming declaration OWES a harness test; but a harness entry is orphaned when NO
+    // declaration of any strength names it, because lowering a declaration to `None` leaves
+    // its test over-measuring rather than measuring something that has gone.
+    let unchecked: Vec<&String> = claiming.difference(&harnessed).collect();
     let orphaned: Vec<&String> = harnessed.difference(&declared).collect();
 
     assert!(
@@ -118,6 +139,17 @@ fn Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness()
          domain now promises nothing while a test still reports on it, or the type was \
          renamed and this is the rename nobody finished."
     );
+}
+
+/// The subset of declarations that promise something a test could find false.
+fn Declared_Strategies_Claiming_Reproducibility() -> BTreeSet<String>
+{
+    return Fact_Domains()
+        .iter()
+        .flat_map(|domain| return domain.declarations.iter())
+        .filter(|declaration| return declaration.strength != "None")
+        .map(|declaration| return declaration.strategy.clone())
+        .collect();
 }
 
 /// Every strategy any crate in the workspace declares.
@@ -159,14 +191,7 @@ fn Assert_Both_Scans_Found_Something(declared: &BTreeSet<String>, harnessed: &BT
 /// [`Test_Every_Unoccupied_Row_Should_Still_Be_A_Row_Of_The_Table`] — a declared list whose
 /// members are never compared against the thing they claim to describe is precisely what
 /// `OD-COMPLETENESS-001` is about.
-const UNOCCUPIED: &[(&str, &str)] = &[
-    (
-        "Progress UI, logs, telemetry, agent execution",
-        "the `None` row, and the one that keeps determinism affordable. The CLI prints, \
-         and nothing about what it prints is a fact. A domain here would be declaring that \
-         it promises nothing, which is what the row already says.",
-    ),
-];
+const UNOCCUPIED: &[(&str, &str)] = &[];
 
 /// The table has to be readable before anything below it means anything.
 #[test]

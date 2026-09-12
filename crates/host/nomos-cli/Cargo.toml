@@ -18,7 +18,7 @@ nomos-ledger = { workspace = true }
 # policy this run resolved. Content addressing is the kernel's and is not respelled here.
 nomos-model = { workspace = true }
 nomos-platform = { workspace = true }
-nomos-platform-std = { workspace = true }
+nomos-composer-std = { workspace = true }
 nomos-rules = { workspace = true }
 # `RegistryError` is what a self-contradictory capability registry one band down
 # (`nomos-check-orchestration`) reports back through -- `check.rs` and `gate.rs` both
@@ -38,8 +38,8 @@ nomos-lang-rust = { workspace = true }
 nomos-workspace = { workspace = true }
 # The seam between choosing a platform, running a `work` verb and rendering its outcome —
 # `work.rs` composes the platform and renders; this crate runs the verb, generic over the
-# platform traits, so a second adapter can depend on it without also depending on
-# `nomos-platform-std` or on how this crate prints an answer. `OD-HOST-001`.
+# platform traits, so a second adapter can depend on it without also depending on a platform
+# implementation or on how this crate prints an answer. `OD-HOST-001`.
 nomos-work-orchestration = { workspace = true }
 # The seam between composing the capability registry, ingesting a walk into facts and
 # judging them, and finding that walk or rendering what came of it — `check.rs` walks the
@@ -90,9 +90,9 @@ nomos-correction-orchestration = { workspace = true }
 # composes and dispatches. `P40-WORKFLOW-CLI-VERB`.
 nomos-workflow-orchestration = { workspace = true }
 # The seam for dispatching one TaskEnvelope to a chosen backend both hosts call --
-# `agent.rs` supplies StdProcessLauncher, the same choice `check.rs` and `work.rs` already
-# make for their own subprocesses; this crate composes the dispatch itself and no longer
-# depends on nomos-agent-executor-claude-code or nomos-model-backend-ollama directly.
+# `agent.rs` supplies `nomos-composer-std`'s launcher, the same choice `check.rs` and `work.rs`
+# already make for their own subprocesses; this crate composes the dispatch itself and no
+# longer depends on nomos-agent-executor-claude-code or nomos-model-backend-ollama directly.
 # `P43-AGENT-CANONICAL-SEAM-2`.
 nomos-agent-orchestration = { workspace = true }
 

@@ -30,6 +30,7 @@ fn Test_The_Declared_Triple_Should_Be_Coherent_Under_Nomos_Contracts_Own_Rule()
 {
     assert!(Declaration_Is_Coherent(
         ProjectionOutput::STRENGTH,
+        ProjectionOutput::SCOPE,
         ProjectionOutput::TRACE
     ));
 }

@@ -75,6 +75,7 @@ impl core::fmt::Display for IncrementalGranularity
 #[cfg(test)]
 mod tests
 {
+    use alloc::vec::Vec;
     use super::*;
 
     #[test]

@@ -26,13 +26,41 @@ pub trait Strategy
     const TRACE: TraceEquivalence;
 }
 
+/// A reference to a strategy promises exactly what the strategy promises.
+///
+/// Without this, a type implementing a port for `&Self` — which several of this
+/// workspace's test doubles do, because the port is taken by shared reference and the
+/// double holds interior state — would have to restate all three constants, and the
+/// restatement is a second place for them to drift. There is no judgment in the
+/// forwarding: indirection is not a property a determinism claim is about.
+impl<Referent: Strategy + ?Sized> Strategy for &Referent
+{
+    const STRENGTH: DeterminismStrength = Referent::STRENGTH;
+    const SCOPE: ReproducibilityScope = Referent::SCOPE;
+    const TRACE: TraceEquivalence = Referent::TRACE;
+}
+
 /// Whether a declaration triple is internally coherent.
 ///
-/// One cross-axis rule binds the three constants: a trace claim and a strength claim
-/// must agree about whether reproducibility is being promised at all.
-/// [`TraceEquivalence::NotApplicable`] is honest only when the strength is
-/// [`DeterminismStrength::None`], and a strategy claiming `State` or better must say
-/// what "the same" means or its claim cannot be checked.
+/// One cross-axis rule binds all three constants: they must agree about whether
+/// reproducibility is being promised at all. [`DeterminismStrength::None`] *is* the
+/// declaration that no claim is made, and the other two axes describe a claim, so when
+/// there is none they have nothing to describe.
+///
+/// - [`DeterminismStrength::None`] requires [`ReproducibilityScope::SingleRun`] and
+///   [`TraceEquivalence::NotApplicable`].
+/// - `State` or better requires a real trace claim, or the claim cannot be checked. Any
+///   scope is admissible: a guarantee holding only within one run is narrow, not
+///   incoherent.
+///
+/// # Why the scope axis is part of this
+///
+/// It was not, and the omission had a measurable cost. The rule bound strength to trace
+/// and left scope alone, so a declaration naming an environment for a guarantee it had
+/// just declined to make passed. A scan of the sibling XVPE workspace's 742 strategy
+/// declarations found that shape three times, in declarations that were also wrong on
+/// the trace axis: the narrower rule would have caught those three by accident, and a
+/// scope-only violation not at all.
 ///
 /// This is a free function rather than a trait method so it can be applied to a triple
 /// read off the wire — a peer's declaration, or one loaded from a package manifest —
@@ -40,17 +68,17 @@ pub trait Strategy
 #[must_use]
 pub const fn Declaration_Is_Coherent(
     strength: DeterminismStrength,
+    scope: ReproducibilityScope,
     trace: TraceEquivalence,
 ) -> bool
 {
-    return match trace
+    if !strength.Can_Claim_Reproducibility()
     {
-        TraceEquivalence::NotApplicable => !strength.Can_Claim_Reproducibility(),
-        TraceEquivalence::BehaviorallyEquivalent | TraceEquivalence::BitIdentical =>
-        {
-            strength.Can_Claim_Reproducibility()
-        }
-    };
+        return matches!(scope, ReproducibilityScope::SingleRun)
+            && matches!(trace, TraceEquivalence::NotApplicable);
+    }
+
+    return !matches!(trace, TraceEquivalence::NotApplicable);
 }
 
 #[cfg(test)]
@@ -84,10 +112,12 @@ mod tests
     {
         assert!(Declaration_Is_Coherent(
             AnalysisKernel::STRENGTH,
+            AnalysisKernel::SCOPE,
             AnalysisKernel::TRACE
         ));
         assert!(Declaration_Is_Coherent(
             AgentHost::STRENGTH,
+            AgentHost::SCOPE,
             AgentHost::TRACE
         ));
     }
@@ -100,10 +130,12 @@ mod tests
     {
         assert!(!Declaration_Is_Coherent(
             DeterminismStrength::State,
+            ReproducibilityScope::CrossRun,
             TraceEquivalence::NotApplicable
         ));
         assert!(!Declaration_Is_Coherent(
             DeterminismStrength::StateTemporal,
+            ReproducibilityScope::CrossPlatform,
             TraceEquivalence::NotApplicable
         ));
     }
@@ -115,11 +147,31 @@ mod tests
     {
         assert!(!Declaration_Is_Coherent(
             DeterminismStrength::None,
+            ReproducibilityScope::SingleRun,
             TraceEquivalence::BitIdentical
         ));
         assert!(!Declaration_Is_Coherent(
             DeterminismStrength::None,
+            ReproducibilityScope::SingleRun,
             TraceEquivalence::BehaviorallyEquivalent
+        ));
+    }
+
+    /// The axis the rule did not used to cover: naming an environment for a guarantee
+    /// that was never given. Found three times in the sibling workspace, which is why
+    /// the rule grew rather than this case being hypothetical.
+    #[test]
+    fn Test_Declaration_Is_Coherent_Should_Refuse_A_Scope_With_No_Strength()
+    {
+        assert!(!Declaration_Is_Coherent(
+            DeterminismStrength::None,
+            ReproducibilityScope::CrossPlatform,
+            TraceEquivalence::NotApplicable
+        ));
+        assert!(!Declaration_Is_Coherent(
+            DeterminismStrength::None,
+            ReproducibilityScope::CrossBinary,
+            TraceEquivalence::NotApplicable
         ));
     }
 }

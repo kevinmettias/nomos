@@ -4,6 +4,7 @@
 //! own crate, and duplicating eight lines of "find the value after this flag" is cheaper
 //! than the dependency edge a shared crate would cost a tool this small.
 
+use nomos_platform::Environment;
 use std::path::PathBuf;
 
 /// One usage message, spelled once, so a refusal and `--help` never drift apart.
@@ -29,17 +30,32 @@ pub(crate) struct Parsed
 
 /// Parses `arguments` (excluding the program name), or names what usage requires.
 ///
+/// `environment` decides what `--root` defaults to. Read through the port rather than
+/// from `std::env::current_dir` since `P86`: the default is the one parsed value this
+/// function does not take from `arguments`, so it was the one value no test could state
+/// — and the two tests below that parse a line without `--root` said nothing about
+/// `root` for exactly that reason.
+///
 /// # Errors
 ///
-/// Returns [`USAGE`] when `--since` or `--until` is missing.
-pub(crate) fn Parsed_From_String_Arguments(arguments: &[String]) -> Result<Parsed, String>
+/// Returns [`USAGE`] when `--since` or `--until` is missing, and [`USAGE`] followed by
+/// the port's own explanation when `--root` was omitted and the working directory it
+/// would have defaulted to cannot be read.
+pub(crate) fn Parsed_From_String_Arguments(
+    arguments: &[String],
+    environment: &impl Environment,
+) -> Result<Parsed, String>
 {
     let since = Named_Value_From_String_Arguments(arguments, "--since").ok_or(USAGE)?;
     let until = Named_Value_From_String_Arguments(arguments, "--until").ok_or(USAGE)?;
     let root = Named_Value_From_String_Arguments(arguments, "--root")
         .map(PathBuf::from)
         .map_or_else(
-            || std::env::current_dir().map_err(|error| format!("{USAGE}\n\ncannot read the current directory: {error}")),
+            // One spelling of this failure, not two: the port already renders it as "the
+            // current directory could not be read: <cause>", which is what this line used
+            // to spell itself. Appending that to USAGE keeps the usage-first shape every
+            // other refusal here has.
+            || environment.Working_Directory().map_err(|error| format!("{USAGE}\n\n{error}")),
             Ok,
         )?;
     let crates = Named_Values_From_String_Arguments(arguments, "--crate");
@@ -89,11 +105,21 @@ fn Named_Values_From_String_Arguments(arguments: &[String], name: &str) -> Vec<S
 mod tests
 {
     use super::*;
+    use crate::stated_environment::Stated;
+    use std::path::Path;
+
+    /// Where a test that does not care about `--root` stands. Named rather than repeated
+    /// so the two tests that *do* care read as deliberately different from the ones that
+    /// do not.
+    fn Anywhere() -> Stated
+    {
+        return Stated::At(Path::new("/anywhere"));
+    }
 
     #[test]
     fn Test_Parsed_From_String_Arguments_Should_Require_Since_And_Until()
     {
-        let missing_since = match Parsed_From_String_Arguments(&Arguments_From_Text("--until HEAD"))
+        let missing_since = match Parsed_From_String_Arguments(&Arguments_From_Text("--until HEAD"), &Anywhere())
         {
             Err(error) => error,
             // This argument list omits --since on purpose, and Parsed_From_String_Arguments
@@ -101,7 +127,7 @@ mod tests
             // itself stopped enforcing, not a condition this test should assert around.
             Ok(_) => panic!("missing --since must refuse"),
         };
-        let missing_until = match Parsed_From_String_Arguments(&Arguments_From_Text("--since HEAD~5"))
+        let missing_until = match Parsed_From_String_Arguments(&Arguments_From_Text("--since HEAD~5"), &Anywhere())
         {
             Err(error) => error,
             // This argument list omits --until on purpose, and Parsed_From_String_Arguments
@@ -120,19 +146,61 @@ mod tests
     #[test]
     fn Test_A_Minimal_Line_Parses_With_No_Crates_Named()
     {
-        let parsed = Parsed_From_String_Arguments(&Arguments_From_Text("--since a --until b")).expect("must parse");
+        let environment = Stated::At(Path::new("/stated/working/directory"));
+
+        let parsed = Parsed_From_String_Arguments(&Arguments_From_Text("--since a --until b"), &environment)
+            .expect("must parse");
 
         assert_eq!(parsed.since, "a");
         assert_eq!(parsed.until, "b");
         assert!(parsed.crates.is_empty());
+        // The assertion this test could not make before `P86`. The working directory is
+        // deliberately not the one this test process is standing in, so a default that
+        // still read `std::env::current_dir` would fail here rather than agree by
+        // accident with whatever the test also read.
+        assert_eq!(parsed.root, PathBuf::from("/stated/working/directory"));
+    }
+
+    /// The control for the assertion above: an explicit `--root` still wins, so that
+    /// assertion is about the *default* rather than about `root` being set at all.
+    #[test]
+    fn Test_An_Explicit_Root_Wins_Over_The_Working_Directory()
+    {
+        let environment = Stated::At(Path::new("/stated/working/directory"));
+
+        let parsed = Parsed_From_String_Arguments(&Arguments_From_Text("--since a --until b --root /given"), &environment)
+            .expect("must parse");
+
+        assert_eq!(parsed.root, PathBuf::from("/given"));
+    }
+
+    /// A working directory that cannot be read is a usage refusal carrying the port's own
+    /// explanation, not a panic and not a silent fallback to some other directory.
+    #[test]
+    fn Test_An_Unreadable_Working_Directory_Refuses_With_Usage_And_A_Reason()
+    {
+        // `let ... else` rather than `expect_err`, because `Parsed` carries no `Debug` --
+        // and deriving one on a production type so a test can phrase itself more briefly is
+        // a widening of the crate's surface for the test's convenience. The two refusal
+        // tests above match instead, each keeping an explanation inside its own `Ok` arm
+        // that this one has no need of.
+        let Err(error) = Parsed_From_String_Arguments(&Arguments_From_Text("--since a --until b"), &Stated::Standing_Nowhere())
+        else
+        {
+            panic!("a fixture standing nowhere has no directory to default --root to");
+        };
+
+        assert!(error.starts_with(USAGE), "{error}");
+        assert!(error.contains("the current directory could not be read: "), "{error}");
     }
 
     #[test]
     fn Test_Crate_Repeats_And_Root_Are_Read()
     {
-        let parsed = Parsed_From_String_Arguments(&Arguments_From_Text(
-            "--since a --until b --root /work --crate nomos-model --crate nomos-store",
-        ))
+        let parsed = Parsed_From_String_Arguments(
+            &Arguments_From_Text("--since a --until b --root /work --crate nomos-model --crate nomos-store"),
+            &Anywhere(),
+        )
         .expect("must parse");
 
         assert_eq!(parsed.root, PathBuf::from("/work"));

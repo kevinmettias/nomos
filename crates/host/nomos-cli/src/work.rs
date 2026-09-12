@@ -1,16 +1,18 @@
 //! `nomos work` — the ledger, from a terminal.
 //!
 //! This module is the composition root and the renderer, and nothing else. It chooses the
-//! platform — `nomos-platform-std`'s `StdFileSystem`, `SystemClock`, `FileLock` and
-//! `StdProcessLauncher` — and it turns a [`nomos_work_orchestration::WorkOutcome`] into
+//! platform — `nomos-composer-std`'s `FILE_SYSTEM`, `CLOCK`, `Lock_At` and `LAUNCHER` —
+//! over the two files `nomos_ledger::Board_In` names, which are the ledger's own format and
+//! never this module's to restate —
+//! and it turns a [`nomos_work_orchestration::WorkOutcome`] into
 //! text and an [`ExitCode`]. Running the verb itself, between those two steps, is
 //! `nomos_work_orchestration::Run`'s job: generic over the platform traits rather than
 //! these four concrete types, so a second adapter can call it with its own choices without
 //! also taking on how this module renders an answer. `OD-HOST-001`.
 
-use nomos_ledger::{AddRefusal, FileLedger, ItemId, LedgerDocument, LedgerError, LedgerItem, Territory};
+use nomos_ledger::{AddRefusal, Board_In, FileLedger, ItemId, LedgerDocument, LedgerError, LedgerItem, Territory};
 use nomos_platform::FileSystem;
-use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
+use nomos_composer_std::{CLOCK, FILE_SYSTEM, LAUNCHER, Lock_At};
 use nomos_work_orchestration::{BoardView, ShowView, WorkOutcome};
 use std::path::Path;
 
@@ -43,18 +45,14 @@ pub fn Run(
     output: &mut impl std::io::Write,
 ) -> ExitCode
 {
-    let mut ledger = FileLedger::At(
-        directory.join("ledger.json"),
-        StdFileSystem,
-        SystemClock,
-        FileLock::At(directory.join("ledger.lock")),
-    );
+    let board = Board_In(directory);
+    let mut ledger = FileLedger::At(board.document, FILE_SYSTEM, CLOCK, Lock_At(board.lock));
 
     let outcome = nomos_work_orchestration::Run(
         command,
         &mut ledger,
-        &StdProcessLauncher,
-        || Published_Records(directory, &StdFileSystem),
+        &LAUNCHER,
+        || Published_Records(directory, &FILE_SYSTEM),
     );
 
     return Render_Outcome(command, outcome, output);
@@ -134,7 +132,7 @@ mod published_records_tests
 {
     use super::{Published_Records, RECORD_DIRECTORY};
     use nomos_ledger::Territory;
-    use nomos_platform_std::StdFileSystem;
+    use nomos_composer_std::FILE_SYSTEM;
     use std::path::PathBuf;
 
     #[test]
@@ -145,7 +143,7 @@ mod published_records_tests
         std::fs::write(root.join(RECORD_DIRECTORY).join("OD-EXAMPLE-001.md"), "# example").unwrap();
         std::fs::write(root.join(RECORD_DIRECTORY).join("OD-EXAMPLE-002.md"), "# example").unwrap();
 
-        let territory = Published_Records(&root.join("work"), &StdFileSystem);
+        let territory = Published_Records(&root.join("work"), &FILE_SYSTEM);
 
         let _ignored = std::fs::remove_dir_all(&root);
         assert_eq!(
@@ -162,7 +160,7 @@ mod published_records_tests
     {
         let root = Fresh_Root("nomos-cli-work-published-records-absent");
 
-        let territory = Published_Records(&root.join("work"), &StdFileSystem);
+        let territory = Published_Records(&root.join("work"), &FILE_SYSTEM);
 
         let _ignored = std::fs::remove_dir_all(&root);
         assert_eq!(territory, Territory::Empty());
@@ -385,7 +383,7 @@ fn Print_Audit(document: &LedgerDocument, now: nomos_platform::Timestamp, output
 /// This module's own composition-root test.
 ///
 /// `Run` is not generic over the platform traits the way `nomos_work_orchestration::Run` is --
-/// it always chooses `StdFileSystem`, `SystemClock` and `FileLock`, which is the whole point of
+/// it always chooses `FILE_SYSTEM`, `CLOCK` and `Lock_At`, which is the whole point of
 /// this file (`OD-HOST-001`). Proving that wiring holds together means running it against a
 /// real directory on disk rather than a fake, because a fake is exactly the thing this
 /// composition root does not accept.
@@ -411,7 +409,7 @@ mod run_test
         );
     }
 
-    /// A scratch ledger directory, real enough for `Run` to open with `StdFileSystem`.
+    /// A scratch ledger directory, real enough for `Run` to open with `FILE_SYSTEM`.
     ///
     /// Named with the process id so two suites running at once do not collide, and cleared
     /// first in case a previous run of this same test was killed before its own cleanup ran.

@@ -230,6 +230,7 @@ fn Validated_Board<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProces
 mod tests
 {
     use super::Run;
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use crate::WorkCommand;
     use nomos_ledger::{FileLedger, Territory};
     use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
@@ -237,6 +238,14 @@ mod tests
     /// No process is ever actually launched by `list`, so any launcher would do; one that
     /// panics if called also proves it.
     struct Unreached;
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for Unreached
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
 
     impl nomos_platform::ProcessLauncher for Unreached
     {

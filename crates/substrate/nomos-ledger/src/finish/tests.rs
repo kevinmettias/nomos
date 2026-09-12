@@ -1,5 +1,6 @@
 //! What this module promises, exercised.
 
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use super::*;
 use nomos_platform::ProcessOutput;
 
@@ -189,6 +190,14 @@ struct Simulated
     keeps_producing: bool,
 }
 
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for Simulated
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
+
 impl ProcessLauncher for &Simulated
 {
     fn Run(&self, command: &Command) -> Result<ProcessOutput, String>
@@ -283,6 +292,14 @@ fn Test_A_Predicate_That_Keeps_Producing_Should_Still_Report_Timed_Out()
 /// A launcher for a predicate that exits immediately, standing in for the ordinary case
 /// this item must leave undisturbed.
 struct ExitsPromptly;
+
+/// Answers from fixed data, so its outputs reproduce byte for byte.
+impl Strategy for ExitsPromptly
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
 
 impl ProcessLauncher for &ExitsPromptly
 {
