@@ -25,4 +25,17 @@ pub enum Invocation
         command: GateCommand,
         query: FindingQuery,
     },
+    /// Walk two trees, judge each, and report what moved between them.
+    ///
+    /// Two whole [`GateCommand`]s rather than one command and a second root: what a run
+    /// finds depends on its scope and rule selectors as much as on its root, so a compare
+    /// that shared everything but the path could only ever answer "did the tree change",
+    /// never "did tightening this selector change what can fail the build". They carry the
+    /// same selectors today because one set of flags authors both; the shape is what lets
+    /// a later flag vary one side alone without changing this type.
+    Compare
+    {
+        baseline: GateCommand,
+        candidate: GateCommand,
+    },
 }

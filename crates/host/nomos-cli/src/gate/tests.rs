@@ -101,6 +101,9 @@ fn Root_Of(invocation: &Invocation) -> &PathBuf
     return match invocation
     {
         Invocation::Plan(command) | Invocation::Run(command) | Invocation::Explain { command, .. } => &command.root,
+        // The baseline's, because `--root` spells it for every verb including this one;
+        // `--against`'s is reached through the variant itself where a test needs both.
+        Invocation::Compare { baseline, .. } => &baseline.root,
     };
 }
 
@@ -140,18 +143,74 @@ fn Test_Gate_Invocation_From_String_Arguments_Should_Parse_Run_As_Run_Not_Plan()
     assert_eq!(Root_Of(&invocation), &PathBuf::from("."));
 }
 
-/// `compare` is named by `ARC-ROADMAP-001` but has no real implementation yet, so this
-/// must refuse rather than quietly running `plan` instead. `explain` moved out of this
-/// test once it gained a real body (`P13-GATE-EXPLAIN-FIRST-INCREMENT`) -- it is now
-/// covered by its own parsing tests instead, and would pass this one for the wrong reason
-/// (a missing `--rule`, not an unrecognized verb) if it stayed.
+/// A verb this group does not implement must refuse rather than quietly running `plan`
+/// instead. `explain` moved out of this test once it gained a real body
+/// (`P13-GATE-EXPLAIN-FIRST-INCREMENT`) and `compare` when it gained one
+/// (`P73-GATE-COMPARE-HAS-NO-CALLER`) -- each is covered by its own tests now, and either
+/// would pass this one for the wrong reason (a missing required flag, not an unrecognized
+/// verb) if it stayed. `diff` is a name a person might plausibly reach for and this group
+/// does not answer to.
 #[test]
 fn Test_An_Unimplemented_Verb_Should_Refuse()
 {
-    let error = Gate_Invocation_From_String_Arguments(&["compare".to_owned()]).expect_err("must refuse");
+    let error = Gate_Invocation_From_String_Arguments(&["diff".to_owned()]).expect_err("must refuse");
 
-    assert!(error.contains("compare"), "{error}");
+    assert!(error.contains("diff"), "{error}");
     assert!(error.contains("usage"), "{error}");
+}
+
+/// `compare` runs two real walks of this workspace's own tree and reports a difference.
+///
+/// The two sides name the same root deliberately: a tree compared with itself has a known
+/// answer -- nothing moved -- which is the one assertion about `compare`'s arithmetic that
+/// does not depend on what this workspace's rules happen to find today. That it reaches
+/// `Ok` is the other half, and it is the claim `OD-GATE-022`'s Status made about a first
+/// caller: two same-process walks, no store, no new serializable type.
+#[test]
+fn Test_Compare_Should_Report_No_Difference_Between_A_Tree_And_Itself()
+{
+    let root = Repository_Root();
+    let arguments = vec![
+        "compare".to_owned(),
+        "--root".to_owned(),
+        root.display().to_string(),
+        "--against".to_owned(),
+        root.display().to_string(),
+    ];
+    let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("compare parses");
+
+    let (code, rendered, rendered_stderr) = Run_Over_This_Tree(invocation);
+
+    assert_eq!(code, ExitCode::Ok, "stderr: {rendered_stderr}");
+    assert!(rendered.contains("0 added, 0 removed, 0 changed disposition"), "{rendered}");
+    // Two executions, not one: a RunId distinguishes them even over one unchanged tree.
+    assert!(rendered.contains("baseline:"), "{rendered}");
+    assert!(rendered.contains("candidate:"), "{rendered}");
+}
+
+/// A side that was never judged is not a difference of zero. `compare` must say which side,
+/// and leave the code `run` already gives that reason, rather than rendering an empty
+/// difference as though the trees agreed.
+#[test]
+fn Test_Compare_Should_Refuse_A_Side_That_Was_Never_Judged()
+{
+    let root = Repository_Root();
+    let empty = root.join("target").join("nomos-gate-compare-empty-side");
+    std::fs::create_dir_all(&empty).expect("the fixture directory");
+    let arguments = vec![
+        "compare".to_owned(),
+        "--root".to_owned(),
+        root.display().to_string(),
+        "--against".to_owned(),
+        empty.display().to_string(),
+    ];
+    let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("compare parses");
+
+    let (code, _rendered, rendered_stderr) = Run_Over_This_Tree(invocation);
+
+    assert_eq!(code, ExitCode::Vacuous, "stderr: {rendered_stderr}");
+    assert!(rendered_stderr.contains("--against"), "{rendered_stderr}");
+    std::fs::remove_dir_all(&empty).ok();
 }
 
 /// A mistyped flag must not be silently ignored into a default.

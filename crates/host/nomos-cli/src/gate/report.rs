@@ -130,6 +130,102 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
     return Exit_Code_For(result.disposition);
 }
 
+/// Renders what [`nomos_gate_orchestration::Compare_Gate_Runs`] answered for `compare`.
+///
+/// # Why a difference is never a verdict
+///
+/// `compare` is `0` whenever both sides were judged, however much moved between them. A
+/// finding added between two trees is a fact about the difference; whether that fact should
+/// fail a build is a policy question, and the policy that would answer it — which additions
+/// are tolerable, against which baseline — is `GateCommand`'s own
+/// `suppressions`/`baseline`/`adoption`, which no flag authors yet. Reading `Violations`
+/// onto an addition here would be inventing that policy at the exit code, where nobody
+/// declared it.
+///
+/// A side that was never judged is different in kind, and keeps the code `run` already
+/// gives that reason: there is no difference to report, rather than one that happens to be
+/// empty.
+pub(super) fn Render_Compare(
+    baseline: &GateRunResult,
+    candidate: &GateRunResult,
+    stdout: &mut impl Write,
+    stderr: &mut impl Write,
+) -> ExitCode
+{
+    if let Some(code) = Unjudged(baseline, "--root", stderr)
+    {
+        return code;
+    }
+    if let Some(code) = Unjudged(candidate, "--against", stderr)
+    {
+        return code;
+    }
+
+    let compared = nomos_gate_orchestration::Compare_Gate_Runs(baseline, candidate);
+
+    let _ = writeln!(
+        stdout,
+        "baseline: {} ({})\ncandidate: {} ({})",
+        compared.baseline,
+        baseline.root.display(),
+        compared.candidate,
+        candidate.root.display()
+    );
+
+    for finding in &compared.added
+    {
+        let _ = writeln!(stdout, "+ {}", finding.Describe());
+    }
+    for finding in &compared.removed
+    {
+        let _ = writeln!(stdout, "- {}", finding.Describe());
+    }
+    for change in &compared.changed
+    {
+        let _ = writeln!(
+            stdout,
+            "~ {} {}: {:?} -> {:?}",
+            change.rule, change.subject_name, change.before, change.after
+        );
+    }
+
+    let _ = writeln!(
+        stdout,
+        "\n{} added, {} removed, {} changed disposition",
+        compared.added.len(),
+        compared.removed.len(),
+        compared.changed.len()
+    );
+
+    return ExitCode::Ok;
+}
+
+/// The exit code for a side of a `compare` that never reached a judgment, and the reason
+/// why, named by the flag that selected it.
+///
+/// `None` when the side was judged and there is nothing to report about it. Reuses
+/// [`Render_Run`]'s own refusals rather than restating them, so `compare` cannot drift into
+/// describing an unreadable tree differently from `run`.
+fn Unjudged(result: &GateRunResult, flag: &str, stderr: &mut impl Write) -> Option<ExitCode>
+{
+    if matches!(result.check_outcome, CheckOutcome::Judged { .. })
+    {
+        return None;
+    }
+
+    let _ = writeln!(stderr, "{flag} was not judged, so there is no difference to report:");
+
+    return Some(match &result.check_outcome
+    {
+        CheckOutcome::Unreadable => Render_Check_Unreadable(&result.root, stderr),
+        CheckOutcome::Contradictory(error) => Render_Run_Contradictory(error, stderr),
+        CheckOutcome::NoSource => Render_Run_No_Source(&result.root, stderr),
+        CheckOutcome::NoFacts { files } => Render_Run_No_Facts(&result.root, *files, stderr),
+        // Guarded by the matches! above, which returns before reaching here.
+        CheckOutcome::Judged { .. } => ExitCode::Ok,
+    });
+}
+
 /// Reduces a real run's disposition to the [`ExitCode`] it reports.
 fn Exit_Code_For(disposition: GateRunOutcome) -> ExitCode
 {

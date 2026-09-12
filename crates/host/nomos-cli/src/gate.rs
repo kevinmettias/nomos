@@ -39,11 +39,18 @@
 //! answers it; this module still owns only the walk and the host build variant, the same
 //! division `run` already has.
 //!
-//! # What this module still does not do
+//! # `compare`, after `P73-GATE-COMPARE-HAS-NO-CALLER`
 //!
-//! It does not implement `compare`: [`parsing::Gate_Invocation_From_String_Arguments`] refuses it as usage, the same "no
-//! invented shape ahead of a real body" discipline the orchestration crate's own
-//! `command.rs` already documents.
+//! [`Invocation::Compare`] carries two whole [`GateCommand`]s, and [`Compare_Verb`] below
+//! walks and judges each exactly as `run` does before handing both to
+//! `nomos_gate_orchestration::Compare_Gate_Runs`. Two same-process walks under two
+//! `RunId`s, which is the shape `OD-GATE-022`'s own Status named for a first caller: it
+//! needs no store, because nothing has to outlive the process that produced it, and no new
+//! serializable type, because the two `GateRunResult`s it compares already exist in memory.
+//!
+//! This is what closes the last of the four verbs `ARC-ROADMAP-001` names. It was refused
+//! as usage until now on the "no invented shape ahead of a real body" discipline; that
+//! discipline is unchanged, and the body is what arrived.
 
 mod composition;
 mod invocation;
@@ -56,7 +63,7 @@ mod tests;
 
 pub use invocation::Invocation;
 pub use parsing::Gate_Invocation_From_String_Arguments;
-use report::{Render_Explain, Render_Plan, Render_Run};
+use report::{Render_Compare, Render_Explain, Render_Plan, Render_Run};
 
 mod exit_code;
 
@@ -82,6 +89,10 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
             Render_Plan(&outcome, stdout, stderr)
         }
         Invocation::Run(command) => Run_Verb(command, stdout, stderr),
+        Invocation::Compare { baseline, candidate } =>
+        {
+            Compare_Verb(baseline, candidate, stdout, stderr)
+        }
         Invocation::Explain { command, query } =>
         {
             let walked = sources::Walked_Sources(&command.root);
@@ -104,9 +115,36 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
 /// renders what came back -- the self-contained unit `Invocation::Run`'s own arm was.
 fn Run_Verb(command: &GateCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
+    return Render_Run(&Judged(command), stdout, stderr);
+}
+
+/// Judges both commands the same way `run` judges one, and renders what moved.
+///
+/// Each side gets its own `RunId` from the same clock: two walks in one process are still
+/// two executions, which is exactly what `GateRunResult::run`'s own doc says a `RunId`
+/// distinguishes. Sequential rather than concurrent -- `Run_Gate` is the expensive part and
+/// nothing here is waiting on I/O it could overlap.
+fn Compare_Verb(
+    baseline: &GateCommand,
+    candidate: &GateCommand,
+    stdout: &mut impl Write,
+    stderr: &mut impl Write,
+) -> ExitCode
+{
+    return Render_Compare(&Judged(baseline), &Judged(candidate), stdout, stderr);
+}
+
+/// One walk-and-judge of `command.root`, under a freshly minted `RunId`.
+///
+/// Shared by `run` and both sides of `compare` so the two verbs cannot drift about what
+/// judging a tree means: a compare whose sides were composed differently from a run would
+/// report differences that only exist between the two code paths.
+fn Judged(command: &GateCommand) -> nomos_gate_orchestration::GateRunResult
+{
     let walked = sources::Walked_Sources(&command.root);
     let run = nomos_gate_orchestration::Fresh_Run_Id(CLOCK.Now());
-    let result = nomos_gate_orchestration::Run_Gate(
+
+    return nomos_gate_orchestration::Run_Gate(
         walked,
         nomos_gate_orchestration::GateEnvironment {
             variant: composition::Host_Variant(),
@@ -116,8 +154,6 @@ fn Run_Verb(command: &GateCommand, stdout: &mut impl Write, stderr: &mut impl Wr
         command,
         run,
     );
-
-    return Render_Run(&result, stdout, stderr);
 }
 
 #[cfg(test)]

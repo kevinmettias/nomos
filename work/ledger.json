@@ -60401,7 +60401,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -60414,7 +60414,27 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "eck_orchestration_seam-a06344a378dce713.exe)\n     Running tests\\composer_std_seam.rs (target\\debug\\deps\\composer_std_seam-ed6d04bc8d89af36.exe)\n     Running tests\\contracts_seam.rs (target\\debug\\deps\\contracts_seam-9f3fe8f548d17bab.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-e17d0fa080d874d2.exe)\n     Running tests\\gate_orchestration_seam.rs (target\\debug\\deps\\gate_orchestration_seam-8e9eb4a21f706799.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-f433a0f326ac20cd.exe)\n     Running tests\\lang_go_seam.rs (target\\debug\\deps\\lang_go_seam-126a051e70ec8789.exe)\n     Running tests\\lang_rust_seam.rs (target\\debug\\deps\\lang_rust_seam-21e4d711588fa8dc.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-eb881b37502cc056.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-6e4edc82a01dbde3.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-ae0b617102dd3009.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-04ea16aad0fabd75.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-3280349c95fefea2.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-5e1c9f4878575f71.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-938ce3bf1a5089c5.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-94d7292345d520d6.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-813c14e0af29f347.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-edce0034430d69a3.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-1da870d5dcc7bd73.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-cb3e049ca967cf9a.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-586b71f69871fb5c.exe)\n",
+        "verified_at": 1789256329,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6d73394f737071804cb0ce25e10f653066946ea6"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
