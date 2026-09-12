@@ -64053,7 +64053,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Declined per OD-EXECUTOR-010 (docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md), which measured this item's premise false against the tree at 86568bc6. Clay, its named motivating example, appears exactly once in this repository -- in OD-EXECUTOR-006, in a sentence declining to decide its shape -- so there is no runtime, integration or backend here to adapt. The dispatch moved to the engine under OD-PLATFORM-003, where nine xvpe agent backends already share one contract, so a new execution architecture here would reverse that migration. A second consumer of the same TaskEnvelope already exists in nomos-model-backend-ollama, which README's own band table calls structurally parallel. And the evidence this item existed to produce -- which of the first executor's choices are the contract rather than one vendor's -- was produced by P91 and P92 without a third crate: available_tools was enforced in one adapter, the divergence surfaced immediately as a caller-facing defect across one shared match arm, and closing it established the refusal as the envelope's mechanism. OD-EXECUTOR-010 records what the two adapters share and where they diverge, each divergence traced to a real difference in backend capability, and names the three conditions that would license a third adapter. Not re-authored: this is the fifth authoring and the sixth would be the default outcome without a record saying why not."
+        }
+      },
       "depends_on": [
         "P42-EXECUTOR-WORKRESULT-IMPLEMENTATION-4",
         "P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-4"
@@ -64074,7 +64078,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1789254973
+      }
     },
     {
       "id": "P91-ONE-ENVELOPE-TWO-BACKENDS-TWO-GUARANTEES",
@@ -64198,6 +64205,59 @@
           "exit_code": 0
         },
         "revision": "b147c1620232aa80af147f29ebd690e7007966d1"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P93-SECOND-EXECUTOR-PREMISE-REMEASURED",
+      "title": "The second implementation that would show which of the first executor's choices are the contract already exists",
+      "why": "P42-SECOND-HARNESS-EXECUTOR has been authored five times and built zero times, most recently as -5. Its premise is that one agent executor exists, so nothing distinguishes what the canonical task contract requires from what one vendor happened to need, and its remedy is a new nomos-agent-executor-harness crate over a richer session or harness runtime, of which Clay is the motivating example. Three measurements against the tree at 86568bc6 say that premise no longer holds. Clay is named exactly once in this repository, in OD-EXECUTOR-006, as a shape that record explicitly declines to decide; there is no harness runtime, no integration and no backend here to adapt. The dispatch itself moved down to the engine under OD-PLATFORM-003, where nine xvpe agent backends already exercise one AgentExecutorStrategy contract, so a new execution architecture up here would reverse that migration rather than extend it. And a second nomos adapter over the same TaskEnvelope already exists: nomos-model-backend-ollama, which README's own band table calls structurally parallel to nomos-agent-executor-claude-code with no shared trait and no shared package kind. P91 and P92 then produced the very evidence the item wanted without a third crate -- enforcing available_tools in one adapter and not the other made the divergence visible as a caller-facing defect, and closing it established the refusal as the envelope's mechanism rather than either vendor's.",
+      "done_when": "A governing record states what the two existing TaskEnvelope adapters agree about and what they disagree about, each item measured against the code rather than asserted, so a reader can tell which of the first executor's choices are the contract; states what would license a third adapter, naming the condition rather than a date; and P42-SECOND-HARNESS-EXECUTOR-5 is declined citing it, so the sixth authoring of an item whose premise has been measured false does not happen by default.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md",
+          "crates/spec/nomos-spec-store/records/OD-EXECUTOR-010.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s\n\n\nrunning 15 tests\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789255091,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "86568bc6994f9e5456fb3fb8d401ecb8608a1d7f"
       },
       "abandoned": [],
       "displaced": [],

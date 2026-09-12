@@ -81,6 +81,7 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md@authored | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md | authored | 33 | 10 | sha256:a8a606ac572d71702792163128caae171168c9e6e5f00c3b012b0675b5d7bc8d |
 | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md@authored | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md | authored | 19 | 6 | sha256:2b4a9d2bb3daa50e11f78a921b819c109cbcab767766c84970181f3873081454 |
 | docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md@authored | docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md | authored | 18 | 6 | sha256:45cf84c5f564bbf8c10b18bf9bcfd793f0fb284d663a48bda04e8376577f3728 |
+| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md@authored | docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md | authored | 28 | 8 | sha256:3591b780c13db3d7e66d70b17727c44fadc80e583eeb90eda64e8f65984a8231 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
@@ -770,6 +771,14 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#9 | authored | 2 | The Decision |
 | docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#12 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#17 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#1 | authored | 1 | A second TaskEnvelope adapter already exists, and what the two disagree about is now measured |
+| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#2 | authored | 2 | Question |
+| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#10 | authored | 3 | What the two adapters agree about, and what they do not |
+| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#17 | authored | 2 | The Decision |
+| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#20 | authored | 2 | What Would License A Third Adapter |
+| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#23 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#27 | authored | 2 | Status |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1 | authored | 1 | A skipped test reports ok, so the size of the hole is declared rather than the hole being closed |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#5 | authored | 2 | What Was Found |
@@ -19080,6 +19089,256 @@ shape in `kwb-contracts` — not on a timer or another Nomos-side design pass.
 Accepted. Knowledge-context acquisition and selection are blocked on KWB exposing a real
 interface, which it has not done; promotion back across the boundary is recorded as refused,
 honestly, because nothing yet exists to promote.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#1
+
+*revision: authored · kind: heading · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured · hash: sha256:43272f6164f6ed11bd8170c314e8c12fb3584028aa75702d57b7448e988686e6*
+
+# A second TaskEnvelope adapter already exists, and what the two disagree about is now measured
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#2
+
+*revision: authored · kind: heading · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#3
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / Question · hash: sha256:2b35f156e40df6ee7d4f9f6d232efda27388e6afe451b0dbaa8dc7f542b6d13b*
+
+`P42-SECOND-HARNESS-EXECUTOR` has been authored five times and built zero times. Its premise
+is that "one agent executor exists, so nothing has shown which of its choices are the
+contract," and its remedy is a new `nomos-agent-executor-harness` crate over "a richer
+session or harness runtime, of which Clay is the motivating example." Its stated value is
+not the crate but the evidence: "with one implementation nothing distinguishes what the
+canonical task contract requires from what one vendor happened to need."
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#4
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / Question · hash: sha256:2b248d73fec27ecc88e0e15c47f5347bbb47eadc90287ee52f6b9f9612b0f3bd*
+
+An item re-authored five times without being built is either blocked on something nobody has
+named, or resting on a premise that stopped being true. This record asks which, against the
+tree at `86568bc6`, rather than authoring it a sixth time.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#5
+
+*revision: authored · kind: heading · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#6
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured · hash: sha256:49282db8bef9d4ef7f438f3bc59e4fc14a82c24e1b22bcdb8e5d70bbedaa1525*
+
+**Clay is not a thing this repository can adapt.** Grepped across `crates/`, `docs/records/`
+and `README.md`: the string appears exactly once, in `OD-EXECUTOR-006`, in a sentence
+declining to decide it — "It does not decide Clay's shape." There is no harness runtime, no
+session integration, no dependency and no backend here. Building an adapter for it would be
+inventing the case rather than adapting a real one, which is the move `OD-EXECUTOR-006`
+itself refused.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#7
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured · hash: sha256:b43733fed90aa198f5d53fb0a8acf1aab064d2eb2e3a592897ce826b8c64b548*
+
+**The dispatch is no longer this workspace's to add one to.** `OD-PLATFORM-003` moved the
+agent dispatch down into `xvpe-agent-backend-claude-code` and `xvpe-agent-backend-ollama`
+over a capability contract in `xvpe-agent-execution`, on the ground that "a general
+capability sitting up here was unreachable by everything down there." Nine backends now sit
+under that contract in the engine (`anthropic-cli`, `claude-code`, `deepseek`,
+`deepseek-cli`, `generic-cli`, `glm`, `kimi`, `kimi-cli`, `ollama`). A *new execution
+architecture* in this workspace would reverse that migration. A new *adapter* here is a
+different and much smaller thing: translate a `TaskEnvelope`, call a backend, read back an
+outcome.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#8
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured · hash: sha256:a58ae241ccd9db904b931ce29f0031c3ee677439dab4f90566d0df499f690724*
+
+**A second adapter of exactly that smaller kind already exists.**
+`nomos-model-backend-ollama` takes the same `TaskEnvelope` and returns its own outcome, and
+`README.md`'s own band table already describes it as "structurally parallel to
+`nomos-agent-executor-claude-code`, no shared trait, no shared package kind."
+`OD-EXECUTOR-005` classifies it a `ModelBackend` rather than a second `AgentExecutor`, which
+is a claim about its *role*, not about whether it is a second consumer of the envelope. As a
+consumer of the envelope it is the second one, and it always was.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#9
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured · hash: sha256:3058ca8fd4cfeab02123317d0fa61d5efb4dfbe81ebebe35846a1814879b246a*
+
+**The discriminating evidence arrived without a third crate.** `OD-EXECUTOR-007` decided
+`available_tools` must be refused rather than silently dropped. `P42-EXECUTOR-ENVELOPE-
+IMPLEMENTATION-4` built that refusal in one adapter and not the other, and the result was
+immediately visible as a caller-facing defect rather than a design opinion: both adapters are
+dispatched from one `match` on one envelope in `nomos-agent-orchestration::run.rs` and
+`nomos-workflow-orchestration::run.rs`, so a declared capability was refused or silently
+dropped depending only on which arm a backend flag selected. `P91` closed it by making
+ollama refuse too. That sequence is the experiment the item wanted: a thing was enforced in
+one implementation, the second implementation showed whether it was the contract, and the
+answer was that it is.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#10
+
+*revision: authored · kind: heading · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured / What the two adapters agree about, and what they do not · hash: sha256:7901b254c65afd743a35256d4290d5b67741d97b7ae291ca69deab0c122086e0*
+
+### What the two adapters agree about, and what they do not
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#11
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured / What the two adapters agree about, and what they do not · hash: sha256:8d71db419ecdb4b6f56d2f676177711244ffaa57b3c4730a4e5fcc7592afb7c3*
+
+Measured from the two crates directly rather than inferred from their docs.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#12
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured / What the two adapters agree about, and what they do not · hash: sha256:06913f4293a7534ba088fd15df9e563bd645be6344c227b59693ad3f23a6032f*
+
+**Shared, and therefore the contract:**
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#13
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured / What the two adapters agree about, and what they do not · hash: sha256:60c2fd3e00346abb851afad88902f7fa315fe5d50fda5bcd7d60566948138ded*
+
+- The envelope going in (`TaskEnvelope`) and a refusal type going out, both with an
+  `Execute_Task`/`Execute_In` pair over an injected `ProcessLauncher`.
+- `AgentCapability::Isolated` with `ToolGrant::Nothing` — neither grants any capability, and
+  neither has ever dispatched under anything wider.
+- `AgentExecutionError::UnsupportedTools` for a declared `available_tools` neither can grant,
+  refused before any process starts. Shared *because* `P91` measured that a caller is owed
+  the same answer either way, not because the two crates were written together.
+- `AgentExecutionError::Unavailable` for "no answer was produced," including the engine's
+  own `#[non_exhaustive]` errors folded in by a deliberate wildcard.
+- `knowledge_context` and `scope` accepted and structurally unenforced in both, each for a
+  reason already recorded — `OD-EXECUTOR-009` and `OD-EXECUTOR-007` version 2 respectively.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#14
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured / What the two adapters agree about, and what they do not · hash: sha256:3a661df6d0c967a3c5cb82b6b8a3d969272b5cb047d1451e0946bd7d11ebbab9*
+
+**Divergent, and therefore one vendor's own, each with its measured reason:**
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#15
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured / What the two adapters agree about, and what they do not · hash: sha256:48f87913b7426f7f6988f6715d2ad9d2570704f72b638a17c177b0034942cb0e*
+
+| Choice | `nomos-agent-executor-claude-code` | `nomos-model-backend-ollama` |
+|---|---|---|
+| Answer shape | `JSON_SCHEMA`, `additionalProperties:false`, read from `structured_output` | none; stdout is free text, so there is nothing to conform |
+| Failure taxonomy | `Unparseable` kept apart from `Unavailable` | no `Unparseable`: a clean exit with some stdout is a valid answer by construction |
+| Spend | `MAXIMUM_SPEND`, a `MicroDollars` ceiling | none; local inference has no metered charge, a wall clock stands in its place |
+| Effort | six `EffortLevel` values mapped onto five engine values, `Minimal` approximated to `Low` | unmapped; no control in the command line that `EffortLevel` honestly maps onto |
+| `prohibited_changes` | compared before and after, refused by path | unenforced; no tool-use loop, so nothing can write |
+| `applicable_rules` | folded into the goal text as advisory context | unenforced |
+| Outcome | `WorkResult` plus `denied_tool_uses`, `is_error`, `cost`, `duration_ms` | one `response: String` |
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#16
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured / What the two adapters agree about, and what they do not · hash: sha256:05b69e649af1b57b9a8c6b46c5d3279da18a2ec46ff7791771d7600c974883c0*
+
+Every divergent row traces to a real difference in what the backend can do, not to a
+preference. That is the distinction the item existed to draw, and it is drawn.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#17
+
+*revision: authored · kind: heading · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#18
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / The Decision · hash: sha256:dbcabd60d4b3498817c133aa72b5bb1662f69feb68f03edf97c4908a509878be*
+
+**A third adapter is not the next increment, and `P42-SECOND-HARNESS-EXECUTOR-5` is declined
+citing this record.** Its premise — that only one implementation exists, so nothing
+discriminates contract from vendor choice — is false against this tree, and its named
+motivating example is a system this repository has no integration with. Building it would
+mean adapting an absent vendor to learn something two present adapters have already shown.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#19
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / The Decision · hash: sha256:480cf1306110fde5deb92ca12871defb93f69d510b5560d653e0c74a6bce7136*
+
+This is not a decision that a third adapter is forever unwarranted, and it moves nothing out
+of scope permanently. It records that the condition which made the item worth doing has been
+met by another route, so the item is complete in substance while its `done_when` — a new
+crate, registered in four places — is now a cost with no remaining evidentiary return.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#20
+
+*revision: authored · kind: heading · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Would License A Third Adapter · hash: sha256:78eeb78150f28ae9150d30e39010ebefa71a666ad4c1c21eeef27d5033c08aba*
+
+## What Would License A Third Adapter
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#21
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Would License A Third Adapter · hash: sha256:de58834087905781d3251a276aa0c4f653bb8f479c2a929b571dd9ef6847438d*
+
+Named as conditions rather than dates, so a future session can check them rather than
+re-derive this argument:
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#22
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Would License A Third Adapter · hash: sha256:f4a7280fc52b108fddef403bcb9e3079dac289f784b721cb98d028b727fd02bb*
+
+- **A real backend this workspace must reach that the engine does not already carry.** The
+  nine `xvpe-agent-backend-*` crates are the supply; an adapter here is warranted when
+  something needs one of them, or something outside them, through a `TaskEnvelope`.
+- **A third row in the divergence table that no existing adapter can produce.** The table
+  above has two columns because there are two consumers. A candidate that would only add a
+  third column agreeing with one of them everywhere teaches nothing; one that would disagree
+  in a new place is evidence.
+- **A `TaskEnvelope` field gaining a mechanism that cannot be built once.** Every shared row
+  above is currently duplicated per adapter rather than factored into `nomos-agent-contracts`.
+  Two copies are two copies; a third would be the point at which duplicating the envelope's
+  own mechanisms is the defect rather than the cheaper option.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#23
+
+*revision: authored · kind: heading · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#24
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What This Record Does Not Do · hash: sha256:dd153eb092634702f908a8747b178453c31d1462016303f135fca538ef7527ec*
+
+It does not retire `OD-EXECUTOR-005`'s classification: ollama is still a `ModelBackend` and
+not a second `AgentExecutor`. This record's claim is narrower and about a different axis —
+that it is the second *consumer of the envelope*, which is what the evidence needed.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#25
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What This Record Does Not Do · hash: sha256:c7a0eb89e5f4a2f3d45c51b503ed40bdc0492db5cb34695109a434f16fee7b49*
+
+It does not factor the shared mechanisms into `nomos-agent-contracts`. Two copies of
+`Refuse_Ungrantable_Tools` exist and are named above as the thing a third adapter would make
+intolerable; deciding to unify them now, with two consumers, would be the same
+ahead-of-the-evidence move this record declines elsewhere.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#26
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What This Record Does Not Do · hash: sha256:f80104f5226c57e9033c995e0727a037bfe5e0ca8a43abf5614426787cc10736*
+
+It does not change any code. `P91` and `P92` already landed the behaviour this record
+measures.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#27
+
+*revision: authored · kind: heading · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#28
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / Status · hash: sha256:0485c480fbaa4e25e5c05a61538c9b0285efb0353c47ee34c9f72d52acf8d444*
+
+Accepted. The second implementation that would discriminate contract from vendor choice
+already exists and has now been used for exactly that, so `P42-SECOND-HARNESS-EXECUTOR-5` is
+declined rather than authored a sixth time. What the two adapters share and where they
+diverge is recorded above, measured against the crates, with each divergence traced to a real
+difference in backend capability.
 
 ### docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1
 

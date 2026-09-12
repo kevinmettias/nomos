@@ -510,6 +510,7 @@ graph LR
     od_executor_001 -->|"relates-to"| od_executor_005["OD-EXECUTOR-005"]
     od_executor_001 -->|"relates-to"| od_executor_007
     od_executor_001 -->|"relates-to"| od_executor_008
+    od_executor_001 -->|"relates-to"| od_executor_010["OD-EXECUTOR-010"]
     od_executor_001 -->|"relates-to"| od_workflow_004
     od_executor_001 -->|"relates-to"| od_workflow_005["OD-WORKFLOW-005"]
     od_executor_002 -->|"relates-to"| arc_connector_001
@@ -529,17 +530,20 @@ graph LR
     od_executor_004 -->|"relates-to"| od_executor_001
     od_executor_004 -->|"relates-to"| od_executor_002
     od_executor_004 -->|"relates-to"| od_executor_005
+    od_executor_004 -->|"relates-to"| od_executor_010
     od_executor_004 -->|"relates-to"| od_package_013
     od_executor_004 -->|"relates-to"| od_workflow_005
     od_executor_005 -->|"relates-to"| od_executor_001
     od_executor_005 -->|"relates-to"| od_executor_004
     od_executor_005 -->|"relates-to"| od_executor_006
+    od_executor_005 -->|"relates-to"| od_executor_010
     od_executor_005 -->|"relates-to"| od_package_013
     od_executor_006 -->|"relates-to"| arc_connector_001
     od_executor_006 -->|"relates-to"| od_connector_001
     od_executor_006 -->|"relates-to"| od_connector_002
     od_executor_006 -->|"relates-to"| od_connector_004
     od_executor_006 -->|"relates-to"| od_executor_005
+    od_executor_006 -->|"relates-to"| od_executor_010
     od_executor_006 -->|"relates-to"| od_ledger_037
     od_executor_006 -->|"relates-to"| od_rules_010
     od_executor_007 -->|"relates-to"| od_contracts_003
@@ -547,6 +551,7 @@ graph LR
     od_executor_007 -->|"relates-to"| od_executor_002
     od_executor_007 -->|"relates-to"| od_executor_008
     od_executor_007 -->|"relates-to"| od_executor_009
+    od_executor_007 -->|"relates-to"| od_executor_010
     od_executor_007 -->|"relates-to"| od_ledger_038["OD-LEDGER-038"]
     od_executor_008 -->|"relates-to"| od_contracts_003
     od_executor_008 -->|"relates-to"| od_executor_001
@@ -555,6 +560,12 @@ graph LR
     od_executor_009 -->|"relates-to"| arc_ecosystem_001
     od_executor_009 -->|"relates-to"| d_137
     od_executor_009 -->|"relates-to"| od_executor_007
+    od_executor_010 -->|"relates-to"| od_executor_001
+    od_executor_010 -->|"relates-to"| od_executor_004
+    od_executor_010 -->|"relates-to"| od_executor_005
+    od_executor_010 -->|"relates-to"| od_executor_006
+    od_executor_010 -->|"relates-to"| od_executor_007
+    od_executor_010 -->|"relates-to"| od_platform_003
     od_gate_001 -->|"affected_by"| od_determinism_001
     od_gate_001 -->|"affects"| arc_specdb_001
     od_gate_001 -->|"relates-to"| d_133
@@ -1186,6 +1197,7 @@ graph LR
     od_platform_003 -->|"affects"| agt_006
     od_platform_003 -->|"affects"| od_executor_001
     od_platform_003 -->|"affects"| od_executor_004
+    od_platform_003 -->|"relates-to"| od_executor_010
     od_platform_003 -->|"relates-to"| od_host_013
     od_platform_003 -->|"relates-to"| od_platform_001
     od_project_001 -->|"relates-to"| d_128
@@ -1644,6 +1656,7 @@ graph LR
     od_executor_007
     od_executor_008
     od_executor_009
+    od_executor_010
     od_gate_001
     od_gate_002
     od_gate_003

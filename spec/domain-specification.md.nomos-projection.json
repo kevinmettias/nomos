@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:7b66b3bb5618a813dc7bbe4005f81a4104d7e1aac652590e76122939ebbc9ca2",
-  "inputs_digest": "sha256:4994ebfce44d358b41909ad177e171180ffc48593d57d5c9fe0433afb63e5986",
+  "content_digest": "sha256:ffc3609845256de39fd9bf941445248fc1c1104a5f9d82ce25c094a2373c0fca",
+  "inputs_digest": "sha256:c975eaa1214b43a8195579a352b1c0dd76974ec21fb3bcb08bc432949dc631cc",
   "sections": [
     [
       "Documents",
-      221
+      222
     ],
     [
       "Sections",
-      1795
+      1803
     ],
     [
       "Source blocks",
-      6200
+      6228
     ]
   ],
   "inputs": [
@@ -374,6 +374,11 @@
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md@authored",
       "hash": "sha256:45cf84c5f564bbf8c10b18bf9bcfd793f0fb284d663a48bda04e8376577f3728"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md@authored",
+      "hash": "sha256:3591b780c13db3d7e66d70b17727c44fadc80e583eeb90eda64e8f65984a8231"
     },
     {
       "content": "documents",
@@ -3794,6 +3799,46 @@
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#17",
       "hash": "sha256:ede73b2fb32e7bdd475cb08f9968e669eab84cdb3651785aa38d2c8bd015f6ee"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#1",
+      "hash": "sha256:8401c65e6e15b9edaf9043a8b5e34454ea0a7fc35fe954a5dd5907dfd19f5aa8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#2",
+      "hash": "sha256:b481c9e51f2fdc4a6fd778ef6c05d0916b438f7e563e88bf1600d03a8f0ce64c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#5",
+      "hash": "sha256:ba34964e2391205b49b791b47911ab977b511ad734d5a2d7af525a612099aef3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#10",
+      "hash": "sha256:73873fe1df6a0bc7e4caf15c1d050f9ccb90a6e93a55dbfc38588c405630feaa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#17",
+      "hash": "sha256:340917a3ff1b2fbe90d9d6568fc99d523074c3f215e9dcf48336558d2f7c520b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#20",
+      "hash": "sha256:ae51775139f071fd23189689efb84819de99a1145c27fc629a03dc1a216bb8ef"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#23",
+      "hash": "sha256:7747f352bda9f33e3add316d064e54daddf6f1738216b7208fa46cdd14a666bd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#27",
+      "hash": "sha256:c03380ec000b16a3c9e1942d414a573202557981d3091ec0891ad38b8a8555da"
     },
     {
       "content": "headings",
@@ -19064,6 +19109,146 @@
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md#18",
       "hash": "sha256:d1ce573216cf6cd90dba4bf88e1cf1218c45d6d8e969c3247e4fc0714bd9e509"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#1",
+      "hash": "sha256:43272f6164f6ed11bd8170c314e8c12fb3584028aa75702d57b7448e988686e6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#3",
+      "hash": "sha256:2b35f156e40df6ee7d4f9f6d232efda27388e6afe451b0dbaa8dc7f542b6d13b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#4",
+      "hash": "sha256:2b248d73fec27ecc88e0e15c47f5347bbb47eadc90287ee52f6b9f9612b0f3bd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#6",
+      "hash": "sha256:49282db8bef9d4ef7f438f3bc59e4fc14a82c24e1b22bcdb8e5d70bbedaa1525"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#7",
+      "hash": "sha256:b43733fed90aa198f5d53fb0a8acf1aab064d2eb2e3a592897ce826b8c64b548"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#8",
+      "hash": "sha256:a58ae241ccd9db904b931ce29f0031c3ee677439dab4f90566d0df499f690724"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#9",
+      "hash": "sha256:3058ca8fd4cfeab02123317d0fa61d5efb4dfbe81ebebe35846a1814879b246a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#10",
+      "hash": "sha256:7901b254c65afd743a35256d4290d5b67741d97b7ae291ca69deab0c122086e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#11",
+      "hash": "sha256:8d71db419ecdb4b6f56d2f676177711244ffaa57b3c4730a4e5fcc7592afb7c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#12",
+      "hash": "sha256:06913f4293a7534ba088fd15df9e563bd645be6344c227b59693ad3f23a6032f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#13",
+      "hash": "sha256:60c2fd3e00346abb851afad88902f7fa315fe5d50fda5bcd7d60566948138ded"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#14",
+      "hash": "sha256:3a661df6d0c967a3c5cb82b6b8a3d969272b5cb047d1451e0946bd7d11ebbab9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#15",
+      "hash": "sha256:48f87913b7426f7f6988f6715d2ad9d2570704f72b638a17c177b0034942cb0e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#16",
+      "hash": "sha256:05b69e649af1b57b9a8c6b46c5d3279da18a2ec46ff7791771d7600c974883c0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#17",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#18",
+      "hash": "sha256:dbcabd60d4b3498817c133aa72b5bb1662f69feb68f03edf97c4908a509878be"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#19",
+      "hash": "sha256:480cf1306110fde5deb92ca12871defb93f69d510b5560d653e0c74a6bce7136"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#20",
+      "hash": "sha256:78eeb78150f28ae9150d30e39010ebefa71a666ad4c1c21eeef27d5033c08aba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#21",
+      "hash": "sha256:de58834087905781d3251a276aa0c4f653bb8f479c2a929b571dd9ef6847438d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#22",
+      "hash": "sha256:f4a7280fc52b108fddef403bcb9e3079dac289f784b721cb98d028b727fd02bb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#23",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#24",
+      "hash": "sha256:dd153eb092634702f908a8747b178453c31d1462016303f135fca538ef7527ec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#25",
+      "hash": "sha256:c7a0eb89e5f4a2f3d45c51b503ed40bdc0492db5cb34695109a434f16fee7b49"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#26",
+      "hash": "sha256:f80104f5226c57e9033c995e0727a037bfe5e0ca8a43abf5614426787cc10736"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#27",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#28",
+      "hash": "sha256:0485c480fbaa4e25e5c05a61538c9b0285efb0353c47ee34c9f72d52acf8d444"
     },
     {
       "content": "blocks",
