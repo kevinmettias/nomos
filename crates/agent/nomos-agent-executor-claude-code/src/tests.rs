@@ -302,13 +302,13 @@ fn Test_Declared_Tools_This_Crate_Cannot_Grant_Should_Refuse_Before_Dispatching(
 {
     let launcher = Scripted::Saying(A_VALID_RESPONSE);
     let mut task = Bare_Task(A_GOAL, EffortLevel::BackendDefault);
-    task.available_tools = vec![CapabilityId::New("nomos.cap.syntax.items")];
+    task.available_tools = vec![CapabilityId::New("nomos.cap.example.claude_code_refusal_test_only")];
 
     let refusal = Execute_Task(&task, &launcher, Path::new(NO_ROOT));
 
     assert_eq!(
         refusal,
-        Err(AgentExecutionError::UnsupportedTools("nomos.cap.syntax.items".to_owned())),
+        Err(AgentExecutionError::UnsupportedTools("nomos.cap.example.claude_code_refusal_test_only".to_owned())),
         "{UNGRANTABLE_TOOLS_ARE_REFUSED}"
     );
     // Before anything runs, not after: a refused grant must not have dispatched.

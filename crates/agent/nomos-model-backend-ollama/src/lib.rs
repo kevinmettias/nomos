@@ -19,12 +19,18 @@
 //!
 //! # What this crate reads from an envelope, and what it does not
 //!
-//! `goal` is read. Everything else — `scope`, `prohibited_changes`,
-//! `available_tools`, `knowledge_context`, `applicable_rules` and `effort` — is
-//! accepted and ignored. `effort` specifically: nothing in this command line has
-//! a control that `EffortLevel` honestly maps onto, and inventing one ahead of
-//! measuring it would be an approximation asserted rather than observed. A real
-//! gap, not a silent one.
+//! `goal` is read. `available_tools` is *refused* when it names anything, per
+//! `OD-EXECUTOR-007`: this backend runs one model turn with no tool-use loop, so
+//! a declared capability is not merely unmet here but unmeetable, and saying so
+//! is the difference between a gap and a false guarantee. That refusal is the
+//! envelope's mechanism rather than this backend's own, which is why it reads
+//! the same as `nomos-agent-executor-claude-code`'s.
+//!
+//! Everything else — `scope`, `prohibited_changes`, `knowledge_context`,
+//! `applicable_rules` and `effort` — is accepted and ignored. `effort`
+//! specifically: nothing in this command line has a control that `EffortLevel`
+//! honestly maps onto, and inventing one ahead of measuring it would be an
+//! approximation asserted rather than observed. A real gap, not a silent one.
 //!
 //! # The response is never evidence
 //!
@@ -56,6 +62,8 @@ use xvpe_agent_execution::{
 ///
 /// # Errors
 ///
+/// [`AgentExecutionError::UnsupportedTools`] if `task.available_tools` names
+/// anything, before any process is started.
 /// [`AgentExecutionError::Unavailable`] if the isolated directory could not be
 /// created, the process could not be started, it exited non-zero — including
 /// when the daemon this backend requires is unreachable — or a bound killed it.
@@ -88,13 +96,16 @@ pub fn Execute_In<Launcher: ProcessLauncher>(
     return Dispatch(task, launcher, capability);
 }
 
-/// The one call into the engine, over a boundary already decided on.
+/// The one call into the engine, over a boundary already decided on, after the one
+/// envelope constraint this backend can answer.
 fn Dispatch<Launcher: ProcessLauncher>(
     task: &TaskEnvelope,
     launcher: &Launcher,
     capability: AgentCapability,
 ) -> Result<AgentExecutionOutcome, AgentExecutionError>
 {
+    Refuse_Ungrantable_Tools(task)?;
+
     let bridged = XvpeLauncher::Wrapping(launcher);
 
     let outcome = OllamaDispatch::Through(&bridged)
@@ -102,6 +113,24 @@ fn Dispatch<Launcher: ProcessLauncher>(
         .map_err(AgentExecutionError::From_Engine)?;
 
     return Ok(AgentExecutionOutcome { response: outcome.answer });
+}
+
+/// Refuses a declared tool need this backend cannot honor, before anything runs.
+///
+/// Not a narrower case of its sibling's: there the grant is missing a bridge that could
+/// one day exist, here the backend has no tool-use loop for a bridge to reach. Both refuse,
+/// because what a caller is owed is the same answer either way — the capability it declared
+/// was not granted, and the dispatch did not quietly proceed without it.
+fn Refuse_Ungrantable_Tools(task: &TaskEnvelope) -> Result<(), AgentExecutionError>
+{
+    if task.available_tools.is_empty()
+    {
+        return Ok(());
+    }
+
+    let named =
+        task.available_tools.iter().map(|tool| tool.As_Str()).collect::<Vec<_>>().join(", ");
+    return Err(AgentExecutionError::UnsupportedTools(named));
 }
 
 /// The envelope, as the engine's own task.

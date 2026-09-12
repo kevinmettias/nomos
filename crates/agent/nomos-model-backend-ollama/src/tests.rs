@@ -13,7 +13,7 @@
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use std::cell::RefCell;
 
-use nomos_contracts::SchemaId;
+use nomos_contracts::{CapabilityId, SchemaId};
 use nomos_ledger::Territory;
 use nomos_model_package::EffortLevel;
 use nomos_platform::{Command, ExitOutcome, ProcessOutput};
@@ -41,6 +41,9 @@ const NO_CEILING_IS_SET: &str = "local inference has no metered charge to bound"
 const RESPONSE_IS_THE_OUTPUT: &str = "the outcome carries what the model wrote";
 /// A caller-chosen directory must actually be used.
 const CHOSEN_DIRECTORY_IS_USED: &str = "a caller-chosen directory is the one dispatched into";
+/// A capability this backend cannot grant must refuse before anything runs.
+const UNGRANTABLE_TOOLS_ARE_REFUSED: &str =
+    "available_tools this backend cannot grant refuses instead of dispatching";
 
 /// A launcher that answers from a script and remembers what it was asked.
 struct Scripted
@@ -141,4 +144,22 @@ fn Test_A_Caller_Chosen_Directory_Should_Be_The_One_Dispatched_Into()
         Some(directory.as_path()),
         "{CHOSEN_DIRECTORY_IS_USED}"
     );
+}
+
+#[test]
+fn Test_Declared_Tools_This_Backend_Cannot_Grant_Should_Refuse_Before_Dispatching()
+{
+    let launcher = Scripted::New();
+    let mut task = Bare_Task(A_GOAL);
+    task.available_tools = vec![CapabilityId::New("nomos.cap.example.ollama_refusal_test_only")];
+
+    let refusal = Execute_Task(&task, &launcher);
+
+    assert_eq!(
+        refusal,
+        Err(AgentExecutionError::UnsupportedTools("nomos.cap.example.ollama_refusal_test_only".to_owned())),
+        "{UNGRANTABLE_TOOLS_ARE_REFUSED}"
+    );
+    // Before anything runs: a refused grant must not have reached the launcher.
+    assert!(launcher.seen.borrow().is_empty(), "{UNGRANTABLE_TOOLS_ARE_REFUSED}");
 }

@@ -44,6 +44,9 @@ impl ProcessLauncher for Scripted
 /// `nomos_ledger`'s own re-exported `Territory` for scope (the same type
 /// `nomos-agent-contracts` itself declares `TaskEnvelope.scope` as), `nomos_model_package`
 /// for effort.
+/// `available_tools` is empty, and that is a real value rather than an omission:
+/// `OD-EXECUTOR-007` has this backend refuse a capability it cannot grant, so a non-empty
+/// list here would test the refusal rather than the dispatch. It has its own case below.
 fn Real_Task(goal: &str) -> TaskEnvelope
 {
     return TaskEnvelope {
@@ -52,7 +55,7 @@ fn Real_Task(goal: &str) -> TaskEnvelope
         knowledge_context: vec![KnowledgeReferenceId::New("kwb:decision:integration-seam-test")],
         applicable_rules: vec![RuleId::New("check-naming-convention")],
         prohibited_changes: Territory::Of_Files(["work/ledger.json"]),
-        available_tools: vec![CapabilityId::New("nomos.cap.example.integration_seam_test_only")],
+        available_tools: Vec::new(),
         expected_output_schema: SchemaId::New("nomos.agent.executor.v1"),
         effort: EffortLevel::BackendDefault,
     };
@@ -166,4 +169,24 @@ fn Test_The_Ledger_Territory_A_Task_Envelope_Carries_Is_The_Same_Territory_A_Rea
 
     assert_eq!(reservation.item, ItemId::New("integration-seam-test-item"));
     let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// A `CapabilityId` this backend cannot grant crosses the boundary as a refusal, from
+/// outside the crate, the way a real consumer meets it. The same assertion its sibling
+/// makes, deliberately: `OD-EXECUTOR-007`'s refusal is the envelope's mechanism, so the two
+/// backends owe a caller the same answer rather than each deciding for itself.
+#[test]
+fn Test_Execute_Task_Should_Refuse_A_Capability_It_Has_No_Way_To_Grant()
+{
+    let launcher = Scripted {
+        outcome: ExitOutcome::Exited { code: 0 },
+        stdout: String::new(),
+        stderr: String::new(),
+    };
+    let mut task = Real_Task("say PONG");
+    task.available_tools = vec![CapabilityId::New("nomos.cap.example.ollama_seam_refusal_test_only")];
+
+    let error = Execute_Task(&task, &launcher).expect_err("a capability with no grant is refused");
+
+    assert_eq!(error, AgentExecutionError::UnsupportedTools("nomos.cap.example.ollama_seam_refusal_test_only".to_owned()));
 }

@@ -64075,6 +64075,133 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P91-ONE-ENVELOPE-TWO-BACKENDS-TWO-GUARANTEES",
+      "title": "The same TaskEnvelope gets a declared capability refused or silently dropped depending on which backend one match arm chose",
+      "why": "OD-EXECUTOR-007 decided available_tools is refused rather than silently dropped, on the principle that an executor which cannot honor a declared need must say so rather than proceed as if it could. P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-4 built that refusal in nomos-agent-executor-claude-code (commit b147c162) and nowhere else. nomos-model-backend-ollama consumes the identical TaskEnvelope type and still accepts-and-ignores the field, and both are dispatched from the same match on the same envelope in nomos-agent-orchestration::run.rs and nomos-workflow-orchestration::run.rs. So a caller that declares a capability now gets a structural refusal or a silent drop depending only on which arm the backend flag selected, which is the contract-depends-on-the-vendor failure OD-EXECUTOR-007 exists to close. Ollama can grant no capability at all -- its own module doc says the model has no tool-use loop -- so the field is not merely unenforced there, it is unenforceable, which is exactly the case the record says must refuse. That crate documents the gap honestly rather than hiding it, so this is an unfinished mechanism rather than a concealed one.",
+      "done_when": "nomos-model-backend-ollama refuses a non-empty available_tools with a new AgentExecutionError::UnsupportedTools naming the capabilities, before any process is started, verified by a test that also proves nothing was dispatched; an empty list dispatches exactly as it does today; nomos-api's ollama error twin carries the new variant; both moved surface snapshots are re-blessed; and this crate's module doc no longer lists available_tools among the fields it accepts and ignores.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-model-backend-ollama/src/lib.rs",
+          "crates/agent/nomos-model-backend-ollama/src/agent_execution_error.rs",
+          "crates/agent/nomos-model-backend-ollama/src/tests.rs",
+          "crates/agent/nomos-model-backend-ollama/tests/integration_seams.rs",
+          "crates/host/nomos-api/src/workflow.rs",
+          "crates/host/nomos-cli/tests/model_backend_ollama_seam.rs",
+          "tests/contract/surface/nomos-model-backend-ollama.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-model-backend-ollama",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-model-backend-ollama",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "tale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-edce0034430d69a3.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-1da870d5dcc7bd73.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-cb3e049ca967cf9a.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-586b71f69871fb5c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-2798a4de35a5285e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-9605e43a7ba4051e.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-0d2658cfef36e1ed.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-dd110170cf7576e4.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-a074b1410fc3b879.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c1ad6c81408d535b.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-c8aa96e5af235abe.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-b03dbd257c9bac3c.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2ca57c1c434e3b40.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-725dffee8029b64d.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-c0ca678df5530871.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-d1f727837388cfcb.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-6a26573367b28197.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_model_backend_ollama-f7d754449438cdfd.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-7be0a1670801a056.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_model_backend_ollama\n",
+        "verified_at": 1789254783,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b147c1620232aa80af147f29ebd690e7007966d1"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P92-A-FIXTURE-WROTE-ANOTHER-CRATES-CAPABILITY-ID",
+      "title": "A test fixture wrote a capability id another crate owns, and the item that added it could not see the test that refuses this",
+      "why": "Commit b147c162 (P42-EXECUTOR-ENVELOPE-IMPLEMENTATION-4) added a fixture to crates/agent/nomos-agent-executor-claude-code/src/tests.rs naming CapabilityId::New(nomos.cap.syntax.items) to exercise the new UnsupportedTools refusal. That id belongs to nomos-cap-syntax, and tests/contract/tests/boundaries/capabilities.rs refuses any capability id written in more than one crate, on the ground that a capability contract is an agreement and an agreement is not the property of a party to it. The scan reads src/ trees, so a fixture under src/tests.rs counts exactly as production code does. nomos-contract-tests has been red at HEAD since that commit. The item that caused it could not have caught it: its own verification predicate named five crates and nomos-contract-tests was not among them, and the gate Lint step is clippy, which has nothing to say about this. Authored as a second disjoint claim beside P91 rather than by unwinding it, because the two territories do not overlap and re-authoring a mid-flight item would strand its work.",
+      "done_when": "The fixture names an id no other crate writes, following the nomos.cap.example.<purpose> convention this workspace's other test-only ids already use; tests/contract/tests/boundaries/capabilities.rs passes; and the refusal the fixture exercises is still asserted rather than weakened to make the boundary test pass.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-claude-code/src/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-agent-executor-claude-code"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-agent-executor-claude-code"
+        ],
+        "exit_code": 0,
+        "output_tail": " 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n   Compiling nomos-agent-executor-claude-code v0.1.0 (F:\\repos\\nomos\\crates\\agent\\nomos-agent-executor-claude-code)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_agent_executor_claude_code-6509bef98bbe1d3f.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-b5536ffc9e294a70.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-31027da778b71ca0.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-7472d4183c182701.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-1c3bc74f7d7be5c0.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-75607c87e2b2406d.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-f69bad71bff09f9b.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-da02b1b993b0c3a1.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-96ebb22bac2b2868.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-2e2c835f5bd04a16.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-14accc5dfc9a5eb1.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-ff997a53b980fbfa.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-ec29bf2e5126c955.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-1e0716f73f2778ad.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-f1bc1bab1bcd28b3.exe)\n   Doc-tests nomos_agent_executor_claude_code\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789254720,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b147c1620232aa80af147f29ebd690e7007966d1"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

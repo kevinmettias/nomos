@@ -307,6 +307,13 @@ pub enum OllamaExecutionErrorResponse
     {
         reason: String,
     },
+    /// The envelope declared capabilities no tool grant exists for, so nothing ran. Spelled
+    /// the same as its sibling's over the wire, because a caller meets one refusal for one
+    /// reason and should not have to learn which backend phrased it.
+    UnsupportedTools
+    {
+        capabilities: String,
+    },
 }
 
 impl OllamaExecutionErrorResponse
@@ -316,6 +323,7 @@ impl OllamaExecutionErrorResponse
         return match error
         {
             nomos_model_backend_ollama::AgentExecutionError::Unavailable(reason) => Self::Unavailable { reason },
+            nomos_model_backend_ollama::AgentExecutionError::UnsupportedTools(capabilities) => Self::UnsupportedTools { capabilities },
         };
     }
 }

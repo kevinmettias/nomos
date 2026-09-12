@@ -2,11 +2,15 @@
 
 /// Why `Execute` could not answer.
 ///
-/// One variant, unlike `nomos_agent_executor_claude_code::AgentExecutionError`'s two: this
+/// No `Unparseable`, unlike `nomos_agent_executor_claude_code::AgentExecutionError`: this
 /// backend's stdout is plain text, not a JSON document with fields that can be individually
 /// absent or malformed, so there is no distinct "ran cleanly but could not be parsed" case
 /// to keep apart from "did not run cleanly." A process that exits zero and produces *some*
 /// stdout is a valid response by construction; there is nothing further to fail to parse.
+///
+/// [`Self::UnsupportedTools`] *is* shared with that sibling, and deliberately: it is the
+/// envelope's own mechanism rather than either backend's, so a caller declaring a capability
+/// meets the same refusal whichever one a dispatch chose.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum AgentExecutionError
 {
@@ -20,6 +24,14 @@ pub enum AgentExecutionError
     /// if slow and noisy, failure this variant's string still names honestly rather than
     /// hiding behind a generic message).
     Unavailable(String),
+    /// `TaskEnvelope::available_tools` named capabilities this backend has no way to grant,
+    /// so the dispatch never ran. Carries the capabilities named.
+    ///
+    /// `OD-EXECUTOR-007`: a backend that cannot honor a declared need says so rather than
+    /// proceeding as if it could. Here the need is not merely unmet but unmeetable — this
+    /// backend runs one model turn with no tool-use loop at all, so there is no grant it
+    /// could ever make.
+    UnsupportedTools(String),
 }
 
 impl core::fmt::Display for AgentExecutionError
@@ -29,6 +41,10 @@ impl core::fmt::Display for AgentExecutionError
         return match self
         {
             Self::Unavailable(reason) => write!(formatter, "{reason}"),
+            Self::UnsupportedTools(capabilities) =>
+            {
+                write!(formatter, "no tool grant exists for {capabilities}")
+            }
         };
     }
 }
