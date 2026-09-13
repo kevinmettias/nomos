@@ -65797,7 +65797,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P41-RUN-STOPS-NAMING-EVERY-RULE-3, which reserves tests/contract/tests/rule_composition.rs as well and states a done_when that matches what OD-RULES-027 actually decided. No work is lost: the implementation carries over under the new item."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -65811,6 +65815,279 @@
           "nomos-rules"
         ],
         "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-dev-session",
+          "reason": "Territory and done_when were both wrong, measured by implementing it. tests/contract/tests/rule_composition.rs reads the composed set out of run_context.rs's own text, anchored on the string 'fn With_Composed_Rules', so deleting that function fails a test in a file this item did not reserve. And the done_when required that the only rule ids left in run_context.rs be the six of the capability-slice mapping, which is false and was false when written: OD-GATE-017's materialization axis legitimately names fifteen more, and OD-RULES-027 says in as many words that it does not disturb that axis. Re-authored as -3 with the fifth path and a done_when measured against the real file rather than assumed.",
+          "abandoned_at": 1789280462
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1789280462
+      }
+    },
+    {
+      "id": "P41-RUN-STOPS-NAMING-EVERY-RULE-3",
+      "title": "Run still names every rule, and OD-RULES-027 decided the derivation that stops it is available",
+      "why": "run_context.rs writes out seventy ComposedRule entries by hand while composition::Registered on the gate side already loops over nomos_rules::DESCRIPTORS. P41-RUN-STOPS-NAMING-EVERY-RULE was declined pending P74-RUN-ARRAY-DERIVATION-DISPOSITION, whose decline reason says the decision authors the implementation item if the derivation turns out to be available. OD-RULES-027 decided it is. This re-authors -2, which reserved four paths and stated a done_when that implementing it proved false twice over: the contract suite reads the composed set out of run_context.rs own text anchored on the name With_Composed_Rules, so deleting that function reddens a file -2 did not reserve; and the surviving rule identifiers are not six but twenty-one, because OD-GATE-017 materialization axis names fifteen more and OD-RULES-027 leaves that axis alone on purpose.",
+      "done_when": "nomos_rules::RuleDescriptor carries its rule check as a uniform fn pointer and DESCRIPTORS declares one per rule in the order a run executes them; run_context.rs calls no Check_ function, declares no rule count, and both its judging loop and Composed_Rules derive from DESCRIPTORS; the rule identifiers that file still names are exactly the twenty-one its two selection mappings need, being OD-GATE-017 fifteen materialization-feeding ones plus the six capability-slice ones OD-RULES-027 licensed; the contract suite reads the composed set from the descriptor table rather than from a function that no longer exists; and cargo test -p nomos-check-orchestration -p nomos-rules -p nomos-contract-tests passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "tests/contract/tests/rule_composition.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-dev-session",
+        "acquired_at": 1789280483,
+        "lease_expires_at": 1789294883
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-ARCHITECTURE-DECLARATION-IS-COMPILED-AND-DUPLICATED",
+      "title": "The layering declaration a dependency rule judges against is compiled into nomos-rules and duplicated, stale, in standards.json",
+      "why": "Check_Dependency_Direction judges every edge against ZONES and Permits in crates/rules/nomos-rules/src/checks/dependency/zones.rs, where ZONES is a Rust slice naming this workspace's own crates as string literals and Permits is a hand-written match. Two consequences, measured rather than argued. First, on any repository other than this one every member has no declared zone, so violations::Violations_In returns an empty vector at its own early exit and completeness::Violations_In emits one DEPENDENCY_COMPLETENESS finding per member: a foreign workspace gets a finding per crate saying it declared nothing, and silence on the layering question the rule exists to answer. Second, the declaration already exists a second time and has gone stale. standards.json declares a tiers array, authored by P26-DEPENDENCY-TIER-POLICY out of the README band table so code-standards' own dependency-direction check could read it. It names 50 paths under the band-N vocabulary OD-RULES-020 retired, and 16 of this workspace's 66 members have no entry at all: nomos-platform-xvpe, nomos-composer-std, nomos-lang-rust-compiler, nomos-repo-policy, the five nomos-cap policy contracts, nomos-connector-coderabbit, nomos-cap-requirement-trace, nomos-tool-package, nomos-workspace-discovery, nomos-correction-orchestration, nomos-agent-orchestration and nomos-lsp. Nothing in this workspace reads tiers, grepped: the only matches for the word are unrelated types in nomos-corrections and nomos-model-package. OD-RULES-011 already decided the shape a repository's own declared policy takes when a rule needs one -- it reaches the rule as a capability fact read from standards.json as data rather than compiled as a constant, and five families are built that way behind one provider in nomos-repo-policy. Whether the architecture declaration is a sixth family of that kind, or stays compiled because a zone table is this workspace's own architecture rather than a repository's policy, is undecided: no record argues either way, and the stale second copy is unowned while it is.",
+      "done_when": "A new governing record under OD-RULES decides whether the declaration Check_Dependency_Direction and Check_Dependency_Completeness read becomes a capability fact read from the repository under check -- an OD-RULES-011 sixth family, naming the contract identifier and which crate would offer it -- or stays compiled into nomos-rules, and gives its reason against the two measurements above rather than by analogy to the five existing families. It disposes of standards.json's tiers array explicitly, as one of: the declaration a provider would read, a second authority to delete, or code-standards' own input this workspace does not own -- and where it is kept, names what makes the 16-member gap visible rather than leaving the reconciliation unowned. It states what it does not do: no contract crate, no provider, no change to nomos-rules, no edit to standards.json. The record is registered at crates/spec/nomos-spec-store/records/OD-RULES-029.record so it is governing rather than merely written, and cargo test --no-fail-fast -p nomos-spec-store -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-029.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-RELATION-VOCABULARY-IS-ONE-TERM-IN-NINETY-THREE-PERCENT",
+      "title": "The record graph's typed vocabulary is one term in ninety-three percent of its edges, and that term is its own inverse",
+      "why": "The seeded relation vocabulary is enforced by name -- OD-SPEC-011 made an unknown term a diagnosable refusal rather than a foreign-key failure -- and every type carries a declared domain, range and cardinality plus an inverse it is paired with, so Write_Relation completes each authored edge with its inverse on the way in. Censused across all 227 files in docs/records: 820 authored edges, of which 763 are relates-to at 93.0 percent, 51 affects, 5 affected_by and 1 supersedes. Every record declares at least one edge, so there is no orphan. relates-to is paired with itself, so those 763 carry no direction, and the one relation projection this repository commits shows what that costs: diagrams/relations.mmd draws 1612 arrows, 1500 of them labelled relates-to, each authored pair appearing once in each direction with the same label, against 55 affects, 55 affected_by and one supersedes pair. A reader or an agent opening it to learn how these decisions stand to one another is given 1500 arrows that say only that two records are connected. No record says what relates-to means or when a more specific term is owed. Of the seeded terms no record uses, the last four -- answers, answered_by, implements, implemented_by -- declare corpus node kinds (design-spec, feature-request, feature-result) as their domain and range, so no record could carry them; superseded_by is declared over record kinds and appears only as the derived inverse of the single supersedes edge. P10-EDGE-CONSTRAINTS was declined on the ground that the constraint mechanism was missing and the corpus would supply the real vocabulary. The mechanism has since shipped: domain_kinds_json, range_kinds_json and max_per_node are enforced in store/write/relations.rs. What is unmeasured now is not the mechanism but whether the authoring feeding it is honest.",
+      "done_when": "A new governing record under OD-SPEC states the census above as measured -- 227 records, 820 authored edges, the four terms and their counts, and the 1612-arrow committed diagram -- and decides one of two things. Either relates-to is the honest term for a connection between two decisions, in which case the record names the cases where a specific term is owed instead and says why a 93 percent share is not a defect; or the record set owes a specific term where one applies, in which case it names the criterion by which a term is chosen and whether any mechanism will check it, without itself re-authoring 763 edges. Either way it states that the four corpus-scoped terms are unavailable to a record by their declared domain and range, so a reader stops reading their absence as neglect. It states what it does not do: no relation is re-authored, no seed table changes, no projection changes, and diagrams/relations.mmd is not regenerated for content reasons by this item. Registered at crates/spec/nomos-spec-store/records/OD-SPEC-015.record so it is governing rather than merely written, and cargo test --no-fail-fast -p nomos-spec-store -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md",
+          "crates/spec/nomos-spec-store/records/OD-SPEC-015.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-A-RECORDS-DECLARED-STATUS-CANNOT-BE-SELECTED",
+      "title": "A record's declared status is stored and cannot be selected, so ten open governing questions project as settled decisions",
+      "why": "Migration 5 created record_front_matter for the three fields the graph could not hold -- status, version and tags -- and authoring/write.rs fills it for every record the store seeds. Nothing reads status back out. nomos_spec_project::Filter carries eleven fields (kind, authority, representation, suite, document, revision, relation_type, disposition, row_kind, identifier_prefix, node_id) and none is status; the nodes selection in select/sections.rs reads node_id, kind, authority, representation, title and suite_id from nodes with no join to record_front_matter. So no profile can select on a record's lifecycle status and no projection can show it. Measured over docs/records: 227 records carry three values -- accepted 195, closed 22, open 10 -- and the ten open ones are this repository's own unanswered governing questions, among them OD-RULES-007 on a rule-program intermediate representation, OD-CAPABILITY-007 on a declared decline-with-reason, OD-SPEC-001 on the storage backend and OD-LEDGER-001 on territory being declared and not enforced. In spec/domain-specification.md, the one markdown projection this repository commits, those ten render beside the 195 accepted ones with nothing distinguishing them; the only occurrences of the word status in that file are the literal Status headings inside record bodies. The projection an agent is routed to therefore presents an open question as a settled decision, and the field that would have said otherwise is one join away.",
+      "done_when": "nomos_spec_project::Filter gains a status field. select.rs admits it for the content kinds that can answer it and refuses it through the existing ProjectError::UnsupportedFilter for the kinds that cannot, the same way an unsupported filter is already refused. The nodes selection joins record_front_matter so a status filter narrows on the value a record declared, and a node with no front-matter row (a referenced placeholder) is excluded rather than reported with an invented status. The shipped html-site profile gains a section selecting nodes whose declared status is open, so the field has a real consumer rather than a test-only one: html-site renders on a records-only store per OD-PROJECT-002 and is not a committed output per OD-PROJECT-003, so no freshness obligation and no committed projection moves. tests/projections/selection.rs gains a case proving a status filter over a real seeded store selects the open records and excludes the accepted ones, and a case proving the unsupported-kind refusal names the filter. tests/contract/surface/nomos-spec-project.txt is updated for the one new public field. cargo test --no-fail-fast -p nomos-spec-project -p nomos-contract-tests passes.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project/src/projection/filter.rs",
+          "crates/spec/nomos-spec-project/src/select.rs",
+          "crates/spec/nomos-spec-project/src/select/sections.rs",
+          "crates/spec/nomos-spec-project/src/select/query.rs",
+          "crates/spec/nomos-spec-project/profiles/html-site.json",
+          "crates/spec/nomos-spec-project/tests/projections/selection.rs",
+          "tests/contract/surface/nomos-spec-project.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-THE-HTML-PROJECTION-RESOLVES-NO-IDENTIFIER",
+      "title": "The HTML projection resolves no identifier, so it gives a reader strictly less than the markdown rendered from the same store",
+      "why": "Render_Html in crates/spec/nomos-spec-project/src/render.rs writes a head, one section element per profile section, and one article per item; Write_Article writes the item identity as an h3, its stated fields as a definition list, and its body in a pre. There is no anchor element anywhere in the renderer -- grepped: no a element, no href, no nav, no per-item id attribute -- so every identifier a projection carries is escaped text a reader cannot follow, including both endpoints of every row in the Relations section that traceability-matrix and subject-report select. Slug_Of_Text already exists and is spent only on the section id, so a section is addressable and an item is not. Two shipped profiles declare format html, html-site and subject-report, and both render this way. The markdown renderer beside it produces output GitHub resolves for the same content, so the html format currently gives a reader less than the format it was presumably added to improve on: no cross-reference, no backlink, no way to reach a record from the edge naming it. What an html projection must add over markdown is undecided -- OD-PROJECT-002 decided which projections are required and OD-PROJECT-003 what committing one costs, and neither answers this -- but the gap does not need a decision first: an identifier resolving to the item it names inside the same projection is what the format is for, and nothing about it is contested.",
+      "done_when": "Render_Html gives every item a stable id derived from its identity through the existing Slug_Of_Text, and renders an identifier naming another item in the same projection as a link to that item's id rather than as escaped text -- at minimum both endpoints of a Relations row. An identity no item in the projection carries stays plain text rather than becoming a dead link. Escaping is unchanged: an identity carrying an html-significant character is still escaped before it reaches an attribute or a body, and the escaping used for an attribute value is correct for that position rather than reusing the body escape unexamined. tests/projections/renderers.rs gains three cases: a relation endpoint present in the projection renders as a link to that item's id, an endpoint absent from it renders as text, and an identity carrying a character that would break an attribute is escaped there. Determinism does not move: the existing determinism contract still passes, so two renders of one store stay byte-identical. cargo test --no-fail-fast -p nomos-spec-project -p nomos-contract-tests passes.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project/src/render.rs",
+          "crates/spec/nomos-spec-project/tests/projections/renderers.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-LEDGER-VALIDATION-ADMITS-A-DEPENDENCY-CYCLE",
+      "title": "Ledger validation checks that a dependency resolves and not that the graph the dependencies form is acyclic",
+      "why": "Validate_Document runs five per-item checks and two document-wide ones: duplicate identifiers, dependencies naming an item the ledger does not hold, state coherence, predicate, territory, patterns, and overlapping claims. None looks at the shape of the dependency graph. Two items naming each other in depends_on, or any longer ring, is a valid document by this function and therefore loads -- Load refuses an invalid document and every verb loads first, so nothing downstream examines it again. A cycle then produces silence rather than an error. Every item in the ring lists as waiting, the label for a dependency that has not finished, and stays that way forever because no member can finish before another member that cannot finish either. The next line OD-LEDGER-023 computes from the whole board never names any of them. And stranded, the one label that says a dependency will never finish, is reserved by OD-LEDGER-020 for a declined dependency and does not fire here. Measured on the live board: 1148 items, no cycle, no self-dependency, no dangling dependency -- so this is a guard against a defect that has not happened rather than a repair, and a provably clean board is the cheapest moment to add one. The class is one this ledger already writes records about: a coordination document whose validator checks that a reference resolves and not that the structure those references form is usable. OD-LEDGER-038, on an item ended honestly leaving others silently unreachable, is the same failure mode reached by a different route.",
+      "done_when": "Validate_Document reports a violation for each dependency cycle in the document, naming the items in the ring in a stable order rather than emitting one violation per member, and the seven existing checks are unchanged in what they report. The violation text follows the existing convention in this file: it names the subject so a caller can act on it. A test in validation.rs proves it on four shapes -- a two-item mutual pair, a longer ring, a self-dependency named either as a cycle of one or as already covered by an existing check depending on which the implementation finds true, and an acyclic diamond that must not be reported, which is the negative control and must be confirmed red before the check is written. The live board still validates: nomos work validate exits 0 against work/ledger.json. cargo test --no-fail-fast -p nomos-ledger -p nomos-contract-tests passes.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/store/validation.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-THE-CONTEXT-PACK-SELECTS-THE-WHOLE-CORPUS",
+      "title": "The implementation context pack selects every decision and every statement, and selection cannot follow a relation at all",
+      "why": "implementation-context-pack is the one profile whose declared format is contextpack and whose output is context/implementation.json -- the shape meant to be an agent's focused context. Its three sections are every node of kind decision, every normative statement with no filter at all, and every prose block. Nothing scopes it to a task, a subject or a question. Selection cannot do better: Filter is a flat conjunction of equality, prefix and either-column clauses over one table, and no code path in select follows an edge. subject-dossier, the nearest thing to a scoped projection, selects the subject's own node, its own statements and its own relation rows, and those rows are listed rather than resolved, so a neighbour's content is never retrieved and a second hop does not exist. So the projection meant to be focused is the least focused one shipped, and an agent needing the record that governs the thing it is about to change must either read the whole decision set or already know the identifier -- which is the condition a context pack exists to remove. What a bounded traversal would have to settle is not obvious, which is why this is a decision before it is code: which relation terms are worth following at all given that 93 percent of this record graph's edges are relates-to and relates-to is its own inverse, whether the stop condition is a hop bound or a node budget, whether a record's declared status participates in what is followed, in what order reached content is emitted so two renders of one store stay byte-identical under the existing determinism contract, and whether reached content is inlined or cited by identity and section anchor.",
+      "done_when": "A new governing record under OD-PROJECT decides whether projection selection gains bounded relation traversal. If it does, the record fixes all five questions above: which terms are followed, the stop condition, whether declared status participates, the emission order that keeps rendering deterministic, and inlined content versus citation by identity and anchor. If it declines, it says what a caller does instead and measures that answer against what the shipped profiles can express today rather than against the idea of a context pack. Either way it states the three facts above as measured: the three unscoped sections of implementation-context-pack, the flat shape of Filter, and that subject-dossier lists relation rows without resolving them. It states what it does not do: no profile changes, no selection code, no new filter field, no renderer change. Registered at crates/spec/nomos-spec-store/records/OD-PROJECT-005.record so it is governing rather than merely written, and cargo test --no-fail-fast -p nomos-spec-store -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md",
+          "crates/spec/nomos-spec-store/records/OD-PROJECT-005.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
       },
       "verified": null,
       "abandoned": [],
