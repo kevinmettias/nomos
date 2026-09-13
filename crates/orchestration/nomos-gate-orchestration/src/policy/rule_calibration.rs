@@ -16,10 +16,12 @@ use nomos_contracts::{Finding, RuleId};
 /// triggered it, because calibration overrides a rule's category for this repository's
 /// adoption stage entirely -- the corpus's "not by forking rule implementations" language,
 /// expressed as configuration instead. No declared phases, thresholds or approvals here --
-/// `ADOPT-CONFIG-*`'s full corpus shape -- and no owner/approver/date fields, the same
-/// "nothing constructs one yet, so validating fields nothing populates would validate
-/// against nothing" discipline [`crate::BaselineDebt`]'s own doc already states for this
-/// crate.
+/// `ADOPT-CONFIG-*`'s full corpus shape -- and no owner/approver/date fields, on the reason
+/// [`crate::BaselineDebt`]'s own doc now gives: a declared `nomos-gate.json` is the real
+/// constructor since `P40-GATE-POLICY-AUTHORING-3`, and a calibration entry there is exactly
+/// `rule` and `rationale`. It names no path either, and for a reason of its own rather than
+/// the same one -- a calibration is the rule-wide override, so a path would suggest a
+/// narrowing it does not perform.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct RuleCalibration
 {

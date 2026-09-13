@@ -12,9 +12,17 @@ use nomos_contracts::{Finding, RuleId, SubjectId};
 /// [`Finding`] already carries -- no second addressing scheme invented for the same
 /// question. Deliberately narrower than `BASELINE-*`'s full shape: no new-code/diff
 /// detection, no distinction from a reintroduced or safety-critical finding, and no
-/// owner/approver/date fields -- the same "nothing constructs one yet, so validating
-/// fields nothing populates would validate against nothing" discipline
-/// [`crate::Suppression`]'s own doc already states for this crate. A named entry here is a
+/// owner/approver/date fields. That last omission is a choice against a real alternative
+/// rather than an absence waiting on one: `P40-GATE-POLICY-AUTHORING-3` made a declared
+/// `nomos-gate.json` the real constructor of these, and a debt entry there is exactly
+/// `rule`, `path` and `rationale`. [`crate::Suppression`] is the contrast that shows the
+/// difference is deliberate -- it carries an `owner` and the same file reads it -- so an
+/// author who wants a debt attributed is being told no rather than overlooked, and
+/// `deny_unknown_fields` makes writing one a refusal rather than a silent drop.
+///
+/// What would justify widening is a declared file that has to attribute or expire a
+/// tolerance, in the order `Suppression::owner` already followed: the key appears on the
+/// declared entry first, and this type grows a field to carry it. A named entry here is a
 /// closed, specific piece of debt, not a scope a diff could grow or shrink; scoping by
 /// source geometry and revision is a later increment's concern, once a real caller needs
 /// one.
