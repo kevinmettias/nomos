@@ -151,6 +151,7 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
         run,
         check_outcome: outcome,
         findings: reduced.findings,
+        unmatched_policy: reduced.unmatched_policy,
         // A policy file that exists and could not be turned into a policy refuses the run
         // rather than letting it report a disposition reached under policy nobody authored.
         // The judgment above still happens and `check_outcome` still carries it in full, so a
@@ -204,6 +205,7 @@ struct Reduction
 {
     findings: GateFindings,
     disposition: GateRunOutcome,
+    unmatched_policy: Vec<String>,
 }
 
 /// The blocking findings, the findings an `AdoptionPolicy` calibration kept from blocking,
@@ -221,6 +223,41 @@ struct Reduction
 /// "does this blocking finding still block," a question about one finding at a time, while
 /// `coverage` answers "did this run reach a judgment about everything it selected," a
 /// question about the run as a whole.
+/// Every declared entry that no finding in `selected` matched, described for a reader.
+///
+/// `OD-GATE-024`'s one clause that survived its own retraction: an entry matching nothing is
+/// reported rather than silently ignored. Against the findings a run actually *selected*,
+/// not every finding it judged, because an entry for a rule the caller deselected did not
+/// fail to match -- it was never asked.
+fn Unmatched_Entries(selected: &[Finding], policies: DispositionPolicies<'_>) -> Vec<String>
+{
+    let mut unmatched = Vec::new();
+
+    for suppression in &policies.suppressions.suppressions
+    {
+        if !selected.iter().any(|finding| return suppression.Is_Applicable_To(finding))
+        {
+            unmatched.push(format!("suppression for `{}` matched nothing", suppression.rule));
+        }
+    }
+    for debt in &policies.baseline.debt
+    {
+        if !selected.iter().any(|finding| return debt.Is_Applicable_To(finding))
+        {
+            unmatched.push(format!("baseline entry for `{}` matched nothing", debt.rule));
+        }
+    }
+    for calibration in &policies.adoption.calibrated
+    {
+        if !selected.iter().any(|finding| return calibration.Is_Applicable_To(finding))
+        {
+            unmatched.push(format!("calibration for `{}` matched nothing", calibration.rule));
+        }
+    }
+
+    return unmatched;
+}
+
 fn Reduced_Findings(
     outcome: &CheckOutcome,
     rules: &RuleSelector,
@@ -238,7 +275,9 @@ fn Reduced_Findings(
     let findings = Partitioned_Findings(&selected, policies);
     let disposition = Reduced_With_Coverage(Disposition_Of_Findings(&findings.blocking_findings), coverage, &selected);
 
-    return Reduction { findings, disposition };
+    let unmatched_policy = Unmatched_Entries(&selected, policies);
+
+    return Reduction { findings, disposition, unmatched_policy };
 }
 
 /// [`Reduced_Findings`]'s own result when `outcome` was never judged -- nothing was found, so
@@ -254,6 +293,8 @@ fn Unjudged() -> Reduction
             baselined_findings: Vec::new(),
         },
         disposition: GateRunOutcome::Indeterminate,
+        // Nothing was judged, so no entry failed to match -- none was asked.
+        unmatched_policy: Vec::new(),
     };
 }
 

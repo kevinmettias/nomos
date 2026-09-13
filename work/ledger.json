@@ -64972,7 +64972,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -64989,7 +64989,31 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "3.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-1da870d5dcc7bd73.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-cb3e049ca967cf9a.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-586b71f69871fb5c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-2798a4de35a5285e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-9605e43a7ba4051e.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-0d2658cfef36e1ed.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-dd110170cf7576e4.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-a074b1410fc3b879.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c1ad6c81408d535b.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-c8aa96e5af235abe.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-b03dbd257c9bac3c.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2ca57c1c434e3b40.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-725dffee8029b64d.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-c0ca678df5530871.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-d1f727837388cfcb.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-6a26573367b28197.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-efc995b9467d3a34.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-41b5cba870fb12b1.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-9473a6b62ef541c8.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1789270836,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "69a0a291209f48c31528e17c999a08f052732b13"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -65500,6 +65524,59 @@
           "exit_code": 0
         },
         "revision": "7f309c5da308d38d0567d97b2f1c2880c64ca7c0"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P76-UNMATCHED-POLICY-FIXTURE-AND-TESTS",
+      "title": "A GateRunResult fixture and the gate crate's own tests follow the new unmatched-policy field",
+      "why": "P76-A-POLICY-ENTRY-THAT-MATCHED-NOTHING-IS-REPORTED-2 adds GateRunResult::unmatched_policy, which every construction of that struct must supply and which the two tests proving the behaviour live beside. gate_compare.rs builds a GateRunResult in its own fixture and src/tests.rs is where the gate crate's tests are written; neither is in that item's territory, which reserved gate_environment.rs, gate_plan/gate_run_result.rs, nomos-cli's gate report and the surface snapshot. Authored after the fact rather than pretended away: the work is in the tree and its predicate covers it, and a Done item whose changes reach files it never reserved is exactly the bookkeeping this board exists to keep honest.",
+      "done_when": "gate_compare.rs's fixture supplies the field, src/tests.rs carries the two tests proving an entry that matched nothing is reported and one that matched is not, and cargo test -p nomos-gate-orchestration passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "Test_A_Narrowed_Run_And_A_Whole_Run_Should_Agree_About_A_Declared_Module ... ok\ntest tests::Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrated ... ok\ntest tests::Test_A_Baselined_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Suppressed_Finding_Should_Not_Block ... ok\ntest tests::Test_Explain_Should_Report_A_Calibration_That_Applies ... ok\n\ntest result: ok. 95 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 37.35s\n\n\nrunning 4 tests\ntest Test_Run_Gate_Should_Report_An_Unreadable_Check_Outcome_As_Indeterminate ... ok\ntest Test_Run_Gate_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified ... ok\ntest Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestration_Seam ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.11s\n\n\nrunning 4 tests\ntest Test_Disposition_Of_Findings_Should_Fail_On_A_Blocking_Finding ... ok\ntest Test_Disposition_Of_Findings_Should_Fail_With_One_Blocking_Finding_Among_Many ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_When_Nothing_Can_Fail_A_Build ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_With_No_Findings ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.49s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-4281b14ceca8e621.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-23ff7cc352e6b2e5.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-8bad2a3e6bf12a8f.exe)\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1789270907,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "69a0a291209f48c31528e17c999a08f052732b13"
       },
       "abandoned": [],
       "displaced": [],

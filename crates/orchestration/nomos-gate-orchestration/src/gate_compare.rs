@@ -275,6 +275,7 @@ mod tests
     fn Result_With(run: RunId, findings: GateFindings) -> GateRunResult
     {
         return GateRunResult {
+            unmatched_policy: Vec::new(),
             run,
             root: std::path::PathBuf::from("."),
             check_outcome: nomos_check_orchestration::CheckOutcome::NoSource,

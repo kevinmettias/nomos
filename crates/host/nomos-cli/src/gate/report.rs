@@ -127,7 +127,33 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
         result.findings.baselined_findings.len()
     );
 
+    Report_Unmatched_Policy(result, stdout);
+
     return Exit_Code_For(result.disposition);
+}
+
+/// Names every declared policy entry that matched no finding in this run.
+///
+/// `OD-GATE-024`: an entry that matches nothing is reported rather than silently ignored,
+/// because an author who wrote one cannot otherwise tell a mis-spelling from a finding that
+/// has since been fixed. It does not change the exit code — a policy legitimately outlives
+/// the finding it was written for, and a repository whose debt was paid must not fail its
+/// own gate for having paid it.
+///
+/// Silent when every entry matched, and when none was declared: a header over an empty list
+/// on every clean run is the noise that teaches a reader to skip the line that matters.
+fn Report_Unmatched_Policy(result: &GateRunResult, stdout: &mut impl Write)
+{
+    if result.unmatched_policy.is_empty()
+    {
+        return;
+    }
+
+    let _ = writeln!(stdout, "\ndeclared policy that matched nothing:");
+    for entry in &result.unmatched_policy
+    {
+        let _ = writeln!(stdout, "  {entry}");
+    }
 }
 
 /// Renders what [`nomos_gate_orchestration::Compare_Gate_Runs`] answered for `compare`.
@@ -423,6 +449,7 @@ mod tests
     fn Test_Render_Run_Should_Report_Vacuous_When_The_Check_Outcome_Never_Reached_Judged()
     {
         let result = GateRunResult {
+            unmatched_policy: Vec::new(),
             run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
             root: PathBuf::from("does/not/matter"),
             check_outcome: CheckOutcome::NoSource,
@@ -447,6 +474,7 @@ mod tests
     {
         let run = Fresh_Run_Id(Timestamp::From_Unix_Seconds(0));
         let result = GateRunResult {
+            unmatched_policy: Vec::new(),
             run,
             root: PathBuf::from("."),
             check_outcome: CheckOutcome::Judged {
@@ -476,6 +504,7 @@ mod tests
     {
         let finding = Example_Finding(GateCategory::Blocking);
         let result = GateRunResult {
+            unmatched_policy: Vec::new(),
             run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
             root: PathBuf::from("."),
             check_outcome: CheckOutcome::Judged {

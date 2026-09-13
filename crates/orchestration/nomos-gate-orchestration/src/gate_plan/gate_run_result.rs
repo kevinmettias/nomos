@@ -36,4 +36,17 @@ pub struct GateRunResult
     /// still carries every finding this run reduced, in full, regardless of what any phase
     /// decided about them.
     pub disposition: GateRunOutcome,
+    /// Every declared policy entry that matched no finding in this run, described as a
+    /// reader would need to find it in the file that declares it.
+    ///
+    /// Not a failure. A policy legitimately outlives the finding it was written for, and a
+    /// repository whose debt was paid must not fail its own gate for having paid it. But it
+    /// is never silent either: `OD-GATE-024` was filed because an author who writes an entry
+    /// that matches nothing gets no error, no warning and no effect, and cannot tell a
+    /// mis-spelling from a finding that has since been fixed.
+    ///
+    /// Text rather than a typed entry, deliberately. This is a report line — the identity a
+    /// caller would match on is already in the policy the entry came from, and duplicating
+    /// it here would be a second addressing scheme for the same question.
+    pub unmatched_policy: Vec<String>,
 }

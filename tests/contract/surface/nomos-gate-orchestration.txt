@@ -101,6 +101,7 @@ pub struct field nomos_gate_orchestration::GateRunResult::disposition: GateRunOu
 pub struct field nomos_gate_orchestration::GateRunResult::findings: GateFindings
 pub struct field nomos_gate_orchestration::GateRunResult::root: PathBuf
 pub struct field nomos_gate_orchestration::GateRunResult::run: RunId
+pub struct field nomos_gate_orchestration::GateRunResult::unmatched_policy: Vec<String>
 pub struct field nomos_gate_orchestration::PhaseApproval::phase: String
 pub struct field nomos_gate_orchestration::PhaseApproval::rationale: String
 pub struct field nomos_gate_orchestration::PhaseOutcome::approved: bool

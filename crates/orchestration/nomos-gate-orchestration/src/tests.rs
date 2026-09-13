@@ -1002,3 +1002,51 @@ fn Orphan_Findings_Of(sources: Vec<SourceFile>, command: &GateCommand) -> Vec<St
         .map(|finding| return finding.subject_name.clone())
         .collect();
 }
+
+/// `OD-GATE-024`'s surviving clause: an entry that matched no finding is named, so an author
+/// can tell a mis-spelling from a finding that has since been fixed.
+#[test]
+fn Test_A_Declared_Entry_Matching_No_Finding_Should_Be_Reported()
+{
+    let unreachable = Suppression {
+        rule: RuleId::New("no-single-line-function-bodies"),
+        subject: Subject_Of_Path("a-file-this-run-never-saw.rs"),
+        disposition: SuppressionDisposition::FalsePositiveDisposition,
+        rationale: "test fixture".to_owned(),
+        owner: "test".to_owned(),
+    };
+    let command = Command_With_Suppression(Repository_Root(), unreachable);
+
+    let result = Run_Gate(
+        Some(vec![Source("b.rs", "pub fn Named() {}\n")]),
+        GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment },
+        &command,
+        Test_Run_Id(),
+    );
+
+    assert_eq!(result.unmatched_policy.len(), 1, "{:?}", result.unmatched_policy);
+    let named = result.unmatched_policy.first().expect("asserted len 1 above");
+    assert!(named.contains("no-single-line-function-bodies"), "{named}");
+    // Reported, not failed: a policy legitimately outlives the finding it was written for.
+    assert_ne!(result.disposition, GateRunOutcome::Indeterminate, "an unmatched entry must not refuse the run");
+}
+
+/// The other half, without which the assertion above is satisfied by naming every entry: an
+/// entry that did match its finding is not reported as unmatched.
+#[test]
+fn Test_A_Declared_Entry_That_Matched_Should_Not_Be_Reported_As_Unmatched()
+{
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n");
+    let real_finding = One_Real_Blocking_Finding(source);
+    let command = Command_With_Suppression(Repository_Root(), Suppression_Of(&real_finding));
+
+    let result = Run_Gate(
+        Some(vec![source()]),
+        GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment },
+        &command,
+        Test_Run_Id(),
+    );
+
+    assert!(!result.findings.suppressed_findings.is_empty(), "the fixture's own suppression must have matched");
+    assert!(result.unmatched_policy.is_empty(), "{:?}", result.unmatched_policy);
+}
