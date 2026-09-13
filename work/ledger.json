@@ -66536,7 +66536,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -66551,6 +66551,103 @@
           "nomos-contract-tests"
         ],
         "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.27s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-1d28294da7ccfd5c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-8ea3cb7fd6a0f525.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-d047a80aa7f2318b.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fc7f3114650a3027.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-c166af22a1e42cb3.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-7bca6c85e7186a29.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-d41551fea154d6cc.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-3fb338c970b0e631.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-15afe485737c906b.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-677b0d50cc26c095.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-d1453c60403f001f.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-e256273955311a9e.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-115a2761f72faa7b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-fb1c20a2af433cc4.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-91dbb605c0c2c1f6.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-ed30fea2b99fbd8e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-e8c56575d59b7830.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789287089,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f1060f5103c87f8e566646577fc8f2ee837f5aa4"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-FIVE-RECORDS-CITE-A-TEST-THAT-NEVER-EXISTED",
+      "title": "Five governing records assert coverage by a test name that resolves to nothing, and the committed projection republishes each one",
+      "why": "OD-SPEC-017 censused every test name cited in prose across 229 records: 178 distinct names, 28 unresolved, of which nine are line-wrap truncations and five are prose-declared placeholders. Of the 14 real ones, six are renames with an obvious surviving successor and two are already annotated at the site they left. Five resolve to nothing and nothing anywhere notes it: Test_A_Lapsed_Item_Should_Refuse_A_New_Holder_And_Keep_The_Old_One_Visible in OD-LEDGER-012, Test_A_Held_Pattern_Should_Refuse_Every_Other_Claim_On_The_Board and Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held in OD-LEDGER-013, Test_A_Phantom_Mirror_Should_Fail_The_Command in OD-GATE-004, and Test_No_Strength_Should_Refuse_A_Trace_Claim in OD-ANALYSIS-006. Each appears in exactly two files, its own record and spec/domain-specification.md, so the committed projection republishes the claim. D-134 already ranks a false claim of coverage above an admitted gap, and this is that claim one indirection further from the reader.",
+      "done_when": "For each of the five, the citation is resolved: either the surviving test it became is named in an amendment to its own record, or the record says the test no longer exists and why, or the test is rebuilt. Which of the three is chosen is decided per citation by looking at what the cited test was asserting and whether that assertion still holds, not by one blanket edit. Both projections are re-rendered because record bodies moved. cargo test --no-fail-fast -p nomos-spec-store -p nomos-contract-tests passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-012-a-lapse-is-taken-over-and-the-claim-it-replaces-is-kept.md",
+          "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md",
+          "docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md",
+          "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-A-RECORDS-TEST-CITATIONS-ARE-RESOLVED-BY-A-GUARD",
+      "title": "A test name cited in a governing record is resolved against the workspace, the way a declared mirror already is",
+      "why": "OD-SPEC-017 decided a test name cited in a record is a live reference and named the shape that resolves it: a contract test of tests/contract/tests/rule_contract_citation.rs's shape -- one that reads records' own content and checks it against the workspace -- using checks/mirror.rs's resolution, a declared name resolved against real parsed fn Test_ functions. Not a new rule and not a new capability. The record also names the two exclusions as requirements rather than conveniences, both measured: nine of the 28 unresolved names are line-wrap truncations and every one of them ends in an underscore, so a guard that reports them is wrong nine times before it is right once; and five are prose-declared placeholders, so prose needs a way to say a name deliberately does not exist that is not the guard happening to miss it.",
+      "done_when": "A test under tests/contract resolves every Test_ name cited in prose across docs/records against the real fn Test_ functions in this workspace, and fails on one that resolves to nothing. It excludes a name ending in an underscore as a line-wrap truncation and says in its own text why that exclusion is not a hole. It gives prose a stated way to declare a name deliberately absent and exercises that path, rather than hard-coding the five placeholders. It is green against the tree at the time it lands, which means it lands after P95-FIVE-RECORDS-CITE-A-TEST-THAT-NEVER-EXISTED or names those five as the debt it is measured against. cargo test --no-fail-fast -p nomos-contract-tests passes.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/record_citation.rs",
+          "tests/contract/tests/corpus_gates.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P95-FIVE-RECORDS-CITE-A-TEST-THAT-NEVER-EXISTED"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
       },
       "verified": null,
       "abandoned": [],

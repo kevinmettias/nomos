@@ -225,6 +225,7 @@ profile: domain-specification
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md@authored | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md | authored | 41 | 13 | sha256:8dcf5d25a7f6914387cc79e86eeb50d23edb944694fefdfdefc1d1cd468ae003 |
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md@authored | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md | authored | 14 | 5 | sha256:227009cdd4296112242bd4f960cab6549a198a1359f288aca43bbec584cc5247 |
 | docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md@authored | docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md | authored | 36 | 10 | sha256:0a6d2a8d267b11294fae15ddfc5418b3015cf7f3996d29b1f1f013026f6ca5cc |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md@authored | docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md | authored | 43 | 12 | sha256:362f678527ab18efc705043a86f1dfa1711631784e6f083bea3f294da71e4fa8 |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md@authored | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md | authored | 28 | 8 | sha256:3e2b7309bfc8cd5f7083b3e96924cffe4cebfbd23f7d604f7c1b5fe8d4c339fa |
 | docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md@authored | docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md | authored | 29 | 9 | sha256:c6a7a7c0db9ecc42434859889d7851a22f1a4349bfc2b6b0855b281638738901 |
 | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md@authored | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md | authored | 29 | 8 | sha256:1c14ec80ab265a141f114e04b9391559cf6eda8cba021361e8dd4ee10aee41cf |
@@ -1989,6 +1990,18 @@ profile: domain-specification
 | docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#28 | authored | 3 | Why it is not paid now |
 | docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#31 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#35 | authored | 2 | Status |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#1 | authored | 1 | What a citation inside a governing record is owed when the site it names has moved or gone |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#2 | authored | 2 | Question |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#8 | authored | 3 | Test names |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#17 | authored | 3 | Paths |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#21 | authored | 2 | The Decision |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#24 | authored | 3 | Why a test name is live |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#27 | authored | 3 | Why a path is not |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#30 | authored | 3 | Which mechanism resolves a test name |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#34 | authored | 3 | The five are disposed of, and the tombstone is the convention |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#37 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#42 | authored | 2 | Status |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#1 | authored | 1 | A document kind is a behaviour, not a label — and one of them was misnamed |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#2 | authored | 2 | Question |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#5 | authored | 2 | The Criterion |
@@ -58435,6 +58448,341 @@ of taking it again.
 Accepted. The connection stays public; named operations are refused at 159 statements; the
 seam `OD-SPEC-001` would need is five operations wide and blocked by 84 type mentions and 8
 statements, not by 107 call sites; and it waits on the backend that would consume it.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#1
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone · hash: sha256:ba85ad325fb28acc0193226eeb122453ab406b20d455d5a1194632466693dbac*
+
+# What a citation inside a governing record is owed when the site it names has moved or gone
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#2
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#3
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Question · hash: sha256:f6363441eadeadbdd6ea2f583d633d368fc96c31c8863e25d2e98fd9ceef9161*
+
+`AGENTS.md` sends every agent to `docs/records/` for why something was decided, and those
+records cite the tree constantly — a test by name, a file by path, a symbol. Nothing resolves
+any of it. A record may name a test that no longer exists and a file that was deleted, and
+the only way to find out is to go looking.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#4
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Question · hash: sha256:8438df3b0004159411f1f318ef28c0570d2032cebd5ccb703db66d9d80385285*
+
+The same claim in a code doc comment is already resolved. `checks/mirror.rs` reads a declared
+mirror out of a doc comment and resolves it against real parsed test functions, and `D-134`
+ranks the failure deliberately: a name that resolves to nothing is `Blocking` and fails the
+command, while a universe admitting it has no mirror is only `Advisory`. The asymmetry is
+stated there — a phantom is worse than declaring no enforcer at all, because a false claim of
+coverage is worse than a hole somebody wrote down.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#5
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Question · hash: sha256:3a872a5b72d1c4bcc63cb346b31bc51ce7cb83b35229bc6b250c740d4c5ac239*
+
+Records make claims of exactly that kind and are held to none of it.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#6
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#7
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured · hash: sha256:48d16e25f03160189c16cd51e1e5654de633c4ad4ff6b0865ac9672868a5cd21*
+
+Measured 2026-09-13 over all 229 files in `docs/records/`, against the whole workspace.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#8
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured / Test names · hash: sha256:f1f76cdb2d5e08dc84b1e97879c24f1fd4be72682671446b02dc56834bc65797*
+
+### Test names
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#9
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured / Test names · hash: sha256:4827253c99e8a22ad8382461378a82b17d14304f67d3c108b44fc1c7ad8c966d*
+
+4,079 real `fn Test_*` exist in the tree. 83 records name at least one test in prose, 178
+distinct names, and **28 resolve to no `fn Test_` anywhere**.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#10
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured / Test names · hash: sha256:a47ddd2052639c96fbcfa92a5c0d3494a6ecaef04c62cd91a4bc861c7b25c8a2*
+
+Two of those 28 are artefacts of reading rather than defects, and both have to be named
+because a guard written without them reports 14 false phantoms on its first run:
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#11
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured / Test names · hash: sha256:9449840fd035dc1439b2e84993d4d6db73c5869d6a88b9977f93574577d0729d*
+
+- **Nine are truncations.** A name broken across a line wrap leaves a fragment ending in `_`
+  — `Test_Registered_`, `Test_A_Capability_Id_Should_Be_`, `Test_The_Registry_Should_Match_The_`.
+  Every one of the nine ends in an underscore, and every one has a real test whose name it
+  is a prefix of.
+- **Five are deliberate non-existence.** `Test_A_Check_That_Does_Not_Exist_Anywhere_In_This_Tree`,
+  `Test_This_Check_Does_Not_Exist_Anywhere`, `Test_Anything`, `Test_Name`, `Test_X_And_More` —
+  each in prose that says outright it is a placeholder or a fixture.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#12
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured / Test names · hash: sha256:0a5a0641c283c2c983954578fb6e185cb39836d3b6414187a75830c1ea2ca684*
+
+That leaves **14 real dead citations**, which fall into three groups:
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#13
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured / Test names · hash: sha256:8b47850a98ce53f3dd1475360c0c74dae906ce13a823b2d90682ef8430ce68cc*
+
+| what it is | count | example |
+|---|---|---|
+| a rename with an obvious surviving successor | 6 | `..._Read_Off_The_Doc_Comment` against the real `..._Read_Off_The_Documentation_Comment`, which is `OD-RULES-017`'s own abbreviation rename; `..._Should_Match_The_Manifesto` against `..._Should_Match_The_Manifest`; `..._Offer_All_Eight_Shipped_Rules` against `..._Offer_Every_Composed_Rule` |
+| a rename whose successor changed subject too | 1 | `Test_Two_Items_Writing_Different_Records_Should_Be_Claimable_At_Once` |
+| **retired, and the code says so at the site** | 2 | `graph.rs` carries "`Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` was here, and is retired as of 2026-09-10 by the owner's decision"; `declarations.rs` carries a "# Why this test was renamed" section naming the old name and the record that cites it |
+| **resolves to nothing, and nothing anywhere notes it** | 5 | below |
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#14
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured / Test names · hash: sha256:7df0a0f1df35f95ae8588b71e598c6d1887ce112efe0837b82ffa8094abdc6a3*
+
+The five:
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#15
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured / Test names · hash: sha256:368cea96693afda2de56739f42fa4a71faac204201dce4a8457881eb590b69bc*
+
+| citation | cited by |
+|---|---|
+| `Test_A_Lapsed_Item_Should_Refuse_A_New_Holder_And_Keep_The_Old_One_Visible` | `OD-LEDGER-012` |
+| `Test_A_Held_Pattern_Should_Refuse_Every_Other_Claim_On_The_Board` | `OD-LEDGER-013` |
+| `Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held` | `OD-LEDGER-013` |
+| `Test_A_Phantom_Mirror_Should_Fail_The_Command` | `OD-GATE-004` |
+| `Test_No_Strength_Should_Refuse_A_Trace_Claim` | `OD-ANALYSIS-006` |
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#16
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured / Test names · hash: sha256:0422763611f2747f00f9367df67b6be0106cd0df6c94ebb968a4bad846491fd4*
+
+Each appears in exactly two files: its own record, and `spec/domain-specification.md`. The
+committed projection republishes every one of them.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#17
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured / Paths · hash: sha256:8d50101137b43f304b7893484e58c1e1aaca3c93a89128b8ae99c19d459de76b*
+
+### Paths
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#18
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured / Paths · hash: sha256:c13c214df1a92c3c85cd4db8bc8da952b380a4d7737755459eaef78376e29658*
+
+**253 repository-rooted cited paths carry a file extension, and 80 do not exist** — measured
+by taking paths whose first segment is a real top-level entry of this repository, discarding
+ellipsis-truncated fragments and relative ones. The looser reading that admits those gives
+357 and 184; the method is recorded here because the two numbers differ by a factor the
+conclusion does not, and a later reader deserves to know which was counted.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#19
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured / Paths · hash: sha256:53d3d1174dbe8ea90bcc74cf2546eeaa1b999e51e59cc074c13254335990f44e*
+
+The 80 come from three causes, not one, and all three are honest history:
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#20
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What Was Measured / Paths · hash: sha256:1d10d77bd2c36adf303aa1e26692e5fb14e203435451b5c92984241f4177b0fa*
+
+- **A module was reorganized.** `nomos-contracts/src/finding/applicability.rs` is now
+  `src/reporting/finding/applicability.rs`.
+- **A crate was renamed.** `crates/agent/nomos-agent-executor/src/lib.rs` and
+  `nomos-agent-executor-ollama` name crates that no longer exist under those names.
+- **The architecture deleted the file.** `crates/host/nomos-lsp/src/server.rs` went when
+  `OD-HOST-013` moved the protocol to the xvpe backend.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#21
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#22
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision · hash: sha256:132244cd04e8017bed842b88184373a2a25c1aa1a0d4a8359695749cd8bb6219*
+
+**A citation is a live reference, and the one kind in scope is the test name. A path citation
+is a historical statement that may age, and this record says so plainly so that no later
+reader treats a dead path as a defect.**
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#23
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision · hash: sha256:7349f83f5f98a7a2c9fc62a5f2f858ac4460364a11f24886aac02ac7b4d5fc5b*
+
+Both halves follow from what was measured, and they differ because the two kinds of citation
+make different claims.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#24
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision / Why a test name is live · hash: sha256:11c6b12f2a689a61e7250274742f54496040552eabdeb14e90810f0e6ea0d385*
+
+### Why a test name is live
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#25
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision / Why a test name is live · hash: sha256:65589a071d2fe8ef1815745950a55e2fdb665bb97293119fd36b4f1533c4c9fb*
+
+A test name is a claim about **coverage** — this is proven, and here is the proof. `D-134`
+already decided what a false coverage claim is worth relative to an admitted gap, and decided
+it against the same failure in a different file: a phantom is `Blocking`, a declared absence
+is `Advisory`, because "a false claim of coverage is worse than a hole somebody wrote down."
+A record asserting a test that does not exist is that phantom, one indirection further from
+the reader and republished by the committed projection.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#26
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision / Why a test name is live · hash: sha256:8ade9b032ab9ccefda8b6c59db6e63465a44ac3ee835901010d5c959f3b6bb13*
+
+The population supports holding them to it. 14 of 178 is 8 per cent, six of those are
+mechanical renames, and two are already annotated at the site. The cost of making the claim
+live is small and bounded, and it is smallest now.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#27
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision / Why a path is not · hash: sha256:0d1ef91486b1addde0a7ba9cc500dcb3c1f053f0878286c23c666b4aea83a07f*
+
+### Why a path is not
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#28
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision / Why a path is not · hash: sha256:e8414d0ecbf6a66c55eb500edc5aedc555db4939d2bb908198f47d3be5fd39a8*
+
+A path citation is a claim about **where something was when the record was written**, and a
+record is dated. 80 of 253 is nearly a third, and every cause measured is a legitimate change
+to the tree rather than an error in the record. Holding paths live would make every module
+reorganization and every crate rename a record-editing exercise across accepted records whose
+reasoning did not change — which trades a small reading cost for a large authoring one, and
+invites the worse failure of editing a record's history to keep a footnote resolving.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#29
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision / Why a path is not · hash: sha256:d90751722523eb192215ff148f3068bf07aad2db379f84ecd052aa95d765586b*
+
+So: **a dead path in a record is not a defect and is not to be filed as one.** A reader who
+finds one reads the record's date, takes the path as where the thing was then, and takes the
+tree as the authority on where it is now. If the reader wants the move recorded, the place
+for that is the record that moved it, not an edit to the record that cited it.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#30
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision / Which mechanism resolves a test name · hash: sha256:5bd66e7a1ee9b62dd9ef3c1c20b37ab50c5457312ca0ae0a7f0a5455fe840bc7*
+
+### Which mechanism resolves a test name
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#31
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision / Which mechanism resolves a test name · hash: sha256:9b2cb11c11aa759ba3d97922206c34c04fde04d55d314c58aa8377cb669ed80c*
+
+The shape `tests/contract/tests/rule_contract_citation.rs` already uses: a contract test that
+reads records' own content and checks it against the workspace. Not a new rule, not a new
+capability, and not a third mechanism — `mirror.rs` supplies the resolution idea (a declared
+name resolved against real parsed `fn Test_*`) and that file supplies the shape (a test that
+reads records).
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#32
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision / Which mechanism resolves a test name · hash: sha256:2dea7fbc8ab371d46da7a9345d48aa2be223f429ae715d427c3c05021db5913c*
+
+Whatever builds it inherits the two exclusions above as requirements, not as conveniences:
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#33
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision / Which mechanism resolves a test name · hash: sha256:d00e010816e4931a370900fb24883da4986629a1fc1db6d7ff1bb4c997015fd6*
+
+1. **A name ending in `_` is a line-wrap truncation, not a citation.** Nine of the 28 measured
+   are exactly this. A guard that reports them is wrong nine times before it is right once.
+2. **A record may name a test that deliberately does not exist**, and five do. The guard needs
+   a way for prose to say so which is not "the guard happens not to look there".
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#34
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision / The five are disposed of, and the tombstone is the convention · hash: sha256:4a6a1a11d0861a38cc5ed4733757b7f7264b145de1bcdf50d1dd13579a85a3b0*
+
+### The five are disposed of, and the tombstone is the convention
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#35
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision / The five are disposed of, and the tombstone is the convention · hash: sha256:210fd680bb94a256626f920fff7f22368f3fd003fa447911656ca2c3194a8b46*
+
+The five in the table above are the case no reading of this question leaves alone: they assert
+coverage that does not exist, in a projection this repository commits. They are filed as their
+own item, because this record edits no record.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#36
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / The Decision / The five are disposed of, and the tombstone is the convention · hash: sha256:9c073f7f3d4db39de188c8de92dbf97db9dcc9ba330801f2d88970c1f2eb0f04*
+
+The remedy is not invention. Two of the 14 are already handled correctly and by hand, and
+they show the convention: **when a cited test is renamed or retired, the code says so at the
+site it left** — `graph.rs`'s "was here, and is retired as of 2026-09-10", `declarations.rs`'s
+"# Why this test was renamed" naming both the old name and the record that cites it. That
+costs a comment, keeps the record's history intact, and resolves the reader's question at the
+place they arrive. It is the cheap half of the answer and it is already working.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#37
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#38
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What This Record Does Not Do · hash: sha256:a538d947079e9d34e28693ead2e62197af6bfb4de71ad2a49451d7616892e0e6*
+
+It does not edit any record, repair any citation, or rename any test.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#39
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What This Record Does Not Do · hash: sha256:cf91c06db176f83ed0bf50e531ee80cce1e7f98cbaaea67366b51bfbe6707350*
+
+It does not write the guard, a rule, or a test. It decides what is owed and which shape the
+guard takes; building it is the item that follows.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#40
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What This Record Does Not Do · hash: sha256:8b1e8490c465e8f49d907b248e006abfc4b4ed7cfbcab95457ff5ef3f9df4b99*
+
+It does not change `D-134`, `mirror.rs`, or how a phantom mirror is ranked. It applies that
+decision's reasoning to a second population rather than reopening it.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#41
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / What This Record Does Not Do · hash: sha256:bb1d06af8a73bdcbd633be578521b7cccb1a9e39b89df3bacf2b60a3068a162e*
+
+It does not make path citations checkable later by a side door. A record that wants a path
+held live has to argue against the measurement above.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#42
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#43
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Status · hash: sha256:e199761bf4752271a15bd3d4181df219b2d0c689c4b6b260760e91acec704306*
+
+Accepted. A test name cited in a governing record is a live reference and is owed resolution,
+by a contract test of `rule_contract_citation.rs`'s shape using `mirror.rs`'s resolution,
+excluding line-wrap truncations and prose-declared non-existence. A path citation is dated
+history and a dead one is not a defect. The five fully-unresolved test citations —
+`OD-LEDGER-012`, `OD-LEDGER-013` twice, `OD-GATE-004` and `OD-ANALYSIS-006` — are filed for
+repair, and the tombstone comment two sites already carry is the convention the rest follow.
 
 ### docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#1
 
