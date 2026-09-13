@@ -37,7 +37,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md@authored | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md | authored | 26 | 8 | sha256:d3ae25e96ff37b5a8bee583bbfff827ddd125845ee968619d863300a96185557 |
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md@authored | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md | authored | 30 | 7 | sha256:2d1cc618a04047fd179e4d5f24fd112d9fafc6d05fe7710be734b52d3d2dc8e9 |
 | docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md@authored | docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md | authored | 23 | 7 | sha256:f8ced57db03fbaac9fbbb8a550e6e9561a4d5e651d59adb613370d47e46725be |
-| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md | authored | 38 | 8 | sha256:2bd79506c974018e6fbd0be693dfd6a4e5545e674125e589330629657b1d0e44 |
+| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md | authored | 42 | 9 | sha256:a7a3620d599955e63ca9bcc81b52866cf77cf156c8bb930391ee67daedaa3040 |
 | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md | authored | 12 | 5 | sha256:7b868459b4901509f831d98949e39dd926a2a649fc7ab419ad983c06f799c1a1 |
 | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md | authored | 22 | 8 | sha256:2a1f9cc14ba7229566dea2754dfbafa91116a43aa78032e04f419cbd3c313272 |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 28 | 8 | sha256:f9c663f27499031ece5e69ff38d7a5b150fb4b9bdd4c34bb112940800b662719 |
@@ -131,7 +131,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-010-opening-an-item-on-held-ground-is-how-the-board-is-used.md@authored | docs/records/OD-LEDGER-010-opening-an-item-on-held-ground-is-how-the-board-is-used.md | authored | 32 | 7 | sha256:17278bb3678519fb59aeb633a882c2c7860eed22d6dd7172de4f0a90116c0c34 |
 | docs/records/OD-LEDGER-011-an-item-reserves-the-snapshot-it-writes-and-the-register-empties.md@authored | docs/records/OD-LEDGER-011-an-item-reserves-the-snapshot-it-writes-and-the-register-empties.md | authored | 57 | 11 | sha256:bea0117983798941618c6bb02e434e01724011b472b15ce2789eea55dffdc6bd |
 | docs/records/OD-LEDGER-012-a-lapse-is-taken-over-and-the-claim-it-replaces-is-kept.md@authored | docs/records/OD-LEDGER-012-a-lapse-is-taken-over-and-the-claim-it-replaces-is-kept.md | authored | 49 | 12 | sha256:132b3b282d6055769c5aa827f773c67e60275d3a0d43008b0591d1525f70dca4 |
-| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md@authored | docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md | authored | 37 | 12 | sha256:5f21272705557881d9d73abe392ba0fc106a8185353907cc918aa75c666879be |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md@authored | docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md | authored | 41 | 13 | sha256:f61d5899597ba56ac06ac4feefb73e9a7d1b586e19faa98e954358f0ed92907d |
 | docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md@authored | docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md | authored | 31 | 10 | sha256:05e72e68c8f9a965c72f529769f7093ba245682cf6bbb6c9f80dd9f0e93e74b3 |
 | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md@authored | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md | authored | 42 | 10 | sha256:a66618d299913629165021f9bec2bd02f4afcb0714f8dd1149db99f5391d2e71 |
 | docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md@authored | docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md | authored | 39 | 10 | sha256:cbf273e93bd704aae1337dc210a950f7f95493a727a45aef6d66b0af422aa458 |
@@ -225,7 +225,7 @@ profile: domain-specification
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md@authored | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md | authored | 41 | 13 | sha256:8dcf5d25a7f6914387cc79e86eeb50d23edb944694fefdfdefc1d1cd468ae003 |
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md@authored | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md | authored | 14 | 5 | sha256:227009cdd4296112242bd4f960cab6549a198a1359f288aca43bbec584cc5247 |
 | docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md@authored | docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md | authored | 36 | 10 | sha256:0a6d2a8d267b11294fae15ddfc5418b3015cf7f3996d29b1f1f013026f6ca5cc |
-| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md@authored | docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md | authored | 43 | 12 | sha256:362f678527ab18efc705043a86f1dfa1711631784e6f083bea3f294da71e4fa8 |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md@authored | docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md | authored | 53 | 15 | sha256:239f1677411871d68199e7aa0c340412401f9e87fda6a35db980a1dacccf3257 |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md@authored | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md | authored | 28 | 8 | sha256:3e2b7309bfc8cd5f7083b3e96924cffe4cebfbd23f7d604f7c1b5fe8d4c339fa |
 | docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md@authored | docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md | authored | 29 | 9 | sha256:c6a7a7c0db9ecc42434859889d7851a22f1a4349bfc2b6b0855b281638738901 |
 | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md@authored | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md | authored | 29 | 8 | sha256:1c14ec80ab265a141f114e04b9391559cf6eda8cba021361e8dd4ee10aee41cf |
@@ -447,7 +447,8 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#18 | authored | 2 | The Determinism Declarations Are Not Satisfiable As Written, And What Replaces Them Is Already Named |
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#24 | authored | 2 | What A Runtime-Informed Claim Means When No Observation Exists |
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#30 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#37 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#37 | authored | 2 | Amendment: The Coherence Test Named Above Was Renamed |
+| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#41 | authored | 2 | Status |
 | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#1 | authored | 1 | Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce |
 | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#2 | authored | 2 | Question |
 | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#5 | authored | 2 | Current Position |
@@ -1201,7 +1202,8 @@ profile: domain-specification
 | docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#28 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#32 | authored | 2 | What This Does Not Do |
 | docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#34 | authored | 2 | Controls |
-| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#36 | authored | 2 | Status |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#36 | authored | 2 | Amendment: The Two Tests Named Above Were Renamed |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#40 | authored | 2 | Status |
 | docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#1 | authored | 1 | A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed |
 | docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#8 | authored | 2 | The Decision |
@@ -2001,7 +2003,10 @@ profile: domain-specification
 | docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#30 | authored | 3 | Which mechanism resolves a test name |
 | docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#34 | authored | 3 | The five are disposed of, and the tombstone is the convention |
 | docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#37 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#42 | authored | 2 | Status |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#42 | authored | 2 | Amendment: Two Of The Five Were The Record Noting Its Own History |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#46 | authored | 3 | The guard carries a third exclusion, and it is the hard one |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#50 | authored | 3 | Why this record made the mistake it was written about |
+| docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#52 | authored | 2 | Status |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#1 | authored | 1 | A document kind is a behaviour, not a label — and one of them was misnamed |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#2 | authored | 2 | Question |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#5 | authored | 2 | The Criterion |
@@ -8514,7 +8519,7 @@ section exists rather than a one-line pointer to the `None` row:
 
 ### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#23
 
-*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / The Determinism Declarations Are Not Satisfiable As Written, And What Replaces Them Is Already Named · hash: sha256:7ae82c7d669dbf914907729fcd344ee86e30de4e5af779cfcb31dcd3069aa739*
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / The Determinism Declarations Are Not Satisfiable As Written, And What Replaces Them Is Already Named · hash: sha256:54967032056f587f0cace09e12c57c36dd1504f7c65d6913e831b63db57a26eb*
 
 - **It is the observed value that is `None`, not everything a runtime producer does.** Once an
   observation has been captured and written into a `Fact`, storing it, comparing it, serving it
@@ -8527,7 +8532,7 @@ section exists rather than a one-line pointer to the `None` row:
   pair `None` with `TraceEquivalence::NotApplicable`, exactly as `AgentHost` does, and the
   workspace's existing test already refuses the inverse — `None` paired with a trace claim — the
   same way it refuses `State` paired with no trace claim at all.
-  `Test_No_Strength_Should_Refuse_A_Trace_Claim` covers this today; a runtime declaration adding
+  `Test_Declaration_Is_Coherent_Should_Refuse_A_Trace_Claim_With_No_Strength` covers this today; a runtime declaration adding
   a fourth occupant to that same coherent pairing changes nothing about it.
   `tests/contract/tests/determinism_declarations.rs`'s enforcement is likewise unchanged by a
   `None`-declaring domain arriving: `Rows_Nothing_Declares` filters to rows that
@@ -8675,15 +8680,50 @@ implementation questions this record does not reach.
 
 ### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#37
 
+*revision: authored · kind: heading · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Amendment: The Coherence Test Named Above Was Renamed · hash: sha256:d9908fb828b1755bdeeaacd83b0fd71cddc65c1881e7d36186c14ec6d8e2255b*
+
+## Amendment: The Coherence Test Named Above Was Renamed
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#38
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Amendment: The Coherence Test Named Above Was Renamed · hash: sha256:8b8a49752e7715ccd8364b280b6842a24dac4ed94ab7881d805368585f07f49e*
+
+Version 1 said `Test_No_Strength_Should_Refuse_A_Trace_Claim` "covers this today". That name
+does not exist and had not for some time when `OD-SPEC-017`'s census over every record found
+it on 2026-09-13.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#39
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Amendment: The Coherence Test Named Above Was Renamed · hash: sha256:6534ae648f59e0a126d4772e24ecfa84d81aeadad054d678ab87783b043554e1*
+
+**The assertion still holds and the test still exists**, as
+`Test_Declaration_Is_Coherent_Should_Refuse_A_Trace_Claim_With_No_Strength` in
+`crates/contracts/nomos-contracts/src/determinism/strategy.rs`, beside its three siblings
+covering the rest of `Declaration_Is_Coherent`'s pairings. The rename added the function it
+tests as a prefix; nothing about what it refuses changed, and nothing about this record's
+reasoning depends on the name.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#40
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Amendment: The Coherence Test Named Above Was Renamed · hash: sha256:25a4ef837e6fb33f0178542e7f4f011294bddcec5a057c1ecf16f8f04dbf4bbc*
+
+It is corrected rather than left because the claim was a present-tense claim about coverage.
+`D-134` ranks a false claim of coverage above an admitted gap, and `spec/domain-specification.md`
+republished this one for as long as it stood — which `OD-SPEC-017` decided is the case no
+reading of that question leaves alone.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#41
+
 *revision: authored · kind: heading · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#38
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#42
 
-*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Status · hash: sha256:d16b36763d2df48dce1c5530f8d1048ff6bc8f5439c71282509185aa3fff1da1*
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Status · hash: sha256:b8095b8ee37223822ba25f6eaf02e8738c419a6cc1deb56f8991a436b09b9fcc*
 
-Closed by `P12-RUNTIME-EVIDENCE`.
+Closed by `P12-RUNTIME-EVIDENCE`. Version 2, amended once to name the coherence test the
+renamed one became.
 
 ### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#1
 
@@ -33031,14 +33071,15 @@ The true shape is worse than an item nobody can take:
 
 ### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#11
 
-*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / What Was Measured · hash: sha256:11e06cbc380b144020aca9e9750ab4af866c26df79a2654cf083a552dc5e3015*
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / What Was Measured · hash: sha256:76a4c51cb3490e8d6629371b37b77b4e97d7bc5ca85eb07743d52f95ce6f4892*
 
 So there is no ordering in which a board carries a pattern and keeps working, and the one
 agent who acquires the power to stop every other session learns nothing about having done so.
 The refusal they each receive is the code `README.md` defines as *stop and fetch a person*,
 which is the one refusal an agent must not route around — so the failure does not even
-present as contention. `Test_A_Held_Pattern_Should_Refuse_Every_Other_Claim_On_The_Board` and
-`Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held` pin both directions.
+present as contention. `Test_A_Pattern_Anywhere_On_The_Board_Should_Refuse_Every_Claim_As_Ledger_Unusable`
+and `Test_A_Pattern_Item_Should_Refuse_Every_Claim_Wherever_It_Sits`, both in
+`crates/substrate/nomos-ledger/tests/exclusion_holds/claiming.rs`, pin both directions.
 
 ### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#12
 
@@ -33242,15 +33283,50 @@ pattern seconds apart would reserve different sets, and the document would not s
 
 ### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#36
 
+*revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored / Amendment: The Two Tests Named Above Were Renamed · hash: sha256:a4ba722845776e85ce57e96a6ef057b3c8c9cd895ca97ed6489cf1e168b409ce*
+
+## Amendment: The Two Tests Named Above Were Renamed
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#37
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / Amendment: The Two Tests Named Above Were Renamed · hash: sha256:af41acf9cf35978c4c6e78340a24941089995edde07ca5b673eaefa273ae53ec*
+
+Version 1 cited `Test_A_Held_Pattern_Should_Refuse_Every_Other_Claim_On_The_Board` and
+`Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held` and said they pin both
+directions. Neither name exists, and neither has since some point before 2026-09-13, when
+`OD-SPEC-017`'s census over every record found them.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#38
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / Amendment: The Two Tests Named Above Were Renamed · hash: sha256:f9c64b479998d6cd3dfbd3a3f307e30b77230b70df2ebe069162c40c5d850781*
+
+**Both assertions still hold and both tests still exist**; only the names moved, to
+`Test_A_Pattern_Anywhere_On_The_Board_Should_Refuse_Every_Claim_As_Ledger_Unusable` and
+`Test_A_Pattern_Item_Should_Refuse_Every_Claim_Wherever_It_Sits`. Nothing about the decision
+changes and no assertion was reversed; the sentence above now names the tests that are
+actually there.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#39
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / Amendment: The Two Tests Named Above Were Renamed · hash: sha256:8c24ac77682382f66ec1a14c3d0cac61c6856811eaa996e5a91851c65c376c08*
+
+`OD-SPEC-017` decided why this was worth repairing rather than leaving: a test name in a
+record is a claim about coverage, `D-134` already ranks a false coverage claim above an
+admitted gap, and this repository's committed `spec/domain-specification.md` republished the
+claim for as long as it stood.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#40
+
 *revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#37
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#41
 
-*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / Status · hash: sha256:93fcbc34b5418e23f7ba27548ac2a55f486cb52347526db2f220f33cbb5dcf66*
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / Status · hash: sha256:c9f8284fe7da11e0062c275275c4bafe895607072933871522ace3f613b11a7f*
 
-Closed by `P10-PATTERN-BRICK`.
+Closed by `P10-PATTERN-BRICK`. Version 2, amended once to name the two tests the renamed ones
+became.
 
 ### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#1
 
@@ -58769,20 +58845,104 @@ held live has to argue against the measurement above.
 
 ### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#42
 
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Amendment: Two Of The Five Were The Record Noting Its Own History · hash: sha256:4b38a3fc20073fcc89646ff403f45504d0e350d8390fd7ce3f17b2ad7da7ddb1*
+
+## Amendment: Two Of The Five Were The Record Noting Its Own History
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#43
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Amendment: Two Of The Five Were The Record Noting Its Own History · hash: sha256:b78abc2ac4412298208ba9e7c50b5279f0051aef2a90c16002b85cd179cd3448*
+
+Version 1 named five citations that "resolve to nothing, and nothing anywhere notes it", and
+disposed of them as one group. Read in context while repairing them, **two of the five are not
+claims of coverage at all**, and the count of fully-unresolved citations is **three**.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#44
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Amendment: Two Of The Five Were The Record Noting Its Own History · hash: sha256:ac49e1f19801f75f13bcacbfe6dd653d1df939d717c94e80f13e6f05062ca9a3*
+
+| citation | what its record actually says |
+|---|---|
+| `Test_A_Lapsed_Item_Should_Refuse_A_New_Holder_And_Keep_The_Old_One_Visible` | `OD-LEDGER-012` names it under a heading **"What Is Renamed Rather Than Reversed"**, and the sentence is that it *becomes* `Test_A_Lapsed_Item_Should_Refuse_A_Plain_Claim_And_Name_The_Takeover` — which exists |
+| `Test_A_Phantom_Mirror_Should_Fail_The_Command` | `OD-GATE-004` says `check_command.rs` **held** it, past tense, under **"The assertion this repository already had, and what it was worth"**, and then argues it was inadequate |
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#45
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Amendment: Two Of The Five Were The Record Noting Its Own History · hash: sha256:fc02a79094d197009cfb525d2156408a19aae470fe04d59202142712f855a80e*
+
+Neither is a defect. A record retiring a name has to be able to write the name it is retiring,
+and a record arguing that an old assertion was too weak has to be able to name the assertion.
+Both are a record noting its own history — which is exactly what this record decided a *path*
+citation is, and did not notice a *test* citation can be too.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#46
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Amendment: Two Of The Five Were The Record Noting Its Own History / The guard carries a third exclusion, and it is the hard one · hash: sha256:2af8ce1013e1c2b24e36dc7c269472102dcf723b8ca81d097bfa1ab238ba1b48*
+
+### The guard carries a third exclusion, and it is the hard one
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#47
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Amendment: Two Of The Five Were The Record Noting Its Own History / The guard carries a third exclusion, and it is the hard one · hash: sha256:6a78aac9341d4aafade7d7056fb580877a5ff0ddabaee717b5dcda14fca22a73*
+
+Version 1 named two exclusions, both mechanical: a trailing underscore is a line-wrap
+truncation, and prose may declare a name deliberately absent. This is the third, and it is not
+mechanical — the distinguishing evidence is grammatical and structural. A citation is a claim
+about coverage when it is present tense (`X` *covers* this today; `X` and `Y` *pin* both
+directions), and it is history when it is past tense (`check_command.rs` *held* `X`) or sits
+under a heading that says so.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#48
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Amendment: Two Of The Five Were The Record Noting Its Own History / The guard carries a third exclusion, and it is the hard one · hash: sha256:5750c19c4ab0f8649b93bc355868109957c60df23c06c69ed34a8bdd887e87d7*
+
+A guard cannot read tense. So the exclusion cannot be inferred and has to be **declared at the
+citation**, the same way the other two are: a record naming a name it is retiring says so, and
+the guard honours the declaration rather than guessing. That is more work than version 1
+implied, and it is the reason this amendment exists rather than a footnote.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#49
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Amendment: Two Of The Five Were The Record Noting Its Own History / The guard carries a third exclusion, and it is the hard one · hash: sha256:1add2be1bd6336ff90006184a4112b8c696c474a509d5c0bce643d95e141d4c8*
+
+The three that were real were all renames whose assertions still hold —
+`OD-LEDGER-013`'s two pattern-refusal tests and `OD-ANALYSIS-006`'s coherence test — and each
+record now names the test its citation became.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#50
+
+*revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Amendment: Two Of The Five Were The Record Noting Its Own History / Why this record made the mistake it was written about · hash: sha256:22a005a3ccd168b119d0d911134ba33c119dbc27386aa571cb252c4b83c9c3d5*
+
+### Why this record made the mistake it was written about
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#51
+
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Amendment: Two Of The Five Were The Record Noting Its Own History / Why this record made the mistake it was written about · hash: sha256:a963b7d13cac3e961fde4a0f5031aa5397f108e773ff28b2707412c49d311687*
+
+Version 1 counted citations by resolving a name and not by reading what the sentence around it
+claimed. That is the same defect in kind as the one it corrected in the path census, one level
+up: a count that does not distinguish claim-kinds will group things that need different
+answers. The measurement was right and the grouping was wrong, which is the failure this
+repository keeps finding and is worth one more sentence saying so plainly.
+
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#52
+
 *revision: authored · kind: heading · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#43
+### docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#53
 
-*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Status · hash: sha256:e199761bf4752271a15bd3d4181df219b2d0c689c4b6b260760e91acec704306*
+*revision: authored · kind: prose · heading: What a citation inside a governing record is owed when the site it names has moved or gone / Status · hash: sha256:e31d1a2051f124899602d47b0080da6e6b9b762a1cf63a18b786649bb5713c97*
 
-Accepted. A test name cited in a governing record is a live reference and is owed resolution,
+Accepted, version 2. A test name cited in a governing record is a live reference and is owed resolution,
 by a contract test of `rule_contract_citation.rs`'s shape using `mirror.rs`'s resolution,
 excluding line-wrap truncations and prose-declared non-existence. A path citation is dated
 history and a dead one is not a defect. The five fully-unresolved test citations —
 `OD-LEDGER-012`, `OD-LEDGER-013` twice, `OD-GATE-004` and `OD-ANALYSIS-006` — are filed for
-repair, and the tombstone comment two sites already carry is the convention the rest follow.
+repair — of which **three** were real and are now repaired, and two were the record noting its
+own history and needed no edit. The tombstone comment two sites already carry is the convention
+the rest follow, and the guard carries three exclusions rather than two.
 
 ### docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#1
 

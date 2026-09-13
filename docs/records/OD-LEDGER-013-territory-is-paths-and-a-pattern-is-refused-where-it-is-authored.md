@@ -3,7 +3,7 @@ id: OD-LEDGER-013
 type: decision
 title: Territory is paths, and a pattern is refused where it is authored
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - ledger
@@ -64,8 +64,9 @@ So there is no ordering in which a board carries a pattern and keeps working, an
 agent who acquires the power to stop every other session learns nothing about having done so.
 The refusal they each receive is the code `README.md` defines as *stop and fetch a person*,
 which is the one refusal an agent must not route around — so the failure does not even
-present as contention. `Test_A_Held_Pattern_Should_Refuse_Every_Other_Claim_On_The_Board` and
-`Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held` pin both directions.
+present as contention. `Test_A_Pattern_Anywhere_On_The_Board_Should_Refuse_Every_Claim_As_Ledger_Unusable`
+and `Test_A_Pattern_Item_Should_Refuse_Every_Claim_Wherever_It_Sits`, both in
+`crates/substrate/nomos-ledger/tests/exclusion_holds/claiming.rs`, pin both directions.
 
 ## The Decision
 
@@ -171,6 +172,25 @@ pattern seconds apart would reserve different sets, and the document would not s
 | remove the `patterns` field outright | every ledger ever written stops loading, `OD-LEDGER-008`'s refusal chosen deliberately |
 | check `--territory` before the pattern | "an item that reserves nothing excludes nobody" — true, about the wrong problem, and it sends the author to add a path rather than drop the flag |
 
+## Amendment: The Two Tests Named Above Were Renamed
+
+Version 1 cited `Test_A_Held_Pattern_Should_Refuse_Every_Other_Claim_On_The_Board` and
+`Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held` and said they pin both
+directions. Neither name exists, and neither has since some point before 2026-09-13, when
+`OD-SPEC-017`'s census over every record found them.
+
+**Both assertions still hold and both tests still exist**; only the names moved, to
+`Test_A_Pattern_Anywhere_On_The_Board_Should_Refuse_Every_Claim_As_Ledger_Unusable` and
+`Test_A_Pattern_Item_Should_Refuse_Every_Claim_Wherever_It_Sits`. Nothing about the decision
+changes and no assertion was reversed; the sentence above now names the tests that are
+actually there.
+
+`OD-SPEC-017` decided why this was worth repairing rather than leaving: a test name in a
+record is a claim about coverage, `D-134` already ranks a false coverage claim above an
+admitted gap, and this repository's committed `spec/domain-specification.md` republished the
+claim for as long as it stood.
+
 ## Status
 
-Closed by `P10-PATTERN-BRICK`.
+Closed by `P10-PATTERN-BRICK`. Version 2, amended once to name the two tests the renamed ones
+became.

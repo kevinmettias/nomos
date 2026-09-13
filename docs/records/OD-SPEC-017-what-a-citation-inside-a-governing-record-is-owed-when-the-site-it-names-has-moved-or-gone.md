@@ -3,7 +3,7 @@ id: OD-SPEC-017
 type: decision
 title: What a citation inside a governing record is owed when the site it names has moved or gone
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - spec
@@ -172,11 +172,55 @@ decision's reasoning to a second population rather than reopening it.
 It does not make path citations checkable later by a side door. A record that wants a path
 held live has to argue against the measurement above.
 
+## Amendment: Two Of The Five Were The Record Noting Its Own History
+
+Version 1 named five citations that "resolve to nothing, and nothing anywhere notes it", and
+disposed of them as one group. Read in context while repairing them, **two of the five are not
+claims of coverage at all**, and the count of fully-unresolved citations is **three**.
+
+| citation | what its record actually says |
+|---|---|
+| `Test_A_Lapsed_Item_Should_Refuse_A_New_Holder_And_Keep_The_Old_One_Visible` | `OD-LEDGER-012` names it under a heading **"What Is Renamed Rather Than Reversed"**, and the sentence is that it *becomes* `Test_A_Lapsed_Item_Should_Refuse_A_Plain_Claim_And_Name_The_Takeover` — which exists |
+| `Test_A_Phantom_Mirror_Should_Fail_The_Command` | `OD-GATE-004` says `check_command.rs` **held** it, past tense, under **"The assertion this repository already had, and what it was worth"**, and then argues it was inadequate |
+
+Neither is a defect. A record retiring a name has to be able to write the name it is retiring,
+and a record arguing that an old assertion was too weak has to be able to name the assertion.
+Both are a record noting its own history — which is exactly what this record decided a *path*
+citation is, and did not notice a *test* citation can be too.
+
+### The guard carries a third exclusion, and it is the hard one
+
+Version 1 named two exclusions, both mechanical: a trailing underscore is a line-wrap
+truncation, and prose may declare a name deliberately absent. This is the third, and it is not
+mechanical — the distinguishing evidence is grammatical and structural. A citation is a claim
+about coverage when it is present tense (`X` *covers* this today; `X` and `Y` *pin* both
+directions), and it is history when it is past tense (`check_command.rs` *held* `X`) or sits
+under a heading that says so.
+
+A guard cannot read tense. So the exclusion cannot be inferred and has to be **declared at the
+citation**, the same way the other two are: a record naming a name it is retiring says so, and
+the guard honours the declaration rather than guessing. That is more work than version 1
+implied, and it is the reason this amendment exists rather than a footnote.
+
+The three that were real were all renames whose assertions still hold —
+`OD-LEDGER-013`'s two pattern-refusal tests and `OD-ANALYSIS-006`'s coherence test — and each
+record now names the test its citation became.
+
+### Why this record made the mistake it was written about
+
+Version 1 counted citations by resolving a name and not by reading what the sentence around it
+claimed. That is the same defect in kind as the one it corrected in the path census, one level
+up: a count that does not distinguish claim-kinds will group things that need different
+answers. The measurement was right and the grouping was wrong, which is the failure this
+repository keeps finding and is worth one more sentence saying so plainly.
+
 ## Status
 
-Accepted. A test name cited in a governing record is a live reference and is owed resolution,
+Accepted, version 2. A test name cited in a governing record is a live reference and is owed resolution,
 by a contract test of `rule_contract_citation.rs`'s shape using `mirror.rs`'s resolution,
 excluding line-wrap truncations and prose-declared non-existence. A path citation is dated
 history and a dead one is not a defect. The five fully-unresolved test citations —
 `OD-LEDGER-012`, `OD-LEDGER-013` twice, `OD-GATE-004` and `OD-ANALYSIS-006` — are filed for
-repair, and the tombstone comment two sites already carry is the convention the rest follow.
+repair — of which **three** were real and are now repaired, and two were the record noting its
+own history and needed no edit. The tombstone comment two sites already carry is the convention
+the rest follow, and the guard carries three exclusions rather than two.

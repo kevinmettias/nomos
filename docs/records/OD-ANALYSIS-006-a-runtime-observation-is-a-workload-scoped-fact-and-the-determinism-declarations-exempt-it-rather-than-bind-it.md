@@ -3,7 +3,7 @@ id: OD-ANALYSIS-006
 type: decision
 title: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - analysis
@@ -195,7 +195,7 @@ section exists rather than a one-line pointer to the `None` row:
   pair `None` with `TraceEquivalence::NotApplicable`, exactly as `AgentHost` does, and the
   workspace's existing test already refuses the inverse — `None` paired with a trace claim — the
   same way it refuses `State` paired with no trace claim at all.
-  `Test_No_Strength_Should_Refuse_A_Trace_Claim` covers this today; a runtime declaration adding
+  `Test_Declaration_Is_Coherent_Should_Refuse_A_Trace_Claim_With_No_Strength` covers this today; a runtime declaration adding
   a fourth occupant to that same coherent pairing changes nothing about it.
   `tests/contract/tests/determinism_declarations.rs`'s enforcement is likewise unchanged by a
   `None`-declaring domain arriving: `Rows_Nothing_Declares` filters to rows that
@@ -289,6 +289,25 @@ crate or several, or how a workload is actually driven or an environment actuall
 `OD-CAPABILITY-002`'s criterion governs the first question unchanged; the second and third are
 implementation questions this record does not reach.
 
+## Amendment: The Coherence Test Named Above Was Renamed
+
+Version 1 said `Test_No_Strength_Should_Refuse_A_Trace_Claim` "covers this today". That name
+does not exist and had not for some time when `OD-SPEC-017`'s census over every record found
+it on 2026-09-13.
+
+**The assertion still holds and the test still exists**, as
+`Test_Declaration_Is_Coherent_Should_Refuse_A_Trace_Claim_With_No_Strength` in
+`crates/contracts/nomos-contracts/src/determinism/strategy.rs`, beside its three siblings
+covering the rest of `Declaration_Is_Coherent`'s pairings. The rename added the function it
+tests as a prefix; nothing about what it refuses changed, and nothing about this record's
+reasoning depends on the name.
+
+It is corrected rather than left because the claim was a present-tense claim about coverage.
+`D-134` ranks a false claim of coverage above an admitted gap, and `spec/domain-specification.md`
+republished this one for as long as it stood — which `OD-SPEC-017` decided is the case no
+reading of that question leaves alone.
+
 ## Status
 
-Closed by `P12-RUNTIME-EVIDENCE`.
+Closed by `P12-RUNTIME-EVIDENCE`. Version 2, amended once to name the coherence test the
+renamed one became.

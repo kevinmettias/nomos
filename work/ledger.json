@@ -66597,7 +66597,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -66613,7 +66613,30 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-1d28294da7ccfd5c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-8ea3cb7fd6a0f525.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-d047a80aa7f2318b.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fc7f3114650a3027.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-c166af22a1e42cb3.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-7bca6c85e7186a29.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-d41551fea154d6cc.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-3fb338c970b0e631.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-15afe485737c906b.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-677b0d50cc26c095.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-d1453c60403f001f.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-e256273955311a9e.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-115a2761f72faa7b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-fb1c20a2af433cc4.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-91dbb605c0c2c1f6.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-ed30fea2b99fbd8e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-e8c56575d59b7830.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789287449,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a9dfcdff386105e91a2e3c49e093bbecf532f4e4"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -66650,6 +66673,64 @@
         "timeout_seconds": 3600
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-OD-SPEC-017-COUNTED-A-RECORDS-OWN-HISTORY-AS-A-DEAD-CITATION",
+      "title": "OD-SPEC-017 counts five unresolved test citations where two are the record noting its own history",
+      "why": "OD-SPEC-017 named five test citations that resolve to nothing and said nothing anywhere notes them. Read in context while repairing them, two of the five are not claims of coverage at all. OD-LEDGER-012 names Test_A_Lapsed_Item_Should_Refuse_A_New_Holder_And_Keep_The_Old_One_Visible in a section headed What Is Renamed Rather Than Reversed, saying in as many words that it becomes Test_A_Lapsed_Item_Should_Refuse_A_Plain_Claim_And_Name_The_Takeover, which exists. OD-GATE-004 says crates/host/nomos-cli/tests/check_command.rs held Test_A_Phantom_Mirror_Should_Fail_The_Command, past tense, in a section headed The assertion this repository already had, and what it was worth, and then argues it was inadequate. Both are a record noting its own history, which is the thing OD-SPEC-017 decided path citations are and did not notice test citations can be too. The count is three, not five, and the guard that record specifies would be wrong twice on its first run for a reason it does not name -- the same shape of defect the record was written about.",
+      "done_when": "OD-SPEC-017 is amended to version 2, correcting the count of fully-unresolved test citations, naming the two that are a record's own history and the tense and section-heading evidence that distinguishes them, and adding that distinction to the exclusions the guard it specifies must carry. Both projections are re-rendered because a record body moved. cargo test --no-fail-fast -p nomos-spec-store -p nomos-contract-tests passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-1d28294da7ccfd5c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-8ea3cb7fd6a0f525.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-d047a80aa7f2318b.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fc7f3114650a3027.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-c166af22a1e42cb3.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-7bca6c85e7186a29.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-d41551fea154d6cc.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-3fb338c970b0e631.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-15afe485737c906b.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-677b0d50cc26c095.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-d1453c60403f001f.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-e256273955311a9e.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-115a2761f72faa7b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-fb1c20a2af433cc4.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-91dbb605c0c2c1f6.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-ed30fea2b99fbd8e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-e8c56575d59b7830.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789287471,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a9dfcdff386105e91a2e3c49e093bbecf532f4e4"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

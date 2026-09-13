@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:75597d01dfbcfa88c2f37d8fde06134f990fff850bb111474094e5f20d8aeb67",
-  "inputs_digest": "sha256:e5035d519254e4e8af9db6a884b675001921edb2f6052cd0b1bf7b99fe65c07f",
+  "content_digest": "sha256:faf053e7b9f700c2073e15c1db3c75a59f2edc4051f30b92b3375daffc4f731b",
+  "inputs_digest": "sha256:6983a2e8b073fc4137af8a76278050287a55794a82eb5805534ca5a836054a87",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1877
+      1882
     ],
     [
       "Source blocks",
-      6504
+      6522
     ]
   ],
   "inputs": [
@@ -158,7 +158,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored",
-      "hash": "sha256:2bd79506c974018e6fbd0be693dfd6a4e5545e674125e589330629657b1d0e44"
+      "hash": "sha256:a7a3620d599955e63ca9bcc81b52866cf77cf156c8bb930391ee67daedaa3040"
     },
     {
       "content": "documents",
@@ -628,7 +628,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md@authored",
-      "hash": "sha256:5f21272705557881d9d73abe392ba0fc106a8185353907cc918aa75c666879be"
+      "hash": "sha256:f61d5899597ba56ac06ac4feefb73e9a7d1b586e19faa98e954358f0ed92907d"
     },
     {
       "content": "documents",
@@ -1098,7 +1098,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md@authored",
-      "hash": "sha256:362f678527ab18efc705043a86f1dfa1711631784e6f083bea3f294da71e4fa8"
+      "hash": "sha256:239f1677411871d68199e7aa0c340412401f9e87fda6a35db980a1dacccf3257"
     },
     {
       "content": "documents",
@@ -2183,7 +2183,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#37",
-      "hash": "sha256:9e761b542fe4199a65a70aa55a85853b63b4dfc6267da0e6e0a5ecd522065d4d"
+      "hash": "sha256:7643177770ea42487c397ab885a96c15448b5139ec64723b63fa7cacb35efe62"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#41",
+      "hash": "sha256:a9e81a5fc976d4a0ae0b17558568dc58b9e53de6bf1d8e06e1455dc507e5ffa5"
     },
     {
       "content": "headings",
@@ -5953,7 +5958,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#36",
-      "hash": "sha256:655b1270b55ae1a60ebef821a81b197c9f41ec311d68352081b067cbfff50a05"
+      "hash": "sha256:bf4355d260f32538a55391d6ee94a09c8555f8c05b70d658db639f09a08467cf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#40",
+      "hash": "sha256:6889bbaaf9616566b425ad278f2325ba2b3705ddb3c1f31729f7559a89c4f1ad"
     },
     {
       "content": "headings",
@@ -9953,7 +9963,22 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#42",
-      "hash": "sha256:033b954c1b6407380ca9c4f5e234578c82d1b044e2bf0039c3a7480f14d4eaea"
+      "hash": "sha256:b82bd5369e9d042ccd78817e7890bc4ca1e40370b8f1245dd0cff902757a531b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#46",
+      "hash": "sha256:c42bb87e1753e9c2b9fb96530d8703ba06be8a7943ec642a372738c8980b38b1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#50",
+      "hash": "sha256:db8e66a8e710cababf566827f13375b962797d7b091b1bb79703346c08ced22e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#52",
+      "hash": "sha256:83c051076c5bf99d4abba7428e5c314b8c8342788d156942eab2f03dea5cebc4"
     },
     {
       "content": "headings",
@@ -14063,7 +14088,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#23",
-      "hash": "sha256:7ae82c7d669dbf914907729fcd344ee86e30de4e5af779cfcb31dcd3069aa739"
+      "hash": "sha256:54967032056f587f0cace09e12c57c36dd1504f7c65d6913e831b63db57a26eb"
     },
     {
       "content": "blocks",
@@ -14133,12 +14158,32 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#37",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:d9908fb828b1755bdeeaacd83b0fd71cddc65c1881e7d36186c14ec6d8e2255b"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#38",
-      "hash": "sha256:d16b36763d2df48dce1c5530f8d1048ff6bc8f5439c71282509185aa3fff1da1"
+      "hash": "sha256:8b8a49752e7715ccd8364b280b6842a24dac4ed94ab7881d805368585f07f49e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#39",
+      "hash": "sha256:6534ae648f59e0a126d4772e24ecfa84d81aeadad054d678ab87783b043554e1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#40",
+      "hash": "sha256:25a4ef837e6fb33f0178542e7f4f011294bddcec5a057c1ecf16f8f04dbf4bbc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#41",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#42",
+      "hash": "sha256:b8095b8ee37223822ba25f6eaf02e8738c419a6cc1deb56f8991a436b09b9fcc"
     },
     {
       "content": "blocks",
@@ -27083,7 +27128,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#11",
-      "hash": "sha256:11e06cbc380b144020aca9e9750ab4af866c26df79a2654cf083a552dc5e3015"
+      "hash": "sha256:76a4c51cb3490e8d6629371b37b77b4e97d7bc5ca85eb07743d52f95ce6f4892"
     },
     {
       "content": "blocks",
@@ -27208,12 +27253,32 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#36",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:a4ba722845776e85ce57e96a6ef057b3c8c9cd895ca97ed6489cf1e168b409ce"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#37",
-      "hash": "sha256:93fcbc34b5418e23f7ba27548ac2a55f486cb52347526db2f220f33cbb5dcf66"
+      "hash": "sha256:af41acf9cf35978c4c6e78340a24941089995edde07ca5b673eaefa273ae53ec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#38",
+      "hash": "sha256:f9c64b479998d6cd3dfbd3a3f307e30b77230b70df2ebe069162c40c5d850781"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#39",
+      "hash": "sha256:8c24ac77682382f66ec1a14c3d0cac61c6856811eaa996e5a91851c65c376c08"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#40",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#41",
+      "hash": "sha256:c9f8284fe7da11e0062c275275c4bafe895607072933871522ace3f613b11a7f"
     },
     {
       "content": "blocks",
@@ -41263,12 +41328,62 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#42",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:4b38a3fc20073fcc89646ff403f45504d0e350d8390fd7ce3f17b2ad7da7ddb1"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#43",
-      "hash": "sha256:e199761bf4752271a15bd3d4181df219b2d0c689c4b6b260760e91acec704306"
+      "hash": "sha256:b78abc2ac4412298208ba9e7c50b5279f0051aef2a90c16002b85cd179cd3448"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#44",
+      "hash": "sha256:ac49e1f19801f75f13bcacbfe6dd653d1df939d717c94e80f13e6f05062ca9a3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#45",
+      "hash": "sha256:fc02a79094d197009cfb525d2156408a19aae470fe04d59202142712f855a80e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#46",
+      "hash": "sha256:2af8ce1013e1c2b24e36dc7c269472102dcf723b8ca81d097bfa1ab238ba1b48"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#47",
+      "hash": "sha256:6a78aac9341d4aafade7d7056fb580877a5ff0ddabaee717b5dcda14fca22a73"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#48",
+      "hash": "sha256:5750c19c4ab0f8649b93bc355868109957c60df23c06c69ed34a8bdd887e87d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#49",
+      "hash": "sha256:1add2be1bd6336ff90006184a4112b8c696c474a509d5c0bce643d95e141d4c8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#50",
+      "hash": "sha256:22a005a3ccd168b119d0d911134ba33c119dbc27386aa571cb252c4b83c9c3d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#51",
+      "hash": "sha256:a963b7d13cac3e961fde4a0f5031aa5397f108e773ff28b2707412c49d311687"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#52",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#53",
+      "hash": "sha256:e31d1a2051f124899602d47b0080da6e6b9b762a1cf63a18b786649bb5713c97"
     },
     {
       "content": "blocks",
