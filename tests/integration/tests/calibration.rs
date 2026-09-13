@@ -15,7 +15,8 @@
 //! checked zero: the rule looked at the fixture's own code and found nothing to report.
 //! [`Expected::TruePositive`] names a count where every finding is individually justified
 //! below as a real, deserved report against this specific fixture's own code.
-//! [`Expected::NotAllDeserved`] pins a real, currently-produced count where at least one of
+//! [`Expected::NotAllDeserved`] -- currently claimed by no rule, see its own doc -- pins a
+//! real, currently-produced count where at least one of
 //! the findings is *not* claimed as deserved -- named and explained below, per `done_when`'s
 //! own "or is an open item naming the rule" allowance; the count still guards against a
 //! silent regression, but is not itself a claim that the rule is right.
@@ -175,6 +176,14 @@ enum Expected
 {
     Clean,
     TruePositive(usize),
+    /// Uninhabited since `P96` closed the one rule that used it, and kept rather than
+    /// deleted: this is the state that lets a calibration author pin a real count without
+    /// claiming the rule producing it is right, and without it the next author of an
+    /// undeserved finding must choose between calling it a true positive, which is a lie,
+    /// and `Uncalibrated`, which stops measuring the count at all. `#[expect]` rather than
+    /// `#[allow]` on purpose -- when a rule lands here again, the attribute itself goes red
+    /// rather than sitting on a variant that is no longer dead.
+    #[expect(dead_code)]
     NotAllDeserved(usize),
     Uncalibrated,
 }
@@ -253,7 +262,7 @@ fn Verdicts() -> Vec<RuleVerdict>
         RuleVerdict { id: "goals-and-parts-line-up", expected: Expected::Clean, reason: "opt-in: judges a repository's own declared nomos.cap.goals.policy (standards.json's \"goals\" block); the fixture declares none, and Check_Goals_And_Parts_Line_Up's own doc states a repository that has not written one down has not opted in -- a generalizable, unused mechanism, not a hardcoded nomos-only table." },
         RuleVerdict { id: "requirement-trace-staleness", expected: Expected::Clean, reason: "opt-in: judges a repository's own tests/contract/requirements/*.assessment corpus; the fixture has none, which Discover_Workspace's own doc treats identically to \"declares none\" or \"every entry resolves\" -- a generalizable, unused mechanism." },
         RuleVerdict { id: "abbreviations", expected: Expected::TruePositive(1), reason: "1 finding, deserved. `val` (the real, private function fn val(c, idx) -> Result<u8, FromHexError>) is a genuine, deserved true positive: DEFAULT_BANNED_WORDS lists \"val\" verbatim (ported from code-standards' own defaults.go) and hex's author really did choose that terse name. `alloc` -- the name of `extern crate alloc;`, fixed by the real crate being linked, not chosen at this site -- was a real false positive when this verdict was first written (`P68-ABBREVIATIONS-DOES-NOT-EXEMPT-EXTERN-CRATE`); Is_Exempt now recognizes ItemKind::ExternCrate the same way it already recognized ItemKind::Use, and this fixture is what proved the fix." },
-        RuleVerdict { id: "single-letter-names", expected: Expected::NotAllDeserved(1), reason: "1 finding, 0 deserved. `T` is not a struct field or an ordinarily-declared item name a human carelessly abbreviated -- it is `impl<T: AsRef<[u8]>> ToHex for T`'s own Self type, and nomos_lang_rust::syntax::walk's visit_item_impl records an Implementation item's `name` as `Type_Head(&node.self_ty)`, which for this common, idiomatic blanket-impl-over-a-generic-parameter shape is literally the generic parameter's own already-declared name. single_letter_names.rs's own module doc states generic parameters are explicitly out of this rule's scope (\"left to a richer syntax shape\"), but a generic parameter used as a blanket impl's Self type reaches this rule anyway through the Implementation item path. A genuine, newly-discovered gap this fixture surfaced by using an entirely ordinary Rust idiom nomos's own tree does not happen to write -- open item for the calling session: exempt an Implementation item whose own name is a bare generic parameter (or otherwise recognize a blanket impl's Self type as a name nobody chose here)." },
+        RuleVerdict { id: "single-letter-names", expected: Expected::Clean, reason: "a real, checked zero, and it was 1-finding-0-deserved until P96. `T` was never a struct field or an ordinarily-declared item name a human carelessly abbreviated -- it is `impl<T: AsRef<[u8]>> ToHex for T`'s own Self type, and nomos_lang_rust::syntax::walk's visit_item_impl records an Implementation item's `name` as `Type_Head(&node.self_ty)`, which for this common, idiomatic blanket-impl-over-a-generic-parameter shape is literally the generic parameter's own already-declared name. The gap took two increments and not one: P68 was DECLINED because the payload carried no fact that could tell this apart from `impl Trait for X` over a real, single-letter-named struct somebody chose, and a name-only heuristic would have hidden that second, deserved case. OD-CAPABILITY-014 decided the extension, P96-AN-IMPL-BLOCKS-GENERIC-PARAMETERS-REACH-THE-SYNTAX-PAYLOAD built it (Impl_Shape now carries the block's own type parameters, read back by Impl_Generics), and the rule now exempts an Implementation item whose own name is one of them -- still reporting one whose name is not. This fixture is what surfaced the gap, by using an entirely ordinary Rust idiom nomos's own tree does not happen to write, and is what now measures it closed." },
         RuleVerdict { id: "a-disabled-test-states-why", expected: Expected::Clean, reason: "the fixture carries no #[test] functions at all (see zero-flake-policy's identical note), so there is no #[ignore] attribute for this rule to examine either." },
         RuleVerdict { id: "inline-always-requires-justification", expected: Expected::Clean, reason: "no #[inline(always)] attribute in the fixture (only plain #[inline], which this rule does not judge)." },
         RuleVerdict { id: "no-wildcard-imports", expected: Expected::Clean, reason: "every `use` in the fixture names what it imports (core::iter, alloc::{string::String, vec::Vec}, core::fmt); no `use ...::*;` anywhere." },

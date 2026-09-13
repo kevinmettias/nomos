@@ -4,6 +4,16 @@
 //! arguments. The current syntax payload exposes declared item names and named struct
 //! fields, so this rule judges that subset and leaves the rest to a richer syntax shape.
 //!
+//! An `impl` block whose own recorded name is one of the generic parameters that same block
+//! declares is exempt, and it is the reason the exemption above is not enough on its own. The
+//! walker records an `Implementation` item's name as the head of its self type, so
+//! `impl<T: AsRef<[u8]>> ToHex for T` arrives here as an item named `T` -- the block's own
+//! already-declared parameter, reached a second time, not an identifier anybody chose for a
+//! declaration. `impl Trait for X` over a real, one-letter-named struct `X` is still reported,
+//! which is why this asks the payload what the block declared rather than exempting every
+//! single-letter `impl` by the shape of its name: `OD-CAPABILITY-014` put that list in the
+//! `shape` field precisely because no name-only heuristic can tell the two apart.
+//!
 //! A `use` binding is exempt the same way [`Check_Abbreviations`]'s own does: its name was
 //! chosen wherever the thing it imports was declared, not here, and for a wildcard import
 //! that "name" is not a declared identifier at all -- `*`, the payload's own glob token, a
@@ -13,7 +23,7 @@
 
 use crate::SourceFile;
 use nomos_analysis::FactReader;
-use nomos_cap_syntax::{PayloadItem, Struct_Fields, SyntaxPayload};
+use nomos_cap_syntax::{IMPLEMENTATION, Impl_Generics, PayloadItem, Struct_Fields, SyntaxPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
 /// This rule's own identifier, matching the code-standards rule id.
@@ -74,8 +84,9 @@ fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
 }
 
 /// One item's own violations: skipped entirely if it is a `use` binding (a name chosen
-/// wherever the binding's target was declared, not here), otherwise its own name and (for a
-/// struct) its fields, against the single-letter rule.
+/// wherever the binding's target was declared, not here), otherwise its own name -- unless
+/// that name is one of its own generic parameters, see [`Names_Its_Own_Generic_Parameter`] --
+/// and (for a struct) its fields, against the single-letter rule.
 fn Item_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
 {
     if item.kind == USE_BINDING
@@ -85,7 +96,7 @@ fn Item_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
 
     let mut findings = Vec::new();
 
-    if Is_Single_Letter(item.Own_Name())
+    if Is_Single_Letter(item.Own_Name()) && !Names_Its_Own_Generic_Parameter(item)
     {
         let finding = Violation_Finding(path, item, item.Own_Name());
         findings.push(finding);
@@ -122,6 +133,26 @@ fn Unread_As_This_Rule(mut finding: Finding) -> Finding
         .summary
         .replace("this file's naming could not be judged", "this file's single-letter names could not be judged");
     return finding;
+}
+
+/// Whether `item` is an `impl` block whose own recorded name is one of the generic
+/// parameters that same block declares.
+///
+/// Asked of the payload rather than guessed from the name. `OD-CAPABILITY-014` measured the
+/// alternative and rejected it: exempting every `Implementation` item whose name is a single
+/// upper-case letter would also hide `impl Trait for X` over a real struct somebody named
+/// `X`, which is the case this rule exists for. A `None` here is a `shape` no `impl` block
+/// wrote, and answers `false` rather than exempting on a field it could not read.
+fn Names_Its_Own_Generic_Parameter(item: &PayloadItem) -> bool
+{
+    if item.kind != IMPLEMENTATION
+    {
+        return false;
+    }
+
+    return Impl_Generics(&item.shape).is_some_and(|parameters| {
+        return parameters.iter().any(|parameter| return parameter == item.Own_Name());
+    });
 }
 
 /// `_` is exempt regardless of what declared it: `const _: () = assert!(...);` is Rust's own
@@ -226,6 +257,53 @@ mod tests
         let findings = Violations_In(&payload, "src/point.rs");
 
         assert!(findings.is_empty(), "{findings:?}");
+    }
+
+
+    /// `hex` 0.4.3's own `impl<T: AsRef<[u8]>> ToHex for T`, which
+    /// `P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON` surfaced against a real
+    /// third-party crate: an entirely ordinary Rust idiom this workspace's own tree does not
+    /// happen to write.
+    #[test]
+    fn Test_Violations_In_Should_Not_Judge_A_Blanket_Impls_Own_Generic_Parameter()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tImplementation\tNotApplicable\tT\t.\t+trait\\ngenerics\\nT\n");
+
+        let findings = Violations_In(&payload, "src/lib.rs");
+
+        assert!(findings.is_empty(), "the block declared T itself: {findings:?}");
+    }
+
+    /// The case the exemption must not swallow, and the reason it reads the payload's own
+    /// generic list rather than the shape of the name. `X` here is a real type somebody
+    /// named, and an `impl` block over it is not where that name was chosen -- but the
+    /// declaration `X` is still a single-letter name, and a rule that exempted every
+    /// one-letter `impl` would report neither.
+    #[test]
+    fn Test_Violations_In_Should_Still_Judge_An_Impl_Over_A_Real_Single_Letter_Type()
+    {
+        let payload = Payload_From_Text(
+            "unexpanded\t0\n\
+             item\t0\tImplementation\tNotApplicable\tX\t.\t+trait\\ngenerics\\nT\n",
+        );
+
+        let findings = Violations_In(&payload, "src/lib.rs");
+
+        assert_eq!(findings.len(), 1, "X is not among the parameters this block declared: {findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "X");
+    }
+
+    /// An `impl` block declaring no generics at all still reaches the rule, and its own name
+    /// is still judged -- the empty list is not the absent one.
+    #[test]
+    fn Test_Violations_In_Should_Still_Judge_A_Non_Generic_Impls_Own_Name()
+    {
+        let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tImplementation\tNotApplicable\tX\t.\t+inherent\n");
+
+        let findings = Violations_In(&payload, "src/lib.rs");
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "X");
     }
 
     fn Payload_From_Text(text: &str) -> SyntaxPayload

@@ -67924,7 +67924,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P96-AN-IMPL-BLOCKS-GENERIC-PARAMETERS-REACH-THE-SYNTAX-PAYLOAD"
       ],
@@ -67941,7 +67941,29 @@
         ],
         "timeout_seconds": 2400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "e ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 640 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 5 tests\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-04dff4c12c871542.exe)\n     Running tests\\analysis_slice\\main.rs (target\\debug\\deps\\analysis_slice-bd1f27925664f652.exe)\n     Running tests\\calibration.rs (target\\debug\\deps\\calibration-3a2ce21be7e245e2.exe)\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-3713d78c13901bf6.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-df82492f6578d76e.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-7fcb6b3878d50f43.exe)\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1789317322,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1f103f532706c0c9d2e3aa0607b4ed6db5c48e1c"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
