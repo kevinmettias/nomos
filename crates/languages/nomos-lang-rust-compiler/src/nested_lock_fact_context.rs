@@ -4,6 +4,7 @@ use crate::guarantee::PROVIDER;
 use crate::nested_lock_contract::{Capability, Payload_Schema, CONTRACT_VERSION};
 use crate::nested_lock_guarantee::Declared_Guarantee;
 use crate::nested_lock_reading::Discover_Nested_Locks;
+use nomos_platform::Environment;
 use crate::payload::Encode_Nested_Lock_Payload;
 use crate::payload::nested_lock_payload::NestedLockPayload;
 use crate::provider::FactContext;
@@ -32,9 +33,9 @@ pub struct NestedLockFact
 /// # Errors
 ///
 /// Whatever [`Discover_Nested_Locks`] returns.
-pub fn Materialize_Nested_Locks(root: &Path, context: FactContext) -> Result<NestedLockFact, CompilerError>
+pub fn Materialize_Nested_Locks<Env: Environment>(root: &Path, context: FactContext, environment: &Env) -> Result<NestedLockFact, CompilerError>
 {
-    let findings = Discover_Nested_Locks(root)?;
+    let findings = Discover_Nested_Locks(root, environment)?;
     let payload = NestedLockPayload { findings };
     let subject = nomos_model::Subject_Of_Path(&root.to_string_lossy());
     let guarantee = Declared_Guarantee();
@@ -83,7 +84,7 @@ mod tests
     fn Test_Materialize_Nested_Locks_Should_Find_The_Real_Fixtures_Own_Finding()
     {
         let NestedLockFact { subject, fact } =
-            Materialize_Nested_Locks(&Fixture_Root(), Context()).expect("this crate's own fixture is a real, loadable Cargo project");
+            Materialize_Nested_Locks(&Fixture_Root(), Context(), &nomos_platform_std::StdEnvironment).expect("this crate's own fixture is a real, loadable Cargo project");
 
         assert_eq!(subject, nomos_model::Subject_Of_Path(&Fixture_Root().to_string_lossy()));
         assert_eq!(fact.guarantee, Declared_Guarantee());

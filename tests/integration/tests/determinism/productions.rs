@@ -591,7 +591,7 @@ fn Copy_Clones_Context() -> nomos_lang_rust_compiler::FactContext
 fn Discovered_Copy_Clones_Fact(context: nomos_lang_rust_compiler::FactContext) -> nomos_lang_rust_compiler::CloneOnCopyFact
 {
     let root = Repository_Root().join("crates/languages/nomos-lang-rust-compiler/fixtures/clone_on_copy_sample");
-    return nomos_lang_rust_compiler::Materialize_Crate(&root, context)
+    return nomos_lang_rust_compiler::Materialize_Crate(&root, context, &StdEnvironment)
         .expect("this crate's own committed fixture is a real, loadable Cargo project; a provider that cannot see it verifies nothing");
 }
 
@@ -633,7 +633,7 @@ fn Nested_Locks_Context() -> nomos_lang_rust_compiler::FactContext
 fn Discovered_Nested_Locks_Fact(context: nomos_lang_rust_compiler::FactContext) -> nomos_lang_rust_compiler::NestedLockFact
 {
     let root = Repository_Root().join("crates/languages/nomos-lang-rust-compiler/fixtures/nested_lock_sample");
-    return nomos_lang_rust_compiler::Materialize_Nested_Locks(&root, context)
+    return nomos_lang_rust_compiler::Materialize_Nested_Locks(&root, context, &StdEnvironment)
         .expect("this crate's own committed fixture is a real, loadable Cargo project; a provider that cannot see it verifies nothing");
 }
 

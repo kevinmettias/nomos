@@ -12,6 +12,9 @@ nomos-contracts = { workspace = true }
 nomos-model = { workspace = true }
 nomos-capability = { workspace = true }
 nomos-analysis = { workspace = true }
+# `OD-PLATFORM-002`/`OD-HOST-001`: a relative root resolves against an environment the
+# composition root chose, never against this process's own current directory.
+nomos-platform = { workspace = true }
 ra_ap_hir = { workspace = true }
 ra_ap_ide_db = { workspace = true }
 ra_ap_load-cargo = { workspace = true }
@@ -21,3 +24,6 @@ line-index = { workspace = true }
 
 [lints]
 workspace = true
+
+[dev-dependencies]
+nomos-platform-std = { workspace = true }

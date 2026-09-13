@@ -22,10 +22,10 @@ pub fn nomos_lang_rust_compiler::Capability_Contract() -> CapabilityContract
 pub fn nomos_lang_rust_compiler::Check_Copy_Clones(subject: SubjectId, subject_name: &str, facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_lang_rust_compiler::Check_Nested_Locks(subject: SubjectId, subject_name: &str, facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_lang_rust_compiler::CompilerError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-pub fn nomos_lang_rust_compiler::Discover_Nested_Locks(root: &Path) -> Result<Vec<NestedLockFinding>, CompilerError>
+pub fn nomos_lang_rust_compiler::Discover_Nested_Locks<Env: Environment>(root: &Path, environment: &Env) -> Result<Vec<NestedLockFinding>, CompilerError>
 pub fn nomos_lang_rust_compiler::Encode_Nested_Lock_Payload(payload: &NestedLockPayload) -> Vec<u8>
 pub fn nomos_lang_rust_compiler::Encode_Payload(payload: &CloneOnCopyPayload) -> Vec<u8>
-pub fn nomos_lang_rust_compiler::Materialize_Nested_Locks(root: &Path, context: FactContext) -> Result<NestedLockFact, CompilerError>
+pub fn nomos_lang_rust_compiler::Materialize_Nested_Locks<Env: Environment>(root: &Path, context: FactContext, environment: &Env) -> Result<NestedLockFact, CompilerError>
 pub fn nomos_lang_rust_compiler::Nested_Locks_Capability() -> CapabilityId
 pub fn nomos_lang_rust_compiler::Nested_Locks_Capability_Contract() -> CapabilityContract
 pub fn nomos_lang_rust_compiler::Nested_Locks_Payload_Schema() -> SchemaId

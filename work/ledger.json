@@ -64037,7 +64037,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -64050,7 +64050,27 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-compiler"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Should_Be_Refused ... ok\ntest payload::tests::Test_A_Line_Not_Prefixed_Nested_Lock_Should_Be_Refused ... ok\ntest payload::tests::Test_An_Empty_Byte_String_Should_Decode_To_A_Clean_Nested_Lock_Payload ... ok\ntest payload::tests::Test_An_Empty_Byte_String_Should_Decode_To_A_Clean_Payload ... ok\ntest payload::tests::Test_Encode_Nested_Lock_Payload_Should_Produce_Stable_Diffable_Bytes ... ok\ntest payload::tests::Test_Encode_Payload_Should_Produce_Stable_Diffable_Bytes ... ok\ntest nested_lock_check::tests::Test_Check_Nested_Locks_Should_Produce_No_Finding_For_A_Clean_Fact ... ok\ntest payload::tests::Test_Parse_Nested_Lock_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding ... ok\ntest payload::tests::Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding ... ok\ntest provider::tests::Test_A_Fact_Key_Should_Depend_On_The_Guarantee ... ok\ntest nested_lock_fact_context::tests::Test_A_Fact_Key_Should_Depend_On_The_Guarantee ... ok\ntest nested_lock_reading::tests::Test_Discover_Nested_Locks_Should_Refuse_A_Root_With_No_Cargo_Project ... ok\ntest reading::tests::Test_Discover_Crate_Should_Refuse_A_Root_With_No_Cargo_Project ... ok\ntest nested_lock_fact_context::tests::Test_Materialize_Nested_Locks_Should_Find_The_Real_Fixtures_Own_Finding ... ok\ntest nested_lock_reading::tests::Test_Discover_Nested_Locks_Should_Find_Exactly_The_Real_Nested_Lock ... ok\ntest reading::tests::Test_Discover_Crate_Should_Find_Exactly_The_Real_Clone_On_Copy_Call ... ok\ntest provider::tests::Test_Materialize_Crate_Should_Find_The_Real_Fixtures_Own_Finding ... ok\n\ntest result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 31.94s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.25s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_compiler-cfafa3587739e6fa.exe)\n   Doc-tests nomos_lang_rust_compiler\n",
+        "verified_at": 1789269674,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7f309c5da308d38d0567d97b2f1c2880c64ca7c0"
+      },
       "abandoned": [
         {
           "holder": "claude-dev-session",
@@ -65323,6 +65343,164 @@
         "timeout_seconds": 600
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P87-COMPILER-PROVIDER-MANIFEST-AND-CALLER",
+      "title": "The compiler provider names no platform dependency and its one caller passes no environment",
+      "why": "P87-THE-COMPILER-PROVIDER-RESOLVES-A-ROOT-AGAINST-THE-REAL-CURRENT-DIRECTORY replaces Load_Crate's std::env::current_dir with nomos_platform::Environment::Working_Directory, the same port P87-RUST-PROVIDERS-READ-THE-ENVIRONMENT-PAST-THE-INJECTED-LAUNCHER-4 threaded through the other three rust providers. nomos-lang-rust-compiler does not depend on nomos-platform at all, so its Cargo.toml must name it, and Load_Crate's only caller is nested_lock_reading.rs:51, which the signature change reaches. Neither is in that item's territory, which reserved src/reading.rs and the surface snapshot. Two disjoint paths, claimed separately rather than re-authoring an item whose own measurement is sound.",
+      "done_when": "nomos-lang-rust-compiler names nomos-platform as a dependency and nomos-platform-std as a dev-dependency if its tests need one; nested_lock_reading.rs supplies an environment to Load_Crate; and cargo test -p nomos-lang-rust-compiler passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-compiler/Cargo.toml",
+          "crates/languages/nomos-lang-rust-compiler/src/nested_lock_reading.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-compiler"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-compiler"
+        ],
+        "exit_code": 0,
+        "output_tail": "... ok\ntest nested_lock_check::tests::Test_Check_Nested_Locks_Should_Relay_A_Real_Findings_Own_Location ... ok\ntest nested_lock_fact_context::tests::Test_A_Fact_Key_Should_Depend_On_The_Guarantee ... ok\ntest payload::tests::Test_An_Empty_Byte_String_Should_Decode_To_A_Clean_Nested_Lock_Payload ... ok\ntest payload::tests::Test_Encode_Nested_Lock_Payload_Should_Produce_Stable_Diffable_Bytes ... ok\ntest payload::tests::Test_Encode_Payload_Should_Produce_Stable_Diffable_Bytes ... ok\ntest payload::tests::Test_Parse_Nested_Lock_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding ... ok\ntest payload::tests::Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding ... ok\ntest provider::tests::Test_A_Fact_Key_Should_Depend_On_The_Guarantee ... ok\ntest payload::tests::Test_A_Line_Not_Prefixed_Clone_On_Copy_Should_Be_Refused ... ok\ntest nested_lock_check::tests::Test_Check_Nested_Locks_Should_Produce_No_Finding_For_A_Clean_Fact ... ok\ntest reading::tests::Test_Discover_Crate_Should_Refuse_A_Root_With_No_Cargo_Project ... ok\ntest nested_lock_reading::tests::Test_Discover_Nested_Locks_Should_Refuse_A_Root_With_No_Cargo_Project ... ok\ntest nested_lock_fact_context::tests::Test_Materialize_Nested_Locks_Should_Find_The_Real_Fixtures_Own_Finding ... ok\ntest nested_lock_reading::tests::Test_Discover_Nested_Locks_Should_Find_Exactly_The_Real_Nested_Lock ... ok\ntest reading::tests::Test_Discover_Crate_Should_Find_Exactly_The_Real_Clone_On_Copy_Call ... ok\ntest provider::tests::Test_Materialize_Crate_Should_Find_The_Real_Fixtures_Own_Finding ... ok\n\ntest result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 31.19s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.26s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_compiler-cfafa3587739e6fa.exe)\n   Doc-tests nomos_lang_rust_compiler\n",
+        "verified_at": 1789269641,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7f309c5da308d38d0567d97b2f1c2880c64ca7c0"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P87-COMPILER-PROVIDER-FACT-CONTEXTS",
+      "title": "Both compiler fact contexts call a discovery that now takes an environment",
+      "why": "P87-THE-COMPILER-PROVIDER-RESOLVES-A-ROOT-AGAINST-THE-REAL-CURRENT-DIRECTORY gives Load_Crate an injected nomos_platform::Environment, which reaches its two public entry points and therefore the two fact contexts that call them: fact_context.rs:51 calls Discover_Crate and nested_lock_fact_context.rs:37 calls Discover_Nested_Locks. Neither file is in that item's territory, which reserved src/reading.rs and the surface snapshot, nor in P87-COMPILER-PROVIDER-MANIFEST-AND-CALLER's, which reserved the manifest and nested_lock_reading.rs. Claimed separately for the same reason as those: the measurement behind the parent item is sound and re-authoring it would strand the threading already done.",
+      "done_when": "Both Materialize_* entry points take an environment and pass it to the discovery they call, every caller supplies one, and cargo test -p nomos-lang-rust-compiler passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-compiler/src/fact_context.rs",
+          "crates/languages/nomos-lang-rust-compiler/src/nested_lock_fact_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-compiler"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-compiler"
+        ],
+        "exit_code": 0,
+        "output_tail": "yload::tests::Test_Encode_Nested_Lock_Payload_Should_Produce_Stable_Diffable_Bytes ... ok\ntest payload::tests::Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding ... ok\ntest provider::tests::Test_A_Fact_Key_Should_Depend_On_The_Guarantee ... ok\ntest payload::tests::Test_Encode_Payload_Should_Produce_Stable_Diffable_Bytes ... ok\ntest nested_lock_reading::tests::Test_Discover_Nested_Locks_Should_Refuse_A_Root_With_No_Cargo_Project ... ok\ntest reading::tests::Test_Discover_Crate_Should_Refuse_A_Root_With_No_Cargo_Project ... ok\ntest nested_lock_reading::tests::Test_Discover_Nested_Locks_Should_Find_Exactly_The_Real_Nested_Lock ... ok\ntest nested_lock_fact_context::tests::Test_Materialize_Nested_Locks_Should_Find_The_Real_Fixtures_Own_Finding ... ok\ntest provider::tests::Test_Materialize_Crate_Should_Find_The_Real_Fixtures_Own_Finding ... ok\ntest reading::tests::Test_Discover_Crate_Should_Find_Exactly_The_Real_Clone_On_Copy_Call ... ok\n\ntest result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 31.39s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contracts v0.1.0 (F:\\repos\\nomos\\crates\\contracts\\nomos-contracts)\n   Compiling nomos-model v0.1.0 (F:\\repos\\nomos\\crates\\kernel\\nomos-model)\n   Compiling nomos-platform v0.1.0 (F:\\repos\\nomos\\crates\\platform\\nomos-platform)\n   Compiling nomos-capability v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-capability)\n   Compiling nomos-platform-std v0.1.0 (F:\\repos\\nomos\\crates\\platform\\nomos-platform-std)\n   Compiling nomos-analysis v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-analysis)\n   Compiling nomos-lang-rust-compiler v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-compiler)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.99s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_compiler-cfafa3587739e6fa.exe)\n   Doc-tests nomos_lang_rust_compiler\n",
+        "verified_at": 1789269608,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7f309c5da308d38d0567d97b2f1c2880c64ca7c0"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P87-DETERMINISM-PRODUCTIONS-CALL-THE-COMPILER-PROVIDER",
+      "title": "The determinism productions call both compiler entry points without an environment",
+      "why": "P87-THE-COMPILER-PROVIDER-RESOLVES-A-ROOT-AGAINST-THE-REAL-CURRENT-DIRECTORY gives Load_Crate an injected environment, which reaches Materialize_Crate and Materialize_Nested_Locks. tests/integration/tests/determinism/productions.rs calls both at lines 594 and 636 and stops compiling. The file is reserved by no live item -- P87-INTEGRATION-TESTS-CONSTRUCT-THE-THREADED-PORTS held it for the other three providers and is Done -- and it is outside the compiler item's own territory, which reserved src/reading.rs and the surface snapshot.",
+      "done_when": "Both productions supply an environment the way every other caller does, the determinism declarations they back still hold, and cargo test -p nomos-integration-tests passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration/tests/determinism/productions.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Strategy ... ok\ntest domains::Test_The_Go_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Parser_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Rollup_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Go_Dependency_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Projection_Output_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Requirement_Trace_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Dependency_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Dependency_Policy_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Lint_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Copy_Clones_Provider_Should_Meet_Its_Declared_Strategy has been running for over 60 seconds\ntest domains::Test_The_Nested_Locks_Provider_Should_Meet_Its_Declared_Strategy has been running for over 60 seconds\ntest domains::Test_The_Nested_Locks_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Copy_Clones_Provider_Should_Meet_Its_Declared_Strategy ... ok\n\ntest result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 304.85s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.33s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-04dff4c12c871542.exe)\n     Running tests\\analysis_slice\\main.rs (target\\debug\\deps\\analysis_slice-bd1f27925664f652.exe)\n     Running tests\\calibration.rs (target\\debug\\deps\\calibration-3a2ce21be7e245e2.exe)\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-3713d78c13901bf6.exe)\n   Doc-tests nomos_integration_tests\n",
+        "verified_at": 1789270374,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7f309c5da308d38d0567d97b2f1c2880c64ca7c0"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

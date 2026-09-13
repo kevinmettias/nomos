@@ -5,6 +5,7 @@ use crate::guarantee::{Declared_Guarantee, PROVIDER};
 use crate::payload::clone_on_copy_payload::CloneOnCopyPayload;
 use crate::payload::Encode_Payload;
 use crate::reading::{CompilerError, Discover_Crate};
+use nomos_platform::Environment;
 use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_contracts::{
     BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, Guarantee, ProviderId, SnapshotId, SubjectId,
@@ -46,9 +47,9 @@ pub struct CloneOnCopyFact
 /// # Errors
 ///
 /// Whatever [`Discover_Crate`] returns.
-pub fn Materialize_Crate(root: &Path, context: FactContext) -> Result<CloneOnCopyFact, CompilerError>
+pub fn Materialize_Crate<Env: Environment>(root: &Path, context: FactContext, environment: &Env) -> Result<CloneOnCopyFact, CompilerError>
 {
-    let findings = Discover_Crate(root)?;
+    let findings = Discover_Crate(root, environment)?;
     let payload = CloneOnCopyPayload { findings };
     let subject = nomos_model::Subject_Of_Path(&root.to_string_lossy());
     let guarantee = Declared_Guarantee();
@@ -97,7 +98,7 @@ mod tests
     #[test]
     fn Test_Materialize_Crate_Should_Find_The_Real_Fixtures_Own_Finding()
     {
-        let CloneOnCopyFact { subject, fact } = Materialize_Crate(&Fixture_Root(), Context()).expect("this crate's own fixture is a real, loadable Cargo project");
+        let CloneOnCopyFact { subject, fact } = Materialize_Crate(&Fixture_Root(), Context(), &nomos_platform_std::StdEnvironment).expect("this crate's own fixture is a real, loadable Cargo project");
 
         assert_eq!(subject, nomos_model::Subject_Of_Path(&Fixture_Root().to_string_lossy()));
         assert_eq!(fact.guarantee, Declared_Guarantee());

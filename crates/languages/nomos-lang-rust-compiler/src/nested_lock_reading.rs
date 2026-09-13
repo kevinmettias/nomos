@@ -29,6 +29,7 @@
 
 use crate::payload::nested_lock_finding::NestedLockFinding;
 use crate::reading::{CompilerError, Load_Crate};
+use nomos_platform::Environment;
 use line_index::LineIndex;
 use ra_ap_hir::{Adt, ModuleDef, ScopeDef, Semantics, Struct};
 use ra_ap_ide_db::RootDatabase;
@@ -46,9 +47,9 @@ use std::path::Path;
 /// not discover a real sysroot, or if no loaded crate's own dependency graph reached a
 /// real `std` this reader could resolve `Mutex`/`RwLock` against -- in every one of these
 /// cases the honest answer is a refusal, not a silent "no nesting found".
-pub fn Discover_Nested_Locks(root: &Path) -> Result<Vec<NestedLockFinding>, CompilerError>
+pub fn Discover_Nested_Locks<Env: Environment>(root: &Path, environment: &Env) -> Result<Vec<NestedLockFinding>, CompilerError>
 {
-    let (db, files) = Load_Crate(root)?;
+    let (db, files) = Load_Crate(root, environment)?;
     let sema: Semantics<'_, RootDatabase> = Semantics::new(&db);
 
     let Some((mutex, rwlock)) = Lock_Structs(&sema)
@@ -174,7 +175,7 @@ mod tests
     #[test]
     fn Test_Discover_Nested_Locks_Should_Find_Exactly_The_Real_Nested_Lock()
     {
-        let findings = Discover_Nested_Locks(&Fixture_Root()).expect("this crate's own fixture is a real, loadable Cargo project");
+        let findings = Discover_Nested_Locks(&Fixture_Root(), &nomos_platform_std::StdEnvironment).expect("this crate's own fixture is a real, loadable Cargo project");
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
@@ -191,7 +192,7 @@ mod tests
         let root = std::env::temp_dir().join("nomos-lang-rust-compiler-nested-locks-no-cargo-project-test");
         std::fs::create_dir_all(&root).expect("the platform temporary directory is writable");
 
-        let error = Discover_Nested_Locks(&root).expect_err("a directory with no Cargo.toml anywhere above it is not a loadable project");
+        let error = Discover_Nested_Locks(&root, &nomos_platform_std::StdEnvironment).expect_err("a directory with no Cargo.toml anywhere above it is not a loadable project");
 
         assert!(error.reason.contains("could not be loaded"), "{}", error.reason);
     }

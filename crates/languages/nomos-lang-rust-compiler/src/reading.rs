@@ -49,6 +49,7 @@ use ra_ap_ide_db::RootDatabase;
 use ra_ap_load_cargo::{LoadCargoConfig, ProcMacroServerChoice, load_workspace_at};
 use ra_ap_project_model::{CargoConfig, RustLibSource};
 use ra_ap_syntax::ast::{self, AstNode};
+use nomos_platform::Environment;
 use std::path::Path;
 
 /// This provider's own analysis could not be run, or could not be trusted once it was.
@@ -82,14 +83,15 @@ impl core::fmt::Display for CompilerError
 /// could not discover a real sysroot -- without one, a lang-item or well-known-path
 /// lookup resolves nothing for anything, which would make every answer built on this
 /// loader a silent, unearned "no".
-pub(crate) fn Load_Crate(root: &Path) -> Result<(RootDatabase, Vec<(EditionedFileId, String)>), CompilerError>
+pub(crate) fn Load_Crate<Env: Environment>(root: &Path, environment: &Env) -> Result<(RootDatabase, Vec<(EditionedFileId, String)>), CompilerError>
 {
     // The exact absolutization `ra_ap_load_cargo::load_workspace_at` performs on `root`
     // internally before resolving it -- not `std::fs::canonicalize`, whose Windows
     // implementation returns a `\\?\`-prefixed verbatim path that a plain `VfsPath`
     // rendering never carries, which silently broke every prefix match below until this
     // was verified against a real fixture crate rather than assumed to line up.
-    let absolute_root = std::env::current_dir()
+    let absolute_root = environment
+        .Working_Directory()
         .map_err(|error| CompilerError { reason: format!("the current directory could not be read: {error}") })?
         .join(root);
 
@@ -139,9 +141,9 @@ pub(crate) fn Load_Crate(root: &Path) -> Result<(RootDatabase, Vec<(EditionedFil
 /// could not discover a real sysroot -- without one, [`ra_ap_hir::Type::is_copy`] cannot
 /// resolve the `Copy` lang item for anything, which would make every answer this reader
 /// gives a silent, unearned "no".
-pub fn Discover_Crate(root: &Path) -> Result<Vec<ClonedCopyType>, CompilerError>
+pub fn Discover_Crate<Env: Environment>(root: &Path, environment: &Env) -> Result<Vec<ClonedCopyType>, CompilerError>
 {
-    let (db, files) = Load_Crate(root)?;
+    let (db, files) = Load_Crate(root, environment)?;
     let sema: Semantics<'_, RootDatabase> = Semantics::new(&db);
 
     let mut locations: Vec<(String, u32, u32)> = Vec::new();
@@ -216,7 +218,7 @@ mod tests
     #[test]
     fn Test_Discover_Crate_Should_Find_Exactly_The_Real_Clone_On_Copy_Call()
     {
-        let findings = Discover_Crate(&Fixture_Root()).expect("this crate's own fixture is a real, loadable Cargo project");
+        let findings = Discover_Crate(&Fixture_Root(), &nomos_platform_std::StdEnvironment).expect("this crate's own fixture is a real, loadable Cargo project");
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
@@ -234,7 +236,7 @@ mod tests
         let root = std::env::temp_dir().join("nomos-lang-rust-compiler-no-cargo-project-test");
         std::fs::create_dir_all(&root).expect("the platform temporary directory is writable");
 
-        let error = Discover_Crate(&root).expect_err("a directory with no Cargo.toml anywhere above it is not a loadable project");
+        let error = Discover_Crate(&root, &nomos_platform_std::StdEnvironment).expect_err("a directory with no Cargo.toml anywhere above it is not a loadable project");
 
         assert!(error.reason.contains("could not be loaded"), "{}", error.reason);
     }
