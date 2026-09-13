@@ -25,6 +25,27 @@ allow = [
     "Zlib",
 ]
 
+# `notify` is CC0-1.0, and it arrives here without anyone having chosen it: the path is
+# `ra_ap_vfs-notify` -> `ra_ap_load-cargo` -> `nomos-lang-rust-compiler`, so it came in with
+# the compiler-backed provider and the allowlist above simply predates it. This was the whole
+# of `licenses FAILED`; `advisories`, `bans` and `sources` all passed beside it.
+#
+# CC0-1.0 is a public-domain dedication and imposes no obligation on a consumer -- strictly
+# less demanding than MIT, which is already allowed above -- so admitting it is not a close
+# call. What is a choice is admitting it *here* rather than in the list above. A blanket
+# `"CC0-1.0"` entry would admit every future CC0 dependency silently, and CC0's own text is
+# the one permissive license with a widely-noted omission (it declines to grant patent
+# rights, which is why several organizations decline it for code). That is not a reason to
+# refuse this crate; it is a reason for the next CC0 crate to be looked at rather than
+# inherited. Naming `notify` keeps that.
+#
+# Deliberately no `version` pin. The exception permits exactly CC0-1.0 and only for this
+# crate, so a `notify` that relicenses is checked against the allowlist above like anything
+# else -- a pin would buy nothing and would red this step on a routine bump.
+[[licenses.exceptions]]
+name = "notify"
+allow = ["CC0-1.0"]
+
 [bans]
 multiple-versions = "warn"
 wildcards = "deny"

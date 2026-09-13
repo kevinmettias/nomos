@@ -68152,6 +68152,64 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P96-THE-SUPPLY-CHAIN-GATE-STEP-REFUSES-A-DEPENDENCY-THIS-WORKSPACE-TOOK",
+      "title": "The supply-chain gate step fails on a license this workspace never decided about",
+      "why": "cargo deny check advisories bans licenses sources is the gate Supply chain step, and licenses FAILED at HEAD: notify 8.2.0 is CC0-1.0 and deny.toml allowlist does not name it. The path is ra_ap_vfs-notify to ra_ap_load-cargo to nomos-lang-rust-compiler, so it arrived with the compiler-backed provider and nothing about it was ever decided -- the allowlist simply predates the dependency. The other three classes pass, measured: advisories ok, bans ok, sources ok. Nobody has seen this because real CI has not executed a single gate step since 2026-09-07: every run on dev failed in under ten seconds with the job was not started because recent account payments have failed, which is a billing state and not a code state, so the one instrument that would have reported this has been dark for a week. nomos gate run also reports it, as dependency-policy workspace error rejected, but only as an Advisory, which cannot fail a build.",
+      "done_when": "cargo deny check advisories bans licenses sources exits 0 over this workspace. CC0-1.0 is admitted for notify by name rather than added to the blanket allowlist, so a second CC0-1.0 dependency arriving later is still stopped and looked at rather than silently admitted, and deny.toml own comment says that and says why CC0-1.0 is acceptable at all. No version pin on the exception, because the exception permits exactly CC0-1.0 for that one crate and a relicensed notify is therefore checked against the main allowlist anyway -- stated in the comment so the absence reads as a choice. The unmatched BSD-3-Clause allowance is left alone and named as out of scope: it is a warning about headroom nothing uses, not the failure this item is about.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "deny.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "deny",
+          "check",
+          "advisories",
+          "bans",
+          "licenses",
+          "sources"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "deny",
+          "check",
+          "advisories",
+          "bans",
+          "licenses",
+          "sources"
+        ],
+        "exit_code": 0,
+        "output_tail": "   ├── ra_ap_syntax-bridge v0.0.293 (*)\n      │       ├── ra_ap_tt v0.0.293\n      │       │   ├── ra_ap_cfg v0.0.293\n      │       │   │   ├── ra_ap_base_db v0.0.293 (*)\n      │       │   │   ├── ra_ap_hir v0.0.293 (*)\n      │       │   │   ├── ra_ap_hir_def v0.0.293 (*)\n      │       │   │   ├── ra_ap_hir_expand v0.0.293 (*)\n      │       │   │   └── ra_ap_project_model v0.0.293 (*)\n      │       │   ├── ra_ap_hir v0.0.293 (*)\n      │       │   ├── ra_ap_hir_def v0.0.293 (*)\n      │       │   ├── ra_ap_hir_expand v0.0.293 (*)\n      │       │   ├── ra_ap_load-cargo v0.0.293 (*)\n      │       │   ├── ra_ap_mbe v0.0.293 (*)\n      │       │   ├── ra_ap_proc_macro_api v0.0.293 (*)\n      │       │   └── ra_ap_syntax-bridge v0.0.293 (*)\n      │       ├── ra_ap_vfs v0.0.293\n      │       │   ├── ra_ap_base_db v0.0.293 (*)\n      │       │   ├── ra_ap_ide_db v0.0.293 (*)\n      │       │   ├── ra_ap_load-cargo v0.0.293 (*)\n      │       │   ├── ra_ap_span v0.0.293 (*)\n      │       │   └── ra_ap_vfs-notify v0.0.293 (*)\n      │       └── ra_ap_vfs-notify v0.0.293 (*)\n      ├── seize v0.5.1\n      │   └── papaya v0.2.5\n      │       └── salsa v0.23.0\n      │           ├── ra_ap_base_db v0.0.293 (*)\n      │           ├── ra_ap_hir_def v0.0.293 (*)\n      │           ├── ra_ap_hir_expand v0.0.293 (*)\n      │           ├── ra_ap_hir_ty v0.0.293 (*)\n      │           ├── ra_ap_ide_db v0.0.293 (*)\n      │           └── ra_ap_span v0.0.293 (*)\n      └── winapi-util v0.1.11\n          ├── same-file v1.0.6\n          │   └── walkdir v2.5.0\n          │       ├── notify v8.2.0 (*)\n          │       └── ra_ap_vfs-notify v0.0.293 (*)\n          └── walkdir v2.5.0 (*)\n\n",
+        "verified_at": 1789318299,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c3ff169e54bad4959f7382d8bab3106fa4abb5c3"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
