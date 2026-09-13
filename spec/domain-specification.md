@@ -182,6 +182,7 @@ profile: domain-specification
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
 | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md@authored | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md | authored | 20 | 6 | sha256:5f9c67cc4d6f14d07b696b7c2842958e0e79c15eede17749d7e63ce8627f8793 |
+| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md@authored | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md | authored | 41 | 11 | sha256:569c3dd0c4f68f7a29cdbe800e1a2e759cf8c0ee53e364e677274c253e2bec3e |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md@authored | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md | authored | 18 | 7 | sha256:4264b9448cf95f7bb22780f4a6cd970a7f64828eea993961df2987984417b701 |
 | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md@authored | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md | authored | 18 | 6 | sha256:5369feac3ebd7b343b32234f25aa30ba669d4151b15af6d83d2ad37da0f58379 |
 | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md | authored | 24 | 6 | sha256:b8159cff04a7379eb48a47ce46a3da98ad447cc8ccec98c33ab48526d604e57f |
@@ -1650,6 +1651,17 @@ profile: domain-specification
 | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#10 | authored | 2 | The Decision |
 | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#14 | authored | 2 | What This Does Not Do |
 | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#19 | authored | 2 | Status |
+| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#1 | authored | 1 | Whether projection selection gains bounded relation traversal for a scoped context pack |
+| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#2 | authored | 2 | Question |
+| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#14 | authored | 2 | The Decision |
+| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#17 | authored | 3 | Which terms are followed: all of them, `relates-to` included |
+| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#20 | authored | 3 | The stop condition: one hop, and the bound is the decision rather than a parameter |
+| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#24 | authored | 3 | Declared status participates, as a report and never as a filter |
+| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#28 | authored | 3 | Emission order: by identity, never by discovery |
+| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#31 | authored | 3 | Inlined subject, cited neighbours |
+| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#35 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#40 | authored | 2 | Status |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1 | authored | 1 | Main and dev mean different things, and the distance between them is a decision, not an accident |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#2 | authored | 2 | Question |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#5 | authored | 2 | What main is for |
@@ -47231,6 +47243,318 @@ test would find. Nothing measured here shows that need existing today.
 Accepted. Four crates named for a new directory, one of the four redirected to an
 existing family directory instead, one Cargo workspace kept, and one graph assertion's
 shape stated; no crate moves and no test is written here.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#1
+
+*revision: authored · kind: heading · heading: Whether projection selection gains bounded relation traversal for a scoped context pack · hash: sha256:d6208e13c9d58eb83bfc56108444dfb61a434ed3d806e0c136b8a3e2f2ebb8e8*
+
+# Whether projection selection gains bounded relation traversal for a scoped context pack
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#2
+
+*revision: authored · kind: heading · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#3
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / Question · hash: sha256:bdba5fdeea215a53d71c1ea19a3cfff7834ce2d3025428722879e70521a1e74e*
+
+`implementation-context-pack` is the one shipped profile whose declared format is `contextpack`
+and whose output is `context/implementation.json` — the shape meant to be an agent's focused
+context. It is the least focused profile shipped.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#4
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / Question · hash: sha256:0a38e13acd8fb1ccb98f85bc7493c01cfebaaeb83cd98a8f5c871d51d5283dd8*
+
+Its three sections are every node of kind `decision`, every normative statement with no filter
+at all, and every prose block. Nothing scopes it to a task, a subject or a question. So an
+agent needing the record that governs the thing it is about to change must either read the
+whole decision set or already know the identifier — and not knowing the identifier is the
+condition a context pack exists to remove.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#5
+
+*revision: authored · kind: heading · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#6
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What Was Measured · hash: sha256:119d9617b4f750c3a62ee3d9fd67079d5ca1d314fc86b1d5d5597e3a17725ec0*
+
+Measured 2026-09-13.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#7
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What Was Measured · hash: sha256:e834837ef5a535ee20be0d022ca51a0be0a71561306227874b24cfda4ae261e5*
+
+**The pack's three sections, verbatim from the profile.** `nodes` filtered to
+`kind: decision`; `statements` with no filter; `blocks` filtered to `kind: prose`. No subject,
+no scope, no question.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#8
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What Was Measured · hash: sha256:f255ba56517a7cd83ccec5237e615dba0f6e01ee963360bd5b12beabf4e35560*
+
+**Selection cannot do better today.** `Filter` is a flat conjunction of equality, prefix,
+either-column and semi-join clauses over one query, and no code path in `select` follows an
+edge. `subject-dossier`, the nearest thing to a scoped projection, selects the subject's own
+node, its own statements and its own relation rows — and `Gather_Relations` returns
+`(from, relation_type, to, tier, suite)`, five identities and no content. A neighbour's content
+is never retrieved and a second hop does not exist.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#9
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What Was Measured · hash: sha256:2c1ac4112c5c2b0d0b01d73c7fa1be5f13d0ace9b2ab50b6bd703b9a04ee8693*
+
+**The scale the pack would carry.** `spec/domain-specification.md`, the committed projection of
+the same store's records half, is **5,162,557 bytes over 63,195 lines** for 232 records —
+about 22 KB of rendered content per record.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#10
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What Was Measured · hash: sha256:d6e70bdc27a6f58171b63b37c9130e7981f84482ecdaf44621e74be85d4b21a0*
+
+**Reachability, over the real record graph.** 232 records, treating every edge as undirected
+because `relates-to` is its own inverse:
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#11
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What Was Measured · hash: sha256:a7e4bce3ebe48f1ce8828fce12157c0f061c4d89eff8fe25839877e33a7d8d6d*
+
+| from any record | median reached | mean | max | share of corpus |
+|---|---|---|---|---|
+| 1 hop | 7 | 8.0 | 36 | 3% |
+| 2 hops | 43 | 45.7 | 161 | 19% |
+| 3 hops | 144 | 142.8 | 238 | **62%** |
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#12
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What Was Measured · hash: sha256:743d7c1e60d3ed3f875e9e451d966aabc79e179a678431a9d7c93564a223595b*
+
+Degree is median 6, mean 7.0, max 35 — `ARC-ECOSYSTEM-001`.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#13
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What Was Measured · hash: sha256:ad208b392f32c162d05eca65304540b6ff8bb3ac40349834766f05b473be3dca*
+
+**Following only the directional terms reaches nothing.** Restricted to
+`affects`/`affected_by`/`supersedes`, the median reach is **1 — the record itself — at one, two
+and three hops alike**, and **177 of 232 records (76%) have no directional edge at all.**
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#14
+
+*revision: authored · kind: heading · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#15
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision · hash: sha256:2a41231ccbfa95cd2d56bbc4d3f326e22615a4bd367017855dc2eb845723debd*
+
+**Yes. Selection gains bounded relation traversal, at exactly one hop, following every relation
+term, emitting the subject's content inlined and each reached neighbour cited by identity,
+title and declared status, ordered by identity.**
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#16
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision · hash: sha256:88a190b96b478128ef5387fbbe44c2aea15edcaddb0a403c82880b8103c37d5d*
+
+Each of the five open questions is answered by a measurement rather than a preference.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#17
+
+*revision: authored · kind: heading · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Which terms are followed: all of them, `relates-to` included · hash: sha256:b95100a7ec6c42e0131237e6798be8e3032bd9329bfd071c879d5f3a64e08542*
+
+### Which terms are followed: all of them, `relates-to` included
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#18
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Which terms are followed: all of them, `relates-to` included · hash: sha256:9ab0748ef299523e188139c252d9f86a0d6640466c467775e1e598034fd380e0*
+
+This looks like the question with the most room in it and has none. `OD-SPEC-015` measured
+`relates-to` at 93 per cent of authored edges; the traversal measurement above is the other
+half of that fact. A traversal that followed only the directional terms would reach **the
+record it started from and nothing else**, for three quarters of the corpus, at any hop count.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#19
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Which terms are followed: all of them, `relates-to` included · hash: sha256:16cefe71e502ebd4b57aef8508c2a4eddb03aa228a35c77f95a7131bb0bd366f*
+
+So "follow the meaningful edges and skip the vague ones" is not available. There is one graph,
+`relates-to` is nearly all of it, and a traversal either follows it or does not exist.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#20
+
+*revision: authored · kind: heading · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / The stop condition: one hop, and the bound is the decision rather than a parameter · hash: sha256:f341a2df1faba332d30b216fc7691077af31be2fd4791c007cb3723df5efa5a5*
+
+### The stop condition: one hop, and the bound is the decision rather than a parameter
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#21
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / The stop condition: one hop, and the bound is the decision rather than a parameter · hash: sha256:2f82f7ee070f22e277b9e48bea1afba69241305d597f204360fbfc4e5f377c6d*
+
+A hop bound stops bounding almost immediately. One hop reaches 3 per cent of the corpus; two
+reaches 19 per cent and ranges from 7 records to 161 depending on where it starts; three
+reaches 62 per cent and, from the best-connected records, everything. The graph's diameter is
+small because `relates-to` is symmetric and dense, which is exactly what makes a second hop
+worthless as a bound.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#22
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / The stop condition: one hop, and the bound is the decision rather than a parameter · hash: sha256:703961c5a312a65261f6a819993de02894ea7a8e9ec75879afe3659900060ba0*
+
+A node budget is refused for the same measurement. A budget would only be needed above one hop,
+and above one hop it must truncate a set that varies more than twenty-fold by starting point —
+so two agents asking about neighbouring records would get packs neither of them could compare,
+and which one got truncated would depend on a graph property neither of them chose.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#23
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / The stop condition: one hop, and the bound is the decision rather than a parameter · hash: sha256:453c5ee1b0ca74f4e9b0900d17cd7ee305ae07023d756f1d6f21d19e8d5857b0*
+
+One hop is therefore fixed, not configurable. A caller wanting a neighbour's neighbourhood asks
+about the neighbour, which is a second question with its own honest answer, rather than a
+parameter that silently changes what a pack means.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#24
+
+*revision: authored · kind: heading · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Declared status participates, as a report and never as a filter · hash: sha256:1fd608198ac50c544cd51fac3d1cee470db115e48bc53142e891d26a00db1d13*
+
+### Declared status participates, as a report and never as a filter
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#25
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Declared status participates, as a report and never as a filter · hash: sha256:27d3a01e334f57b89d6bb103b720cf92deae28db1ceabeb118140419a5d97be4*
+
+`Filter` gained `status` this week, and ten of this repository's governing questions declare
+`status: open`.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#26
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Declared status participates, as a report and never as a filter · hash: sha256:30f6e7d201e2eba78dca55ca7a5600bf9544fe960b368c49970dbd07e8d54eb1*
+
+A pack that filtered reached records to `accepted` would hide precisely the unsettled questions
+an implementer most needs to know are unsettled. One that filtered to `open` would hide the
+settled ground the work stands on. Both are worse than not asking.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#27
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Declared status participates, as a report and never as a filter · hash: sha256:a56f33d8468cce49fe59ecb2b65a1522c7b9cba682a5cf64d51f9b23c7b8294b*
+
+So status does not gate traversal. It is **carried on each citation**, so a pack says of every
+neighbour whether the thing it governs is decided or still open — which is the same reasoning
+`P95-A-RECORDS-DECLARED-STATUS-CANNOT-BE-SELECTED` acted on for projections generally: the
+field existed and nothing could read it back, so open questions rendered as settled decisions.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#28
+
+*revision: authored · kind: heading · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Emission order: by identity, never by discovery · hash: sha256:4d59e3515e7d6e7aa875ab14db40038142c57de2d38a5da4aed5e0be6a68f0a4*
+
+### Emission order: by identity, never by discovery
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#29
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Emission order: by identity, never by discovery · hash: sha256:2575ec405b4a85607254153be869b6158414d9a1b37cac0dc26c96cb2761405c*
+
+Every existing gather ends in an explicit `Ordered_By` over an identity column — `n.node_id`,
+`s.statement_id`, `f.node_id, r.relation_type, t.node_id`. Reached content is emitted by
+`node_id` ascending, extending that rule rather than adding a second one.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#30
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Emission order: by identity, never by discovery · hash: sha256:3bacfbb946bd0cc55c112ee66b0619d7ad8fa4da6b410f1ffa25fd2d80ff257c*
+
+The alternative, discovery order, would make the output depend on frontier iteration, and two
+renders of one store would stop being byte-identical — which the determinism contract the
+freshness sidecar rests on does not permit. Ordering by identity also means a pack's diff
+between two renders shows what changed rather than what moved.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#31
+
+*revision: authored · kind: heading · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Inlined subject, cited neighbours · hash: sha256:8cf185b026840a7827cdf333326aa19a861a0158d94348a1a168b4b8a12211e3*
+
+### Inlined subject, cited neighbours
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#32
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Inlined subject, cited neighbours · hash: sha256:d1251d2345ffaafb52463f3b08db9d6bbd3bf9b47ddaaa55a630ba14b4675058*
+
+The subject's own content is inlined. Each reached neighbour is cited by identity, title and
+declared status, plus the section anchor the citation points at — not inlined.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#33
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Inlined subject, cited neighbours · hash: sha256:c1d395cf1cf7bc6ff403d2522a3c2460c682c37903fd154ec5b18ad9a4f0b761*
+
+At about 22 KB of rendered content per record, a median one-hop neighbourhood of 7 inlined is
+around 155 KB, which would be usable. The maximum is 36, around 790 KB, which would not be —
+and the record that hits it, `ARC-ECOSYSTEM-001`, is one of the ones most worth asking about.
+Inlining would make a pack's size a function of its subject's popularity rather than of the
+question, and the agent least able to afford a large pack is the one asking about the
+best-connected record.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#34
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / The Decision / Inlined subject, cited neighbours · hash: sha256:529a95290e68d28280fb8a81f1f930f5a6e380d432e8c2febf40e8c4ac2642d3*
+
+Citation by identity is also what the asking agent actually lacked. It did not need the
+neighbour's prose; it needed to know the neighbour exists and what it is called. A second call
+fetches one.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#35
+
+*revision: authored · kind: heading · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#36
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What This Record Does Not Do · hash: sha256:dfc526b0b90108b19f0bbeac98424f2417afee9c761be68c83d9f612f239541f*
+
+It does not change any profile, including `implementation-context-pack`. It does not add a
+filter field, change selection code, or change a renderer.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#37
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What This Record Does Not Do · hash: sha256:0d3bdc6be147fbb789e3a90cbd776786df5a50ac8ef947d637ad154021fdbf3e*
+
+It does not decide the spelling of the traversal — whether it is a new content kind, a section
+option, or a profile-level declaration — or what the citation's JSON looks like. Those are the
+building item's, against the format `contextpack` already has.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#38
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What This Record Does Not Do · hash: sha256:7def7d265f0fac86aa098b8c61455399d64d6b6ff621eb0b8359b765c7d45d09*
+
+It does not extend traversal to the corpus half of the store. Every measurement here is over
+`docs/records/`, and a corpus node's edge population has not been measured.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#39
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What This Record Does Not Do · hash: sha256:5036dd30f87cb1dbd3ab3d9ddf7e674accb7e2a1b4f157e2a624c47c99787932*
+
+It does not reopen `OD-SPEC-015`. That `relates-to` carries 93 per cent of the edges is taken
+as measured there and used here; nothing about this decision asks it to be otherwise.
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#40
+
+*revision: authored · kind: heading · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#41
+
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / Status · hash: sha256:42dfdaed47aa855114fbc749ce434019479ec478c424c895fe35b266442989ec*
+
+Accepted. Selection gains bounded relation traversal at exactly one hop, following every term
+because following only the directional ones reaches nothing for 76 per cent of records,
+stopping at one hop because two already ranges from 7 records to 161 and three reaches 62 per
+cent of the corpus, carrying declared status on each citation rather than filtering by it,
+emitting by identity so two renders stay byte-identical, and citing neighbours rather than
+inlining them so a pack's size follows its question and not its subject's popularity.
 
 ### docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1
 

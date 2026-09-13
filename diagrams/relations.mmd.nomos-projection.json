@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:9516990ef6bef64db7242ec793244b2e9affbae728a199c8c1e6710d0be064de",
-  "inputs_digest": "sha256:61677241606204878d292ce219f79fd14ff39dc3d7f493ba4fa637ac0427413a",
+  "content_digest": "sha256:39a9c8d382378e645e03d060e02b23f20f652f1078cb43e2f6ef9f59b7358db7",
+  "inputs_digest": "sha256:6926881b247812e46d4de1cb37fd5898e9833bb3b487deb651ca284bda1c493e",
   "sections": [
     [
       "Relations",
-      1640
+      1646
     ],
     [
       "Decisions",
-      224
+      225
     ]
   ],
   "inputs": [
@@ -6208,6 +6208,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PROJECT-002 relates-to OD-PROJECT-005",
+      "hash": "sha256:9ff7e0b0e38020302999f66724e50c3f0371f8ccbacd34926a1cf4f549f0f802"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PROJECT-002 relates-to OD-SPEC-005",
       "hash": "sha256:ebd39aea17ffb4ee2ed7176b4fa9a9b9c45cd41467ac09d890c8fdb8db3a15ae"
     },
@@ -6245,6 +6250,21 @@
       "content": "relations",
       "identity": "OD-PROJECT-004 relates-to OD-RULES-020",
       "hash": "sha256:9293608df2a16786db58816ff72246c630fbd72772e58d82dd7fb884b8ac419d"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PROJECT-005 relates-to OD-PROJECT-002",
+      "hash": "sha256:3108c89e163c22fffcd9768d9f83ba32d1bab0aff67a80bad2e63da05274099b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PROJECT-005 relates-to OD-SPEC-012",
+      "hash": "sha256:851fdd4b92bf707d61dc9308f93edfe52ce36fbbbf72660857b90c867a265dd0"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PROJECT-005 relates-to OD-SPEC-015",
+      "hash": "sha256:e314598d4cc94c80ee89e600825efd139bd4b61cb0916c0475d87ab555503fa3"
     },
     {
       "content": "relations",
@@ -7638,6 +7658,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-SPEC-012 relates-to OD-PROJECT-005",
+      "hash": "sha256:75ae1ca87afde8dfbb1650d550827e01ca3dd6d15d36ff034cfef9281c1f5880"
+    },
+    {
+      "content": "relations",
       "identity": "OD-SPEC-012 relates-to OD-SPEC-010",
       "hash": "sha256:89d6a315b23b707a9af820de01b209e419e0ea27225b0efd10484d45336352bd"
     },
@@ -7705,6 +7730,11 @@
       "content": "relations",
       "identity": "OD-SPEC-015 relates-to ARC-SPECDB-001",
       "hash": "sha256:da5345a8f1ff164d3b45c0b5bf86f843bedc66d40b61969b88e1339edbf45735"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SPEC-015 relates-to OD-PROJECT-005",
+      "hash": "sha256:f2164ceafe7884096c2e9991fcf16205c2f3c8c12c79b56bd9cd600dd6b2860c"
     },
     {
       "content": "relations",
@@ -9035,6 +9065,11 @@
       "content": "nodes",
       "identity": "OD-PROJECT-004",
       "hash": "sha256:0d90c2ed36ffcdc5ab4462244048b53d7b0b969935b8324a91d7e85c0cda6d33"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-PROJECT-005",
+      "hash": "sha256:3f7d616adce59b7b93f4eb93b4137d26feb1ec61e55216be993aff2959db17a6"
     },
     {
       "content": "nodes",

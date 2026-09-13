@@ -1241,6 +1241,7 @@ graph LR
     od_project_002 -->|"relates-to"| od_package_005
     od_project_002 -->|"relates-to"| od_project_001
     od_project_002 -->|"relates-to"| od_project_003
+    od_project_002 -->|"relates-to"| od_project_005["OD-PROJECT-005"]
     od_project_002 -->|"relates-to"| od_spec_005
     od_project_003 -->|"relates-to"| od_gate_005
     od_project_003 -->|"relates-to"| od_project_002
@@ -1249,6 +1250,9 @@ graph LR
     od_project_004 -->|"relates-to"| od_ledger_036
     od_project_004 -->|"relates-to"| od_package_015
     od_project_004 -->|"relates-to"| od_rules_020
+    od_project_005 -->|"relates-to"| od_project_002
+    od_project_005 -->|"relates-to"| od_spec_012
+    od_project_005 -->|"relates-to"| od_spec_015
     od_release_001 -->|"relates-to"| od_agent_002
     od_release_001 -->|"relates-to"| od_gate_005
     od_roadmap_001 -->|"affected_by"| od_roadmap_002
@@ -1527,6 +1531,7 @@ graph LR
     od_spec_011 -->|"relates-to"| od_spec_013
     od_spec_011 -->|"relates-to"| od_spec_015
     od_spec_012 -->|"relates-to"| od_ledger_020
+    od_spec_012 -->|"relates-to"| od_project_005
     od_spec_012 -->|"relates-to"| od_spec_010
     od_spec_012 -->|"relates-to"| od_spec_011
     od_spec_012 -->|"relates-to"| od_spec_015
@@ -1541,6 +1546,7 @@ graph LR
     od_spec_014 -->|"relates-to"| d_136
     od_spec_014 -->|"relates-to"| d_137
     od_spec_015 -->|"relates-to"| arc_specdb_001
+    od_spec_015 -->|"relates-to"| od_project_005
     od_spec_015 -->|"relates-to"| od_spec_011
     od_spec_015 -->|"relates-to"| od_spec_012
     od_spec_016 -->|"relates-to"| arc_specdb_001
@@ -1809,6 +1815,7 @@ graph LR
     od_project_002
     od_project_003
     od_project_004
+    od_project_005
     od_release_001
     od_roadmap_001
     od_roadmap_002

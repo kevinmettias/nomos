@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:bc94838889cdc99c4ec09693eabd106de1bce327b7d03ab8a433ab9106d6fce0",
-  "inputs_digest": "sha256:8075183e60af4d39edd8118535637225f16379a3502218611e003c35ad0f38d3",
+  "content_digest": "sha256:c6d09de07dfd82ac0a99784bdcc9a783939346b7ffe4a010012b2957d444ad6b",
+  "inputs_digest": "sha256:b04854b9eda724d35ee088986b911bbc9007023a027258ade0ad6358a18e702e",
   "sections": [
     [
       "Documents",
-      232
+      233
     ],
     [
       "Sections",
-      1909
+      1920
     ],
     [
       "Source blocks",
-      6621
+      6662
     ]
   ],
   "inputs": [
@@ -879,6 +879,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md@authored",
       "hash": "sha256:5f9c67cc4d6f14d07b696b7c2842958e0e79c15eede17749d7e63ce8627f8793"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md@authored",
+      "hash": "sha256:569c3dd0c4f68f7a29cdbe800e1a2e759cf8c0ee53e364e677274c253e2bec3e"
     },
     {
       "content": "documents",
@@ -8194,6 +8199,61 @@
       "content": "headings",
       "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#19",
       "hash": "sha256:6a94a1c596f2d0d4dc7a3ea8be11a0d6b28e2f34c118be94d6a51c5863e82bdb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#1",
+      "hash": "sha256:b54a7a54420d5c4328424c79c03f9c658aa7334b1281a6fc8b3bba3aaf247894"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#2",
+      "hash": "sha256:9cef9ade397c075fb4b8160dc7c4ada6c50e852350a24eaea15f7a8c0dc06f89"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#5",
+      "hash": "sha256:7277c82f0564cd8c4faf70500aa1faa978a7b1b42bbf70088c00379e880e4ca0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#14",
+      "hash": "sha256:440768f043cc28a8a7ec7fb09db92bf6d28c0a6c6a1e8687fb465df2bf39f10b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#17",
+      "hash": "sha256:74686568e4bde46d760cc33ea45707b708f8eeeaa16f47287871687fa6d7bfe5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#20",
+      "hash": "sha256:aa76db77f28c43b469b725c2a3adba8e30ad4145652d98c8b2dbfc993fdeeb5c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#24",
+      "hash": "sha256:90f677c73f9ac51f3496331a43f01ff68023bc63d9a7bfdab7e2b5e7361e6163"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#28",
+      "hash": "sha256:bb90be4c6095def8c10ec47e46d7b2728d050e045487acdaaf0cbe70ffca585c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#31",
+      "hash": "sha256:8d2806778257551c6d522b783fc72c424fdc53472336f81fb0feccb0c18c13cc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#35",
+      "hash": "sha256:04f4f67c116fc2ab5c9733272e5d4211cd4ef81b651bbfd25dd46c58fd5d80c2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#40",
+      "hash": "sha256:2e745cc1b8f3544439f0f2b7cb4a3a1f42be925a63bc9526d4f0d7e4f296d109"
     },
     {
       "content": "headings",
@@ -35139,6 +35199,211 @@
       "content": "blocks",
       "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#20",
       "hash": "sha256:d244b0b265fc6ea0d6d56949bf88d02595c0b3c6ea700ea23f13138a7b88787b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#1",
+      "hash": "sha256:d6208e13c9d58eb83bfc56108444dfb61a434ed3d806e0c136b8a3e2f2ebb8e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#3",
+      "hash": "sha256:bdba5fdeea215a53d71c1ea19a3cfff7834ce2d3025428722879e70521a1e74e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#4",
+      "hash": "sha256:0a38e13acd8fb1ccb98f85bc7493c01cfebaaeb83cd98a8f5c871d51d5283dd8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#6",
+      "hash": "sha256:119d9617b4f750c3a62ee3d9fd67079d5ca1d314fc86b1d5d5597e3a17725ec0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#7",
+      "hash": "sha256:e834837ef5a535ee20be0d022ca51a0be0a71561306227874b24cfda4ae261e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#8",
+      "hash": "sha256:f255ba56517a7cd83ccec5237e615dba0f6e01ee963360bd5b12beabf4e35560"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#9",
+      "hash": "sha256:2c1ac4112c5c2b0d0b01d73c7fa1be5f13d0ace9b2ab50b6bd703b9a04ee8693"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#10",
+      "hash": "sha256:d6e70bdc27a6f58171b63b37c9130e7981f84482ecdaf44621e74be85d4b21a0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#11",
+      "hash": "sha256:a7e4bce3ebe48f1ce8828fce12157c0f061c4d89eff8fe25839877e33a7d8d6d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#12",
+      "hash": "sha256:743d7c1e60d3ed3f875e9e451d966aabc79e179a678431a9d7c93564a223595b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#13",
+      "hash": "sha256:ad208b392f32c162d05eca65304540b6ff8bb3ac40349834766f05b473be3dca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#14",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#15",
+      "hash": "sha256:2a41231ccbfa95cd2d56bbc4d3f326e22615a4bd367017855dc2eb845723debd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#16",
+      "hash": "sha256:88a190b96b478128ef5387fbbe44c2aea15edcaddb0a403c82880b8103c37d5d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#17",
+      "hash": "sha256:b95100a7ec6c42e0131237e6798be8e3032bd9329bfd071c879d5f3a64e08542"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#18",
+      "hash": "sha256:9ab0748ef299523e188139c252d9f86a0d6640466c467775e1e598034fd380e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#19",
+      "hash": "sha256:16cefe71e502ebd4b57aef8508c2a4eddb03aa228a35c77f95a7131bb0bd366f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#20",
+      "hash": "sha256:f341a2df1faba332d30b216fc7691077af31be2fd4791c007cb3723df5efa5a5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#21",
+      "hash": "sha256:2f82f7ee070f22e277b9e48bea1afba69241305d597f204360fbfc4e5f377c6d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#22",
+      "hash": "sha256:703961c5a312a65261f6a819993de02894ea7a8e9ec75879afe3659900060ba0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#23",
+      "hash": "sha256:453c5ee1b0ca74f4e9b0900d17cd7ee305ae07023d756f1d6f21d19e8d5857b0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#24",
+      "hash": "sha256:1fd608198ac50c544cd51fac3d1cee470db115e48bc53142e891d26a00db1d13"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#25",
+      "hash": "sha256:27d3a01e334f57b89d6bb103b720cf92deae28db1ceabeb118140419a5d97be4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#26",
+      "hash": "sha256:30f6e7d201e2eba78dca55ca7a5600bf9544fe960b368c49970dbd07e8d54eb1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#27",
+      "hash": "sha256:a56f33d8468cce49fe59ecb2b65a1522c7b9cba682a5cf64d51f9b23c7b8294b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#28",
+      "hash": "sha256:4d59e3515e7d6e7aa875ab14db40038142c57de2d38a5da4aed5e0be6a68f0a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#29",
+      "hash": "sha256:2575ec405b4a85607254153be869b6158414d9a1b37cac0dc26c96cb2761405c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#30",
+      "hash": "sha256:3bacfbb946bd0cc55c112ee66b0619d7ad8fa4da6b410f1ffa25fd2d80ff257c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#31",
+      "hash": "sha256:8cf185b026840a7827cdf333326aa19a861a0158d94348a1a168b4b8a12211e3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#32",
+      "hash": "sha256:d1251d2345ffaafb52463f3b08db9d6bbd3bf9b47ddaaa55a630ba14b4675058"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#33",
+      "hash": "sha256:c1d395cf1cf7bc6ff403d2522a3c2460c682c37903fd154ec5b18ad9a4f0b761"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#34",
+      "hash": "sha256:529a95290e68d28280fb8a81f1f930f5a6e380d432e8c2febf40e8c4ac2642d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#35",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#36",
+      "hash": "sha256:dfc526b0b90108b19f0bbeac98424f2417afee9c761be68c83d9f612f239541f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#37",
+      "hash": "sha256:0d3bdc6be147fbb789e3a90cbd776786df5a50ac8ef947d637ad154021fdbf3e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#38",
+      "hash": "sha256:7def7d265f0fac86aa098b8c61455399d64d6b6ff621eb0b8359b765c7d45d09"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#39",
+      "hash": "sha256:5036dd30f87cb1dbd3ab3d9ddf7e674accb7e2a1b4f157e2a624c47c99787932"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#40",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#41",
+      "hash": "sha256:42dfdaed47aa855114fbc749ce434019479ec478c424c895fe35b266442989ec"
     },
     {
       "content": "blocks",
