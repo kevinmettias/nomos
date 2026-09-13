@@ -302,24 +302,30 @@ fn Test_Render_Plan_Should_Report_Every_Rule_A_Check_Run_Composes()
 }
 
 /// The `[Blocking]` findings this workspace's own tree carries today, and why each is
-/// accepted rather than fixed -- checked directly (`gh run list --branch dev` showed CI's
-/// own `Test` step failing on every push since), not assumed. `abbreviations: val` is
-/// `P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON`'s own permanent, deliberate
-/// true positive against `tests/integration/fixtures/third-party/hex-0.4.3/lib.rs`
-/// (`calibration.rs`'s own `Expected::TruePositive(1)`) -- never to be fixed, because hex's
-/// own author really did choose that name. `single-letter-names: T` is a real, tracked,
-/// not-yet-fixed gap (`P70-IMPL-BLOCK-GENERIC-PARAMETERS-NOT-IN-PAYLOAD`'s own follow-up)
-/// against the same file, kept in this allowlist only until that item closes it -- removing
-/// it from here is part of that item's own `done_when`, not a decision this list makes for
-/// it.
+/// accepted rather than fixed.
 ///
-/// A named allowlist rather than a bare count: a third finding accepted the same deliberate
-/// way must be added here explicitly, and anything *not* named here still fails these tests
-/// exactly as before `P71-GATE-TESTS-OWN-CLEAN-TREE-ASSERTION-IS-STALE-2` -- neither
+/// Empty today, and that is the assertion rather than the absence of one: with no entry,
+/// [`Only_Accepted_Findings_Are_Blocking`] means this workspace's own tree carries no
+/// `[Blocking]` finding at all, which is strictly stronger than the two-named version it
+/// replaces.
+///
+/// Both former entries were against the same file,
+/// `tests/integration/fixtures/third-party/hex-0.4.3/lib.rs`, and they left for different
+/// reasons. `single-letter-names: T` was a real gap and was fixed: `OD-CAPABILITY-014` put an
+/// `impl` block's own generic parameters in the syntax payload, and the rule now exempts an
+/// `Implementation` item whose own name is one of them (`P96`, `c278d896`). `abbreviations:
+/// val` was *not* fixed and never will be -- this list's own previous text called it a
+/// permanent, deliberate true positive, because `hex`'s author really did choose that name --
+/// but that reasoning was always about the finding and never about whether this repository
+/// walks the file. `P96` (`c3ff169e`) stopped the shared walk descending into a directory
+/// carrying its own `standards.json`, so the vendored fixture is no longer judged from this
+/// root at all, and `tests/integration/tests/calibration.rs` still judges it from its own.
+///
+/// A named allowlist rather than a bare count: a finding accepted the same deliberate way
+/// must be added here explicitly, and anything not named here fails these tests -- neither
 /// `nomos_gate_orchestration::Suppression` nor `RuleCalibration` is wired to a real config
-/// file yet (checked: zero non-test construction sites), so this allowlist is what stands
-/// in for that mechanism today.
-const ACCEPTED_BLOCKING_FINDINGS: &[&str] = &["[Blocking] abbreviations: val ", "[Blocking] single-letter-names: T "];
+/// file yet, so this allowlist is what stands in for that mechanism.
+const ACCEPTED_BLOCKING_FINDINGS: &[&str] = &[];
 
 /// Whether `rendered` carries no `[Blocking]` line other than the ones
 /// [`ACCEPTED_BLOCKING_FINDINGS`] names.
@@ -334,9 +340,13 @@ fn Only_Accepted_Findings_Are_Blocking(rendered: &str) -> bool
 /// A real `run` over this workspace's own tree, end to end -- the same "real run over the
 /// real tree" discipline the `plan` test above already uses. This repository's own `Rules`
 /// step runs `gate run` over this same tree, so this test, exercising the same command,
-/// must agree with itself end to end: `Violations`, carrying no `[Blocking]` finding beyond
-/// [`ACCEPTED_BLOCKING_FINDINGS`]'s own two, and the same rule names `plan` already reports
-/// must be nameable in the rendered findings' rule ids where any exist.
+/// must agree with itself end to end: `Ok`, carrying no `[Blocking]` finding that
+/// [`ACCEPTED_BLOCKING_FINDINGS`] does not name, and the same rule names `plan` already
+/// reports must be nameable in the rendered findings' rule ids where any exist.
+///
+/// `Ok` is a real assertion and not a weaker one. `Test_Walked_Sources_Should_Not_Report_Ok_
+/// Over_An_Empty_Tree` below is what keeps it from being satisfied by a run that judged
+/// nothing: a walk finding no source reports `NothingJudged`, not this.
 #[test]
 fn Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree()
 {
@@ -345,10 +355,10 @@ fn Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_
 
     assert_eq!(
         code,
-        ExitCode::Violations,
-        "this workspace's own tree carries exactly ACCEPTED_BLOCKING_FINDINGS's two accepted \
-         findings today; a clean Ok here would mean one of them was fixed and this allowlist \
-         was not updated to say so: {rendered}"
+        ExitCode::Ok,
+        "this workspace's own tree carries nothing that can fail a build today, and \
+         ACCEPTED_BLOCKING_FINDINGS is empty to say so; anything but Ok here is either a real \
+         regression or a finding somebody meant to accept without naming it: {rendered}"
     );
     assert!(
         Only_Accepted_Findings_Are_Blocking(&rendered),
@@ -369,7 +379,7 @@ fn Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report()
     let command = GateCommand { root: Repository_Root(), ..Default::default() };
     let (code, rendered, stderr) = Run_Over_This_Tree(Invocation::Run(command));
 
-    assert_eq!(code, ExitCode::Violations, "{rendered}");
+    assert_eq!(code, ExitCode::Ok, "{rendered}");
     assert!(Only_Accepted_Findings_Are_Blocking(&rendered), "{rendered}");
     let run_line = rendered.lines().find(|line| line.starts_with("run: ")).unwrap_or_else(|| panic!("no `run: ` line in: {rendered}"));
     let hex = run_line.trim_start_matches("run: ");

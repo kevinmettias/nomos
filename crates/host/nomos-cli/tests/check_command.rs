@@ -355,11 +355,31 @@ fn Test_An_Invocation_Refused_Before_Walking_Should_Report_Its_Own_Code()
 /// tests.rs`'s own `ACCEPTED_BLOCKING_FINDINGS` carries, duplicated here rather than shared
 /// because the two live in different crates (a library's own unit tests against a separate
 /// integration-test binary) with no existing shared test-support dependency between them.
-/// See that constant's own doc for what each accepted finding is and why: `abbreviations:
-/// val` is `P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON`'s own permanent
-/// true positive; `single-letter-names: T` is `P70-IMPL-BLOCK-GENERIC-PARAMETERS-NOT-IN-
-/// PAYLOAD`'s own tracked, not-yet-fixed gap, named here only until that item removes it.
-const ACCEPTED_BLOCKING_FINDINGS: &[&str] = &["[Blocking] abbreviations: val ", "[Blocking] single-letter-names: T "];
+/// Being a copy, it goes stale the same way and on the same commits; `P96` is where both
+/// were last emptied together.
+///
+/// Empty today, and that is the assertion rather than the absence of one: with no entry,
+/// [`Only_Accepted_Findings_Are_Blocking`] means this workspace's own tree carries no
+/// `[Blocking]` finding at all, which is strictly stronger than the two-named version it
+/// replaces.
+///
+/// Both former entries were against the same file,
+/// `tests/integration/fixtures/third-party/hex-0.4.3/lib.rs`, and they left for different
+/// reasons. `single-letter-names: T` was a real gap and was fixed: `OD-CAPABILITY-014` put an
+/// `impl` block's own generic parameters in the syntax payload, and the rule now exempts an
+/// `Implementation` item whose own name is one of them (`P96`, `c278d896`). `abbreviations:
+/// val` was *not* fixed and never will be -- this list's own previous text called it a
+/// permanent, deliberate true positive, because `hex`'s author really did choose that name --
+/// but that reasoning was always about the finding and never about whether this repository
+/// walks the file. `P96` (`c3ff169e`) stopped the shared walk descending into a directory
+/// carrying its own `standards.json`, so the vendored fixture is no longer judged from this
+/// root at all, and `tests/integration/tests/calibration.rs` still judges it from its own.
+///
+/// A named allowlist rather than a bare count: a finding accepted the same deliberate way
+/// must be added here explicitly, and anything not named here fails these tests -- neither
+/// `nomos_gate_orchestration::Suppression` nor `RuleCalibration` is wired to a real config
+/// file yet, so this allowlist is what stands in for that mechanism.
+const ACCEPTED_BLOCKING_FINDINGS: &[&str] = &[];
 
 /// Whether `output` carries no `[Blocking]` line other than the ones
 /// [`ACCEPTED_BLOCKING_FINDINGS`] names.
@@ -417,10 +437,11 @@ fn Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build()
          new regression, or an accepted finding whose exact rendered text drifted: {output}"
     );
     assert_eq!(
-        code, 1,
-        "this workspace's own tree carries exactly ACCEPTED_BLOCKING_FINDINGS's two accepted \
-         findings today (exit Violations); a clean 0 here would mean one was fixed and this \
-         allowlist was not updated to say so: {output}"
+        code, 0,
+        "this workspace's own tree carries nothing that can fail a build today, and \
+         ACCEPTED_BLOCKING_FINDINGS is empty to say so; a non-zero code here is either a real \
+         regression or a finding somebody meant to accept without naming it. The file count \
+         asserted above is what keeps this 0 from being a run over the wrong tree: {output}"
     );
 }
 
