@@ -1,19 +1,31 @@
 //! Describing the form of a declaration in the words the payload uses.
 
-/// Whether an `impl` block serves a trait or is inherent.
+/// Whether an `impl` block serves a trait or is inherent, and which type parameters it
+/// declares of its own.
 ///
-/// It is the only thing that tells two `impl` blocks for one type apart. A member of
+/// The first is the only thing that tells two `impl` blocks for one type apart. A member of
 /// `impl Display for Table` carries the same qualified name as a member of `impl Table` and
 /// does not belong to `Table` the same way, which is a distinction a consumer cannot
 /// recover from any other field.
-pub(super) fn Impl_Shape(serves_a_trait: bool) -> String
+///
+/// The second is `OD-CAPABILITY-014`'s extension, and it answers a question no other field
+/// can either: an `impl` block's own recorded name is [`Type_Head`] of its self type, so
+/// `impl<T: AsRef<[u8]>> ToHex for T` records `T` -- a name the block itself bound, not one
+/// anybody chose for a declaration. Without the parameter list beside it, a consumer cannot
+/// tell that apart from `impl Trait for T` over a real, one-letter-named type.
+///
+/// [`syn::Generics::type_params`] yields exactly the type parameters, skipping lifetimes and
+/// const generics. That is the whole of what the record put in scope, and it is not a
+/// simplification here: neither of those can ever collide with an `impl` block's own
+/// recorded name, which is the one need the extension was measured for.
+pub(super) fn Impl_Shape(serves_a_trait: bool, generics: &syn::Generics) -> String
 {
-    if serves_a_trait
-    {
-        return nomos_cap_syntax::TRAIT.to_owned();
-    }
+    let parameters: Vec<String> = generics
+        .type_params()
+        .map(|parameter| return parameter.ident.to_string())
+        .collect();
 
-    return nomos_cap_syntax::INHERENT.to_owned();
+    return nomos_cap_syntax::Impl_Shape(serves_a_trait, &parameters);
 }
 
 /// The single name a leaf of a use tree binds into this file.
@@ -134,8 +146,29 @@ mod tests
     #[test]
     fn Test_Impl_Shape_Should_Distinguish_A_Trait_Impl_From_An_Inherent_One()
     {
-        assert_eq!(Impl_Shape(true), nomos_cap_syntax::TRAIT);
-        assert_eq!(Impl_Shape(false), nomos_cap_syntax::INHERENT);
+        let none = syn::Generics::default();
+
+        assert_eq!(Impl_Shape(true, &none), nomos_cap_syntax::TRAIT);
+        assert_eq!(Impl_Shape(false, &none), nomos_cap_syntax::INHERENT);
+    }
+
+    /// The blanket-impl shape `OD-CAPABILITY-014` was measured on, parsed rather than
+    /// hand-built, so what is asserted is what a real source file produces.
+    ///
+    /// The lifetime and the const parameter are in the fixture on purpose: the record put
+    /// both out of scope, and a test that declared only type parameters could not tell a
+    /// provider that honoured that from one that had never been asked.
+    #[test]
+    fn Test_Impl_Shape_Should_Carry_An_Impls_Own_Type_Parameters_And_Nothing_Else()
+    {
+        let block: syn::ItemImpl =
+            syn::parse_str("impl<'a, T: AsRef<[u8]>, const N: usize> ToHex for T {}").expect("a valid impl parses");
+
+        let shape = Impl_Shape(block.trait_.is_some(), &block.generics);
+        let observed = nomos_cap_syntax::Observation::Present(shape);
+
+        assert_eq!(nomos_cap_syntax::Impl_Serves_A_Trait(&observed), Some(true));
+        assert_eq!(nomos_cap_syntax::Impl_Generics(&observed), Some(vec!["T".to_owned()]));
     }
 
     #[test]

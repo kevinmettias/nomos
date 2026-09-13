@@ -5,7 +5,7 @@
 //! is — no registry, no store, no reader.
 
 use nomos_cap_naming_policy::Case;
-use nomos_cap_syntax::{PayloadItem, SyntaxPayload, FUNCTION, IMPLEMENTATION, TRAIT};
+use nomos_cap_syntax::{PayloadItem, SyntaxPayload, FUNCTION, IMPLEMENTATION, Impl_Serves_A_Trait};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
 /// The one literal exemption: every binary's entry point is spelled `main`, fixed by the
@@ -51,7 +51,11 @@ fn Is_Trait_Method(payload: &SyntaxPayload, ordinal: usize) -> bool
         return false;
     };
 
-    return owner.kind == IMPLEMENTATION && owner.shape.Value() == Some(TRAIT);
+    // Read through the typed reader rather than compared against `TRAIT`, for the reason
+    // `abbreviations.rs`'s own carry gives: since `OD-CAPABILITY-014` an `impl` block's shape
+    // carries its generic type parameters behind that label, and an equality test against the
+    // bare constant reads `impl<T> Display for T`'s own methods as ordinary declarations.
+    return owner.kind == IMPLEMENTATION && Impl_Serves_A_Trait(&owner.shape) == Some(true);
 }
 
 /// A finding for one function whose name does not conform.
@@ -231,6 +235,26 @@ mod tests
             let payload = Payload_From_Text("unexpanded\t0\n");
 
             assert!(Violations_In(&payload, "src/lib.rs", Case::UpperSnake).is_empty());
+        }
+
+        /// `OD-CAPABILITY-014` put a variable-length body behind an `impl` block's own
+        /// trait-or-inherent label, so [`Is_Trait_Method`] stopped being an equality test
+        /// against [`nomos_cap_syntax::TRAIT`]. `impl<T> Display for T`'s own `fmt` is the
+        /// shape that proves it: read the bare constant and a name the trait fixed is
+        /// reported as one this repository chose.
+        #[test]
+        fn Test_A_Generic_Trait_Impls_Own_Method_Should_Stay_Exempt()
+        {
+            let payload = Payload_From_Text(
+                "unexpanded\t0\n\
+                 item\t0\tImplementation\tNotApplicable\tT\t.\t+trait\\ngenerics\\nT\n\
+                 item\t1\tFunction\tNotApplicable\tT::fmt\t.\t+fn/2\n",
+            );
+
+            assert!(
+                Violations_In(&payload, "src/lib.rs", Case::UpperSnake).is_empty(),
+                "the trait fixed fmt, whether or not the impl is generic"
+            );
         }
 
         fn Payload_From_Text(text: &str) -> SyntaxPayload

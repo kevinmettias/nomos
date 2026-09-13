@@ -36,6 +36,9 @@ const FUNCTION_SHAPE: &str = "fn/";
 /// The `shape` header a struct's field list is written behind.
 const STRUCT_SHAPE_HEADER: &str = "fields";
 
+/// The `shape` header an implementation block's own generic parameter list is written behind.
+const IMPL_GENERICS_HEADER: &str = "generics";
+
 /// What a provider saw when it looked — including that it could not look.
 ///
 /// Three states rather than an `Option`, because the two empty answers are not the same
@@ -173,6 +176,107 @@ pub fn Struct_Shape(fields: &[(String, String)]) -> Option<String>
         .join("\n");
 
     return Some(format!("{STRUCT_SHAPE_HEADER}\n{body}"));
+}
+
+/// An implementation block's `shape`, split into whether it serves a trait and whatever the
+/// label is followed by -- `None` for a `shape` no implementation block wrote.
+///
+/// The label is matched as a whole line rather than as a bare prefix: a `shape` spelled
+/// `traits` is not a trait `impl` with a one-character body, and a reader that accepted it
+/// as one would report a generic parameter list nobody wrote.
+fn Impl_Shape_Parts(shape: &Observation) -> Option<(bool, &str)>
+{
+    let value = shape.Value()?;
+
+    for (label, serves_a_trait) in [(TRAIT, true), (INHERENT, false)]
+    {
+        let Some(rest) = value.strip_prefix(label)
+        else
+        {
+            continue;
+        };
+
+        if rest.is_empty() || rest.starts_with('\n')
+        {
+            return Some((serves_a_trait, rest));
+        }
+    }
+
+    return None;
+}
+
+/// Whether an implementation block's `shape` says it serves a trait -- `None` for a `shape`
+/// that is not an implementation block's at all.
+///
+/// This exists so that no consumer compares the `shape` field against [`TRAIT`] or
+/// [`INHERENT`] directly. `OD-CAPABILITY-014` gave an implementation block a variable-length
+/// body behind that label, so an equality test against the bare constant silently stops
+/// recognizing a generic `impl` -- which is the one shape the extension exists for.
+#[must_use]
+pub fn Impl_Serves_A_Trait(shape: &Observation) -> Option<bool>
+{
+    return Impl_Shape_Parts(shape).map(|(serves_a_trait, _rest)| return serves_a_trait);
+}
+
+/// An implementation block's own declared generic type-parameter names, in declaration
+/// order -- `Some` of an empty list for a block that declares none, and `None` for a `shape`
+/// that is not an implementation block's at all. Those are different answers, for the reason
+/// the module's own three-state argument gives, and a consumer that conflated them would
+/// read every struct and every function as an `impl` declaring no generics.
+///
+/// Lifetime and const generic parameters are deliberately absent. `OD-CAPABILITY-014`
+/// extended this shape for one checked need -- telling an implementation block's own name
+/// apart from one of its own generics -- and neither of those can ever be that name.
+///
+/// Each name is unescaped a second time here, on top of whatever `Observation::Decode`
+/// already did to the whole value, for the reason [`Struct_Fields`] gives for its own pair.
+#[must_use]
+pub fn Impl_Generics(shape: &Observation) -> Option<Vec<String>>
+{
+    let (_serves_a_trait, rest) = Impl_Shape_Parts(shape)?;
+
+    if rest.is_empty()
+    {
+        return Some(Vec::new());
+    }
+
+    let body = rest
+        .strip_prefix('\n')?
+        .strip_prefix(IMPL_GENERICS_HEADER)?
+        .strip_prefix('\n')?;
+
+    return Some(body.lines().map(Unescape_Field).collect());
+}
+
+/// The `shape` an implementation block declares: its own trait-or-inherent label, and, for a
+/// block declaring generic type parameters, that parameter list behind a header -- the wire
+/// form [`Impl_Generics`] reads back.
+///
+/// A block declaring no generics encodes as the bare label and its bytes do not move. That
+/// is the same "nothing to say" default [`Struct_Shape`] already gives a struct with no
+/// named fields, and it is what keeps `OD-CAPABILITY-014`'s extension from re-addressing
+/// every fact for every non-generic `impl` in a repository.
+///
+/// Each name is escaped here, before this function's own newline is laid down as the list
+/// delimiter, for the reason [`Struct_Shape`] gives for its own pair: one escaping pass
+/// protects the delimiters one layer up from it and never its own.
+#[must_use]
+pub fn Impl_Shape(serves_a_trait: bool, generics: &[String]) -> String
+{
+    let label = if serves_a_trait { TRAIT } else { INHERENT };
+
+    if generics.is_empty()
+    {
+        return label.to_owned();
+    }
+
+    let body = generics
+        .iter()
+        .map(|name| return Escape(name))
+        .collect::<Vec<_>>()
+        .join("\n");
+
+    return format!("{label}\n{IMPL_GENERICS_HEADER}\n{body}");
 }
 
 /// Reads a field that must be an observation.

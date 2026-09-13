@@ -29,6 +29,9 @@ pub fn nomos_cap_syntax::Capability_Contract() -> CapabilityContract
 pub fn nomos_cap_syntax::Escape(value: &str) -> String
 pub fn nomos_cap_syntax::Function_Arity(shape: &Observation) -> Option<u32>
 pub fn nomos_cap_syntax::Function_Shape(arity: usize) -> String
+pub fn nomos_cap_syntax::Impl_Generics(shape: &Observation) -> Option<Vec<String>>
+pub fn nomos_cap_syntax::Impl_Serves_A_Trait(shape: &Observation) -> Option<bool>
+pub fn nomos_cap_syntax::Impl_Shape(serves_a_trait: bool, generics: &[String]) -> String
 pub fn nomos_cap_syntax::Language::As_Str(&self) -> &str
 pub fn nomos_cap_syntax::Language::New(value: impl Into<String>) -> Self
 pub fn nomos_cap_syntax::Language::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result

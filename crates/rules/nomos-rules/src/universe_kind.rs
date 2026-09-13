@@ -50,7 +50,7 @@
 
 use crate::DeclaredUniverse;
 use crate::Reading;
-use nomos_cap_syntax::{FUNCTION, Function_Arity, IMPLEMENTATION, INHERENT, PayloadItem, SLICE, SyntaxPayload};
+use nomos_cap_syntax::{FUNCTION, Function_Arity, IMPLEMENTATION, Impl_Serves_A_Trait, PayloadItem, SLICE, SyntaxPayload};
 
 /// How a universe is written down.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -209,7 +209,11 @@ fn Enumeration_Universe(
     }
 
     let owner = payload.Enclosing(index)?;
-    if owner.kind != IMPLEMENTATION || owner.shape.Value() != Some(INHERENT)
+    // Read through the typed reader rather than compared against `INHERENT`, for the reason
+    // `abbreviations.rs`'s own carry gives: since `OD-CAPABILITY-014` an `impl` block's shape
+    // carries its generic type parameters behind that label, and an equality test against the
+    // bare constant would stop seeing `impl<T> Holder<T>`'s own `ALL` as a declared universe.
+    if owner.kind != IMPLEMENTATION || Impl_Serves_A_Trait(&owner.shape) != Some(false)
     {
         return None;
     }
@@ -466,6 +470,28 @@ mod tests
     fn Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty()
     {
         assert_eq!(Read_Universes("a.rs", &Payload_From_Records("")), Reading::Observed(Vec::new()));
+    }
+
+    /// `OD-CAPABILITY-014` put a variable-length body behind an `impl` block's own
+    /// trait-or-inherent label, so this attribution stopped being an equality test against
+    /// [`nomos_cap_syntax::INHERENT`]. `impl<T> Holder<T>` is the shape that proves it: read
+    /// the bare constant and a generic type's own declared universe stops being seen at all,
+    /// which is an absence becoming a clean result rather than a finding.
+    #[test]
+    fn Test_A_Generic_Inherent_Impl_Should_Still_Own_Its_Types_Variant_List()
+    {
+        let found = Universes_In(
+            "a.rs",
+            &Payload_From_Records(
+                "item\t0\tImplementation\tNotApplicable\tHolder\t.\t+inherent\\ngenerics\\nT\n\
+                 item\t1\tFunction\tPublic\tHolder::All\t.\t+fn/0\n",
+            ),
+        );
+
+        assert_eq!(
+            found.first().map(|universe| universe.name.clone()),
+            Some("Holder::All".to_owned())
+        );
     }
 
     /// A payload built from item records, so a fixture reads as the bytes a provider wrote.

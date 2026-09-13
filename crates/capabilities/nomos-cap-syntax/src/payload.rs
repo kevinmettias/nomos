@@ -79,7 +79,7 @@
 //! |---|---|
 //! | typed declaration — a constant, a static | [`SLICE`] when the declared type is a slice or an array, however many references deep, and [`VALUE`] otherwise |
 //! | function | `fn/<arity>`, the number of declared parameters including a receiver — read it with [`Function_Arity`] |
-//! | implementation block | [`INHERENT`] or [`TRAIT`] |
+//! | implementation block | [`INHERENT`] or [`TRAIT`], followed -- for a block declaring generic type parameters -- by `generics` and one parameter name per line. Read the label with [`Impl_Serves_A_Trait`] and the list with [`Impl_Generics`], write both with [`Impl_Shape`]; a block declaring no type parameters is the bare label alone, so its bytes are what they always were (`OD-CAPABILITY-014`) |
 //! | struct with named fields | `fields` followed by one `name`-TAB-`type` line per field, in declaration order — read it with [`Struct_Fields`], write it with [`Struct_Shape`]. `type` is each provider's own honest answer to "the type as spelled," bounded by what that provider can see without resolving a name (`OD-CAPABILITY-010`) |
 //! | struct with no named fields (a unit or tuple struct) | `.` — observed, and there are no named fields to report, the same default every other kind already has |
 //! | anything else | `.` — observed, and the shape has nothing to say about this form |
@@ -134,8 +134,8 @@ mod render;
 mod tests;
 
 pub use observation::{
-    FUNCTION, Function_Arity, Function_Shape, IMPLEMENTATION, INHERENT, NOT_APPLICABLE, Observation, PUBLIC, SLICE,
-    Struct_Fields, Struct_Shape, TRAIT, VALUE,
+    FUNCTION, Function_Arity, Function_Shape, IMPLEMENTATION, INHERENT, Impl_Generics, Impl_Serves_A_Trait,
+    Impl_Shape, NOT_APPLICABLE, Observation, PUBLIC, SLICE, Struct_Fields, Struct_Shape, TRAIT, VALUE,
 };
 use observation::Observed_Field;
 pub use parse::Parse_Payload;

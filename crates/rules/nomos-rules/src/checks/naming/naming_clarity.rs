@@ -32,7 +32,7 @@
 
 use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest};
-use nomos_cap_syntax::{IMPLEMENTATION, PayloadItem, Struct_Fields, SyntaxPayload, TRAIT};
+use nomos_cap_syntax::{IMPLEMENTATION, Impl_Serves_A_Trait, PayloadItem, Struct_Fields, SyntaxPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
 /// This rule's own identifier, matching the code-standards rule id.
@@ -164,7 +164,11 @@ fn Enclosing_Trait_Impl(item: &PayloadItem, previous: Option<String>) -> Option<
         return previous;
     }
 
-    if item.shape.Value() == Some(TRAIT)
+    // Read through the typed reader rather than compared against `TRAIT`. An `impl` block's
+    // own shape carries its generic type parameters behind that label since
+    // `OD-CAPABILITY-014`, so an equality test against the bare constant answers `false` for
+    // `impl<T> Display for T` -- a trait impl whose members this would then stop exempting.
+    if Impl_Serves_A_Trait(&item.shape) == Some(true)
     {
         return Some(item.qualified_name.clone());
     }
@@ -410,5 +414,25 @@ mod tests
     fn Payload_From_Text(text: &str) -> SyntaxPayload
     {
         return nomos_cap_syntax::Parse_Payload(text.as_bytes()).expect("this fixture payload is well formed");
+    }
+
+    /// `OD-CAPABILITY-014` put a variable-length body behind an `impl` block's own
+    /// trait-or-inherent label, so this carry stopped being an equality test against
+    /// [`nomos_cap_syntax::TRAIT`]. `impl<T: Display> Display for T` is the shape that
+    /// proves it: read the bare constant and its members lose an exemption the trait fixed.
+    #[test]
+    fn Test_Enclosing_Trait_Impl_Should_Carry_A_Generic_Trait_Impl()
+    {
+        let payload = Payload_From_Text(
+            "unexpanded\t0\n\
+             item\t0\tImplementation\tNotApplicable\tT\t.\t+trait\\ngenerics\\nT\n\
+             item\t1\tImplementation\tNotApplicable\tTable\t.\t+inherent\\ngenerics\\nT\n",
+        );
+
+        let generic_trait_impl = payload.items.first().expect("two items");
+        let generic_inherent_impl = payload.items.get(1).expect("two items");
+
+        assert_eq!(Enclosing_Trait_Impl(generic_trait_impl, None), Some("T".to_owned()));
+        assert_eq!(Enclosing_Trait_Impl(generic_inherent_impl, None), None);
     }
 }

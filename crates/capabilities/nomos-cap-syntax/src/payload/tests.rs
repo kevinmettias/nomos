@@ -320,3 +320,73 @@ fn Test_A_Decoded_Payload_Should_Render_Back_To_The_Bytes_It_Came_From()
     assert_eq!(String::from_utf8(rendered.clone()).as_deref(), Ok(SAMPLE));
     assert!(!rendered.contains(&b'\r'), "line endings must not be local");
 }
+
+/// `OD-CAPABILITY-014`'s extension, read back through the pair that writes it.
+///
+/// The empty case is asserted as the bare label rather than as "something starting with the
+/// label", because that identity is what keeps every non-generic `impl` in every repository
+/// addressed by the bytes it always had.
+#[test]
+fn Test_An_Impl_Shape_Should_Carry_Its_Own_Generic_Parameters()
+{
+    assert_eq!(Impl_Shape(true, &[]), TRAIT);
+    assert_eq!(Impl_Shape(false, &[]), INHERENT);
+
+    let blanket = Observation::Present(Impl_Shape(true, &["T".to_owned()]));
+
+    assert_eq!(Impl_Serves_A_Trait(&blanket), Some(true));
+    assert_eq!(Impl_Generics(&blanket), Some(vec!["T".to_owned()]));
+}
+
+/// The two empty answers this module argues are not the same answer, at this reader.
+///
+/// An `impl` declaring no generics answers with an empty list; a shape no `impl` block wrote
+/// answers `None`. A reader that returned the empty list for both would report every struct
+/// and every function in a repository as an `impl` that declares no type parameters.
+#[test]
+fn Test_Impl_Generics_Should_Separate_No_Generics_From_Not_An_Impl()
+{
+    assert_eq!(Impl_Generics(&Observation::Present(INHERENT.to_owned())), Some(Vec::new()));
+
+    for foreign in [Function_Shape(1), SLICE.to_owned(), VALUE.to_owned(), "traits".to_owned()]
+    {
+        let shape = Observation::Present(foreign.clone());
+
+        assert_eq!(Impl_Generics(&shape), None, "{foreign} is not an impl block's shape");
+        assert_eq!(Impl_Serves_A_Trait(&shape), None, "{foreign} is not an impl block's shape");
+    }
+
+    assert_eq!(Impl_Generics(&Observation::NotObserved), None);
+    assert_eq!(Impl_Generics(&Observation::Absent), None);
+}
+
+/// A generic parameter name cannot contain a tab or a newline, so what this really guards is
+/// the escaping pass itself: the same one `Struct_Shape` needs, kept in place by a value that
+/// would read back as two parameters if it were dropped.
+#[test]
+fn Test_An_Impl_Shapes_Generic_List_Should_Survive_A_Delimiter_In_A_Name()
+{
+    let awkward = "One\nTwo".to_owned();
+
+    let shape = Observation::Present(Impl_Shape(false, &[awkward.clone(), "Three".to_owned()]));
+
+    assert_eq!(Impl_Generics(&shape), Some(vec![awkward, "Three".to_owned()]));
+}
+
+/// The whole round trip, through the wire form rather than through the accessor alone --
+/// `Observation::Encode` escapes this shape a second time, and a consumer reads what
+/// `Parse_Payload` hands back rather than what `Impl_Shape` returned.
+#[test]
+fn Test_A_Generic_Impls_Shape_Should_Survive_The_Wire()
+{
+    let payload = Parse_Payload(
+        b"unexpanded\t0\n\
+          item\t0\tImplementation\tNotApplicable\tT\t.\t+trait\\ngenerics\\nT\n",
+    )
+    .expect("well formed");
+
+    let block = payload.items.first().expect("one item");
+
+    assert_eq!(Impl_Serves_A_Trait(&block.shape), Some(true));
+    assert_eq!(Impl_Generics(&block.shape), Some(vec!["T".to_owned()]));
+}

@@ -63,8 +63,9 @@ mod syntax_payload;
 pub use contract::{CAPABILITY, Capability, Capability_Contract, Ceiling, CONTRACT_VERSION, Payload_Schema, SCHEMA};
 pub use language::Language;
 pub use payload::{
-    Escape, FUNCTION, Function_Arity, Function_Shape, IMPLEMENTATION, INHERENT, NOT_APPLICABLE, Observation,
-    Parse_Payload, PUBLIC, Render_Payload, SLICE, Struct_Fields, Struct_Shape, TRAIT, VALUE,
+    Escape, FUNCTION, Function_Arity, Function_Shape, IMPLEMENTATION, INHERENT, Impl_Generics,
+    Impl_Serves_A_Trait, Impl_Shape, NOT_APPLICABLE, Observation, Parse_Payload, PUBLIC, Render_Payload, SLICE,
+    Struct_Fields, Struct_Shape, TRAIT, VALUE,
 };
 pub use payload_item::PayloadItem;
 pub use payload_refusal::PayloadRefusal;
