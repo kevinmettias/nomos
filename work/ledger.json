@@ -68319,6 +68319,66 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P96-A-FENCED-CODE-BLOCKS-ASCII-ART-IS-READ-AS-A-MARKDOWN-TABLE",
+      "title": "Table_Rows scans a fenced code block for table rows, so ASCII art is read as a table",
+      "why": "nomos_spec_model::Table_Rows walks a blocks text for pipe-shaped lines and never consults block.kind, even though Segment already classifies a fenced block as BlockKind::Code correctly. A diagram inside a triple-backtick fence in the v14 corpus game plan -- a box drawn with plus and minus borders and five lines reading pipe Request N pipe -- is therefore read as a five-row markdown table with no delimiter row, and Table_Defects refuses it: table 1 has 5 row(s) and no delimiter, so no row is a header. Six corpus-gated tests fail on exactly that message. Markdown has no tables inside a fence; every parser treats fenced content as literal. The defect reaches five call sites through this one function -- archaeology/sections.rs, restore/extract.rs, revisions.rs and both of nomos-spec-store write/blocks.rs -- so it is fixed once, here, rather than at each. Invisible until now because it only bites a corpus CI never has, which is OD-GATE-001 shape.",
+      "done_when": "Table_Rows returns no rows for a block whose kind is Code, and the doc says why in terms of what a fence means rather than as a special case. A unit test builds a Code block whose text is pipe-shaped ASCII art and asserts no row comes back, and a second asserts a Prose block with the identical text still yields its rows, so the discriminator is the kind and not the text. The existing fixtures are unaffected and stay unaffected, measured: every SourceBlock in the affected suites is already BlockKind::Prose. cargo test -p nomos-spec-model -p nomos-spec-store -p nomos-spec-ingest passes. Note honestly that this predicate is green with no corpus set because the corpus-backed assertions return early; the corpus-backed half of this fix belongs to its successor item, which re-measures the counts this change moves.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-model/src/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-model",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-ingest"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-model",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-ingest"
+        ],
+        "exit_code": 0,
+        "output_tail": "ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.54s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-b91882f9705d3be2.exe)\n     Running tests\\archive_reads.rs (target\\debug\\deps\\archive_reads-57f26477296ecf13.exe)\n     Running tests\\family_counts\\main.rs (target\\debug\\deps\\family_counts-0d6551e8953f8961.exe)\n     Running tests\\gate_holds.rs (target\\debug\\deps\\gate_holds-b5ea4afc81bd7b71.exe)\n     Running tests\\overlay.rs (target\\debug\\deps\\overlay-1ca11b4be69ec8f5.exe)\n     Running tests\\real_corpus.rs (target\\debug\\deps\\real_corpus-4cef0bf42080529e.exe)\n     Running tests\\regression_report\\main.rs (target\\debug\\deps\\regression_report-f2b6e7608b1a7ca9.exe)\n     Running tests\\restoration.rs (target\\debug\\deps\\restoration-c37ddda2e96814aa.exe)\n     Running tests\\revisions.rs (target\\debug\\deps\\revisions-3f881ebab8687f1c.exe)\n     Running tests\\siblings.rs (target\\debug\\deps\\siblings-aa491999edd2b154.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_model-ce5db4274686441d.exe)\n     Running tests\\byte_order_mark.rs (target\\debug\\deps\\byte_order_mark-e91e03ad41a0319f.exe)\n     Running tests\\normalizer_gate.rs (target\\debug\\deps\\normalizer_gate-40b34e670d9ef6b4.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-2049d200876e17c5.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-664bcf5196b763d4.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-b77bfff260f58dcf.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-5768e840765d1bfc.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-55bd8f919d9bc0a0.exe)\n   Doc-tests nomos_spec_ingest\n   Doc-tests nomos_spec_model\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789328640,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c77886f35c903b7a216da1ee27794cfb4907e0a4"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

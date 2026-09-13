@@ -9,14 +9,34 @@ pub use row_kind::RowKind;
 use defect::Defect as TableDefect;
 use row::Row as TableRow;
 
-use crate::SourceBlock;
+use crate::{BlockKind, SourceBlock};
 
 /// Splits a block into the table rows it carries.
 ///
-/// Returns empty for a block holding no pipe lines, which is most of them.
+/// Returns empty for a block holding no pipe lines, which is most of them, and for a fenced
+/// block whatever its lines look like.
+///
+/// A fence means the text inside it is literal, so there is no table in there to find --
+/// every markdown reader agrees, and `Segment` already classifies a fenced block as
+/// [`BlockKind::Code`], so the fact was available here and simply was not asked for. What
+/// asking for it costs nothing and buys is real: the v14 corpus draws a box in a fence with
+/// `+---+` borders and five `| Request N |` lines, and without this those five were a table
+/// -- one with no delimiter row, which `Table_Defects` then refuses with "table 1 has 5
+/// row(s) and no delimiter, so no row is a header". ASCII art is the common case, not a
+/// contrived one; a fence is where people draw.
+///
+/// Asked here rather than at each caller, because all five of them -- two in
+/// `nomos-spec-ingest`'s archaeology and restore, one in its revision census, and both of
+/// `nomos-spec-store`'s block writer -- want the same answer, and a discriminator repeated
+/// five times is one somebody eventually forgets.
 #[must_use]
 pub fn Table_Rows(block: &SourceBlock) -> Vec<TableRow>
 {
+    if block.kind == BlockKind::Code
+    {
+        return Vec::new();
+    }
+
     let mut rows: Vec<TableRow> = Vec::new();
     let mut table_ordinal = 0_u32;
     let mut in_table = false;
@@ -454,4 +474,44 @@ mod tests
         let blocks = Segment(markdown);
         return blocks.iter().flat_map(Table_Rows).collect();
     }
+
+    /// The v14 corpus's own shape: a box drawn inside a fence, whose sides are pipes.
+    #[test]
+    fn Test_Table_Rows_Should_Find_No_Table_In_A_Fenced_Block()
+    {
+        let block = SourceBlock {
+            ordinal: 1,
+            kind: crate::BlockKind::Code,
+            heading_path: Vec::new(),
+            text: ASCII_ART.to_owned(),
+        };
+
+        assert!(Table_Rows(&block).is_empty(), "a fence holds literal text, not a table");
+    }
+
+    /// The same bytes outside a fence are still a table, so what decides is the block's kind
+    /// and not the shape of its lines. Without this, the test above would also pass against a
+    /// `Table_Rows` that had simply stopped recognizing tables.
+    #[test]
+    fn Test_Table_Rows_Should_Still_Read_The_Same_Lines_In_A_Prose_Block()
+    {
+        let block = SourceBlock {
+            ordinal: 1,
+            kind: crate::BlockKind::Prose,
+            heading_path: Vec::new(),
+            text: ASCII_ART.to_owned(),
+        };
+
+        assert_eq!(Table_Rows(&block).len(), 5, "five pipe lines, read as a table because nothing says otherwise");
+    }
+
+    /// A fenced diagram of the shape the v14 game plan actually carries. The `+---+` borders
+    /// are not pipe lines and were never counted; the five between them were.
+    const ASCII_ART: &str = "+-------------------+\n\
+                             | Request 1         |\n\
+                             | Request 2         |\n\
+                             | Request 3         |\n\
+                             | Request 4         |\n\
+                             | Request 5         |\n\
+                             +-------------------+";
 }
