@@ -1410,6 +1410,8 @@ dependencies = [
  "nomos-capability",
  "nomos-contracts",
  "nomos-model",
+ "nomos-platform",
+ "nomos-platform-std",
  "ra_ap_hir",
  "ra_ap_ide_db",
  "ra_ap_load-cargo",
