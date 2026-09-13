@@ -25,8 +25,17 @@
 //!
 //! - `tests/contract/surface/nomos-rules.txt`, the committed, blessed public-surface
 //!   snapshot, for every `Check_*` function this crate exports today.
-//! - `crates/orchestration/nomos-check-orchestration/src/run_context.rs`'s own source, for
-//!   every `Check_*` function `With_Composed_Rules` actually calls.
+//! - `crates/rules/nomos-rules/src/rule_descriptor.rs`'s own source, for every `Check_*`
+//!   function the `DESCRIPTORS` table actually names.
+//!
+//! That second file used to be `nomos-check-orchestration`'s `run_context.rs`, anchored on
+//! `fn With_Composed_Rules`, because that is where the seventy composed closures were
+//! written. `OD-RULES-027` moved each rule's judgment into its own descriptor and the
+//! composition root now derives its run from the table, so the function this reader
+//! anchored on no longer exists and the composed set is declared one crate lower. The
+//! reading is otherwise unchanged, and deliberately still textual: a descriptor carries its
+//! check as a `fn` pointer, which has no name at run time, so `DESCRIPTORS` itself cannot
+//! answer *which* function is composed -- only its own source text can.
 //!
 //! A function added to the surface and never composed falls into the difference; a
 //! function in the difference with no entry in [`ACCOUNTED_FOR`] fails this test.
@@ -169,23 +178,23 @@ fn Exported_Check_Functions(root: &Path) -> BTreeSet<String>
         .collect();
 }
 
-/// Every `Check_*` function `With_Composed_Rules` actually calls, read from that
-/// function's own source text rather than from a second, hand-maintained list.
+/// Every `Check_*` function the `DESCRIPTORS` table names, read from that table's own
+/// source text rather than from a second, hand-maintained list.
 fn Composed_Check_Functions(root: &Path) -> BTreeSet<String>
 {
-    let text = std::fs::read_to_string(root.join("crates/orchestration/nomos-check-orchestration/src/run_context.rs"))
-        .expect("run_context.rs must read");
+    let text = std::fs::read_to_string(root.join("crates/rules/nomos-rules/src/rule_descriptor.rs"))
+        .expect("rule_descriptor.rs must read");
 
-    let Some(start) = text.find("fn With_Composed_Rules")
+    let Some(start) = text.find("pub const DESCRIPTORS")
     else
     {
-        panic!("run_context.rs no longer declares With_Composed_Rules; this reader's own anchor moved");
+        panic!("rule_descriptor.rs no longer declares DESCRIPTORS; this reader's own anchor moved");
     };
     let body = text.get(start..).unwrap_or_default();
-    let Some(end) = body.find("\n}\n")
+    let Some(end) = body.find("\n];\n")
     else
     {
-        panic!("With_Composed_Rules' own closing brace was not found the way this reader expects");
+        panic!("the DESCRIPTORS table's own closing bracket was not found the way this reader expects");
     };
     let body = body.get(..end).unwrap_or_default();
 

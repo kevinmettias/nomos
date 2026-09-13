@@ -270,6 +270,7 @@ pub struct field nomos_rules::RoleSurfacePair::actual_surface: String
 pub struct field nomos_rules::RoleSurfacePair::crate_name: String
 pub struct field nomos_rules::RoleSurfacePair::crate_root: String
 pub struct field nomos_rules::RoleSurfacePair::declared_role: String
+pub struct field nomos_rules::RuleDescriptor::check: RuleJudgment
 pub struct field nomos_rules::RuleDescriptor::contract_record: &'static str
 pub struct field nomos_rules::RuleDescriptor::contract_record_version: u32
 pub struct field nomos_rules::RuleDescriptor::id: &'static str

@@ -65848,14 +65848,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-dev-session",
-        "acquired_at": 1789280483,
-        "lease_expires_at": 1789294883
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -65869,7 +65865,31 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.95s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-42b4a6f6a58a5298.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-c11083dbf7051146.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-2410555736f1910a.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-14534b0811ed0b35.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-6c0d2a3bc7fb3e61.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-b02179d8c1d2c3dc.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-aa793f51a49daa0e.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-0111b9014e26c055.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d4c5fb1e9426d4ec.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-286c08690afc996a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-f96f436344f7e2af.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-61a4ab805a6f6a82.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-5ff00b1c22563e6a.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-3b17673536525d8e.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-8210675160e23eaf.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-606b520971c1e4cb.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-a390115e4c81d50e.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-31de2db9f36c3100.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1789283056,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2935449e8a15932fc552a8474f593f55d012ed0a"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

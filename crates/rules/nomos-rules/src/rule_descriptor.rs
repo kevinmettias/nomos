@@ -1,18 +1,58 @@
-//! What each composed rule reads, declared as data rather than as a branch in the run.
+//! Every rule this crate offers: its identifier, what it reads, the authority it answers
+//! to, and the judgment itself -- declared as one table rather than as a branch in the run.
 //!
-//! A rule is otherwise three things written in three places: a function here, a rule
-//! identifier here, and membership in a hand-written mapping in `nomos-check-orchestration`
-//! that decides which capability families a selection has to materialize. The third is the
-//! one that grows centrally, once per rule, which is what makes adding a rule a change to
-//! the composition root rather than an addition beside its siblings.
+//! The order of this table is the order a run executes in, because the run reads this table.
 //!
-//! A descriptor is the data a planner would plan from. It deliberately does **not** carry
-//! the judgment itself: the composed table holds closures over different captures, and
-//! moving those is `P41-RUN-STOPS-NAMING-EVERY-RULE`, where the composition root and this
-//! table sit in one territory. What is here is the part that can be declared without moving
-//! any code, and proven complete against what the run actually composes.
+//! # Why the judgment is here
+//!
+//! It was not, until `OD-RULES-027`. A rule used to be written in two places -- a descriptor
+//! here and an entry in a seventy-line array in `nomos-check-orchestration` pairing the same
+//! identifier with a closure -- and a declaration split across two artifacts is a declaration
+//! that can go out of step. `OD-GATE-020` measured exactly that happening twice, silently,
+//! against the gate registry's own copy of the same list.
+//!
+//! What kept the judgment out was that the composed array held seventy closures over
+//! different captures, and an array needs one element type. `OD-RULES-027` censused the
+//! captures instead of assuming them: sixty-two of seventy closed over the same walked
+//! sources, and three of the four closure shapes differ only in which of two arguments they
+//! ignore. So one signature serves them all, it is a plain `fn` pointer, and a `fn` pointer
+//! is `const`-compatible -- which is what lets this stay a table while carrying the code.
+//!
+//! # What is still declared above this crate, and why
+//!
+//! Two mappings from rule to something, both in `nomos-check-orchestration`, both fixed
+//! hand-written declarations of the kind `OD-GATE-017` accepted rather than the demand
+//! planner `OD-RULES-009` has declined: which six rules are judged over a capability
+//! family's own materialized slice instead of the walked sources, and which rules feed a
+//! capability and so oblige a selection to materialize it. Neither can live here. A
+//! capability slice and a materialization are orchestration concepts, and a descriptor table
+//! naming one would be a lower band describing an upper band's shape.
 
-use nomos_contracts::{CapabilityId, RuleId};
+use crate::SourceFile;
+use nomos_analysis::FactReader;
+use nomos_contracts::{CapabilityId, Finding, RuleId};
+
+/// A rule's own judgment, in the one shape every rule can be called through.
+///
+/// A plain `fn` pointer rather than a trait object or a closure, because [`DESCRIPTORS`] is
+/// a `const` and a `fn` pointer is the only callable a `const` can hold. That is what makes
+/// the table below the whole declaration of a rule rather than half of one, and it is what
+/// lets `nomos_check_orchestration` derive its run from this list instead of writing a
+/// second copy of it by hand -- `OD-RULES-027`.
+///
+/// Both parameters are taken by every rule and read by most. A rule that judges only source
+/// text is widened here with a closure that ignores the reader, and the two rules whose
+/// whole subject arrives through the reader are widened with one that ignores the sources;
+/// neither wrapper decides anything, which is why they are spelled inline in the table
+/// rather than given names of their own.
+///
+/// The sources a rule is handed are not always the walked ones. Six rules read a capability
+/// family's own materialized slice instead, and which six is `nomos_check_orchestration`'s
+/// to say, not this table's: a capability slice is an orchestration concept, and a
+/// descriptor naming one would be a lower band describing an upper band's shape.
+/// `OD-RULES-027` decided that split and why the mapping that remains there is a
+/// declaration rather than the demand planner `OD-RULES-009` declines.
+pub type RuleJudgment = fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>;
 
 /// What a rule reads to reach a judgment.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -72,8 +112,18 @@ impl RequiredFact
     }
 }
 
-/// One rule, and what a run would have to have materialized before it can be judged.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// One rule: what it reads, what a run must have materialized before it can be judged, the
+/// authority it answers to, and the judgment itself.
+///
+/// # Why this carries no `PartialEq`
+///
+/// It used to, unused. [`Self::check`] is a `fn` pointer, and comparing two of those
+/// compares addresses -- which the compiler is free to merge across distinct functions and
+/// to duplicate across codegen units, so a derived `==` here would answer a question it
+/// cannot actually answer, silently and in whichever direction the build happened to land.
+/// Nothing in this workspace compared two descriptors, so the derive is gone rather than
+/// hand-written to skip the field.
+#[derive(Clone, Copy, Debug)]
 pub struct RuleDescriptor
 {
     /// The rule identifier, the same string the composed table names.
@@ -98,6 +148,13 @@ pub struct RuleDescriptor
     /// The version of [`Self::contract_record`], or [`NO_VERSIONED_RECORD`] when the
     /// authority is prose and has no version a citation could be right or wrong about.
     pub contract_record_version: u32,
+    /// What this rule does when it is run.
+    ///
+    /// Here rather than in a composition root's own array because a rule declared in one
+    /// place and judged in another is two declarations, and this workspace has already
+    /// measured that pair going silently out of step twice (`OD-GATE-020`). A run derives
+    /// its table from this field; see [`RuleJudgment`] for the one shape they share.
+    pub check: RuleJudgment,
 }
 
 impl RuleDescriptor
@@ -161,12 +218,13 @@ pub const NO_VERSIONED_RECORD: u32 = 0;
 /// Cites [`PORTED_STANDARD`] at [`NO_VERSIONED_RECORD`], which is what all but eight rules in
 /// the table cite. The eight that cite something else say so with [`RuleDescriptor::Citing`],
 /// so the common case stays one line and the exceptions are visible as exceptions.
-const fn Described(id: &'static str, subject: SubjectKind, requires: &'static [RequiredFact]) -> RuleDescriptor
+const fn Described(id: &'static str, subject: SubjectKind, requires: &'static [RequiredFact], check: RuleJudgment) -> RuleDescriptor
 {
     return RuleDescriptor {
         id,
         subject,
         requires,
+        check,
         contract_record: PORTED_STANDARD,
         contract_record_version: NO_VERSIONED_RECORD,
     };
@@ -185,81 +243,76 @@ const fn Described(id: &'static str, subject: SubjectKind, requires: &'static [R
 /// list against `nomos_check_orchestration::Composed_Rules` in both directions from
 /// `tests/contract/tests/rule_descriptors.rs` -- the only crate above both.
 pub const DESCRIPTORS: &[RuleDescriptor] = &[
-    Described(crate::COMPLETENESS_MIRROR, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems]).Citing(crate::CONTRACT_RECORD, crate::CONTRACT_RECORD_VERSION),
-    Described(crate::NAMING_CONVENTION, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy]).Citing(WORKSPACE_CONVENTIONS, NO_VERSIONED_RECORD),
-    Described(crate::DEPENDENCY_DIRECTION, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges]).Citing(crate::DEPENDENCY_CONTRACT_RECORD, crate::DEPENDENCY_CONTRACT_RECORD_VERSION),
-    Described(crate::DEPENDENCY_COMPLETENESS, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges]).Citing(crate::DEPENDENCY_CONTRACT_RECORD, crate::DEPENDENCY_CONTRACT_RECORD_VERSION),
-    Described(crate::WRITE_AUTHORITY, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges]).Citing(crate::WRITE_AUTHORITY_CONTRACT_RECORD, crate::WRITE_AUTHORITY_CONTRACT_RECORD_VERSION),
-    Described(crate::LINT_DIAGNOSTICS, SubjectKind::SourceFacts, &[RequiredFact::LintDiagnostics]).Citing(crate::LINT_CONTRACT_RECORD, crate::LINT_CONTRACT_RECORD_VERSION),
-    Described(crate::DEPENDENCY_POLICY, SubjectKind::SourceFacts, &[RequiredFact::DependencyPolicy]).Citing(crate::DEPENDENCY_POLICY_CONTRACT_RECORD, crate::DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION),
-    Described(crate::UNREAD_REACHES_FINDING, SubjectKind::SourceFacts, &[RequiredFact::Reachability]).Citing(crate::UNREAD_REACHES_FINDING_CONTRACT_RECORD, crate::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION),
-    Described(crate::REVIEW_FINDING, SubjectKind::SourceFacts, &[RequiredFact::ReviewFindings]).Citing(crate::REVIEW_CONTRACT_RECORD, crate::REVIEW_CONTRACT_RECORD_VERSION),
-    Described(crate::CROSS_LANGUAGE_CORRESPONDENCE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems]).Citing(crate::CROSS_LANGUAGE_CONTRACT_RECORD, crate::CROSS_LANGUAGE_CONTRACT_RECORD_VERSION),
-    Described(crate::NO_TRAILING_WHITESPACE, SubjectKind::SourceText, &[]),
-    Described(crate::TODO_FORMAT, SubjectKind::SourceText, &[]),
-    Described(crate::DEPRECATION, SubjectKind::SourceText, &[]),
-    Described(crate::A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, SubjectKind::SourceText, &[]),
-    Described(crate::SHARED_INTERIOR_MUTABILITY_SAYS_WHY, SubjectKind::SourceText, &[]),
-    Described(crate::NONNEGATIVE_STORAGE_IS_UNSIGNED, SubjectKind::SourceText, &[]),
-    Described(crate::A_KNOWN_RANGE_PICKS_ITS_TYPE, SubjectKind::SourceText, &[]),
-    Described(crate::NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS, SubjectKind::SourceText, &[]),
-    Described(crate::EVERY_ALLOW_CARRIES_A_JUSTIFICATION, SubjectKind::SourceText, &[]),
-    Described(crate::UNSAFE_JUSTIFICATION, SubjectKind::SourceText, &[]),
-    Described(crate::SCRIPTS_USE_A_PORTABLE_SHEBANG, SubjectKind::SourceText, &[]),
-    Described(crate::A_SCRIPT_DECLARES_ITS_PURPOSE, SubjectKind::SourceText, &[]),
-    Described(crate::EXECUTED_SCRIPTS_SET_NOUNSET, SubjectKind::SourceText, &[]),
-    Described(crate::SLEEP_BASED_SYNCHRONIZATION, SubjectKind::SourceText, &[]),
-    Described(crate::ZERO_FLAKE_POLICY, SubjectKind::SourceText, &[]),
-    Described(crate::NO_MOD_RS_FILES, SubjectKind::SourceText, &[]),
-    Described(crate::A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, SubjectKind::SourceText, &[]),
-    Described(crate::A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, SubjectKind::SourceText, &[]),
-    Described(crate::CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, SubjectKind::SourceText, &[]),
-    Described(crate::A_DISCARDED_ERROR_IS_EXPLAINED, SubjectKind::SourceText, &[]),
-    Described(crate::A_SKIPPED_TEST_STATES_WHY, SubjectKind::SourceText, &[]),
-    Described(crate::AN_EXCLUDED_FILE_SAYS_WHY, SubjectKind::SourceText, &[]),
-    Described(crate::SUPPRESSION_DIRECTIVES_CARRY_A_REASON, SubjectKind::SourceText, &[]),
-    Described(crate::WORKSPACE_MARKERS_CARRY_A_REASON, SubjectKind::SourceText, &[]),
-    Described(crate::A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY, SubjectKind::SourceText, &[]),
-    Described(crate::ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, SubjectKind::SourceText, &[]),
-    Described(crate::SEQCST_JUSTIFIED_EXPLICITLY, SubjectKind::SourceText, &[]),
-    Described(crate::RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, SubjectKind::SourceText, &[]),
-    Described(crate::DATA_NAMES_STAY_LOWER_SNAKE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy]),
-    Described(crate::FILE_NAME_MATCHES_DECLARED_TYPE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems]),
-    Described(crate::CONSTANTS_SPLIT_BY_EXPORT, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems]),
-    Described(crate::GO_VARIABLES_USE_LOWER_SNAKE_CASE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems]),
-    Described(crate::EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy]),
-    Described(crate::UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy]),
-    Described(crate::TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy]),
-    Described(crate::PARAMETER_COUNT, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::LimitsPolicy]),
-    Described(crate::GO_HELPERS_PACKAGE_FIVE_INPUTS, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::LimitsPolicy]),
-    Described(crate::DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, SubjectKind::SourceFacts, &[RequiredFact::ScriptingPolicy]),
-    Described(crate::FILE_SIZE_JUSTIFICATION_TRIGGER, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy]),
-    Described(crate::ONE_THOUSAND_LINE_HARD_TRIGGER, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy]),
-    Described(crate::FIVE_HUNDRED_LINE_REVIEW_TRIGGER, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy]),
-    Described(crate::LOWERCASE_FIRST_LETTER, SubjectKind::SourceText, &[]),
-    Described(crate::NO_TRAILING_PUNCTUATION, SubjectKind::SourceText, &[]),
-    Described(crate::EAGER_VS_LAZY_CONTEXT, SubjectKind::SourceText, &[]),
-    Described(crate::GOALS_AND_PARTS_LINE_UP, SubjectKind::Workspace, &[RequiredFact::GoalsPolicy]),
-    Described(crate::ABBREVIATIONS, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::WordsPolicy]),
-    Described(crate::SINGLE_LETTER_NAMES, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems]),
-    Described(crate::A_DISABLED_TEST_STATES_WHY, SubjectKind::SourceText, &[]),
-    Described(crate::INLINE_ALWAYS_JUSTIFICATION, SubjectKind::SourceText, &[]),
-    Described(crate::NO_WILDCARD_IMPORTS, SubjectKind::SourceText, &[]),
-    Described(crate::NO_SINGLE_LINE_FUNCTION_BODIES, SubjectKind::SourceText, &[]),
-    Described(crate::NO_ORPHAN_MODULES, SubjectKind::SourceText, &[]),
-    Described(crate::PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN, SubjectKind::SourceText, &[]),
-    Described(crate::LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, SubjectKind::SourceText, &[]),
-    Described(crate::STATIC_BOUNDS_ARE_JUSTIFIED, SubjectKind::SourceText, &[]),
-    Described(crate::PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS, SubjectKind::SourceText, &[]),
-    Described(crate::NESTING_DEPTH, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy]),
-    Described(crate::CLOSURE_BOUNDS_ARE_MINIMAL, SubjectKind::SourceText, &[]),
-    Described(crate::BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, SubjectKind::SourceText, &[]),
-    // The second composed rule that takes no sources: its whole subject is a corpus of
-    // committed declaration files compared against the workspace, which arrives through
-    // the reader as one already-judged fact, the same way GOALS_AND_PARTS_LINE_UP's
-    // declaration does.
-    Described(crate::REQUIREMENT_TRACE_STALENESS, SubjectKind::Workspace, &[RequiredFact::RequirementTrace])
-        .Citing(crate::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD, crate::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD_VERSION),
+    Described(crate::COMPLETENESS_MIRROR, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_Completeness_Mirrors).Citing(crate::CONTRACT_RECORD, crate::CONTRACT_RECORD_VERSION),
+    Described(crate::NAMING_CONVENTION, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy], crate::Check_Naming_Convention).Citing(WORKSPACE_CONVENTIONS, NO_VERSIONED_RECORD),
+    Described(crate::DEPENDENCY_DIRECTION, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges], crate::Check_Dependency_Direction).Citing(crate::DEPENDENCY_CONTRACT_RECORD, crate::DEPENDENCY_CONTRACT_RECORD_VERSION),
+    Described(crate::DEPENDENCY_COMPLETENESS, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges], crate::Check_Every_Member_Declares_A_Band).Citing(crate::DEPENDENCY_CONTRACT_RECORD, crate::DEPENDENCY_CONTRACT_RECORD_VERSION),
+    Described(crate::WRITE_AUTHORITY, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges], crate::Check_Write_Authority).Citing(crate::WRITE_AUTHORITY_CONTRACT_RECORD, crate::WRITE_AUTHORITY_CONTRACT_RECORD_VERSION),
+    Described(crate::LINT_DIAGNOSTICS, SubjectKind::SourceFacts, &[RequiredFact::LintDiagnostics], crate::Check_Lint_Diagnostics).Citing(crate::LINT_CONTRACT_RECORD, crate::LINT_CONTRACT_RECORD_VERSION),
+    Described(crate::DEPENDENCY_POLICY, SubjectKind::SourceFacts, &[RequiredFact::DependencyPolicy], crate::Check_Dependency_Policy).Citing(crate::DEPENDENCY_POLICY_CONTRACT_RECORD, crate::DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION),
+    Described(crate::UNREAD_REACHES_FINDING, SubjectKind::SourceFacts, &[RequiredFact::Reachability], crate::Check_Unread_Reaches_A_Finding).Citing(crate::UNREAD_REACHES_FINDING_CONTRACT_RECORD, crate::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION),
+    Described(crate::REVIEW_FINDING, SubjectKind::SourceFacts, &[RequiredFact::ReviewFindings], crate::Check_Review_Findings).Citing(crate::REVIEW_CONTRACT_RECORD, crate::REVIEW_CONTRACT_RECORD_VERSION),
+    Described(crate::CROSS_LANGUAGE_CORRESPONDENCE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_Cross_Language_Correspondence).Citing(crate::CROSS_LANGUAGE_CONTRACT_RECORD, crate::CROSS_LANGUAGE_CONTRACT_RECORD_VERSION),
+    Described(crate::NO_TRAILING_WHITESPACE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_No_Trailing_Whitespace(sources)),
+    Described(crate::TODO_FORMAT, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Todo_Format(sources)),
+    Described(crate::DEPRECATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Deprecation_Carries_A_Reason(sources)),
+    Described(crate::A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources)),
+    Described(crate::SHARED_INTERIOR_MUTABILITY_SAYS_WHY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Shared_Interior_Mutability_Says_Why(sources)),
+    Described(crate::EVERY_ALLOW_CARRIES_A_JUSTIFICATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Every_Allow_Carries_A_Justification(sources)),
+    Described(crate::UNSAFE_JUSTIFICATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Unsafe_Justification(sources)),
+    Described(crate::SCRIPTS_USE_A_PORTABLE_SHEBANG, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Scripts_Use_A_Portable_Shebang(sources)),
+    Described(crate::A_SCRIPT_DECLARES_ITS_PURPOSE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Script_Declares_Its_Purpose(sources)),
+    Described(crate::EXECUTED_SCRIPTS_SET_NOUNSET, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Executed_Scripts_Set_Nounset(sources)),
+    Described(crate::SLEEP_BASED_SYNCHRONIZATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Sleep_Is_Not_Synchronization(sources)),
+    Described(crate::ZERO_FLAKE_POLICY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Test_Does_Not_Retry_Until_Green(sources)),
+    Described(crate::NO_MOD_RS_FILES, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_No_Mod_Rs_Files(sources)),
+    Described(crate::A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Credential_Is_Not_Hardcoded_In_Source(sources)),
+    Described(crate::A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Secret_Does_Not_Travel_In_A_Url(sources)),
+    Described(crate::CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Certificate_Verification_Is_Not_Disabled(sources)),
+    Described(crate::A_DISCARDED_ERROR_IS_EXPLAINED, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Discarded_Error_Is_Explained(sources)),
+    Described(crate::A_SKIPPED_TEST_STATES_WHY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Skipped_Test_States_Why(sources)),
+    Described(crate::AN_EXCLUDED_FILE_SAYS_WHY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_An_Excluded_File_Says_Why(sources)),
+    Described(crate::SUPPRESSION_DIRECTIVES_CARRY_A_REASON, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Suppression_Directives_Carry_A_Reason(sources)),
+    Described(crate::WORKSPACE_MARKERS_CARRY_A_REASON, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Workspace_Markers_Carry_A_Reason(sources)),
+    Described(crate::A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Package_Is_Named_After_Its_Directory(sources)),
+    Described(crate::ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Atomic_Ordering_Choices_Are_Justified(sources)),
+    Described(crate::SEQCST_JUSTIFIED_EXPLICITLY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Seqcst_Justified_Explicitly(sources)),
+    Described(crate::RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Relaxed_Not_Used_When_Ordering_Matters(sources)),
+    Described(crate::DATA_NAMES_STAY_LOWER_SNAKE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy], crate::Check_Data_Names_Stay_Lower_Snake),
+    Described(crate::FILE_NAME_MATCHES_DECLARED_TYPE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_File_Name_Matches_Declared_Type),
+    Described(crate::CONSTANTS_SPLIT_BY_EXPORT, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_Go_Constants_Split_By_Export),
+    Described(crate::GO_VARIABLES_USE_LOWER_SNAKE_CASE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_Go_Variables_Use_Lower_Snake_Case),
+    Described(crate::EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy], crate::Check_Exported_Go_Functions_Use_Upper_Snake_Case),
+    Described(crate::UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy], crate::Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter),
+    Described(crate::TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy], crate::Check_Go_Type_Names_Use_Camel_Case),
+    Described(crate::PARAMETER_COUNT, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::LimitsPolicy], crate::Check_Parameter_Count),
+    Described(crate::GO_HELPERS_PACKAGE_FIVE_INPUTS, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::LimitsPolicy], crate::Check_Go_Helpers_Package_Five_Inputs),
+    Described(crate::DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, SubjectKind::SourceFacts, &[RequiredFact::ScriptingPolicy], crate::Check_Declared_Tooling_Language_For_Scripts),
+    Described(crate::FILE_SIZE_JUSTIFICATION_TRIGGER, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy], crate::Check_File_Size_Justification_Trigger),
+    Described(crate::NONNEGATIVE_STORAGE_IS_UNSIGNED, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Nonnegative_Storage_Is_Unsigned(sources)),
+    Described(crate::A_KNOWN_RANGE_PICKS_ITS_TYPE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Known_Range_Picks_Its_Type(sources)),
+    Described(crate::NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Named_Fields_Over_Positional_Variant_Payloads(sources)),
+    Described(crate::ONE_THOUSAND_LINE_HARD_TRIGGER, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy], crate::Check_Go_File_Size_Hard_Trigger),
+    Described(crate::FIVE_HUNDRED_LINE_REVIEW_TRIGGER, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy], crate::Check_Go_File_Size_Review_Trigger),
+    Described(crate::LOWERCASE_FIRST_LETTER, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Error_Message_Starts_Lowercase(sources)),
+    Described(crate::NO_TRAILING_PUNCTUATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Error_Message_Has_No_Trailing_Punctuation(sources)),
+    Described(crate::EAGER_VS_LAZY_CONTEXT, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Eager_Vs_Lazy_Context(sources)),
+    Described(crate::GOALS_AND_PARTS_LINE_UP, SubjectKind::Workspace, &[RequiredFact::GoalsPolicy], |_sources, reader| return crate::Check_Goals_And_Parts_Line_Up(reader)),
+    Described(crate::REQUIREMENT_TRACE_STALENESS, SubjectKind::Workspace, &[RequiredFact::RequirementTrace], |_sources, reader| return crate::Check_Requirement_Trace_Staleness(reader)) .Citing(crate::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD, crate::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD_VERSION),
+    Described(crate::ABBREVIATIONS, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::WordsPolicy], crate::Check_Abbreviations),
+    Described(crate::SINGLE_LETTER_NAMES, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_Single_Letter_Names),
+    Described(crate::A_DISABLED_TEST_STATES_WHY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Disabled_Test_States_Why(sources)),
+    Described(crate::INLINE_ALWAYS_JUSTIFICATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Inline_Always_Justification(sources)),
+    Described(crate::NO_WILDCARD_IMPORTS, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_No_Wildcard_Imports(sources)),
+    Described(crate::NO_SINGLE_LINE_FUNCTION_BODIES, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_No_Single_Line_Function_Bodies(sources)),
+    Described(crate::NO_ORPHAN_MODULES, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_No_Orphan_Modules(sources)),
+    Described(crate::PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Parameters_Borrow_Unless_Ownership_Is_Taken(sources)),
+    Described(crate::LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Lifetimes_Follow_The_Descriptive_Naming_Rule(sources)),
+    Described(crate::STATIC_BOUNDS_ARE_JUSTIFIED, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Static_Bounds_Are_Justified(sources)),
+    Described(crate::PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Prefer_Macro_Rules_Over_Procedural_Macros(sources)),
+    Described(crate::NESTING_DEPTH, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy], crate::Check_Nesting_Depth),
+    Described(crate::CLOSURE_BOUNDS_ARE_MINIMAL, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Closure_Bounds_Are_Minimal(sources)),
+    Described(crate::BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(sources)),
 ];
 
 #[cfg(test)]
