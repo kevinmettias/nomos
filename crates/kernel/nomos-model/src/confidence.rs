@@ -8,6 +8,24 @@ use serde::{Deserialize, Serialize};
 /// confidence can never be constructed outside its range and never compared with `==`.
 /// Both of those are lint-level errors in this workspace, and both were real defects in
 /// the prototype.
+///
+/// # Why this is still an `f64`, and what would decide otherwise
+///
+/// This is the workspace's one bounded-ratio type and the obvious candidate for a rational
+/// or a fixed-point integer instead. That question is deliberately left open, and the reason
+/// is not that nobody has looked: it is that the one consumer this workspace has actually
+/// named does not exercise the representation at all.
+///
+/// [`crate::IdentityTransition`]'s own doc records that consumer — `SUP-*`'s revalidation
+/// triggers, via `OD-GATE-015`. A trigger is an *event*: "an identity transition occurred"
+/// is a yes or a no, and a suppression that must be revalidated is revalidated whatever
+/// number graded the transition. Nothing there compares two confidences, aggregates them, or
+/// round-trips one through a serialized form and expects the same value back — and those are
+/// the uses a float would be wrong for.
+///
+/// So the representation is answerable only against a consumer that needs a *degree* rather
+/// than an event. Picking one now would be choosing a shape for a use nobody has stated,
+/// which is the move this repository declines elsewhere for the same reason.
 #[derive(Clone, Copy, Debug, PartialEq, PartialOrd, Serialize, Deserialize)]
 pub struct Confidence(f64);
 
