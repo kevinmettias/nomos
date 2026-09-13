@@ -34,4 +34,17 @@ pub struct Filter
     /// declares and not the ones declared about it.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub node_id: Option<String>,
+    /// One record's declared lifecycle status, as its own front matter wrote it.
+    ///
+    /// Not a property of the node. A node is an identity in the graph and the graph holds no
+    /// status; `status` lives in `record_front_matter`, which the authoring surface fills
+    /// from the file the author wrote. `OD-SPEC-016`'s neighbours aside, the reason that
+    /// matters here is that a node referenced but never authored has no front-matter row at
+    /// all, and a filter on this field excludes it rather than reporting it under a status
+    /// nobody declared.
+    ///
+    /// Honoured by `nodes` alone, because it is the only content kind that resolves to a
+    /// record. Every other kind refuses it through `ProjectError::UnsupportedFilter`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }

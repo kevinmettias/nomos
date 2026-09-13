@@ -119,6 +119,34 @@ const NODES: &str =
      VALUES ('REQ-RETIRED-009', 'requirement', 'superseded', 'record', 'Retired',
              '2026-01-14T00:00:00Z', NULL);";
 
+/// What each record declared in its own front matter, for the two documents this fixture
+/// holds.
+///
+/// # Why the fixture needs this at all
+///
+/// Migration 5 created `record_front_matter` for the three fields the graph deliberately
+/// cannot hold -- status, version and tags -- and this fixture wrote no row into it, so the
+/// whole table was unexercised here while the real store carries one row per record. A
+/// fixture that cannot answer a question the store answers for every record is not a smaller
+/// store, it is a differently shaped one, and a filter reading that table would have had
+/// nothing to read.
+///
+/// # Why two rows and two different statuses
+///
+/// `document_uid` is the primary key, so the fixture holds exactly as many rows as it holds
+/// documents: two. Two is enough, and only because they disagree. One row, or two agreeing
+/// rows, would let a filter that ignored the value entirely pass just as well as one that
+/// read it.
+const RECORD_FRONT_MATTER: &str =
+    "INSERT INTO record_front_matter (document_uid, node_uid, status, version, tags_json)
+     SELECT d.uid, n.uid, 'open', 1, '[\"core\"]'
+     FROM source_documents d, nodes n
+     WHERE d.path = 'volumes/02-core.md' AND n.node_id = 'D-129';
+     INSERT INTO record_front_matter (document_uid, node_uid, status, version, tags_json)
+     SELECT d.uid, n.uid, 'accepted', 2, '[\"conformance\"]'
+     FROM source_documents d, nodes n
+     WHERE d.path = 'volumes/03-conformance.md' AND n.node_id = 'CDM-WORKSPACECONTEXT';";
+
 /// The aliases, relations, statements, lineage and omissions that hang off those nodes.
 const GRAPH_EDGES: &str =
     "INSERT INTO node_aliases (alias, node_uid)
@@ -185,6 +213,11 @@ fn Populate_Graph(store: &SpecificationStore, order: Order)
         .Connection()
         .execute_batch(if order == Order::Backwards { &reversed } else { NODES })
         .expect("populates the nodes");
+
+    store
+        .Connection()
+        .execute_batch(RECORD_FRONT_MATTER)
+        .expect("populates the record front matter");
 
     Populate_Graph_Edges(store);
 }

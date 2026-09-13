@@ -20,6 +20,19 @@ pub(super) struct FirstColumn<'a>(pub(super) &'a str);
 /// The second of the two columns [`Query::Either`] matches a value against.
 pub(super) struct SecondColumn<'a>(pub(super) &'a str);
 
+/// The other table [`Query::Among`] matches through: where to look, which column names the
+/// row this query is already selecting, and which column carries the value being matched.
+///
+/// Three fields in one value rather than three parameters, so `Among` stays within this
+/// workspace's own `parameter-count` limit and so two same-typed column names cannot be
+/// swapped at a call site -- the same reason [`FirstColumn`] and [`SecondColumn`] exist.
+pub(super) struct AmongSource<'a>
+{
+    pub(super) table: &'a str,
+    pub(super) key_column: &'a str,
+    pub(super) value_column: &'a str,
+}
+
 impl Query
 {
     pub(super) fn On(base: &str) -> Self
@@ -67,6 +80,35 @@ impl Query
             self.values.push(value.clone());
             let position = self.values.len();
             let _ = write!(self.sql, " AND ({first} = ?{position} OR {second} = ?{position})");
+        }
+    }
+
+    /// One value matched through a table this query does not itself select from.
+    ///
+    /// # Why a semi-join and not a `JOIN` in the base query
+    ///
+    /// A `JOIN` multiplies a row by however many rows the other table holds for it, which
+    /// would change what an *unfiltered* section selects -- and every committed projection
+    /// is built from unfiltered sections. `IN` cannot change the row count whatever the
+    /// other table holds, and when the value is unset it writes nothing at all, so a query
+    /// that does not use this filter is byte-identical to the one before this existed.
+    ///
+    /// # What it does to a row the other table has nothing for
+    ///
+    /// Excludes it. That is the point rather than a side effect: the caller is asking which
+    /// rows *declared* something, and a row that declared nothing has not declared the value
+    /// being asked for. Admitting it would mean reporting it under a value nobody wrote.
+    pub(super) fn Among(&mut self, key: &str, source: AmongSource<'_>, value: Option<&String>)
+    {
+        if let Some(value) = value
+        {
+            self.values.push(value.clone());
+            let AmongSource { table, key_column, value_column } = source;
+            let _ = write!(
+                self.sql,
+                " AND {key} IN (SELECT {key_column} FROM {table} WHERE {value_column} = ?{})",
+                self.values.len()
+            );
         }
     }
 
@@ -174,6 +216,15 @@ pub(super) fn Narrow_To_Nodes(query: &mut Query, filter: &Filter)
     }
 
     query.Prefix("n.node_id", filter.identifier_prefix.as_ref());
+
+    // The one filter answered from outside the graph. A node's identity, kind and authority
+    // are the graph's; a record's declared status is its own front matter's, which the
+    // authoring surface fills from the file and nothing has read back until now.
+    query.Among(
+        "n.uid",
+        AmongSource { table: "record_front_matter", key_column: "node_uid", value_column: "status" },
+        filter.status.as_ref(),
+    );
 }
 
 #[cfg(test)]

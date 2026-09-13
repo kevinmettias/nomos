@@ -15,6 +15,14 @@
     {
       "title": "Source blocks",
       "content": "blocks"
+    },
+    {
+      "title": "Open questions",
+      "content": "nodes",
+      "may_be_empty": true,
+      "filter": {
+        "status": "open"
+      }
     }
   ]
 }

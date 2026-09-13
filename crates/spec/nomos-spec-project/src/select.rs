@@ -38,6 +38,7 @@ impl Filter
             ("row_kind", &self.row_kind),
             ("identifier_prefix", &self.identifier_prefix),
             ("node_id", &self.node_id),
+            ("status", &self.status),
         ]
         {
             if let Some(set) = value
@@ -69,6 +70,7 @@ impl Filter
             &mut self.row_kind,
             &mut self.identifier_prefix,
             &mut self.node_id,
+            &mut self.status,
         ]
         .into_iter()
         .flatten()
@@ -96,6 +98,10 @@ impl Content
                 "suite",
                 "identifier_prefix",
                 "node_id",
+                // `nodes` alone, because it is the only content kind that resolves to a
+                // record, and a record is the only thing that declares a status. Every
+                // other kind refuses this filter rather than ignoring it.
+                "status",
             ],
             Self::Statements => &["kind", "identifier_prefix", "node_id"],
             Self::Relations => &["relation_type", "suite", "identifier_prefix", "node_id"],
