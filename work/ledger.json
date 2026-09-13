@@ -67793,6 +67793,170 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P95-A-DECLARED-GUARANTEE-IS-CHECKED-IN-TWO-DIRECTIONS-BY-SOME",
+      "title": "Two provider crates state a two-direction guarantee check as the convention, and nothing says the other nine owe it",
+      "why": "nomos-lang-rust/src/guarantee.rs and nomos-lang-go/src/guarantee.rs open with the same sentence -- what this provider promises, stated as a value and checked in two directions -- and name both. Downward, nomos_capability::Registry refuses an offer claiming more than the capability ceiling permits, so a provider does not grade its own work. Upward, a test asserts one property per axis against what the provider actually emits, so the declaration is not merely permitted but true. The Rust one states the principle outright: a declaration nobody exercises is a comment rather than a fact. That convention lives in those two module docs and nowhere else -- no record carries it, grepped -- and the workspace does not follow it uniformly. Eleven crates declare a provider guarantee. nomos-lang-rust is the only one with a test file named for it, tests/guarantee.rs. nomos-lang-rust-compiler, nomos-repo-policy and nomos-connector-coderabbit have no tests directory at all; the first two assert their guarantee only as Ceiling().Satisfies of the declared guarantee and registry.Offer of the provider offer returning Ok, both of which are the downward direction, and the third asserts neither. What makes this worth measuring rather than shrugging at is what Sound buys: Assurance::Sound's own doc comment says the property is claimed and the claim is backed, and Satisfies_Requirement returns true for Sound alone, so Sound is the single value that clears a rule's requirement floor and nothing distinguishes a Sound an upward test exercises from a Sound that merely fits under its ceiling. The census is itself the work. A source scan counts 177 production Assurance::Sound occurrences, but that number mixes a contract's ceiling with a provider's claim, and telling a real upward property assertion from a plumbing test that only checks that an emitted fact carries the declared value needs each test read rather than grepped, which is why this item measures before proposing anything.",
+      "done_when": "A new governing record under OD-CAPABILITY carries the census and the disposition. The census names, per guarantee-declaring crate, which direction is actually asserted, separating three things read from each test rather than grepped: a downward check (the ceiling admits the claim, the registry accepts the offer), a plumbing check (an emitted fact carries the declared value), and a real upward property assertion (the claimed property holds of what the provider emits). It also splits the raw Assurance::Sound count into contract ceilings and provider claims, since the single number answers neither question. The disposition decides whether the two-direction convention those two module docs state is a requirement every provider owes or a practice those two crates chose. If a requirement, the record names what enforces it and says whether the precedent is mirror.rs's own convention of naming the exercising test at the declaring site, a mechanism that already resolves a named test against real parsed test functions. If a practice, it says why Sound clearing Satisfies_Requirement without an upward test is acceptable, and amends both module docs so neither states a convention the workspace does not hold. It states what it does not do: no test is written, no guarantee is weakened, no provider and no contract changes. Registered at crates/spec/nomos-spec-store/records/OD-CAPABILITY-016.record so it is governing rather than merely written, and cargo test --no-fail-fast -p nomos-spec-store -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-016.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P96-AN-IMPL-BLOCKS-GENERIC-PARAMETERS-REACH-THE-SYNTAX-PAYLOAD",
+      "title": "An implementation block discards its own generic parameter list before the payload is written",
+      "why": "OD-CAPABILITY-014 is accepted and unbuilt. It decided that an Implementation item own declared generic type-parameter names join OD-CAPABILITY-011 closed set of typed shape extensions, and nothing has built it: nomos-lang-rust visit_item_impl still reads exactly two things off the syn::ItemImpl it holds, Type_Head(&node.self_ty) and node.trait_.is_some(), and node.generics sits unread at that same call site. Impl_Shape is still a two-constant function returning the bare trait or inherent label. Until the fact reaches the payload, no consumer can ask whether an Implementation item own name is one of its own generics, which is the question P68 was declined for being unable to answer.",
+      "done_when": "nomos-cap-syntax encodes an implementation block own declared generic type-parameter names alongside its trait-or-inherent label, and publishes a typed reader for each half, the way it already publishes Struct_Shape and Struct_Fields for a struct field list. An impl declaring no generics still encodes as the bare label, so its bytes do not move. nomos-lang-rust visit_item_impl reads node.generics rather than discarding it. Every site that recovered an impl trait-or-inherent label by comparing the raw shape string against TRAIT or INHERENT reads it through the typed reader instead, so a generic trait impl is still recognized as one; there are four such sites and a test proves each still answers the same for a generic impl. The payload own schema table names the new form. The surface snapshot follows. The determinism goldens are re-baselined if and only if the shared fixture own bytes actually moved, measured rather than assumed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-syntax/src/payload/observation.rs",
+          "crates/capabilities/nomos-cap-syntax/src/payload/tests.rs",
+          "crates/capabilities/nomos-cap-syntax/src/payload.rs",
+          "crates/capabilities/nomos-cap-syntax/src/lib.rs",
+          "crates/languages/nomos-lang-rust/src/syntax/shape.rs",
+          "crates/languages/nomos-lang-rust/src/syntax/walk.rs",
+          "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs",
+          "crates/rules/nomos-rules/src/checks/naming/naming_clarity.rs",
+          "crates/rules/nomos-rules/src/checks/naming/violations.rs",
+          "crates/rules/nomos-rules/src/universe_kind.rs",
+          "tests/contract/surface/nomos-cap-syntax.txt",
+          "tests/integration/tests/determinism/goldens.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop",
+        "acquired_at": 1789314724,
+        "lease_expires_at": 1789325524
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P96-SINGLE-LETTER-NAMES-EXEMPTS-A-BLANKET-IMPLS-OWN-GENERIC-PARAMETER",
+      "title": "single-letter-names still reads a blanket impl own generic Self-type parameter as a chosen name",
+      "why": "P45 third-party fixture (hex 0.4.3) reports T for impl<T: AsRef<[u8]>> ToHex for T. T is the impl own already-declared generic parameter reached a second time through the Implementation item path, not a name anybody chose at that site. The rule own module doc already states generic parameters are out of its scope. P68 was declined because no payload fact could tell this apart from impl Trait for X where X is a real single-letter struct name that still deserves the finding; OD-CAPABILITY-014 decided the payload gains that fact and its predecessor item builds it. This is also one of the two findings that make nomos gate run --root . red at HEAD.",
+      "done_when": "single-letter-names does not report an Implementation item whose own name is one of the generic parameters that same impl declares, and still reports an Implementation item whose own name is a real single-letter type the author chose. Both cases are proved by a test in the rule own suite. tests/integration/tests/calibration.rs moves single-letter-names from NotAllDeserved(1) to a checked Clean, and its stated reason says what changed rather than being deleted.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/single_letter_names.rs",
+          "tests/integration/tests/calibration.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P96-AN-IMPL-BLOCKS-GENERIC-PARAMETERS-REACH-THE-SYNTAX-PAYLOAD"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-A-BENCHMARK-OWES-A-CORRECTNESS-ORACLE-AND-NOTHING-CHECKS-IT",
+      "title": "A benchmark with no correctness oracle is a real defect class with 266 subjects in the sibling workspace and none in this one",
+      "why": "XVPE's own testing standard states a Benchmark Correctness Rule: every benchmark must exercise behavior covered by a correctness test or an equivalent pre-benchmark oracle, and results from an implementation that does not pass its oracle are invalid and must not participate in performance comparison or default selection. Nomos is the layer that would judge that and has no rule of the kind -- across every rule module under crates/rules/nomos-rules/src/checks the only occurrence of the word bench anywhere is a fixture string inside rust_text.rs. The mechanism is already built one scale over: mirror.rs reads a declared mirror off a doc comment, resolves the name against real parsed test functions, and reports a phantom when it resolves to nothing, which is the shape a bench-to-oracle correspondence needs. Population, measured rather than assumed, and this is the part that decides the item's shape. This workspace has zero bench targets, so the rule would be vacuous against nomos's own self-check and a green self-check would be no evidence at all -- the vacuity trap the corpus gates already warn about. The sibling xvpe checkout has 266 real bench targets (a crate benches directory holding .rs files with a manifest beside it) across 84 crates, of which 112 have no same-stem file under tests or src in the same crate. That 112 is a proxy and an upper bound rather than a finding count: a bench may be covered by a differently-named test, and a same-stem file does not prove the bench's own workload is asserted anywhere. And xvpe is a corpus CI does not have, so the only population able to exercise this rule is one no gate run will ever see.",
+      "done_when": "A new governing record under OD-RULES decides whether a bench-to-correctness-oracle rule is built, against the population split above rather than against the standard's wording. If it is built, the record fixes four things: what declares which benches owe an oracle (a declared policy family in the OD-RULES-011 shape, or the mirror convention of naming the oracle at the bench site that mirror.rs already resolves, and not a compiled-in assumption about directory names); what the rule's subject is, given that a bench target is a file while its oracle may be a test function in another file; what it reports when it can see a bench and not its oracle, since absence must become neither a pass nor a failure per OD-RULES-001; and how it is verified at all, given a zero population here and a corpus-only population there that no predicate on this board can reach. If it is not built, the record declines against the 112 measured candidates rather than against the absence of a local population, since OD-ROADMAP-001 retired the population-of-zero caution and a decline on that ground alone would contradict it. It states what it does not do: no rule is written, no registration site changes, nothing is composed into a run. Registered at crates/spec/nomos-spec-store/records/OD-RULES-031.record so it is governing rather than merely written, and cargo test --no-fail-fast -p nomos-spec-store -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-031.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
