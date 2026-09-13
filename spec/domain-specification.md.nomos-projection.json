@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:ff07ed05a238609ab7e34af806f76cfbed9e404691e24ee66f468c11006bf930",
-  "inputs_digest": "sha256:f5bae3cdcab2c2cca0c003c1e07239b1f840be2090ea18ce840f5529b151ba48",
+  "content_digest": "sha256:b3aa149445fc7bb7b455a7c5e01ff1c8e718b5c35aa1d87c084a3d5883dff506",
+  "inputs_digest": "sha256:b1bdfa11528caec04633f718886ade9982eb5cacfb4bfac11194e05c8e64d620",
   "sections": [
     [
       "Documents",
-      238
+      239
     ],
     [
       "Sections",
-      1958
+      1966
     ],
     [
       "Source blocks",
-      6802
+      6830
     ]
   ],
   "inputs": [
@@ -1059,6 +1059,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md@authored",
       "hash": "sha256:178c45747a9bfc80be65983afb89cd9b8caa6f49345f3e8dd5a8c01080a90d4b"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md@authored",
+      "hash": "sha256:93292451f2a6cee3903cec80729f1f4a648933089166dd3a055febcb80d71eba"
     },
     {
       "content": "documents",
@@ -9604,6 +9609,46 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#27",
       "hash": "sha256:0da2698f9bac8486ee66fe16c895f7d7028004977d6af23fd68878beabb72dba"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#1",
+      "hash": "sha256:6a9525569f4f8c8d3012efe94d7dc396f4940d43ec7822298411a91f06b04fb8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#2",
+      "hash": "sha256:976aec16de6e1b4cd6bebc472b87f3bd78a61bb99936f95da699b69ef8858c5f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#4",
+      "hash": "sha256:732d044dd5d9309cd2037e7334541bcfaf77e98c9e9ef96598909f3714c3a698"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#7",
+      "hash": "sha256:af3bd413ba9440b4f1f32fc1c31abba0d4b910e9bd97952b7af95387fdfd099e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#15",
+      "hash": "sha256:f104a7b952ea57479e6332289529f7037e49946a16515c83d630fd1a1d8524fd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#18",
+      "hash": "sha256:d5c08011039c90bb8d16e46deee29ec578a5c2497f73d8ea036aa0b6f12dbcaa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#22",
+      "hash": "sha256:b2db4ba796e8a23cd7fd35d05597acd8f91c05cf235ff3ec11d07bd9b893ae23"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#27",
+      "hash": "sha256:a9f74e17bb0dbb0c06dabfed2215e558def968b5acc0407398b8f6d0686ef4d1"
     },
     {
       "content": "headings",
@@ -40374,6 +40419,146 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#28",
       "hash": "sha256:dc1812a9fde74cf424c30e870bafca434254574656e730c9ea46ee14c0dee476"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#1",
+      "hash": "sha256:1102d19aaf7176389920e52655bd8452cd962787a35a682c7939df8e0e6345ea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#3",
+      "hash": "sha256:3def527f8e9cbdbd96608457e997aec5fc74fde01045523fecc49de14d2f7719"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#4",
+      "hash": "sha256:571e4ec33e6a6bb2fd6ff4be538256a401de191f0f38b3a124507ef6fa3e0e6b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#5",
+      "hash": "sha256:c74a009a4a2dfe09943ae8eed2c9b964b448c219da09e6ef8c4ecb111c530110"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#6",
+      "hash": "sha256:059fdca784418d84998a1b414543244788cc24abff582265668f8f2425fe0bb8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#7",
+      "hash": "sha256:f66dccbd07fd06d21718eb91b9b9536f1e675681091895b27aeff08dcf7e69d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#8",
+      "hash": "sha256:d5813f234f0c65df6ceb72b187f7c3e3683c1720210375cd77c63fe5cf31880a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#9",
+      "hash": "sha256:bc6b54a053ca841cb3f7c1bfce62e6caaced67c9d746805f6a0e597faee741c5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#10",
+      "hash": "sha256:3b16b8bcec4b7472f96514e62d1197f58587187f255c93f48a93a7685ea79094"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#11",
+      "hash": "sha256:68c12e06d1bc7143b44dce12f6f537c34709cb49a3bda7cbc5987804771b0cd3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#12",
+      "hash": "sha256:b02c1bbb8bb80f47dfaaea1a0f35ab16459825d55ea7bb74390fcc62994b3b55"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#13",
+      "hash": "sha256:e1ae1a1e668f7787012a843dfd16c19b2d2121dae6b3bb5cff1861948743d402"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#14",
+      "hash": "sha256:74781cedf4c19a09af9f63c1f1adf1934364dfc4ce8adb3884f7e4408a3b0302"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#15",
+      "hash": "sha256:748a911ae5bd4244c9f614ebbc3efc8e7bc1c513e129f25a2da817345f6f68a7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#16",
+      "hash": "sha256:92495abbd66f8d4bbec63bf6d5e2cfd578d8769edb1bdc3184b4662647f5180c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#17",
+      "hash": "sha256:2e4b0b8137d41c0de7f924f879782f82f92851e3921b523ea2d3c4c1fa163253"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#18",
+      "hash": "sha256:b3ef81b5ea5146a8eae722fb9373a7f44e7ba1438dbc48e6c015423676439c93"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#19",
+      "hash": "sha256:9ad083c288fa3a042d11a34e8495a630eec4dc0e2311c4d0544e80d98ba4f0d9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#20",
+      "hash": "sha256:575183a62fd47ca563b21eeac91b51ab7103c8bd4bccee33ed5e71a4535e3478"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#21",
+      "hash": "sha256:7c1a63c71974e8443770858479e241c8c12b2b54de46b059657a2b07a602e2c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#22",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#23",
+      "hash": "sha256:49092e3dad2b7999479a3fc07230aa5e5bf9840c3340e766467fc1e73692cb71"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#24",
+      "hash": "sha256:51555cf5d8b09cd19e0a23b18590e5dfd15e7b70c292fc892ad354334758035b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#25",
+      "hash": "sha256:74b3a7853cafeabb7d4b93ffcede5dd0c7df969471057be7424aa48fc24368e2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#26",
+      "hash": "sha256:9a6145fd57b2dc9d1d22a1d535b6cfbc681580062770170e4272782cfccfc15e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#27",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#28",
+      "hash": "sha256:762a828b7a3c260a73282f117fa2021aeade05df94aa949887390bc4e495bd43"
     },
     {
       "content": "blocks",

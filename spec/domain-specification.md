@@ -218,6 +218,7 @@ profile: domain-specification
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md@authored | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md | authored | 52 | 14 | sha256:194a79f00c4934f15b88c83b104b3eb2e9db06f8b1d94e94886ed5ed9daf9c70 |
 | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md@authored | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md | authored | 29 | 9 | sha256:c7d51d0052bf5bf9d6198fe75095c23e3079efba7af49973d3e12360dbae7606 |
 | docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md@authored | docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md | authored | 28 | 6 | sha256:178c45747a9bfc80be65983afb89cd9b8caa6f49345f3e8dd5a8c01080a90d4b |
+| docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md@authored | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md | authored | 28 | 8 | sha256:93292451f2a6cee3903cec80729f1f4a648933089166dd3a055febcb80d71eba |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1932,6 +1933,14 @@ profile: domain-specification
 | docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#12 | authored | 2 | Decision |
 | docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#22 | authored | 2 | What this record does not do |
 | docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#27 | authored | 2 | Status |
+| docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#1 | authored | 1 | Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else |
+| docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#4 | authored | 2 | Method |
+| docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#7 | authored | 2 | The census |
+| docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#15 | authored | 2 | The shared ancestor did not produce convergence |
+| docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#18 | authored | 2 | A lexical matcher was tried and does not work |
+| docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#22 | authored | 2 | What this record does not do |
+| docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#27 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -56694,6 +56703,244 @@ back to itself.
 Accepted. The rule is built, its convention is declared by the repository under check, its
 subject is the bench file, its three absences are distinguished, and its real-population
 verification is corpus-gated and counted. No code moves here.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#1
+
+*revision: authored · kind: heading · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else · hash: sha256:1102d19aaf7176389920e52655bd8452cd962787a35a682c7939df8e0e6345ea*
+
+# Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#2
+
+*revision: authored · kind: heading · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#3
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / Question · hash: sha256:3def527f8e9cbdbd96608457e997aec5fc74fde01045523fecc49de14d2f7719*
+
+Eighty-five rule identifiers ship in `nomos-rules`. None has ever been measured against
+another repository's own declared list of what must hold, and one is on disk: the `xvpe`
+checkout this build already requires declares 261 machine-readable rules under
+`docs/arch/standards`. This repository's bar for building anything is a real second party —
+`OD-CAPABILITY-002` licenses a bundled contract only while there is one provider on each
+side, `OD-PACKAGE-011` stands open for want of a second case, and `OD-RULES-010`'s whole
+reasoning is that a rule was a real second party from the day it was written. What that
+second list actually says about Nomos's rule set has never been counted.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#4
+
+*revision: authored · kind: heading · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / Method · hash: sha256:571e4ec33e6a6bb2fd6ff4be538256a401de191f0f38b3a124507ef6fa3e0e6b*
+
+## Method
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#5
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / Method · hash: sha256:c74a009a4a2dfe09943ae8eed2c9b964b448c219da09e6ef8c4ecb111c530110*
+
+Every one of the 261 rule documents was classified from its own declared normative
+statement — the first prose assertion in its body — rather than from its identifier. The
+full body of both sides was read for every pair claimed below. 85 Nomos identifiers were
+taken from the `RuleId` constants under `crates/rules/nomos-rules/src/checks`.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#6
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / Method · hash: sha256:059fdca784418d84998a1b414543244788cc24abff582265668f8f2425fe0bb8*
+
+The line drawn for "inside Nomos's domain" is stated so a later reader can re-apply it
+rather than re-derive it: a claim about **declared structure, naming, reachability or
+dependency shape, judgeable from source plus a declared policy**. Claims about runtime
+measurement, benchmark methodology, UI rendering, numeric backend accuracy, or the content
+(as opposed to the path shape) of a document are outside it.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#7
+
+*revision: authored · kind: heading · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / The census · hash: sha256:f66dccbd07fd06d21718eb91b9b9536f1e675681091895b27aeff08dcf7e69d0*
+
+## The census
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#8
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / The census · hash: sha256:d5813f234f0c65df6ceb72b187f7c3e3683c1720210375cd77c63fe5cf31880a*
+
+**261 rules. 5 answered, 42 unanswered and inside the domain, 214 outside.**
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#9
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / The census · hash: sha256:bc6b54a053ca841cb3f7c1bfce62e6caaced67c9d746805f6a0e597faee741c5*
+
+**The five pairs**, each read on both sides:
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#10
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / The census · hash: sha256:3b16b8bcec4b7472f96514e62d1197f58587187f255c93f48a93a7685ea79094*
+
+| xvpe rule | severity | xvpe gate | Nomos rule |
+|---|---|---|---|
+| `every-source-file-is-reachable` | MUST | blocking | `no-orphan-modules` |
+| `engine-folder-tiers-and-dependency-direction` | MUST | blocking | `dependency-direction` |
+| `composer-dependency-direction` | MUST | blocking | `dependency-direction` |
+| `memory-ordering-in-security-code` | MUST | review | `atomic-ordering-choices-are-justified`, `relaxed-not-used-when-ordering-matters`, `seqcst-justified-explicitly` |
+| `simulation-path-panics` | MUST NOT | review | `panics-are-justified-documented-and-validated` |
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#11
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / The census · hash: sha256:68c12e06d1bc7143b44dce12f6f537c34709cb49a3bda7cbc5987804771b0cd3*
+
+**Two of the five are declared review-enforced** — `memory-ordering-in-security-code` and
+`simulation-path-panics`. That is the pairing with the most consequence in it: a `MUST` whose
+own corpus records that no tool reaches it, while Nomos ships rules that do. The other three
+are `blocking`, meaning xvpe already reaches them; there Nomos's rule is a second opinion
+rather than a first.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#12
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / The census · hash: sha256:b02c1bbb8bb80f47dfaaea1a0f35ab16459825d55ea7bb74390fcc62994b3b55*
+
+**The 42 unanswered-but-inside** cluster where the reading predicts: strategy-surface naming
+(`contract-trait-is-named-surface-strategy`, `generic-wrapper-type-is-named-surface`,
+`strategy-type-parameter-is-named-strategy`, and the placement rule
+`concrete-strategies-live-under-strategies`), declared-constant honesty
+(`all-three-constants-declared`, `scope-requires-a-strength-claim`,
+`notapplicable-gated-to-none-strength`, `strategies-declare-honestly`), boundary routing
+(`gpu-api-boundary`, `platform-boundary-routing`, `mechanism-subsystem-boundary`,
+`backend-vs-composer`, `product-hosts-name-no-backends`), third-party isolation
+(`no-single-library-dependence`,
+`source-outside-wrappers-does-not-import-third-party-libraries`), doc-path mirroring
+(`mirrored-structure`, `crate-level-doc-path`, `file-level-doc-path`, `module-level-doc-path`,
+`rename-move-mirroring`), and `cargo-target-reachability`, which is
+`every-source-file-is-reachable`'s sibling for a different reachability graph and which
+`no-orphan-modules` does not answer.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#13
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / The census · hash: sha256:e1ae1a1e668f7787012a843dfd16c19b2d2121dae6b3bb5cff1861948743d402*
+
+`benchmark-correctness-provenance` is in that 42, and `OD-RULES-031` decided a day earlier to
+build the rule that answers it. It is counted unanswered here because nothing ships.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#14
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / The census · hash: sha256:74781cedf4c19a09af9f63c1f1adf1934364dfc4ce8adb3884f7e4408a3b0302*
+
+**The 214 outside** are benchmark methodology and cadence, profiling and frame budgets,
+numeric-tower and backend accuracy, UI geometry and theming, E2E scene design, and the
+content of xvpe's own reference and feature documentation. None of them is a claim about
+source shape.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#15
+
+*revision: authored · kind: heading · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / The shared ancestor did not produce convergence · hash: sha256:748a911ae5bd4244c9f614ebbc3efc8e7bc1c513e129f25a2da817345f6f68a7*
+
+## The shared ancestor did not produce convergence
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#16
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / The shared ancestor did not produce convergence · hash: sha256:92495abbd66f8d4bbec63bf6d5e2cfd578d8769edb1bdc3184b4662647f5180c*
+
+**14 of the 261 cite `(upstream: code-standards)` in their bodies** — naming the very
+corpus Nomos's own rule set was ported from. 11 are `MUST` or `MUST NOT`; 10 are `review`
+-gated. **Nomos answers exactly one of the 14** (`simulation-path-panics`).
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#17
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / The shared ancestor did not produce convergence · hash: sha256:2e4b0b8137d41c0de7f924f879782f82f92851e3921b523ea2d3c4c1fa163253*
+
+That is the measurement worth keeping. Two rule sets descended from one ancestor, one of them
+ported into executable rules and the other into declared prose, and a shared parent bought a
+single overlap out of fourteen acknowledged inheritances. Common origin is not evidence of
+coverage, and a later session proposing to port "the rest of code-standards" should read this
+number first.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#18
+
+*revision: authored · kind: heading · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / A lexical matcher was tried and does not work · hash: sha256:b3ef81b5ea5146a8eae722fb9373a7f44e7ba1438dbc48e6c015423676439c93*
+
+## A lexical matcher was tried and does not work
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#19
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / A lexical matcher was tried and does not work · hash: sha256:9ad083c288fa3a042d11a34e8495a630eec4dc0e2311c4d0544e80d98ba4f0d9*
+
+Re-run here rather than taken on trust: token overlap over identifier and title, stopwords
+removed, Jaccard at or above 0.25. **19 candidate pairs. 2 true, 17 false. Three of the five
+real pairs missed**, including the two strongest — `every-source-file-is-reachable` and
+`memory-ordering-in-security-code`.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#20
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / A lexical matcher was tried and does not work · hash: sha256:575183a62fd47ca563b21eeac91b51ab7103c8bd4bccee33ed5e71a4535e3478*
+
+The false positives are instructive because they are not near-misses:
+`trace-verification` against `certificate-verification-is-not-disabled` on the token
+*verification*; `generic-parameter-ownership` against `parameter-count` on *parameter*;
+`user-authored-source-is-bounded` against `nesting-depth` on *depth* and *nesting*;
+`orphan-audits` — a benchmark-map audit rule — against `no-orphan-modules` on *orphan*. Five
+separate xvpe verification rules all collide with `certificate-verification-is-not-disabled`
+on one shared word.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#21
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / A lexical matcher was tried and does not work · hash: sha256:7c1a63c71974e8443770858479e241c8c12b2b54de46b059657a2b07a602e2c2*
+
+The item that raised this reported 23 at its own threshold. The count moves with the
+threshold and the tokenizer; the conclusion does not, and the failure is not one a threshold
+fixes. `every-source-file-is-reachable` and `no-orphan-modules` share no token at all and are
+the same rule. **Do not repeat this approach.** The correspondence is semantic, and 261
+readings is what it costs.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#22
+
+*revision: authored · kind: heading · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / What this record does not do · hash: sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4*
+
+## What this record does not do
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#23
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / What this record does not do · hash: sha256:49092e3dad2b7999479a3fc07230aa5e5bf9840c3340e766467fc1e73692cb71*
+
+It does not decide whether Nomos should read that corpus, or what relationship the two rule
+sets have. `ARC-CONFORMANCE-002` decided that — the corpus is a fact Nomos reads through a
+declared per-repository policy, Nomos stays out of `enforced_by` — and this record neither
+anticipates nor contradicts it.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#24
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / What this record does not do · hash: sha256:51555cf5d8b09cd19e0a23b18590e5dfd15e7b70c292fc892ad354334758035b*
+
+It writes no rule, changes no rule identifier, declares no capability contract, and edits
+nothing in the `xvpe` tree, which this workspace does not own.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#25
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / What this record does not do · hash: sha256:74b3a7853cafeabb7d4b93ffcede5dd0c7df969471057be7424aa48fc24368e2*
+
+It does not claim that any of the 261 is violated, or that the 5 paired Nomos rules would
+pass or fail over that tree. Nothing here was run against xvpe's source; this is a comparison
+of two declared lists.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#26
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / What this record does not do · hash: sha256:9a6145fd57b2dc9d1d22a1d535b6cfbc681580062770170e4272782cfccfc15e*
+
+It does not treat the 42 as a work queue. They are what the census found inside the domain,
+not a decision that any of them should be built, and each would need its own population
+measured the way `OD-RULES-031` measured one.
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#27
+
+*revision: authored · kind: heading · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#28
+
+*revision: authored · kind: prose · heading: Five of a sibling's 261 declared rules are answered by a Nomos rule, and a lexical matcher finds neither those five nor much else / Status · hash: sha256:762a828b7a3c260a73282f117fa2021aeade05df94aa949887390bc4e495bd43*
+
+Accepted. 5 answered, 42 unanswered inside the domain, 214 outside; 2 of the 5 pairs sit on
+rules xvpe declares nobody enforces; 14 rules cite the shared ancestor and Nomos answers one
+of them; and the lexical shortcut is recorded as tried and refused. No code moves here.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
