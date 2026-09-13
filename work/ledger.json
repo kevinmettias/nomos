@@ -66110,10 +66110,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-dev-session",
+        "acquired_at": 1789285255,
+        "lease_expires_at": 1789296055
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -66422,6 +66426,78 @@
         },
         "revision": "cf91ee69d697b2523be086654c7f9eda1cf207e9"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-NOTHING-ASKS-WHETHER-AN-EDGE-WOULD-BE-PERMITTED",
+      "title": "Nothing can ask whether a dependency would be permitted before it is written, so the architecture answers only once the edge exists",
+      "why": "Two independent brainstorming loops put the same step before implementation -- have Nomos validate the proposed dependency and policy impact -- and Nomos answers only retrospectively. Check_Dependency_Direction reads nomos.cap.dependency.edges, which nomos-lang-rust-cargo derives by running cargo metadata over manifests on disk, so an edge is judged once it has been written and never before. The primitives for a prospective answer are already public and total: Zone_Of maps a crate name to its zone, Permits answers a zone pair, SAME_ZONE_EDGES names the peer exceptions. Grepped, Permits has exactly two non-test callers -- violations.rs, judging an edge that already exists, and tests/contract/tests/boundaries/graph.rs, asserting the real graph -- and no host verb reaches it at all. nomos-lsp already names Zone_Of, but only to label which architectural component a finding falls in. The cost of learning late is recorded rather than imagined: OD-RULES-020 replaced the band table because a crate had to be renumbered more than once for a dependency nobody disputed, nomos-workflow-orchestration three times across two items in one session. The counter-argument belongs in the record rather than being hidden here: nomos check over this workspace already answers the question retrospectively in one run, so what is missing may be a convenience rather than a capability; and while the declaration is compiled into nomos-rules, which P95-ARCHITECTURE-DECLARATION-IS-COMPILED-AND-DUPLICATED puts in question, a prospective answer is only ever about this repository.",
+      "done_when": "A new governing record under OD-GATE decides whether this workspace answers a prospective admissibility question -- may a crate in zone A name a crate in zone B, asked before any manifest carries the edge. If it does, it fixes three things: whose question it is (a fourth Gate verb beside Plan, Run and Explain, an LSP code action, or a seam with no host surface yet), what the subject of the answer is (a crate pair, a proposed manifest edit, or a planned change-set), and what the answer says when either endpoint has no declared zone, which is what Zone_Of already returns None for and the case a foreign repository is always in. If it declines, it declines against the counter-argument stated above rather than around it, and names what would change the answer. It states what it does not do: no verb is built, no crate changes, nomos-rules and every host are untouched. Registered at crates/spec/nomos-spec-store/records/OD-GATE-026.record so it is governing rather than merely written, and cargo test --no-fail-fast -p nomos-spec-store -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-026.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-THE-REQUIRED-DIAGRAM-HAS-ONE-RESOLUTION",
+      "title": "The one required diagram is 243 nodes at a single resolution, and re-rendering it is the most-paid tax in this repository",
+      "why": "diagrams/relations.mmd is one of the two committed projections and one of the two the freshness step requires. Measured: 1851 lines, 89473 bytes, 243 distinct nodes, 1612 edges, two subgraphs (Relations and Decisions), and 93 percent of those edges carry the single label relates-to, which is paired with itself, so each authored pair is drawn once in each direction. Measured on git history: 151 of the 830 commits in the last thirty days touched this file, so nearly one commit in five pays the re-render, and OD-GATE-005 requires that re-render to come from a worktree holding exactly the record set the commit publishes -- which is why this repository ships a skill for constructing one and why a stale pair is a recurring way CI goes red on a change that looks unrelated. So the most-paid tax here buys an artifact whose readability at that size nobody has measured. The README opens by claiming a canonical, multi-resolution model of software, and this projection has exactly one resolution: there is no aggregation anywhere in selection, no group-by and no rollup, so nothing can show how the OD-LEDGER decisions stand to the OD-GATE ones without drawing all 243 nodes. The one narrowing mechanism that does exist, Filter's identifier_prefix, is used by no shipped profile. OD-PROJECT-002 decided which projections are required and OD-PROJECT-003 what committing one costs; neither asked whether the required one can be read.",
+      "done_when": "A new governing record under OD-PROJECT states the measurements above -- 243 nodes, 1612 edges, 89473 bytes, 151 of 830 commits in thirty days, 93 percent one label, identifier_prefix used by no profile, no aggregation in selection -- and decides what the required relation projection is for, reaching one of three answers. The diagram stays as it is, in which case the record names who reads it at this size and why the tax is worth paying. Or the required projection becomes a coarser one with the full graph still available unrequired through nomos spec render, in which case it names the resolution and says whether that needs aggregation in selection or is expressible with identifier_prefix alone. Or the requirement moves off the diagram, in which case it says what still catches a stale projection and answers OD-PROJECT-002's own reasoning for requiring one. It changes no profile, no selection code and not the required set itself: this item reserves the decision, not the implementation, and diagrams/relations.mmd is re-rendered only because registering the record changes the record set, never for a content reason of its own. Registered at crates/spec/nomos-spec-store/records/OD-PROJECT-006.record so it is governing rather than merely written, and cargo test --no-fail-fast -p nomos-spec-store -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md",
+          "crates/spec/nomos-spec-store/records/OD-PROJECT-006.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
