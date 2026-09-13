@@ -163,18 +163,21 @@ pub const ZONES: &[(&str, Zone)] = &[
     ("nomos-cap-scripting-policy", Zone::CapabilityContract),
     ("nomos-cap-words-policy", Zone::CapabilityContract),
     ("nomos-cap-goals-policy", Zone::CapabilityContract),
-    // A connector under ARC-CONNECTOR-001, not a nomos-cap-* crate -- but classified
-    // Capability Contract zone rather than Provider zone anyway, because it bundles
-    // nomos.cap.review.finding's contract with its one provider in one crate
-    // (OD-CAPABILITY-002 licenses this while there is only one provider) and Rules zone
-    // may not name Provider zone at all. Provider zone would leave this fact family
-    // structurally unreachable by nomos-rules, not merely misfiled.
+    // A connector under ARC-CONNECTOR-001, not a nomos-cap-* crate -- and Capability
+    // Contract zone because it declares nomos.cap.review.finding's contract, bundling that
+    // contract's one provider in the same crate while there is exactly one
+    // (OD-CAPABILITY-002). That criterion is the reason, and OD-CAPABILITY-015 settles that
+    // it has to be: classifying by the edge instead -- because Rules zone may not name
+    // Provider zone -- would relabel whatever a rule turns out to need and leave that edge
+    // constraining nothing. Running gh api through a launcher is beside the point either
+    // way, since Permits already grants this zone Substrate, where the ports live. A
+    // consequence rather than a justification: Provider zone would leave this fact family
+    // structurally unreachable by nomos-rules.
     ("nomos-connector-coderabbit", Zone::CapabilityContract),
-    // Also bundles a single provider with its contract in one crate (OD-CAPABILITY-002),
-    // the identical reason nomos-connector-coderabbit does one row above -- reading
-    // arbitrary files across the repository tree needs a nomos_platform::FileSystem, which
-    // Permits forbids Rules zone from reaching except through a Capability Contract zone
-    // crate.
+    // The identical criterion one row above, applied identically: it declares
+    // nomos.cap.requirement.trace's contract and bundles that contract's one provider
+    // (OD-CAPABILITY-002, OD-CAPABILITY-015). Reading arbitrary files across the tree
+    // through a nomos_platform::FileSystem neither qualifies nor disqualifies it.
     ("nomos-cap-requirement-trace", Zone::CapabilityContract),
     ("nomos-package", Zone::Provider),
     ("nomos-lang-rust", Zone::Provider),
