@@ -66501,6 +66501,42 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P95-A-RECORDS-CITATIONS-INTO-THE-TREE-ARE-UNCHECKED",
+      "title": "A governing record cites tests and files by name and nothing resolves them, so 14 test citations and 97 path citations point at nothing",
+      "why": "mirror.rs resolves a declared mirror named in a code doc comment against real parsed test functions and reports a phantom when the name resolves to nothing, and D-134 decision 4 ranks that phantom Blocking while an admitted gap is only Advisory, because a false claim of coverage is worse than a hole somebody wrote down. Records carry the same kind of claim and get no such resolution. Censused over all 227 files in docs/records: 83 name at least one Test_ function in prose, 178 distinct names, of which 14 resolve to no fn Test_ anywhere in the workspace -- counted after discarding nine names this reading truncated at a line wrap and five whose own prose says outright that they do not exist. Of the 14, seven have an obvious renamed successor in the tree (a cited ..._Read_Off_The_Doc_Comment against the real ..._Read_Off_The_Documentation_Comment, which is OD-RULES-017's own abbreviation rename; a cited ..._Match_The_Manifesto against the real ..._Match_The_Manifest; a cited ..._Offer_All_Eight_Shipped_Rules against the real ..._Offer_Every_Composed_Rule), two are absences the code itself documents with a tombstone comment naming the old test, and five resolve to nothing anywhere with nothing noting it: OD-LEDGER-012, OD-LEDGER-013 twice, OD-GATE-004 and OD-ANALYSIS-006. Each of those five appears in exactly two files, its own record and spec/domain-specification.md, so the committed projection republishes the claim. File paths are the larger half: 273 distinct cited paths carry a file extension and 97 do not exist, from mixed causes rather than one. Some moved under a reorganized module (nomos-contracts src/finding/applicability.rs is now src/reporting/finding/applicability.rs). Some name a crate since renamed (nomos-agent-executor, nomos-agent-executor-ollama). Some name a file the architecture deleted (nomos-lsp src/server.rs, which OD-HOST-013 replaced when the protocol moved to the xvpe backend). Each is honest history from the record's side and a dead reference from a reader's, and AGENTS.md sends every agent to the records as the authority.",
+      "done_when": "A new governing record under OD-SPEC states the census above and decides what a citation inside a governing record is owed, reaching one of two answers. Either a citation is a historical statement that may age, in which case the record says so plainly so no later reader treats a dead path as a defect, and says what a reader does when a cited site has moved. Or a citation is a live reference, in which case the record names which citation kinds are in scope (a test name, a path, a symbol) and which existing mechanism resolves them -- mirror.rs already resolves a test name against real parsed test functions, and tests/contract/tests/rule_contract_citation.rs already reads a record's own front matter from a test, so it picks one of those two shapes rather than inventing a third. Either answer disposes of the five fully-unresolved test citations by name, since a claim the committed projection republishes is the one case no reading of the question leaves alone. It states what it does not do: no record is edited, no citation is repaired, no rule and no test is written, and this item reserves the decision rather than the sweep that would follow it. Registered at crates/spec/nomos-spec-store/records/OD-SPEC-017.record so it is governing rather than merely written, and cargo test --no-fail-fast -p nomos-spec-store -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md",
+          "crates/spec/nomos-spec-store/records/OD-SPEC-017.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
