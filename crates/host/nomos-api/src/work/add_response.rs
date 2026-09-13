@@ -2,6 +2,7 @@
 
 use nomos_ledger::{AddRefusal, LedgerItem, Territory};
 use serde::Serialize;
+use nomos_platform::FileSystem;
 use std::path::Path;
 
 /// Puts `item` on the board at `directory`, declaring `amending` as the published records it
@@ -11,7 +12,7 @@ use std::path::Path;
 pub fn Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory) -> AddResponse
 {
     use super::Ledger_At;
-    use nomos_composer_std::LAUNCHER;
+    use nomos_composer_std::{FILE_SYSTEM, LAUNCHER};
     use nomos_work_orchestration::WorkCommand;
 
     let mut ledger = Ledger_At(directory);
@@ -20,7 +21,7 @@ pub fn Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory
         &WorkCommand::Add { item: Box::new(item.clone()), amending: amending.clone() },
         &mut ledger,
         &LAUNCHER,
-        || Published_Records(directory),
+        || Published_Records(directory, &FILE_SYSTEM),
     );
 
     let nomos_work_orchestration::WorkOutcome::Add(added) = outcome
@@ -74,15 +75,18 @@ impl AddResponse
 /// not a shared dependency of it, the same "a walk is a composition-root concern"
 /// `crate::sources` already documents for Gate's own walk. `nomos_work_orchestration::Run`'s
 /// own `published` closure exists precisely so each composition root can answer this its own
-/// way. Unlike the recursive source walk, this listing is one level, so routing it through
-/// `OD-PLATFORM-002`'s `Read_Directory` is a real available increment rather than the
-/// impossibility this doc claimed before that operation existed.
+/// way. Unlike the recursive source walk, this listing is one level, so it routes through
+/// `OD-PLATFORM-002`'s `Read_Directory` -- the same port the function it twins uses, which is
+/// what keeps the two answering the port question the same way rather than only claiming to.
+/// Staying a composition-root function is the separate question, and its answer is the one
+/// that function already gives: what this hands across `published` is a repository's own
+/// convention about where records live, not a ledger-agnostic filesystem concern.
 ///
 /// An unreadable or absent `docs/records` yields `Territory::Empty()` rather than refusing --
 /// the one judgement worth stating here, because this repository's usual rule is the
 /// opposite. It does not apply: this is input to the open-item comparison, not the check
 /// itself, and a tree with no `docs/records` is a ledger being used somewhere that has none.
-fn Published_Records(directory: &Path) -> Territory
+fn Published_Records(directory: &Path, filesystem: &impl FileSystem) -> Territory
 {
     let Some(root) = directory.parent()
     else
@@ -90,7 +94,7 @@ fn Published_Records(directory: &Path) -> Territory
         return Territory::Empty();
     };
 
-    let mut published = Record_Files(root);
+    let mut published = Record_Files(root, filesystem);
     published.sort();
 
     return Territory::Of_Files(published);
@@ -101,18 +105,22 @@ const RECORD_DIRECTORY: &str = "docs/records";
 
 /// Every file directly under `root`'s record directory, as a territory is spelled --
 /// repository-relative and forward-slashed.
-fn Record_Files(root: &Path) -> Vec<String>
+///
+/// Through `OD-PLATFORM-002`'s `Read_Directory` rather than `std::fs`, which is what makes
+/// the twin above a real twin: the function it names does the same, and a twin that reached
+/// the filesystem by a different route would be one in name only.
+fn Record_Files(root: &Path, filesystem: &impl FileSystem) -> Vec<String>
 {
-    let Ok(entries) = std::fs::read_dir(root.join(RECORD_DIRECTORY))
+    let Ok(entries) = filesystem.Read_Directory(&root.join(RECORD_DIRECTORY))
     else
     {
         return Vec::new();
     };
 
     let mut published = Vec::new();
-    for entry in entries.flatten()
+    for entry in entries
     {
-        if let Some(name) = entry.file_name().to_str()
+        if let Some(name) = entry.file_name().and_then(std::ffi::OsStr::to_str)
         {
             published.push(format!("{RECORD_DIRECTORY}/{name}"));
         }

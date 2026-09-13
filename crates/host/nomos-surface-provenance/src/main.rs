@@ -131,7 +131,7 @@ fn Report_Text_From_String_Arguments(
 /// none were.
 fn Selected_Crates(parsed: &self::arguments::Parsed, stderr: &mut impl std::io::Write) -> Result<Vec<String>, ExitCode>
 {
-    let known = match discovery::Every_Snapshotted_Crate(&parsed.root)
+    let known = match discovery::Every_Snapshotted_Crate(&parsed.root, &nomos_composer_std::FILE_SYSTEM)
     {
         Ok(known) => known,
         Err(message) =>

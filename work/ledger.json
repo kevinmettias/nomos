@@ -60454,7 +60454,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -60469,7 +60469,29 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "exit_code": 0,
+        "output_tail": "Test_Records_Touched_In_Range_Should_Scope_To_Documentation_Records_Only ... ok\ntest report::tests::Test_A_Clean_Crate_Is_Named_But_Not_Flagged ... ok\ntest report::tests::Test_Render_Report_Should_Name_A_Finding_With_Its_Commits ... ok\ntest tests::Test_A_Missing_Since_Is_A_Usage_Error_Before_Anything_Runs ... ok\ntest arguments::tests::Test_Crate_Repeats_And_Root_Are_Read ... ok\ntest discovery::tests::Test_This_Repositorys_Own_Surface_Directory_Yields_Its_Crates ... ok\ntest discovery::tests::Test_Every_Snapshotted_Crate_Should_Refuse_A_Missing_Directory_Rather_Than_Reporting_Empty ... ok\ntest tests::Test_A_Finding_Reaches_The_Rendered_Report_And_Still_Exits_Ok ... ok\ntest tests::Test_An_Unknown_Crate_Name_Is_A_Usage_Error ... ok\n\ntest result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_A_Real_Bad_Revision_Fails_The_Query_Rather_Than_Reporting_A_Finding ... ok\ntest Test_A_Real_Surface_Change_With_No_Records_Commit_Is_A_Finding ... ok\ntest Test_A_Real_Records_Commit_In_Range_Suppresses_The_Finding ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.43s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Blocking waiting for file lock on build directory\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\n   Compiling nomos-surface-provenance v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-surface-provenance)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.22s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-7367b8147e17f21c.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-b5bb8905d34f6ccc.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_surface_provenance-d04a75d4e36a0e4b.exe)\n     Running tests\\platform_integration.rs (target\\debug\\deps\\platform_integration-d18d964442a32251.exe)\n   Doc-tests nomos_api\n",
+        "verified_at": 1789258687,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3afed432d25f5d8fdf453712b396675dab84f879"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -64482,6 +64504,58 @@
           "exit_code": 0
         },
         "revision": "2ffce6da965ea09c639a4f3564e3dc4e6985c621"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P74-SURFACE-PROVENANCE-ROOT-INJECTS-THE-FILESYSTEM",
+      "title": "nomos-surface-provenance's composition root supplies the FileSystem its discovery listing now takes",
+      "why": "P74-ONE-LEVEL-LISTINGS-ANSWER-THE-PORT-THREE-WAYS routes the three one-level directory listings through OD-PLATFORM-002's Read_Directory so they stop disagreeing about whether a port exists for this. In nomos-surface-provenance that makes discovery::Every_Snapshotted_Crate take a &impl FileSystem, which its only production caller -- main.rs, this crate's own composition root -- has to supply. main.rs is not in that item's territory and the two do not overlap. Injecting from the root rather than naming nomos_composer_std::FILE_SYSTEM inside discovery.rs is the point: the nomos-cli function these three sites are being aligned with takes the port as a parameter, and a sibling that reached for a concrete platform one module deeper would be agreeing in mechanism while diverging in composition, which is the same shape of drift this alignment exists to close.",
+      "done_when": "main.rs passes nomos_composer_std::FILE_SYSTEM to discovery::Every_Snapshotted_Crate, no module below the composition root names a concrete platform, and cargo test -p nomos-surface-provenance passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-surface-provenance/src/main.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "exit_code": 0,
+        "output_tail": "ic_Discriminant ... ok\ntest fake_launcher::tests::Test_Answer_Should_Match_By_Argv_Substring_Not_By_The_Order_Answers_Were_Added ... ok\ntest fake_launcher::tests::Test_New_Should_Start_With_No_Scripted_Answers ... ok\ntest git::tests::Test_Endpoint_Diff_Compares_The_Two_Trees_Directly ... ok\ntest git::tests::Test_Path_History_Carries_Hash_And_Subject ... ok\ntest git::tests::Test_Records_Touched_In_Range_Should_Scope_To_Documentation_Records_Only ... ok\ntest evaluate::tests::Test_A_Blank_Diff_Means_No_Finding ... ok\ntest tests::Test_A_Missing_Since_Is_A_Usage_Error_Before_Anything_Runs ... ok\ntest discovery::tests::Test_This_Repositorys_Own_Surface_Directory_Yields_Its_Crates ... ok\ntest report::tests::Test_Render_Report_Should_Name_A_Finding_With_Its_Commits ... ok\ntest tests::Test_A_Finding_Reaches_The_Rendered_Report_And_Still_Exits_Ok ... ok\ntest tests::Test_An_Unknown_Crate_Name_Is_A_Usage_Error ... ok\n\ntest result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_A_Real_Bad_Revision_Fails_The_Query_Rather_Than_Reporting_A_Finding ... ok\ntest Test_A_Real_Surface_Change_With_No_Records_Commit_Is_A_Finding ... ok\ntest Test_A_Real_Records_Commit_In_Range_Suppresses_The_Finding ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.41s\n\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on build directory\n   Compiling nomos-surface-provenance v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-surface-provenance)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.73s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_surface_provenance-b341902d6fd92dac.exe)\n     Running tests\\platform_integration.rs (target\\debug\\deps\\platform_integration-66cf4f75ba6180dc.exe)\n",
+        "verified_at": 1789258673,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3afed432d25f5d8fdf453712b396675dab84f879"
       },
       "abandoned": [],
       "displaced": [],

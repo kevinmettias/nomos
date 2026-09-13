@@ -1,12 +1,13 @@
 //! Which crates this report can check: every `tests/contract/surface/<crate>.txt`.
 //!
-//! This reads the filesystem directly rather than through a port because the listing it
-//! needs is a single level and this crate composes no [`nomos_platform::FileSystem`] of its
-//! own. `OD-PLATFORM-002` since gave the port a one-level `Read_Directory`, so routing this
-//! through it is a real available increment; what stops it today is the missing composition,
-//! not a missing operation. Stated here rather than quoted from another module, per
-//! `OD-AGENT-001`.
+//! The listing it needs is a single level, and it routes through `OD-PLATFORM-002`'s
+//! [`nomos_platform::FileSystem::Read_Directory`] — the same answer `nomos-cli`'s and
+//! `nomos-api`'s own one-level record listings give, so that the three sites do not disagree
+//! about whether a port exists for this. The composition that once blocked it is this crate's
+//! own `nomos-composer-std` dependency, which it already has. Stated here rather than quoted
+//! from another module, per `OD-AGENT-001`.
 
+use nomos_platform::FileSystem;
 use std::path::{Path, PathBuf};
 
 /// `tests/contract/surface`, under a repository root.
@@ -21,18 +22,17 @@ pub(crate) fn Snapshot_Directory(root: &Path) -> PathBuf
 ///
 /// Returns a message when the directory cannot be read at all — a repository root that
 /// is not this repository, or is not checked out.
-pub(crate) fn Every_Snapshotted_Crate(root: &Path) -> Result<Vec<String>, String>
+pub(crate) fn Every_Snapshotted_Crate(root: &Path, filesystem: &impl FileSystem) -> Result<Vec<String>, String>
 {
     let directory = Snapshot_Directory(root);
-    let entries = std::fs::read_dir(&directory).map_err(|error| {
+    let entries = filesystem.Read_Directory(&directory).map_err(|error| {
         return format!("cannot read {}: {error}", directory.display());
     })?;
 
     let mut names = Vec::new();
     for entry in entries
     {
-        let entry = entry.map_err(|error| format!("cannot read an entry under {}: {error}", directory.display()))?;
-        if let Some(stem) = Snapshot_Stem(&entry.path())
+        if let Some(stem) = Snapshot_Stem(&entry)
         {
             names.push(stem);
         }
@@ -74,7 +74,7 @@ mod tests
         // that is already present in any checkout, shallow or not, is safe here.
         let root = Repository_Root();
 
-        let crates = Every_Snapshotted_Crate(&root).expect("this repository has the directory");
+        let crates = Every_Snapshotted_Crate(&root, &nomos_composer_std::FILE_SYSTEM).expect("this repository has the directory");
 
         assert!(crates.contains(&"nomos-model".to_owned()));
         assert!(crates.iter().all(|name| !name.is_empty()));
@@ -94,7 +94,7 @@ mod tests
     fn Test_Every_Snapshotted_Crate_Should_Refuse_A_Missing_Directory_Rather_Than_Reporting_Empty()
     {
         let missing_root = Path::new("no-such-directory-at-all");
-        let result = Every_Snapshotted_Crate(missing_root);
+        let result = Every_Snapshotted_Crate(missing_root, &nomos_composer_std::FILE_SYSTEM);
 
         let error = result.expect_err("a missing directory must refuse rather than report empty");
         let expected_directory = Snapshot_Directory(missing_root);
