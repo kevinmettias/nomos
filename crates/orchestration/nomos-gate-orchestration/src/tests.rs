@@ -11,7 +11,7 @@ use nomos_contracts::{
     Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, RunId, SubjectId,
 };
 use nomos_model::Subject_Of_Path;
-use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
 use nomos_rules::{
     SourceFile, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION,
     DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
@@ -98,7 +98,7 @@ fn Calibration_Of(finding: &Finding) -> RuleCalibration
 /// before either can address a specific finding with its own policy.
 fn One_Real_Blocking_Finding(source: impl Fn() -> SourceFile) -> Finding
 {
-    let unmatched = Run_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(Repository_Root()), Test_Run_Id());
+    let unmatched = Run_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &Command_At(Repository_Root()), Test_Run_Id());
 
     return unmatched
         .findings.blocking_findings
@@ -124,7 +124,7 @@ fn Assert_Tolerated_Not_Blocking(result: &GateRunResult, tolerated: &[Finding])
 /// both need before either can address that finding with its own policy.
 fn Real_Finding_For(query: &FindingQuery, source: impl Fn() -> SourceFile) -> Finding
 {
-    let unmatched = Explain_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(Repository_Root()), query);
+    let unmatched = Explain_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &Command_At(Repository_Root()), query);
     let Explanation::Found { finding, .. } = unmatched.explanation
     else
     {
@@ -421,7 +421,7 @@ fn Test_One_Blocking_Finding_Among_Many_Should_Fail()
 #[test]
 fn Test_Judged_Sources_Should_Report_Unreadable_For_An_Unwalked_Root()
 {
-    let result = Run_Gate(None, GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(Repository_Root()), Test_Run_Id());
+    let result = Run_Gate(None, GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &Command_At(Repository_Root()), Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::Unreadable));
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
@@ -434,7 +434,7 @@ fn Test_Judged_Sources_Should_Report_Unreadable_For_An_Unwalked_Root()
 #[test]
 fn Test_A_Walk_That_Found_No_Source_Should_Be_Indeterminate()
 {
-    let result = Run_Gate(Some(Vec::new()), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(Repository_Root()), Test_Run_Id());
+    let result = Run_Gate(Some(Vec::new()), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &Command_At(Repository_Root()), Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::NoSource));
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
@@ -450,7 +450,7 @@ fn Test_A_Clean_Source_Should_Pass()
 {
     let sources = vec![Source("a.rs", "pub fn Ok()\n{\n}\n")];
 
-    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(Repository_Root()), Test_Run_Id());
+    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &Command_At(Repository_Root()), Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
     assert_eq!(result.disposition, GateRunOutcome::Passed);
@@ -470,7 +470,7 @@ fn Test_Run_Gate_Should_Fail_On_A_Blocking_Finding()
         "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n",
     )];
 
-    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(Repository_Root()), Test_Run_Id());
+    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &Command_At(Repository_Root()), Test_Run_Id());
 
     assert_eq!(result.disposition, GateRunOutcome::Failed);
     assert!(!result.findings.blocking_findings.is_empty());
@@ -500,7 +500,7 @@ fn Test_A_Scoped_Out_Source_Should_Not_Be_Judged()
         ..Command_At(Repository_Root())
     };
 
-    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::NoSource));
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
@@ -523,7 +523,7 @@ fn Test_A_Deselected_Rules_Finding_Should_Not_Exist()
         ..Command_At(Repository_Root())
     };
 
-    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
     assert_eq!(result.disposition, GateRunOutcome::Passed);
@@ -553,7 +553,7 @@ fn Test_A_Suppressed_Finding_Should_Not_Block()
     let real_finding = One_Real_Blocking_Finding(source);
     let command = Command_With_Suppression(Repository_Root(), Suppression_Of(&real_finding));
 
-    let result = Run_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, Test_Run_Id());
 
     Assert_Tolerated_Not_Blocking(&result, &result.findings.suppressed_findings);
     assert!(
@@ -576,7 +576,7 @@ fn Test_A_Baselined_Finding_Should_Not_Block()
     let real_finding = One_Real_Blocking_Finding(source);
     let command = Command_With_Baseline(Repository_Root(), Baseline_Of(&real_finding));
 
-    let result = Run_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, Test_Run_Id());
 
     Assert_Tolerated_Not_Blocking(&result, &result.findings.baselined_findings);
 }
@@ -596,7 +596,7 @@ fn Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed()
         ..Command_At(Repository_Root())
     };
 
-    let result = Run_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, Test_Run_Id());
 
     assert!(!result.findings.suppressed_findings.is_empty(), "the double-matched finding must report as suppressed");
     assert!(
@@ -619,7 +619,7 @@ fn Test_A_Calibrated_Finding_Should_Not_Block()
     let real_finding = One_Real_Blocking_Finding(source);
     let command = Command_With_Calibration(Repository_Root(), Calibration_Of(&real_finding));
 
-    let result = Run_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, Test_Run_Id());
 
     Assert_Tolerated_Not_Blocking(&result, &result.findings.calibrated_findings);
 }
@@ -640,7 +640,7 @@ fn Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrate
         ..Command_At(Repository_Root())
     };
 
-    let result = Run_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, Test_Run_Id());
 
     assert!(!result.findings.calibrated_findings.is_empty(), "the triple-matched finding must report as calibrated");
     assert!(
@@ -664,7 +664,7 @@ fn Test_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers()
     let sources = vec![Source("a.rs", "pub fn Ok()\n{\n}\n")];
     let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "nowhere.rs".to_owned() };
 
-    let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(Repository_Root()), &query);
+    let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &Command_At(Repository_Root()), &query);
 
     assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
     assert_eq!(result.explanation, Explanation::NotFound);
@@ -682,7 +682,7 @@ fn Test_Explain_Gate_Should_Find_A_Real_Blocking_Finding()
     )];
     let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
 
-    let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(Repository_Root()), &query);
+    let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &Command_At(Repository_Root()), &query);
 
     let Explanation::Found { finding, would_block, calibrated_by, suppressed_by, baselined_by, contract } = result.explanation
     else
@@ -707,7 +707,7 @@ fn Test_Explain_Should_Report_A_Suppression_That_Applies()
     let (source, query, real_finding) = Explain_Applies_Fixture();
     let command = Command_With_Suppression(Repository_Root(), Suppression_Of(&real_finding));
 
-    let result = Explain_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, &query);
+    let result = Explain_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, &query);
 
     let (would_block, _, suppressed_by, _) = Explained_Found(result.explanation);
     assert!(!would_block);
@@ -723,7 +723,7 @@ fn Test_Explain_Should_Report_A_Baseline_That_Applies()
     let (source, query, real_finding) = Explain_Applies_Fixture();
     let command = Command_With_Baseline(Repository_Root(), Baseline_Of(&real_finding));
 
-    let result = Explain_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, &query);
+    let result = Explain_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, &query);
 
     let (would_block, _, _, baselined_by) = Explained_Found(result.explanation);
     assert!(!would_block);
@@ -740,7 +740,7 @@ fn Test_Explain_Should_Report_A_Calibration_That_Applies()
     let (source, query, real_finding) = Explain_Applies_Fixture();
     let command = Command_With_Calibration(Repository_Root(), Calibration_Of(&real_finding));
 
-    let result = Explain_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, &query);
+    let result = Explain_Gate(Some(vec![source()]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, &query);
 
     let (would_block, calibrated_by, _, _) = Explained_Found(result.explanation);
     assert!(!would_block);
@@ -762,7 +762,7 @@ fn Test_Explain_Should_Ignore_Scope()
         ..Command_At(Repository_Root())
     };
 
-    let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, &query);
+    let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, &query);
 
     assert!(matches!(result.explanation, Explanation::Found { .. }));
 }
@@ -786,7 +786,7 @@ fn Test_An_Unset_Coverage_Policy_Should_Leave_A_Passed_Disposition_Alone()
 {
     let command = Command_At(Repository_Root());
 
-    let result = Run_Gate(Some(Coverage_Debt_Fixture()), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(Coverage_Debt_Fixture()), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, Test_Run_Id());
 
     assert_eq!(result.disposition, GateRunOutcome::Passed);
     let CheckOutcome::Judged { claim, .. } = result.check_outcome
@@ -807,7 +807,7 @@ fn Test_Required_Completeness_Should_Downgrade_An_Incomplete_Passed_Run()
 {
     let command = GateCommand { coverage: CoveragePolicy::RequireCompleteness, ..Command_At(Repository_Root()) };
 
-    let result = Run_Gate(Some(Coverage_Debt_Fixture()), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(Coverage_Debt_Fixture()), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, Test_Run_Id());
 
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
     assert!(result.findings.blocking_findings.is_empty(), "coverage must never manufacture a blocking finding: {:?}", result.findings.blocking_findings);
@@ -825,7 +825,7 @@ fn Test_Required_Completeness_Should_Not_Touch_A_Failed_Run()
     sources.push(Source("phantom.rs", "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n"));
     let command = GateCommand { coverage: CoveragePolicy::RequireCompleteness, ..Command_At(Repository_Root()) };
 
-    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, Test_Run_Id());
 
     assert_eq!(result.disposition, GateRunOutcome::Failed);
     assert!(!result.findings.blocking_findings.is_empty());
@@ -871,7 +871,7 @@ fn Test_A_Declared_Policy_File_Should_Tolerate_Findings_A_Command_Never_Mentione
         }"#,
     );
 
-    let result = Run_Gate(Some(sources()), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(root), Test_Run_Id());
+    let result = Run_Gate(Some(sources()), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &Command_At(root), Test_Run_Id());
 
     assert!(!result.findings.suppressed_findings.is_empty(), "the file's suppression must have matched a real finding");
     assert!(!result.findings.baselined_findings.is_empty(), "the file's baseline entry must have matched a real finding");
@@ -892,7 +892,7 @@ fn Test_A_Root_With_No_Policy_File_Should_Judge_Exactly_As_Before()
     std::fs::create_dir_all(&root).expect("writable");
     let _ = std::fs::remove_file(root.join("nomos-gate.json"));
 
-    let result = Run_Gate(Some(vec![Source("b.rs", "pub fn badName() {}\n")]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(root), Test_Run_Id());
+    let result = Run_Gate(Some(vec![Source("b.rs", "pub fn badName() {}\n")]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &Command_At(root), Test_Run_Id());
 
     assert!(result.findings.suppressed_findings.is_empty());
     assert!(result.findings.baselined_findings.is_empty());
@@ -906,7 +906,7 @@ fn Test_A_Declared_Coverage_Floor_Should_Reach_The_Disposition()
 {
     let root = Root_Declaring("coverage", r#"{ "coverage": "require-completeness" }"#);
 
-    let result = Run_Gate(Some(Coverage_Debt_Fixture()), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(root), Test_Run_Id());
+    let result = Run_Gate(Some(Coverage_Debt_Fixture()), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &Command_At(root), Test_Run_Id());
 
     assert_ne!(result.disposition, GateRunOutcome::Failed, "this fixture must not block, so the floor is what is being observed");
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate, "a declared coverage floor must reach the disposition");
@@ -921,7 +921,7 @@ fn Test_A_Malformed_Policy_File_Should_Refuse_Rather_Than_Report_A_Verdict()
 {
     let root = Root_Declaring("malformed", "{ not json");
 
-    let result = Run_Gate(Some(vec![Source("b.rs", "pub fn Named() {}\n")]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &Command_At(root), Test_Run_Id());
+    let result = Run_Gate(Some(vec![Source("b.rs", "pub fn Named() {}\n")]), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &Command_At(root), Test_Run_Id());
 
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
     assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }), "the check itself still ran: {:?}", result.check_outcome);
@@ -985,7 +985,7 @@ fn Orphan_Findings_Of(sources: Vec<SourceFile>, command: &GateCommand) -> Vec<St
 {
     let result = Run_Gate(
         Some(sources),
-        GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },
+        GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment },
         command,
         Test_Run_Id(),
     );

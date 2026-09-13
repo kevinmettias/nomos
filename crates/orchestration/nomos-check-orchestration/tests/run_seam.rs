@@ -26,6 +26,7 @@ use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
 use nomos_rules::{SourceFile, COMPLETENESS_MIRROR};
 use nomos_workspace::BuildVariant;
 use std::path::PathBuf;
+use nomos_platform_std::StdEnvironment;
 
 fn Test_Variant() -> BuildVariant
 {
@@ -58,7 +59,7 @@ fn Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher()
 {
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
     assert!(matches!(outcome, nomos_check_orchestration::CheckOutcome::Judged { .. }));
 }
@@ -69,7 +70,7 @@ fn Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher()
 #[test]
 fn Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List()
 {
-    let outcome: nomos_check_orchestration::CheckOutcome = Run(&[], RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
+    let outcome: nomos_check_orchestration::CheckOutcome = Run(&[], RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
     assert!(matches!(outcome, nomos_check_orchestration::CheckOutcome::Unreadable));
 }
@@ -83,7 +84,7 @@ fn Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule()
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
     let selected = [RuleId::New(COMPLETENESS_MIRROR)];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() }, &selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &selected);
 
     assert!(matches!(outcome, nomos_check_orchestration::CheckOutcome::Judged { .. }));
 }

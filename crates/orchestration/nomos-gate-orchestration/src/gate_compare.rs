@@ -144,7 +144,7 @@ mod tests
     use super::*;
     use crate::{GateCommand, GateEnvironment, Run_Gate};
     use nomos_contracts::{Digest128, GateCategory};
-    use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
+    use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
     use nomos_rules::SourceFile;
     use nomos_workspace::BuildVariant;
 
@@ -177,7 +177,7 @@ mod tests
             ..GateCommand::default()
         };
 
-        return Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, run);
+        return Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, run);
     }
 
     /// Two runs over a tree that gained one real blocking finding between them: the

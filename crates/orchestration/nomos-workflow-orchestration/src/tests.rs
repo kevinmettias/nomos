@@ -157,7 +157,7 @@ fn Test_An_Empty_Plan_Completes_Vacuously()
 {
     let launcher = Scripted::Of(Vec::new());
 
-    let outcome = Run(&[], &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+    let outcome = Run(&[], &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment }, &Test_Variant(), Test_Run_Id());
 
     assert_eq!(outcome, WorkflowOutcome::Completed { completed: Vec::new() });
 }
@@ -168,7 +168,7 @@ fn Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes()
     let launcher = Scripted::Of(vec![Clean_Claude_Code_Response("PONG")]);
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("say PONG")) }];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
@@ -186,7 +186,7 @@ fn Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes()
     let launcher = Scripted::Of(vec![Clean_Ollama_Response("PONG")]);
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("say PONG")) }];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
@@ -207,7 +207,7 @@ fn Test_A_Two_Step_Sequence_Completes_In_Order()
         WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("second")) },
     ];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
@@ -227,7 +227,7 @@ fn Test_An_Incoherent_Step_Is_Refused_Before_Dispatch()
     let launcher = Scripted::Of(Vec::new());
     let plan = [WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task("never runs")) }];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment }, &Test_Variant(), Test_Run_Id());
 
     assert_eq!(outcome, WorkflowOutcome::Refused { completed: Vec::new(), index: 0 });
 }
@@ -241,7 +241,7 @@ fn Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions()
         WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task("never runs")) },
     ];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Refused { completed, index } = outcome
     else
@@ -260,7 +260,7 @@ fn Test_A_Failed_Dispatch_Stops_The_Run()
     let launcher = Scripted::Of(vec![Failing_Response("claude exited 1")]);
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("fails")) }];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Failed { completed, index, error } = outcome
     else
@@ -297,7 +297,7 @@ fn Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonic
         WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("second")) },
     ];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
@@ -327,7 +327,7 @@ fn Test_A_Failure_Prevents_A_Later_Step_From_Running()
         WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("never runs")) },
     ];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Failed { completed, index, .. } = outcome
     else
@@ -371,7 +371,7 @@ fn Test_A_Correction_Step_Should_Commit_A_Real_Phantom_Claim()
     let launcher = Scripted::Of(Vec::new());
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Correction(CorrectionBody::New(root.clone(), sources, true)) }];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment }, &Test_Variant(), Test_Run_Id());
     let corrected = std::fs::read_to_string(&path).expect("still readable");
 
     let _ignored = std::fs::remove_dir_all(&root);
@@ -406,7 +406,7 @@ fn Test_A_Correction_Step_Should_Refuse_An_Ambiguous_Claim_Without_Committing()
     let launcher = Scripted::Of(Vec::new());
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Correction(CorrectionBody::New(root.clone(), sources, true)) }];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment }, &Test_Variant(), Test_Run_Id());
     let untouched = std::fs::read_to_string(&path).expect("still readable");
 
     let _ignored = std::fs::remove_dir_all(&root);
@@ -441,7 +441,7 @@ fn Test_A_Passing_Gate_Step_Completes_As_A_Step_Outcome()
     let launcher = Scripted::Of(Vec::new());
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Gate(gate) }];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
@@ -465,7 +465,7 @@ fn Test_A_Failing_Gate_Step_Ends_The_Workflow_Rather_Than_Completing()
     let launcher = Scripted::Of(Vec::new());
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Gate(gate) }];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem }, &Test_Variant(), Test_Run_Id());
+    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment }, &Test_Variant(), Test_Run_Id());
 
     let WorkflowOutcome::Failed { completed, index, error } = outcome
     else

@@ -20,6 +20,7 @@ use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, 
 use nomos_lang_rust_cargo::{Declared_Guarantee, Discover_Workspace, FactContext, Materialize_Workspace, Provider_Offer};
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
 use std::path::{Path, PathBuf};
+use nomos_platform_std::StdEnvironment;
 
 /// A [`ProcessLauncher`] that never runs anything -- it returns a canned answer regardless
 /// of what `command` names, which is what makes the boundary check here cheap and
@@ -183,7 +184,7 @@ fn Test_Discover_Workspace_Should_Read_Packages_And_Edges_From_A_Fake_Launchers_
     let workspace_root = FakeWorkspaceRoot::New("read-packages");
     let launcher = FakeLauncher::Succeeding(&Fake_Metadata_Document(workspace_root.Path()));
 
-    let discovered = Discover_Workspace(workspace_root.Path(), &launcher).expect("a well-formed fake metadata document");
+    let discovered = Discover_Workspace(workspace_root.Path(), &launcher, &StdEnvironment).expect("a well-formed fake metadata document");
 
     assert_eq!(discovered.len(), 2);
     let alpha = discovered
@@ -220,7 +221,7 @@ fn Test_Discover_Workspace_Should_Report_The_Launchers_Own_Stderr_On_A_Nonzero_E
     {
         let launcher = FakeLauncher::Failing(stderr);
 
-        let error = Discover_Workspace(&Fake_Workspace_Root(), &launcher).expect_err("a nonzero exit must not be read as success");
+        let error = Discover_Workspace(&Fake_Workspace_Root(), &launcher, &StdEnvironment).expect_err("a nonzero exit must not be read as success");
 
         assert!(error.reason.contains(expected_fragment), "{}", error.reason);
     }
@@ -289,7 +290,7 @@ fn Test_A_Facts_Subject_Should_Match_Nomos_Models_Own_Subject_Of_Its_Path()
     let workspace_root = FakeWorkspaceRoot::New("facts-subject");
     let launcher = FakeLauncher::Succeeding(&Fake_Metadata_Document(workspace_root.Path()));
 
-    let facts = Materialize_Workspace(workspace_root.Path(), Context(), &launcher).expect("a well-formed fake metadata document");
+    let facts = Materialize_Workspace(workspace_root.Path(), Context(), &launcher, &StdEnvironment).expect("a well-formed fake metadata document");
 
     let alpha = facts
         .iter()

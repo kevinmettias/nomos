@@ -15,7 +15,7 @@ use nomos_contracts::{
     BuildVariantId, ConfigurationId, Digest128, GenerationId, IncrementalGranularity, SnapshotId, SubjectId,
 };
 use nomos_lang_rust_cargo::{FactContext, Materialize_Workspace, PackageFact};
-use nomos_platform_std::StdProcessLauncher;
+use nomos_platform_std::{StdEnvironment, StdProcessLauncher};
 use std::path::{Path, PathBuf};
 
 fn Context(generation: GenerationId) -> FactContext
@@ -107,7 +107,7 @@ fn Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_In
 /// generation, and subject — everything the rest of this test invalidates and re-reads by.
 fn Materialize_And_Store_Initial(fixture: &Fixture, store: &mut MemoryFactStore) -> (FactKey, GenerationId, SubjectId)
 {
-    let initial = Materialize_Workspace(fixture.Path(), Context(GenerationId::INITIAL), &StdProcessLauncher)
+    let initial = Materialize_Workspace(fixture.Path(), Context(GenerationId::INITIAL), &StdProcessLauncher, &StdEnvironment)
         .expect("a real cargo workspace with an edge");
     let alpha_before = initial
         .iter()
@@ -191,7 +191,7 @@ fn Assert_Historical_Fact(store: &MemoryFactStore, old_key: &FactKey, next: Gene
 /// returns its key alongside the fact itself.
 fn Materialize_And_Store_Refresh(fixture: &Fixture, store: &mut MemoryFactStore, next: GenerationId) -> (FactKey, PackageFact)
 {
-    let refreshed = Materialize_Workspace(fixture.Path(), Context(next), &StdProcessLauncher)
+    let refreshed = Materialize_Workspace(fixture.Path(), Context(next), &StdProcessLauncher, &StdEnvironment)
         .expect("a real cargo workspace with the edge removed");
     let alpha_after = refreshed
         .into_iter()

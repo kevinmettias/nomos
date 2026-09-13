@@ -15,7 +15,7 @@
 
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
 use nomos_lang_rust_clippy::{FactContext, Materialize_Workspace};
-use nomos_platform_std::StdProcessLauncher;
+use nomos_platform_std::{StdEnvironment, StdProcessLauncher};
 use std::path::{Path, PathBuf};
 
 /// A one-member scratch workspace with no dependencies of its own, removed when the test
@@ -84,7 +84,7 @@ fn Test_Materialize_Workspace_Should_Run_A_Real_Clippy_Pass_Through_The_Real_Std
 {
     let fixture = Fixture::New("clippy-std-launcher");
 
-    let facts = Materialize_Workspace(fixture.Path(), Context(), &StdProcessLauncher)
+    let facts = Materialize_Workspace(fixture.Path(), Context(), &StdProcessLauncher, &StdEnvironment)
         .expect("a real, trivial one-crate workspace under a real cargo clippy pass");
 
     assert_eq!(facts.len(), 1, "{facts:?}");

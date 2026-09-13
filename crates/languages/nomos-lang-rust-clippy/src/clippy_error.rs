@@ -5,7 +5,7 @@
 //! this reader was written, not assumed from the format's name alone.
 
 use nomos_cap_lint::{DiagnosticsPayload, LintDiagnostic, LintLevel};
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher};
+use nomos_platform::{Command, Environment, ExitOutcome, ProcessLauncher};
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
@@ -53,10 +53,10 @@ impl core::fmt::Display for ClippyError
 /// [`ClippyError`] if the `cargo` binary cannot be run, exits non-zero, is killed for
 /// exceeding [`TIMEOUT`] or going idle for that long, or its stdout could not be read as
 /// the newline-delimited JSON stream `--message-format json` promises.
-pub fn Discover_Workspace<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<Vec<DiscoveredDiagnostics>, ClippyError>
+pub fn Discover_Workspace<Launcher: ProcessLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<Vec<DiscoveredDiagnostics>, ClippyError>
 {
-    let stdout = Run_Cargo_Clippy(root, launcher)?;
-    let absolute_root = Absolutized(root)?;
+    let stdout = Run_Cargo_Clippy(root, launcher, environment)?;
+    let absolute_root = Absolutized(root, environment)?;
     let discovered = Grouped_By_Package(&stdout, &absolute_root);
 
     return Require_Nonempty(discovered);
@@ -72,18 +72,33 @@ pub fn Discover_Workspace<Launcher: ProcessLauncher>(root: &Path, launcher: &Lau
 /// check`'s own CLI default is `.` -- must resolve to the same real directory `cargo
 /// clippy` itself ran in, or every first-party package it reports would fail to
 /// relativize against it and be excluded as if it were external.
-fn Absolutized(root: &Path) -> Result<PathBuf, ClippyError>
+fn Absolutized<Env: Environment>(root: &Path, environment: &Env) -> Result<PathBuf, ClippyError>
 {
-    let current_dir = std::env::current_dir().map_err(|error| ClippyError {
+    let current_dir = environment.Working_Directory().map_err(|error| ClippyError {
         reason: format!("the current directory could not be read: {error}"),
     })?;
 
     return Ok(current_dir.join(root));
 }
 
-fn Run_Cargo_Clippy<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<String, ClippyError>
+/// The program name `cargo` is invoked by, from the environment rather than from this
+/// process's own ambient state.
+///
+/// `CARGO` is what a cargo-invoked build sets to the exact toolchain binary running, and a
+/// provider handed an injected launcher must not then reach around it for the program that
+/// launcher will run -- a fake launcher receives the command already built, so no test could
+/// state which cargo it names. `P87`/`OD-HOST-001`: the port comes from the composition root.
+fn Cargo_Program<Env: Environment>(environment: &Env) -> String
 {
-    let command = Cargo_Clippy_Command(root);
+    return environment
+        .Variable("CARGO")
+        .and_then(|value| return value.into_string().ok())
+        .unwrap_or_else(|| return "cargo".to_owned());
+}
+
+fn Run_Cargo_Clippy<Launcher: ProcessLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<String, ClippyError>
+{
+    let command = Cargo_Clippy_Command(root, environment);
     let output = launcher.Run(&command).map_err(|error| ClippyError {
         reason: format!("cargo clippy could not be run: {error}"),
     })?;
@@ -97,9 +112,9 @@ fn Run_Cargo_Clippy<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher)
 /// (`--workspace --all-targets`), so this provider's own diagnostics are never a different
 /// question from the one CI already gates on -- plus `--message-format json` for a
 /// machine-readable stream in place of the gate's own human-rendered text.
-fn Cargo_Clippy_Command(root: &Path) -> Command
+fn Cargo_Clippy_Command<Env: Environment>(root: &Path, environment: &Env) -> Command
 {
-    let cargo = std::env::var("CARGO").unwrap_or_else(|_| "cargo".to_owned());
+    let cargo = Cargo_Program(environment);
     let mut command = Command::New(
         vec![
             cargo,
@@ -334,6 +349,7 @@ fn Require_Nonempty(discovered: Vec<DiscoveredDiagnostics>) -> Result<Vec<Discov
 mod local_tests
 {
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
+    use nomos_platform_std::StdEnvironment;
     use super::*;
     use nomos_platform::ProcessOutput;
 
@@ -400,7 +416,7 @@ mod local_tests
         .to_string();
         let launcher = FakeLauncher { stdout };
 
-        let discovered = Discover_Workspace(&root, &launcher).expect("the fake launcher reports one package");
+        let discovered = Discover_Workspace(&root, &launcher, &StdEnvironment).expect("the fake launcher reports one package");
 
         assert_eq!(discovered.len(), 1);
         assert_eq!(discovered.first().expect("one package").payload.package, "nomos-contracts");
@@ -412,7 +428,7 @@ mod local_tests
         let root = Path::new("F:/repos/nomos");
         let launcher = FakeLauncher { stdout: String::new() };
 
-        let error = Discover_Workspace(root, &launcher).expect_err("an empty stream names no first-party package");
+        let error = Discover_Workspace(root, &launcher, &StdEnvironment).expect_err("an empty stream names no first-party package");
 
         assert!(error.reason.contains("no first-party workspace member"), "{}", error.reason);
     }
@@ -439,7 +455,7 @@ mod local_tests
         .to_string();
         let launcher = FakeLauncher { stdout };
 
-        let discovered = Discover_Workspace(root, &launcher)
+        let discovered = Discover_Workspace(root, &launcher, &StdEnvironment)
             .expect("a relative root, once resolved against the real current directory, must still find a package genuinely under it");
 
         assert_eq!(discovered.len(), 1);
@@ -467,7 +483,7 @@ mod local_tests
         .to_string();
         let launcher = FakeLauncher { stdout };
 
-        let error = Discover_Workspace(&root, &launcher).expect_err(
+        let error = Discover_Workspace(&root, &launcher, &StdEnvironment).expect_err(
             "a package cargo clippy reports outside the judged root must be excluded, leaving \
              nothing for a real, honest Require_Nonempty refusal to report instead of a clean \
              but empty result",

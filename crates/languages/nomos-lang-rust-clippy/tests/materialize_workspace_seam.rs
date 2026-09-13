@@ -20,6 +20,7 @@ use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, 
 use nomos_lang_rust_clippy::{Declared_Guarantee, FactContext, Materialize_Workspace};
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
 use std::path::{Path, PathBuf};
+use nomos_platform_std::StdEnvironment;
 
 /// `Discover_Workspace` absolutizes `root` against the real process working directory
 /// before relativizing any `package_id` against it (`Absolutized`, added for
@@ -130,7 +131,7 @@ fn Test_Materialize_Workspace_Should_Produce_A_Fact_Nomos_Analysis_And_Nomos_Mod
     let launcher = FakeLauncher::Reporting(Single_Member_Clippy_Output());
     let context = Context(GenerationId::INITIAL);
 
-    let facts = Materialize_Workspace(&Root(), context, &launcher).expect("the fake launcher reports one clean member");
+    let facts = Materialize_Workspace(&Root(), context, &launcher, &StdEnvironment).expect("the fake launcher reports one clean member");
 
     assert_eq!(facts.len(), 1, "{facts:?}");
     let member = facts.first().expect("asserted len 1 above");
@@ -170,9 +171,9 @@ fn Test_The_Facts_Key_Should_Depend_On_The_Build_Variant_But_Not_On_The_Generati
     let different_variant =
         FactContext { variant: BuildVariantId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH])), ..base };
 
-    let at_base = Materialize_Workspace(&Root(), base, &launcher).expect("base context");
-    let at_later_generation = Materialize_Workspace(&Root(), later_generation, &launcher).expect("later generation");
-    let at_different_variant = Materialize_Workspace(&Root(), different_variant, &launcher).expect("different variant");
+    let at_base = Materialize_Workspace(&Root(), base, &launcher, &StdEnvironment).expect("base context");
+    let at_later_generation = Materialize_Workspace(&Root(), later_generation, &launcher, &StdEnvironment).expect("later generation");
+    let at_different_variant = Materialize_Workspace(&Root(), different_variant, &launcher, &StdEnvironment).expect("different variant");
 
     let key_at_base = at_base.first().expect("one member").fact.Key().Digest();
     let key_at_later_generation = at_later_generation.first().expect("one member").fact.Key().Digest();
@@ -206,7 +207,7 @@ fn Test_A_Non_Zero_Exit_Should_Refuse_Rather_Than_Report_A_Clean_Result()
     };
 
     let error =
-        Materialize_Workspace(&Root(), Context(GenerationId::INITIAL), &launcher).expect_err("a non-zero exit must refuse");
+        Materialize_Workspace(&Root(), Context(GenerationId::INITIAL), &launcher, &StdEnvironment).expect_err("a non-zero exit must refuse");
 
     assert!(error.reason.contains("exit 101"), "{}", error.reason);
     assert!(error.reason.contains("mismatched types"), "{}", error.reason);

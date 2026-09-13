@@ -156,7 +156,7 @@ fn Outcome_For(root: &Path) -> nomos_check_orchestration::CheckOutcome
 fn Judged_Sources(root: &Path, sources: &[SourceFile]) -> nomos_check_orchestration::CheckOutcome
 {
     use composition::Host_Variant;
-    use nomos_composer_std::{FILE_SYSTEM, LAUNCHER};
+    use nomos_composer_std::{ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 
     return nomos_check_orchestration::Run(
         sources,
@@ -165,6 +165,7 @@ fn Judged_Sources(root: &Path, sources: &[SourceFile]) -> nomos_check_orchestrat
             root,
             launcher: &LAUNCHER,
             filesystem: &FILE_SYSTEM,
+            environment: &ENVIRONMENT,
             workspace: &mut None,
             store: &mut nomos_analysis::MemoryFactStore::New(),
         },

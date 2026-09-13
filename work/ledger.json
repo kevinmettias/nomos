@@ -63922,7 +63922,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -63955,7 +63955,47 @@
         ],
         "timeout_seconds": 5400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-lang-rust-deny",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-correction-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "tests src\\lib.rs (target\\debug\\deps\\nomos_correction_orchestration-5bd99f2e21d2cd23.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-c9662d6feac492d1.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-e12ce8b5110b2b8d.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-8a3fa01f728d1cfe.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_cargo-41ebe810b6bde079.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-084b187ba18c9500.exe)\n     Running tests\\invalidation.rs (target\\debug\\deps\\invalidation-4266df1b729a4476.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_clippy-88548692ac49cc1b.exe)\n     Running tests\\capability_seam.rs (target\\debug\\deps\\capability_seam-e9e955bc5e201b9d.exe)\n     Running tests\\materialize_workspace_seam.rs (target\\debug\\deps\\materialize_workspace_seam-9986b555c1e2fd21.exe)\n     Running tests\\platform_std_seam.rs (target\\debug\\deps\\platform_std_seam-75f1e793163d3f8a.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_deny-e6093ccff26dbc8f.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-391d317ce964e146.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lsp-7c67cb1d37424678.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_lsp-fa4449598fd183b5.exe)\n     Running tests\\fixture_tree.rs (target\\debug\\deps\\fixture_tree-af397d8b9dae8884.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workflow_orchestration-31357a0593f95bae.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_correction_orchestration\n   Doc-tests nomos_gate_orchestration\n   Doc-tests nomos_lang_rust_cargo\n   Doc-tests nomos_lang_rust_clippy\n   Doc-tests nomos_lang_rust_deny\n   Doc-tests nomos_lsp\n   Doc-tests nomos_workflow_orchestration\n",
+        "verified_at": 1789267179,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "58e7fe41953ba44d3ad75a519c528430a39c8ff8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -65077,6 +65117,59 @@
           "exit_code": 0
         },
         "revision": "15bdbb74d2028fb2a484d4379d9dd90792530fe8"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P87-INTEGRATION-TESTS-CONSTRUCT-THE-THREADED-PORTS",
+      "title": "Two integration tests construct a RunContext and call the rust providers without the environment port",
+      "why": "P87-RUST-PROVIDERS-READ-THE-ENVIRONMENT-PAST-THE-INJECTED-LAUNCHER-4 threads nomos_platform::Environment from every composition root down to the three rust providers, which adds a field to RunContext and a parameter to each provider's Discover_Workspace/Materialize_Workspace. tests/integration/tests/calibration.rs constructs a RunContext and tests/integration/tests/determinism/productions.rs calls all three providers directly, so both stop compiling. Neither is in that item's territory, which reserved tests/contract/surface but not tests/integration, and the two do not overlap. A disjoint claim rather than a decline and re-author, because that item is an all-or-nothing threading across roughly forty files that cannot be abandoned and re-done cheaply.",
+      "done_when": "Both integration tests supply the environment the way every other caller does, assert exactly what they asserted before, and cargo test -p nomos-integration-tests passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration/tests/calibration.rs",
+          "tests/integration/tests/determinism/productions.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "\ntest domains::Test_The_Go_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Naming_Policy_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Rollup_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Go_Dependency_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Projection_Output_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Requirement_Trace_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Dependency_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Dependency_Policy_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Lint_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Copy_Clones_Provider_Should_Meet_Its_Declared_Strategy has been running for over 60 seconds\ntest domains::Test_The_Nested_Locks_Provider_Should_Meet_Its_Declared_Strategy has been running for over 60 seconds\ntest domains::Test_The_Nested_Locks_Provider_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Copy_Clones_Provider_Should_Meet_Its_Declared_Strategy ... ok\n\ntest result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 304.26s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.29s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-2e5f1b23241ce63f.exe)\n     Running tests\\analysis_slice\\main.rs (target\\debug\\deps\\analysis_slice-45ab30a65f845dba.exe)\n     Running tests\\calibration.rs (target\\debug\\deps\\calibration-846bb8f6ed0c0dc7.exe)\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-0069d21837802c80.exe)\n   Doc-tests nomos_integration_tests\n",
+        "verified_at": 1789267919,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "58e7fe41953ba44d3ad75a519c528430a39c8ff8"
       },
       "abandoned": [],
       "displaced": [],

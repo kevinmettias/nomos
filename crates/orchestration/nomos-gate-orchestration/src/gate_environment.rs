@@ -3,7 +3,7 @@
 
 use nomos_check_orchestration::{CheckOutcome, Claim, Claim_Of};
 use nomos_contracts::{Finding, RuleId, RunId};
-use nomos_platform::{FileSystem, ProcessLauncher};
+use nomos_platform::{Environment, FileSystem, ProcessLauncher};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::Path;
@@ -33,11 +33,9 @@ use crate::{
 /// at all -- empty for every rule, the same default `RuleSelector::include` already has. A
 /// caller that must see every rule's findings regardless of `command.rules` (`Explain_Gate`)
 /// passes an empty slice here rather than `command.rules.include`.
-pub(crate) fn Judged_Sources<Launcher: ProcessLauncher, Fs: FileSystem>(
+pub(crate) fn Judged_Sources<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     walked: Option<Vec<SourceFile>>,
-    launcher: &Launcher,
-    filesystem: &Fs,
-    context: JudgeContext<'_>,
+    context: JudgeContext<'_, Launcher, Fs, Env>,
 ) -> CheckOutcome
 {
     return match walked
@@ -49,8 +47,9 @@ pub(crate) fn Judged_Sources<Launcher: ProcessLauncher, Fs: FileSystem>(
             nomos_check_orchestration::RunContext {
                 variant: context.variant,
                 root: context.root,
-                launcher,
-                filesystem,
+                launcher: context.launcher,
+                filesystem: context.filesystem,
+                environment: context.environment,
                 workspace: &mut None,
                 store: &mut nomos_analysis::MemoryFactStore::New(),
             },
@@ -63,18 +62,27 @@ pub(crate) fn Judged_Sources<Launcher: ProcessLauncher, Fs: FileSystem>(
 /// both need but neither computes -- grouped into one value so each stays within this crate's
 /// own parameter-count limit. `command` and `walked`/`query`/`run` stay separate parameters:
 /// this groups only the three values every gate entry point shares.
-pub struct GateEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem>
+pub struct GateEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
 {
     pub variant: BuildVariant,
     pub launcher: &'a Launcher,
     pub filesystem: &'a Fs,
+    /// Where a provider reads `CARGO` and the working directory from, rather than from this
+    /// process's own ambient state. `OD-HOST-001`: the composition root chooses it.
+    pub environment: &'a Env,
 }
 
 /// What [`Judged_Sources`] judges a walked tree against, apart from the walk itself and the
 /// platform used to run it -- grouped into one value so [`Judged_Sources`] stays within this
 /// crate's own parameter-count limit.
-pub(crate) struct JudgeContext<'a>
+pub(crate) struct JudgeContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
 {
+    /// The process launcher a provider's subprocess runs through.
+    pub(crate) launcher: &'a Launcher,
+    /// The filesystem a provider reads through.
+    pub(crate) filesystem: &'a Fs,
+    /// Where a provider reads `CARGO` and the working directory from.
+    pub(crate) environment: &'a Env,
     /// Which [`BuildVariant`] to judge as.
     pub(crate) variant: BuildVariant,
     /// The tree this judgment is over.
@@ -97,14 +105,14 @@ pub(crate) struct JudgeContext<'a>
 /// The composition root supplies one, typically [`crate::Fresh_Run_Id`] over a real clock
 /// reading.
 #[must_use]
-pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem>(
+pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     walked: Option<Vec<SourceFile>>,
-    environment: GateEnvironment<'_, Launcher, Fs>,
+    environment: GateEnvironment<'_, Launcher, Fs, Env>,
     command: &GateCommand,
     run: RunId,
 ) -> GateRunResult
 {
-    let GateEnvironment { variant, launcher, filesystem } = environment;
+    let GateEnvironment { variant, launcher, filesystem, environment } = environment;
     let declared = Resolve_Gate_Policy(&command.root, filesystem);
     let effective = match &declared
     {
@@ -125,7 +133,7 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem>(
     let admits_a_source = walked.as_ref().is_none_or(|sources| {
         return sources.iter().any(|source| return command.scope.Is_In_Scope(&source.path));
     });
-    let judged = Judged_Sources(walked, launcher, filesystem, JudgeContext { variant, root: &command.root, selected: &command.rules.include });
+    let judged = Judged_Sources(walked, JudgeContext { launcher, filesystem, environment, variant, root: &command.root, selected: &command.rules.include });
     let outcome = if admits_a_source { Scoped_Findings(judged, &command.scope) } else { CheckOutcome::NoSource };
 
     let reduced = Reduced_Findings(
@@ -298,7 +306,7 @@ mod tests
     use nomos_check_orchestration::CheckOutcome;
     use nomos_contracts::{Digest128, RuleId, RunId};
     use nomos_model::Subject_Of_Path;
-    use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
+    use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
     use nomos_rules::SourceFile;
     use nomos_workspace::BuildVariant;
     use std::path::PathBuf;
@@ -323,7 +331,7 @@ mod tests
     fn Test_Judged_Sources_Should_Report_Unreadable_For_An_Unwalked_Root()
     {
         let root = Repository_Root();
-        let outcome = Judged_Sources(None, &StdProcessLauncher, &StdFileSystem, JudgeContext { variant: Test_Variant(), root: &root, selected: &[] });
+        let outcome = Judged_Sources(None, JudgeContext { launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, variant: Test_Variant(), root: &root, selected: &[] });
 
         assert!(matches!(outcome, CheckOutcome::Unreadable));
     }
@@ -332,7 +340,7 @@ mod tests
     fn Test_Judged_Sources_Should_Report_No_Source_For_An_Empty_Walk()
     {
         let root = Repository_Root();
-        let outcome = Judged_Sources(Some(Vec::new()), &StdProcessLauncher, &StdFileSystem, JudgeContext { variant: Test_Variant(), root: &root, selected: &[] });
+        let outcome = Judged_Sources(Some(Vec::new()), JudgeContext { launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, variant: Test_Variant(), root: &root, selected: &[] });
 
         assert!(matches!(outcome, CheckOutcome::NoSource));
     }
@@ -345,7 +353,7 @@ mod tests
         let run = RunId::From_Digest(Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]));
 
         let result =
-            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, run);
+            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, run);
 
         assert!(!result.findings.blocking_findings.is_empty());
     }
@@ -357,7 +365,7 @@ mod tests
         let unphased = GateCommand { root: root.clone(), ..Default::default() };
         let baseline = Run_Gate(
             Some(Blocking_Sources()),
-            super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },
+            super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment },
             &unphased,
             RunId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH])),
         );
@@ -375,7 +383,7 @@ mod tests
         let run = RunId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH]));
 
         let result =
-            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, run);
+            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, run);
 
         assert!(!result.findings.blocking_findings.is_empty(), "the finding must still be real and reported, not hidden");
         assert!(matches!(result.disposition, GateRunOutcome::Passed), "an approved phase covering every blocking finding must pass the run");
@@ -390,7 +398,7 @@ mod tests
         let run = RunId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH]));
 
         let result =
-            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command, run);
+            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, run);
 
         assert!(matches!(result.disposition, GateRunOutcome::Failed), "a phase policy must not let a finding outside its own scope silently stop blocking");
     }

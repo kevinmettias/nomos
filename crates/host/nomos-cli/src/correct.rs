@@ -28,7 +28,7 @@ pub use parsing::Parse;
 
 use crate::arguments::Named_Value_From_String_Arguments;
 use nomos_correction_orchestration::{CorrectionCommand as SeamCommand, CorrectionEnvironment, CorrectionOutcome, Run_Correction};
-use nomos_composer_std::{FILE_SYSTEM, LAUNCHER};
+use nomos_composer_std::{ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::io::Write;
@@ -49,7 +49,7 @@ pub fn Run(command: &CorrectCommand, stdout: &mut impl Write, stderr: &mut impl 
 {
     let walked = Walked(&command.root);
     let seam_command = SeamCommand { root: command.root.clone(), commit: command.commit };
-    let environment = CorrectionEnvironment { variant: Correction_Variant(), launcher: &LAUNCHER, filesystem: &FILE_SYSTEM };
+    let environment = CorrectionEnvironment { variant: Correction_Variant(), launcher: &LAUNCHER, filesystem: &FILE_SYSTEM, environment: &ENVIRONMENT };
 
     let outcome = Run_Correction(walked, environment, &seam_command);
 

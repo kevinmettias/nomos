@@ -70,7 +70,7 @@ mod exit_code;
 pub(crate) use exit_code::ExitCode;
 pub(crate) use nomos_gate_orchestration::{FindingQuery, GateCommand};
 use nomos_platform::Clock;
-use nomos_composer_std::{CLOCK, FILE_SYSTEM, LAUNCHER};
+use nomos_composer_std::{CLOCK, ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 
 use crate::arguments::Named_Value_From_String_Arguments;
 use nomos_rules::SourceFile;
@@ -102,6 +102,7 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
                     variant: composition::Host_Variant(),
                     launcher: &LAUNCHER,
                     filesystem: &FILE_SYSTEM,
+                    environment: &ENVIRONMENT,
                 },
                 command,
                 query,
@@ -150,6 +151,7 @@ fn Judged(command: &GateCommand) -> nomos_gate_orchestration::GateRunResult
             variant: composition::Host_Variant(),
             launcher: &LAUNCHER,
             filesystem: &FILE_SYSTEM,
+            environment: &ENVIRONMENT,
         },
         command,
         run,

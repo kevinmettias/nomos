@@ -5,7 +5,7 @@
 //! alone.
 
 use nomos_cap_dependency_policy::{PolicySeverity, PolicyViolation};
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher};
+use nomos_platform::{Command, Environment, ExitOutcome, ProcessLauncher};
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
@@ -62,10 +62,10 @@ impl core::fmt::Display for DenyError
 /// or going idle for that long, is terminated before finishing, or produces no stderr at
 /// all — the one signal this reader treats as a genuine failure to answer rather than an
 /// answer it does not like.
-pub fn Discover_Workspace<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<Vec<PolicyViolation>, DenyError>
+pub fn Discover_Workspace<Launcher: ProcessLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<Vec<PolicyViolation>, DenyError>
 {
     let config = Required_Deny_Config(root)?;
-    let stream = Run_Cargo_Deny(root, &config, launcher)?;
+    let stream = Run_Cargo_Deny(root, &config, launcher, environment)?;
 
     return Ok(Canonical_Order(Violations_Of(&stream)));
 }
@@ -99,9 +99,9 @@ fn Required_Deny_Config(root: &Path) -> Result<PathBuf, DenyError>
     return Ok(config);
 }
 
-fn Run_Cargo_Deny<Launcher: ProcessLauncher>(root: &Path, config: &Path, launcher: &Launcher) -> Result<String, DenyError>
+fn Run_Cargo_Deny<Launcher: ProcessLauncher, Env: Environment>(root: &Path, config: &Path, launcher: &Launcher, environment: &Env) -> Result<String, DenyError>
 {
-    let command = Cargo_Deny_Command(root, config);
+    let command = Cargo_Deny_Command(root, config, environment);
     let output = launcher.Run(&command).map_err(|error| DenyError {
         reason: format!("cargo deny could not be run: {error}"),
     })?;
@@ -209,12 +209,27 @@ fn Require_Summarized(stream: &str, command: &Command) -> Result<(), DenyError>
     return Ok(());
 }
 
+/// The program name `cargo` is invoked by, from the environment rather than from this
+/// process's own ambient state.
+///
+/// `CARGO` is what a cargo-invoked build sets to the exact toolchain binary running, and a
+/// provider handed an injected launcher must not then reach around it for the program that
+/// launcher will run -- a fake launcher receives the command already built, so no test could
+/// state which cargo it names. `P87`/`OD-HOST-001`: the port comes from the composition root.
+fn Cargo_Program<Env: Environment>(environment: &Env) -> String
+{
+    return environment
+        .Variable("CARGO")
+        .and_then(|value| return value.into_string().ok())
+        .unwrap_or_else(|| return "cargo".to_owned());
+}
+
 /// `config` is passed explicitly rather than left for `cargo deny` to discover on its own
 /// -- [`Required_Deny_Config`]'s own doc explains why that discovery is a second escape
 /// this provider must not leave open.
-fn Cargo_Deny_Command(root: &Path, config: &Path) -> Command
+fn Cargo_Deny_Command<Env: Environment>(root: &Path, config: &Path, environment: &Env) -> Command
 {
-    let cargo = std::env::var("CARGO").unwrap_or_else(|_| "cargo".to_owned());
+    let cargo = Cargo_Program(environment);
     let mut command = Command::New(
         vec![
             cargo,
@@ -315,6 +330,7 @@ fn Violation_Of(diagnostic: &serde_json::Value) -> Option<PolicyViolation>
 #[cfg(test)]
 mod tests
 {
+    use nomos_platform_std::StdEnvironment;
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use nomos_platform::ProcessOutput;
@@ -452,7 +468,7 @@ mod tests
         let scratch = ScratchDirectory::New("missing");
         let launcher = RecordingLauncher::New();
 
-        let error = Discover_Workspace(scratch.Path(), &launcher)
+        let error = Discover_Workspace(scratch.Path(), &launcher, &StdEnvironment)
             .expect_err("a root with no deny.toml of its own must be refused");
 
         assert!(error.reason.contains("deny.toml"), "{}", error.reason);
@@ -475,7 +491,7 @@ mod tests
         std::fs::write(scratch.Path().join("deny.toml"), "[bans]\nmultiple-versions = \"allow\"\n").expect("writing a scratch deny.toml");
         let launcher = RecordingLauncher::New();
 
-        let _ignored = Discover_Workspace(scratch.Path(), &launcher).expect("a root with its own deny.toml must be run, not refused");
+        let _ignored = Discover_Workspace(scratch.Path(), &launcher, &StdEnvironment).expect("a root with its own deny.toml must be run, not refused");
 
         let received = launcher.received.borrow();
         let command = received.first().expect("Discover_Workspace must have launched exactly one command");
@@ -519,7 +535,7 @@ mod tests
         let stderr = format!("{stderr}\n{}", Completed_Summary());
         let launcher = FakeLauncher { stderr };
 
-        let violations = Discover_Workspace(scratch.Path(), &launcher).expect("the fake launcher writes a real stderr stream");
+        let violations = Discover_Workspace(scratch.Path(), &launcher, &StdEnvironment).expect("the fake launcher writes a real stderr stream");
 
         assert_eq!(violations.len(), 1);
         assert_eq!(violations.first().expect("one violation").code, "duplicate");
@@ -537,7 +553,7 @@ mod tests
         std::fs::write(scratch.Path().join("deny.toml"), "[bans]\nmultiple-versions = \"warn\"\n").expect("writing a scratch deny.toml");
         let launcher = FakeLauncher { stderr: String::new() };
 
-        let error = Discover_Workspace(scratch.Path(), &launcher).expect_err("an empty stderr stream is not a real cargo deny run");
+        let error = Discover_Workspace(scratch.Path(), &launcher, &StdEnvironment).expect_err("an empty stderr stream is not a real cargo deny run");
 
         assert!(error.reason.contains("no output"), "{}", error.reason);
     }
@@ -558,7 +574,7 @@ mod tests
             stderr: "error: failed to fetch the advisory database\nnote: run with --offline\n".to_owned(),
         };
 
-        let error = Discover_Workspace(scratch.Path(), &launcher).expect_err(
+        let error = Discover_Workspace(scratch.Path(), &launcher, &StdEnvironment).expect_err(
             "a stream with no summary means cargo deny never finished its checks, and an empty violation list over it is not a clean result",
         );
 
@@ -580,7 +596,7 @@ mod tests
             .to_string(),
         };
 
-        let error = Discover_Workspace(scratch.Path(), &launcher).expect_err("a summary accounting for only one of three requested checks is not a completed run");
+        let error = Discover_Workspace(scratch.Path(), &launcher, &StdEnvironment).expect_err("a summary accounting for only one of three requested checks is not a completed run");
 
         assert!(error.reason.contains("licenses"), "{}", error.reason);
         assert!(error.reason.contains("sources"), "{}", error.reason);
@@ -591,7 +607,7 @@ mod tests
     #[test]
     fn Test_Requested_Checks_Should_Name_Every_Check_The_Command_Asks_For()
     {
-        let command = Cargo_Deny_Command(Path::new("root"), Path::new("root/deny.toml"));
+        let command = Cargo_Deny_Command(Path::new("root"), Path::new("root/deny.toml"), &StdEnvironment);
 
         assert_eq!(Requested_Checks(&command), vec!["bans".to_owned(), "licenses".to_owned(), "sources".to_owned()]);
     }

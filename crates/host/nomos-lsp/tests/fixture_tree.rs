@@ -63,6 +63,7 @@ fn Test_Diagnostics_For_Should_Translate_A_Real_Run_Result()
             root: &root,
             launcher: &nomos_composer_std::LAUNCHER,
             filesystem: &nomos_composer_std::FILE_SYSTEM,
+            environment: &nomos_composer_std::ENVIRONMENT,
             workspace: &mut workspace,
             store: &mut store,
         },

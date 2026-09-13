@@ -14,7 +14,7 @@ use nomos_analysis::{MemoryFactStore, Reader};
 use nomos_contracts::{Finding, GateCategory, RuleId};
 use nomos_model::Subject_Of_Path;
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
-use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
 use nomos_rules::{Check_Completeness_Mirrors, SourceFile};
 use nomos_workspace::BuildVariant;
 use std::cell::Cell;
@@ -71,7 +71,7 @@ fn Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings()
 {
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&Architectural_Rules());
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },&Architectural_Rules());
 
     let CheckOutcome::Judged { findings, examined, claim } = outcome
     else
@@ -102,7 +102,7 @@ fn Test_A_Clean_Go_Source_Should_Be_Judged_Through_Its_Own_Real_Provider()
     let sources = vec![Source("main.go", "package main\n\nfunc One() {}\n")];
     let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR), RuleId::New(nomos_rules::NAMING_CONVENTION)];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },&selected);
 
     let CheckOutcome::Judged { findings, examined, claim } = outcome
     else
@@ -130,7 +130,7 @@ fn Test_A_Genuine_Cross_Language_Field_Mismatch_Should_Be_Reported()
     ];
     let selected = [RuleId::New(nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE)];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },&selected);
 
     let CheckOutcome::Judged { findings, .. } = outcome else { panic!("a tree the provider can read must be judged") };
 
@@ -151,7 +151,7 @@ fn Test_A_Genuine_Cross_Language_Field_Match_Should_Report_Nothing()
     ];
     let selected = [RuleId::New(nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE)];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },&selected);
 
     let CheckOutcome::Judged { findings, .. } = outcome else { panic!("a tree the provider can read must be judged") };
 
@@ -172,7 +172,7 @@ fn Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete()
         "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
     )];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },&[]);
 
     let CheckOutcome::Judged { findings, claim, .. } = outcome
     else
@@ -195,7 +195,7 @@ fn Test_A_Run_That_Materializes_No_Facts_Should_Report_NoFacts()
 {
     let sources = vec![Source("broken.rs", "pub const ??? = ;")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },&[]);
 
     assert!(
         matches!(outcome, CheckOutcome::NoFacts { files: 1 }),
@@ -212,7 +212,7 @@ fn Test_Conflicting_Paths_Should_Be_Unreadable()
 {
     let sources = vec![Source("a.rs", "pub fn one() {}\n"), Source("a.rs", "pub fn two() {}\n")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },&[]);
 
     assert!(matches!(outcome, CheckOutcome::Unreadable), "duplicate paths must not be ingested");
 }
@@ -225,7 +225,7 @@ fn Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor()
 {
     let sources = vec![Source("a.rs", "pub const TABLE: &[&str] = &[];\n")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },&[]);
 
     let CheckOutcome::Judged { findings, .. } = outcome
     else
@@ -309,7 +309,7 @@ fn Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members()
     let mut store = MemoryFactStore::New();
 
     let crate::facts::DependencyMaterialization { sources, findings } =
-        crate::facts::Materialize_Dependencies(&Repository_Root(), &context, &mut store, &StdProcessLauncher);
+        crate::facts::Materialize_Dependencies(&Repository_Root(), &context, &mut store, crate::facts::Subprocess { launcher: &StdProcessLauncher, environment: &StdEnvironment });
 
     assert!(findings.is_empty(), "a real workspace root must not report ProviderUnavailable: {findings:?}");
     assert!(
@@ -336,7 +336,7 @@ fn Test_Materialize_Lint_Should_Return_Real_Workspace_Members()
     let mut store = MemoryFactStore::New();
 
     let crate::facts::LintMaterialization { sources, findings } =
-        crate::facts::Materialize_Lint(&Repository_Root(), &context, &mut store, &StdProcessLauncher);
+        crate::facts::Materialize_Lint(&Repository_Root(), &context, &mut store, crate::facts::Subprocess { launcher: &StdProcessLauncher, environment: &StdEnvironment });
 
     assert!(findings.is_empty(), "a real workspace root must not report ProviderUnavailable: {findings:?}");
     assert!(
@@ -367,7 +367,7 @@ fn Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact()
     let mut store = MemoryFactStore::New();
 
     let crate::facts::PolicyMaterialization { sources, findings } =
-        crate::facts::Materialize_Policy(&Repository_Root(), &context, &mut store, &StdProcessLauncher);
+        crate::facts::Materialize_Policy(&Repository_Root(), &context, &mut store, crate::facts::Subprocess { launcher: &StdProcessLauncher, environment: &StdEnvironment });
 
     assert!(findings.is_empty(), "a real workspace root must not report ProviderUnavailable: {findings:?}");
     assert_eq!(sources.len(), 1, "IncrementalGranularity::WholeWorkspace materializes exactly one fact: {sources:?}");
@@ -426,7 +426,7 @@ fn Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_Metadata()
     let unselected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &[RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
     );
     assert_eq!(unselected.Count(), 0, "dependency-direction was not selected, so cargo metadata must not run");
@@ -434,7 +434,7 @@ fn Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_Metadata()
     let selected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &[RuleId::New(nomos_rules::DEPENDENCY_DIRECTION)],
     );
     assert_eq!(selected.Count(), 1, "dependency-direction was selected, so cargo metadata must run exactly once");
@@ -450,7 +450,7 @@ fn Test_A_Deselected_Lint_Rule_Should_Not_Launch_Cargo_Clippy()
     let unselected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &[RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
     );
     assert_eq!(unselected.Count(), 0, "lint-diagnostics was not selected, so cargo clippy must not run");
@@ -458,7 +458,7 @@ fn Test_A_Deselected_Lint_Rule_Should_Not_Launch_Cargo_Clippy()
     let selected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &[RuleId::New(nomos_rules::LINT_DIAGNOSTICS)],
     );
     assert_eq!(selected.Count(), 1, "lint-diagnostics was selected, so cargo clippy must run exactly once");
@@ -474,7 +474,7 @@ fn Test_A_Deselected_Dependency_Policy_Rule_Should_Not_Launch_Cargo_Deny()
     let unselected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &unselected, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &[RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
     );
     assert_eq!(unselected.Count(), 0, "dependency-policy was not selected, so cargo deny must not run");
@@ -482,7 +482,7 @@ fn Test_A_Deselected_Dependency_Policy_Rule_Should_Not_Launch_Cargo_Deny()
     let selected = CountingLauncher::New();
     let _ = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &selected, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &[RuleId::New(nomos_rules::DEPENDENCY_POLICY)],
     );
     assert_eq!(selected.Count(), 1, "dependency-policy was selected, so cargo deny must run exactly once");
@@ -548,6 +548,7 @@ fn Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomput
             root: &Repository_Root(),
             launcher: &StdProcessLauncher,
             filesystem: &StdFileSystem,
+            environment: &StdEnvironment,
             workspace: &mut workspace,
             store: &mut store,
         },
@@ -563,6 +564,7 @@ fn Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomput
             root: &Repository_Root(),
             launcher: &StdProcessLauncher,
             filesystem: &StdFileSystem,
+            environment: &StdEnvironment,
             workspace: &mut workspace,
             store: &mut store,
         },
@@ -584,6 +586,7 @@ fn Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomput
             root: &Repository_Root(),
             launcher: &StdProcessLauncher,
             filesystem: &StdFileSystem,
+            environment: &StdEnvironment,
             workspace: &mut clean_workspace,
             store: &mut clean_store,
         },
@@ -634,6 +637,7 @@ fn Test_A_Store_And_Workspace_Reused_With_No_Change_Between_Two_Calls_Should_Sti
             root: &Repository_Root(),
             launcher: &StdProcessLauncher,
             filesystem: &StdFileSystem,
+            environment: &StdEnvironment,
             workspace: &mut workspace,
             store: &mut store,
         },
@@ -653,6 +657,7 @@ fn Test_A_Store_And_Workspace_Reused_With_No_Change_Between_Two_Calls_Should_Sti
             root: &Repository_Root(),
             launcher: &StdProcessLauncher,
             filesystem: &StdFileSystem,
+            environment: &StdEnvironment,
             workspace: &mut workspace,
             store: &mut store,
         },
@@ -691,7 +696,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Naming_Override()
     let unconfigured = Scratch_Directory("naming-unconfigured");
     let unconfigured_outcome = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &selected,
     );
     let CheckOutcome::Judged { findings: unconfigured_findings, .. } = unconfigured_outcome
@@ -709,7 +714,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Naming_Override()
     std::fs::write(overridden.join("standards.json"), r#"{"naming":{"function":"lower-snake"}}"#).expect("a scratch standards.json");
     let overridden_outcome = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &selected,
     );
     let CheckOutcome::Judged { findings: overridden_findings, .. } = overridden_outcome
@@ -740,7 +745,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_File_Size_Limit()
     let unconfigured = Scratch_Directory("limits-unconfigured");
     let CheckOutcome::Judged { findings: unconfigured_findings, .. } = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &selected,
     )
     else
@@ -756,7 +761,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_File_Size_Limit()
     std::fs::write(overridden.join("standards.json"), r#"{"limits":{"file-size-hard-lines":3}}"#).expect("a scratch standards.json");
     let CheckOutcome::Judged { findings: overridden_findings, .. } = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &selected,
     )
     else
@@ -794,7 +799,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Forbidden_Script_Extension()
     let unconfigured = Scratch_Directory("scripting-unconfigured");
     let CheckOutcome::Judged { findings: unconfigured_findings, .. } = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &selected,
     )
     else
@@ -814,7 +819,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Forbidden_Script_Extension()
     .expect("a scratch standards.json");
     let CheckOutcome::Judged { findings: overridden_findings, .. } = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &selected,
     )
     else
@@ -847,7 +852,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Goal_Declaration()
     let unconfigured = Scratch_Directory("goals-unconfigured");
     let CheckOutcome::Judged { findings: unconfigured_findings, .. } = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &selected,
     )
     else
@@ -870,7 +875,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Goal_Declaration()
     .expect("a scratch standards.json");
     let CheckOutcome::Judged { findings: declared_findings, .. } = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &selected,
     )
     else
@@ -912,7 +917,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Approved_Abbreviation()
     let unconfigured = Scratch_Directory("words-unconfigured");
     let CheckOutcome::Judged { findings: unconfigured_findings, .. } = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &unconfigured, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &selected,
     )
     else
@@ -930,7 +935,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Approved_Abbreviation()
         .expect("a scratch standards.json");
     let CheckOutcome::Judged { findings: approved_findings, .. } = Run(
         &sources,
-        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root: &overridden, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         &selected,
     )
     else
@@ -994,7 +999,7 @@ fn Test_A_Rule_Selected_Through_Its_Exported_Identifier_Should_Run()
 
     let sources = vec![Source("a.rs", "pub fn one() {} \n")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&[exported.clone()]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },&[exported.clone()]);
 
     let CheckOutcome::Judged { findings, .. } = outcome
     else
@@ -1025,7 +1030,7 @@ fn Test_An_Identifier_The_Export_Does_Not_Name_Should_Select_Nothing()
 
     let sources = vec![Source("a.rs", "pub fn one() {} \n")];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, workspace: &mut None, store: &mut MemoryFactStore::New() },&[absent]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },&[absent]);
 
     let CheckOutcome::Judged { findings, .. } = outcome
     else

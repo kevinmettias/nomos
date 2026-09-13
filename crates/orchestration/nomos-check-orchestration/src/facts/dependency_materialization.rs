@@ -16,7 +16,7 @@ pub use review_materialization::ReviewMaterialization;
 use nomos_analysis::{Context, FactKey, FactStore, GuaranteeDigest, InputDigest, MaterializedFact, MemoryFactStore};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, ProviderId, RuleId};
 use nomos_lang_rust::{FactContext, Materialization};
-use nomos_platform::ProcessLauncher;
+use nomos_platform::{Environment, ProcessLauncher};
 use nomos_rules::SourceFile;
 
 use std::path::Path;
@@ -264,16 +264,27 @@ pub fn Materialize_Reachability(sources: &[SourceFile], context: &Context, store
 /// exactly the vacuity [`Materialize_Syntax`]'s own `NoFacts` case exists to catch one layer
 /// over. So a failed materialization returns no dependency sources and one synthetic
 /// finding reporting why, rather than nothing at all.
-pub fn Materialize_Dependencies<Launcher: ProcessLauncher>(
+/// The two ports a subprocess-backed materialization needs, grouped so each
+/// `Materialize_*` below stays inside this workspace's own `parameter-count` limit -- the
+/// same reason `MaterializationEnvironment` groups its own five.
+pub struct Subprocess<'a, Launcher: ProcessLauncher, Env: Environment>
+{
+    /// What the provider's subprocess runs through.
+    pub launcher: &'a Launcher,
+    /// Where the provider reads `CARGO` from, rather than from this process's own state.
+    pub environment: &'a Env,
+}
+
+pub fn Materialize_Dependencies<Launcher: ProcessLauncher, Env: Environment>(
     root: &Path,
     context: &Context,
     store: &mut MemoryFactStore,
-    launcher: &Launcher,
+    subprocess: Subprocess<'_, Launcher, Env>,
 ) -> DependencyMaterialization
 {
     let production = Cargo_Production(context);
 
-    let facts = match nomos_lang_rust_cargo::Materialize_Workspace(root, production, launcher)
+    let facts = match nomos_lang_rust_cargo::Materialize_Workspace(root, production, subprocess.launcher, subprocess.environment)
     {
         Ok(facts) => facts,
         Err(error) => return DependencyMaterialization {
@@ -340,16 +351,16 @@ fn Materialized_Dependency_Sources(
 /// `NoFacts`-shaped vacuity [`Materialize_Syntax`]'s own case exists to catch one layer
 /// over. So a failed materialization returns no lint sources and one synthetic finding
 /// reporting why, rather than nothing at all.
-pub fn Materialize_Lint<Launcher: ProcessLauncher>(
+pub fn Materialize_Lint<Launcher: ProcessLauncher, Env: Environment>(
     root: &Path,
     context: &Context,
     store: &mut MemoryFactStore,
-    launcher: &Launcher,
+    subprocess: Subprocess<'_, Launcher, Env>,
 ) -> LintMaterialization
 {
     let production = Clippy_Production(context);
 
-    let facts = match nomos_lang_rust_clippy::Materialize_Workspace(root, production, launcher)
+    let facts = match nomos_lang_rust_clippy::Materialize_Workspace(root, production, subprocess.launcher, subprocess.environment)
     {
         Ok(facts) => facts,
         Err(error) => return LintMaterialization {
@@ -424,16 +435,16 @@ fn Lint_Capability_Unavailable(error: &nomos_lang_rust_clippy::ClippyError) -> F
 /// A failure here does not abort the run, the identical reasoning [`Materialize_Lint`]'s
 /// own doc gives one layer up: a failed materialization returns no policy sources and one
 /// synthetic finding reporting why, rather than nothing at all.
-pub fn Materialize_Policy<Launcher: ProcessLauncher>(
+pub fn Materialize_Policy<Launcher: ProcessLauncher, Env: Environment>(
     root: &Path,
     context: &Context,
     store: &mut MemoryFactStore,
-    launcher: &Launcher,
+    subprocess: Subprocess<'_, Launcher, Env>,
 ) -> PolicyMaterialization
 {
     let production = Deny_Production(context);
 
-    let fact = match nomos_lang_rust_deny::Materialize_Workspace(root, production, launcher)
+    let fact = match nomos_lang_rust_deny::Materialize_Workspace(root, production, subprocess.launcher, subprocess.environment)
     {
         Ok(fact) => fact,
         Err(error) => return PolicyMaterialization {
@@ -558,6 +569,7 @@ mod tests
     //! What this module promises, exercised.
 
     use super::*;
+    use nomos_platform_std::StdEnvironment;
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use nomos_platform::Command;
     use nomos_workspace::BuildVariant;
@@ -669,7 +681,7 @@ mod tests
     {
         let RefusedLaunchFixture { context, mut store } = Refused_Launch_Fixture();
 
-        let result = Materialize_Dependencies(&PathBuf::from("."), &context, &mut store, &RefusingLauncher);
+        let result = Materialize_Dependencies(&PathBuf::from("."), &context, &mut store, Subprocess { launcher: &RefusingLauncher, environment: &StdEnvironment });
 
         assert!(result.sources.is_empty(), "a refused launch must not report workspace members");
         assert_eq!(result.findings.len(), 1, "{:?}", result.findings);
@@ -687,7 +699,7 @@ mod tests
     {
         let RefusedLaunchFixture { context, mut store } = Refused_Launch_Fixture();
 
-        let result = Materialize_Lint(&PathBuf::from("."), &context, &mut store, &RefusingLauncher);
+        let result = Materialize_Lint(&PathBuf::from("."), &context, &mut store, Subprocess { launcher: &RefusingLauncher, environment: &StdEnvironment });
 
         assert!(result.sources.is_empty(), "a refused launch must not report workspace members");
         assert_eq!(result.findings.len(), 1, "{:?}", result.findings);
@@ -705,7 +717,7 @@ mod tests
     {
         let RefusedLaunchFixture { context, mut store } = Refused_Launch_Fixture();
 
-        let result = Materialize_Policy(&PathBuf::from("."), &context, &mut store, &RefusingLauncher);
+        let result = Materialize_Policy(&PathBuf::from("."), &context, &mut store, Subprocess { launcher: &RefusingLauncher, environment: &StdEnvironment });
 
         assert!(result.sources.is_empty(), "a refused launch must not report the policy fact");
         assert_eq!(result.findings.len(), 1, "{:?}", result.findings);

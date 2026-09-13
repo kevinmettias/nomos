@@ -11,7 +11,7 @@
 mod dependency_materialization;
 mod policy_materialization;
 
-pub use dependency_materialization::{
+pub use dependency_materialization::{Subprocess,
     DependencyMaterialization, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
     Materialize_Policy, Materialize_Reachability, Materialize_Review, Materialize_Syntax,
     PolicyMaterialization, ReviewMaterialization,

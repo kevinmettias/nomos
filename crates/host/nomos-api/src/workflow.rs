@@ -40,7 +40,7 @@ use crate::response::GateRunResponse;
 use crate::{check, composition, correction, sources};
 use nomos_gate_orchestration::Fresh_Run_Id;
 use nomos_platform::Clock;
-use nomos_composer_std::{CLOCK, FILE_SYSTEM, LAUNCHER};
+use nomos_composer_std::{CLOCK, ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 use nomos_workflow_orchestration::{Body, CheckBody, CorrectionBody, DispatchError, GateBody, Platform, Run, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
 use serde::Serialize;
 
@@ -57,7 +57,7 @@ pub fn Handle_Workflow_Run(plan: &WorkflowStepPlan) -> WorkflowRunResponse
     };
     let walked_plan = WorkflowStepPlan { declaration: plan.declaration.clone(), body };
 
-    let platform = Platform { launcher: &LAUNCHER, filesystem: &FILE_SYSTEM };
+    let platform = Platform { launcher: &LAUNCHER, filesystem: &FILE_SYSTEM, environment: &ENVIRONMENT };
     let run = Fresh_Run_Id(CLOCK.Now());
     let outcome = Run(std::slice::from_ref(&walked_plan), &platform, &composition::Host_Variant(), run);
 

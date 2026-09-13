@@ -20,7 +20,7 @@ use super::{BaselineDebtResponse, RuleCalibrationResponse, SuppressionResponse};
 #[must_use]
 pub fn Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse
 {
-    use nomos_composer_std::{FILE_SYSTEM, LAUNCHER};
+    use nomos_composer_std::{ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 
     let command = GateCommand { root: root.to_path_buf(), ..Default::default() };
     let walked = sources::Walked_Sources(root);
@@ -30,6 +30,7 @@ pub fn Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResp
             variant: composition::Host_Variant(),
             launcher: &LAUNCHER,
             filesystem: &FILE_SYSTEM,
+            environment: &ENVIRONMENT,
         },
         &command,
         query,

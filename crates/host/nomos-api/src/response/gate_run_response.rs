@@ -6,7 +6,7 @@ use crate::{composition, sources};
 use nomos_contracts::RunId;
 use nomos_gate_orchestration::{GateCommand, GateRunResult};
 use nomos_platform::Clock;
-use nomos_composer_std::{CLOCK, FILE_SYSTEM, LAUNCHER};
+use nomos_composer_std::{CLOCK, ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 use serde::Serialize;
 use std::path::PathBuf;
 
@@ -30,6 +30,7 @@ pub fn Handle_Gate_Run(command: &GateCommand) -> GateRunResponse
             variant: composition::Host_Variant(),
             launcher: &LAUNCHER,
             filesystem: &FILE_SYSTEM,
+            environment: &ENVIRONMENT,
         },
         command,
         run,

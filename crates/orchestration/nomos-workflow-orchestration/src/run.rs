@@ -9,7 +9,7 @@ use nomos_check_orchestration::RunContext;
 use nomos_contracts::RunId;
 use nomos_correction_orchestration::{CorrectionCommand, CorrectionEnvironment, Run_Correction};
 use nomos_gate_orchestration::{GateEnvironment, GateRunOutcome, Run_Gate};
-use nomos_platform::{FileSystem, ProcessLauncher};
+use nomos_platform::{Environment, FileSystem, ProcessLauncher};
 use nomos_workspace::BuildVariant;
 
 use crate::{Body, DispatchError, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
@@ -19,10 +19,13 @@ use crate::{Body, DispatchError, StepOutcome, WorkflowOutcome, WorkflowStepPlan}
 /// crate's own version of the identical grouping `nomos_check_orchestration::
 /// MaterializationEnvironment` and `nomos_gate_orchestration::GateEnvironment` already use
 /// for the same two values.
-pub struct Platform<'a, Launcher: ProcessLauncher, Fs: FileSystem>
+pub struct Platform<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
 {
     pub launcher: &'a Launcher,
     pub filesystem: &'a Fs,
+    /// Where a provider reads `CARGO` and the working directory from, rather than from this
+    /// process's own ambient state. `OD-HOST-001`: the composition root chooses it.
+    pub environment: &'a Env,
 }
 
 /// Dispatches `plan` in order through `platform`.
@@ -45,7 +48,7 @@ pub struct Platform<'a, Launcher: ProcessLauncher, Fs: FileSystem>
 /// signature threads through unchanged -- not a case `nomos_cli::workflow`'s own
 /// single-step-per-invocation shape reaches yet.
 #[must_use]
-pub fn Run<Launcher: ProcessLauncher, Fs: FileSystem>(plan: &[WorkflowStepPlan], platform: &Platform<'_, Launcher, Fs>, variant: &BuildVariant, run: RunId) -> WorkflowOutcome
+pub fn Run<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(plan: &[WorkflowStepPlan], platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> WorkflowOutcome
 {
     let mut completed = Vec::new();
 
@@ -89,7 +92,7 @@ const NO_ROOT: &str = "";
 /// a `GateRunOutcome::Failed` disposition becomes `DispatchError::Gate` rather than
 /// `StepOutcome::Gate`, which is what makes a failing gate end the workflow instead of
 /// merely being reported as a step that ran.
-fn Dispatch<Launcher: ProcessLauncher, Fs: FileSystem>(body: &Body, platform: &Platform<'_, Launcher, Fs>, variant: &BuildVariant, run: RunId) -> Result<StepOutcome, DispatchError>
+fn Dispatch<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(body: &Body, platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> Result<StepOutcome, DispatchError>
 {
     return match body
     {
@@ -117,8 +120,8 @@ fn Dispatch<Launcher: ProcessLauncher, Fs: FileSystem>(body: &Body, platform: &P
 /// "every caller today passes a fresh one" shape `nomos_check_orchestration::Run`'s own
 /// doc names as what reproduces its pre-reuse behavior exactly. A workflow step dispatches
 /// once; there is no second call here for a reused store to help.
-fn Dispatched_Check<Launcher: ProcessLauncher, Fs: FileSystem>(
-    check: &crate::CheckBody, platform: &Platform<'_, Launcher, Fs>, variant: &BuildVariant,
+fn Dispatched_Check<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+    check: &crate::CheckBody, platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant,
 ) -> nomos_check_orchestration::CheckOutcome
 {
     return nomos_check_orchestration::Run(
@@ -128,6 +131,7 @@ fn Dispatched_Check<Launcher: ProcessLauncher, Fs: FileSystem>(
             root: &check.root,
             launcher: platform.launcher,
             filesystem: platform.filesystem,
+            environment: platform.environment,
             workspace: &mut None,
             store: &mut MemoryFactStore::New(),
         },
@@ -140,12 +144,12 @@ fn Dispatched_Check<Launcher: ProcessLauncher, Fs: FileSystem>(
 /// case (its answer to a walk that never happened at all) is not reachable from a body a
 /// caller already built with real, already-walked source, the same "already walked"
 /// contract [`Dispatched_Check`] holds for `Body::Check`.
-fn Dispatched_Correction<Launcher: ProcessLauncher, Fs: FileSystem>(
-    correction: &crate::CorrectionBody, platform: &Platform<'_, Launcher, Fs>, variant: &BuildVariant,
+fn Dispatched_Correction<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+    correction: &crate::CorrectionBody, platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant,
 ) -> nomos_correction_orchestration::CorrectionOutcome
 {
     let command = CorrectionCommand { root: correction.root.clone(), commit: correction.commit };
-    let environment = CorrectionEnvironment { variant: variant.clone(), launcher: platform.launcher, filesystem: platform.filesystem };
+    let environment = CorrectionEnvironment { variant: variant.clone(), launcher: platform.launcher, filesystem: platform.filesystem, environment: platform.environment };
 
     return Run_Correction(Some(correction.sources.clone()), environment, &command);
 }
@@ -153,11 +157,11 @@ fn Dispatched_Correction<Launcher: ProcessLauncher, Fs: FileSystem>(
 /// A [`Body::Gate`]'s own dispatch: `gate.sources` is always `Some`, never `None`, the
 /// identical "already walked" contract [`Dispatched_Correction`] holds for
 /// `Body::Correction`.
-fn Dispatched_Gate<Launcher: ProcessLauncher, Fs: FileSystem>(
-    gate: &crate::GateBody, platform: &Platform<'_, Launcher, Fs>, variant: &BuildVariant, run: RunId,
+fn Dispatched_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+    gate: &crate::GateBody, platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId,
 ) -> nomos_gate_orchestration::GateRunResult
 {
-    let environment = GateEnvironment { variant: variant.clone(), launcher: platform.launcher, filesystem: platform.filesystem };
+    let environment = GateEnvironment { variant: variant.clone(), launcher: platform.launcher, filesystem: platform.filesystem, environment: platform.environment };
 
     return Run_Gate(Some(gate.sources.clone()), environment, &gate.command, run);
 }

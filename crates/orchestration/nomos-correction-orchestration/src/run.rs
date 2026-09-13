@@ -50,7 +50,7 @@ use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{ConfigurationId, EvidenceClass, Finding, ProviderId, RuleId};
 use nomos_corrections::{CorrectionCandidate, CorrectionPlan, ValidatedPlan};
 use nomos_model::{Content_Digest, Evidence, EvidenceRef};
-use nomos_platform::{FileSystem, ProcessLauncher};
+use nomos_platform::{Environment, FileSystem, ProcessLauncher};
 use nomos_rules::SourceFile;
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
 use std::path::Path;
@@ -59,11 +59,14 @@ use std::path::Path;
 /// compute -- grouped into one value the same way `nomos_gate_orchestration::
 /// GateEnvironment` groups its own three, for the identical reason: neither computes a
 /// build variant, chooses a platform, or is the caller that gets to decide either.
-pub struct CorrectionEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem>
+pub struct CorrectionEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
 {
     pub variant: BuildVariant,
     pub launcher: &'a Launcher,
     pub filesystem: &'a Fs,
+    /// Where a provider reads `CARGO` and the working directory from, rather than from this
+    /// process's own ambient state. `OD-HOST-001`: the composition root chooses it.
+    pub environment: &'a Env,
 }
 
 /// Judges `walked` for a blocking claim from either correction family, and if one
@@ -74,9 +77,9 @@ pub struct CorrectionEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem>
 /// `walked` is the walk, already done and already decided by the composition root, the
 /// same reason `nomos_gate_orchestration::Run_Gate` takes it rather than a root to read.
 #[must_use]
-pub fn Run_Correction<Launcher: ProcessLauncher, Fs: FileSystem>(walked: Option<Vec<SourceFile>>, environment: CorrectionEnvironment<'_, Launcher, Fs>, command: &CorrectionCommand) -> CorrectionOutcome
+pub fn Run_Correction<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(walked: Option<Vec<SourceFile>>, environment: CorrectionEnvironment<'_, Launcher, Fs, Env>, command: &CorrectionCommand) -> CorrectionOutcome
 {
-    let CorrectionEnvironment { variant, launcher, filesystem } = environment;
+    let CorrectionEnvironment { variant, launcher, filesystem, environment } = environment;
 
     let Some(sources) = walked
     else
@@ -88,7 +91,7 @@ pub fn Run_Correction<Launcher: ProcessLauncher, Fs: FileSystem>(walked: Option<
         return CorrectionOutcome::NoSourceFound;
     }
 
-    let findings = match Judged(&sources, launcher, filesystem, JudgeContext { variant: variant.clone(), root: &command.root })
+    let findings = match Judged(&sources, JudgeContext { launcher, filesystem, environment, variant: variant.clone(), root: &command.root })
     {
         Ok(findings) => findings,
         Err(outcome) => return outcome,
@@ -150,15 +153,21 @@ pub fn Run_Correction<Launcher: ProcessLauncher, Fs: FileSystem>(walked: Option<
 /// What [`Judged`] judges a walked tree against, apart from the walk itself and the
 /// platform used to run it -- the same grouping [`nomos_check_orchestration`]'s own
 /// callers use to stay within this crate's parameter-count limit.
-struct JudgeContext<'a>
+struct JudgeContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
 {
+    /// The process launcher a provider's subprocess runs through.
+    launcher: &'a Launcher,
+    /// The filesystem a provider reads through.
+    filesystem: &'a Fs,
+    /// Where a provider reads `CARGO` and the working directory from.
+    environment: &'a Env,
     variant: BuildVariant,
     root: &'a Path,
 }
 
 /// Runs both correction families' own rules over `sources`, or the [`CorrectionOutcome`] a
 /// non-`Judged` check outcome already decides.
-fn Judged<Launcher: ProcessLauncher, Fs: FileSystem>(sources: &[SourceFile], launcher: &Launcher, filesystem: &Fs, context: JudgeContext<'_>) -> Result<Vec<Finding>, CorrectionOutcome>
+fn Judged<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], context: JudgeContext<'_, Launcher, Fs, Env>) -> Result<Vec<Finding>, CorrectionOutcome>
 {
     let selected: Vec<RuleId> = CorrectionFamily::ALL.iter().map(|family| return family.Rule()).collect();
     let outcome = nomos_check_orchestration::Run(
@@ -166,8 +175,9 @@ fn Judged<Launcher: ProcessLauncher, Fs: FileSystem>(sources: &[SourceFile], lau
         nomos_check_orchestration::RunContext {
             variant: context.variant,
             root: context.root,
-            launcher,
-            filesystem,
+            launcher: context.launcher,
+            filesystem: context.filesystem,
+            environment: context.environment,
             workspace: &mut None,
             store: &mut nomos_analysis::MemoryFactStore::New(),
         },
@@ -337,7 +347,7 @@ mod tests
 {
     use super::*;
     use nomos_model::Subject_Of_Path;
-    use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
+    use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
 
     fn Fresh_Root(name: &str) -> std::path::PathBuf
     {
@@ -372,7 +382,7 @@ mod tests
     fn Test_An_Unwalked_Root_Should_Be_Unreadable()
     {
         let command = CorrectionCommand { root: "does/not/exist".into(), commit: false };
-        let outcome = Run_Correction(None, CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command);
+        let outcome = Run_Correction(None, CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
 
         assert_eq!(outcome, CorrectionOutcome::UnreadableRoot);
     }
@@ -381,7 +391,7 @@ mod tests
     fn Test_An_Empty_Walk_Should_Report_No_Source_Found()
     {
         let command = CorrectionCommand { root: "irrelevant".into(), commit: false };
-        let outcome = Run_Correction(Some(Vec::new()), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command);
+        let outcome = Run_Correction(Some(Vec::new()), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
 
         assert_eq!(outcome, CorrectionOutcome::NoSourceFound);
     }
@@ -393,7 +403,7 @@ mod tests
         std::fs::write(root.join("a.rs"), "pub fn Something() -> u32 { return 1; }\n").expect("writable");
         let command = CorrectionCommand { root: root.clone(), commit: false };
 
-        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command);
+        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
 
         let _ignored = std::fs::remove_dir_all(&root);
         assert_eq!(outcome, CorrectionOutcome::Clean);
@@ -411,7 +421,7 @@ mod tests
         std::fs::write(&path, PHANTOM_FIXTURE).expect("writable");
         let command = CorrectionCommand { root: root.clone(), commit: false };
 
-        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command);
+        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
         let on_disk = std::fs::read_to_string(&path).expect("still readable");
 
         let _ignored = std::fs::remove_dir_all(&root);
@@ -435,7 +445,7 @@ mod tests
         std::fs::write(&path, PHANTOM_FIXTURE).expect("writable");
         let command = CorrectionCommand { root: root.clone(), commit: true };
 
-        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command);
+        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
 
         match &outcome
         {
@@ -446,7 +456,7 @@ mod tests
         let corrected = std::fs::read_to_string(&path).expect("still readable");
         assert_eq!(corrected, "/// A list of things this crate owns.\npub const THINGS: &[&str] = &[\"a\"];\n", "only the phantom claim's own line should be gone");
 
-        let second = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command);
+        let second = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
         let _ignored = std::fs::remove_dir_all(&root);
         assert_eq!(second, CorrectionOutcome::Clean, "the corrected universe now declares no mirror at all, an admitted gap rather than a second phantom");
     }
@@ -461,7 +471,7 @@ mod tests
         std::fs::write(&path, TRAILING_WHITESPACE_FIXTURE).expect("writable");
         let command = CorrectionCommand { root: root.clone(), commit: false };
 
-        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command);
+        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
         let on_disk = std::fs::read_to_string(&path).expect("still readable");
 
         let _ignored = std::fs::remove_dir_all(&root);
@@ -485,7 +495,7 @@ mod tests
         std::fs::write(&path, TRAILING_WHITESPACE_FIXTURE).expect("writable");
         let command = CorrectionCommand { root: root.clone(), commit: true };
 
-        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command);
+        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
 
         match &outcome
         {
@@ -496,7 +506,7 @@ mod tests
         let corrected = std::fs::read_to_string(&path).expect("still readable");
         assert_eq!(corrected, "pub fn Something() -> u32\n{\n    return 1;\n}\n", "both flagged lines are stripped by the one committed candidate");
 
-        let second = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem }, &command);
+        let second = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
         let _ignored = std::fs::remove_dir_all(&root);
         assert_eq!(second, CorrectionOutcome::Clean, "a corrected file must not still claim trailing whitespace on a rerun");
     }

@@ -33,7 +33,7 @@ use nomos_gate_orchestration::{Fresh_Run_Id, GateCommand, RuleSelector};
 use nomos_ledger::Territory;
 use nomos_model_package::EffortLevel;
 use nomos_platform::Clock;
-use nomos_composer_std::{CLOCK, FILE_SYSTEM, LAUNCHER};
+use nomos_composer_std::{CLOCK, ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 use nomos_rules::SourceFile;
 use nomos_workflow_orchestration::{Body, CheckBody, CorrectionBody, GateBody, Platform, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
 use nomos_workspace::BuildVariant;
@@ -231,7 +231,7 @@ pub fn Run(command: &WorkflowCommand, stdout: &mut impl Write, stderr: &mut impl
     };
 
     let plan = [WorkflowStepPlan { declaration: Coherent_Declaration(), body }];
-    let platform = Platform { launcher: &LAUNCHER, filesystem: &FILE_SYSTEM };
+    let platform = Platform { launcher: &LAUNCHER, filesystem: &FILE_SYSTEM, environment: &ENVIRONMENT };
     let run = Fresh_Run_Id(CLOCK.Now());
     let outcome = nomos_workflow_orchestration::Run(&plan, &platform, &Workflow_Variant(), run);
 

@@ -13,6 +13,7 @@ use nomos_lang_rust_deny::{
     Declared_Guarantee, Discover_Workspace, FactContext, Materialize_Workspace, PolicyFact, Provider_Offer,
 };
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+use nomos_platform_std::StdEnvironment;
 use std::path::{Path, PathBuf};
 
 /// A launcher that hands `Discover_Workspace` a fixed stderr stream instead of running a
@@ -119,7 +120,7 @@ fn Materialize_With(cases: &[(&str, &str, &str)], name: &str) -> PolicyFact
     let scratch = ScratchDirectory::New(name);
     let launcher = FakeLauncher { stderr: Diagnostics_Stderr(cases) };
 
-    return Materialize_Workspace(scratch.Path(), Context(), &launcher)
+    return Materialize_Workspace(scratch.Path(), Context(), &launcher, &StdEnvironment)
         .expect("the fake launcher writes a real stderr stream Discover_Workspace can read");
 }
 
@@ -133,7 +134,7 @@ fn Test_Discover_Workspace_Should_Read_A_Real_Diagnostic_Shape_Through_The_Proce
     let cases = Sample_Violation_Cases();
     let launcher = FakeLauncher { stderr: Diagnostics_Stderr(&cases) };
 
-    let violations = Discover_Workspace(scratch.Path(), &launcher)
+    let violations = Discover_Workspace(scratch.Path(), &launcher, &StdEnvironment)
         .expect("the fake launcher writes a real stderr stream Discover_Workspace can read");
 
     let (code, severity_label, message) = cases.first().expect("one sample case");
@@ -277,11 +278,11 @@ impl Drop for ScratchDirectory
 #[test]
 fn Test_A_Real_Run_That_Resolved_No_Workspace_Should_Be_Refused_Rather_Than_Reported_Clean()
 {
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_platform_std::{StdEnvironment, StdProcessLauncher};
 
     let scratch = ScratchDirectory::New("no-manifest");
 
-    let error = Discover_Workspace(scratch.Path(), &StdProcessLauncher).expect_err(
+    let error = Discover_Workspace(scratch.Path(), &StdProcessLauncher, &StdEnvironment).expect_err(
         "a real cargo deny that could not resolve a workspace at all has not judged this \
          directory's dependencies, and must be refused rather than reported clean",
     );

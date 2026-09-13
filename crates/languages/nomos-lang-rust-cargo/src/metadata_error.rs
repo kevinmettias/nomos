@@ -19,7 +19,7 @@
 //! reader keeps the `kind`/`optional` fields that one discards.
 
 use nomos_cap_dependency::{DependencyEdge, DependencyKind, DependencyPayload};
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher};
+use nomos_platform::{Command, Environment, ExitOutcome, ProcessLauncher};
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
@@ -71,9 +71,9 @@ impl core::fmt::Display for MetadataError
 /// [`MetadataError`] if the `cargo` binary cannot be run, exits non-zero, is killed for
 /// exceeding [`TIMEOUT`] or going idle for that long, or its stdout is not the JSON
 /// document `--format-version 1` promises.
-pub fn Discover_Workspace<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<Vec<DiscoveredPackage>, MetadataError>
+pub fn Discover_Workspace<Launcher: ProcessLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<Vec<DiscoveredPackage>, MetadataError>
 {
-    let document = Run_Cargo_Metadata(root, launcher)?;
+    let document = Run_Cargo_Metadata(root, launcher, environment)?;
     Require_Workspace_Root_Is(&document, root)?;
     let members = Member_Ids(&document)?;
     let packages = Packages_Array(&document)?;
@@ -131,9 +131,9 @@ fn Require_Workspace_Root_Is(document: &serde_json::Value, root: &Path) -> Resul
     return Ok(());
 }
 
-fn Run_Cargo_Metadata<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<serde_json::Value, MetadataError>
+fn Run_Cargo_Metadata<Launcher: ProcessLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<serde_json::Value, MetadataError>
 {
-    let command = Cargo_Metadata_Command(root);
+    let command = Cargo_Metadata_Command(root, environment);
     let output = launcher.Run(&command).map_err(|error| MetadataError {
         reason: format!("cargo metadata could not be run: {error}"),
     })?;
@@ -145,9 +145,25 @@ fn Run_Cargo_Metadata<Launcher: ProcessLauncher>(root: &Path, launcher: &Launche
 
 /// The `cargo metadata` invocation `tests/contract/src/workspace.rs` already established
 /// works over this workspace, run from `root`.
-fn Cargo_Metadata_Command(root: &Path) -> Command
+/// The program name `cargo` is invoked by, from the environment rather than from this
+/// process's own ambient state.
+///
+/// `CARGO` is what a cargo-invoked build sets to the exact toolchain binary running, and a
+/// provider handed an injected launcher must not then reach around it for the program that
+/// launcher will run -- a fake launcher receives the command already built, so no test could
+/// state which cargo it names. `P87`/`OD-HOST-001`: the port comes from the composition root.
+fn Cargo_Program<Env: Environment>(environment: &Env) -> String
 {
-    let cargo = std::env::var("CARGO").unwrap_or_else(|_| "cargo".to_owned());
+    return environment
+        .Variable("CARGO")
+        .and_then(|value| return value.into_string().ok())
+        .unwrap_or_else(|| return "cargo".to_owned());
+}
+
+/// The `cargo metadata` invocation, run from `root`.
+fn Cargo_Metadata_Command<Env: Environment>(root: &Path, environment: &Env) -> Command
+{
+    let cargo = Cargo_Program(environment);
     let mut command = Command::New(
         vec![
             cargo,
@@ -402,12 +418,12 @@ fn Is_Member(package: &serde_json::Value, members: &BTreeSet<String>) -> bool
 mod tests
 {
     use super::*;
-    use nomos_platform_std::StdProcessLauncher;
+    use nomos_platform_std::{StdEnvironment, StdProcessLauncher};
 
     #[test]
     fn Test_Discover_Workspace_Should_Find_This_Crates_Real_Dependency_On_Nomos_Contracts()
     {
-        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher).expect("a real cargo workspace");
+        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher, &StdEnvironment).expect("a real cargo workspace");
 
         let this_crate = discovered
             .iter()
@@ -428,7 +444,7 @@ mod tests
     #[test]
     fn Test_Nomos_Contracts_Should_Have_No_First_Party_Edges()
     {
-        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher).expect("a real cargo workspace");
+        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher, &StdEnvironment).expect("a real cargo workspace");
 
         let contracts = discovered
             .iter()
@@ -445,7 +461,7 @@ mod tests
     #[test]
     fn Test_Every_Discovered_Package_Should_Carry_A_Manifest_Relative_Root()
     {
-        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher).expect("a real cargo workspace");
+        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher, &StdEnvironment).expect("a real cargo workspace");
 
         let this_crate = discovered
             .iter()
@@ -461,7 +477,7 @@ mod tests
     #[test]
     fn Test_Edges_Should_Be_In_Canonical_Order()
     {
-        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher).expect("a real cargo workspace");
+        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher, &StdEnvironment).expect("a real cargo workspace");
 
         for package in &discovered
         {
@@ -483,5 +499,106 @@ mod tests
             .and_then(Path::parent)
             .map(PathBuf::from)
             .expect("this crate sits three levels below the workspace root");
+    }
+}
+
+#[cfg(test)]
+mod stated_environment_decides_the_program
+{
+    use super::*;
+    use nomos_platform::{DeterminismStrength, EnvironmentError, ReproducibilityScope, Strategy, TraceEquivalence};
+    use std::cell::RefCell;
+    use std::ffi::OsString;
+
+    /// The program name a test states, rather than the one this process happens to be
+    /// standing in.
+    struct Stated
+    {
+        cargo: Option<&'static str>,
+    }
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for Stated
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
+
+    impl Environment for Stated
+    {
+        fn Variable(&self, name: &str) -> Option<OsString>
+        {
+            if name != "CARGO"
+            {
+                return None;
+            }
+
+            return self.cargo.map(OsString::from);
+        }
+
+        fn Working_Directory(&self) -> Result<PathBuf, EnvironmentError>
+        {
+            return Ok(PathBuf::from("."));
+        }
+    }
+
+    /// A launcher that records the command it was handed and never runs anything.
+    struct Recording
+    {
+        seen: RefCell<Vec<Command>>,
+    }
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for Recording
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
+
+    impl ProcessLauncher for Recording
+    {
+        fn Run(&self, command: &Command) -> Result<nomos_platform::ProcessOutput, String>
+        {
+            self.seen.borrow_mut().push(command.clone());
+
+            return Err("this launcher only records".to_owned());
+        }
+    }
+
+    /// The defect `P87` closed, stated as the property it restores: a test can now say which
+    /// `cargo` a dispatch would run.
+    ///
+    /// Before the port, this function read `CARGO` from `std::env` while building a command
+    /// for an *injected* launcher, so the fake launcher below received the program already
+    /// chosen and nothing could state it. Watched failing against the `std::env` read first —
+    /// under it the command names whatever this process was launched by, never `stated-cargo`.
+    #[test]
+    fn Test_A_Stated_Cargo_Should_Be_The_Program_The_Launcher_Is_Handed()
+    {
+        let launcher = Recording { seen: RefCell::new(Vec::new()) };
+        let environment = Stated { cargo: Some("stated-cargo") };
+
+        let _refused = Discover_Workspace(Path::new("."), &launcher, &environment);
+
+        let seen = launcher.seen.borrow();
+        let command = seen.first().expect("the launcher was handed a command before it refused");
+        assert_eq!(command.argv.first().map(String::as_str), Some("stated-cargo"));
+    }
+
+    /// And an environment naming no `CARGO` falls back to the plain program, rather than to
+    /// whatever this process inherited.
+    #[test]
+    fn Test_An_Unset_Cargo_Should_Fall_Back_To_The_Plain_Program_Name()
+    {
+        let launcher = Recording { seen: RefCell::new(Vec::new()) };
+        let environment = Stated { cargo: None };
+
+        let _refused = Discover_Workspace(Path::new("."), &launcher, &environment);
+
+        let seen = launcher.seen.borrow();
+        let command = seen.first().expect("the launcher was handed a command before it refused");
+        assert_eq!(command.argv.first().map(String::as_str), Some("cargo"));
     }
 }

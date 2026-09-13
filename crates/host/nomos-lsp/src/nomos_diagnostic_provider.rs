@@ -5,7 +5,7 @@ use crate::build_variant::Host_Variant;
 use crate::file_diagnostic::Diagnostics_For;
 use crate::sources::Walked_Sources;
 use nomos_analysis::MemoryFactStore;
-use nomos_composer_std::{FILE_SYSTEM, LAUNCHER};
+use nomos_composer_std::{ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 use nomos_workspace::Workspace;
 use std::path::Path;
 use xvpe_diagnostics::{DiagnosticProviderStrategy, SourceDiagnostic};
@@ -89,6 +89,7 @@ impl DiagnosticProviderStrategy for NomosDiagnosticProvider
                 root,
                 launcher: &LAUNCHER,
                 filesystem: &FILE_SYSTEM,
+                environment: &ENVIRONMENT,
                 workspace: &mut self.workspace,
                 store: &mut self.store,
             },
