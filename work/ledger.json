@@ -67957,6 +67957,42 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P95-A-SIBLING-DECLARES-261-RULES-AND-NAMES-NOMOS-IN-NONE",
+      "title": "The xvpe checkout declares 261 machine-readable rules, 224 of them enforced by nobody, and names nomos in none of them",
+      "why": "The xvpe checkout beside this workspace -- the one OD-PLATFORM-003 made this build depend on, so it is always on disk -- ships a committed machine-readable standards corpus under docs/arch/standards: 375 markdown files behind a rule.schema.json requiring every rule document to declare id, severity, enforced_by and gate in YAML front matter, with prose in the body and, in the schema's own words, nothing guessed. Censused directly rather than assumed: 261 rule documents, 109 indexes, 5 references. Severity is 161 MUST, 5 MUST NOT, 83 SHOULD, 1 SHOULD NOT, 11 MAY. Gate is 224 review, 31 blocking, 6 unreachable -- so 86 percent of that corpus declares outright that no tool enforces it. The named enforcers are xvpe's own scripts: check-impact-map on 11 rules, then check-arch-doc-structure, check-strategy-docs, check-platform-boundaries, layering-direction, strategy-determinism-gate and a handful more. Nomos appears in enforced_by zero times. Set against what this repository already decided, that is the finding. ARC-ECOSYSTEM-001 makes nomos the ecosystem's deterministic conformance layer. ARC-CONFORMANCE-001 argues that a check surface which cannot say what it is for keeps being filled with what is easiest to justify rather than with what only it can supply, and defines a conformance claim as the question a compiler, a linter and a language server cannot answer. A declared MUST rule whose own front matter says no tool enforces it is that question, 224 times over. And nomos-rules already reads this very doctrine once: Check_Declared_Role_Matches_Surface quotes xvpe's engineering doctrine on why some MUST rules are review-enforced, and produces Applicability::AgentRequired for exactly that category. So the category nomos built a state for is declared, enumerable and 224 rules long in a tree this workspace already requires, nomos's own rule set was ported from code-standards instead, and nothing connects the two.",
+      "done_when": "A new governing record in the ARC-CONFORMANCE family decides what relationship nomos's rule set has to xvpe's declared standards corpus, against the census above rather than against the idea of an ecosystem. It reaches one of three answers. The corpus is an external declaration nomos reads as a capability fact, in which case the record names the contract, says what a rule does with a severity, a gate and an enforced_by value, and says what becomes of the 224 review-gated rules given Applicability::AgentRequired already exists for precisely that category. Or the corpus is xvpe's own to enforce and nomos's absence from enforced_by is correct, in which case the record says why the ecosystem's conformance layer is not the enforcer of its sibling's MUST rules, and what ARC-ECOSYSTEM-001's seam means if not that. Or the question waits, in which case the record names the trigger as a condition a later session can mechanically check rather than a judgement it would have to re-make. Either way it records the numbers it decided against -- 261 rules, the five-way severity split, 224 review-gated, 31 blocking, zero naming nomos -- so a later reader can re-measure rather than re-argue. It states what it does not do: no contract crate, no provider, no rule, no change to nomos-rules, and no edit anywhere in the xvpe tree, which this workspace does not own. Registered at crates/spec/nomos-spec-store/records/ARC-CONFORMANCE-002.record so it is governing rather than merely written, and cargo test --no-fail-fast -p nomos-spec-store -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md",
+          "crates/spec/nomos-spec-store/records/ARC-CONFORMANCE-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
