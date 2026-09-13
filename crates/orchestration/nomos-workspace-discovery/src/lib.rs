@@ -2,7 +2,7 @@
 //!
 //! Measured directly at `c0e5c79f`: four composition roots (`nomos-api`, `nomos-cli`'s
 //! `check` and `gate`, `nomos-lsp`) each carried their own copy of the same walk -- an
-//! explicit directory stack over `std::fs`, `target`/`.git` and nested-git-worktree
+//! explicit directory stack over `std::fs`, `target`/`.git` and nested-root
 //! exclusion, and a hand-typed `"rs"`/`"go"` extension check -- each citing `OD-HOST-002`'s
 //! family 3 ("the directory walk itself stays a composition-root concern") as why sharing
 //! it was declined. `OD-HOST-008` reverses that: the walk mechanics were never the
@@ -29,6 +29,20 @@
 use nomos_model::Subject_Of_Path;
 use nomos_rules::SourceFile;
 use std::path::{Path, PathBuf};
+
+/// The file a repository declares its own conventions in, and so the mark of a repository
+/// root.
+///
+/// A literal here rather than `nomos_repo_policy`'s own `STANDARDS_JSON`, and the reason is
+/// not reach: `nomos-repo-policy` keeps `standards_document` a private module, because
+/// `OD-RULES-019` and `OD-PACKAGE-015` put the shared read beneath its five providers rather
+/// than beside them, so the constant is not exported and making it so would widen that
+/// crate's public surface to publish a filename. This walk never reads the file. It asks
+/// whether one is there, which is the same distinction `OD-HOST-008` already drew for the
+/// extension check: this walk decides which directories are somebody else's root, not how a
+/// root's conventions are parsed. `nomos_rules::checks::goals`'s own `DECLARATION_FILE`
+/// carries the identical literal for the identical reason.
+const ROOT_MARKER: &str = "standards.json";
 
 /// Every extension a registered language package recognizes.
 ///
@@ -72,7 +86,9 @@ pub fn Walked_Sources(root: &Path, recognized: &[&str]) -> Option<Vec<SourceFile
 /// subject its facts are filed under.
 ///
 /// `target` and `.git` are skipped: the first holds generated source nobody authored, and
-/// the second is not source at all.
+/// the second is not source at all. So are two kinds of directory that are somebody else's
+/// root rather than a part of this one -- see [`Is_A_Nested_Git_Worktree`] and
+/// [`Is_A_Nested_Repository_Root`].
 #[must_use]
 pub fn Read_Sources(root: &Path, recognized: &[&str]) -> Vec<SourceFile>
 {
@@ -113,7 +129,9 @@ fn Read_Entry(root: &Path, path: PathBuf, recognized: &[&str], collected: &mut C
 {
     if path.is_dir()
     {
-        let skipped = path.file_name().is_some_and(|name| return name == "target" || name == ".git") || Is_A_Nested_Git_Worktree(&path);
+        let skipped = path.file_name().is_some_and(|name| return name == "target" || name == ".git")
+            || Is_A_Nested_Git_Worktree(&path)
+            || Is_A_Nested_Repository_Root(&path);
 
         if !skipped
         {
@@ -144,6 +162,35 @@ fn Is_A_Nested_Git_Worktree(path: &Path) -> bool
     return path.join(".git").is_file();
 }
 
+/// Whether `path` is itself a repository root -- a directory carrying its own
+/// `standards.json`, which is the file a run reads a repository's declared conventions from.
+///
+/// Skipped for the reason [`Is_A_Nested_Git_Worktree`] is skipped, one step further out: it
+/// is not source anyone at *this* address authored. A vendored third-party tree is judged
+/// against the conventions it declares or it is not judged here at all, and the enclosing
+/// root's conventions are not a claim about it.
+///
+/// `P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON` is what made this concrete
+/// and is also what makes it measurable. It committed an unmodified excerpt of `hex` 0.4.3
+/// under `tests/integration/fixtures/third-party/`, with a `standards.json` beside it
+/// declaring that crate's own real convention, so the composed rule set could be measured
+/// against code this repository did not write. `tests/integration/tests/calibration.rs`
+/// measured that declaration working -- 13 `function-naming-convention` findings without it,
+/// 0 with it. This walk reached the same files from the repository root, read the
+/// repository's own `standards.json` instead, and reported those 13 back with a reason
+/// citing this repository's README at somebody else's crate. Two more of its findings could
+/// fail a build, which is how a fixture whose whole purpose is to produce findings came to
+/// be the reason `nomos gate run --root .` was red.
+///
+/// The root of the run is not reachable here: [`Read_Sources`] seeds it directly and only
+/// entries below it are judged, so a repository's own marker configures it rather than
+/// excluding it. `Test_Read_Sources_Should_Not_Descend_Into_A_Nested_Repository_Root` holds
+/// both halves of that.
+fn Is_A_Nested_Repository_Root(path: &Path) -> bool
+{
+    return path.join(ROOT_MARKER).is_file();
+}
+
 /// One source file as a caller takes it.
 ///
 /// This root files a fact under the subject and hands the same value on
@@ -171,7 +218,7 @@ pub fn Relative_Path(root: &Path, path: &Path) -> String
 #[cfg(test)]
 mod tests
 {
-    use super::{Read_Source, Read_Sources, Registered_Extensions, Relative_Path, Walked_Sources, SCRIPT_EXTENSIONS};
+    use super::{Read_Source, Read_Sources, Registered_Extensions, Relative_Path, ROOT_MARKER, Walked_Sources, SCRIPT_EXTENSIONS};
     use std::path::PathBuf;
 
     #[test]
@@ -263,6 +310,48 @@ mod tests
         let _ignored = std::fs::remove_dir_all(&root);
         let paths: Vec<&str> = sources.iter().map(|source| return source.path.as_str()).collect();
         assert_eq!(paths, vec!["a.rs"], "{paths:?}");
+    }
+
+    /// Both halves in one tree, because either alone would pass while the other was wrong.
+    ///
+    /// `a.rs` is found *because* the root's own `standards.json` does not exclude the root --
+    /// a walk that treated the marker as "skip this directory" without regard to which
+    /// directory would find nothing at all and still look like it was working, since
+    /// "excluded everything" and "found nothing" are the same empty list here.
+    #[test]
+    fn Test_Read_Sources_Should_Not_Descend_Into_A_Nested_Repository_Root()
+    {
+        let root = Fresh_Root("nomos-workspace-discovery-nested-root");
+        std::fs::write(root.join(ROOT_MARKER), "{}\n").expect("writable");
+        std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("writable");
+        let vendored = root.join("vendored");
+        std::fs::create_dir_all(&vendored).expect("writable");
+        std::fs::write(vendored.join(ROOT_MARKER), "{}\n").expect("writable");
+        std::fs::write(vendored.join("foreign.rs"), "pub fn two() {}\n").expect("writable");
+
+        let sources = Read_Sources(&root, &Registered_Extensions());
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        let paths: Vec<&str> = sources.iter().map(|source| return source.path.as_str()).collect();
+        assert_eq!(paths, vec!["a.rs"], "{paths:?}");
+    }
+
+    /// A directory with no marker of its own is still descended into, so the skip above is a
+    /// statement about the marker rather than about being nested.
+    #[test]
+    fn Test_Read_Sources_Should_Descend_Into_An_Ordinary_Nested_Directory()
+    {
+        let root = Fresh_Root("nomos-workspace-discovery-ordinary-nesting");
+        std::fs::write(root.join(ROOT_MARKER), "{}\n").expect("writable");
+        let nested = root.join("nested");
+        std::fs::create_dir_all(&nested).expect("writable");
+        std::fs::write(nested.join("b.rs"), "pub fn Two() {}\n").expect("writable");
+
+        let sources = Read_Sources(&root, &Registered_Extensions());
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        let paths: Vec<&str> = sources.iter().map(|source| return source.path.as_str()).collect();
+        assert_eq!(paths, vec!["nested/b.rs"], "{paths:?}");
     }
 
     #[test]
