@@ -42,7 +42,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md | authored | 22 | 8 | sha256:2a1f9cc14ba7229566dea2754dfbafa91116a43aa78032e04f419cbd3c313272 |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 28 | 8 | sha256:f9c663f27499031ece5e69ff38d7a5b150fb4b9bdd4c34bb112940800b662719 |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md | authored | 16 | 6 | sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a |
-| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md@authored | docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md | authored | 24 | 7 | sha256:99dfeab5b3a481955faaabeb984f629c445b63cfef97dc70f9740b3300ca522c |
+| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md@authored | docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md | authored | 39 | 10 | sha256:0659127bd83ac1811095bbc0260811d6746be26549907654ed8854b1d9c27460 |
 | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md@authored | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md | authored | 18 | 6 | sha256:05eb45335e03a5d62b2c97bb0815702e51852b67c101e91b9c3b852491e0967a |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
@@ -477,7 +477,10 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#12 | authored | 2 | The Decision |
 | docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#16 | authored | 2 | What This Unblocks, And What It Does Not |
 | docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#19 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#23 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#23 | authored | 2 | Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set |
+| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#30 | authored | 3 | There are three permitted derivations, not two |
+| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#34 | authored | 3 | Why that guard would not have reported this |
+| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#38 | authored | 2 | Status |
 | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#1 | authored | 1 | A rule that judged an empty population is reported apart from one that judged clean |
 | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#2 | authored | 2 | Question |
 | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#4 | authored | 2 | What Was Measured |
@@ -9662,26 +9665,172 @@ It does not change `Subject_Of_Path`, `Normalize_Path` or how territory identity
 
 ### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#22
 
-*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / What This Record Does Not Do · hash: sha256:b800773187d0689580649342ded188085a6e421c417ec9af47e786babfd52d9f*
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / What This Record Does Not Do · hash: sha256:a002b91054294c73dbddaec7d3a37e73039907cf5fbcd2f2d010a3c637900a94*
 
-It does not add a mechanical guard over the two permitted derivations. One would be buildable
-— assert that every finding's `subject` is either `Subject_Of_Path` of one of its locations or
-the digest of its `subject_name` — and it reaches the rule crate and the contract test suite,
-neither of which this record holds. It is filed separately rather than claimed here.
+It does not add a mechanical guard over the permitted derivations. Version 1 of this record
+said one would be buildable by asserting that every finding's `subject` is either
+`Subject_Of_Path` of one of its locations or the digest of its `subject_name`. **That sentence
+was wrong**, and the amendment below replaces it: measured against the real functions, it is
+false for 22 of the 63 sites censused above. A guard is still buildable over the three
+derivations the amendment names is buildable, and one now exists: the test at
+`tests/contract/tests/boundaries/findings.rs`, filed and landed separately from this record
+rather than claimed here.
 
 ### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#23
+
+*revision: authored · kind: heading · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set · hash: sha256:6a664dc1538d4c6c53f4fb41760131b8685207c293c3ad2631234fdb5739a78b*
+
+## Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#24
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set · hash: sha256:12411fd5c092329290ea87459b855d9b72687333bb334addf83eac8e2aea18c3*
+
+Version 1 closed one trap and set another in the same breath. Its "What This Record Does Not
+Do" section described a mechanical guard — `subject` is either `Subject_Of_Path` of one of the
+finding's locations, or the digest of its `subject_name` — and a later session read that
+sentence as a specification, which is exactly what a canonical record is for. Measured
+2026-09-12 against the real `nomos_model::Subject_Of_Path`, `nomos_model::Normalize_Path` and
+`nomos_model::Content_Digest`, **both arms fail** for the largest single shape in the census
+above.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#25
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set · hash: sha256:1802eb487c822db473ff54bcb38dd4518e46efc64e4d3d38fdd3d16ae143941a*
+
+For a finding built by `checks/error_text.rs`'s `Finding_At`:
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#26
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set · hash: sha256:25bdbf2cea9b0403c5b07757188a0255f4046cc6b886aadfbb3e5cff48861fc7*
+
+| field | what the rule sets |
+|---|---|
+| `subject` | `Subject_Of_Path(source.path)` — the file, with no line |
+| `subject_name` | `format!("{}:{line_number}", source.path)` |
+| `locations` | `vec![format!("{}:{line_number}", source.path)]` |
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#27
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set · hash: sha256:87e794ce3a0344238567e7e77b47b6388652c8a7846beac02e318f54c6af1af0*
+
+`Normalize_Path` unifies separators, drops `.` and empty segments and lowercases. It does not
+strip a trailing `:line`, and nothing else does either — so `…/error_text.rs:238` normalizes to
+itself, and against a subject digested from `…/error_text.rs`:
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#28
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set · hash: sha256:6a54bea50e8e2c8da04d3e5dea25fb381e879d024beccb04c38422c0007fefab*
+
+- `subject == Subject_Of_Path(one of its locations)` — **false**
+- `subject == digest(subject_name)` — **false**
+- `subject == Subject_Of_Path(that location's file part)` — **true**
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#29
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set · hash: sha256:4582e1ae4eb390323962b3e74503f130802cf58ccfa82fcc08223e2ea4cca067*
+
+**22 of the 63 construction sites are that shape**: 14 writing `subject_name` as the formatted
+path and line directly, 8 writing it as a `location` variable of the same shape, all 22 paired
+with `subject: source.subject`. They span 17 files — `borrowed_container`, `closure_bounds`,
+`concurrency_text`, `constant_scope`, `domain_type_alias`, `enum_shape`, `error_text`,
+`facade`, `flakiness_text`, `formatting`, `go_text`, `lifetime_discipline`, `placement`,
+`procedural_macro`, `rust_text`, `scalar_range` and `security_text`.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#30
+
+*revision: authored · kind: heading · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set / There are three permitted derivations, not two · hash: sha256:cb5c8cb72e9f8db4f5e380ab1bf415e77be8040dbc4499d92543f3bda90d6b30*
+
+### There are three permitted derivations, not two
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#31
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set / There are three permitted derivations, not two · hash: sha256:ded144ac78be295abc3690b2a0103d3f4a2b7798395ab51d7aee002ad31855cd*
+
+`subject` is one of:
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#32
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set / There are three permitted derivations, not two · hash: sha256:61fc9022003396b3645ab40113e2fcd75ca3d6bec65a3b848e8123b3335b33b9*
+
+1. **`Subject_Of_Path` of the *file part* of one of the finding's locations**, the `:line`
+   suffix stripped. This is the 22 sites above, and it is what the coarse subject is *for*:
+   `Suppression` and `BaselineDebt` match on it and must outlive the revision they were
+   written in, which is the argument this record already makes for not making `subject`
+   line-sensitive.
+2. **`Subject_Of_Path` of a location that is already a bare path** — case 1 with nothing to
+   strip, which is the 16 sites whose `subject_name` is `source.path` and the 4 that name a
+   package.
+3. **The digest of the qualified name `subject_name` carries** — the naming family, where the
+   relationship version 1 documented does hold.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#33
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set / There are three permitted derivations, not two · hash: sha256:4a54870039e6212671824d83f95ed84ad3ead0f8335434ea12e08fd4aac4418f*
+
+Nothing about the decision changes. The rules were right in version 1 and are right now; what
+was wrong is a sentence describing a guard over them. That is the same class of defect this
+record was written to correct — prose asserting a derivation that does not hold — which is why
+the correction belongs here rather than in the guard's own file.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#34
+
+*revision: authored · kind: heading · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set / Why that guard would not have reported this · hash: sha256:a6dd38e2828d1a859ecc3214651e7fd9cbfe785059511470e6dc1a5d1e3d1919*
+
+### Why that guard would not have reported this
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#35
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set / Why that guard would not have reported this · hash: sha256:fe27ab436f2f785b74f6e9e81689f07171553d792df57094607a03e97ae6bf4e*
+
+It would have passed. `nomos gate run` over this whole tree fires **8 of about 70 rules** —
+`completeness-mirror`, `function-naming-convention`, `abbreviations`, `single-letter-names`,
+`data-names-stay-lower-snake`, `lint-diagnostics`, `dependency-policy` and
+`unread-reaches-finding` — and not one of their findings carries a line-suffixed location.
+Narrowing to `tests/corpus` fires the same set. **No committed corpus exercises any of the 22
+sites**, because this repository conforms to those 17 files' rules, and a rule that finds
+nothing constructs nothing to check.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#36
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set / Why that guard would not have reported this · hash: sha256:28b7ce99f6acf4bbc0dc6266e5bcaf1cc54084ae7bb83ab7456eff4976c2fbe6*
+
+So the guard as version 1 described it had both failure modes at once: vacuous today, and red
+the first time any of those 17 files' rules actually fires. That is the part worth carrying
+forward — a claim about what the rules *construct* cannot be validated by an orchestrated run
+over a clean tree, because a rule that finds nothing constructs nothing to check.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#37
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Amendment: The Guard Described Here Would Have Refused A Third Of The Rule Set / Why that guard would not have reported this · hash: sha256:709da149ecf0c0f1035612aa89dc12fb25c3fa124ae275fd677d691798a06bb8*
+
+What the landed guard does instead is not a bigger corpus. The test at
+`tests/contract/tests/boundaries/findings.rs` calls two **fact-free** rules directly —
+`Check_No_Orphan_Modules`, which attributes to the file, and `Check_No_Trailing_Whitespace`,
+which names a line — over a three-file fixture written to produce both shapes. Both
+derivations are then exercised by construction rather than by hoping a corpus happens to
+contain them, and a second test fails if the fixture ever stops producing either shape. Around
+fifty rules expose that same `Check_*(sources: &[SourceFile])` form, so this route is open to
+any future claim about what the rule set constructs — which is the cheaper half of what this
+amendment has to teach.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#38
 
 *revision: authored · kind: heading · heading: A finding's subject name is not always the preimage of its subject / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#24
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#39
 
-*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Status · hash: sha256:95980a2509767732cc99d7b9fbde1476d2446b3eabf3fafba132c75c594c1397*
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Status · hash: sha256:8502741ddbc5ec4567f18f60ff1f32a6155af8b7230b2752b6eae1f63a87d6db*
 
-Accepted. `subject` is a stable identity and `subject_name` is a readable label, at
+Accepted, version 2. `subject` is a stable identity and `subject_name` is a readable label, at
 deliberately different granularities, and `Finding`'s documentation said otherwise. The rules
-are unchanged because they were never wrong; the contract is corrected because it was.
+are unchanged because they were never wrong; the contract is corrected because it was. Amended
+once: version 1's own description of a mechanical guard over "the two permitted derivations"
+was false for 22 of the 63 sites it had just censused, and the amendment above names the three
+derivations that hold, together with the measured reason a guard written to the old sentence
+would have passed vacuously rather than reporting the mismatch.
 
 ### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#1
 
