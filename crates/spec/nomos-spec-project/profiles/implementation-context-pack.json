@@ -2,25 +2,30 @@
   "id": "implementation-context-pack",
   "title": "Implementation context",
   "format": "contextpack",
-  "output": "context/implementation.json",
+  "output": "context/{subject}/implementation.json",
   "sections": [
     {
-      "title": "Decisions",
+      "title": "Subject",
       "content": "nodes",
       "filter": {
-        "kind": "decision"
+        "node_id": "{subject}"
       }
     },
     {
       "title": "Statements",
-      "content": "statements"
+      "content": "statements",
+      "filter": {
+        "node_id": "{subject}"
+      },
+      "may_be_empty": true
     },
     {
-      "title": "Prose",
-      "content": "blocks",
+      "title": "Neighbourhood",
+      "content": "neighbourhood",
       "filter": {
-        "kind": "prose"
-      }
+        "node_id": "{subject}"
+      },
+      "may_be_empty": true
     }
   ]
 }

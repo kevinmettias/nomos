@@ -4,7 +4,7 @@
 //! YAML have to parse as themselves, and HTML has to escape what it is handed. None of these
 //! is visible from the selection — they are all properties of the writing.
 
-use crate::store::{Populated, Profile_Named, Rendered};
+use crate::store::{For_Building, Populated, Profile_Named, Rendered};
 use nomos_spec_project::Build;
 
 #[test]
@@ -44,7 +44,11 @@ fn Test_A_Diagram_Should_Name_Every_Relation_It_Draws()
 fn Test_A_Context_Pack_Should_Carry_Its_Inputs_Digest()
 {
     let store = Populated();
-    let profile = Profile_Named("implementation-context-pack");
+    // Through `For_Building` rather than directly: `OD-PROJECT-005` scoped this profile to a
+    // subject, so its output path carries `{subject}` and `Build` refuses a template given
+    // none. `For_Building` supplies the fixture's own subject for exactly the profiles that
+    // need one, which is the same thing every other caller in this suite does.
+    let profile = For_Building(&Profile_Named("implementation-context-pack"));
     let output = Build(&store, &profile).expect("builds");
 
     let parsed: serde_json::Value = serde_json::from_str(&output.body).expect("is json");

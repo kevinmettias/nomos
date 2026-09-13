@@ -67205,7 +67205,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory is short of the design the record it implements requires. OD-PROJECT-005 says a reached neighbour is cited by identity, title and declared status, and a node item carries no status today -- adding one to every nodes section would move spec/domain-specification.md, a committed projection, for every profile rather than for this one. The honest shape is its own Content variant, which reaches crates/spec/nomos-spec-project/src/projection/content.rs for the enum, its Label, its All and its two mirror tests, and that file is not reserved here. Measured before re-authoring rather than after: Content::All already has a row in tests/contract/tests/completeness_universes/table.rs so no new row is owed, and catalogue.rs's every-content-kind-is-selected guard is satisfied by implementation-context-pack selecting the new kind. Re-authored as -2 with content.rs reserved."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -67220,6 +67224,162 @@
           "nomos-contract-tests"
         ],
         "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1789291399
+      }
+    },
+    {
+      "id": "P95-SELECTION-GAINS-ONE-HOP-RELATION-TRAVERSAL-2",
+      "title": "The one-hop traversal OD-PROJECT-005 decided is not built, and implementation-context-pack is still unscoped",
+      "why": "OD-PROJECT-005 decided selection gains bounded relation traversal at exactly one hop and fixed all five questions it turned on: every relation term is followed, because restricting to the directional ones reaches only the starting record for 76 percent of the corpus; the bound is one hop and is not configurable, because two hops already ranges from 7 records to 161 and three reaches 62 percent of everything; declared status is carried on each citation rather than filtering traversal; emission is by identity so two renders stay byte-identical; and neighbours are cited by identity, title and status rather than inlined, so a pack's size follows its question rather than its subject's popularity. None of it is built. Filter is a flat conjunction over one query, no code path in select follows an edge, Gather_Relations returns five identities and no content, and implementation-context-pack still selects every decision, every statement and every prose block.",
+      "done_when": "A Content variant selects the one-hop neighbourhood of a named subject, honouring node_id, and implementation-context-pack is scoped to a subject rather than selecting the whole corpus. Each item carries the neighbour's identity, title, kind and declared status, ordered by node identity rather than by discovery, and the subject itself is excluded from its own neighbourhood. A test proves two selections of one store are identical, which is the claim the ordering decision exists for. A test proves a subject whose every edge is relates-to still reaches its neighbours, since that is 76 percent of the corpus and an implementation following only the typed terms would pass every other test. A test proves a neighbour with no declared status is reported with an empty status rather than omitted, since a referenced placeholder carries no front-matter row. tests/contract/surface/nomos-spec-project.txt is re-blessed. cargo test --no-fail-fast -p nomos-spec-project -p nomos-contract-tests passes and cargo clippy --workspace --all-targets is clean.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project/src/projection/content.rs",
+          "crates/spec/nomos-spec-project/src/select.rs",
+          "crates/spec/nomos-spec-project/src/select/sections.rs",
+          "crates/spec/nomos-spec-project/src/select/query.rs",
+          "crates/spec/nomos-spec-project/profiles/implementation-context-pack.json",
+          "crates/spec/nomos-spec-project/tests/projections/selection.rs",
+          "tests/contract/surface/nomos-spec-project.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.22s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-962d1813b3b427e8.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-73b714f796860a28.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6244c4e442d87de9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-f1c31331742f5fa4.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-7c478dde509b12e1.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-b097dd667c629b65.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-4c60a6c067c9e9d8.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-81846ef75e0f5a38.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-ba372c50c1f44156.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-a9b68f2b2d22344c.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-a8e4bd522de6fa20.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-1bfc5f8f7f451dbb.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-b10594f1759ed66b.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-be3d821147c8381c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-eedcbcded190e978.exe)\n     Running tests\\determinism_contract.rs (target\\debug\\deps\\determinism_contract-383d5dd140d76cd9.exe)\n     Running tests\\projections\\main.rs (target\\debug\\deps\\projections-61d33c504494389c.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_project\n",
+        "verified_at": 1789291750,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "58d34c48a87bcdad4b6c0fac09d7981b51858bd4"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-THE-PROFILE-SUITE-DESCRIBES-AN-UNSCOPED-CONTEXT-PACK",
+      "title": "Three declared lists in the projections suite describe implementation-context-pack as unsubjected and the records store as answering seven content kinds",
+      "why": "Scoping implementation-context-pack to a subject, which OD-PROJECT-005 decided and P95-SELECTION-GAINS-ONE-HOP-RELATION-TRAVERSAL-2 builds, falsifies three declared lists in files that item does not hold. renderers.rs builds the pack with no subject and now gets SubjectUnresolved. rebuildability.rs's SEEDED_BY_RECORDS names the content kinds a records-only store answers for and omits neighbourhood, which it now answers for; that list's own message says a kind the store answers for but the list omits would make a rebuildable profile look corpus-backed. And rebuildability.rs's skipped set names the four subject-scoped profiles excluded from its comparison, which implementation-context-pack has now joined. All three are honest consequences of the scoping rather than defects in it, and none is visible to a grep of the profile: each is a list describing the profile suite from outside it.",
+      "done_when": "renderers.rs builds implementation-context-pack with a subject the seeded store really holds, rather than without one. rebuildability.rs's SEEDED_BY_RECORDS names neighbourhood, and its skipped set names implementation-context-pack alongside the four subject profiles it now behaves like. Each edit carries the reason in its own text so the next reader learns the profile is subject-scoped from the list rather than from a failure. cargo test --no-fail-fast -p nomos-spec-project passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project/tests/projections/renderers.rs",
+          "crates/spec/nomos-spec-project/tests/projections/rebuildability.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "exit_code": 0,
+        "output_tail": "d_Select_One_Node_Where_A_Prefix_Selects_Two ... ok\ntest subjects::Test_Every_Subject_Profile_Should_Render_The_Same_Subject_In_Its_Own_Format ... ok\ntest subjects::Test_An_Unresolved_Template_Should_Not_Be_Built ... ok\ntest subjects::Test_One_Profile_Should_Serve_Every_Subject ... ok\ntest determinism::Test_Insertion_Order_Should_Not_Reach_The_Output ... ok\ntest determinism::Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original ... ok\ntest selection::Test_A_Neighbourhood_Should_Reach_The_Subjects_Own_Neighbours ... ok\ntest selection::Test_A_Neighbourhood_Should_Select_Identically_Twice ... ok\ntest selection::Test_A_Neighbour_With_No_Declared_Status_Should_Be_Reported_Not_Dropped ... ok\ntest selection::Test_A_Node_With_No_Declared_Status_Should_Be_Excluded_Rather_Than_Defaulted ... ok\ntest selection::Test_A_Status_Filter_Should_Select_The_Open_Records_And_Exclude_The_Accepted_Ones ... ok\ntest selection::Test_A_Subject_Whose_Edges_Are_All_Relates_To_Should_Still_Reach_Them ... ok\ntest rebuildability::Test_Every_Required_Profile_Should_Render_Over_A_Seeded_Store ... ok\ntest rebuildability::Test_A_Seeded_Store_Should_Answer_For_Exactly_The_Declared_Content_Kinds ... ok\ntest rebuildability::Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content ... ok\ntest renderers::Test_The_Governing_Records_Should_Project_As_A_Document_Suite ... ok\n\ntest result: ok. 50 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.47s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-038a5a8f3ace54f0.exe)\n     Running tests\\determinism_contract.rs (target\\debug\\deps\\determinism_contract-5c5278a816d06a45.exe)\n     Running tests\\projections\\main.rs (target\\debug\\deps\\projections-ec716ea5d64801d7.exe)\n   Doc-tests nomos_spec_project\n",
+        "verified_at": 1789291739,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "58d34c48a87bcdad4b6c0fac09d7981b51858bd4"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-A-PACK-ITEM-DROPS-THE-STATUS-ITS-CITATION-IS-SUPPOSED-TO-CARRY",
+      "title": "The contextpack renderer emits identity and title, and OD-PROJECT-005's citation is identity, title and declared status",
+      "why": "OD-PROJECT-005 decided a reached neighbour is cited by identity, title and declared status, and gave the reason: a pack should say which of the decisions around its subject are still open, because ten of this repository's governing questions declare status open and a reader given only identities cannot tell a settled neighbour from an unsettled one. The selection carries it -- Gather_Neighbourhood reads record_front_matter and a test proves a neighbour with no declared status is reported with an empty one rather than dropped. PackItem in render.rs carries identity, title and text, so the field is computed and then discarded on the way out, and the one artifact the decision is about does not carry it. Measured on a real render of OD-PROJECT-005's own pack: 1,234 bytes, three neighbours, each with identity and title and no status.",
+      "done_when": "PackItem carries the declared status a neighbourhood item computed, absent rather than empty when the item has none, so a rendered context pack says of each neighbour whether what it governs is decided or still open. A test renders a real pack over the seeded records and asserts a neighbour's status reaches the JSON, which is the assertion that fails today. cargo test --no-fail-fast -p nomos-spec-project passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project/src/render.rs",
+          "crates/spec/nomos-spec-project/tests/projections/renderers.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "timeout_seconds": 3600
       },
       "verified": null,
       "abandoned": [],

@@ -18,6 +18,7 @@ pub enum variant nomos_spec_project::Content::Blocks
 pub enum variant nomos_spec_project::Content::Documents
 pub enum variant nomos_spec_project::Content::Headings
 pub enum variant nomos_spec_project::Content::Lineage
+pub enum variant nomos_spec_project::Content::Neighbourhood
 pub enum variant nomos_spec_project::Content::Nodes
 pub enum variant nomos_spec_project::Content::Omissions
 pub enum variant nomos_spec_project::Content::Relations

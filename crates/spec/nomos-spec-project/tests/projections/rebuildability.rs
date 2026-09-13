@@ -34,6 +34,12 @@ const SEEDED_BY_RECORDS: &[Content] = &[
     Content::Nodes,
     Content::Relations,
     Content::Lineage,
+    // A records-only store answers for this the moment it answers for `Relations`: a
+    // neighbourhood is those rows resolved one hop to the nodes at their far end, and
+    // `OD-PROJECT-005` fixed that hop at one. Added when `implementation-context-pack` became
+    // subject-scoped -- before then nothing selected it, and this list's own message says why
+    // omitting a kind the store answers for is not harmless.
+    Content::Neighbourhood,
 ];
 
 /// Whether every section of a profile reaches a kind a seeded store answers for.
@@ -220,7 +226,18 @@ fn Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content(
     );
     assert_eq!(
         screened.skipped,
-        Named(&["subject-contract", "subject-dossier", "subject-model", "subject-report"]),
+        // `implementation-context-pack` joined the subject-scoped four when `OD-PROJECT-005`
+        // scoped it: its output path carries `{subject}` and it cannot be built without one,
+        // so it is screened out here for the same reason they are rather than for one of its
+        // own. `Test_The_Required_Projections_Should_Render` is where a subject-scoped profile
+        // is really exercised.
+        Named(&[
+            "implementation-context-pack",
+            "subject-contract",
+            "subject-dossier",
+            "subject-model",
+            "subject-report",
+        ]),
         "the set of profiles excluded from this comparison moved. A profile excluded here is a \
          profile this test says nothing about."
     );

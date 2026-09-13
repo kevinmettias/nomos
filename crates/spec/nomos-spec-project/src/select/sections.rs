@@ -185,6 +185,62 @@ pub(super) fn Gather_Nodes(connection: &Connection, filter: &Filter) -> Result<V
     });
 }
 
+/// Every node one relation away from the node `filter.node_id` names, with what it declared.
+///
+/// # Why one hop, and why it is not a parameter
+///
+/// `OD-PROJECT-005` measured the record graph: from any record, one hop reaches a median of 7
+/// of 232 records, two reaches a median of 43 and ranges from 7 to 161 by starting point, and
+/// three reaches 62 per cent of the corpus. A hop bound stops bounding after the first, because
+/// `relates-to` is symmetric and carries 93 per cent of the edges. A caller wanting a
+/// neighbour's neighbourhood asks about the neighbour.
+///
+/// # Why every relation type is followed
+///
+/// The same record measured the alternative. Restricted to `affects`, `affected_by` and
+/// `supersedes`, the median reach is the starting record itself at any hop count, and 177 of
+/// 232 records carry no directional edge at all. A traversal that skipped `relates-to` would
+/// reach nothing for three quarters of the corpus.
+///
+/// # Why status is reported and not filtered
+///
+/// A neighbour's declared lifecycle status rides along so a pack says which of the decisions
+/// around its subject are still open — ten of this repository's are. Filtering by it was
+/// refused: keeping only `accepted` would hide exactly the unsettled questions an implementer
+/// needs flagged, and keeping only `open` would hide the settled ground. A neighbour that
+/// declared no status at all — a referenced placeholder carries no front-matter row — is
+/// reported with an empty one rather than dropped, for the reason `OD-RULES-003` gives
+/// generally: an absence is said rather than inferred.
+pub(super) fn Gather_Neighbourhood(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+{
+    // `DISTINCT` because `relations` holds each authored edge and its inverse, so a neighbour
+    // is reached twice; `s.node_id <> n.node_id` because a subject is not its own neighbour.
+    let mut query = Query::On(
+        "SELECT DISTINCT n.node_id, n.kind, n.title, COALESCE(front.status, '')
+         FROM nodes n
+         JOIN relations r ON r.from_node_uid = n.uid OR r.to_node_uid = n.uid
+         JOIN nodes s ON (s.uid = r.from_node_uid OR s.uid = r.to_node_uid) AND s.node_id <> n.node_id
+         LEFT JOIN record_front_matter front ON front.node_uid = n.uid
+         WHERE n.deleted_at IS NULL",
+    );
+    query.Equal("s.node_id", filter.node_id.as_ref());
+
+    // By identity, never by the order the walk reached them: two selections of one store must
+    // be identical, which is what the freshness sidecar's determinism rests on.
+    return query.Ordered_By("n.node_id").Run(connection, |row| {
+        let mut columns = Columns::Of(row);
+        let node = columns.Text()?;
+        let kind = columns.Text()?;
+        let title = columns.Text()?;
+        let status = columns.Text()?;
+
+        return Ok(Item::Of(&node)
+            .With(Name("kind"), Value(&kind))
+            .With(Name("title"), Value(&title))
+            .With(Name("status"), Value(&status)));
+    });
+}
+
 pub(super) fn Gather_Statements(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(

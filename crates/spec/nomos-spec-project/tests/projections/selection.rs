@@ -241,3 +241,122 @@ fn Seeded() -> nomos_spec_store::SpecificationStore
 
     return store;
 }
+
+/// A subject reaches its one-hop neighbours, carrying what each declared.
+///
+/// Over the real seeded records rather than the volume fixture, because the claim is about a
+/// record graph and `OD-PROJECT-005`'s whole argument is a measurement of that graph's shape.
+#[test]
+fn Test_A_Neighbourhood_Should_Reach_The_Subjects_Own_Neighbours()
+{
+    let store = Seeded();
+
+    let reached = Neighbourhood_Of(&store, "OD-PROJECT-005");
+
+    assert!(!reached.is_empty(), "the subject reached nobody");
+    for expected in ["OD-PROJECT-002", "OD-SPEC-012", "OD-SPEC-015"]
+    {
+        assert!(reached.contains(&expected.to_owned()), "{expected} missing from {reached:?}");
+    }
+    assert!(
+        !reached.contains(&"OD-PROJECT-005".to_owned()),
+        "a subject is not its own neighbour: {reached:?}"
+    );
+}
+
+/// A subject whose every edge is `relates-to` still reaches its neighbours.
+///
+/// This is the test an implementation following only the typed terms would fail while passing
+/// every other one here. `OD-SPEC-015` measured `relates-to` at 93 per cent of authored edges,
+/// and `OD-PROJECT-005` measured the consequence: restricted to `affects`, `affected_by` and
+/// `supersedes`, 177 of 232 records reach nothing but themselves at any hop count. A traversal
+/// that skipped the symmetric term would be empty for three quarters of the corpus.
+#[test]
+fn Test_A_Subject_Whose_Edges_Are_All_Relates_To_Should_Still_Reach_Them()
+{
+    let store = Seeded();
+
+    let reached = Neighbourhood_Of(&store, "OD-SPEC-015");
+
+    assert!(
+        reached.len() >= 3,
+        "OD-SPEC-015 declares three relates-to edges and nothing else, and reached {reached:?}"
+    );
+}
+
+/// Two selections of one store are identical.
+///
+/// The claim `OD-PROJECT-005`'s emission-order decision exists for. A traversal emitting in
+/// discovery order would pass every assertion above and fail this one, and would then make two
+/// renders of one store differ -- which is what the freshness sidecar's determinism rests on.
+#[test]
+fn Test_A_Neighbourhood_Should_Select_Identically_Twice()
+{
+    let store = Seeded();
+
+    let first = Neighbourhood_Of(&store, "OD-PROJECT-005");
+    let second = Neighbourhood_Of(&store, "OD-PROJECT-005");
+
+    assert_eq!(first, second);
+    let mut sorted = first.clone();
+    sorted.sort();
+    assert_eq!(first, sorted, "a neighbourhood is emitted by identity, not by discovery order");
+}
+
+/// A neighbour that declared no status is reported with an empty one rather than dropped.
+///
+/// A node referenced by a relation but never authored carries no `record_front_matter` row at
+/// all. Dropping it would make a pack silently narrower than the graph, and inventing a status
+/// for it would put a value in a projection no author wrote -- the one thing this store exists
+/// to prevent. `OD-RULES-003`'s reasoning generally: an absence is said, not inferred.
+#[test]
+fn Test_A_Neighbour_With_No_Declared_Status_Should_Be_Reported_Not_Dropped()
+{
+    let store = Seeded();
+
+    let statuses = Neighbourhood_Statuses(&store, "OD-PROJECT-005");
+
+    assert!(!statuses.is_empty(), "the subject reached nobody");
+    assert!(
+        statuses.iter().all(|(identity, _)| return !identity.is_empty()),
+        "a neighbour was reported with no identity: {statuses:?}"
+    );
+    assert!(
+        statuses.iter().any(|(_, status)| return status == "accepted"),
+        "no neighbour carried a declared status at all, so this proved nothing: {statuses:?}"
+    );
+}
+
+/// Every identity a subject's neighbourhood section selects.
+fn Neighbourhood_Of(store: &nomos_spec_store::SpecificationStore, subject: &str) -> Vec<String>
+{
+    return Neighbourhood_Statuses(store, subject).into_iter().map(|(identity, _)| return identity).collect();
+}
+
+/// Every `(identity, declared status)` a subject's neighbourhood section selects.
+fn Neighbourhood_Statuses(store: &nomos_spec_store::SpecificationStore, subject: &str) -> Vec<(String, String)>
+{
+    let profile = Profile::Parse(&format!(
+        r#"{{ "id": "probe", "title": "Probe", "format": "markdown", "output": "probe.md",
+              "sections": [{{ "title": "Neighbourhood", "content": "neighbourhood",
+                              "may_be_empty": true,
+                              "filter": {{ "node_id": "{subject}" }} }}] }}"#
+    ))
+    .expect("parses");
+
+    let projection = Select_Projection(store, &profile).expect("selects");
+
+    return projection
+        .sections
+        .into_iter()
+        .flat_map(|section| return section.items)
+        .map(|item| {
+            let status = item
+                .fields
+                .iter()
+                .find(|(name, _)| return name == "status")
+                .map_or_else(String::new, |(_, value)| return value.clone());
+            return (item.identity, status);
+        })
+        .collect();
+}

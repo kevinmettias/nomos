@@ -3,7 +3,7 @@ mod sections;
 
 use query::{Columns, FirstColumn, Gather_Items, Narrow_To_Nodes, Query, SecondColumn};
 use sections::{
-    Gather_Blocks, Gather_Documents, Gather_Headings, Gather_Lineage, Gather_Nodes, Gather_Omissions, Gather_Relations,
+    Gather_Blocks, Gather_Documents, Gather_Headings, Gather_Lineage, Gather_Neighbourhood, Gather_Nodes, Gather_Omissions, Gather_Relations,
     Gather_Rows, Gather_Statements, Gather_Suites,
 };
 
@@ -107,6 +107,12 @@ impl Content
             Self::Relations => &["relation_type", "suite", "identifier_prefix", "node_id"],
             Self::Lineage => &["disposition", "document"],
             Self::Omissions => &["document"],
+            // `node_id` alone. A neighbourhood is defined by the node it is around, and every
+            // other filter would narrow the answer to a question nobody asked -- a caller
+            // wanting only the accepted neighbours is asking for the filtering
+            // `OD-PROJECT-005` refused, and one wanting a kind is asking about the graph
+            // rather than about a subject.
+            Self::Neighbourhood => &["node_id"],
         };
     }
 }
