@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:f6cf1685b97275635b7ba860615729a5f5d1e0a91e62f1feb9697b836cdba1ee",
-  "inputs_digest": "sha256:ae5977d208bb3bc6f314bc0de5e006bb174c581c78cc14409a253080b20c26e9",
+  "content_digest": "sha256:69b00691b2bc6d938290bc5b533ea7c40af203535436aae055595bfb5ab4733f",
+  "inputs_digest": "sha256:708e5fc79a47f12a6922e429fe61cc0b778677e2d322352baf528bdb9dd5c988",
   "sections": [
     [
       "Documents",
@@ -883,12 +883,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md@authored",
-      "hash": "sha256:569c3dd0c4f68f7a29cdbe800e1a2e759cf8c0ee53e364e677274c253e2bec3e"
+      "hash": "sha256:ca481db57e29583ad6541fcf1a098df4a0450fe3a08a0a6b74856756e523ea1d"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md@authored",
-      "hash": "sha256:d626c9d148242ed2fc3c3795f8eeebd9120f24c92a005151f55d6a4adfdfd4cc"
+      "hash": "sha256:0e6efa712278eff244251689c8bf8b4e33630f39419eb66ad7e39d563d402a1d"
     },
     {
       "content": "documents",
@@ -1043,7 +1043,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md@authored",
-      "hash": "sha256:46eb5765b153256b27f6e7b97a860369739ba32c2365cc8084f12e20553605ed"
+      "hash": "sha256:c7d51d0052bf5bf9d6198fe75095c23e3079efba7af49973d3e12360dbae7606"
     },
     {
       "content": "documents",
@@ -35333,7 +35333,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#6",
-      "hash": "sha256:119d9617b4f750c3a62ee3d9fd67079d5ca1d314fc86b1d5d5597e3a17725ec0"
+      "hash": "sha256:fe34acc7b92b65b1bf8618070f9490fd59663eccbfa9abb9f96b4fd5295866d8"
     },
     {
       "content": "blocks",
@@ -35538,7 +35538,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#6",
-      "hash": "sha256:119d9617b4f750c3a62ee3d9fd67079d5ca1d314fc86b1d5d5597e3a17725ec0"
+      "hash": "sha256:966de40162e397c72c4ae0380e8b1e7477111bce02ee4509c6db44aea5ed5419"
     },
     {
       "content": "blocks",
@@ -39748,7 +39748,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#6",
-      "hash": "sha256:119d9617b4f750c3a62ee3d9fd67079d5ca1d314fc86b1d5d5597e3a17725ec0"
+      "hash": "sha256:fd66cc31fccde0c4bc2aee06629fbfa6c9d05db26b7f3cd6659905e834d4aadf"
     },
     {
       "content": "blocks",

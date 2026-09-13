@@ -182,8 +182,8 @@ profile: domain-specification
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
 | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md@authored | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md | authored | 20 | 6 | sha256:5f9c67cc4d6f14d07b696b7c2842958e0e79c15eede17749d7e63ce8627f8793 |
-| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md@authored | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md | authored | 41 | 11 | sha256:569c3dd0c4f68f7a29cdbe800e1a2e759cf8c0ee53e364e677274c253e2bec3e |
-| docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md@authored | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md | authored | 31 | 10 | sha256:d626c9d148242ed2fc3c3795f8eeebd9120f24c92a005151f55d6a4adfdfd4cc |
+| docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md@authored | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md | authored | 41 | 11 | sha256:ca481db57e29583ad6541fcf1a098df4a0450fe3a08a0a6b74856756e523ea1d |
+| docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md@authored | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md | authored | 31 | 10 | sha256:0e6efa712278eff244251689c8bf8b4e33630f39419eb66ad7e39d563d402a1d |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md@authored | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md | authored | 18 | 7 | sha256:4264b9448cf95f7bb22780f4a6cd970a7f64828eea993961df2987984417b701 |
 | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md@authored | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md | authored | 18 | 6 | sha256:5369feac3ebd7b343b32234f25aa30ba669d4151b15af6d83d2ad37da0f58379 |
 | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md | authored | 24 | 6 | sha256:b8159cff04a7379eb48a47ce46a3da98ad447cc8ccec98c33ab48526d604e57f |
@@ -214,7 +214,7 @@ profile: domain-specification
 | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md@authored | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md | authored | 28 | 8 | sha256:65229767fb7df92fdb3e15faa97875746dd70f7a86d656248cfd622909967161 |
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md@authored | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md | authored | 22 | 7 | sha256:eef4a3f365ef12f634f1fee88c3cf1b2ad45aad74e471e1daf8c8c26603a4228 |
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md@authored | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md | authored | 52 | 14 | sha256:194a79f00c4934f15b88c83b104b3eb2e9db06f8b1d94e94886ed5ed9daf9c70 |
-| docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md@authored | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md | authored | 29 | 9 | sha256:46eb5765b153256b27f6e7b97a860369739ba32c2365cc8084f12e20553605ed |
+| docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md@authored | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md | authored | 29 | 9 | sha256:c7d51d0052bf5bf9d6198fe75095c23e3079efba7af49973d3e12360dbae7606 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -47303,9 +47303,9 @@ condition a context pack exists to remove.
 
 ### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#6
 
-*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What Was Measured · hash: sha256:119d9617b4f750c3a62ee3d9fd67079d5ca1d314fc86b1d5d5597e3a17725ec0*
+*revision: authored · kind: prose · heading: Whether projection selection gains bounded relation traversal for a scoped context pack / What Was Measured · hash: sha256:fe34acc7b92b65b1bf8618070f9490fd59663eccbfa9abb9f96b4fd5295866d8*
 
-Measured 2026-09-13.
+Measured 2026-09-13 over the real record graph, the shipped profiles and the selection code that reads them.
 
 ### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#7
 
@@ -47615,9 +47615,9 @@ one costs. Neither asked whether the required one can be read.
 
 ### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#6
 
-*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / What Was Measured · hash: sha256:119d9617b4f750c3a62ee3d9fd67079d5ca1d314fc86b1d5d5597e3a17725ec0*
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / What Was Measured · hash: sha256:966de40162e397c72c4ae0380e8b1e7477111bce02ee4509c6db44aea5ed5419*
 
-Measured 2026-09-13.
+Measured 2026-09-13 over the committed diagram, its own sidecar, and this repository's git history.
 
 ### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#7
 
@@ -55751,9 +55751,9 @@ It will be raised again, because the complaint is correct and nothing records th
 
 ### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#6
 
-*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / What Was Measured · hash: sha256:119d9617b4f750c3a62ee3d9fd67079d5ca1d314fc86b1d5d5597e3a17725ec0*
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / What Was Measured · hash: sha256:fd66cc31fccde0c4bc2aee06629fbfa6c9d05db26b7f3cd6659905e834d4aadf*
 
-Measured 2026-09-13.
+Measured 2026-09-13 over the seventeen crates naming `nomos-rules` and the zone lattice they sit in.
 
 ### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#7
 

@@ -33,7 +33,7 @@ one costs. Neither asked whether the required one can be read.
 
 ## What Was Measured
 
-Measured 2026-09-13.
+Measured 2026-09-13 over the committed diagram, its own sidecar, and this repository's git history.
 
 **The artifact.** 1,879 lines, 90,749 bytes, 247 distinct nodes, 1,646 edges, two subgraphs.
 `OD-SPEC-015` measured that 93 per cent of the edges carry the single label `relates-to`, which

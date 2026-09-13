@@ -34,7 +34,7 @@ condition a context pack exists to remove.
 
 ## What Was Measured
 
-Measured 2026-09-13.
+Measured 2026-09-13 over the real record graph, the shipped profiles and the selection code that reads them.
 
 **The pack's three sections, verbatim from the profile.** `nodes` filtered to
 `kind: decision`; `statements` with no filter; `blocks` filtered to `kind: prose`. No subject,

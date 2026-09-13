@@ -33,7 +33,7 @@ It will be raised again, because the complaint is correct and nothing records th
 
 ## What Was Measured
 
-Measured 2026-09-13.
+Measured 2026-09-13 over the seventeen crates naming `nomos-rules` and the zone lattice they sit in.
 
 **The inversion is real, and it is two crates wide.** Of the seventeen crates naming
 `nomos-rules`, exactly two use nothing from it but `SourceFile`: `nomos-lang-rust-cargo` and
