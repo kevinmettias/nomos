@@ -104,6 +104,7 @@ profile: domain-specification
 | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md@authored | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md | authored | 21 | 6 | sha256:5e4ffc056879a2325a78cf957dd7e176cd0a0ebc73c27b1b2a8d90553bd65891 |
 | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md@authored | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md | authored | 23 | 7 | sha256:7ffcec3773752326a5ba599808f3454e1385db25737f73d58c74cbc762307665 |
 | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md@authored | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md | authored | 36 | 9 | sha256:976dbc3e7de91a5dcca2d62ad0b6ab43726a8e065cbcd1aa5516963cc03ebd93 |
+| docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md@authored | docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md | authored | 35 | 9 | sha256:ee8f60df55168698b0463998c8b6c953f0356311dfed9d1293e434cdc3117461 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -972,6 +973,15 @@ profile: domain-specification
 | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#27 | authored | 3 | What is retracted, and what still stands |
 | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#31 | authored | 3 | Why this is recorded rather than quietly rewritten |
 | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#33 | authored | 2 | Status |
+| docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#1 | authored | 1 | include selects what a gate run reports and never what it judges |
+| docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#16 | authored | 2 | The Decision |
+| docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#19 | authored | 3 | Why this does not contradict `OD-GATE-017` |
+| docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#24 | authored | 3 | A scope that admits no source is still not a clean pass |
+| docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#27 | authored | 3 | What a caller gains that it did not have |
+| docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#29 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#34 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -25684,6 +25694,281 @@ naming family and break the formatting family, trading one silence for another.
 What survives unqualified is the fourth decision: an entry that matches nothing is reported
 rather than silently ignored. It was written to hold regardless of how the addressing question
 was answered, and it does, including when the answer turns out to be "not yet".
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#1
+
+*revision: authored · kind: heading · heading: include selects what a gate run reports and never what it judges · hash: sha256:99dcf0e626f49b92b4e4e67d7ca91eff710c6c8dd93ee746a411e61e6adb36eb*
+
+# include selects what a gate run reports and never what it judges
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#2
+
+*revision: authored · kind: heading · heading: include selects what a gate run reports and never what it judges / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#3
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / Question · hash: sha256:d38673b0d6d9885de22b9d5c56eada57d7f1483469be494ba299a469f8c690de*
+
+`nomos gate run --include <one file>` reports `Blocking` findings about correct code that a
+whole-workspace run does not. A caller reaches for `--include` to be told *less* and is told
+something *false*, in the one category the tool asks to be trusted on.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#4
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / Question · hash: sha256:6715ca9e3db513827254f1a30838aa112b167061d00abaaa277c6ddd18bce62f*
+
+`OD-GATE-017` decided the opposite direction for rules: selection is real, `Run` skips a
+deselected rule's own computation rather than discarding its finding afterwards. So the
+question is not merely how to stop the false finding — it is whether file selection may be
+real in the same sense rule selection is, and if not, why the two differ.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#5
+
+*revision: authored · kind: heading · heading: include selects what a gate run reports and never what it judges / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#6
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What Was Measured · hash: sha256:7470895afb94eb2a047171f7624c562df5455083ad46c3eaa773a38ba05b1923*
+
+Measured against this repository at `15bdbb74`, with the shipped binary.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#7
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What Was Measured · hash: sha256:9fe904e2ef954490c7c7df37f6872a08806de6e79e42011ff2e77030ed08afef*
+
+**The invented finding, reproduced.** `nomos gate run --root . --include
+crates/rules/nomos-rules/src/checks/orphan_modules.rs` reports:
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#8
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What Was Measured · hash: sha256:a8e84e48833724995afb2a5fe730862d1945d7c94a5dc682842c98558196b218*
+
+> `[Blocking] no-orphan-modules: … is not reachable from its crate's module tree: no
+> declaration names it, so rustc never parses it and nothing in it compiles, runs or is
+> linted -- declare it, or delete it`
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#9
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What Was Measured · hash: sha256:ab6117cce41f3f887ced71cae1982e9f30f83db1a63a5eaa07f2f7dd7e7e8fdd*
+
+The file is declared. `crates/rules/nomos-rules/src/checks.rs:45` reads `mod orphan_modules;`.
+The advice is to delete or re-declare correct code.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#10
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What Was Measured · hash: sha256:30b9c2f2f99f2c814dc019c3c2fe32e35a169e646f14538041468ddc01ba51d4*
+
+**The whole-workspace run disagrees.** The same tree, no `--include`: **zero**
+`no-orphan-modules` findings. The two runs contradict each other about the same file.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#11
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What Was Measured · hash: sha256:29b33c3cd69e328b71e84911bd156f990af28608fb8ff49781159969cf34150d*
+
+**The cause.** `Scoped_Sources` in `gate_environment.rs` filters the walked source set
+*before* `nomos_check_orchestration::Run` sees it. A rule answering a cross-file question
+then answers it against a truncated world. `no-orphan-modules`' own module doc states the
+assumption that makes narrowing safe — a file the walk did not collect can neither back a
+declaration nor be reported as an orphan, so the two answers move together — and `--include`
+is exactly what falsifies it: the file is collected, its declaring root is not.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#12
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What Was Measured · hash: sha256:b96fcaea84c982cee929a91d2826127e5bcb6dac23821322809c9b74b66e1757*
+
+**`--include` is not a speed lever, which is the measurement that decides the cost.** The
+item that filed this named "costs `--include` its role as a speed lever" as the price of the
+mechanism chosen below. There is no such role to lose:
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#13
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What Was Measured · hash: sha256:aa2a316fffc67027eb5327f10be282de1820ac7278ee16c36acf591003cf8386*
+
+- A whole-workspace `gate run` takes **4.6 seconds**.
+- Narrowing does not narrow the expensive work at all. The narrowed run above still reported
+  194 findings, including `lint-diagnostics` advisories for `crates/substrate/nomos-ledger`,
+  `crates/substrate/nomos-scope-verification`, `tests/contract` and `tests/integration`, and
+  every `dependency-policy` advisory — all about files outside the include set. Those come
+  from provider subprocesses that never consulted the scope.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#14
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What Was Measured · hash: sha256:d494da318030a7693517494a418eb07afb96f97501e7575a01f547eaad787b08*
+
+So scope today narrows exactly the rules it breaks (the ones reading walked source) and not
+the ones that dominate the runtime. The present behaviour is not a principled trade between
+speed and completeness; it is a filter applied at the one layer where it does harm and no
+good.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#15
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What Was Measured · hash: sha256:88d22d29b459fc9a71d934fcaf3a3872accf355fb19aef36f266f02f90e79f78*
+
+**Which rules answer cross-file questions today.** `no-orphan-modules` (a file's
+reachability is a fact about its crate's declaring tree, not about the file) and
+`completeness-mirror` (a declared table resolves against checks elsewhere in the workspace).
+Both are reserved by the item implementing this. Every other shipped rule judges a file, a
+name, or a line from what that file itself contains.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#16
+
+*revision: authored · kind: heading · heading: include selects what a gate run reports and never what it judges / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#17
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / The Decision · hash: sha256:753954d15e33fca9ea0897607b2ea73f03e12772236813e95b560028176038c7*
+
+**`--include` and `--exclude` select what a run reports. Judging is always whole.**
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#18
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / The Decision · hash: sha256:4b69c8ed803dcd8a2e3d3f7ac3d0cf558fc312625f9b06780492478f1c206c4f*
+
+The walked source set reaches the rules entire. Scope is applied to the findings afterwards:
+a finding is reported when any of its locations is in scope, and a finding carrying no
+location is not narrowed by a path filter, because a path filter has nothing to say about it.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#19
+
+*revision: authored · kind: heading · heading: include selects what a gate run reports and never what it judges / The Decision / Why this does not contradict `OD-GATE-017` · hash: sha256:4d7d32c531d9163e48eceab9477cbe4ac41a6278e1fba0ebb5ad02db00f104b5*
+
+### Why this does not contradict `OD-GATE-017`
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#20
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / The Decision / Why this does not contradict `OD-GATE-017` · hash: sha256:3a71c89adcd16898f0a56ae780ee4a272d618a8b8db96e40c85dda983635f22e*
+
+`OD-GATE-017` is untouched, and rule selection stays exactly as real as it made it. The two
+are different because of one asymmetry, which is the whole answer to that precedent:
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#21
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / The Decision / Why this does not contradict `OD-GATE-017` · hash: sha256:e075726d6b1c8cf8e3c4ebf0560778ce893a57b701f09a88f82a1eeba27ed073*
+
+> **Selecting fewer rules cannot change a remaining rule's answer. Selecting fewer files
+> can.**
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#22
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / The Decision / Why this does not contradict `OD-GATE-017` · hash: sha256:a96ec637ab0aba60d82ffc0c105cb60e61f15dcaff110199c2d0696d58c8d64f*
+
+Rules are independent judges over a shared world. Removing one leaves every other rule's
+question and evidence exactly as it was, so skipping its computation is a pure saving and
+the answers that remain are the answers a full run would have given. Files are the world
+itself. Removing one changes what a cross-file rule *sees*, so a narrowed run does not
+compute a subset of the full run's answers — it computes different answers to different
+questions and labels them the same. "Real selection" for files would mean handing rules a
+false world and reporting their conclusions as though the world were true.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#23
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / The Decision / Why this does not contradict `OD-GATE-017` · hash: sha256:f0408246bec6e497d2b7b5a470acf23a9f0010541ef0bd7770cc11d9620c1cf6*
+
+That is not a weaker form of `OD-GATE-017`'s principle; it is the same principle. Selection
+is real where it is honest, and a saving that changes the answer is not a saving.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#24
+
+*revision: authored · kind: heading · heading: include selects what a gate run reports and never what it judges / The Decision / A scope that admits no source is still not a clean pass · hash: sha256:ea628af145ad37f68c9fcc211a64754348db7448d32fe4cdd73f5969bb9bd08d*
+
+### A scope that admits no source is still not a clean pass
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#25
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / The Decision / A scope that admits no source is still not a clean pass · hash: sha256:cf6a20cead3adeac9d943d862135f8268dd1a53242fd552f66615b2930f69c62*
+
+If no walked file is in scope, the run reports `NoSource` and is `Indeterminate`, exactly as
+it did before. The judging happens over the whole walk and is discarded, rather than never
+running — what a caller is told is unchanged, and that is deliberate. A typed-wrong
+`--include` must not read as a repository with nothing to say, which is what
+`Test_A_Scoped_Out_Source_Should_Not_Be_Judged` has always protected, and moving the scope
+off the source set gives no reason to weaken it.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#26
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / The Decision / A scope that admits no source is still not a clean pass · hash: sha256:c346748de0022680662c9f12f963291cf0ab2e831bf43cd16bc7c89eb74492d9*
+
+This is also what keeps the change inside one crate. Reporting a *judged* outcome with an
+empty in-scope finding set would have been defensible, and would have made a scoped-to-nothing
+run exit clean rather than vacuous unless the host's exit-code mapping learned a new case — a
+change to `nomos-cli`'s reporting, for no difference a caller could see.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#27
+
+*revision: authored · kind: heading · heading: include selects what a gate run reports and never what it judges / The Decision / What a caller gains that it did not have · hash: sha256:9c66979b1265603066996cc0eddd762b846829da7ca6dac3b83b82e1a632ae32*
+
+### What a caller gains that it did not have
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#28
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / The Decision / What a caller gains that it did not have · hash: sha256:f6ad39df560188e1abacb089d85945eebaca2ae807677d3972f8add84dbdd30e*
+
+A narrowed report becomes genuinely narrow. Because scope now filters findings rather than
+source, provider-backed findings about out-of-scope files stop being reported too — the
+`lint-diagnostics` and `dependency-policy` advisories that a narrowed run previously printed
+about unrelated crates. `--include` starts meaning the one thing a reader would guess it
+means.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#29
+
+*revision: authored · kind: heading · heading: include selects what a gate run reports and never what it judges / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#30
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What This Record Does Not Do · hash: sha256:e7089907af879b13fc11dc7b9858e88219d16727996fd17174ec6fc857beb070*
+
+It does not make `--include` a performance control, and does not claim the run became faster.
+Judging was already whole for the expensive providers; what changes is that it is now whole
+for everything, and the 4.6-second measurement above is what makes that affordable to say
+plainly rather than a cost to apologize for. If a real performance need appears, it is a
+different question with a different answer — narrowing the *providers*, which is where the
+time is — and it does not begin by lying to a rule.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#31
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What This Record Does Not Do · hash: sha256:04ef2dc06b034f599f00bb4100cb852cc960ed9ba3f0b8150cad7e61114244db*
+
+It does not change `no-orphan-modules` or `completeness-mirror`'s logic. Their assumption
+about narrowing becomes true again rather than needing repair, and only their docs move.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#32
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What This Record Does Not Do · hash: sha256:06361143e970910e1b0b076ac3dab800878246db06c0e4b4b85be88883319f43*
+
+It does not introduce a partial-source signal, the mechanism the filing item named second. It
+would preserve narrowing as a real saving at the cost of threading a parameter through
+`RunContext`'s roughly 45 construction sites, and it earns that cost only if the saving is
+real. The measurement above says it is not.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#33
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / What This Record Does Not Do · hash: sha256:8423b8a1c6fba3223c0798e88e0c422689abb63537ef36806f9edcf3b2c0baf9*
+
+It does not touch rule selection, `RuleSelector`, or anything `OD-GATE-017` decided.
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#34
+
+*revision: authored · kind: heading · heading: include selects what a gate run reports and never what it judges / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#35
+
+*revision: authored · kind: prose · heading: include selects what a gate run reports and never what it judges / Status · hash: sha256:4ce7ce36289cb02262112e760c1b0ff2ffcc02056c4f8ce4f406d1f2ab79e93b*
+
+Accepted. A narrowed run and a whole run now agree about every file both judge, because both
+judge the same world and differ only in what they print. `OD-GATE-017`'s selection-is-real
+direction stands for rules, and the reason it does not extend to files is recorded rather
+than left as an inconsistency: selecting fewer rules cannot change a remaining rule's answer,
+and selecting fewer files can.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

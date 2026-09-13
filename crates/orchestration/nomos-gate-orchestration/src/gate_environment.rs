@@ -114,8 +114,19 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem>(
         Ok(None) | Err(_) => GatePolicyFile::default().Resolved_Over(command),
     };
 
-    let scoped = walked.map(|sources| return Scoped_Sources(sources, &command.scope));
-    let outcome = Judged_Sources(scoped, launcher, filesystem, JudgeContext { variant, root: &command.root, selected: &command.rules.include });
+    // `OD-GATE-025`: the scope never reaches the judging. Every walked file is judged, and
+    // the scope narrows the findings afterwards -- a rule answering a cross-file question
+    // must see the whole world or it answers a different question and labels it the same.
+    //
+    // A scope admitting no walked source at all is still `NoSource`, which is what it was
+    // before the scope moved. The judging happened and is simply discarded: what a caller is
+    // told is that nothing it asked about was there, and a mistyped `--include` must not read
+    // as a repository with nothing to say.
+    let admits_a_source = walked.as_ref().is_none_or(|sources| {
+        return sources.iter().any(|source| return command.scope.Is_In_Scope(&source.path));
+    });
+    let judged = Judged_Sources(walked, launcher, filesystem, JudgeContext { variant, root: &command.root, selected: &command.rules.include });
+    let outcome = if admits_a_source { Scoped_Findings(judged, &command.scope) } else { CheckOutcome::NoSource };
 
     let reduced = Reduced_Findings(
         &outcome,
@@ -142,10 +153,41 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem>(
     };
 }
 
-/// `sources` narrowed to what `scope` admits.
-fn Scoped_Sources(sources: Vec<SourceFile>, scope: &ScopeSelector) -> Vec<SourceFile>
+/// `outcome`'s findings narrowed to what `scope` admits, the judging behind them untouched.
+///
+/// `OD-GATE-025` decided this is where a scope belongs. Narrowing the *source* set instead
+/// handed a rule answering a cross-file question a truncated world, which is how
+/// `--include <one file>` came to report `no-orphan-modules` against a file its own `lib.rs`
+/// declares: the file was collected and its declaring root was not.
+///
+/// A finding is admitted when any of its locations is, and a finding carrying no location at
+/// all is admitted unchanged -- a path filter has nothing to say about a finding that names
+/// no path, which is every `dependency-policy` advisory about the workspace as a whole.
+fn Scoped_Findings(outcome: CheckOutcome, scope: &ScopeSelector) -> CheckOutcome
 {
-    return sources.into_iter().filter(|source| return scope.Is_In_Scope(&source.path)).collect();
+    let CheckOutcome::Judged { findings, examined, claim } = outcome
+    else
+    {
+        return outcome;
+    };
+
+    let admitted = findings
+        .into_iter()
+        .filter(|finding| return Is_Admitted(finding, scope))
+        .collect();
+
+    return CheckOutcome::Judged { findings: admitted, examined, claim };
+}
+
+/// Whether `scope` admits `finding`, by the places it names.
+fn Is_Admitted(finding: &Finding, scope: &ScopeSelector) -> bool
+{
+    if finding.locations.is_empty()
+    {
+        return true;
+    }
+
+    return finding.locations.iter().any(|location| return scope.Is_In_Scope(location));
 }
 
 /// [`Reduced_Findings`]'s own result -- named so its caller assigns [`GateFindings`] and the

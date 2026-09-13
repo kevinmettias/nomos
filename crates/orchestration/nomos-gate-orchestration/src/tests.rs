@@ -480,10 +480,14 @@ fn Test_Run_Gate_Should_Fail_On_A_Blocking_Finding()
         .all(|finding| return finding.gate == GateCategory::Blocking));
 }
 
-/// [`ScopeSelector`] excludes the one source a walk found, so `Run_Gate` never calls
-/// `nomos_check_orchestration::Run` at all -- the same `CheckOutcome::NoSource` an empty
-/// walk already produces, because "scoped to nothing" and "found nothing" mean the same
-/// thing to a caller.
+/// [`ScopeSelector`] excludes the one source a walk found, so the run reports
+/// `CheckOutcome::NoSource` -- the same answer an empty walk gives, because "scoped to
+/// nothing" and "found nothing" still mean the same thing to a caller.
+///
+/// Unchanged by `OD-GATE-025`, and worth saying why, because that record moved the scope off
+/// the source set everywhere else. The judging now happens over the whole walk and is
+/// discarded here rather than never running; what a caller is told is identical, which is
+/// the point. A mistyped `--include` must not read as a clean pass.
 #[test]
 fn Test_A_Scoped_Out_Source_Should_Not_Be_Judged()
 {
@@ -921,4 +925,80 @@ fn Test_A_Malformed_Policy_File_Should_Refuse_Rather_Than_Report_A_Verdict()
 
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
     assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }), "the check itself still ran: {:?}", result.check_outcome);
+}
+
+/// The property `OD-GATE-025` exists for, pinned in both directions: a narrowed run and a
+/// whole-workspace run agree about the same file.
+///
+/// `src/thing.rs` is declared by `src/lib.rs` and is not an orphan. Before the scope moved
+/// off the source set, `--include src/thing.rs` collected the file and dropped the `lib.rs`
+/// that declares it, so `no-orphan-modules` answered a question about a world where nothing
+/// declared it and reported a `Blocking` finding telling a reader to delete or re-declare
+/// correct code. Both runs must now say the same thing about it, which is nothing.
+#[test]
+fn Test_A_Narrowed_Run_And_A_Whole_Run_Should_Agree_About_A_Declared_Module()
+{
+    let sources = || {
+        return vec![
+            Source("crates/example/src/lib.rs", "mod thing;\n"),
+            Source("crates/example/src/thing.rs", "pub fn Thing() {}\n"),
+        ];
+    };
+    let narrowed = GateCommand {
+        scope: ScopeSelector { include: vec!["crates/example/src/thing.rs".to_owned()], exclude: Vec::new() },
+        ..Command_At(Repository_Root())
+    };
+
+    let whole = Orphan_Findings_Of(sources(), &Command_At(Repository_Root()));
+    let narrow = Orphan_Findings_Of(sources(), &narrowed);
+
+    assert!(whole.is_empty(), "a declared module is not an orphan to a whole run: {whole:?}");
+    assert!(narrow.is_empty(), "nor to a narrowed one -- the run that invented this is the defect: {narrow:?}");
+}
+
+/// The other half, so the fix is not bought by blinding the rule: a file nothing declares is
+/// still reported, including when the run was narrowed to exactly that file.
+///
+/// Without this, every assertion above is satisfied by a rule that stopped answering.
+#[test]
+fn Test_A_Genuinely_Orphaned_Module_Should_Still_Be_Reported_By_A_Narrowed_Run()
+{
+    let sources = vec![
+        Source("crates/example/src/lib.rs", "mod thing;\n"),
+        Source("crates/example/src/thing.rs", "pub fn Thing() {}\n"),
+        Source("crates/example/src/stray.rs", "pub fn Stray() {}\n"),
+    ];
+    let narrowed = GateCommand {
+        scope: ScopeSelector { include: vec!["crates/example/src/stray.rs".to_owned()], exclude: Vec::new() },
+        ..Command_At(Repository_Root())
+    };
+
+    let reported = Orphan_Findings_Of(sources, &narrowed);
+
+    assert_eq!(reported.len(), 1, "the one file nothing declares must still be named: {reported:?}");
+    let named = reported.first().expect("asserted len 1 above");
+    assert!(named.contains("stray.rs"), "{reported:?}");
+}
+
+/// Every `no-orphan-modules` finding a run reported, as the text a reader would act on.
+fn Orphan_Findings_Of(sources: Vec<SourceFile>, command: &GateCommand) -> Vec<String>
+{
+    let result = Run_Gate(
+        Some(sources),
+        GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem },
+        command,
+        Test_Run_Id(),
+    );
+
+    let CheckOutcome::Judged { findings, .. } = &result.check_outcome
+    else
+    {
+        panic!("these fixtures are real source, so the run judges them: {:?}", result.check_outcome);
+    };
+
+    return findings
+        .iter()
+        .filter(|finding| return finding.rule == RuleId::New("no-orphan-modules"))
+        .map(|finding| return finding.subject_name.clone())
+        .collect();
 }

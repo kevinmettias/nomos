@@ -63558,7 +63558,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -63575,7 +63575,31 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "et\\debug\\deps\\lang_go_seam-126a051e70ec8789.exe)\n     Running tests\\lang_rust_seam.rs (target\\debug\\deps\\lang_rust_seam-21e4d711588fa8dc.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-eb881b37502cc056.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-6e4edc82a01dbde3.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-ae0b617102dd3009.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-04ea16aad0fabd75.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-3280349c95fefea2.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-5e1c9f4878575f71.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-938ce3bf1a5089c5.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-94d7292345d520d6.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-813c14e0af29f347.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-edce0034430d69a3.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-1da870d5dcc7bd73.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-cb3e049ca967cf9a.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-586b71f69871fb5c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-efc995b9467d3a34.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-41b5cba870fb12b1.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-9473a6b62ef541c8.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-8b6db6463184b33f.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-2b7d9d61e0d2a859.exe)\n   Doc-tests nomos_gate_orchestration\n   Doc-tests nomos_rules\n",
+        "verified_at": 1789263965,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "15bdbb74d2028fb2a484d4379d9dd90792530fe8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -65000,6 +65024,59 @@
           "exit_code": 0
         },
         "revision": "09b293a90d4557233baa9df0cd196418ce748e79"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P87-INCLUDE-MEANS-REPORT-NOT-JUDGE-RECORD",
+      "title": "What --include means is undecided, and the run that answers it has no record to point at",
+      "why": "P87-A-NARROWED-GATE-RUN-INVENTS-FINDINGS-A-FULL-RUN-DOES-NOT-3's own done_when requires a record deciding what --include means and answering OD-GATE-017's selection-is-real precedent, and its territory reserves only code: crates/orchestration/nomos-gate-orchestration/src and two rule files. No docs/records path and no registration path, so the record it demands cannot be written under it. A second disjoint claim rather than a decline and re-author, because that item has already been authored three times and the code half is sound as reserved.",
+      "done_when": "A governing record states whether --include selects what a gate run judges or only what it reports, answers OD-GATE-017's rule-selection precedent rather than ignoring it by naming why selecting fewer rules and selecting fewer files differ, names the rules that answer cross-file questions today, and carries the measurements that decided it rather than asserting the choice.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-025.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 15 tests\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789264064,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "15bdbb74d2028fb2a484d4379d9dd90792530fe8"
       },
       "abandoned": [],
       "displaced": [],

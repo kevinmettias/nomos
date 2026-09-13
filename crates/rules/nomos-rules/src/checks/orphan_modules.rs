@@ -38,6 +38,15 @@
 //! neither back a declaration nor be reported as an orphan — so no file changes verdict for
 //! having been resolved one way rather than the other.
 //!
+//! That assumption is load-bearing and was briefly false. `nomos gate run --include <file>`
+//! used to filter the walked set before this rule saw it, which collects a file while
+//! dropping the `lib.rs` that declares it — the one shape the sentence above rules out — and
+//! the rule duly reported a declared, compiling file as an orphan, advising a reader to
+//! delete or re-declare correct code. `OD-GATE-025` took the scope off the source set: a
+//! gate run judges every walked file and narrows only what it reports, so the walk this rule
+//! sees is whole again and the assumption holds by construction rather than by nobody having
+//! narrowed yet.
+//!
 //! A crate is likewise identified by a `src` path segment rather than by a `Cargo.toml`
 //! beside it, because a manifest is not a source this walk collects. Measured against this
 //! workspace when the rule was written: sixty source directories found this way, sixty with

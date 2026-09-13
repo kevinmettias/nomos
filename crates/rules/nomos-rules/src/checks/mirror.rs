@@ -11,6 +11,13 @@
 //! the reality it claims to enumerate. The universe declares that check by name, at the
 //! site, and this rule resolves the name against the real source.
 //!
+//! Resolution is cross-file: the check a universe names almost never sits beside it, so this
+//! rule's answer depends on the whole collected source set rather than on the file the
+//! universe is declared in. A run that judged a truncated set would resolve a real check to
+//! nothing and report a **blocking** finding against a declaration that is in fact mirrored.
+//! `nomos gate run --include` did exactly that until `OD-GATE-025` took the scope off the
+//! source set, so a gate run now judges every walked file and narrows only what it reports.
+//!
 //! Three outcomes, and the ordering between the last two is the whole point:
 //!
 //! | The universe | The rule says |

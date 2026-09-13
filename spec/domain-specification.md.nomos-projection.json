@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5a4e26f7d395b533bde5a0f61c36e1a55578b2577c46a77d0e9e08d612f3418e",
-  "inputs_digest": "sha256:8f80129af3917706a2473626bc0fd489976b51c6526bacb2e1b9151dc32ee77c",
+  "content_digest": "sha256:7e5f95fab16e378170764d9903ed35be2593267e663444535d60076e2d1add4d",
+  "inputs_digest": "sha256:bcd0d2aaf40076963b3a535e7315a957312a14f7e6f06778ea811f86f955206b",
   "sections": [
     [
       "Documents",
-      224
+      225
     ],
     [
       "Sections",
-      1818
+      1827
     ],
     [
       "Source blocks",
-      6286
+      6321
     ]
   ],
   "inputs": [
@@ -489,6 +489,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md@authored",
       "hash": "sha256:976dbc3e7de91a5dcca2d62ad0b6ab43726a8e065cbcd1aa5516963cc03ebd93"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md@authored",
+      "hash": "sha256:ee8f60df55168698b0463998c8b6c953f0356311dfed9d1293e434cdc3117461"
     },
     {
       "content": "documents",
@@ -4804,6 +4809,51 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#33",
       "hash": "sha256:f45a99c8d38c65b15434c0e561bb5099c8dc693b25797d228df5b41515b1e68a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#1",
+      "hash": "sha256:db79be79f030c714d5afd78c8f9146dc7da9b50293ea80d1a6040d4f9cd2d35d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#2",
+      "hash": "sha256:2a8f4092bf1e27aa197fb897f5ae23278ad6454859766dedde08a34cc31de849"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#5",
+      "hash": "sha256:909adc20be5cd0f3d678b92c5e9b6a8e510bc3bde46b050f5f2fd221a41cbcd9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#16",
+      "hash": "sha256:fb7223249eb4fd166252c65ef8694c925ae7311f3c0a21706701b89d87f1c39f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#19",
+      "hash": "sha256:982d808eac3098e94e2f6955d5ff230da67f696e8ba07f2dbdd2c19f6b400137"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#24",
+      "hash": "sha256:d34eae5373a137ad5e180bd518f924d54c0c5e20f16f0b450971cc29b6355144"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#27",
+      "hash": "sha256:c54626d54bde8cf48ebaafd5daa070539453b05fd48b560f725ca04c6d5e4253"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#29",
+      "hash": "sha256:d705158d49fbd43f8dffd03c802d11b12250b3303f9f3074152241f804ef7ed7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#34",
+      "hash": "sha256:41621fe4803872282c79df68ab8ec0ce4424d4f23df77f26ca66f261eea5c9f2"
     },
     {
       "content": "headings",
@@ -22719,6 +22769,181 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#36",
       "hash": "sha256:ed966d38d96e8742321ed0be856f486547b12753e834502c212ae0084f71eb41"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#1",
+      "hash": "sha256:99dcf0e626f49b92b4e4e67d7ca91eff710c6c8dd93ee746a411e61e6adb36eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#3",
+      "hash": "sha256:d38673b0d6d9885de22b9d5c56eada57d7f1483469be494ba299a469f8c690de"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#4",
+      "hash": "sha256:6715ca9e3db513827254f1a30838aa112b167061d00abaaa277c6ddd18bce62f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#6",
+      "hash": "sha256:7470895afb94eb2a047171f7624c562df5455083ad46c3eaa773a38ba05b1923"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#7",
+      "hash": "sha256:9fe904e2ef954490c7c7df37f6872a08806de6e79e42011ff2e77030ed08afef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#8",
+      "hash": "sha256:a8e84e48833724995afb2a5fe730862d1945d7c94a5dc682842c98558196b218"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#9",
+      "hash": "sha256:ab6117cce41f3f887ced71cae1982e9f30f83db1a63a5eaa07f2f7dd7e7e8fdd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#10",
+      "hash": "sha256:30b9c2f2f99f2c814dc019c3c2fe32e35a169e646f14538041468ddc01ba51d4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#11",
+      "hash": "sha256:29b33c3cd69e328b71e84911bd156f990af28608fb8ff49781159969cf34150d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#12",
+      "hash": "sha256:b96fcaea84c982cee929a91d2826127e5bcb6dac23821322809c9b74b66e1757"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#13",
+      "hash": "sha256:aa2a316fffc67027eb5327f10be282de1820ac7278ee16c36acf591003cf8386"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#14",
+      "hash": "sha256:d494da318030a7693517494a418eb07afb96f97501e7575a01f547eaad787b08"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#15",
+      "hash": "sha256:88d22d29b459fc9a71d934fcaf3a3872accf355fb19aef36f266f02f90e79f78"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#16",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#17",
+      "hash": "sha256:753954d15e33fca9ea0897607b2ea73f03e12772236813e95b560028176038c7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#18",
+      "hash": "sha256:4b69c8ed803dcd8a2e3d3f7ac3d0cf558fc312625f9b06780492478f1c206c4f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#19",
+      "hash": "sha256:4d7d32c531d9163e48eceab9477cbe4ac41a6278e1fba0ebb5ad02db00f104b5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#20",
+      "hash": "sha256:3a71c89adcd16898f0a56ae780ee4a272d618a8b8db96e40c85dda983635f22e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#21",
+      "hash": "sha256:e075726d6b1c8cf8e3c4ebf0560778ce893a57b701f09a88f82a1eeba27ed073"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#22",
+      "hash": "sha256:a96ec637ab0aba60d82ffc0c105cb60e61f15dcaff110199c2d0696d58c8d64f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#23",
+      "hash": "sha256:f0408246bec6e497d2b7b5a470acf23a9f0010541ef0bd7770cc11d9620c1cf6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#24",
+      "hash": "sha256:ea628af145ad37f68c9fcc211a64754348db7448d32fe4cdd73f5969bb9bd08d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#25",
+      "hash": "sha256:cf6a20cead3adeac9d943d862135f8268dd1a53242fd552f66615b2930f69c62"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#26",
+      "hash": "sha256:c346748de0022680662c9f12f963291cf0ab2e831bf43cd16bc7c89eb74492d9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#27",
+      "hash": "sha256:9c66979b1265603066996cc0eddd762b846829da7ca6dac3b83b82e1a632ae32"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#28",
+      "hash": "sha256:f6ad39df560188e1abacb089d85945eebaca2ae807677d3972f8add84dbdd30e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#29",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#30",
+      "hash": "sha256:e7089907af879b13fc11dc7b9858e88219d16727996fd17174ec6fc857beb070"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#31",
+      "hash": "sha256:04ef2dc06b034f599f00bb4100cb852cc960ed9ba3f0b8150cad7e61114244db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#32",
+      "hash": "sha256:06361143e970910e1b0b076ac3dab800878246db06c0e4b4b85be88883319f43"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#33",
+      "hash": "sha256:8423b8a1c6fba3223c0798e88e0c422689abb63537ef36806f9edcf3b2c0baf9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#34",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#35",
+      "hash": "sha256:4ce7ce36289cb02262112e760c1b0ff2ffcc02056c4f8ce4f406d1f2ab79e93b"
     },
     {
       "content": "blocks",
