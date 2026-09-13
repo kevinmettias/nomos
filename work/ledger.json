@@ -65916,7 +65916,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -65932,7 +65932,30 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.24s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-1d28294da7ccfd5c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-8ea3cb7fd6a0f525.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-d047a80aa7f2318b.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fc7f3114650a3027.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-c166af22a1e42cb3.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-7bca6c85e7186a29.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-d41551fea154d6cc.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-3fb338c970b0e631.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-15afe485737c906b.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-677b0d50cc26c095.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-d1453c60403f001f.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-e256273955311a9e.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-115a2761f72faa7b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-fb1c20a2af433cc4.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-91dbb605c0c2c1f6.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-ed30fea2b99fbd8e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-e8c56575d59b7830.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789284608,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6e82e1bff0c0d282df4e1d8eb46671bff697e507"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -66248,6 +66271,76 @@
         },
         "revision": "f8db4bee5b98d7a640068e13d30976fb8537c8ea"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-STANDARDS-JSON-TIERS-IS-A-SECOND-AUTHORITY-NOBODY-READS",
+      "title": "standards.json declares a layering table in a retired vocabulary that nothing reads and that is 16 members short",
+      "why": "standards.json carries a tiers array of 29 groups and 50 paths, authored by P26-DEPENDENCY-TIER-POLICY so code-standards' own check-dependency-direction could read this repository's band table. Three things are true of it now and all three were measured. It uses the band-N vocabulary OD-RULES-020 retired for named zones. 16 of this workspace's 66 members have no entry: nomos-platform-xvpe, nomos-composer-std, nomos-lang-rust-compiler, nomos-repo-policy, the five nomos-cap policy contracts, nomos-connector-coderabbit, nomos-cap-requirement-trace, nomos-tool-package, nomos-workspace-discovery, nomos-correction-orchestration, nomos-agent-orchestration and nomos-lsp. And nothing in this tree reads it, grepped across every rs, json, toml, yml, py and sh file. OD-RULES-029 decided its disposition: it is a second authority to delete rather than the declaration a future provider would read, because reviving a stale one-third-of-the-triple table in a retired vocabulary would import the 16-member gap into the mechanism's first real consumer.",
+      "done_when": "The tiers array is removed from standards.json, the five repo-policy providers that read that file still parse it, and cargo test --no-fail-fast -p nomos-repo-policy -p nomos-check-orchestration passes. If any reader is found during the work that the grep missed, the item is declined with that reader named rather than the array deleted out from under it.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "standards.json"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-repo-policy",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-DEPENDENCY-COMPLETENESS-CANNOT-SAY-NOT-APPLICABLE",
+      "title": "A repository that declared no architecture gets a finding per crate where OD-RULES-003 says it gets NotApplicable",
+      "why": "OD-RULES-003 decided what a repository declaring no architecture gets from this rule: Applicability::NotApplicable, chosen explicitly over MissingCapability and ConfigurationDisabled with a reason given for each. What it gets is one dependency-completeness finding per member, because completeness::Violations_In returns a finding whenever Zone_Of finds no entry, and on any repository but this one no member has an entry. Inside this workspace the current behaviour is right: a member absent from a declaration this repository did author has genuinely declared nothing. The defect OD-RULES-029 named is that the two cases are indistinguishable while the declaration is a const in the rule's own crate -- this repository declared an architecture and this member is missing from it, versus this repository declared no architecture at all. The rule cannot report NotApplicable honestly because it has no way to know it should.",
+      "done_when": "Either the rule distinguishes the two cases and reports Applicability::NotApplicable for a subject whose repository declared no architecture at all, with a test over a fixture whose members are none of this workspace's; or the item is declined with a measured argument that the distinction is unavailable until OD-RULES-003's third prerequisite -- a place to author a declared architecture as data -- exists, in which case it names that dependency rather than leaving the contradiction unowned. cargo test --no-fail-fast -p nomos-rules -p nomos-contract-tests passes either way.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/dependency/completeness.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null

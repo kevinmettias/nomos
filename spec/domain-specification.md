@@ -210,6 +210,7 @@ profile: domain-specification
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md@authored | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md | authored | 16 | 6 | sha256:66d2427694c21ad26b870820393f14285fbb1678448d0a33f4490a61fd0f1118 |
 | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md@authored | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md | authored | 28 | 8 | sha256:65229767fb7df92fdb3e15faa97875746dd70f7a86d656248cfd622909967161 |
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md@authored | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md | authored | 22 | 7 | sha256:eef4a3f365ef12f634f1fee88c3cf1b2ad45aad74e471e1daf8c8c26603a4228 |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md@authored | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md | authored | 37 | 10 | sha256:96cfa9e9e05cd504f39e05233485d9606967f40dfe7f6c061d1b8a4ecfdcc9c6 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1846,6 +1847,16 @@ profile: domain-specification
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#14 | authored | 2 | What It Costs |
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#18 | authored | 2 | What This Does Not Do |
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#21 | authored | 2 | Status |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#1 | authored | 1 | Whether the layering declaration a rule judges against is read from the repository under check |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#13 | authored | 2 | The Decision |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#15 | authored | 3 | Why not a sixth family |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#20 | authored | 3 | What is actually blocked, and what is not |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#23 | authored | 3 | The `dependency-completeness` behaviour is a defect against an accepted record, not an open question |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#27 | authored | 3 | `standards.json`'s `tiers` array is a second authority, and it is to be deleted |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#31 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#36 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -54278,6 +54289,308 @@ decision rather than an invisible one.
 Accepted, version 1. Twelve named zones; `nomos-platform-std` moves from `Substrate` to
 `Backend`. Amends `OD-RULES-020`, whose own "What This Does Not Do" left open whether the
 eleven zones it named were the final set.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#1
+
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check · hash: sha256:32ca1c6d24bcd031f48cf0ab304c740c1c2de5e9480ff9e2e122220dcb6b3c66*
+
+# Whether the layering declaration a rule judges against is read from the repository under check
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#2
+
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#3
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Question · hash: sha256:081bac139a87fe6e1f85dc84675e8a0c564ce5b09f2466c99f9e5407af93cc23*
+
+`Check_Dependency_Direction` and `Check_Dependency_Completeness` judge every edge against
+`ZONES` and `Permits` in `crates/rules/nomos-rules/src/checks/dependency/zones.rs`, where
+`ZONES` is a Rust slice naming this workspace's own crates as string literals and `Permits`
+is a hand-written match. The item that raised this asked whether that declaration becomes an
+`OD-RULES-011` sixth family — a capability fact read from the repository under check — or
+stays compiled, and said no record argues either way.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#4
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Question · hash: sha256:a02fcb1fde352c8f58e96245e795f437592b044aef3a9016c16eb46d9c78c315*
+
+**A record does.** `OD-RULES-003` decided it, in those words: "a declared architecture is
+expressed as data, not as a bespoke Rust test." So the question this record can honestly
+answer is not the one it was asked. It is narrower and more useful: which seam that data
+arrives through, how much of `OD-RULES-003`'s mechanism is already built, and what the one
+missing piece is.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#5
+
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#6
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / What Was Measured · hash: sha256:157e7c464b549c04771839c4f9b5efa304f67673af1db9ccfd6e6f599601b930*
+
+Measured 2026-09-13, against this workspace.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#7
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / What Was Measured · hash: sha256:36c2613a0b4860e4b794413dc53ec1a082f13dfdfe19f29a76709bc9dd077b80*
+
+**The declaration, and the gap it leaves elsewhere.** `ZONES` holds 66 entries, one per
+workspace member, as string literals. On any other repository no member matches, so
+`violations::Violations_In` takes its early exit and returns nothing, while
+`completeness::Violations_In` returns one `dependency-completeness` finding per member. A
+foreign workspace therefore gets a finding per crate saying it declared nothing, and silence
+on the layering question the rule exists to answer.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#8
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / What Was Measured · hash: sha256:c19b7136e97ff240a78c15b4f9de45199196e79e85b5043dcab07d584fd349e8*
+
+**Two of `OD-RULES-003`'s three prerequisites are built.** That record named three things
+that "do not exist yet" and left the migration unowned. Today:
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#9
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / What Was Measured · hash: sha256:25f26dc0a7b83d8a24e213a29be17da10c99f21d63ac669c8c276616778647fd*
+
+| `OD-RULES-003` named | today |
+|---|---|
+| a capability establishing the observed graph as a fact at a stated `Guarantee` | **built** — `nomos-cap-dependency`, at `FactVariant::SemanticallyResolved`, the exact level that record specified and argued for over `Syntactic` |
+| a rule consuming both through `OD-RULES-001`'s seam | **built** — `Check_Dependency_Direction` reads `DependencyPayload` through the `FactReader` |
+| a place to author a declared architecture as data rather than a Rust `const` table | **not built** — `ZONES` is still the `const` table |
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#10
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / What Was Measured · hash: sha256:e6bcd0d1cfa64af47cb848b2450e59c7fd0bdcfed9f32776eaa2391ba167b6c5*
+
+So the mechanism is two-thirds complete, matching its own specification, and the missing third
+is exactly what this item asked about.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#11
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / What Was Measured · hash: sha256:d526bb6277fc0b49f0f3f3e78f925ad29fefef58dd06c2a4ed0e5e5f0aa557de*
+
+**The second copy.** `standards.json` declares a `tiers` array: 29 groups, 50 paths, in the
+`band-N` vocabulary `OD-RULES-020` retired for named zones. 16 of this workspace's 66 members
+have no entry at all — `nomos-platform-xvpe`, `nomos-composer-std`, `nomos-lang-rust-compiler`,
+`nomos-repo-policy`, the five `nomos-cap-*-policy` contracts, `nomos-connector-coderabbit`,
+`nomos-cap-requirement-trace`, `nomos-tool-package`, `nomos-workspace-discovery`,
+`nomos-correction-orchestration`, `nomos-agent-orchestration` and `nomos-lsp`. Grepped across
+every `.rs`, `.py`, `.json`, `.yml`, `.toml` and `.sh` in the tree: **nothing reads it.** It
+was authored by `P26-DEPENDENCY-TIER-POLICY` so that code-standards' own
+`check-dependency-direction` could read this repository's band table.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#12
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / What Was Measured · hash: sha256:930c078ba69e94409e6a8680e5569e92b6de49dbb6b5d918713ffbc053b7350f*
+
+**What a sixth family would cost.** Less than the item assumed. `OD-PACKAGE-015` collapsed
+the five `OD-RULES-011` families from six crates into one, so a sixth is a module in
+`nomos-repo-policy`, not a new crate, and `OD-RULES-019`'s `standards_document` already holds
+the shared read step.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#13
+
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#14
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision · hash: sha256:67e5dace0dd7f8e75503d28d1c7de34d6ba0ef3910d4e1008e9fdd4d58e79d2c*
+
+**The declaration is read from the repository under check — `OD-RULES-003` decided that and
+this record does not re-decide it. It is not an `OD-RULES-011` sixth family. The two seams
+carry different things, and that difference is the whole answer.**
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#15
+
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / Why not a sixth family · hash: sha256:4f30e49c91ed0bc83051ccbc9348f2e41df53410f668cab1e19f6a6bdbac0163*
+
+### Why not a sixth family
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#16
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / Why not a sixth family · hash: sha256:b7a843d807b69de0fa7db59b7b08785e644f05a8149496edf5c56fa7bd65309c*
+
+An `OD-RULES-011` family is a repository's **policy parameters** — which words are banned, how
+many parameters a function may take. It parameterizes a judgment the rule keeps making.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#17
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / Why not a sixth family · hash: sha256:a8ce143aa78e83666fef5005765c9ee63f8c08a74d3679ec6345d81d5f7af48f*
+
+`OD-RULES-003`'s declared architecture is a **triple**: a finite set of named components, an
+order over them, and named exceptions the order alone cannot express. `ZONES` is only the
+first of the three. `Permits` is the other two.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#18
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / Why not a sixth family · hash: sha256:43ac642ab8aaa8067d6d5e85702beeb88eff628d83ed8179a585c96b97d0afcf*
+
+Shipping the membership map as a sixth family and leaving `Permits` compiled would move
+one-third of the triple and fix nothing for the repository it was moved for: a foreign
+workspace would author `crate → zone` in *this* workspace's twelve-zone vocabulary and still
+be judged by *this* workspace's permitted-edge matrix. `OD-RULES-003` made the order and the
+exceptions part of the declaration precisely so a second party could hold a different one,
+which is the seam `OD-CAPABILITY-002` drew and that record cites: an agreement does not belong
+to the party enforcing it.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#19
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / Why not a sixth family · hash: sha256:28bac310169126e5a4b32d64996d8b4b9547e2e5eb5a08f02e849bbe9ba7168f*
+
+That is also why the vocabulary has to travel with the data rather than be assumed. A zone
+lattice with reasons behind each cell — `OD-RULES-020`, `OD-RULES-028` and `OD-CAPABILITY-015`
+each argue one — is this workspace's architecture. It is not every repository's, and a
+declaration format that cannot express a different one has not externalized the declaration,
+only moved it.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#20
+
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / What is actually blocked, and what is not · hash: sha256:430f57dacd8328dad304430152579f12176372ba5906a7f679a7fcc2b8cd64eb*
+
+### What is actually blocked, and what is not
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#21
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / What is actually blocked, and what is not · hash: sha256:e02fc50235e4a9fad6297f70019c2ceea95b9c566aaf24270c11b628b271e1aa*
+
+Not the fact side: `nomos-cap-dependency` establishes the observed graph, at the resolution
+`OD-RULES-003` specified. Not the rule side: the comparison already runs through the reader.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#22
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / What is actually blocked, and what is not · hash: sha256:1eb9960bdf5879235cc578d79138d2deebc7958afee4f89096e14504d2f5d7dc*
+
+What is missing is a format for the triple and a provider that reads it — the third
+prerequisite, unowned since `OD-RULES-003` was accepted because that record deliberately
+declined to schedule the migration. It is now the only thing between two built thirds and a
+rule that answers for any repository.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#23
+
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / The `dependency-completeness` behaviour is a defect against an accepted record, not an open question · hash: sha256:ee77300be1a7eefd0bba310a4821ca2e32037f192807aa779526dcd3447f59d5*
+
+### The `dependency-completeness` behaviour is a defect against an accepted record, not an open question
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#24
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / The `dependency-completeness` behaviour is a defect against an accepted record, not an open question · hash: sha256:5bf3d6e93dbc88459bb852c6edd969cf3765ef1791324769d44694688d3dac77*
+
+`OD-RULES-003` says what a repository declaring no architecture gets:
+`Applicability::NotApplicable`, chosen over `MissingCapability` and `ConfigurationDisabled`
+with a reason given for each. What it gets today is a `dependency-completeness` finding per
+member.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#25
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / The `dependency-completeness` behaviour is a defect against an accepted record, not an open question · hash: sha256:63ba5775f4e29c681b61c54100bde0aaccf7d27b8e46bb37c2dfb30fd8115cff*
+
+Inside this workspace that is right — a member absent from a declaration this repository *did*
+author has genuinely declared nothing. The defect is that the compiled table cannot tell that
+case from the other one: **"this repository declared an architecture and this member is missing
+from it" and "this repository declared no architecture at all" are indistinguishable when the
+declaration is a `const` in the rule's own crate.** Externalizing the declaration is what makes
+them distinguishable, and until then the rule cannot report `NotApplicable` honestly, because
+it has no way to know that it should.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#26
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / The `dependency-completeness` behaviour is a defect against an accepted record, not an open question · hash: sha256:ca6f47aebd3300e9616bda650b3fd7671a2b78082551b1b3eea1e6c2c39fca7a*
+
+That is filed as its own item rather than argued further here.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#27
+
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / `standards.json`'s `tiers` array is a second authority, and it is to be deleted · hash: sha256:39e601341df09b8683f3d757bb3688d22df8b9c25b9d367b3ad5642ace9ae645*
+
+### `standards.json`'s `tiers` array is a second authority, and it is to be deleted
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#28
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / `standards.json`'s `tiers` array is a second authority, and it is to be deleted · hash: sha256:2b9a7677fe6fdcdd0bf0e01cb4920e8b8da88cfe7069987ac39e3101ee42a142*
+
+Not kept as the declaration a provider would read, and not treated as code-standards' input
+this workspace does not own — the file is this repository's own, and its five `OD-RULES-011`
+families read from it.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#29
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / `standards.json`'s `tiers` array is a second authority, and it is to be deleted · hash: sha256:6813da572787e685d9014ef3a0ab5f611706e4fd4c74970cba38e5f5287583d7*
+
+It is deleted because every property that would make it the future declaration is false. It
+carries one-third of the triple, in a vocabulary `OD-RULES-020` retired, 16 of 66 members
+short, and read by nothing in this tree. Reviving it once the format exists would import that
+16-member gap into the mechanism's first real consumer, and re-expressing it in zone
+vocabulary is authoring it fresh rather than reusing it.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#30
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / The Decision / `standards.json`'s `tiers` array is a second authority, and it is to be deleted · hash: sha256:e7bb8951476de8d9dc931062a6ba53393d935ed952d8b15a45bdc4c96a6a2161*
+
+Deleting it is also what makes the reconciliation owned. A stale declaration nobody reads has
+no failing test and no owner; the gap is invisible precisely because nothing depends on it.
+Removing it means the next declaration is authored once, against the 66 members that exist, by
+the item that builds the format — rather than inherited half-done from a table written for a
+different tool.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#31
+
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#32
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / What This Record Does Not Do · hash: sha256:1ec12ccb204ec7da2a3114898f5bfbc57218063104d3e56d41fee9d2acb22c1b*
+
+It does not build the format, a contract crate, or a provider. It does not change
+`nomos-rules`: `ZONES` and `Permits` stay exactly as they are until the third prerequisite
+exists.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#33
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / What This Record Does Not Do · hash: sha256:13eeb05dd0e312c4814d6d92ae77749fe0a7a5cf67616ae304d84f1839e30c39*
+
+It does not edit `standards.json`. The deletion it decides is filed as its own item, because
+this record holds only its own two files.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#34
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / What This Record Does Not Do · hash: sha256:6b322fbddf5dfecbe4ebcfe04659da4b2fc81baccb760f038d214107cffa13f6*
+
+It does not reopen `OD-RULES-003`, `OD-RULES-011` or `OD-RULES-020`. It applies the first,
+declines to stretch the second, and keeps the third's vocabulary.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#35
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / What This Record Does Not Do · hash: sha256:47808d4ea6c77ec172d8fcac5c205bfbf96e84121d4f149d36259b3d4801f0ce*
+
+It does not schedule the migration. `OD-RULES-003` declined to, deliberately, and nothing
+measured here changes that — except that the cost is now two-thirds lower than when that
+record declined it, which is worth knowing the next time somebody asks.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#36
+
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#37
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Status · hash: sha256:fd133e5b9e4328e59b69d7e377f2f1c1ce928fe8a488e0d1ef1803a91b5bbdbb*
+
+Accepted. The declaration is data read from the repository under check, per `OD-RULES-003`; it
+is that record's triple and not an `OD-RULES-011` family, because a membership map without its
+lattice externalizes nothing; two of the three prerequisites are built to specification and the
+third is unowned; the foreign-repository behaviour contradicts `OD-RULES-003`'s `NotApplicable`
+and is filed as a defect; and `standards.json`'s `tiers` array is a second authority to delete
+rather than the declaration to revive.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
