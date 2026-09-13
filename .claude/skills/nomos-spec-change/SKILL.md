@@ -148,6 +148,36 @@ Two things follow that surprise people:
 Every edit to a record body changes the store, so **render after the last word is written**, not
 before. A record you touch again is a diagram you render again.
 
+### Rebuild the binary after the last record edit, not merely once in the worktree
+
+Record content is **compiled into the binary**. Building it in the worktree is necessary and
+not sufficient: the common failure is a binary that was right when it was built and wrong
+afterwards — build, edit the record again, re-render. The second render emits the superseded
+text, and **every check around it passes**. `freshness` compares the body against the sidecar
+the same stale binary just wrote, so the two agree; the store and the file on disk do not.
+
+Measured twice within an hour on 2026-09-06. One session rendered a projection carrying a
+record citation it had already replaced. The other, running a binary copied to a scratchpad
+at session start, re-rendered and produced **85 insertions against 2180 deletions**, having
+silently dropped the projection entries for `OD-GATE-023`, `OD-HOST-011`, `OD-HOST-012`,
+`OD-AGENT-004` and the amended `OD-RULES-025`, at exit 0.
+
+- **`cargo` does track `docs/records` as a build input**, so a plain rebuild is sufficient —
+  you do not need to touch a source file or clean anything. What is not sufficient is reusing
+  a binary built or copied before the edit.
+- **Read the render diff. That is the check that catches this**, and nothing else does. The
+  counts each render prints — relations, decisions, documents, sections — should move the way
+  your edit moved them: adding one record adds one decision. A `git diff --stat` whose
+  deletions dwarf its insertions is this bug, every time.
+
+**Record-fed and source-fed are not the same input, and one session filed a whole item on the
+confusion.** A projection's input digest is fed by the *record set*, not by repository source.
+Measured directly: a source-only change leaves `freshness` at exit 0, and only a record change
+stales it. So a mismatch that appears after you edited source is not evidence that source
+feeds the digest — it is evidence your binary is stale. That misreading has already been
+filed once as a defect in this skill's own render rule and declined; do not re-derive it from
+the symptom.
+
 ### The diagram is nobody's territory, and you may re-render it
 
 `diagrams/relations.mmd` is reserved by no item and re-rendering it is not a territory
