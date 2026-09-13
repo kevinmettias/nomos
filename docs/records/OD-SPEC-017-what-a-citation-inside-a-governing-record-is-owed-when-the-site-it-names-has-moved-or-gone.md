@@ -3,7 +3,7 @@ id: OD-SPEC-017
 type: decision
 title: What a citation inside a governing record is owed when the site it names has moved or gone
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - spec
@@ -206,6 +206,31 @@ The three that were real were all renames whose assertions still hold —
 `OD-LEDGER-013`'s two pattern-refusal tests and `OD-ANALYSIS-006`'s coherence test — and each
 record now names the test its citation became.
 
+### The form, stated
+
+A record declares that a name it writes down is not expected to resolve by writing, anywhere
+in its own text, the backticked name followed by exactly **`does not resolve`**:
+
+> `Test_Anything` does not resolve — it stands for whatever check a record happens to be
+> talking about.
+
+One closed form, chosen against the alternatives for reasons that are not aesthetic. It is
+ordinary prose, so it renders as a sentence a reader benefits from rather than as machinery
+they have to look past. It is plain text, so it round-trips through the specification store
+with no new markup — **no record in this repository contains an HTML comment**, and making the
+first one carry a mechanically-load-bearing marker would put the guard's correctness on a
+store behaviour nothing has ever exercised. And it sits beside the citation, which is the
+whole point: the author who knows why the name will not resolve is the author writing it.
+
+The form says only that the name is not expected to resolve. It deliberately does not
+distinguish a placeholder from a name being retired, because the guard does not need to and a
+second form would be a second thing to get wrong. The sentence the author writes after it is
+where the difference belongs, and every use below carries one.
+
+This record uses the form for all twelve names it quotes, which is the largest single block of
+them in the corpus — a record that states a convention and does not follow it has stated
+nothing.
+
 ### Why this record made the mistake it was written about
 
 Version 1 counted citations by resolving a name and not by reading what the sentence around it
@@ -214,13 +239,49 @@ up: a count that does not distinguish claim-kinds will group things that need di
 answers. The measurement was right and the grouping was wrong, which is the failure this
 repository keeps finding and is worth one more sentence saying so plainly.
 
+## The Names This Record Quotes, Declared
+
+Every test name written down above is quoted as evidence about citations, not cited as
+coverage. Each is declared here in the form this record states, so the guard it specifies has
+nothing to report against the record that specifies it.
+
+- `Test_Registered_` does not resolve — a line-wrap truncation, quoted as an example of one.
+- `Test_A_Capability_Id_Should_Be_` does not resolve — the same.
+- `Test_The_Registry_Should_Match_The_` does not resolve — the same.
+- `Test_A_Check_That_Does_Not_Exist_Anywhere_In_This_Tree` does not resolve — a placeholder,
+  quoted as an example of one, and named by prose that says so where it is cited.
+- `Test_This_Check_Does_Not_Exist_Anywhere` does not resolve — the same.
+- `Test_Anything` does not resolve — the same.
+- `Test_Name` does not resolve — the same.
+- `Test_X_And_More` does not resolve — the same.
+- `Test_A_Lapsed_Item_Should_Refuse_A_New_Holder_And_Keep_The_Old_One_Visible` does not
+  resolve — quoted as one of the two that are a record noting its own history.
+- `Test_A_Phantom_Mirror_Should_Fail_The_Command` does not resolve — the same.
+- `Test_A_Held_Pattern_Should_Refuse_Every_Other_Claim_On_The_Board` does not resolve — quoted
+  as one of the three renames, since repaired in `OD-LEDGER-013`.
+- `Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held` does not resolve — the
+  same.
+- `Test_No_Strength_Should_Refuse_A_Trace_Claim` does not resolve — quoted as the third
+  rename, since repaired in `OD-ANALYSIS-006`.
+- `Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` does not resolve — quoted as
+  one of the two the code itself annotates where the test used to be.
+- `Test_Two_Items_Writing_Different_Records_Should_Be_Claimable_At_Once` does not resolve —
+  quoted as the one rename whose successor changed subject as well as name.
+
+A declaration may wrap, as three of these do, and the guard compares with whitespace
+normalized for exactly that reason: a convention that a long name plus a fixed phrase cannot
+fit on one line would be a convention the longest names could never use, which is the
+truncation defect this record already measured, arriving a second time by a different door.
+
 ## Status
 
-Accepted, version 2. A test name cited in a governing record is a live reference and is owed resolution,
+Accepted, version 3. A test name cited in a governing record is a live reference and is owed resolution,
 by a contract test of `rule_contract_citation.rs`'s shape using `mirror.rs`'s resolution,
 excluding line-wrap truncations and prose-declared non-existence. A path citation is dated
 history and a dead one is not a defect. The five fully-unresolved test citations —
 `OD-LEDGER-012`, `OD-LEDGER-013` twice, `OD-GATE-004` and `OD-ANALYSIS-006` — are filed for
 repair — of which **three** were real and are now repaired, and two were the record noting its
 own history and needed no edit. The tombstone comment two sites already carry is the convention
-the rest follow, and the guard carries three exclusions rather than two.
+the rest follow, and the guard carries three exclusions rather than two. Version 3 states the
+one prose form a record uses to declare a name it writes down is not expected to resolve, and
+uses it for all thirteen names this record quotes.

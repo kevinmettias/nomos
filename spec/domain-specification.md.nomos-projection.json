@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:faf053e7b9f700c2073e15c1db3c75a59f2edc4051f30b92b3375daffc4f731b",
-  "inputs_digest": "sha256:6983a2e8b073fc4137af8a76278050287a55794a82eb5805534ca5a836054a87",
+  "content_digest": "sha256:43031f67628d4513f36deb247466af543ae637b6d4ecf76ff7240245963fad8d",
+  "inputs_digest": "sha256:ff209d629d3041b4073c133a2e7e07117612eaa32ede4ef1a02d7167c98d5beb",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1882
+      1884
     ],
     [
       "Source blocks",
-      6522
+      6532
     ]
   ],
   "inputs": [
@@ -1098,7 +1098,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md@authored",
-      "hash": "sha256:239f1677411871d68199e7aa0c340412401f9e87fda6a35db980a1dacccf3257"
+      "hash": "sha256:176649f9cacd5f4aae0ac3cd2e983cf1aa5b691fcd10f0ac1f48a2e1609b3d0a"
     },
     {
       "content": "documents",
@@ -9973,12 +9973,22 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#50",
-      "hash": "sha256:db8e66a8e710cababf566827f13375b962797d7b091b1bb79703346c08ced22e"
+      "hash": "sha256:2c116b44fa6a58f91a5dae4758bc8bf5a257cadf2444b50a46ca8890a2bf0cab"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#52",
-      "hash": "sha256:83c051076c5bf99d4abba7428e5c314b8c8342788d156942eab2f03dea5cebc4"
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#56",
+      "hash": "sha256:62de3820da3624a22a2616c2b2bfac9f6f285937e1b82682285781d0cf474847"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#58",
+      "hash": "sha256:c68f6de2660c749cbad473fdf95e98295662834d26f948721af09a256761ae29"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#62",
+      "hash": "sha256:026edbec5f95a75483a853375031bd690a68b993858244f7af6cea0639a1b506"
     },
     {
       "content": "headings",
@@ -41368,22 +41378,72 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#50",
-      "hash": "sha256:22a005a3ccd168b119d0d911134ba33c119dbc27386aa571cb252c4b83c9c3d5"
+      "hash": "sha256:c99ae222075eed7ea6cd6c2381099d3d51e94792ea825d4d7dbed76b546f7615"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#51",
-      "hash": "sha256:a963b7d13cac3e961fde4a0f5031aa5397f108e773ff28b2707412c49d311687"
+      "hash": "sha256:596c39e1c0a8e709746a286ffa38bb2f5329b5ff71dda34a7d45fd4adfc95670"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#52",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:1546a17cc456b2712b16450d906f82c24a26e5f7ee34f87f888aa1aebaaba647"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#53",
-      "hash": "sha256:e31d1a2051f124899602d47b0080da6e6b9b762a1cf63a18b786649bb5713c97"
+      "hash": "sha256:c346fd634c4a381e212e0d519c70ffe37684dac5b2455dbaf6b1cab2b10556ff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#54",
+      "hash": "sha256:1c99c2e7743a27f9c11753a82dbbe0ed9ac184b34aa35cb31287a348d3b5ef27"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#55",
+      "hash": "sha256:9849d4f9987335c0bd8e1ea622106c45a7b8abda9449619db272636153132d77"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#56",
+      "hash": "sha256:22a005a3ccd168b119d0d911134ba33c119dbc27386aa571cb252c4b83c9c3d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#57",
+      "hash": "sha256:a963b7d13cac3e961fde4a0f5031aa5397f108e773ff28b2707412c49d311687"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#58",
+      "hash": "sha256:1296322187d72c0ba30f286e1e0dda2f77b3aa84733a1ecc097c6e4dc2970c46"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#59",
+      "hash": "sha256:b8f8f60db2a4a9b90e7aea684016630521b5dbef0e41e77aab51051706f017e3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#60",
+      "hash": "sha256:525ac83c7e5aa93c82029c85497204eb3070f00ff5ac4d2b078635d3687279ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#61",
+      "hash": "sha256:8eadc3683c978d02fe3a558821fc4485715ba909aacc00740a0242f31bdfd23e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#62",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md#63",
+      "hash": "sha256:159e98d0942d1b9e1b930f39e6a5d582f952ad7812ce7a55263c9e7a70bd2c60"
     },
     {
       "content": "blocks",
