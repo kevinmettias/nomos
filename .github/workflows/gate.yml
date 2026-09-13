@@ -63,9 +63,18 @@ jobs:
       # characters are how a pin becomes a paste nobody can check.
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
-      # The toolchain is pinned in rust-toolchain.toml and honoured automatically.
-      # It is nightly because rustfmt's Allman brace option is unstable -- see
-      # rustfmt.toml, which also records why `cargo fmt --check` is NOT a gate step.
+      # The toolchain is pinned in rust-toolchain.toml and honoured automatically. It is
+      # `1.88.0` -- an exact release, not a channel name, for the same reason the `uses:` above
+      # is a commit and not a tag: a floating reference changes what this job runs on a morning
+      # nobody committed anything.
+      #
+      # It used to be `nightly`, and this comment used to say so: rustfmt's Allman brace option
+      # (`brace_style = "AlwaysNextLine"`) is nightly-only. `OD-GATE-012` dropped that pin,
+      # because the option's only consumer is `cargo fmt` and `cargo fmt` is forbidden in this
+      # workspace -- a toolchain pinned for a command nobody may run is pinned for nothing.
+      # rustfmt.toml still records the intended style, and still records why `cargo fmt --check`
+      # is NOT a gate step; on a stable toolchain its `unstable_features = true` now fails loudly
+      # rather than being ignored, which that file argues is the better failure.
       - name: Show toolchain
         run: cargo --version && rustc --version
 
@@ -151,6 +160,21 @@ jobs:
       # `--all-targets`, because several of the `&& let` sites this floor exists for are inside
       # `tests/`; checking library code alone would under-measure the same defect `OD-GATE-006`
       # found.
+      #
+      # What this step buys changed when `OD-GATE-012` dropped the toolchain pin to `1.88.0`,
+      # and saying so is the point of this paragraph. The pin now *equals* the declared floor,
+      # so `Lint` and `Test` above already compile on this exact compiler, and this workspace
+      # declares no bench and no example for `--all-targets` to reach beyond what they build.
+      # This step is therefore not reaching a compiler the rest of the gate never sees, the way
+      # it did while the pin was `nightly`.
+      #
+      # It is kept, and not because removing it would be work. What it catches now is the two
+      # values *diverging*: a `rust-version` bump without a repin, or a repin past the floor,
+      # leaves this step checking a release the rest of the gate no longer exercises -- and that
+      # is precisely the state nothing else here would report, since a gate whose every step
+      # runs above the declared floor is how `rust-version` came to sit at a false `1.85`
+      # unnoticed (`P11-MSRV-UNCHECKED`, `OD-GATE-006`). The redundancy is the healthy reading
+      # of this step, not the argument against it.
       #
       # Linux only, matching `Lint` and `Rules` below, and for the reason `OD-GATE-009` measured
       # for both: no `cfg(windows)`, `cfg(unix)` or `cfg(target_os = ...)` anywhere in this

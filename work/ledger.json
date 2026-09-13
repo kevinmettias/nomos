@@ -68263,6 +68263,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P96-THE-GATE-WORKFLOW-TELLS-A-READER-IT-RUNS-ON-NIGHTLY",
+      "title": "The gate workflow states it runs on nightly, and it has not since OD-GATE-012",
+      "why": "gate.yml line 67 says: It is nightly because rustfmts Allman brace option is unstable. rust-toolchain.toml pins channel 1.88.0 and explains at length that the nightly pin was dropped because it was pinning a toolchain for a command nobody may run. OD-GATE-012 is that decision, and it names this exact comment under What This Record Does Not Decide: its own territory did not reach the workflow because P11-MSRV-UNCHECKED held it concurrently, so it states plainly that the comment is now stale and asks whichever item next touches it to correct it. Nothing has. A reader of the workflow is told the build runs on a floating nightly, which is false in both halves -- not nightly, and not floating. rustfmt.toml is already correct and already cites OD-GATE-012, so the workflow is the only file still saying it. Separately, what the Compatibility floor step buys has changed and nothing says so: with the toolchain pinned to 1.88.0 and rust-version 1.88, that step now runs cargo check on the same compiler Lint and Test already use, over a target set this workspace has no benches or examples to widen -- measured, not assumed. It still catches the pin and the step diverging, which is a real thing to catch, but it is no longer reaching a compiler the rest of the gate does not.",
+      "done_when": "The Show toolchain comment says what rust-toolchain.toml actually pins and why, citing OD-GATE-012, and no longer says nightly. The Compatibility floor step comment says that the pinned toolchain currently equals the declared floor, so what the step catches is the two diverging rather than a compiler the rest of the gate never reaches -- without implying the step is therefore useless, because divergence is exactly what would otherwise go unnoticed. No step name, no run line and no step ordering changes, because nomos_ledger::Derive_Step reads the step named Lint to build work finish argv and nomos-cli tests/gate_step/step_order.rs asserts every cargo install precedes the first cargo test; both suites pass.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".github/workflows/gate.yml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "t_seam-21e4d711588fa8dc.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-eb881b37502cc056.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-6e4edc82a01dbde3.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-ae0b617102dd3009.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-04ea16aad0fabd75.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-3280349c95fefea2.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-5e1c9f4878575f71.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-938ce3bf1a5089c5.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-94d7292345d520d6.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-813c14e0af29f347.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-edce0034430d69a3.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-1da870d5dcc7bd73.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-cb3e049ca967cf9a.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-586b71f69871fb5c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-0fe4577065c5f238.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-a4c580f5f4e07fa0.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-c2ff04d6078661b9.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-600bb9d904e3ddd2.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-e501df974a7977c4.exe)\n     Running tests\\scope_verification_integration.rs (target\\debug\\deps\\scope_verification_integration-d9841bb6c61f3cb8.exe)\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1789320394,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "abae1225f6ef16a883eba71a3d394c7d85e1d49b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
