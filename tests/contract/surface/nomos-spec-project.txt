@@ -16,6 +16,7 @@ pub enum nomos_spec_project::Format
 pub enum nomos_spec_project::ProjectError
 pub enum variant nomos_spec_project::Content::Blocks
 pub enum variant nomos_spec_project::Content::Documents
+pub enum variant nomos_spec_project::Content::Families
 pub enum variant nomos_spec_project::Content::Headings
 pub enum variant nomos_spec_project::Content::Lineage
 pub enum variant nomos_spec_project::Content::Neighbourhood

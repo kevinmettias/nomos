@@ -40,6 +40,11 @@ const SEEDED_BY_RECORDS: &[Content] = &[
     // subject-scoped -- before then nothing selected it, and this list's own message says why
     // omitting a kind the store answers for is not harmless.
     Content::Neighbourhood,
+    // Answered for the same reason `Neighbourhood` is: a family view is the relation rows
+    // rolled up by the identifier each end carries, and a records-only store holds both.
+    // `OD-PROJECT-006` decided this view is deliberately not required, which is a different
+    // question from whether a seeded store can answer for it.
+    Content::Families,
 ];
 
 /// Whether every section of a profile reaches a kind a seeded store answers for.
@@ -213,7 +218,18 @@ fn Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content(
 
     assert_eq!(
         screened.renders,
-        Named(&["diagram-set", "domain-specification", "html-site", "traceability-matrix"]),
+        // `relation-families` renders here and is deliberately *not* required.
+        // `OD-PROJECT-006` decided the required relation projection is the full one, because a
+        // projection is required for being a re-render obligation and this is a reading aid
+        // nobody compares against the store. That it *could* be required is what this set
+        // says; what the gate asks for is `Test_The_Required_Projections_Should_Render`.
+        Named(&[
+            "diagram-set",
+            "domain-specification",
+            "html-site",
+            "relation-families",
+            "traceability-matrix",
+        ]),
         "the set of profiles that render without a corpus moved. This is the set the Required \
          projections step may draw from, so a change here changes what the gate can ask for."
     );

@@ -360,3 +360,99 @@ fn Neighbourhood_Statuses(store: &nomos_spec_store::SpecificationStore, subject:
         })
         .collect();
 }
+
+/// A family's internal edges do not appear between families.
+///
+/// `OD-RULES-027` naming `OD-RULES-009` is the resolution the full diagram already shows. A
+/// family view that counted it would answer the question it was built to replace, and would
+/// draw every family with a self-edge whose weight said only how internally cross-referenced
+/// it is.
+#[test]
+fn Test_A_Familys_Internal_Edges_Should_Not_Appear_Between_Families()
+{
+    let store = Seeded();
+
+    let pairs = Family_Pairs(&store);
+
+    assert!(!pairs.is_empty(), "no family pair was selected at all");
+    assert!(
+        pairs.iter().all(|((from, to), _)| return from != to),
+        "a family was drawn against itself: {pairs:?}"
+    );
+}
+
+/// An edge to a node carrying no ordinal is drawn between families, not as a dangling end.
+///
+/// The grouping is total: an identifier with no trailing ordinal is a family of one rather
+/// than a node outside every family. That is what keeps `identifier_prefix`'s failure mode --
+/// one family's internal edges plus every edge leaving it hanging -- from reappearing here,
+/// and `OD-PROJECT-006` named that failure as the reason a filter cannot express this view.
+#[test]
+fn Test_An_Edge_To_A_Node_With_No_Ordinal_Should_Still_Join_Two_Families()
+{
+    let store = Seeded();
+
+    let pairs = Family_Pairs(&store);
+
+    let singleton: Vec<&(String, String)> = pairs
+        .iter()
+        .map(|(pair, _)| return pair)
+        .filter(|(from, to)| return from == "D" || to == "D")
+        .collect();
+
+    assert!(
+        !singleton.is_empty(),
+        "no edge reached the `D` family, so the total-grouping claim went unchecked: {pairs:?}"
+    );
+    assert!(
+        singleton.iter().all(|(from, to)| return !from.is_empty() && !to.is_empty()),
+        "an edge was drawn with an end belonging to no family: {singleton:?}"
+    );
+}
+
+/// Two selections of one store are identical and ordered.
+///
+/// A grouping is a fold over a map, and a hash map's iteration order would pass every
+/// assertion above and then make two renders of one store differ -- which the freshness
+/// sidecar's determinism does not permit.
+#[test]
+fn Test_A_Family_View_Should_Select_Identically_Twice()
+{
+    let store = Seeded();
+
+    let first = Family_Pairs(&store);
+    let second = Family_Pairs(&store);
+
+    assert_eq!(first, second);
+    let mut sorted = first.clone();
+    sorted.sort();
+    assert_eq!(first, sorted, "family pairs are emitted in order, not in map order");
+}
+
+/// Every `((from, to), edge count)` the families section selects.
+fn Family_Pairs(store: &nomos_spec_store::SpecificationStore) -> Vec<((String, String), String)>
+{
+    let profile = Profile::Parse(
+        r#"{ "id": "probe", "title": "Probe", "format": "markdown", "output": "probe.md",
+             "sections": [{ "title": "Families", "content": "families" }] }"#,
+    )
+    .expect("parses");
+
+    let projection = Select_Projection(store, &profile).expect("selects");
+
+    return projection
+        .sections
+        .into_iter()
+        .flat_map(|section| return section.items)
+        .map(|item| {
+            let named = |name: &str| {
+                return item
+                    .fields
+                    .iter()
+                    .find(|(field, _)| return field == name)
+                    .map_or_else(String::new, |(_, value)| return value.clone());
+            };
+            return ((named("from"), named("to")), named("edges"));
+        })
+        .collect();
+}

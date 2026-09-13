@@ -17,6 +17,7 @@ pub enum Content
     Lineage,
     Omissions,
     Neighbourhood,
+    Families,
 }
 
 impl Content
@@ -37,6 +38,7 @@ impl Content
             Self::Lineage => "lineage",
             Self::Omissions => "omissions",
             Self::Neighbourhood => "neighbourhood",
+            Self::Families => "families",
         };
     }
 
@@ -60,6 +62,7 @@ impl Content
             Self::Lineage,
             Self::Omissions,
             Self::Neighbourhood,
+            Self::Families,
         ];
     }
 }
@@ -92,6 +95,7 @@ mod tests
                 Content::Lineage => 8,
                 Content::Omissions => 9,
                 Content::Neighbourhood => 10,
+                Content::Families => 11,
             };
         }
 
@@ -127,5 +131,6 @@ mod tests
         assert_eq!(Content::Suites.Label(), "suites");
         assert_eq!(Content::Omissions.Label(), "omissions");
         assert_eq!(Content::Neighbourhood.Label(), "neighbourhood");
+        assert_eq!(Content::Families.Label(), "families");
     }
 }

@@ -2,7 +2,7 @@
 
 use super::{
     Connection, Content, Filter, Gather_Blocks, Gather_Documents, Gather_Headings, Gather_Lineage, Gather_Nodes,
-    Gather_Neighbourhood, Gather_Omissions, Gather_Relations, Gather_Rows, Gather_Statements, Gather_Suites, Item, params_from_iter,
+    Gather_Families, Gather_Neighbourhood, Gather_Omissions, Gather_Relations, Gather_Rows, Gather_Statements, Gather_Suites, Item, params_from_iter,
     ProjectError, Row,
 };
 use core::fmt::Write as _;
@@ -156,6 +156,7 @@ pub(super) fn Gather_Items(
         Content::Lineage => Gather_Lineage(connection, filter),
         Content::Omissions => Gather_Omissions(connection, filter),
         Content::Neighbourhood => Gather_Neighbourhood(connection, filter),
+        Content::Families => Gather_Families(connection, filter),
     };
 }
 

@@ -15,15 +15,15 @@ fn Test_Every_Shipped_Profile_Should_Parse_And_Be_Distinct()
 
     assert_eq!(
         catalogue.Profiles().len(),
-        18,
-        "fourteen whole-store profiles and four subject-addressed ones"
+        19,
+        "fifteen whole-store profiles and four subject-addressed ones"
     );
     let identifiers: BTreeSet<&str> = catalogue
         .Profiles()
         .iter()
         .map(|profile| return profile.id.as_str())
         .collect();
-    assert_eq!(identifiers.len(), 18, "two profiles share an identifier");
+    assert_eq!(identifiers.len(), 19, "two profiles share an identifier");
 }
 
 /// `SHIPPED`'s reality: what files actually sit in `profiles/`. A profile added there and

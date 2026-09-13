@@ -71,6 +71,13 @@ pub const SHIPPED: &[(&str, &str)] = &[
         include_str!("../profiles/contract-yaml.json"),
     ),
     ("diagram-set", include_str!("../profiles/diagram-set.json")),
+    // Deliberately not in the required set. `OD-PROJECT-006` decided the required relation
+    // projection is the full one, because a projection is required for being a re-render
+    // obligation and this is a reading aid nobody compares against the store.
+    (
+        "relation-families",
+        include_str!("../profiles/relation-families.json"),
+    ),
     (
         "offline-bundle",
         include_str!("../profiles/offline-bundle.json"),

@@ -1,0 +1,12 @@
+{
+  "id": "relation-families",
+  "title": "Relation families",
+  "format": "markdown",
+  "output": "diagrams/relation-families.md",
+  "sections": [
+    {
+      "title": "Families",
+      "content": "families"
+    }
+  ]
+}

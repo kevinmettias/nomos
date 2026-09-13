@@ -3,7 +3,7 @@ mod sections;
 
 use query::{Columns, FirstColumn, Gather_Items, Narrow_To_Nodes, Query, SecondColumn};
 use sections::{
-    Gather_Blocks, Gather_Documents, Gather_Headings, Gather_Lineage, Gather_Neighbourhood, Gather_Nodes, Gather_Omissions, Gather_Relations,
+    Gather_Blocks, Gather_Documents, Gather_Headings, Gather_Lineage, Gather_Families, Gather_Neighbourhood, Gather_Nodes, Gather_Omissions, Gather_Relations,
     Gather_Rows, Gather_Statements, Gather_Suites,
 };
 
@@ -113,6 +113,12 @@ impl Content
             // `OD-PROJECT-005` refused, and one wanting a kind is asking about the graph
             // rather than about a subject.
             Self::Neighbourhood => &["node_id"],
+            // Nothing. A family view is a view of the whole graph -- that is what makes it a
+            // resolution rather than a slice, and `OD-PROJECT-006` measured why narrowing is
+            // the wrong tool for it: `identifier_prefix` draws one family's internal edges and
+            // every edge leaving it as a dangling end, which is the artifact this replaces
+            // rather than the one it is.
+            Self::Families => &[],
         };
     }
 }

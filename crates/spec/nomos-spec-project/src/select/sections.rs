@@ -11,6 +11,7 @@ use super::{
     Columns, Connection, Filter, FirstColumn, Item, Name, ProjectError, Query, Narrow_To_Nodes, Row,
     SecondColumn, Value,
 };
+use std::collections::BTreeMap;
 
 pub(super) fn Gather_Suites(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
@@ -239,6 +240,111 @@ pub(super) fn Gather_Neighbourhood(connection: &Connection, filter: &Filter) -> 
             .With(Name("title"), Value(&title))
             .With(Name("status"), Value(&status)));
     });
+}
+
+/// Every edge between two record families, counted, rather than every edge between two records.
+///
+/// # What a family is
+///
+/// The identifier without its ordinal: `OD-RULES-027` and `OD-RULES-029` are both `OD-RULES`,
+/// `D-134` is `D`. A node whose identifier carries no trailing ordinal is a family of one
+/// rather than a node outside every family, and that is what keeps an edge to it from becoming
+/// a dangling end -- the grouping is total, so every edge has a family at both ends.
+///
+/// # Why this is not `identifier_prefix`
+///
+/// `OD-PROJECT-006` measured the difference. Narrowing by prefix draws one family's internal
+/// edges and every edge leaving it as a dangling end; it answers "what is inside OD-RULES",
+/// which is a slice of the one resolution that already exists. This answers "how do OD-RULES
+/// and OD-GATE stand to each other", which is a second resolution, and no filter can express
+/// it because the answer is about nodes the filter would have excluded.
+///
+/// # Why the aggregation is in Rust rather than in the query
+///
+/// A family is the identifier minus a trailing ordinal, and expressing that in SQLite's string
+/// functions would put the definition of a family in a place no test can reach directly. The
+/// query does what a query is good at -- joining the edges -- and [`Family_Of`] holds what a
+/// family is, in one function with its own tests.
+pub(super) fn Gather_Families(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+{
+    let _ = filter;
+    // Ordered here as well as grouped below: the aggregation is deterministic on its own, and
+    // ordering the input too means a failure reads the same way twice.
+    let edges = Query::On(
+        "SELECT f.node_id, t.node_id
+         FROM relations r
+         JOIN nodes f ON f.uid = r.from_node_uid
+         JOIN nodes t ON t.uid = r.to_node_uid
+         WHERE f.deleted_at IS NULL AND t.deleted_at IS NULL",
+    )
+    .Ordered_By("f.node_id, t.node_id")
+    .Run(connection, |row| {
+        let mut columns = Columns::Of(row);
+        let from = columns.Text()?;
+        let to = columns.Text()?;
+
+        // An edge carried as an item, because that is what `Run` hands back. It is folded into
+        // the real answer below and never reaches a projection.
+        return Ok(Item::Of(&from).With(Name("to"), Value(&to)));
+    })?;
+
+    return Ok(Between_Families(&edges));
+}
+
+/// `edges` rolled into one item per ordered pair of distinct families, carrying how many
+/// edges run between them.
+///
+/// A family's internal edges are dropped rather than counted as a self-edge: the question this
+/// answers is how families stand to one another, and a family's relationship with itself is
+/// the resolution the full diagram already shows.
+///
+/// `BTreeMap` rather than a hash map because the output order is the answer's order, and two
+/// selections of one store must be identical.
+fn Between_Families(edges: &[Item]) -> Vec<Item>
+{
+    let mut counted: BTreeMap<(String, String), usize> = BTreeMap::new();
+    for edge in edges
+    {
+        let from = Family_Of(&edge.identity);
+        let to = Family_Of(edge.Field("to").unwrap_or_default());
+        if from == to
+        {
+            continue;
+        }
+        let tally = counted.entry((from, to)).or_insert(0);
+        *tally = tally.saturating_add(1);
+    }
+
+    return counted
+        .into_iter()
+        .map(|((from, to), edges)| {
+            return Item::Of(&format!("{from} -> {to}"))
+                .With(Name("from"), Value(from.as_str()))
+                .With(Name("to"), Value(to.as_str()))
+                .With(Name("edges"), Value(&edges.to_string()));
+        })
+        .collect();
+}
+
+/// The family an identifier belongs to: itself without a trailing ordinal.
+///
+/// A node carrying no ordinal is its own family rather than no family at all. That is what
+/// makes the grouping total, and a total grouping is what stops an edge to such a node from
+/// being drawn as a dangling end.
+fn Family_Of(identity: &str) -> String
+{
+    let Some((family, ordinal)) = identity.rsplit_once('-')
+    else
+    {
+        return identity.to_owned();
+    };
+
+    if ordinal.is_empty() || !ordinal.bytes().all(|byte| return byte.is_ascii_digit())
+    {
+        return identity.to_owned();
+    }
+
+    return family.to_owned();
 }
 
 pub(super) fn Gather_Statements(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
