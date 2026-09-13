@@ -67367,7 +67367,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -67381,7 +67381,28 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "exit_code": 0,
+        "output_tail": "olved_Template_Should_Not_Be_Built ... ok\ntest subjects::Test_One_Profile_Should_Serve_Every_Subject ... ok\ntest subjects::Test_Every_Subject_Profile_Should_Render_The_Same_Subject_In_Its_Own_Format ... ok\ntest determinism::Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original ... ok\ntest determinism::Test_Insertion_Order_Should_Not_Reach_The_Output ... ok\ntest renderers::Test_A_Packed_Neighbour_Should_Carry_Its_Declared_Status ... ok\ntest selection::Test_A_Neighbourhood_Should_Select_Identically_Twice ... ok\ntest selection::Test_A_Neighbourhood_Should_Reach_The_Subjects_Own_Neighbours ... ok\ntest selection::Test_A_Neighbour_With_No_Declared_Status_Should_Be_Reported_Not_Dropped ... ok\ntest selection::Test_A_Status_Filter_Should_Select_The_Open_Records_And_Exclude_The_Accepted_Ones ... ok\ntest selection::Test_A_Node_With_No_Declared_Status_Should_Be_Excluded_Rather_Than_Defaulted ... ok\ntest selection::Test_A_Subject_Whose_Edges_Are_All_Relates_To_Should_Still_Reach_Them ... ok\ntest rebuildability::Test_A_Seeded_Store_Should_Answer_For_Exactly_The_Declared_Content_Kinds ... ok\ntest rebuildability::Test_Every_Required_Profile_Should_Render_Over_A_Seeded_Store ... ok\ntest rebuildability::Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content ... ok\ntest renderers::Test_The_Governing_Records_Should_Project_As_A_Document_Suite ... ok\n\ntest result: ok. 51 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.87s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-038a5a8f3ace54f0.exe)\n     Running tests\\determinism_contract.rs (target\\debug\\deps\\determinism_contract-5c5278a816d06a45.exe)\n     Running tests\\projections\\main.rs (target\\debug\\deps\\projections-ec716ea5d64801d7.exe)\n   Doc-tests nomos_spec_project\n",
+        "verified_at": 1789291872,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "cc85617448fbe6c2b762d73390f767b71eadb582"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

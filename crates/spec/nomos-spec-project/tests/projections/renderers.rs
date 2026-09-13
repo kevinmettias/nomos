@@ -135,3 +135,43 @@ fn Assert_Profile_Projects_The_Governing_Records(store: &nomos_spec_store::Speci
         first.stamp.inputs.len()
     );
 }
+
+/// A cited neighbour's declared status reaches the rendered pack.
+///
+/// Rendered rather than selected, because the selection already carried it and the rendering
+/// dropped it — the field was computed and discarded on the way out, so every test over
+/// `Select_Projection` passed while the one artifact `OD-PROJECT-005` is about said nothing.
+///
+/// Over the real seeded records: the claim is about governing records' declared lifecycle
+/// status, and the volume fixture has front matter for two documents rather than a graph of
+/// them.
+#[test]
+fn Test_A_Packed_Neighbour_Should_Carry_Its_Declared_Status()
+{
+    let mut store = nomos_spec_store::SpecificationStore::In_Memory().expect("opens");
+    nomos_spec_store::Seed_Governing_Records(&mut store).expect("seeds");
+    let profile = Profile_Named("implementation-context-pack")
+        .For(Some("OD-PROJECT-005"))
+        .expect("this profile is per-subject");
+
+    let output = Build(&store, &profile).expect("builds");
+    let parsed: serde_json::Value = serde_json::from_str(&output.body).expect("is json");
+
+    let neighbourhood = parsed
+        .get("sections")
+        .and_then(serde_json::Value::as_array)
+        .and_then(|sections| return sections.iter().find(|section| return section.get("title").and_then(serde_json::Value::as_str) == Some("Neighbourhood")))
+        .and_then(|section| return section.get("items"))
+        .and_then(serde_json::Value::as_array)
+        .cloned()
+        .unwrap_or_default();
+
+    assert!(!neighbourhood.is_empty(), "the pack cited no neighbour: {}", output.body);
+    assert!(
+        neighbourhood
+            .iter()
+            .any(|item| return item.get("status").and_then(serde_json::Value::as_str) == Some("accepted")),
+        "no cited neighbour carried a declared status: {}",
+        output.body
+    );
+}
