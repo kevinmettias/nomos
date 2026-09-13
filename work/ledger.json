@@ -66324,7 +66324,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -66340,7 +66340,88 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "hould_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-14534b0811ed0b35.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-6c0d2a3bc7fb3e61.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-b02179d8c1d2c3dc.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-aa793f51a49daa0e.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-0111b9014e26c055.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d4c5fb1e9426d4ec.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-286c08690afc996a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-f96f436344f7e2af.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-61a4ab805a6f6a82.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-5ff00b1c22563e6a.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-3b17673536525d8e.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-8210675160e23eaf.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-606b520971c1e4cb.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-a390115e4c81d50e.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-31de2db9f36c3100.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1789285219,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "cf91ee69d697b2523be086654c7f9eda1cf207e9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-DEPENDENCY-COMPLETENESS-NEEDS-THE-WHOLE-MEMBER-SET",
+      "title": "The completeness check judges one payload at a time and so cannot see whether the repository declared an architecture at all",
+      "why": "P95-DEPENDENCY-COMPLETENESS-CANNOT-SAY-NOT-APPLICABLE has to distinguish a member missing from a declaration this repository did author from a repository that declared nothing. That distinction is a property of the whole member set, not of one payload: it is true exactly when no member of the workspace under check has a declared zone. completeness::Violations_In receives one DependencyPayload and one SourceFile and cannot compute it, and the loop that can is Check_Every_Member_Declares_A_Band in checks/dependency.rs, which that item does not reserve. Disjoint from it: that item holds completeness.rs and this one holds dependency.rs, and the two halves land together.",
+      "done_when": "Check_Every_Member_Declares_A_Band decodes its payloads before judging any of them, computes once whether any member of the set has a declared zone, and passes that answer to completeness::Violations_In, so the judgment for each member is made against what the whole repository declared rather than against that member alone. cargo test --no-fail-fast -p nomos-rules -p nomos-contract-tests passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/dependency.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "hould_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-14534b0811ed0b35.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-6c0d2a3bc7fb3e61.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-b02179d8c1d2c3dc.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-aa793f51a49daa0e.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-0111b9014e26c055.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d4c5fb1e9426d4ec.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-286c08690afc996a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-f96f436344f7e2af.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-61a4ab805a6f6a82.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-5ff00b1c22563e6a.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-3b17673536525d8e.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-8210675160e23eaf.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-606b520971c1e4cb.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-a390115e4c81d50e.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-31de2db9f36c3100.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1789285211,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "cf91ee69d697b2523be086654c7f9eda1cf207e9"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

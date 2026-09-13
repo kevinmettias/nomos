@@ -172,17 +172,29 @@ pub fn Check_Every_Member_Declares_A_Band(sources: &[SourceFile], facts: &mut dy
 {
     let mut findings = Vec::new();
 
+    // Decoded before any of them is judged, because the judgment for each member depends on
+    // the whole set: a package with no declared zone is a gap in a repository that declared
+    // an architecture, and is out of this rule's scope entirely in one that declared none.
+    // `OD-RULES-029` measured why that mattered -- with the zone table compiled into this
+    // crate, every member of any other repository looked like a gap. `completeness`'s own
+    // documentation carries the rest of the reason.
+    let mut decoded = Vec::new();
     for source in sources
     {
         match Payload_Of(source, facts, DEPENDENCY_COMPLETENESS)
         {
-            Ok(payload) =>
-            {
-                let violations = completeness::Violations_In(&payload, source);
-                findings.extend(violations);
-            }
+            Ok(payload) => decoded.push((payload, source)),
             Err(finding) => findings.push(finding),
         }
+    }
+
+    let declares = completeness::DeclaresAnArchitecture(
+        decoded.iter().any(|(payload, _)| return zones::Zone_Of(&payload.package).is_some()),
+    );
+
+    for (payload, source) in &decoded
+    {
+        findings.extend(completeness::Violations_In(payload, source, declares));
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
