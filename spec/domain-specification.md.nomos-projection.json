@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:3133d9ed1db175118f150a5399600d2bd21a49a4f82e86a7412c23ad4125edbd",
-  "inputs_digest": "sha256:eee7b2fd16650040cabefa77d55cbafddba639aaedc80ffdcafdc780b620ee96",
+  "content_digest": "sha256:d082c8c54a8dcdd47246697eea900d7ac370b3f0005064437377a4603a24d4f1",
+  "inputs_digest": "sha256:34748f7d0f13c893d358f808ea5266ac243adcb33bfca1d29869015095739ef4",
   "sections": [
     [
       "Documents",
-      231
+      232
     ],
     [
       "Sections",
-      1895
+      1905
     ],
     [
       "Source blocks",
-      6571
+      6606
     ]
   ],
   "inputs": [
@@ -1094,6 +1094,11 @@
       "content": "documents",
       "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md@authored",
       "hash": "sha256:227009cdd4296112242bd4f960cab6549a198a1359f288aca43bbec584cc5247"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md@authored",
+      "hash": "sha256:e8e6d157721ec85155075e0793b7c1d7fd56fb2b4c63daee7194c550924dde56"
     },
     {
       "content": "documents",
@@ -9914,6 +9919,56 @@
       "content": "headings",
       "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#13",
       "hash": "sha256:dfea26804ed4b8a63e6bd971a9bdb218ac1fc2635bbdfe5ad8935e554a657f01"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#1",
+      "hash": "sha256:fcba2b1f8b5e078257c16414dd962de0efe42137e16a0debc26a01af7dda83df"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#2",
+      "hash": "sha256:5538d17d291b31ef8240640df60410d5a4e68d3d07f1f5c2d25dcd1edfdfba72"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#4",
+      "hash": "sha256:b83410a6c6945f21cdd9c4c60e25f0f3f71be34a60da6edbafde7e8e3f9356ac"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#12",
+      "hash": "sha256:b98fb93ab71266e319abc138cce1ee17af6519cc414c86a3b229845458a769a6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#14",
+      "hash": "sha256:f9be0dbf9149a36deee017e136a5fd87ba171fc4d9e761abe7a0b189a5b5be6c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#18",
+      "hash": "sha256:f69ca0284cbb30c0a82313d0c57609aa40e160cc9f2e1bf988101449797d4560"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#22",
+      "hash": "sha256:39d715d544c63fb4a4a195097f2790f7047af4b45c0094c7b148f7a321be02e0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#25",
+      "hash": "sha256:2c66ff17243de7d629def0ee2c904a0fe319198cfaa550ae88e2405a56803e6d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#29",
+      "hash": "sha256:6b973b852deb5765177b00f8f4a429a05d75a79328342e061fedeb72a4eae788"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#34",
+      "hash": "sha256:043eb93b46ebe1c0366974a01de35a2e2bc10c98dd8cc9f54f14adcef7d2fb30"
     },
     {
       "content": "headings",
@@ -41204,6 +41259,181 @@
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#14",
       "hash": "sha256:c17636245cf090184f38cd5f2d563abdd48ac59c5f0a9976bbe7e4a94fb7e411"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#1",
+      "hash": "sha256:ece3c0120482e06f2654bea9c7da07098778cea4ab45b1c38986623e88bb146f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#3",
+      "hash": "sha256:f48847873da4734bd5d95eb54d7b6e6564f4bdf6683e3654d06ffc81d422f0e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#5",
+      "hash": "sha256:c454a4999fabc03d572514d3d5f08c5e646527a0ebaec4220e98764048030b2a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#6",
+      "hash": "sha256:8a592253d87e18da15e08839546a334a53035e0a21c09d76c135b23ab8418ba7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#7",
+      "hash": "sha256:bb461ffa0a0dd26a6c1f2a040457d52b6f453bd52bc10cf5e9d78015ea271bbb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#8",
+      "hash": "sha256:062f7ece5805b087fde4cccbac504e60b2080cc6f1f7f34edfa985ce1fb03937"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#9",
+      "hash": "sha256:f102cc25889922308a25754cd666754308c7c28d65c25f85db7b6091d413fd06"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#10",
+      "hash": "sha256:cbc3e89f25dca9aee7ea437bcaf733f161942ae11378a6cc069cec52f1c13df0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#11",
+      "hash": "sha256:09afbda399db681fae1bb6835ae0ee167c9588bd14e00613fc5cc746d48b9820"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#12",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#13",
+      "hash": "sha256:36a770955a570cfdaf8fb50853dcfe83e67690e7b02397e41b9654b8296e426c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#14",
+      "hash": "sha256:2b7c93143208d3ca074be638b57e6297913959ef8102b9fb82093ec0ce6fe0b6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#15",
+      "hash": "sha256:8d999dbe95ec93030dbc8ef7f05ebac19b4400f9f9310b118df525f7f85b6e77"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#16",
+      "hash": "sha256:af51d409df20c009c292de6d3cd84409c4e74e27fd51d46b263702540703bb9c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#17",
+      "hash": "sha256:d9db7636ce9892ae2cf28ff8cee46c83520bd7aa529d37bb0dc996b5d60f766b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#18",
+      "hash": "sha256:b5e3aabcffad63a111ec4a9d41f9f2cdd70e8d43ab463997ed66e7dad6c27b45"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#19",
+      "hash": "sha256:2670d54cf86ab4708abf0971075cae1aa604c3afa6ccbc96b5c77dd9a38268f8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#20",
+      "hash": "sha256:4cee9676be9c5c4411556c851454fbca2bd28129cb4575eb0fed849bcdf42c6d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#21",
+      "hash": "sha256:056e7e8b330e4322c50d53c04205bf7561cbdb0940359ed7e8a30c3c3def41b4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#22",
+      "hash": "sha256:3b1930c9ff6550d0116b4084aeb5a40bda57f4421f8eea89fd9dc9f67cb27ccb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#23",
+      "hash": "sha256:a88129a6ffc4db92cf9a6d8b72eee39503662455aab82f6dcb26b0dff18af9fb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#24",
+      "hash": "sha256:9ac3678860fac34bbb21cc52214829db0f63cd3e8bf36b401721778a7e49a621"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#25",
+      "hash": "sha256:9eddf8c53e46a8641017dd487c663fda8e57b72f9b6606bfd1abc8f4a182da74"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#26",
+      "hash": "sha256:96e76fe9683b42573709f97f03c57e37eda52ba1d7b63e5f40600183ae11ea04"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#27",
+      "hash": "sha256:dc4b050ca2852775366f4dcc17d2577f4ed67a270991161e9ef8f079a53f11dc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#28",
+      "hash": "sha256:31831a9410702858aaa04a67c9b71a85e0e42257db9a3d748731c2d1e719067f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#29",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#30",
+      "hash": "sha256:b4af367df2f5d1318c56d12a92a9eb56d5e2c6ac30c6589591324518b3d14373"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#31",
+      "hash": "sha256:9b92a1b1b4c413329cf2e8a7b47409cca19647576f4b45e2131548bc5ed3e472"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#32",
+      "hash": "sha256:b8974877af2ef3e60f5be5f9f4324df52656d328550bbba014423b93a1d35a63"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#33",
+      "hash": "sha256:ab99f4ab712dbb8b1611d04b0f36523cb4a36ee65e133a50b9063c8f3379611e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#34",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#35",
+      "hash": "sha256:eafe226e28087c916951bba94c22a3b9b60945543e07c3c8d57fb70148332393"
     },
     {
       "content": "blocks",

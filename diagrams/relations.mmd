@@ -125,6 +125,7 @@ graph LR
     arc_specdb_001 -->|"relates-to"| od_spec_008["OD-SPEC-008"]
     arc_specdb_001 -->|"relates-to"| od_spec_010["OD-SPEC-010"]
     arc_specdb_001 -->|"relates-to"| od_spec_011["OD-SPEC-011"]
+    arc_specdb_001 -->|"relates-to"| od_spec_015["OD-SPEC-015"]
     arc_specdb_001 -->|"relates-to"| od_spec_016["OD-SPEC-016"]
     arc_specdb_001 -->|"relates-to"| od_trace_001
     arc_specdb_002 -->|"relates-to"| arc_specdb_001
@@ -1524,9 +1525,11 @@ graph LR
     od_spec_011 -->|"relates-to"| od_spec_006
     od_spec_011 -->|"relates-to"| od_spec_012
     od_spec_011 -->|"relates-to"| od_spec_013
+    od_spec_011 -->|"relates-to"| od_spec_015
     od_spec_012 -->|"relates-to"| od_ledger_020
     od_spec_012 -->|"relates-to"| od_spec_010
     od_spec_012 -->|"relates-to"| od_spec_011
+    od_spec_012 -->|"relates-to"| od_spec_015
     od_spec_013 -->|"relates-to"| arc_specdb_002
     od_spec_013 -->|"relates-to"| od_spec_008
     od_spec_013 -->|"relates-to"| od_spec_009
@@ -1537,6 +1540,9 @@ graph LR
     od_spec_014 -->|"relates-to"| d_135
     od_spec_014 -->|"relates-to"| d_136
     od_spec_014 -->|"relates-to"| d_137
+    od_spec_015 -->|"relates-to"| arc_specdb_001
+    od_spec_015 -->|"relates-to"| od_spec_011
+    od_spec_015 -->|"relates-to"| od_spec_012
     od_spec_016 -->|"relates-to"| arc_specdb_001
     od_spec_016 -->|"relates-to"| od_spec_001
     od_spec_017 -->|"relates-to"| d_134
@@ -1846,6 +1852,7 @@ graph LR
     od_spec_012
     od_spec_013
     od_spec_014
+    od_spec_015
     od_spec_016
     od_spec_017
     od_store_001

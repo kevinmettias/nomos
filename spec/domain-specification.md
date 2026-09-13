@@ -225,6 +225,7 @@ profile: domain-specification
 | docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md@authored | docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md | authored | 36 | 14 | sha256:9a0f5a872ff7f769ee63d68312e1af6fdbfbf7c6e18e69652864c6f030e15ffa |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md@authored | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md | authored | 41 | 13 | sha256:8dcf5d25a7f6914387cc79e86eeb50d23edb944694fefdfdefc1d1cd468ae003 |
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md@authored | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md | authored | 14 | 5 | sha256:227009cdd4296112242bd4f960cab6549a198a1359f288aca43bbec584cc5247 |
+| docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md@authored | docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md | authored | 35 | 10 | sha256:e8e6d157721ec85155075e0793b7c1d7fd56fb2b4c63daee7194c550924dde56 |
 | docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md@authored | docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md | authored | 36 | 10 | sha256:0a6d2a8d267b11294fae15ddfc5418b3015cf7f3996d29b1f1f013026f6ca5cc |
 | docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md@authored | docs/records/OD-SPEC-017-what-a-citation-inside-a-governing-record-is-owed-when-the-site-it-names-has-moved-or-gone.md | authored | 63 | 17 | sha256:176649f9cacd5f4aae0ac3cd2e983cf1aa5b691fcd10f0ac1f48a2e1609b3d0a |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md@authored | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md | authored | 28 | 8 | sha256:3e2b7309bfc8cd5f7083b3e96924cffe4cebfbd23f7d604f7c1b5fe8d4c339fa |
@@ -1994,6 +1995,16 @@ profile: domain-specification
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#6 | authored | 2 | Current Position |
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#9 | authored | 2 | What Would Decide It |
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#13 | authored | 2 | Status |
+| docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#1 | authored | 1 | The record graph's typed vocabulary is one term in ninety-three percent of its edges |
+| docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#2 | authored | 2 | Question |
+| docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#12 | authored | 2 | The Decision |
+| docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#14 | authored | 3 | Why the share is not a defect on its own |
+| docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#18 | authored | 3 | The cause the measurement exposes |
+| docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#22 | authored | 3 | Why no term is added here |
+| docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#25 | authored | 3 | The criterion an author uses today |
+| docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#29 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#34 | authored | 2 | Status |
 | docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#1 | authored | 1 | Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it |
 | docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#6 | authored | 2 | What Was Measured |
@@ -58563,6 +58574,277 @@ measured against this one rather than assumed from it.
 Open. Revisit when KWB's Rust rewrite reaches the point of needing its own graph-and-lineage
 storage, or at Phase 5 when `D-130`'s gate lifts — whichever comes first. Recorded here so the
 intent is legible rather than lost between sessions, not because either gate has moved.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#1
+
+*revision: authored · kind: heading · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges · hash: sha256:ece3c0120482e06f2654bea9c7da07098778cea4ab45b1c38986623e88bb146f*
+
+# The record graph's typed vocabulary is one term in ninety-three percent of its edges
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#2
+
+*revision: authored · kind: heading · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#3
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / Question · hash: sha256:f48847873da4734bd5d95eb54d7b6e6564f4bdf6683e3654d06ffc81d422f0e5*
+
+The relation vocabulary is enforced by name — `OD-SPEC-011` made an unknown term a diagnosable
+refusal rather than a foreign-key failure — and `OD-SPEC-012` gave every type a declared
+domain, range and cardinality. The mechanism works. What nothing has measured is whether the
+authoring feeding it is honest, and the answer is that one term carries almost all of it.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#4
+
+*revision: authored · kind: heading · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#5
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / What Was Measured · hash: sha256:c454a4999fabc03d572514d3d5f08c5e646527a0ebaec4220e98764048030b2a*
+
+Measured 2026-09-13 over all 231 files in `docs/records/`.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#6
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / What Was Measured · hash: sha256:8a592253d87e18da15e08839546a334a53035e0a21c09d76c135b23ab8418ba7*
+
+**831 authored edges, across four terms:**
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#7
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / What Was Measured · hash: sha256:bb461ffa0a0dd26a6c1f2a040457d52b6f453bd52bc10cf5e9d78015ea271bbb*
+
+| term | edges | share |
+|---|---|---|
+| `relates-to` | 774 | 93.1% |
+| `affects` | 51 | 6.1% |
+| `affected_by` | 5 | 0.6% |
+| `supersedes` | 1 | 0.1% |
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#8
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / What Was Measured · hash: sha256:062f7ece5805b087fde4cccbac504e60b2080cc6f1f7f34edfa985ce1fb03937*
+
+**Every record declares at least one edge.** There are no orphans, so the concentration is
+not an artefact of most records declaring nothing.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#9
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / What Was Measured · hash: sha256:f102cc25889922308a25754cd666754308c7c28d65c25f85db7b6091d413fd06*
+
+**The committed diagram is what it costs a reader.** `diagrams/relations.mmd` draws 1,634
+arrows, of which **1,522 are labelled `relates-to`**, against 55 `affects`, 55 `affected_by`,
+1 `supersedes` and 1 `superseded_by`. `relates-to` is declared as its own inverse, so each
+authored pair appears once in each direction carrying the same word. Somebody opening the one
+relation projection this repository commits, to learn how these decisions stand to one
+another, is handed fifteen hundred arrows that say only that two records are connected.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#10
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / What Was Measured · hash: sha256:cbc3e89f25dca9aee7ea437bcaf733f161942ae11378a6cc069cec52f1c13df0*
+
+**A record can only reach five of the nine seeded terms.** `supersedes`/`superseded_by`,
+`affects`/`affected_by` and `relates-to` declare `RECORD_KINDS` — `architecture` and
+`decision` — as both domain and range. The other four declare corpus node kinds:
+`answers`/`answered_by` over `design-spec` and `feature-request`, `implements`/`implemented_by`
+over `feature-result` and `design-spec`. **No record could carry one of those four**, and
+`OD-SPEC-012`'s constraint would refuse it. Their absence is not neglect and must stop being
+read as any.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#11
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / What Was Measured · hash: sha256:09afbda399db681fae1bb6835ae0ee167c9588bd14e00613fc5cc746d48b9820*
+
+**This is current practice, not historical drift.** Five records were authored in the session
+this one was written in. They added 11 edges. All 11 are `relates-to`.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#12
+
+*revision: authored · kind: heading · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#13
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision · hash: sha256:36a770955a570cfdaf8fb50853dcfe83e67690e7b02397e41b9654b8296e426c*
+
+**`relates-to` is the honest term for what it says, and a 93 per cent share is not by itself a
+defect. But the share is inflated by one measurable cause, and naming it is what this record
+is for: the vocabulary has no term for a record that reasons from another one.**
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#14
+
+*revision: authored · kind: heading · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / Why the share is not a defect on its own · hash: sha256:2b7c93143208d3ca074be638b57e6297913959ef8102b9fb82093ec0ce6fe0b6*
+
+### Why the share is not a defect on its own
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#15
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / Why the share is not a defect on its own · hash: sha256:8d999dbe95ec93030dbc8ef7f05ebac19b4400f9f9310b118df525f7f85b6e77*
+
+The three terms available to a record are not three shades of the same thing. `supersedes`
+means one record replaces another wholesale. `affects` means one record changes what another
+one says. `relates-to` is declared symmetric — its own inverse — and means two records bear on
+each other.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#16
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / Why the share is not a defect on its own · hash: sha256:af51d409df20c009c292de6d3cd84409c4e74e27fd51d46b263702540703bb9c*
+
+Most pairs of decisions about one subject genuinely are symmetric, and this repository has
+already decided, in writing, that a true general edge beats a false specific one. The seed
+table's own comment records it at the moment `affected_by` was added rather than forcing
+`affects`: "`OD-CAPABILITY-002` borrows `OD-STORE-001`'s criterion; it does not affect it, and
+a wrong edge in the graph this system exists to keep honest is worse than a vocabulary one
+term short."
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#17
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / Why the share is not a defect on its own · hash: sha256:d9db7636ce9892ae2cf28ff8cee46c83520bd7aa529d37bb0dc996b5d60f766b*
+
+That authors reach for `affects` 56 times when it fits is the evidence the choice is being
+made rather than defaulted.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#18
+
+*revision: authored · kind: heading · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / The cause the measurement exposes · hash: sha256:b5e3aabcffad63a111ec4a9d41f9f2cdd70e8d43ab463997ed66e7dad6c27b45*
+
+### The cause the measurement exposes
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#19
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / The cause the measurement exposes · hash: sha256:2670d54cf86ab4708abf0971075cae1aa604c3afa6ccbc96b5c77dd9a38268f8*
+
+The most common relationship between two governing records in this repository is neither
+replacement nor effect. It is **citation**: this record reasons from that one — borrows its
+criterion, applies its ranking, declines to reopen it, inherits its measurement.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#20
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / The cause the measurement exposes · hash: sha256:4cee9676be9c5c4411556c851454fbca2bd28129cb4575eb0fed849bcdf42c6d*
+
+The vocabulary cannot say that. `supersedes` is too strong, `affects` is false (a record that
+cites another changes nothing about it), and what is left is `relates-to`. So a directional,
+asymmetric, extremely common relationship is recorded with a symmetric term, and the direction
+— which record is reasoning from which — is lost on the way in.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#21
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / The cause the measurement exposes · hash: sha256:056e7e8b330e4322c50d53c04205bf7561cbdb0940359ed7e8a30c3c3def41b4*
+
+Every one of the 11 edges added while this record was written is that shape. They cite
+precedent, and none of them affects what it cites.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#22
+
+*revision: authored · kind: heading · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / Why no term is added here · hash: sha256:3b1930c9ff6550d0116b4084aeb5a40bda57f4421f8eea89fd9dc9f67cb27ccb*
+
+### Why no term is added here
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#23
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / Why no term is added here · hash: sha256:a88129a6ffc4db92cf9a6d8b72eee39503662455aab82f6dcb26b0dff18af9fb*
+
+The obvious remedy is a sixth seed term, and it is refused for a stated reason rather than an
+aesthetic one. The seed table declares its own tier as `seed` and says why: "the real
+vocabulary is `ADR-ARTIFACT-GRAPH-002`'s, and it arrives with the corpus and supersedes this
+whole table." Adding a term to a table already declared temporary means authoring the same
+vocabulary twice and then reconciling two versions of it, which is a worse trade than the
+information currently lost.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#24
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / Why no term is added here · hash: sha256:9ac3678860fac34bbb21cc52214829db0f63cd3e8bf36b401721778a7e49a621*
+
+What this record does instead is make the gap legible, so the corpus vocabulary arrives to a
+question already framed rather than to a 93 per cent figure nobody has explained.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#25
+
+*revision: authored · kind: heading · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / The criterion an author uses today · hash: sha256:9eddf8c53e46a8641017dd487c663fda8e57b72f9b6606bfd1abc8f4a182da74*
+
+### The criterion an author uses today
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#26
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / The criterion an author uses today · hash: sha256:96e76fe9683b42573709f97f03c57e37eda52ba1d7b63e5f40600183ae11ea04*
+
+Stated because its absence is what lets the share be read as laziness:
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#27
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / The criterion an author uses today · hash: sha256:dc4b050ca2852775366f4dcc17d2577f4ed67a270991161e9ef8f079a53f11dc*
+
+- **`supersedes`** — this record replaces that one. One edge in the whole corpus, correctly.
+- **`affects`** — this record changes what that one says. Use it when the cited record would
+  have to be amended to stay true. Its inverse `affected_by` is written only when the
+  direction genuinely runs that way and writing `affects` from the other end is not available.
+- **`relates-to`** — everything else, including citation. It is correct, and it is not
+  precise, and until the corpus vocabulary lands those are the same answer.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#28
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / The Decision / The criterion an author uses today · hash: sha256:31831a9410702858aaa04a67c9b71a85e0e42257db9a3d748731c2d1e719067f*
+
+An author who is unsure between `affects` and `relates-to` should write `relates-to`. A wrong
+specific edge is worse than a general true one — that is not new here, it is the seed table's
+own already-recorded reasoning, restated where an author will look for it.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#29
+
+*revision: authored · kind: heading · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#30
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / What This Record Does Not Do · hash: sha256:b4af367df2f5d1318c56d12a92a9eb56d5e2c6ac30c6589591324518b3d14373*
+
+It does not re-author any relation. The 774 `relates-to` edges stay as they are; the record
+that judged them a defect would owe a per-edge measurement this one deliberately does not
+make.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#31
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / What This Record Does Not Do · hash: sha256:9b92a1b1b4c413329cf2e8a7b47409cca19647576f4b45e2131548bc5ed3e472*
+
+It does not change the seed table, add a term, or alter any declared domain, range or
+cardinality.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#32
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / What This Record Does Not Do · hash: sha256:b8974877af2ef3e60f5be5f9f4324df52656d328550bbba014423b93a1d35a63*
+
+It does not change any projection, and `diagrams/relations.mmd` is not regenerated for
+content reasons by the item that landed this — only, as always, because a record body moved.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#33
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / What This Record Does Not Do · hash: sha256:ab99f4ab712dbb8b1611d04b0f36523cb4a36ee65e133a50b9063c8f3379611e*
+
+It does not decide what `ADR-ARTIFACT-GRAPH-002`'s vocabulary should contain. It states one
+thing that vocabulary will have to answer for, with the measurement attached.
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#34
+
+*revision: authored · kind: heading · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-SPEC-015-the-record-graphs-typed-vocabulary-is-one-term-in-ninety-three-percent-of-its-edges.md#35
+
+*revision: authored · kind: prose · heading: The record graph's typed vocabulary is one term in ninety-three percent of its edges / Status · hash: sha256:eafe226e28087c916951bba94c22a3b9b60945543e07c3c8d57fb70148332393*
+
+Accepted. `relates-to` is honest for a symmetric bearing between two decisions and its 93 per
+cent share is not a defect in itself; the share is inflated because citation — the commonest
+relationship between two records here — has no term and is directional, which a symmetric term
+cannot carry. No term is added, because the table it would join is already declared superseded
+by the corpus vocabulary. The four corpus-scoped terms are structurally unavailable to a
+record and their absence is not neglect.
 
 ### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#1
 
