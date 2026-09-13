@@ -208,6 +208,7 @@ profile: domain-specification
 | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md@authored | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md | authored | 17 | 6 | sha256:06d7276cc87daf98d5315060d60a9a8b745eb6a1e1af5b124691dc7e3ea0f097 |
 | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md@authored | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md | authored | 18 | 6 | sha256:93c4319371053698f6d4700251affa8044f571891fe4fe6831535c4d7cecbbc9 |
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md@authored | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md | authored | 16 | 6 | sha256:66d2427694c21ad26b870820393f14285fbb1678448d0a33f4490a61fd0f1118 |
+| docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md@authored | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md | authored | 28 | 8 | sha256:65229767fb7df92fdb3e15faa97875746dd70f7a86d656248cfd622909967161 |
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md@authored | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md | authored | 22 | 7 | sha256:eef4a3f365ef12f634f1fee88c3cf1b2ad45aad74e471e1daf8c8c26603a4228 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
@@ -1829,6 +1830,14 @@ profile: domain-specification
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#10 | authored | 2 | The verdict |
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#12 | authored | 2 | What this record does not do |
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#15 | authored | 2 | Status |
+| docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#1 | authored | 1 | Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner |
+| docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#12 | authored | 2 | The Decision |
+| docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#16 | authored | 3 | Why the mapping is not a demand planner |
+| docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#21 | authored | 3 | What this buys, stated so the cost is comparable |
+| docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#23 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#27 | authored | 2 | Status |
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#1 | authored | 1 | A platform implementation is its own zone, so a composition root reaches one only through a composer |
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#5 | authored | 2 | What Was Measured |
@@ -53834,6 +53843,226 @@ its three worked examples need infrastructure categories with no instance in thi
 workspace; the third is already a live, composed, reproducible check
 (`dependency-policy`/`cargo deny check bans`), whose evidence, read honestly, was never
 historical in the first place.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#1
+
+*revision: authored · kind: heading · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner · hash: sha256:7355bc5b7e218d2b2440e02a5e06c34e4f0a3be020efa44a12154fb2206c3546*
+
+# Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#2
+
+*revision: authored · kind: heading · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#3
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / Question · hash: sha256:2defec0af58b05df688c41a646bcc2c5e3c751333853fb0da28d054eb2b2a543*
+
+`run_context.rs` builds a hand-written array of seventy `ComposedRule` entries, and
+`Composed_Rules` derives its answer from that array rather than from `nomos_rules::DESCRIPTORS`.
+`P41-RUN-STOPS-NAMING-EVERY-RULE` complained about exactly this and was stranded behind
+`P41-RUN-PLANNER`'s decline, so the complaint has stood unanswered rather than been refused.
+`OD-GATE-023` disposed the rest of that stranded cluster by measuring each item's own claim
+instead of trusting the dependency edge, and reached this one last: the edge was inherited
+here too, but unlike the five gate items its claim was neither overtaken nor planner-free on
+inspection, so it was left to a measurement of its own. This is that measurement.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#4
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / Question · hash: sha256:1a69358f5bb55525148dd5bf350aefbba0f845810d24dfd54de2658941105fd0*
+
+The gate side already did the derivation being asked for: `composition::Registered` loops over
+`nomos_rules::DESCRIPTORS` directly. So the question is not whether such a derivation is
+possible in this workspace — it is whether `Run` can do it, given that each of its entries
+closes over something different, and whether supplying that difference is the demand planner
+`OD-RULES-009` has declined eight times under another name.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#5
+
+*revision: authored · kind: heading · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#6
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / What Was Measured · hash: sha256:c085d32e64ce67f5a1056ac275c9a68a59bd9449ee6b7bba5ddaf4ac8f0b5723*
+
+Censused all seventy entries by what their closure actually calls, at `3dcd84e7`:
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#7
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / What Was Measured · hash: sha256:9bb1e869a5d05175e905aabe0595772fa6a7f8ce6ab34b7b7405b0a0926aadf3*
+
+| Shape | Entries |
+|---|---|
+| `Check(sources)` — reader ignored | 42 |
+| `Check(sources, reader)` | 20 |
+| `Check(&capabilities.<slice>, reader)` | 6 |
+| `Check(reader)` — sources ignored | 2 |
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#8
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / What Was Measured · hash: sha256:1c286e8c211878ba6e0429823128824f94203a343b14eca81adb30a5f9e11270*
+
+The six are three over `dependency_sources` and one each over `lint_sources`,
+`policy_sources` and `review_sources`.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#9
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / What Was Measured · hash: sha256:1b8fd79e0cbfd22acf71658696b4bf18b33a8cb31db1b30933176240b51ffac1*
+
+**So the per-entry capture that looks like the obstacle is six entries, not seventy.** Sixty-two
+of seventy close over the same `sources` value, and the forty-two fact-free ones differ from
+the twenty fact-reading ones only in whether they name the reader they were handed.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#10
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / What Was Measured · hash: sha256:cda58f8378fd61cf6da975cadae5b5b3e0a5580a7e98a03e91a96d2c9111dd74*
+
+**Three of the four shapes collapse into one signature.** A descriptor carrying
+`fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>` serves shapes 1, 2 and 4 directly — a
+fact-free rule takes a reader it does not read, and the two reader-only rules take a source
+slice they do not read. Both are wrappers with no decision in them, and a plain `fn` pointer is
+`const`-compatible, so `DESCRIPTORS` can carry one without ceasing to be a table.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#11
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / What Was Measured · hash: sha256:1fa062d90c4401797839db64cfdd7ccbc72c0f7d16a5b2c189dfcfa6f7c8f38c*
+
+**Only shape 3 needs anything else**, and what it needs is a rule-to-slice mapping of six
+entries with `sources` as the default.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#12
+
+*revision: authored · kind: heading · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#13
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / The Decision · hash: sha256:4f8da10d3037f555d8ec9c6a33f52ba26348fd38f970192d0b836450aac6dd78*
+
+**The derivation is available, and it is not the planner.**
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#14
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / The Decision · hash: sha256:e0bc58103dbbe0d03ed50241bbb4bb25923446a746883aa06c24f3803472cd54*
+
+`Run` can loop over `DESCRIPTORS` the way `composition::Registered` already does. Two things
+have to be true first, and both are small:
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#15
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / The Decision · hash: sha256:da010214b974f2810f50275e561d141b68ecae042d5a4bcbc05414786b076ff5*
+
+1. **A descriptor carries its check as a uniform `fn` pointer.** That is `nomos-rules`' own
+   concern and names nothing above it — the wrappers that widen a fact-free or source-free
+   check to the common signature sit beside the checks they wrap.
+2. **`nomos-check-orchestration` keeps a six-entry exception mapping from `RuleId` to the
+   capability slice its check reads, defaulting to `sources`.** That mapping cannot live in
+   `nomos-rules`: a capability slice is an orchestration concept, and a descriptor table naming
+   one would be a lower band describing an upper band's shape.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#16
+
+*revision: authored · kind: heading · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / The Decision / Why the mapping is not a demand planner · hash: sha256:034c20d404b329334f148d38725e6960e4edbce1fb2207ab09d735f598566c18*
+
+### Why the mapping is not a demand planner
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#17
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / The Decision / Why the mapping is not a demand planner · hash: sha256:c304787a733f53f46b88ca741a234e36f008f0ed9f374fd34a0dab8a32157d45*
+
+This is the part `P41-RUN-PLANNER`'s decline makes worth stating rather than assuming.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#18
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / The Decision / Why the mapping is not a demand planner · hash: sha256:de40de0e5f4bddb7d035498a802b54facc6c1d7a28626942cd0b13d4d3694dc1*
+
+A planner *computes* demand: it reads what was selected, what is already materialized and what
+each rule would need, and decides at runtime what to produce. `OD-RULES-009` declines that, and
+has declined it repeatedly.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#19
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / The Decision / Why the mapping is not a demand planner · hash: sha256:900766aa5748eed6abba33839f9c05a802e5c28c0d90463608ef60f2a039daab*
+
+A six-entry table saying "this rule reads the dependency slice" computes nothing. It is a
+declared constant about a rule, fixed at the moment the rule is written, and it is precisely
+the same kind of thing `OD-GATE-017` already accepted and named: "a fixed, hand-written mapping
+from `RuleId` to the fact(s) it needs … composition, not choice." That record licensed a
+seventy-entry version of this mapping for a different axis. A six-entry one for this axis is
+smaller and no different in kind.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#20
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / The Decision / Why the mapping is not a demand planner · hash: sha256:336f01e90bf6361500bdc7c359af1a09290a631176e3ea7693b16b179be5c3c9*
+
+The distinction that keeps it honest: the mapping may not grow a *condition*. The moment an
+entry reads "this slice, unless that one is already materialized," it has stopped being a
+declared fact about the rule and become the planner, and `OD-RULES-009` is where that has to be
+argued rather than slipped in under this record.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#21
+
+*revision: authored · kind: heading · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / The Decision / What this buys, stated so the cost is comparable · hash: sha256:0a95030ef459d1e0a1dfb93c1245b2b1eed37ca513acf1606b8a0423ef846f7f*
+
+### What this buys, stated so the cost is comparable
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#22
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / The Decision / What this buys, stated so the cost is comparable · hash: sha256:8885d2ba375ddf21705e31a0f96af83422955335fbb199e42ae06fb01f035460*
+
+Seventy hand-maintained entries become six plus a loop. A rule added to `DESCRIPTORS` today
+must also be added to this array or it is declared and never runs — the exact defect
+`Resolve_Rules` exists to catch after the fact. After the derivation, a rule that reads
+`sources` needs no orchestration edit at all, and one that reads a slice needs one line.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#23
+
+*revision: authored · kind: heading · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#24
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / What This Record Does Not Do · hash: sha256:7600cf511eefff4a88a788f1de0bd6c60062ad3557c24a0f681a69379fe6b4a6*
+
+It does not build it. The change reaches `nomos-rules`' descriptor table, every check's
+wrapper, and `run_context.rs`'s array and `Composed_Rules`; that is a capability item's own
+territory, and this record is the answer it was waiting on rather than the work.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#25
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / What This Record Does Not Do · hash: sha256:c06346e05b1ec3d7c0b4f64b241b49b89dceb7fa08484780d392172f5d4a76ae*
+
+It does not touch `OD-GATE-017`'s rule-to-fact mapping, which is a different axis — which facts
+to *materialize* — and stays exactly as that record left it.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#26
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / What This Record Does Not Do · hash: sha256:fdebc92f1d321266ae9454160885f25ce4c7e5d672cc8b49b5a17d217a27a8e1*
+
+It does not reopen `OD-RULES-009`. Nothing here computes demand, and the paragraph above says
+what would.
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#27
+
+*revision: authored · kind: heading · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#28
+
+*revision: authored · kind: prose · heading: Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner / Status · hash: sha256:d93b3eb0c605bebd26f5b52a1b62bae2faa5179d7bfa51fa1b97acaf7c78d4f6*
+
+Accepted. The derivation `P41-RUN-STOPS-NAMING-EVERY-RULE` asked for is available without a
+planner: sixty-two of seventy entries close over one value, three of four shapes collapse into
+one `fn` signature, and the residue is a six-entry declared mapping of the kind `OD-GATE-017`
+already licensed. That item is re-authored on this answer rather than left stranded behind a
+decline that never addressed it.
 
 ### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#1
 

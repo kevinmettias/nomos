@@ -703,6 +703,7 @@ graph LR
     od_gate_017 -->|"relates-to"| od_rules_008
     od_gate_017 -->|"relates-to"| od_rules_009
     od_gate_017 -->|"relates-to"| od_rules_022["OD-RULES-022"]
+    od_gate_017 -->|"relates-to"| od_rules_027["OD-RULES-027"]
     od_gate_018 -->|"relates-to"| od_contracts_001
     od_gate_020 -->|"relates-to"| od_capability_010
     od_gate_020 -->|"relates-to"| od_gate_011
@@ -725,6 +726,7 @@ graph LR
     od_gate_023 -->|"relates-to"| od_gate_024
     od_gate_023 -->|"relates-to"| od_gate_025
     od_gate_023 -->|"relates-to"| od_rules_009
+    od_gate_023 -->|"relates-to"| od_rules_027
     od_gate_024 -->|"relates-to"| od_analysis_011
     od_gate_024 -->|"relates-to"| od_gate_017
     od_gate_024 -->|"relates-to"| od_gate_023
@@ -1357,6 +1359,7 @@ graph LR
     od_rules_009 -->|"relates-to"| od_rules_007
     od_rules_009 -->|"relates-to"| od_rules_008
     od_rules_009 -->|"relates-to"| od_rules_019
+    od_rules_009 -->|"relates-to"| od_rules_027
     od_rules_010 -->|"relates-to"| od_capability_013
     od_rules_010 -->|"relates-to"| od_executor_006
     od_rules_010 -->|"relates-to"| od_gate_020
@@ -1435,6 +1438,9 @@ graph LR
     od_rules_026 -->|"relates-to"| od_rules_003
     od_rules_026 -->|"relates-to"| od_rules_010
     od_rules_026 -->|"relates-to"| od_store_002
+    od_rules_027 -->|"relates-to"| od_gate_017
+    od_rules_027 -->|"relates-to"| od_gate_023
+    od_rules_027 -->|"relates-to"| od_rules_009
     od_rules_028 -->|"affects"| od_rules_020
     od_rules_028 -->|"relates-to"| od_host_001
     od_rules_028 -->|"relates-to"| od_platform_002
@@ -1801,6 +1807,7 @@ graph LR
     od_rules_024
     od_rules_025
     od_rules_026
+    od_rules_027
     od_rules_028
     od_spec_001
     od_spec_002

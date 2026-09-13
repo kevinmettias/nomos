@@ -60617,7 +60617,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -60630,7 +60630,27 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "unning 15 tests\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.05s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789272764,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6f11edff26940de60bf7b283ac11f2c679d5168b"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -65722,20 +65742,73 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-subject-derivation",
-        "acquired_at": 1789271969,
-        "lease_expires_at": 1789279169
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
           "test",
           "-p",
           "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "inished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling proc-macro2 v1.0.107\n   Compiling quote v1.0.47\n   Compiling cfg-if v1.0.4\n   Compiling typenum v1.20.1\n   Compiling serde_core v1.0.229\n   Compiling serde v1.0.229\n   Compiling once_cell v1.21.4\n   Compiling itoa v1.0.18\n   Compiling hashbrown v0.17.1\n   Compiling equivalent v1.0.2\n   Compiling unsafe-libyaml v0.2.11\n   Compiling cpufeatures v0.2.17\n   Compiling serde_json v1.0.151\n   Compiling ryu v1.0.23\n   Compiling fallible-iterator v0.3.0\n   Compiling fallible-streaming-iterator v0.1.9\n   Compiling bitflags v2.13.1\n   Compiling memchr v2.8.3\n   Compiling smallvec v1.15.2\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos-render\\crates\\spec\\nomos-spec-store)\n   Compiling zerocopy v0.8.56\n   Compiling zmij v1.0.23\n   Compiling libsqlite3-sys v0.30.1\n   Compiling indexmap v2.14.0\n   Compiling generic-array v0.14.7\n   Compiling block-buffer v0.10.4\n   Compiling crypto-common v0.1.7\n   Compiling syn v3.0.3\n   Compiling digest v0.10.7\n   Compiling sha2 v0.10.9\n   Compiling serde_derive v1.0.229\n   Compiling ahash v0.8.12\n   Compiling hashbrown v0.14.5\n   Compiling hashlink v0.9.1\n   Compiling rusqlite v0.32.1\n   Compiling serde_yaml_ng v0.10.0\n   Compiling nomos-spec-model v0.1.0 (F:\\repos\\nomos-render\\crates\\spec\\nomos-spec-model)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.47s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789272435,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P41-RUN-STOPS-NAMING-EVERY-RULE-2",
+      "title": "Run still names every rule, and OD-RULES-027 decided the derivation that stops it is available",
+      "why": "run_context.rs writes out seventy ComposedRule entries by hand while composition::Registered on the gate side already loops over nomos_rules::DESCRIPTORS. P41-RUN-STOPS-NAMING-EVERY-RULE was declined pending P74-RUN-ARRAY-DERIVATION-DISPOSITION, whose decline reason says in as many words that the decision authors the implementation item if the derivation turns out to be available. OD-RULES-027 decided it is: the census found sixty-two of seventy entries close over the same sources value, three of the four closure shapes collapse into one const-compatible fn pointer, and the residue is six entries reading a capability slice. This is that item, scoped to what the record decided rather than to the planner the original was tied to.",
+      "done_when": "A RuleDescriptor carries its check as a uniform fn pointer over sources and a fact reader, run_context.rs derives its composed rule array by looping over DESCRIPTORS instead of naming any rule function, the only rule ids left in that file are the six-entry capability-slice exception mapping OD-RULES-027 permits, and cargo test -p nomos-check-orchestration -p nomos-rules passes with the composed set unchanged.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-rules"
         ],
         "timeout_seconds": 600
       },

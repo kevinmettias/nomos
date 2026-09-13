@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:b327bbe3c7d5ade973639170a571baaefed6dadf251788605acbab4ed29f8cce",
-  "inputs_digest": "sha256:87aec71a653d1cf16b476aa5db38d1afec20936db6bcab031b5af8c0a99444fb",
+  "content_digest": "sha256:5bf555a1460c0afb5123af2904e962530e8b7bc2b7b4aea636d21dcbacc30fe1",
+  "inputs_digest": "sha256:ec3bc33cc94012955364b5ba46013c7c4ceaceeff2bfc30679e09f9a84987cb8",
   "sections": [
     [
       "Documents",
-      226
+      227
     ],
     [
       "Sections",
-      1837
+      1845
     ],
     [
       "Source blocks",
-      6360
+      6388
     ]
   ],
   "inputs": [
@@ -1009,6 +1009,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md@authored",
       "hash": "sha256:66d2427694c21ad26b870820393f14285fbb1678448d0a33f4490a61fd0f1118"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md@authored",
+      "hash": "sha256:65229767fb7df92fdb3e15faa97875746dd70f7a86d656248cfd622909967161"
     },
     {
       "content": "documents",
@@ -9089,6 +9094,46 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#15",
       "hash": "sha256:0a572a0bea627e7cf59cdd91b47f651fff081974091e095253bd3002b457862b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#1",
+      "hash": "sha256:416a332cb8390c5c0986bc1a92bf19a34e0e2501a7ff68408ef747ae57735516"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#2",
+      "hash": "sha256:c19a832c4677fc6d553dd6ebaffb5c8c2a607ad3cb4c270f28cf107d03720c6b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#5",
+      "hash": "sha256:aa644710c56b04160e7092600302332972f0f34897b1002898fb026ba0696382"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#12",
+      "hash": "sha256:048677f9a6665ecadf17041e55fd7243c2f605f110b943081e1f4e6c3a27957e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#16",
+      "hash": "sha256:9b8ba1c904f135a98138c57b1b8544816e47f429a789bac5005ad49369ebb5ef"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#21",
+      "hash": "sha256:4749152b64e9603be607c09fdb4f2e8dde8fc80a43457aa2080e10a9a573fee4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#23",
+      "hash": "sha256:cdf1ac8a6cc9e185b83d69141a325b843e0ad8991921354c90e994ddca3d131b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#27",
+      "hash": "sha256:fc6897f4bc876d4d153df0384e7107516abec7b7c61de0ffd272114958eb1fbd"
     },
     {
       "content": "headings",
@@ -38059,6 +38104,146 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#16",
       "hash": "sha256:c0d2e9482b993beebbee813f801d24e18320e86a63d7a258d43c0c0ca445e14b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#1",
+      "hash": "sha256:7355bc5b7e218d2b2440e02a5e06c34e4f0a3be020efa44a12154fb2206c3546"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#3",
+      "hash": "sha256:2defec0af58b05df688c41a646bcc2c5e3c751333853fb0da28d054eb2b2a543"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#4",
+      "hash": "sha256:1a69358f5bb55525148dd5bf350aefbba0f845810d24dfd54de2658941105fd0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#6",
+      "hash": "sha256:c085d32e64ce67f5a1056ac275c9a68a59bd9449ee6b7bba5ddaf4ac8f0b5723"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#7",
+      "hash": "sha256:9bb1e869a5d05175e905aabe0595772fa6a7f8ce6ab34b7b7405b0a0926aadf3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#8",
+      "hash": "sha256:1c286e8c211878ba6e0429823128824f94203a343b14eca81adb30a5f9e11270"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#9",
+      "hash": "sha256:1b8fd79e0cbfd22acf71658696b4bf18b33a8cb31db1b30933176240b51ffac1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#10",
+      "hash": "sha256:cda58f8378fd61cf6da975cadae5b5b3e0a5580a7e98a03e91a96d2c9111dd74"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#11",
+      "hash": "sha256:1fa062d90c4401797839db64cfdd7ccbc72c0f7d16a5b2c189dfcfa6f7c8f38c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#12",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#13",
+      "hash": "sha256:4f8da10d3037f555d8ec9c6a33f52ba26348fd38f970192d0b836450aac6dd78"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#14",
+      "hash": "sha256:e0bc58103dbbe0d03ed50241bbb4bb25923446a746883aa06c24f3803472cd54"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#15",
+      "hash": "sha256:da010214b974f2810f50275e561d141b68ecae042d5a4bcbc05414786b076ff5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#16",
+      "hash": "sha256:034c20d404b329334f148d38725e6960e4edbce1fb2207ab09d735f598566c18"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#17",
+      "hash": "sha256:c304787a733f53f46b88ca741a234e36f008f0ed9f374fd34a0dab8a32157d45"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#18",
+      "hash": "sha256:de40de0e5f4bddb7d035498a802b54facc6c1d7a28626942cd0b13d4d3694dc1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#19",
+      "hash": "sha256:900766aa5748eed6abba33839f9c05a802e5c28c0d90463608ef60f2a039daab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#20",
+      "hash": "sha256:336f01e90bf6361500bdc7c359af1a09290a631176e3ea7693b16b179be5c3c9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#21",
+      "hash": "sha256:0a95030ef459d1e0a1dfb93c1245b2b1eed37ca513acf1606b8a0423ef846f7f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#22",
+      "hash": "sha256:8885d2ba375ddf21705e31a0f96af83422955335fbb199e42ae06fb01f035460"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#23",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#24",
+      "hash": "sha256:7600cf511eefff4a88a788f1de0bd6c60062ad3557c24a0f681a69379fe6b4a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#25",
+      "hash": "sha256:c06346e05b1ec3d7c0b4f64b241b49b89dceb7fa08484780d392172f5d4a76ae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#26",
+      "hash": "sha256:fdebc92f1d321266ae9454160885f25ce4c7e5d672cc8b49b5a17d217a27a8e1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#27",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#28",
+      "hash": "sha256:d93b3eb0c605bebd26f5b52a1b62bae2faa5179d7bfa51fa1b97acaf7c78d4f6"
     },
     {
       "content": "blocks",
