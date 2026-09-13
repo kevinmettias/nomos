@@ -1,6 +1,7 @@
 //! Every rule the ledger must satisfy, checked over a whole document.
 
 use nomos_platform::Timestamp;
+use std::collections::{BTreeMap, BTreeSet};
 
 use crate::LedgerItem;
 use crate::ItemId;
@@ -26,10 +27,127 @@ pub fn Validate_Document(document: &LedgerDocument, now: Timestamp) -> Vec<Strin
         Check_Pattern(item, &mut violations);
     }
 
+    violations.extend(Dependency_Cycles(document));
+
     let overlapping = Overlapping_Claims(document, now);
     violations.extend(overlapping);
 
     return violations;
+}
+
+/// Sets of items that can only finish after one another, and so can never finish.
+///
+/// # Why `Check_Dependencies` does not already cover this
+///
+/// That check asks whether each named dependency is an item the ledger holds. Every member of
+/// a ring names a real item, so a ring is a valid document by that check -- and `Load` refuses
+/// only invalid documents, which means a cycle loads and nothing downstream looks again. What
+/// follows is silence rather than an error: every item in the ring lists as `waiting`, the
+/// label for a dependency that has not finished, and stays that way forever because no member
+/// can finish before another member that cannot finish either. The `next:` line computed over
+/// the whole board never names any of them, and `stranded` -- the one label that says a
+/// dependency will never finish -- is reserved by `OD-LEDGER-020` for a *declined* dependency
+/// and does not fire here.
+///
+/// # Why one violation per ring and not one per member
+///
+/// A caller has one thing to break. Reporting each member separately would read as several
+/// defects and would still not say which items have to be considered together to repair any
+/// of them.
+///
+/// # Why mutual reachability and not a walk that remembers what it has seen
+///
+/// A diamond -- two paths from one item down to another -- arrives at its bottom item twice,
+/// so a check written on "have I been here before" reports it as a ring. That shape is
+/// ordinary and common on a real board. What makes a ring a ring is that its members reach
+/// *each other*, and `Test_An_Acyclic_Diamond_Should_Not_Be_Reported` is the guard that keeps
+/// the two apart.
+///
+/// Put that way the self-dependency needs no case of its own: an item naming itself reaches
+/// itself, which is what every member of every longer ring also does.
+fn Dependency_Cycles(document: &LedgerDocument) -> Vec<String>
+{
+    let reaches = Reachability_Of(document);
+
+    let mut rings: Vec<String> = Vec::new();
+    let mut already_reported: BTreeSet<&ItemId> = BTreeSet::new();
+
+    for (item, downstream) in &reaches
+    {
+        if already_reported.contains(item) || !downstream.contains(item)
+        {
+            continue;
+        }
+
+        let ring: Vec<&ItemId> = downstream
+            .iter()
+            .copied()
+            .filter(|other| return reaches.get(other).is_some_and(|from_other| return from_other.contains(item)))
+            .collect();
+
+        for member in &ring
+        {
+            already_reported.insert(member);
+        }
+        rings.push(Ring_Violation(&ring));
+    }
+
+    rings.sort();
+
+    return rings;
+}
+
+/// Every item each item can reach through `depends_on`, directly or at any remove.
+///
+/// A dependency naming nothing the ledger holds is `Check_Dependencies`' violation and is
+/// skipped here rather than reported a second time in a second vocabulary.
+fn Reachability_Of(document: &LedgerDocument) -> BTreeMap<&ItemId, BTreeSet<&ItemId>>
+{
+    let mut edges: BTreeMap<&ItemId, Vec<&ItemId>> = BTreeMap::new();
+    for item in &document.items
+    {
+        edges.insert(&item.id, item.depends_on.iter().collect());
+    }
+
+    let mut reaches = BTreeMap::new();
+    for item in &document.items
+    {
+        let mut downstream: BTreeSet<&ItemId> = BTreeSet::new();
+        let mut pending: Vec<&ItemId> = edges.get(&item.id).cloned().unwrap_or_default();
+
+        while let Some(next) = pending.pop()
+        {
+            if !edges.contains_key(next) || !downstream.insert(next)
+            {
+                continue;
+            }
+            pending.extend(edges.get(next).cloned().unwrap_or_default());
+        }
+
+        reaches.insert(&item.id, downstream);
+    }
+
+    return reaches;
+}
+
+/// One ring, said so a reader knows which items have to be considered together.
+fn Ring_Violation(members: &[&ItemId]) -> String
+{
+    let Some(first) = members.first()
+    else
+    {
+        // Unreachable: a ring always holds the item that was found to reach itself.
+        return "an empty dependency cycle was reported, which is a defect in this check".to_owned();
+    };
+
+    if members.len() == 1
+    {
+        return format!("{first} depends on itself, which is a dependency cycle of one, so it can never finish");
+    }
+
+    let named: Vec<&str> = members.iter().map(|member| return member.As_Text()).collect();
+
+    return format!("{} form a dependency cycle, so none of them can ever finish", named.join(", "));
 }
 
 /// Identifiers that appear more than once, which makes every lookup ambiguous.
@@ -280,6 +398,104 @@ mod tests
         assert!(violations.iter().any(|line| line.contains("more than once")), "{violations:?}");
         assert!(violations.iter().any(|line| line.contains("reserves nothing")), "{violations:?}");
         assert_eq!(violations.len(), 2, "exactly these two violations for this fixture, no more, no fewer: {violations:?}");
+    }
+
+    /// Two items naming each other is a ring nothing in it can leave.
+    ///
+    /// Reported once for the ring, not once per member: a caller has one thing to break, and
+    /// two violations saying the same thing would read as two defects.
+    #[test]
+    fn Test_Two_Items_Depending_On_Each_Other_Should_Be_One_Violation()
+    {
+        let document = Document(vec![Depending("A-1", &["B-1"]), Depending("B-1", &["A-1"])]);
+
+        let cycles = Cycles_Among(&document);
+
+        assert_eq!(cycles.len(), 1, "{cycles:?}");
+        let ring = cycles.first().expect("asserted len 1 above");
+        assert!(ring.contains("A-1") && ring.contains("B-1"), "{ring}");
+    }
+
+    /// A ring longer than two, which a check comparing pairs would miss entirely.
+    #[test]
+    fn Test_A_Longer_Ring_Should_Be_One_Violation_Naming_Every_Member()
+    {
+        let document = Document(vec![
+            Depending("C-1", &["D-1"]),
+            Depending("D-1", &["E-1"]),
+            Depending("E-1", &["C-1"]),
+        ]);
+
+        let cycles = Cycles_Among(&document);
+
+        assert_eq!(cycles.len(), 1, "{cycles:?}");
+        let ring = cycles.first().expect("asserted len 1 above");
+        for member in ["C-1", "D-1", "E-1"]
+        {
+            assert!(ring.contains(member), "{member} missing from {ring}");
+        }
+    }
+
+    /// An item naming itself.
+    ///
+    /// Measured not to be covered by `Check_Dependencies`, which asks only whether the named
+    /// item is one the ledger holds -- and it is, it is this one. So it is a ring of one and
+    /// is reported as such, rather than left to a check that does not reach it.
+    #[test]
+    fn Test_An_Item_Depending_On_Itself_Should_Be_Reported_As_A_Ring_Of_One()
+    {
+        let document = Document(vec![Depending("F-1", &["F-1"])]);
+
+        let cycles = Cycles_Among(&document);
+
+        assert_eq!(cycles.len(), 1, "{cycles:?}");
+        let ring = cycles.first().expect("asserted len 1 above");
+        assert!(ring.contains("F-1") && ring.contains("depends on itself"), "{ring}");
+    }
+
+    /// The negative control: two paths from one item down to another is not a ring.
+    ///
+    /// A diamond arrives at `J-1` twice, so any check written on "have I been here before"
+    /// rather than on "do these reach each other" reports it. This is the shape that tells
+    /// those two apart, and a real board is full of it.
+    #[test]
+    fn Test_An_Acyclic_Diamond_Should_Not_Be_Reported()
+    {
+        let document = Document(vec![
+            Depending("G-1", &["H-1", "I-1"]),
+            Depending("H-1", &["J-1"]),
+            Depending("I-1", &["J-1"]),
+            Depending("J-1", &[]),
+        ]);
+
+        let cycles = Cycles_Among(&document);
+
+        assert!(cycles.is_empty(), "a diamond is not a cycle: {cycles:?}");
+    }
+
+    /// Every cycle violation `Validate_Document` reports over `document`, and nothing else.
+    fn Cycles_Among(document: &LedgerDocument) -> Vec<String>
+    {
+        let now = Timestamp::From_Unix_Seconds(1_000);
+
+        return Validate_Document(document, now)
+            .into_iter()
+            .filter(|line| return line.contains("cycle"))
+            .collect();
+    }
+
+    fn Document(items: Vec<LedgerItem>) -> LedgerDocument
+    {
+        return LedgerDocument { schema_version: crate::SCHEMA_VERSION, items };
+    }
+
+    /// A workable item that depends on the identifiers named.
+    fn Depending(id: &str, dependencies: &[&str]) -> LedgerItem
+    {
+        let mut item = Workable_Item(ItemId::New(id));
+        item.depends_on = dependencies.iter().map(|named| return ItemId::New(*named)).collect();
+
+        return item;
     }
 
     fn Workable_Item(id: ItemId) -> LedgerItem
