@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:ffc3609845256de39fd9bf941445248fc1c1104a5f9d82ce25c094a2373c0fca",
-  "inputs_digest": "sha256:c975eaa1214b43a8195579a352b1c0dd76974ec21fb3bcb08bc432949dc631cc",
+  "content_digest": "sha256:44fd23d2791221d8f8f022af26704c9ed808e8e47fba1786471d9c67840f99ba",
+  "inputs_digest": "sha256:230e291e6928cbf5333ec0910c1775a91c00bc0c82d6d1396ead5ed21b542f11",
   "sections": [
     [
       "Documents",
-      222
+      223
     ],
     [
       "Sections",
-      1803
+      1809
     ],
     [
       "Source blocks",
-      6228
+      6250
     ]
   ],
   "inputs": [
@@ -254,6 +254,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md@authored",
       "hash": "sha256:33f282b8156d4f3dd172d5ee4c250a2cb2d4efb04987e2efcae89ba263371d43"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored",
+      "hash": "sha256:c73b6568e987da09a2256a0e13c66b1d768911f443b0fa014c71ff319d11591f"
     },
     {
       "content": "documents",
@@ -2864,6 +2869,36 @@
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#22",
       "hash": "sha256:87dd687de0e76375d4fc2767bc7443333fe3fbb1f5d399b6667668aae7bfd97f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#1",
+      "hash": "sha256:9cc3f6c097caec6db3afe4cda835487fd83af2ec87ba4573259a7c0e7bafacc0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#2",
+      "hash": "sha256:51806b77b9b8695845802b23bfce03115fc0312615cc1ce466baf4777e0e44ee"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#5",
+      "hash": "sha256:ea7ef05a9da8a2df9aa44139e2d5d2cb51a1a01c49a23f0213965553abd08102"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#11",
+      "hash": "sha256:3f5d02d7dfde5d42862db94701c707f76d5e26b539b5d6741009ab7a970f58a5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#17",
+      "hash": "sha256:fd6749b1e29f99665e6767a4b4f2cd47e4ebfbb064dcecbe1a30487a88f281d4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#21",
+      "hash": "sha256:89e58c5a8dca4b2131792183be62dcf419d3c0cb50adc3979efee156b988ee1a"
     },
     {
       "content": "headings",
@@ -16039,6 +16074,116 @@
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#23",
       "hash": "sha256:d4ea10c865d4129a83bf6b16e1277d0320a351ae3a998c1b24cba90908cc62a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#1",
+      "hash": "sha256:701f9e24dd4094241da74d874742c3dd1a796117059b02f33431948f091f3fda"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#3",
+      "hash": "sha256:0d6e3986230de500be4276cae2f166ab101abc4cd7c253f39afe3648dc9ab0b4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#4",
+      "hash": "sha256:65ddffa8b396db640195bba864c9edbe97e0888efb2cbcddc526ad4e0e84bc7b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#6",
+      "hash": "sha256:afb27b2f9fc66349690b33927aa98aeac92ad2b1068d114d59c30c883dd8f2dd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#7",
+      "hash": "sha256:de83d5cfc7ab48c6f67eb1fbee40259ba2e344a28d57f39644eccafa753d908b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#8",
+      "hash": "sha256:bda016af2f4ca7a0f99b51b2dcfd1386209afffb28a7db83238371357568bbf7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#9",
+      "hash": "sha256:97f78592d653f88f7693a8d80fb6356d6b1a384c34754d05aa045e15ca26707f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#10",
+      "hash": "sha256:4e3b74ea8c067c34d8dd06a5cad451f0e852e3de8b667cc6e0eb907f15200417"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#11",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#12",
+      "hash": "sha256:9ebe136b12fdf65efcf625886d0e8421bd008d84b5de99278ebde53d19e96f8c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#13",
+      "hash": "sha256:d0b9a5f2aec08028246b1244762897e0403084b16f6984e631ff1a7f24050e70"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#14",
+      "hash": "sha256:2bb047f2dd4589a0bdb749b84ba9e3427fb1897f3e116b75fc1af2abbd08e4a1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#15",
+      "hash": "sha256:b55a82ab095219db66cfd40e8cde6631d7366e5666785b0b27dc9fe3b68bc834"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#16",
+      "hash": "sha256:dd043191763b6543520c82be7005846179a255ff27bf3f407ee5a9ee0a7d6ac2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#17",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#18",
+      "hash": "sha256:1cd428ee6dabaec8b54c2b19c5f68ef84004b15da0fd285badbb9da146a37119"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#19",
+      "hash": "sha256:1835bde973ebc5702de05b9327503b4b7b24c06db21309ccd02fa52966825b41"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#20",
+      "hash": "sha256:8cd75cf3bcf3fa5488c201e50c985a6486154f3712dfa0f0b94d15e98d6960db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#21",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#22",
+      "hash": "sha256:2c7613e110e6bd36a471654cd8f8900008c4f862f20cda5e4848d3e60ea734c6"
     },
     {
       "content": "blocks",

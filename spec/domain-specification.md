@@ -57,6 +57,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md@authored | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md | authored | 20 | 6 | sha256:88d25ef06103ea7b630b4cf9e09748244421ae9d293d1030f63bed54f2be8850 |
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md@authored | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md | authored | 23 | 6 | sha256:8464e7bf3a1b75d087bbd7ed1b6608955c4c9bafb6ee1a2d2e8c55c66bf06460 |
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md@authored | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md | authored | 23 | 8 | sha256:33f282b8156d4f3dd172d5ee4c250a2cb2d4efb04987e2efcae89ba263371d43 |
+| docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md | authored | 22 | 6 | sha256:c73b6568e987da09a2256a0e13c66b1d768911f443b0fa014c71ff319d11591f |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ea548df7de6d318f3946ffc3c153f837e4289c5b25045352897d0221c1c1d3f7 |
@@ -584,6 +585,12 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#16 | authored | 2 | What happens to the content-addressed encoding |
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#18 | authored | 2 | What this record does not do |
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#22 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#1 | authored | 1 | Whether a bundled contract crate doing real I/O may be classified Capability Contract zone |
+| docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#2 | authored | 2 | Question |
+| docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#11 | authored | 2 | The Decision |
+| docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#17 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#21 | authored | 2 | Status |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1 | authored | 1 | A completeness guard is only as complete as the universe it quantifies over |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#2 | authored | 2 | Question |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#5 | authored | 2 | The Shape, Which Is Not The One The Item Assumed |
@@ -13218,6 +13225,201 @@ real, separate, bounded work once the extension exists.
 Accepted. An `Implementation` item's own generic parameter names join `OD-CAPABILITY-011`'s
 closed set of typed shape extensions, using the same encoding convention its `Struct_Shape`
 already established. No code moves here.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#1
+
+*revision: authored · kind: heading · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone · hash: sha256:701f9e24dd4094241da74d874742c3dd1a796117059b02f33431948f091f3fda*
+
+# Whether a bundled contract crate doing real I/O may be classified Capability Contract zone
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#2
+
+*revision: authored · kind: heading · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#3
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / Question · hash: sha256:0d6e3986230de500be4276cae2f166ab101abc4cd7c253f39afe3648dc9ab0b4*
+
+`nomos-connector-coderabbit` runs `gh api` as a subprocess and `nomos-cap-requirement-trace`
+reads arbitrary files across the tree, and both are classified `Zone::CapabilityContract`
+beside nine siblings that are pure declarations. The zone table says why, in its own
+comments: `Provider` zone "would leave this fact family structurally unreachable by
+`nomos-rules`, not merely misfiled." `README.md` says the same for both rows.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#4
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / Question · hash: sha256:65ddffa8b396db640195bba864c9edbe97e0888efb2cbcddc526ad4e0e84bc7b*
+
+So the label was chosen by what the dependency graph permits rather than by what the crate
+does. `OD-CAPABILITY-002` licenses the *bundling* and its one-provider criterion is untouched
+by this — but it decides nothing about the zone consequence. Two instances exist, so this is
+not a population of one.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#5
+
+*revision: authored · kind: heading · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#6
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What Was Measured · hash: sha256:afb27b2f9fc66349690b33927aa98aeac92ad2b1068d114d59c30c883dd8f2dd*
+
+**The two crates violate no rule.** `Permits` grants
+`Specification | CapabilityContract => matches!(to, Protocol | Substrate)`, and
+`nomos-platform` — which declares `FileSystem` and `ProcessLauncher` — is `Zone::Substrate`.
+A Capability Contract crate reaching a platform port is therefore already permitted,
+zone-wide, and was before either of these crates existed. Neither is smuggling anything past
+the zone model.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#7
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What Was Measured · hash: sha256:de83d5cfc7ab48c6f67eb1fbee40259ba2e344a28d57f39644eccafa753d908b*
+
+**The zone's other members do not use that permission.** Sampled `nomos-cap-syntax`,
+`nomos-cap-naming-policy`, `nomos-cap-limits-policy` and `nomos-cap-dependency-policy`: zero
+files in each name `nomos_platform::FileSystem` or `nomos_platform::ProcessLauncher`.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#8
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What Was Measured · hash: sha256:bda016af2f4ca7a0f99b51b2dcfd1386209afffb28a7db83238371357568bbf7*
+
+**The split this would otherwise owe already exists, five times, in the same zone.** The five
+`nomos-cap-*-policy` contracts are pure payload declarations; `nomos-repo-policy` is
+`Zone::Provider` and is where the `FileSystem` read of `standards.json` actually lives
+(`crates/repository/nomos-repo-policy/src/goals/fact_context.rs`). Contract in Capability
+Contract, provider doing the I/O in Provider, is not a shape this workspace would have to
+invent — it is the dominant shape of this very zone.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#9
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What Was Measured · hash: sha256:97f78592d653f88f7693a8d80fb6356d6b1a384c34754d05aa045e15ca26707f*
+
+**The table's reachability claim is true.** `Provider | Rules => matches!(to, Protocol |
+Substrate | CapabilityContract)`: `Rules` may not name `Provider` at all. Classifying either
+crate `Provider` would make its fact family structurally unreachable from `nomos-rules`,
+exactly as the comment says.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#10
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What Was Measured · hash: sha256:4e3b74ea8c067c34d8dd06a5cad451f0e852e3de8b667cc6e0eb907f15200417*
+
+**No test asserts anything about this.**
+`Test_Dependencies_Should_Run_Strictly_Downward` (`tests/contract/tests/boundaries/graph.rs`)
+walks every real dependency and asserts `Permits(zone, dependency_zone)`. That is the whole
+of what the boundary tests say about the Capability Contract zone, and it is the wrong
+direction to catch a misclassification: moving a row from `Provider` to `CapabilityContract`
+makes that assertion *easier* to satisfy, never harder. `Test_A_Capability_Id_Should_Be_
+Written_In_One_Crate` — `OD-CAPABILITY-002`'s own guard — constrains where an id is written,
+not which zone its crate sits in. So the zone table's rows are load-bearing prose that
+nothing checks, which is the precise reason this question is worth a record rather than a
+comment.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#11
+
+*revision: authored · kind: heading · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#12
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / The Decision · hash: sha256:9ebe136b12fdf65efcf625886d0e8421bd008d84b5de99278ebde53d19e96f8c*
+
+**Both classifications stand, and the reason the table gives for them is retired.**
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#13
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / The Decision · hash: sha256:d0b9a5f2aec08028246b1244762897e0403084b16f6984e631ff1a7f24050e70*
+
+A crate is Capability Contract because it **declares a capability contract** — and, under
+`OD-CAPABILITY-002`, may bundle that contract's single provider in the same crate while
+there is exactly one. It is never Capability Contract *because `nomos-rules` needs to reach
+it*.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#14
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / The Decision · hash: sha256:2bb047f2dd4589a0bdb749b84ba9e3427fb1897f3e116b75fc1af2abbd08e4a1*
+
+The distinction is not wordplay, and it is the whole content of this record. Reasoning from
+the edge to the label makes `Rules ↛ Provider` vacuous: anything a rule turns out to need is
+relabelled to whatever lets it be reached, and the one edge the zone model draws to keep
+judgment away from acquisition stops constraining anything. Reasoning from the criterion to
+the label leaves that edge meaning what it says, and happens to classify both of these
+crates the same way today — which is why this costs nothing to adopt and is worth writing
+down before a third case arrives with less obvious merits.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#15
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / The Decision · hash: sha256:b55a82ab095219db66cfd40e8cde6631d7366e5666785b0b27dc9fe3b68bc834*
+
+**What would owe a split is unchanged, and it is `OD-CAPABILITY-002`'s trigger, not a new
+one:** a second provider for the same contract. At that moment the bundling license lapses on
+its own terms — "the first can change the ceiling, the version or the schema its peer is
+bound by, and the peer cannot see the file" — and the crate splits into a pure contract that
+stays Capability Contract and a provider that becomes Provider, which is what the five policy
+contracts already look like. Nothing about doing I/O triggers it, because doing I/O through a
+port is a permission this zone already has.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#16
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / The Decision · hash: sha256:dd043191763b6543520c82be7005846179a255ff27bf3f407ee5a9ee0a7d6ac2*
+
+**What the boundary tests assert under this answer, stated so nobody mistakes silence for
+coverage:** that every real dependency runs downward through `Permits`, and nothing else.
+Whether a member's zone matches what the crate *is* remains unchecked by any test, and is
+held by this record and by the zone table's own comments. A future increment that wanted it
+mechanical would need a property the graph does not currently carry — which port a crate
+reaches is visible, but "declares a contract" is not — and this record does not propose one
+ahead of a case that needs it.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#17
+
+*revision: authored · kind: heading · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#18
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What This Record Does Not Do · hash: sha256:1cd428ee6dabaec8b54c2b19c5f68ef84004b15da0fd285badbb9da146a37119*
+
+It does not split either crate. Neither has a second provider, so neither has reached
+`OD-CAPABILITY-002`'s trigger, and splitting now would buy two crates and no property — the
+same trade that record already refused.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#19
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What This Record Does Not Do · hash: sha256:1835bde973ebc5702de05b9327503b4b7b24c06db21309ccd02fa52966825b41*
+
+It does not touch `Permits`, the zone table, `README.md`, or any code. The two rows' comments
+still state the edge as their reason and should state the criterion instead; that is a
+correction against files this record does not hold, and is filed separately rather than done
+here.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#20
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What This Record Does Not Do · hash: sha256:8cd75cf3bcf3fa5488c201e50c985a6486154f3712dfa0f0b94d15e98d6960db*
+
+It does not revisit `OD-CAPABILITY-002`'s one-provider criterion, which this record depends
+on rather than amends.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#21
+
+*revision: authored · kind: heading · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#22
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / Status · hash: sha256:2c7613e110e6bd36a471654cd8f8900008c4f862f20cda5e4848d3e60ea734c6*
+
+Accepted. Both crates stay Capability Contract, on the criterion rather than on the
+dependency edge. Doing real I/O through a platform port does not disqualify a member of this
+zone, because `Permits` has always granted it; being reachable from `nomos-rules` does not
+qualify one, because that reasoning would empty the `Rules ↛ Provider` edge of meaning. The
+split stays owed at `OD-CAPABILITY-002`'s existing trigger, a second provider, and the
+boundary tests are recorded as asserting downward dependency only.
 
 ### docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1
 
