@@ -1,3 +1,5 @@
+pub const fn nomos_gate_orchestration::Admissibility::Is_A_Judgment(self) -> bool
+pub enum nomos_gate_orchestration::Admissibility
 pub enum nomos_gate_orchestration::CoveragePolicy
 pub enum nomos_gate_orchestration::Explanation
 pub enum nomos_gate_orchestration::FindingDisposition
@@ -7,6 +9,9 @@ pub enum nomos_gate_orchestration::PhaseDisposition
 pub enum nomos_gate_orchestration::PhaseThreshold
 pub enum nomos_gate_orchestration::RuleCompositionError
 pub enum nomos_gate_orchestration::SuppressionDisposition
+pub enum variant nomos_gate_orchestration::Admissibility::NotJudged
+pub enum variant nomos_gate_orchestration::Admissibility::Permitted
+pub enum variant nomos_gate_orchestration::Admissibility::Refused
 pub enum variant nomos_gate_orchestration::CoveragePolicy::RequireCompleteness
 pub enum variant nomos_gate_orchestration::CoveragePolicy::Unset
 pub enum variant nomos_gate_orchestration::Explanation::Found { finding: Box<Finding>, would_block: bool, calibrated_by: Option<RuleCalibration>, suppressed_by: Option<Suppression>, baselined_by: Option<BaselineDebt>, contract: Option<(String, u32)>, }
@@ -33,6 +38,7 @@ pub enum variant nomos_gate_orchestration::SuppressionDisposition::FormalRiskAcc
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::InlineSuppression
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::RepositoryPolicyException
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::TemporaryWaiver
+pub fn nomos_gate_orchestration::Admits(depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
 pub fn nomos_gate_orchestration::AdoptionPolicy::Calibrating<'a>(&'a self, finding: &Finding) -> Option<&'a RuleCalibration>
 pub fn nomos_gate_orchestration::BaselineDebt::Is_Applicable_To(&self, finding: &Finding) -> bool
 pub fn nomos_gate_orchestration::BaselinePolicy::Tolerating<'a>(&'a self, finding: &Finding) -> Option<&'a BaselineDebt>
@@ -123,6 +129,8 @@ pub struct field nomos_gate_orchestration::SuppressionPolicy::suppressions: Vec<
 pub struct nomos_gate_orchestration::AdoptionPolicy
 pub struct nomos_gate_orchestration::BaselineDebt
 pub struct nomos_gate_orchestration::BaselinePolicy
+pub struct nomos_gate_orchestration::DependedCrate<'a>(pub &'a str)
+pub struct nomos_gate_orchestration::DependingCrate<'a>(pub &'a str)
 pub struct nomos_gate_orchestration::DispositionChange
 pub struct nomos_gate_orchestration::FindingQuery
 pub struct nomos_gate_orchestration::GateCommand

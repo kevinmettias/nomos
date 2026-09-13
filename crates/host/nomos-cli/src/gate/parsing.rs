@@ -6,31 +6,36 @@ use nomos_contracts::RuleId;
 use nomos_gate_orchestration::{RuleSelector, ScopeSelector};
 
 /// The flags this group accepts besides `--root`, `--rule` and `--location`.
-const KNOWN_ARGUMENTS: [&str; 6] =
-    ["--root", "--include", "--exclude", "--rule", "--location", "--against"];
+const KNOWN_ARGUMENTS: [&str; 8] =
+    ["--root", "--include", "--exclude", "--rule", "--location", "--against", "--from", "--to"];
 
 pub(super) const USAGE: &str = "usage: nomos gate plan    [--root <path>] [--include <path>]… \
 [--exclude <path>]… [--rule <id>]…\n       \
      nomos gate run     [--root <path>] [--include <path>]… [--exclude <path>]… [--rule <id>]…\n       \
      nomos gate explain [--root <path>] --rule <id> --location <path>\n       \
      nomos gate compare [--root <path>] --against <path> [--include <path>]… \
-[--exclude <path>]… [--rule <id>]…\n\n\
+[--exclude <path>]… [--rule <id>]…\n       \
+     nomos gate admits  --from <crate> --to <crate>\n\n\
      plan composes this gate's rule registry and reports what it holds.\n\
      run walks the tree, judges it, and reports a real disposition.\n\
      explain walks the tree, judges it, and reports what one named finding looks like and \
 whether it would block.\n\
      compare walks --root and --against, judges each, and reports which findings were \
-added, removed, or moved between buckets.\n\n\
+added, removed, or moved between buckets.\n\
+     admits answers whether --from may name --to under the declared architecture, before any \
+manifest carries the edge. It reads nothing from disk, so --root does not apply to it.\n\n\
      --include/--exclude narrow which files `run` judges, by path prefix; repeat for \
 several. For plan/run, --rule (repeatable) narrows which rules' findings can fail the \
 build. For explain, --rule names the one rule whose finding to explain -- required, not \
 repeatable -- alongside --location, one of that finding's own locations, also \
 required. For compare, --against names the second tree to judge -- required -- and every \
-other flag narrows both sides alike.\n\n\
-     exit codes: 0 clean (the plan was composed, nothing judged can fail a build, or \
-explain's finding was not found or would not block),\n\
-     \x20           1 at least one finding can fail a build, or explain's finding would, \
-2 usage,\n\
+other flag narrows both sides alike. For admits, --from and --to name the two crates -- both \
+required, neither repeatable.\n\n\
+     exit codes: 0 clean (the plan was composed, nothing judged can fail a build, \
+explain's finding was not found or would not block, or admits permitted the edge or could \
+not judge it),\n\
+     \x20           1 at least one finding can fail a build, explain's finding would, or \
+admits refused the edge, 2 usage,\n\
      \x20           5 this build's own composition is self-contradictory, or the tree could \
 not be read,\n\
      \x20           6 nothing was judged: the walk found no source, or no fact was \
@@ -74,6 +79,11 @@ pub fn Gate_Invocation_From_String_Arguments(arguments: &[String]) -> Result<Inv
         return Compare_Invocation(rest, root);
     }
 
+    if verb == "admits"
+    {
+        return Admits_Invocation(rest);
+    }
+
     let command = Plan_Or_Run_Command(root, rest);
 
     return Ok(if verb == "run" { Invocation::Run(command) } else { Invocation::Plan(command) });
@@ -83,7 +93,7 @@ pub fn Gate_Invocation_From_String_Arguments(arguments: &[String]) -> Result<Inv
 fn Known_Verb(verb: &str) -> Result<(), String>
 {
     let is_unknown_verb =
-        verb != "plan" && verb != "run" && verb != "explain" && verb != "compare";
+        verb != "plan" && verb != "run" && verb != "explain" && verb != "compare" && verb != "admits";
     if is_unknown_verb
     {
         return Err(format!("unknown verb `{verb}`.\n\n{USAGE}"));
@@ -119,6 +129,21 @@ fn Explain_Invocation(rest: &[String], root: PathBuf) -> Result<Invocation, Stri
     let query = FindingQuery { rule: RuleId::New(rule), location };
 
     return Ok(Invocation::Explain { command, query });
+}
+
+/// `admits`' own required `--from` and `--to`, naming the two crates.
+///
+/// It takes no root and is handed none. Every other verb walks a tree; this one asks about
+/// two names against the declared architecture, which is what makes it cheap enough to ask
+/// before the edge exists — `OD-GATE-026` measured the two answers at 40 milliseconds against
+/// thirteen seconds. Accepting a `--root` here would advertise a narrowing that changes
+/// nothing about the answer.
+fn Admits_Invocation(rest: &[String]) -> Result<Invocation, String>
+{
+    let depending = Required_Value(Named_Value_From_String_Arguments(rest, "--from").as_ref(), Name("--from"), Usage(USAGE))?;
+    let depended = Required_Value(Named_Value_From_String_Arguments(rest, "--to").as_ref(), Name("--to"), Usage(USAGE))?;
+
+    return Ok(Invocation::Admits { depending, depended });
 }
 
 /// `compare`'s own required `--against`, naming the tree judged against `--root`.

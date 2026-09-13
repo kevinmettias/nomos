@@ -104,6 +104,14 @@ fn Root_Of(invocation: &Invocation) -> &PathBuf
         // The baseline's, because `--root` spells it for every verb including this one;
         // `--against`'s is reached through the variant itself where a test needs both.
         Invocation::Compare { baseline, .. } => &baseline.root,
+        // `admits` carries no `GateCommand` and no root, deliberately: it reads nothing from
+        // disk, which is `OD-GATE-026`'s reason it can answer before the edge exists. A test
+        // asking this one for a root has misunderstood the verb rather than found a gap, so
+        // it says so here rather than inventing `.` and answering about the wrong thing.
+        Invocation::Admits { .. } =>
+        {
+            panic!("`admits` has no root; it judges a crate pair rather than a tree")
+        }
     };
 }
 
@@ -543,4 +551,111 @@ fn Test_Relative_Path_Should_Underlie_A_Real_Explains_Search_Over_A_Clean_Tree()
     assert_eq!(code, ExitCode::Ok, "{rendered}");
     assert!(rendered.contains("not found"), "{rendered}");
     assert!(String::from_utf8_lossy(&stderr).is_empty());
+}
+
+/// `admits` parses into its own variant and carries both crate names.
+#[test]
+fn Test_Admits_Should_Parse_Into_Its_Own_Variant()
+{
+    let arguments = vec![
+        "admits".to_owned(),
+        "--from".to_owned(),
+        "nomos-rules".to_owned(),
+        "--to".to_owned(),
+        "nomos-contracts".to_owned(),
+    ];
+
+    let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("both flags are given");
+
+    let Invocation::Admits { depending, depended } = invocation
+    else
+    {
+        panic!("admits parsed as another verb");
+    };
+    assert_eq!(depending, "nomos-rules");
+    assert_eq!(depended, "nomos-contracts");
+}
+
+/// Both flags are required, and the refusal names the missing one.
+///
+/// Each direction separately: a parser reading one flag and defaulting the other would pass
+/// a single test and answer about a pair nobody asked about.
+#[test]
+fn Test_Admits_Should_Refuse_A_Missing_Crate_By_Name()
+{
+    let missing_to = Gate_Invocation_From_String_Arguments(&[
+        "admits".to_owned(),
+        "--from".to_owned(),
+        "nomos-rules".to_owned(),
+    ])
+    .expect_err("--to is required");
+    let missing_from = Gate_Invocation_From_String_Arguments(&[
+        "admits".to_owned(),
+        "--to".to_owned(),
+        "nomos-contracts".to_owned(),
+    ])
+    .expect_err("--from is required");
+
+    assert!(missing_to.contains("--to"), "{missing_to}");
+    assert!(missing_from.contains("--from"), "{missing_from}");
+}
+
+/// The three outcomes, rendered and exited, end to end through this module's own `Run`.
+///
+/// # Why the exit codes pair the way they do
+///
+/// `Permitted` and `NotJudged` both exit `Ok` and only `Refused` exits `Violations`. The
+/// pairing is the one place this verb could mislead a script: failing on `NotJudged` would
+/// stop a build over a crate this workspace has no opinion about, and succeeding on `Refused`
+/// would let the edge through. So the assertion below pins the codes *and* the words, because
+/// the words are what tell a person "yes" from "no answer" when the code cannot.
+#[test]
+fn Test_Admits_Should_Report_Each_Outcome_With_Its_Own_Code_And_Words()
+{
+    for (depending, depended, code, expected) in [
+        ("nomos-rules", "nomos-contracts", ExitCode::Ok, "permitted"),
+        ("nomos-contracts", "nomos-rules", ExitCode::Violations, "refused"),
+        ("serde_json", "nomos-contracts", ExitCode::Ok, "not judged"),
+    ]
+    {
+        let invocation = Invocation::Admits {
+            depending: depending.to_owned(),
+            depended: depended.to_owned(),
+        };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let exited = Run(&invocation, &mut stdout, &mut stderr);
+
+        let reported = String::from_utf8_lossy(&stdout).into_owned();
+        assert_eq!(exited, code, "{depending} -> {depended}: {reported}");
+        assert!(reported.contains(expected), "{depending} -> {depended}: {reported}");
+        assert!(stderr.is_empty(), "an answer is not a diagnostic: {}", String::from_utf8_lossy(&stderr));
+    }
+}
+
+/// `admits` reads nothing from disk, which is what makes it answerable before the edge is
+/// written -- so it must work from a directory that is not a repository at all.
+///
+/// Asserted rather than assumed: every other gate verb walks `--root`, and a later change
+/// that gave this one a walk would still pass every test above.
+#[test]
+fn Test_Admits_Should_Answer_Without_A_Tree()
+{
+    let elsewhere = std::env::temp_dir();
+    let restore = std::env::current_dir().expect("a current directory exists");
+    std::env::set_current_dir(&elsewhere).expect("the platform temporary directory is enterable");
+
+    let invocation = Invocation::Admits {
+        depending: "nomos-rules".to_owned(),
+        depended: "nomos-contracts".to_owned(),
+    };
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let exited = Run(&invocation, &mut stdout, &mut stderr);
+
+    std::env::set_current_dir(restore).expect("the original directory is still there");
+
+    assert_eq!(exited, ExitCode::Ok);
+    assert!(String::from_utf8_lossy(&stdout).contains("permitted"), "{}", String::from_utf8_lossy(&stdout));
 }

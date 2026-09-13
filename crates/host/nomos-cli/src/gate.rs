@@ -63,7 +63,7 @@ mod tests;
 
 pub use invocation::Invocation;
 pub use parsing::Gate_Invocation_From_String_Arguments;
-use report::{Render_Compare, Render_Explain, Render_Plan, Render_Run};
+use report::{Render_Admits, Render_Compare, Render_Explain, Render_Plan, Render_Run};
 
 mod exit_code;
 
@@ -108,6 +108,17 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
                 query,
             );
             Render_Explain(&result, stdout, stderr)
+        }
+        Invocation::Admits { depending, depended } =>
+        {
+            // The one arm that walks nothing. `OD-GATE-026` decided the subject is a crate
+            // pair, so there is no root to read, no environment to compose and no source to
+            // gather -- which is the whole reason the answer is available before the edge is.
+            let answer = nomos_gate_orchestration::Admits(
+                nomos_gate_orchestration::DependingCrate(depending),
+                nomos_gate_orchestration::DependedCrate(depended),
+            );
+            Render_Admits(answer, (depending, depended), stdout)
         }
     };
 }

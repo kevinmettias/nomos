@@ -196,6 +196,7 @@
 
 #![forbid(unsafe_code)]
 
+mod admissibility;
 mod composition;
 mod rule_composition_error;
 mod finding_query;
@@ -212,6 +213,7 @@ mod run_id;
 mod tests;
 
 pub use rule_composition_error::RuleCompositionError;
+pub use admissibility::{Admissibility, Admits, DependedCrate, DependingCrate};
 pub use composition::Registered;
 pub use finding_query::{Explain_Gate, Explanation, FindingQuery, GateExplainResult};
 pub use gate_command::GateCommand;
