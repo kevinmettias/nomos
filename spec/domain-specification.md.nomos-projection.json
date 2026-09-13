@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:c6d09de07dfd82ac0a99784bdcc9a783939346b7ffe4a010012b2957d444ad6b",
-  "inputs_digest": "sha256:b04854b9eda724d35ee088986b911bbc9007023a027258ade0ad6358a18e702e",
+  "content_digest": "sha256:d3be11772987befa85e57e1904b6bd06e3174d987e612a44c64adf1aaafa9f6d",
+  "inputs_digest": "sha256:2eb2473bc5f96e20f8b17c1a0d135785bdbcbeefaa065f7bfa748b3f6d090916",
   "sections": [
     [
       "Documents",
-      233
+      234
     ],
     [
       "Sections",
-      1920
+      1930
     ],
     [
       "Source blocks",
-      6662
+      6693
     ]
   ],
   "inputs": [
@@ -884,6 +884,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md@authored",
       "hash": "sha256:569c3dd0c4f68f7a29cdbe800e1a2e759cf8c0ee53e364e677274c253e2bec3e"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md@authored",
+      "hash": "sha256:d626c9d148242ed2fc3c3795f8eeebd9120f24c92a005151f55d6a4adfdfd4cc"
     },
     {
       "content": "documents",
@@ -8254,6 +8259,56 @@
       "content": "headings",
       "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#40",
       "hash": "sha256:2e745cc1b8f3544439f0f2b7cb4a3a1f42be925a63bc9526d4f0d7e4f296d109"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#1",
+      "hash": "sha256:5736bdacee7c588e7f4711043c87c0a04f55b1aec8a86a2a2e81525b2fd9f788"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#2",
+      "hash": "sha256:7b91059173fc1635e4ca133baf19ebdb9c8d35f425a875a7d6b491fd1c20a437"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#5",
+      "hash": "sha256:12b9b9343f7a73ef7c4b9f52136d452e03616520cc4e5b319f5068739999e949"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#11",
+      "hash": "sha256:8fe0e33c950d0f781417245838c7de72ffa4906c1e53e54f5b274283c929c6c1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#13",
+      "hash": "sha256:3f99e10973d64bd06196178aa33807ed48714fca370ae3a564186f14267ed752"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#16",
+      "hash": "sha256:41418d89943cafec3e3a6103f6b81c7c6e505b4ebc10b2d0e7354fa5b0e22aef"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#20",
+      "hash": "sha256:c53e07d0ada04dbdc355c068b80764e4cb57e5867b2dd3527be58e329bd38eb9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#22",
+      "hash": "sha256:0c0298389b650e40ff273f86ce5a6b8c8c95a50a23a939eed9fffd5fe6b1a323"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#25",
+      "hash": "sha256:26568e375dd771125c906620ba38d6802ec41c1552c098b71a738d6b87ff95d4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#30",
+      "hash": "sha256:ccd054ba091984ca2102483484c8a256c5aebf6ff67350aef853423b7d15ae3b"
     },
     {
       "content": "headings",
@@ -35404,6 +35459,161 @@
       "content": "blocks",
       "identity": "docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#41",
       "hash": "sha256:42dfdaed47aa855114fbc749ce434019479ec478c424c895fe35b266442989ec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#1",
+      "hash": "sha256:6dc8f0f09be8b1c8d16b8845629fae3ee944eb9a53c77ff546cdf8e73e3ea91a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#3",
+      "hash": "sha256:97fff91db4513a85a4624ed79fc35cf7967a17c42e43896d4d0f097d5f8cd28b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#4",
+      "hash": "sha256:147128f0c5fb88f3e471742ccd3b1bbb3df143c3648df3641adeb58415340d5f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#6",
+      "hash": "sha256:119d9617b4f750c3a62ee3d9fd67079d5ca1d314fc86b1d5d5597e3a17725ec0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#7",
+      "hash": "sha256:d459c73acab1a460230a2c0d16be3c7e2ec7cbe6e447c3efed57973bc90b3f72"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#8",
+      "hash": "sha256:5f944eecc947349ccef533702fd5ecf7436c56cc51be8e445fbc23ae56830c4e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#9",
+      "hash": "sha256:8060032346992a20bf224499cc58f07fb1da28e3c7d1594ed8220400206e231d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#10",
+      "hash": "sha256:ffcfb4c7dad22a075081e5b7db26f06980349c964cf4d3f4d0068a892013440a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#11",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#12",
+      "hash": "sha256:1598b503bfecaf31d4044a8e885fb527360eb9368bbb1f47ed6f34a6f97e34b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#13",
+      "hash": "sha256:b56cd72810ac8eb50fa345edd995939fff6864ed91b47bbb414b9dff3658b424"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#14",
+      "hash": "sha256:4dac5a8071da8d14eabefcebcbf0c635b67f94543316533734f1ad811992dccd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#15",
+      "hash": "sha256:f74b20a5bfafbcdb4084b34a47ae7a8c9f053aaab938e07f258ce686c267c109"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#16",
+      "hash": "sha256:4d8598a430e22f5c2c74a54f78950e41b87e98b013e779031885fa62a0145ea7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#17",
+      "hash": "sha256:4c274dcf3966a4b2dd9037e9eb6897283a18ff8a0588701a5752ee761c43f14d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#18",
+      "hash": "sha256:6c8aa9e530193df4ce78fb6814061cdb2095b8e3351b919d4e8d8434f79510f3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#19",
+      "hash": "sha256:2a0bed322ff770aae0d9cd0e6d87f050f5a7325f3493eecbdd413274891633c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#20",
+      "hash": "sha256:65fcdff26e8b87b459f175efcb12227929ad76c5b9b633dcbd9eb6384be3cc6a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#21",
+      "hash": "sha256:19c2b76f4ac0980fbb88f096b17beae0840b2ee956277ba869764e0754c7a641"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#22",
+      "hash": "sha256:61f9999c9bc240d6c970ec639203e42bdc1636aa20086754c899e516e6745d85"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#23",
+      "hash": "sha256:11c61144b4f5fa59cf089e0b887e168f017fe4f5ed010676fb66dd17b771b50e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#24",
+      "hash": "sha256:0a5270ad6cb111e95b620847cd3636694bc6d43d29e523e1054b286d7d4e4480"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#25",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#26",
+      "hash": "sha256:be3569e87692349b9b98897791b835a05904b62458f26b536527eefccfc28ecb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#27",
+      "hash": "sha256:2e9b92b0d93c78ceca71097717a02c099c382d738818700594c9e71dda1b187f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#28",
+      "hash": "sha256:2952754d4aae41e51f2932f8849f041e2a109dbaee4df8515db10e05aadb1125"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#29",
+      "hash": "sha256:26653131b555157a5e255f7a07913eb9701a097bea9275a67a8c5b0512f9c43a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#30",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#31",
+      "hash": "sha256:e893478ca423800a03b1d81db7c6f4ba06cd2ef2ed6bcb7ba37ecaee4c20ae43"
     },
     {
       "content": "blocks",

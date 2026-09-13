@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:39a9c8d382378e645e03d060e02b23f20f652f1078cb43e2f6ef9f59b7358db7",
-  "inputs_digest": "sha256:6926881b247812e46d4de1cb37fd5898e9833bb3b487deb651ca284bda1c493e",
+  "content_digest": "sha256:09601df6684deca49ecf20ad3caf55e144375b904a9dd52f00285644a6f1b4dd",
+  "inputs_digest": "sha256:031828aff2aff39342d2c3aa5fd9b16b23be209ebaa9791aa2ddc02c94523f1b",
   "sections": [
     [
       "Relations",
-      1646
+      1652
     ],
     [
       "Decisions",
-      225
+      226
     ]
   ],
   "inputs": [
@@ -3228,6 +3228,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-005 relates-to OD-PROJECT-006",
+      "hash": "sha256:cb58c5a04842e96869ccb4fa59576f6e12a8b4761076bc151e04f926f6afb7d6"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-005 relates-to OD-RELEASE-001",
       "hash": "sha256:cf46a89951b6470729814436a49e858df6006d576a78cf745b2d41cfbab0ed64"
     },
@@ -6213,6 +6218,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PROJECT-002 relates-to OD-PROJECT-006",
+      "hash": "sha256:b8fae30bb32215fefbf65b2da387c73915d32ff5fad603203214431241792564"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PROJECT-002 relates-to OD-SPEC-005",
       "hash": "sha256:ebd39aea17ffb4ee2ed7176b4fa9a9b9c45cd41467ac09d890c8fdb8db3a15ae"
     },
@@ -6265,6 +6275,21 @@
       "content": "relations",
       "identity": "OD-PROJECT-005 relates-to OD-SPEC-015",
       "hash": "sha256:e314598d4cc94c80ee89e600825efd139bd4b61cb0916c0475d87ab555503fa3"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PROJECT-006 relates-to OD-GATE-005",
+      "hash": "sha256:d6186bf266369b0186853751eb12d5ae5e4ba8b4dc8ec6c09c981ccb7d635180"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PROJECT-006 relates-to OD-PROJECT-002",
+      "hash": "sha256:9ef4bdde6fc339c2fe94d0bebe98a67dbf3a2c8c612ac111da3833ad8b951d94"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PROJECT-006 relates-to OD-SPEC-015",
+      "hash": "sha256:2b03a24948ccb2c7cb103ffaa4d9a8448f854af83941eeadc1a0317800cebc92"
     },
     {
       "content": "relations",
@@ -7738,6 +7763,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-SPEC-015 relates-to OD-PROJECT-006",
+      "hash": "sha256:b43750587eb09807cda455c2d1345034e7d91f29a0da4e976b136fea83060da9"
+    },
+    {
+      "content": "relations",
       "identity": "OD-SPEC-015 relates-to OD-SPEC-011",
       "hash": "sha256:37a73880f07a86047de60fb80ceead0a43168c23de3fff11ae3d6d48212989d2"
     },
@@ -9070,6 +9100,11 @@
       "content": "nodes",
       "identity": "OD-PROJECT-005",
       "hash": "sha256:3f7d616adce59b7b93f4eb93b4137d26feb1ec61e55216be993aff2959db17a6"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-PROJECT-006",
+      "hash": "sha256:ca98303786dd862e7434e0f6d5eaddf8394bb9f8abafa18e63f03e78658ff89e"
     },
     {
       "content": "nodes",

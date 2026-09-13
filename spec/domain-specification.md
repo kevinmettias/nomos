@@ -183,6 +183,7 @@ profile: domain-specification
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
 | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md@authored | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md | authored | 20 | 6 | sha256:5f9c67cc4d6f14d07b696b7c2842958e0e79c15eede17749d7e63ce8627f8793 |
 | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md@authored | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md | authored | 41 | 11 | sha256:569c3dd0c4f68f7a29cdbe800e1a2e759cf8c0ee53e364e677274c253e2bec3e |
+| docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md@authored | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md | authored | 31 | 10 | sha256:d626c9d148242ed2fc3c3795f8eeebd9120f24c92a005151f55d6a4adfdfd4cc |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md@authored | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md | authored | 18 | 7 | sha256:4264b9448cf95f7bb22780f4a6cd970a7f64828eea993961df2987984417b701 |
 | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md@authored | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md | authored | 18 | 6 | sha256:5369feac3ebd7b343b32234f25aa30ba669d4151b15af6d83d2ad37da0f58379 |
 | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md | authored | 24 | 6 | sha256:b8159cff04a7379eb48a47ce46a3da98ad447cc8ccec98c33ab48526d604e57f |
@@ -1662,6 +1663,16 @@ profile: domain-specification
 | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#31 | authored | 3 | Inlined subject, cited neighbours |
 | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#35 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#40 | authored | 2 | Status |
+| docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#1 | authored | 1 | What the required relation projection is for at two hundred and forty-seven nodes and one resolution |
+| docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#2 | authored | 2 | Question |
+| docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#11 | authored | 2 | The Decision |
+| docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#13 | authored | 3 | What reads it |
+| docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#16 | authored | 3 | Why a coarser required projection would save nothing |
+| docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#20 | authored | 3 | Why the requirement does not move off it either |
+| docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#22 | authored | 3 | What is actually missing, and it is not this artifact |
+| docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#25 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#30 | authored | 2 | Status |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1 | authored | 1 | Main and dev mean different things, and the distance between them is a decision, not an accident |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#2 | authored | 2 | Question |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#5 | authored | 2 | What main is for |
@@ -47555,6 +47566,249 @@ stopping at one hop because two already ranges from 7 records to 161 and three r
 cent of the corpus, carrying declared status on each citation rather than filtering by it,
 emitting by identity so two renders stay byte-identical, and citing neighbours rather than
 inlining them so a pack's size follows its question and not its subject's popularity.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#1
+
+*revision: authored · kind: heading · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution · hash: sha256:6dc8f0f09be8b1c8d16b8845629fae3ee944eb9a53c77ff546cdf8e73e3ea91a*
+
+# What the required relation projection is for at two hundred and forty-seven nodes and one resolution
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#2
+
+*revision: authored · kind: heading · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#3
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / Question · hash: sha256:97fff91db4513a85a4624ed79fc35cf7967a17c42e43896d4d0f097d5f8cd28b*
+
+`diagrams/relations.mmd` is one of the two committed projections and one of the two
+`spec freshness` requires. It is large, it has one resolution, and nearly one commit in five
+pays to re-render it. The `README` opens by claiming a canonical, multi-resolution model of
+software, and this projection has exactly one resolution — there is no aggregation anywhere in
+selection, no group-by and no rollup, so nothing can show how the `OD-LEDGER` decisions stand
+to the `OD-GATE` ones without drawing every node.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#4
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / Question · hash: sha256:147128f0c5fb88f3e471742ccd3b1bbb3df143c3648df3641adeb58415340d5f*
+
+`OD-PROJECT-002` decided which projections are required and `OD-PROJECT-003` what committing
+one costs. Neither asked whether the required one can be read.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#5
+
+*revision: authored · kind: heading · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#6
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / What Was Measured · hash: sha256:119d9617b4f750c3a62ee3d9fd67079d5ca1d314fc86b1d5d5597e3a17725ec0*
+
+Measured 2026-09-13.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#7
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / What Was Measured · hash: sha256:d459c73acab1a460230a2c0d16be3c7e2ec7cbe6e447c3efed57973bc90b3f72*
+
+**The artifact.** 1,879 lines, 90,749 bytes, 247 distinct nodes, 1,646 edges, two subgraphs.
+`OD-SPEC-015` measured that 93 per cent of the edges carry the single label `relates-to`, which
+is paired with itself, so each authored pair is drawn once in each direction with the same
+word.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#8
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / What Was Measured · hash: sha256:5f944eecc947349ccef533702fd5ecf7436c56cc51be8e445fbc23ae56830c4e*
+
+**Its cost, and where that cost actually is.** 155 of the 844 commits in the last thirty days
+touched this file — 18 per cent, nearly one in five. But rendering it takes **495
+milliseconds**, and rendering the domain specification beside it takes 654. The re-render is
+not what costs; `OD-GATE-005` requires that re-render to come from a worktree holding exactly
+the record set the commit publishes, so **the tax is constructing that worktree and building a
+binary in it**, about a minute and a half, and it is paid per commit that touches
+`docs/records/` whatever the diagram's size.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#9
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / What Was Measured · hash: sha256:8060032346992a20bf224499cc58f07fb1da28e3c7d1594ed8220400206e231d*
+
+**Its narrowing mechanisms.** `Filter::identifier_prefix` exists and **no shipped profile uses
+it.** No aggregation of any kind exists in selection.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#10
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / What Was Measured · hash: sha256:ffcfb4c7dad22a075081e5b7db26f06980349c964cf4d3f4d0068a892013440a*
+
+**What its sidecar holds.** `diagrams/relations.mmd.nomos-projection.json` carries a
+`content_digest`, an `inputs_digest`, the section counts, and **one hash per input — 1,646 of
+them**, each naming an edge by identity.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#11
+
+*revision: authored · kind: heading · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#12
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision · hash: sha256:1598b503bfecaf31d4044a8e885fb527360eb9368bbb1f47ed6f34a6f97e34b1*
+
+**The diagram stays required, exactly as it is. What reads it is `spec freshness`, not a
+person — and the tax it is blamed for is not a function of its size, so making it smaller
+would buy nothing.**
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#13
+
+*revision: authored · kind: heading · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision / What reads it · hash: sha256:b56cd72810ac8eb50fa345edd995939fff6864ed91b47bbb414b9dff3658b424*
+
+### What reads it
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#14
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision / What reads it · hash: sha256:4dac5a8071da8d14eabefcebcbf0c635b67f94543316533734f1ad811992dccd*
+
+The sidecar answers this directly and it is worth stating plainly, because the question assumes
+the other answer: the required relation projection is a **derived, committed manifest that the
+store is compared against**. `spec freshness` reads the body, recomputes it from the store, and
+separates two failures that share exit code 8 — the store moved under an unchanged body, and
+somebody typed into the body. Its 1,646 per-input hashes are what make that comparison
+per-edge rather than per-file.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#15
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision / What reads it · hash: sha256:f74b20a5bfafbcdb4084b34a47ae7a8c9f053aaab938e07f258ce686c267c109*
+
+Nobody reads 1,646 arrows, and at this size no mermaid renderer is likely to draw them
+usefully. **That is not a defect in the artifact; it is a category error in the question.** Its
+readability was never what made it worth requiring. What made it worth requiring is that it is
+*derived*, so it cannot disagree with the store without something noticing.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#16
+
+*revision: authored · kind: heading · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision / Why a coarser required projection would save nothing · hash: sha256:4d8598a430e22f5c2c74a54f78950e41b87e98b013e779031885fa62a0145ea7*
+
+### Why a coarser required projection would save nothing
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#17
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision / Why a coarser required projection would save nothing · hash: sha256:4c274dcf3966a4b2dd9037e9eb6897283a18ff8a0588701a5752ee761c43f14d*
+
+This is the answer the measurement forces, against the intuition.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#18
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision / Why a coarser required projection would save nothing · hash: sha256:6c8aa9e530193df4ce78fb6814061cdb2095b8e3351b919d4e8d8434f79510f3*
+
+Rendering is 495 milliseconds. The tax is the worktree and the build, and `OD-GATE-005` imposes
+that on any commit touching a record — for the reason that record gives, which is that the
+shared tree holds other sessions' unlanded records and is never the tree a commit publishes.
+A ten-node diagram would cost precisely the same to re-render, because the cost is not in the
+rendering.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#19
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision / Why a coarser required projection would save nothing · hash: sha256:2a0bed322ff770aae0d9cd0e6d87f050f5a7325f3493eecbdd413274891633c3*
+
+So replacing the required projection with a coarser one would change what the artifact shows
+without changing what it costs, and would weaken the comparison: a rollup has fewer inputs to
+hash, so a per-edge change could stop being visible. Paying the same tax for a weaker check is
+the wrong trade in both directions at once.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#20
+
+*revision: authored · kind: heading · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision / Why the requirement does not move off it either · hash: sha256:65fcdff26e8b87b459f175efcb12227929ad76c5b9b633dcbd9eb6384be3cc6a*
+
+### Why the requirement does not move off it either
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#21
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision / Why the requirement does not move off it either · hash: sha256:19c2b76f4ac0980fbb88f096b17beae0840b2ee956277ba869764e0754c7a641*
+
+`OD-PROJECT-002` required it so a stale one is caught, and nothing else catches one. Removing
+the requirement would mean `spec freshness --require diagram-set` no longer asks, and a
+diagram that had silently stopped matching the store would be discovered by whoever next
+happened to look. The recurring red CI this projection is associated with is the check working,
+not the check misfiring.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#22
+
+*revision: authored · kind: heading · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision / What is actually missing, and it is not this artifact · hash: sha256:61f9999c9bc240d6c970ec639203e42bdc1636aa20086754c899e516e6745d85*
+
+### What is actually missing, and it is not this artifact
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#23
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision / What is actually missing, and it is not this artifact · hash: sha256:11c61144b4f5fa59cf089e0b887e168f017fe4f5ed010676fb66dd17b771b50e*
+
+A reader who wants to see how the `OD-LEDGER` decisions stand to the `OD-GATE` ones has
+nothing, and that want is real. But it is a want for **a second artifact nobody requires**, not
+a change to this one, and it needs something that does not exist: aggregation in selection.
+`identifier_prefix` alone cannot express it — it narrows to one family, which draws that
+family's internal edges and every edge leaving it as a dangling end, rather than rolling
+families into nodes and edges between them.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#24
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / The Decision / What is actually missing, and it is not this artifact · hash: sha256:0a5270ad6cb111e95b620847cd3636694bc6d43d29e523e1054b286d7d4e4480*
+
+That is filed as its own item. It is deliberately not required, for the reason above: a
+projection is required because it is a re-render obligation, and a reading aid that nobody
+compares against the store has no obligation to discharge.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#25
+
+*revision: authored · kind: heading · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#26
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / What This Record Does Not Do · hash: sha256:be3569e87692349b9b98897791b835a05904b62458f26b536527eefccfc28ecb*
+
+It does not change any profile, the required set, selection code, or `Filter`.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#27
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / What This Record Does Not Do · hash: sha256:2e9b92b0d93c78ceca71097717a02c099c382d738818700594c9e71dda1b187f*
+
+It does not reopen `OD-GATE-005`'s rule about which tree a projection is rendered from, or
+`OD-PROJECT-002`'s required set. It measures the cost that rule imposes and says where that
+cost is, which is a different thing from disputing it.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#28
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / What This Record Does Not Do · hash: sha256:2952754d4aae41e51f2932f8849f041e2a109dbaee4df8515db10e05aadb1125*
+
+It does not claim the diagram is readable. It claims readability is not what it is for, and
+names what is.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#29
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / What This Record Does Not Do · hash: sha256:26653131b555157a5e255f7a07913eb9701a097bea9275a67a8c5b0512f9c43a*
+
+It does not build the coarser view. `diagrams/relations.mmd` is re-rendered by the item that
+lands this record only because registering a record changes the record set — never for a
+content reason of its own.
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#30
+
+*revision: authored · kind: heading · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#31
+
+*revision: authored · kind: prose · heading: What the required relation projection is for at two hundred and forty-seven nodes and one resolution / Status · hash: sha256:e893478ca423800a03b1d81db7c6f4ba06cd2ef2ed6bcb7ba37ecaee4c20ae43*
+
+Accepted. The required relation projection is a derived manifest the store is compared
+against, read by `spec freshness` and not by a person; its 1,646 per-input hashes are the
+comparison, its size is not a defect, and the re-render tax it is blamed for is the worktree
+and the build that `OD-GATE-005` requires rather than the 495 milliseconds of rendering — so a
+coarser required projection would pay the same cost for a weaker check. The multi-resolution
+view the question really wants is a second, unrequired artifact needing aggregation selection
+does not have, and is filed separately.
 
 ### docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1
 
