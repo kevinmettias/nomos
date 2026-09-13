@@ -68071,10 +68071,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-loop",
+        "acquired_at": 1789343050,
+        "lease_expires_at": 1789353850
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -68461,6 +68465,42 @@
           "nomos-spec-store"
         ],
         "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P95-NO-NOMOS-RULE-HAS-BEEN-MEASURED-AGAINST-A-SECOND-REPOSITORYS-DECLARED-MUST-LIST",
+      "title": "No nomos rule has been measured against a second repository's declared MUST list, and one sits on disk beside this one",
+      "why": "This repository's bar for building anything is a real second party: OD-CAPABILITY-002 licenses a bundled contract only while there is one provider on each side, OD-PACKAGE-011 stands open because there is still no second case, and OD-RULES-010's whole reasoning is that a rule was a real second party from the day it was written. Eighty-five rule identifiers ship in nomos-rules, extracted from the RuleId constants under src/checks. None has ever been measured against another repository's own declared list of what must hold, and such a list is on disk: the xvpe checkout this build already requires declares 261 machine-readable rules under docs/arch/standards. Two overlaps are verified by reading, not matched on a name. First, xvpe's every-source-file-is-reachable (MUST, gate blocking, enforced_by check-orphan-modules) states that every .rs file under a crate's src must be reachable from its roots by following mod declarations, and argues it as a MUST because rustc never parses an orphan so its tests silently do not run -- which is nomos's own no-orphan-modules rule, shipped. Second, and sharper, xvpe's memory-ordering-in-security-code (MUST, gate review, enforced_by review) states that security-relevant atomics use the ordering their semantics require and default to sequentially consistent unless analysis shows a relaxation is safe -- a rule its own front matter says no tool enforces, while nomos ships three for it: atomic-ordering-choices-are-justified, relaxed-not-used-when-ordering-matters and seqcst-justified-explicitly. A third pairing is the same question over a different declaration: xvpe's engine-folder-tiers-and-dependency-direction and composer-dependency-direction, both MUST and blocking, are what nomos's dependency-direction answers. The census cannot be grepped, and that was measured rather than assumed: a token-overlap matcher over identifiers and titles proposed 23 candidate pairs of which most are false (trace-verification matched against certificate-verification-is-not-disabled, strategy-type-parameter-is-named-strategy against parameter-count) and it missed every-source-file-is-reachable entirely, the strongest real pair of the three.",
+      "done_when": "A new governing record under OD-RULES carries the per-rule census, read from each xvpe rule's body rather than matched on its identifier. For each of the 261 it records exactly one of three dispositions: a nomos rule already answers it, naming the nomos rule identifier; nothing in nomos answers it and the question is inside nomos's domain; or the question is outside it, naming why (a UI spacing rule, a benchmark methodology rule, a documentation-topology rule about xvpe's own tree). It reports the three counts, names every pair it found in the first disposition, and states how many of those pairs xvpe declares review-enforced, since a MUST its own corpus says nobody enforces while nomos enforces it is the finding with the most consequence. It records that a lexical matcher was tried and discarded, with the numbers above, so no later session repeats it. It does not decide whether nomos should read that corpus or what relationship the two rule sets have -- that is P95-A-SIBLING-DECLARES-261-RULES-AND-NAMES-NOMOS-IN-NONE's subject and ARC-CONFORMANCE-002's, and this record neither anticipates nor contradicts it. It states what it does not do: no rule is written, no rule identifier changes, no capability contract is declared, and nothing in the xvpe tree is edited, which this workspace does not own. Registered at crates/spec/nomos-spec-store/records/OD-RULES-032.record so it is governing rather than merely written, and cargo test --no-fail-fast -p nomos-spec-store -p nomos-contract-tests passes.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-032.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
       },
       "verified": null,
       "abandoned": [],
