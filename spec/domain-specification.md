@@ -42,6 +42,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md | authored | 22 | 8 | sha256:2a1f9cc14ba7229566dea2754dfbafa91116a43aa78032e04f419cbd3c313272 |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 28 | 8 | sha256:f9c663f27499031ece5e69ff38d7a5b150fb4b9bdd4c34bb112940800b662719 |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md | authored | 16 | 6 | sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a |
+| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md@authored | docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md | authored | 24 | 7 | sha256:99dfeab5b3a481955faaabeb984f629c445b63cfef97dc70f9740b3300ca522c |
 | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md@authored | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md | authored | 18 | 6 | sha256:05eb45335e03a5d62b2c97bb0815702e51852b67c101e91b9c3b852491e0967a |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
@@ -470,6 +471,13 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#9 | authored | 2 | The Decision |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#13 | authored | 2 | What This Does Not Do |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#1 | authored | 1 | A finding's subject name is not always the preimage of its subject |
+| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#2 | authored | 2 | Question |
+| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#12 | authored | 2 | The Decision |
+| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#16 | authored | 2 | What This Unblocks, And What It Does Not |
+| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#19 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#23 | authored | 2 | Status |
 | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#1 | authored | 1 | A rule that judged an empty population is reported apart from one that judged clean |
 | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#2 | authored | 2 | Question |
 | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#4 | authored | 2 | What Was Measured |
@@ -9480,6 +9488,200 @@ Accepted. Names the mechanism `OD-RULES-008` traced but declined to choose, chec
 against `ARC-CONFORMANCE-001`'s own test for when native analysis is owed, against what tier 2
 actually needs to resolve (narrower than general Rust name resolution), and against what
 `nomos-lang-rust` already is. The provider itself is a following item.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#1
+
+*revision: authored · kind: heading · heading: A finding's subject name is not always the preimage of its subject · hash: sha256:af2ea5a8b7a95347634371c1bafc3f70c283e646f24aa0fbee93412b10edbd6b*
+
+# A finding's subject name is not always the preimage of its subject
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#2
+
+*revision: authored · kind: heading · heading: A finding's subject name is not always the preimage of its subject / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#3
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Question · hash: sha256:1c99f7b456bda2230df6dc1fdb41f9a50aed246a3c6aa7aae3c6425bae65a117*
+
+`Finding::subject` documents itself as "Derived from [`Finding::subject_name`], never from a
+path", and `Finding::subject_name` as "the preimage of `subject`, so the two cannot disagree
+without the digest being computed from something else."
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#4
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Question · hash: sha256:39aee5a61eb3090c6a5a27124c91aba9485465fe084fa1f515245e0208c842b2*
+
+They disagree, across most of the rule set. `OD-GATE-024` was written on that contract and
+retracted when implementing it proved it false, so the question is no longer whether the two
+disagree but which of them is wrong: the rules, or the contract.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#5
+
+*revision: authored · kind: heading · heading: A finding's subject name is not always the preimage of its subject / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#6
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / What Was Measured · hash: sha256:cc30fcdd65863ace8434c58f45bcf8e0d9a95dfe2a0d5fae62dee620eef3fb8f*
+
+Censused every `Finding` construction under `crates/rules/nomos-rules/src/checks/` — 63
+sites. Of those, **42 set `subject: source.subject`**, the digest of the *file*, while
+`subject_name` names something else:
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#7
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / What Was Measured · hash: sha256:2adb4a2f7fbf7d0ee0df1382f47ffaf9843021f707989be4b519ab56f53be75e*
+
+| `subject_name` written as | sites |
+|---|---|
+| `source.path.clone()` | 16 |
+| `format!("{}:{line_number}", source.path)` | 14 |
+| `location.clone()` | 8 |
+| a package or external id | 4 |
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#8
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / What Was Measured · hash: sha256:12b76eced8f6f8fb125298cc106b5749def2d960ae8939a641eea1289da3d6b6*
+
+The naming family is the other shape: it sets
+`subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes()))` over the very name
+`subject_name` carries, and there the documented relationship does hold.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#9
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / What Was Measured · hash: sha256:e97fe674d54a23cd4dffaf648b97ef0ec8e6fa99b3918765621030e12f741b1e*
+
+**Even the sixteen that look like they hold do not.** A walked source's subject is
+`nomos_model::Subject_Of_Path(relative)` (`nomos-cli`'s own `Read_Source`), which digests the
+path *after* `Normalize_Path` unifies separators and lowercases it. `subject_name` is the raw
+relative path. The two agree only for a path that is already normalized — so the relationship
+is "digest of a normalized form of it", not "preimage".
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#10
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / What Was Measured · hash: sha256:120e430f561d094af8d791efcb0d2a0439dd27398986c1b6b1727a02d89ca166*
+
+**The `path:line` shape cannot be made to hold without breaking something real.** Making
+`subject` the digest of `"file.rs:12"` would give a finding a new identity every time a line
+above it moves. `Suppression` and `BaselineDebt` match by `subject` precisely so that a
+tolerated finding stays tolerated across revisions; a line-sensitive subject would expire
+every entry on the next unrelated edit. The coarse subject is load-bearing.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#11
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / What Was Measured · hash: sha256:6c4a0baf50b7adb98bce33fb8bc06163feeb27ffa339591c8a12bf2b698cc3fe*
+
+**And coarsening the name is not available either.** Reporting `src/lib.rs` instead of
+`src/lib.rs:12` for fourteen rules would take from a reader the one thing that lets them find
+what the rule is talking about.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#12
+
+*revision: authored · kind: heading · heading: A finding's subject name is not always the preimage of its subject / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#13
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / The Decision · hash: sha256:e267e9718e3f20caa9f9328a058dc61520f7ed8885790f1acc09cb9539b00a12*
+
+**The contract is wrong, not the rules. `subject` and `subject_name` are deliberately at
+different granularities, and the record of that is this.**
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#14
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / The Decision · hash: sha256:7dc6d8feec76e2fd9c49e18a6c73daa8e2dae7a5385e66b2613a8d4caf2fe9ce*
+
+- **`subject` is the stable identity a finding is attributed to across revisions.** For most
+  rules that is the *file* (`Subject_Of_Path`); for the naming family it is the *qualified
+  name*. What makes it right in both cases is that it survives edits that did not change what
+  the finding is about — which is exactly what `Suppression` and `BaselineDebt` need, since
+  they match on it and are meant to outlive the revision they were written in.
+- **`subject_name` is the human-readable label for what was found**, and is frequently finer
+  than the subject: a line within the file, a function within the module. It is not in general
+  the digest's preimage, and requiring it to be would force a choice between an identity that
+  expires on every edit and a report that cannot say where to look.
+- **Neither is derivable from the other in general.** A caller that needs identity uses
+  `subject`; a caller that needs something to show a person uses `subject_name`; a caller that
+  needs to *match what a person wrote* has neither today, which is precisely why
+  `OD-GATE-024` could not be implemented and why that record is retracted rather than pending.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#15
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / The Decision · hash: sha256:e8d463f08e875de2035e2affba5508473ccfdb1023816fcedefe71f17e741fec*
+
+`Finding`'s own documentation is corrected to say this, because the claim it makes now is the
+reason a whole decision was written on a false premise. The two sentences that assert the
+derivation are replaced by what the two fields actually are.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#16
+
+*revision: authored · kind: heading · heading: A finding's subject name is not always the preimage of its subject / What This Unblocks, And What It Does Not · hash: sha256:d705c9ad3448ca7d9669d4eda6d64d4e184268327ceeab1e55253cf3048ef40f*
+
+## What This Unblocks, And What It Does Not
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#17
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / What This Unblocks, And What It Does Not · hash: sha256:5055d69f2dab2a72be9019e38eba206017e5625f457ddb76bf1d90b19246e985*
+
+It unblocks nothing by itself, and that is worth stating plainly. `OD-GATE-024`'s question —
+how a person names a sub-item finding in a declared policy — is *still open*, and this record
+makes clear why it is harder than it looked: there is no existing field that is both
+authorable by a person and a stable match key. A future answer has to either add one, or
+accept matching on something coarser than the finding.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#18
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / What This Unblocks, And What It Does Not · hash: sha256:0cf8d47836d4450920ba3344f3130e154c0b5e48014f9938efcb70b9d2a4bc5b*
+
+What it does close is the trap. The next session to read `Finding::subject_name` will not be
+told it is the preimage of `subject`, will not build a matcher on that, and will not have to
+re-derive by experiment what this one derived by implementing and reverting.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#19
+
+*revision: authored · kind: heading · heading: A finding's subject name is not always the preimage of its subject / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#20
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / What This Record Does Not Do · hash: sha256:00a3003f1093762451c31284ab7c92bba9a7bf4ca8fc2f255468bd1ba59d1576*
+
+It does not change any rule. All 63 construction sites are correct under the corrected
+contract, which is the point of correcting the contract rather than the rules.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#21
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / What This Record Does Not Do · hash: sha256:a671c9bef71400d920d968823dbd43bc09d406af83a0fd59cfff28957d532494*
+
+It does not change `Subject_Of_Path`, `Normalize_Path` or how territory identity is computed.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#22
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / What This Record Does Not Do · hash: sha256:b800773187d0689580649342ded188085a6e421c417ec9af47e786babfd52d9f*
+
+It does not add a mechanical guard over the two permitted derivations. One would be buildable
+— assert that every finding's `subject` is either `Subject_Of_Path` of one of its locations or
+the digest of its `subject_name` — and it reaches the rule crate and the contract test suite,
+neither of which this record holds. It is filed separately rather than claimed here.
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#23
+
+*revision: authored · kind: heading · heading: A finding's subject name is not always the preimage of its subject / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#24
+
+*revision: authored · kind: prose · heading: A finding's subject name is not always the preimage of its subject / Status · hash: sha256:95980a2509767732cc99d7b9fbde1476d2446b3eabf3fafba132c75c594c1397*
+
+Accepted. `subject` is a stable identity and `subject_name` is a readable label, at
+deliberately different granularities, and `Finding`'s documentation said otherwise. The rules
+are unchanged because they were never wrong; the contract is corrected because it was.
 
 ### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#1
 

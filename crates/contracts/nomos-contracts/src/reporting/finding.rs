@@ -62,18 +62,31 @@ pub struct Finding
 {
     /// The rule that produced this.
     pub rule: RuleId,
-    /// Stable identity of what the finding is about.
+    /// Stable identity of what the finding is attributed to, across revisions.
     ///
-    /// Derived from [`Finding::subject_name`], never from a path. Two findings about
-    /// the same subject in different files carry the same identity, which is what makes
-    /// them comparable across revisions.
+    /// Deliberately coarser than [`Finding::subject_name`], and **not** derived from it in
+    /// general — `OD-ANALYSIS-011` measured that 42 of this workspace's 63 finding
+    /// constructions set this to the *file*'s identity while naming something finer. Most
+    /// rules attribute to the file (`nomos_model::Subject_Of_Path`); the naming family
+    /// attributes to the qualified name it judges.
+    ///
+    /// What makes the coarse choice right is what depends on it: `Suppression` and
+    /// `BaselineDebt` match on this field and are meant to outlive the revision they were
+    /// written in. An identity that moved when a line above the finding moved would expire
+    /// every tolerated entry on the next unrelated edit.
     pub subject: SubjectId,
-    /// The human-authored name the identity was derived from.
+    /// What to call the thing this finding is about, for a person reading it.
     ///
-    /// Not a duplicate of anything: it is the preimage of `subject`, so the two cannot
-    /// disagree without the digest being computed from something else. It is here
+    /// Frequently **finer** than [`Finding::subject`] and not its preimage: a line within a
+    /// file (`src/lib.rs:12`), a qualified name within a module, a package. It is here
     /// because a digest alone cannot be read, and a finding nobody can read is a finding
-    /// nobody acts on.
+    /// nobody acts on — and coarsening it to match the subject would take from a reader the
+    /// one thing that says where to look.
+    ///
+    /// The two fields answer different questions, and `OD-ANALYSIS-011` records why neither
+    /// can be derived from the other: a caller that needs identity reads `subject`, a caller
+    /// that needs something to show reads this. A caller that needs to match what a *person*
+    /// wrote has neither today, which is the open question `OD-GATE-024` was retracted over.
     pub subject_name: String,
     /// Whether the rule actually reached this subject, and if not, why not.
     pub applicability: Applicability,

@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:7e5f95fab16e378170764d9903ed35be2593267e663444535d60076e2d1add4d",
-  "inputs_digest": "sha256:bcd0d2aaf40076963b3a535e7315a957312a14f7e6f06778ea811f86f955206b",
+  "content_digest": "sha256:556886f480edf448258f7d85cc2857c466e252453a2adf58c0cad60bac02a37b",
+  "inputs_digest": "sha256:c2a39bcbcdc974d185830261df60a6b6353cb5b83c3d624ecdfe25e8858504ad",
   "sections": [
     [
       "Documents",
-      225
+      226
     ],
     [
       "Sections",
-      1827
+      1834
     ],
     [
       "Source blocks",
-      6321
+      6345
     ]
   ],
   "inputs": [
@@ -179,6 +179,11 @@
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored",
       "hash": "sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md@authored",
+      "hash": "sha256:99dfeab5b3a481955faaabeb984f629c445b63cfef97dc70f9740b3300ca522c"
     },
     {
       "content": "documents",
@@ -2294,6 +2299,41 @@
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15",
       "hash": "sha256:1ede96a18093b3ee358c643cb4387deb8236faacc6888aa6ff5f005072e073d0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#1",
+      "hash": "sha256:028c1321abfed774acf0278cb54b3663881ca9330d1c239e4ee4b5c68b272eba"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#2",
+      "hash": "sha256:aa551f44eec9aeb3ab928c2e7e0a6689dedda8f27ffd5c0e6a57256cfa4d0c8e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#5",
+      "hash": "sha256:9934636d271c06d2bbffb3dfa2cb916836356cc2d5e44b6fc7e8a4e414eb1234"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#12",
+      "hash": "sha256:7c5d71079b34048157c5075a11e50c7589aee164aaaaeb7593dc51840eab9db0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#16",
+      "hash": "sha256:84b8b4a692fe7512bdc00ed56ba1319a70a9f337cda641fac985ad323f347fa7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#19",
+      "hash": "sha256:c6a080409659ea32b994717364c2274eb0d43d14a21233ae1a6452092e9027e8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#23",
+      "hash": "sha256:19d7097e49cde15b10ba2be262bbc73ddffb1de0651e452f1a34be497c465272"
     },
     {
       "content": "headings",
@@ -14254,6 +14294,126 @@
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#16",
       "hash": "sha256:f87d102ea13bcda0373b3bf59999dfe26afdc5b7b28086ddfc70ce0ed1a4e11f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#1",
+      "hash": "sha256:af2ea5a8b7a95347634371c1bafc3f70c283e646f24aa0fbee93412b10edbd6b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#3",
+      "hash": "sha256:1c99f7b456bda2230df6dc1fdb41f9a50aed246a3c6aa7aae3c6425bae65a117"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#4",
+      "hash": "sha256:39aee5a61eb3090c6a5a27124c91aba9485465fe084fa1f515245e0208c842b2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#6",
+      "hash": "sha256:cc30fcdd65863ace8434c58f45bcf8e0d9a95dfe2a0d5fae62dee620eef3fb8f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#7",
+      "hash": "sha256:2adb4a2f7fbf7d0ee0df1382f47ffaf9843021f707989be4b519ab56f53be75e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#8",
+      "hash": "sha256:12b76eced8f6f8fb125298cc106b5749def2d960ae8939a641eea1289da3d6b6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#9",
+      "hash": "sha256:e97fe674d54a23cd4dffaf648b97ef0ec8e6fa99b3918765621030e12f741b1e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#10",
+      "hash": "sha256:120e430f561d094af8d791efcb0d2a0439dd27398986c1b6b1727a02d89ca166"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#11",
+      "hash": "sha256:6c4a0baf50b7adb98bce33fb8bc06163feeb27ffa339591c8a12bf2b698cc3fe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#12",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#13",
+      "hash": "sha256:e267e9718e3f20caa9f9328a058dc61520f7ed8885790f1acc09cb9539b00a12"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#14",
+      "hash": "sha256:7dc6d8feec76e2fd9c49e18a6c73daa8e2dae7a5385e66b2613a8d4caf2fe9ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#15",
+      "hash": "sha256:e8d463f08e875de2035e2affba5508473ccfdb1023816fcedefe71f17e741fec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#16",
+      "hash": "sha256:d705c9ad3448ca7d9669d4eda6d64d4e184268327ceeab1e55253cf3048ef40f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#17",
+      "hash": "sha256:5055d69f2dab2a72be9019e38eba206017e5625f457ddb76bf1d90b19246e985"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#18",
+      "hash": "sha256:0cf8d47836d4450920ba3344f3130e154c0b5e48014f9938efcb70b9d2a4bc5b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#19",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#20",
+      "hash": "sha256:00a3003f1093762451c31284ab7c92bba9a7bf4ca8fc2f255468bd1ba59d1576"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#21",
+      "hash": "sha256:a671c9bef71400d920d968823dbd43bc09d406af83a0fd59cfff28957d532494"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#22",
+      "hash": "sha256:b800773187d0689580649342ded188085a6e421c417ec9af47e786babfd52d9f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#23",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md#24",
+      "hash": "sha256:95980a2509767732cc99d7b9fbde1476d2446b3eabf3fafba132c75c594c1397"
     },
     {
       "content": "blocks",
