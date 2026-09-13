@@ -68379,6 +68379,41 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P96-THE-LIVE-V14-CORPUS-HAS-DIVERGED-FROM-THE-ARCHIVE-ITS-FIGURES-ARE-PINNED-FROM",
+      "title": "The live v14 corpus has diverged from the archive whose figures the tests pin, and its own machine index is stale",
+      "why": "Eight corpus-gated tests fail, and re-pinning the numbers is the wrong answer -- measured, not assumed. The archive nomos-spec-internal-artifacts-v14.36.zip is dated 2026-08-07 and still reproduces every pinned figure: tests/revisions.rs reads it and passes, 282 pipe lines, 258 non-separator rows, 234 content rows. The live directory NOMOS_V14_CORPUS points at answers 286 and 2535 instead, because five of its ten domain volumes were edited on 2026-08-17. So the live tree has moved past the archive it was cut from and no newer archive exists. Worse, the corpus is now inconsistent with itself: 02_machine/catalog/catalog.json is dated 2026-08-06, eleven days behind the markdown, and Test_I1_Should_Reproduce_Every_Recorded_Block reports 494 block-hash mismatches with 02-core-architecture-identity-and-configuration.md recording 202 blocks where segmentation produces 204. Two further tests report 18 and 103 preservation violations, blocks with neither a lineage disposition nor an omission -- content added without the lineage records the corpus own rules require. None of this is a regression here: running the identical tests at 515fc26a, the last commit known green from 2026-08-09, against todays corpus reproduces all of it. Bumping 282 to 286 would turn three of the eight green and pin figures measured against a corpus whose own index disagrees with its content, which is the number that matches whatever it currently does that this repository refuses elsewhere.",
+      "done_when": "The divergence is resolved at its source before any figure in this repository moves, and which source is the decision: a v14.37 archive cut from the current live tree with 02_machine regenerated and V14_LAST re-pointed, or the live tree reconciled back to v14.36, or the lineage records the 18 and 103 preservation violations name being authored. Only then are the pinned figures re-measured, and each new number is recorded with what it was measured against and on what date, so the next reader can tell a deliberate re-measurement from a drift nobody noticed. If the resolution is entirely corpus-side and no figure in this repository changes, this item declines with that as its reason rather than being closed by editing a constant.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/tests/real_corpus.rs",
+          "crates/spec/nomos-spec-store/tests/table_rows/corpus.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
