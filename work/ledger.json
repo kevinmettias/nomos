@@ -65351,7 +65351,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -65366,7 +65366,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "hould_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-14534b0811ed0b35.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-6c0d2a3bc7fb3e61.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-b02179d8c1d2c3dc.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-aa793f51a49daa0e.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-0111b9014e26c055.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d4c5fb1e9426d4ec.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-286c08690afc996a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-f96f436344f7e2af.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-61a4ab805a6f6a82.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-5ff00b1c22563e6a.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-3b17673536525d8e.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-8210675160e23eaf.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-606b520971c1e4cb.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-a390115e4c81d50e.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-31de2db9f36c3100.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1789272125,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e8a0df4f3e1af8f9461deaf99db8bdb50864c0ad"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -65578,6 +65600,146 @@
         },
         "revision": "69a0a291209f48c31528e17c999a08f052732b13"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P76-FINDINGS-GUARD-NEEDS-A-MODULE-DECLARATION",
+      "title": "A new boundaries test file is not compiled until the suite's own root declares it",
+      "why": "P76-A-FINDINGS-SUBJECT-DERIVATION-IS-PROSE-NOBODY-CHECKS adds tests/contract/tests/boundaries/findings.rs, and a file under that directory is compiled only if boundaries/main.rs names it with a mod declaration -- a test nothing declares is a test that silently never runs, which is the same shape as the orphan-module defect nomos's own rule exists for. main.rs is not in that item's territory, which reserved only the new file.",
+      "done_when": "boundaries/main.rs declares the new module, and the test it contains actually runs -- confirmed by its name appearing in the suite's own output rather than by the suite merely passing.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/boundaries/main.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-14534b0811ed0b35.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-6c0d2a3bc7fb3e61.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-b02179d8c1d2c3dc.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-aa793f51a49daa0e.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-0111b9014e26c055.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d4c5fb1e9426d4ec.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-286c08690afc996a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-f96f436344f7e2af.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-61a4ab805a6f6a82.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-5ff00b1c22563e6a.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-3b17673536525d8e.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-8210675160e23eaf.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-606b520971c1e4cb.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789272116,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e8a0df4f3e1af8f9461deaf99db8bdb50864c0ad"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P76-FINDINGS-GUARD-NEEDS-THE-MODEL-CRATE",
+      "title": "The contract suite cannot recompute a subject digest without naming the crate that defines one",
+      "why": "P76-A-FINDINGS-SUBJECT-DERIVATION-IS-PROSE-NOBODY-CHECKS asserts that every finding's subject is one of the two derivations OD-ANALYSIS-011 permits, which means recomputing them: nomos_model::Subject_Of_Path for the file case and nomos_model::Content_Digest for the name case. tests/contract does not depend on nomos-model, and Rust needs the direct name. The manifest is not in that item's territory, which reserved only the new test file.",
+      "done_when": "tests/contract names nomos-model as a dependency, with the comment its siblings carry saying which test needs it and why, and the guard compiles.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-14534b0811ed0b35.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-6c0d2a3bc7fb3e61.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-b02179d8c1d2c3dc.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-aa793f51a49daa0e.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-0111b9014e26c055.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d4c5fb1e9426d4ec.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-286c08690afc996a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-f96f436344f7e2af.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-61a4ab805a6f6a82.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-5ff00b1c22563e6a.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-3b17673536525d8e.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-8210675160e23eaf.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-606b520971c1e4cb.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789272107,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e8a0df4f3e1af8f9461deaf99db8bdb50864c0ad"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P94-OD-ANALYSIS-011-STATES-A-GUARD-THAT-IS-FALSE-FOR-A-THIRD-OF-ITS-OWN-CENSUS",
+      "title": "OD-ANALYSIS-011 describes a mechanical guard that is false for 22 of the 63 sites it censused",
+      "why": "OD-ANALYSIS-011 exists because Finding::subject and Finding::subject_name documented a derivation that does not hold, and OD-GATE-024 was written on that false premise and retracted. Its own What This Record Does Not Do section then sets the same trap one section later: it says a guard would be buildable -- assert that every finding's subject is either Subject_Of_Path of one of its locations or the digest of its subject_name. Measured 2026-09-12 against the real nomos_model::Subject_Of_Path, Normalize_Path and nomos_model::Content_Digest, that sentence is false. For a finding built by checks/error_text.rs Finding_At, subject is Subject_Of_Path(source.path) while subject_name and locations are both the path with a colon and a line number appended, so Normalize_Path keeps the suffix and neither arm holds: subject == Subject_Of_Path(location) is false, and subject == digest(subject_name) is false. 22 of the 63 Finding constructions under crates/rules/nomos-rules/src/checks/ are exactly that shape -- 14 writing subject_name as the formatted path and line, 8 writing subject_name as a location variable of the same shape, all 22 paired with subject: source.subject, across 17 files including borrowed_container, closure_bounds, formatting, facade, enum_shape, error_text and the four text families. The derivation that does hold is Subject_Of_Path of the location's FILE PART, with the line suffix stripped -- a third permitted derivation the record never names, which is why a reader implementing the record's own sentence builds a guard that refuses a third of the rule set. Worse, the guard would not report that: nomos gate run over this whole tree fires only 8 of about 70 rules and not one finding carries a line-suffixed location, and tests/corpus fires the same 8, so no committed corpus exercises any of the 22 sites. A guard written to the record's sentence therefore passes vacuously today and refuses the tree the moment any of those 17 files' rules actually fires.",
+      "done_when": "OD-ANALYSIS-011 is amended so the derivations it names are the ones that hold: subject is Subject_Of_Path of the file part of one of its locations, or the digest of the qualified name subject_name carries. The amendment states the measured census (22 of 63 sites, 17 files, the line-suffixed shape) and says plainly that the record's previous sentence described a guard that would refuse a third of the rule set, so the next reader does not build it. It also records that no committed corpus fires those 22 sites -- gate run over this tree fires 8 of about 70 rules and no finding carries a line-suffixed location -- so any future guard needs a corpus that provably exercises each derivation rather than a real run, which is the vacuity the record's own reasoning would otherwise walk into.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-subject-derivation",
+        "acquired_at": 1789271969,
+        "lease_expires_at": 1789279169
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null

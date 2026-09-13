@@ -10,6 +10,7 @@
 
 mod band_zero;
 mod capabilities;
+mod findings;
 mod bands;
 mod graph;
 mod manifest_bands;

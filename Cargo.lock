@@ -1238,6 +1238,7 @@ dependencies = [
  "nomos-contracts",
  "nomos-lang-rust",
  "nomos-ledger",
+ "nomos-model",
  "nomos-platform",
  "nomos-platform-std",
  "nomos-rules",

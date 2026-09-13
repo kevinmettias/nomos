@@ -27,6 +27,9 @@ serde_json = { workspace = true }
 # is the only place the descriptor table and the composed table can be compared. A dev
 # dependency rather than a real one, because nothing this crate publishes needs it.
 nomos-check-orchestration = { workspace = true }
+# `nomos-model` for `tests/boundaries/findings.rs` alone: it recomputes the two subject
+# derivations `OD-ANALYSIS-011` permits, which needs `Subject_Of_Path` and `Content_Digest`.
+nomos-model = { workspace = true }
 nomos-contracts = { workspace = true }
 # The ledger crate is used only by integration tests that check the agent contract
 # and toolchain-floor workflow derivation.
