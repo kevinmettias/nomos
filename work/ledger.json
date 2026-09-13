@@ -65019,7 +65019,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -65032,7 +65032,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "d_Fail_With_One_Blocking_Finding_Among_Many ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_When_Nothing_Can_Fail_A_Build ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_With_No_Findings ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-platform v0.1.0 (F:\\repos\\nomos\\crates\\platform\\nomos-platform)\n   Compiling nomos-model-package v0.1.0 (F:\\repos\\nomos\\crates\\packages\\nomos-model-package)\n   Compiling nomos-connector-coderabbit v0.1.0 (F:\\repos\\nomos\\crates\\connectors\\nomos-connector-coderabbit)\n   Compiling nomos-cap-requirement-trace v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-requirement-trace)\n   Compiling nomos-lang-rust-cargo v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-cargo)\n   Compiling nomos-lang-rust-deny v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-deny)\n   Compiling nomos-repo-policy v0.1.0 (F:\\repos\\nomos\\crates\\repository\\nomos-repo-policy)\n   Compiling nomos-lang-rust-clippy v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-clippy)\n   Compiling nomos-platform-std v0.1.0 (F:\\repos\\nomos\\crates\\platform\\nomos-platform-std)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.34s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-4281b14ceca8e621.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-23ff7cc352e6b2e5.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-8bad2a3e6bf12a8f.exe)\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1789269212,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "9964a6ca7f2a48ebfb642b2350cd3c6d10d52e14"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
