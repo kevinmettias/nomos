@@ -175,3 +175,102 @@ fn Test_A_Packed_Neighbour_Should_Carry_Its_Declared_Status()
         output.body
     );
 }
+
+/// An identifier naming another item of the same projection is a link to it.
+///
+/// Before `P95-THE-HTML-PROJECTION-RESOLVES-NO-IDENTIFIER` the HTML renderer wrote no anchor
+/// at all -- no `a`, no `href`, no per-item `id` -- so every identifier a projection carried
+/// was escaped text a reader could not follow, including both endpoints of every relations
+/// row. The markdown renderer beside it produced output GitHub resolves for the same content,
+/// so the format presumably added to improve on markdown gave a reader strictly less.
+#[test]
+fn Test_An_Html_Identifier_Naming_An_Item_Present_Should_Link_To_It()
+{
+    let rendered = nomos_spec_project::Render_Projection(&Projection_Of(&[
+        ("Subjects", &[("CDM-ONE", &[][..])]),
+        ("Relations", &[("CDM-ONE relates-to CDM-TWO", &[("from", "CDM-ONE"), ("to", "CDM-TWO")])]),
+    ]))
+    .expect("html renders");
+
+    assert!(rendered.contains("<article id=\"cdm-one\">"), "{rendered}");
+    assert!(
+        rendered.contains("<a href=\"#cdm-one\">CDM-ONE</a>"),
+        "an endpoint the projection carries did not become a link: {rendered}"
+    );
+}
+
+/// An identifier the projection does not carry stays text rather than becoming a dead link.
+///
+/// A relations section names both ends of every edge, and in a subject-scoped profile the far
+/// end is routinely a record the projection does not hold. A link there would scroll nowhere,
+/// which is worse than the text it replaced: a dead link reads as a promise.
+#[test]
+fn Test_An_Html_Identifier_Naming_Nothing_Present_Should_Stay_Text()
+{
+    let rendered = nomos_spec_project::Render_Projection(&Projection_Of(&[
+        ("Subjects", &[("CDM-ONE", &[][..])]),
+        ("Relations", &[("CDM-ONE relates-to CDM-TWO", &[("from", "CDM-ONE"), ("to", "CDM-TWO")])]),
+    ]))
+    .expect("html renders");
+
+    assert!(
+        !rendered.contains("#cdm-two"),
+        "an endpoint the projection does not carry became a dead link: {rendered}"
+    );
+    assert!(rendered.contains("<dd>CDM-TWO</dd>"), "{rendered}");
+}
+
+/// An identity carrying a character that would break an attribute cannot break one.
+///
+/// Two positions, and they are safe for different reasons. The `id` and `href` are slugs, and
+/// `Slug_Of_Text` emits ASCII alphanumerics and `-` and nothing else, so nothing an author
+/// writes can reach the attribute at all. The displayed text is the identity as authored and
+/// is escaped. Asserting both is what says the renderer did not get one right by getting the
+/// other wrong.
+#[test]
+fn Test_An_Html_Identity_Should_Not_Break_The_Attribute_It_Is_Addressed_By()
+{
+    let hostile = "A\" onload=\"x";
+
+    let rendered = nomos_spec_project::Render_Projection(&Projection_Of(&[(
+        "Subjects",
+        &[(hostile, &[("names", hostile)][..])],
+    )]))
+    .expect("html renders");
+
+    assert!(rendered.contains("<article id=\"a-onload-x\">"), "{rendered}");
+    assert!(!rendered.contains("onload=\"x\""), "the attribute was broken: {rendered}");
+    assert!(rendered.contains("&quot;"), "the displayed identity was not escaped: {rendered}");
+}
+
+/// An html projection built by hand, so a renderer claim can name the shape it is about
+/// rather than depend on what a fixture store happens to hold.
+fn Projection_Of(sections: &[(&str, &[(&str, &[(&str, &str)])])]) -> nomos_spec_project::Projection
+{
+    use nomos_spec_project::{Format, Item, Name, Section, Value};
+
+    return nomos_spec_project::Projection {
+        profile: "probe".to_owned(),
+        title: "Probe".to_owned(),
+        format: Format::Html,
+        output: "probe.html".to_owned(),
+        sections: sections
+            .iter()
+            .map(|(title, items)| {
+                return Section {
+                    title: (*title).to_owned(),
+                    content: nomos_spec_project::Content::Nodes,
+                    items: items
+                        .iter()
+                        .map(|(identity, fields)| {
+                            return fields.iter().fold(Item::Of(identity), |item, (name, value)| {
+                                return item.With(Name(name), Value(value));
+                            });
+                        })
+                        .collect(),
+                };
+            })
+            .collect(),
+        inputs: Vec::new(),
+    };
+}

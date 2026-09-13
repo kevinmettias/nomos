@@ -66098,7 +66098,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -66114,7 +66114,30 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.23s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-962d1813b3b427e8.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-73b714f796860a28.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6244c4e442d87de9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-f1c31331742f5fa4.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-7c478dde509b12e1.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-b097dd667c629b65.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-4c60a6c067c9e9d8.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-81846ef75e0f5a38.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-ba372c50c1f44156.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-a9b68f2b2d22344c.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-a8e4bd522de6fa20.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-1bfc5f8f7f451dbb.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-b10594f1759ed66b.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-be3d821147c8381c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-eedcbcded190e978.exe)\n     Running tests\\determinism_contract.rs (target\\debug\\deps\\determinism_contract-383d5dd140d76cd9.exe)\n     Running tests\\projections\\main.rs (target\\debug\\deps\\projections-61d33c504494389c.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_project\n",
+        "verified_at": 1789292095,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "bd9f8f55c1a55d2a20c94351f15b348af4d276a0"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
