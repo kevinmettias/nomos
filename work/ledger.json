@@ -62248,7 +62248,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -62261,7 +62261,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform-std"
+        ],
+        "exit_code": 0,
+        "output_tail": "uncher::tests::Test_A_Successful_Program_Should_Report_A_Zero_Exit ... ok\ntest std_process_launcher::wait::tests::Test_Waited_For_Child_Should_Report_A_Clean_Exit ... ok\ntest std_process_launcher::tests::Test_A_Loud_Programs_Output_Should_Arrive_Whole ... ok\ntest std_process_launcher::tests::Test_A_Loud_Program_Should_Be_Judged_On_Its_Result_Not_Its_Volume ... ok\ntest std_process_launcher::kill::tests::Test_Killed_And_Reaped_Should_Stop_And_Reap_A_Running_Child ... ok\ntest std_process_launcher::tests::Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out ... ok\ntest std_process_launcher::tests::Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled ... ok\ntest std_process_launcher::tests::Test_A_Silent_Program_Should_Report_Stalled_Rather_Than_Timed_Out ... ok\ntest std_process_launcher::tests::Test_A_Kill_Should_Reach_The_Whole_Process_Tree_Not_Only_The_Direct_Child ... ok\ntest std_process_launcher::tests::Test_A_Grandchild_Holding_The_Pipe_Should_Not_Hold_The_Launcher ... ok\n\ntest result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.06s\n\n\nrunning 4 tests\ntest Test_System_Clock_Should_Produce_Real_Timestamps_The_Real_Trait_Can_Order ... ok\ntest Test_Std_File_System_Should_Round_Trip_A_Real_File_Through_The_Real_Trait ... ok\ntest Test_File_Lock_Should_Exclude_A_Second_Holder_Through_The_Real_Trait ... ok\ntest Test_Std_Process_Launcher_Should_Report_A_Real_Exit_Through_The_Real_Trait ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_platform_std-5d04e036ab2c0cac.exe)\n     Running tests\\implements_the_platform_ports.rs (target\\debug\\deps\\implements_the_platform_ports-f101759916f5c35c.exe)\n   Doc-tests nomos_platform_std\n",
+        "verified_at": 1789259231,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "56c51dcc51d68c7afad540020d23067588077bc1"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -63925,7 +63945,13 @@
         "timeout_seconds": 1200
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-dev-session",
+          "reason": "Claimed, measured, and put back rather than done. Two things the territory does not cover: nomos-lang-rust-compiler does not depend on nomos-platform at all, so reading through nomos_platform::Environment needs its Cargo.toml, and Load_Crate's only caller is nested_lock_reading.rs:51, which the signature change reaches. Neither is reserved here, so doing it now costs two more disjoint claims. Weighed against this item's own measurement -- the crate has no dependents anywhere, its only callers are three files under tests/integration/tests/determinism, and README records it as not yet composed into a real gate run -- the defect is real and unreachable, and this item's why already argues for doing it cheaply when the crate is composed rather than now. Doing it now also risks paying twice, since composition is what would decide where the Environment comes from. Left Ready with its territory intact for whoever composes the crate; nothing was changed in the tree.",
+          "abandoned_at": 1789259059
+        }
+      ],
       "displaced": [],
       "declined": null
     },

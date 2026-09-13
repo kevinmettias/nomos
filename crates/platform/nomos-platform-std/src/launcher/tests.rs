@@ -225,15 +225,19 @@ fn Test_A_Loud_Programs_Output_Should_Arrive_Whole()
 /// the idle bound is deliberately checked first, so a process which produced nothing at all
 /// reports [`ExitOutcome::Stalled`] rather than [`ExitOutcome::TimedOut`] when the two
 /// expire together. Whether this program produces anything is a property of the program,
-/// and [`A_Slow_Program`] is not the same program on both hosts: Windows runs `ping`, which
-/// prints a reply about once a second and so keeps resetting the idle clock, and Unix runs
-/// `sleep`, which is silent for its whole life.
+/// and [`A_Slow_Program`] used not to be the same program on both hosts: Windows ran `ping`,
+/// which prints a reply about once a second and so keeps resetting the idle clock, while
+/// Unix ran `sleep`, which is silent for its whole life. Asserting `TimedOut` here made this
+/// fail on Linux permanently and pass on Windows for a reason the test never stated (`P83`).
 ///
-/// So `TimedOut` was never the outcome under test here -- it was the outcome on the host
-/// whose fixture happened to be chatty. Asserting it made this fail on Linux permanently
-/// and pass on Windows for a reason the test never stated (`P83`). Both outcomes discharge
-/// the control equally: each one is the launcher ending a program rather than waiting for
-/// it, which `Has_A_Verdict` returning false is the type-level statement of.
+/// `P84` since made that fixture `ping` on both hosts, so the two would now agree — but this
+/// stays tolerant of either outcome deliberately. What this control exists to hold is that a
+/// program outstaying its bounds is *ended*, and pinning it to the one outcome a chatty
+/// fixture happens to produce would make it fail again the day the fixture changes for a
+/// reason having nothing to do with what it asserts. Both outcomes discharge it equally:
+/// each is the launcher ending a program rather than waiting for it, which `Has_A_Verdict`
+/// returning false is the type-level statement of. Progress itself is asserted, on both
+/// hosts, by [`Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled`].
 ///
 /// The wall bound specifically *is* exercised, deterministically and on both hosts, by
 /// [`Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled`], which asks
@@ -259,22 +263,28 @@ fn Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out()
     );
 }
 
+/// A program that runs for a while and *talks while it does*, on both hosts.
+///
+/// `ping` either way, differing only in the flag that spells a count, because the property
+/// two tests read off this fixture is that it makes progress — and a fixture that was chatty
+/// on one host and silent on the other let one of them claim a property it never exercised
+/// there. It was `sleep 7` on Unix, which produces nothing for its whole life, so
+/// [`Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled`] passed on Linux
+/// only because its idle bound was longer than its wall bound; progress had never been
+/// checked on any host but Windows (`P84`, the same asymmetry `P83` corrected for this
+/// fixture's other consumer).
+///
 /// Run directly rather than under a shell. `timeout` on Windows refuses a redirected
 /// stdin and this launcher always gives it one, and a shell wrapper would put the
-/// sleeping process a generation away from the kill.
+/// long-running process a generation away from the kill.
 fn A_Slow_Program() -> Vec<String>
 {
-    if cfg!(windows)
-    {
-        return vec![
-            "ping".to_owned(),
-            "-n".to_owned(),
-            "8".to_owned(),
-            "127.0.0.1".to_owned(),
-        ];
-    }
+    // Both print a line as they start and roughly one per second after, which is what keeps
+    // resetting an idle clock. The count flag is the only real difference: `-n` on Windows,
+    // `-c` everywhere else.
+    let count_flag = if cfg!(windows) { "-n" } else { "-c" };
 
-    return vec!["sleep".to_owned(), "7".to_owned()];
+    return vec!["ping".to_owned(), count_flag.to_owned(), "8".to_owned(), "127.0.0.1".to_owned()];
 }
 
 /// The distinction `P11-EXEC-IDLE` exists for: a child that produces nothing at all for
@@ -308,6 +318,16 @@ fn Test_A_Silent_Program_Should_Report_Stalled_Rather_Than_Timed_Out()
 /// The control for the test above: a short idle bound must not turn a program that is
 /// genuinely still working into a stall. Progress keeps resetting the idle clock, so this
 /// must still end at the wall bound, exactly as it did before an idle bound existed.
+///
+/// # Why the premise is asserted and not assumed
+///
+/// The bounds here are deliberately ordered idle-longer-than-wall, so the wall bound would
+/// have expired first whether this program spoke or not. That makes the outcome alone a weak
+/// witness: a silent fixture reaches `TimedOut` too, by never being subject to the idle
+/// bound at all, which is exactly how this test passed on Linux for a year without ever
+/// exercising progress (`P84`). So the output is checked as well. If a host's `ping` cannot
+/// run, this fails saying the fixture was silent rather than passing on the bound ordering —
+/// a test must not claim a property its fixture cannot produce on the host it runs on.
 #[test]
 fn Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled()
 {
@@ -316,6 +336,11 @@ fn Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled()
     let started = Instant::now();
     let output = StdProcessLauncher.Run(&progressing).unwrap();
 
+    assert!(
+        !output.stdout.is_empty(),
+        "this fixture produced nothing, so progress was never exercised and the outcome below \
+         rests on the wall bound expiring first rather than on the idle clock being reset"
+    );
     assert_eq!(
         output.outcome,
         ExitOutcome::TimedOut,
