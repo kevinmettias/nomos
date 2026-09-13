@@ -106,6 +106,7 @@ profile: domain-specification
 | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md@authored | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md | authored | 23 | 7 | sha256:7ffcec3773752326a5ba599808f3454e1385db25737f73d58c74cbc762307665 |
 | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md@authored | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md | authored | 36 | 9 | sha256:976dbc3e7de91a5dcca2d62ad0b6ab43726a8e065cbcd1aa5516963cc03ebd93 |
 | docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md@authored | docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md | authored | 35 | 9 | sha256:ee8f60df55168698b0463998c8b6c953f0356311dfed9d1293e434cdc3117461 |
+| docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md@authored | docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md | authored | 39 | 11 | sha256:acbbd697996692163827ea080880c27e2aeb1a5a97947ce8eac52c8ae6f095d5 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -998,6 +999,17 @@ profile: domain-specification
 | docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#27 | authored | 3 | What a caller gains that it did not have |
 | docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#29 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md#34 | authored | 2 | Status |
+| docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#1 | authored | 1 | Whether this workspace answers whether a dependency would be permitted before the edge exists |
+| docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#13 | authored | 2 | The Decision |
+| docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#15 | authored | 3 | Whose question it is: the gate, with the seam below the verb |
+| docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#18 | authored | 3 | What the subject is: a crate pair |
+| docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#21 | authored | 3 | What it says when a zone is unknown: it does not judge, and says so |
+| docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#27 | authored | 3 | Why the counter-argument does not carry |
+| docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#30 | authored | 3 | What `OD-RULES-029` changes about this, and what it does not |
+| docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#33 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#38 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -26406,6 +26418,305 @@ judge the same world and differ only in what they print. `OD-GATE-017`'s selecti
 direction stands for rules, and the reason it does not extend to files is recorded rather
 than left as an inconsistency: selecting fewer rules cannot change a remaining rule's answer,
 and selecting fewer files can.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#1
+
+*revision: authored · kind: heading · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists · hash: sha256:0636ebb8748b56f68ccc011af6686d7bdcf2b9043cc94782b689d39502065115*
+
+# Whether this workspace answers whether a dependency would be permitted before the edge exists
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#2
+
+*revision: authored · kind: heading · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#3
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / Question · hash: sha256:27e273cd57f01430c99590306b4cc6b7e57369e6ee078d2d05306758360bdaa1*
+
+Two independent brainstorming loops put the same step before implementation: have Nomos
+validate the proposed dependency before the work starts. Nomos answers only afterwards.
+`Check_Dependency_Direction` reads `nomos.cap.dependency.edges`, which `nomos-lang-rust-cargo`
+derives by running `cargo metadata` over manifests on disk — so an edge is judged once it has
+been written, and never before.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#4
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / Question · hash: sha256:3ed6d18db44036d7178f83bd799f38f70ebd732fb167ef103a086c57d9288e2c*
+
+The counter-argument has to be stated first, because it is good: `nomos check` over this
+workspace already answers the question in one run. What is missing may be a convenience rather
+than a capability.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#5
+
+*revision: authored · kind: heading · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#6
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / What Was Measured · hash: sha256:157e7c464b549c04771839c4f9b5efa304f67673af1db9ccfd6e6f599601b930*
+
+Measured 2026-09-13, against this workspace.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#7
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / What Was Measured · hash: sha256:1390602c955401b27a7ce227fbb4740513d9d6204fb63730447ef63b7934c5b9*
+
+**The primitives are already public, total and free of input.** `Zone_Of(name) -> Option<Zone>`
+maps a crate name to its zone, `Permits(from, to) -> bool` answers a zone pair, and
+`SAME_ZONE_EDGES` names the 13 peer exceptions the lattice cannot express. All are exported
+from `nomos-rules` and all appear in its blessed surface snapshot. The whole answer is
+`Permits(Zone_Of(a)?, Zone_Of(b)?)` plus one lookup — **no manifest, no `cargo metadata`, no
+walk, no store, no reader.**
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#8
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / What Was Measured · hash: sha256:9b17a4adec060b33e1df44145411a71e4f3e940a9563c826c31652b2a6cc6697*
+
+**Nothing asks.** `Permits` has exactly two non-test callers in the workspace:
+`checks/dependency/violations.rs`, judging an edge that already exists, and
+`tests/contract/tests/boundaries/graph.rs`, asserting the real graph. No host verb reaches it.
+`nomos-lsp` names `Zone_Of`, in `walk_outward/architectural_component.rs`, only to label which
+architectural component a finding falls in.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#9
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / What Was Measured · hash: sha256:de409c06134ea7c31d8caa60c5343de1f8318dc1e4fd634f6dfde27c29f3c510*
+
+**The two answers are not in the same cost class, and the gap is not small.** Timed on this
+machine over this workspace:
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#10
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / What Was Measured · hash: sha256:407e6cd66a0b47f0563ee36ecc77b9905bf39a412c71e1bcf6de416e3499f928*
+
+| | |
+|---|---|
+| `nomos gate run --root .` — the retrospective answer | **13,127 ms** |
+| `nomos gate explain --root .` — the existing answer-about-the-rules verb | **40 ms** |
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#11
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / What Was Measured · hash: sha256:501d8bd40667619f2c8dd68e5d6342b06af583766ca85bbc1c9f35f010de9254*
+
+A prospective admissibility answer is in `explain`'s class, not `run`'s: it is a pure function
+of two strings. And the 13 seconds is not the real cost of the retrospective route — the real
+cost is that getting it at all means **writing the edge first**, running, reading, and
+reverting.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#12
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / What Was Measured · hash: sha256:cd814771b2f87a611fe7da30b3955f316d6e1e2a89152e42f83a30027059742e*
+
+**The cost of learning late is recorded rather than imagined.** `OD-RULES-020` replaced the
+band number line because crates had to be renumbered for dependencies nobody disputed, and
+names the worst case: `nomos-workflow-orchestration` renumbered three times across two items in
+one session as each new dependency landed.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#13
+
+*revision: authored · kind: heading · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#14
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision · hash: sha256:d1dabcf2775c6df15ab6ad7cc8f7a3f538425d9890a6ba08cb9aacba601fca72*
+
+**Yes. This workspace answers the prospective question, as a fourth gate verb over a crate
+pair, with three outcomes rather than two.**
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#15
+
+*revision: authored · kind: heading · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / Whose question it is: the gate, with the seam below the verb · hash: sha256:bb6f14fc370b74eabc61e248788108a8dcf7bc56da54bd521aed2270770a770e*
+
+### Whose question it is: the gate, with the seam below the verb
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#16
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / Whose question it is: the gate, with the seam below the verb · hash: sha256:f4f3b32ad8b6eb6fa49ba3cfec965bb68f997a698abdef3d89775dd0cf8b3ece*
+
+`gate` already owns "answer about the rules without running them" — that is what `Explain`
+does, and it is the third verb for exactly this reason. A prospective admissibility answer is
+the same shape and belongs beside it.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#17
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / Whose question it is: the gate, with the seam below the verb · hash: sha256:32241d0590954cdda9c7c2c0276c65920adecce7f0df37185a0d469e82d7f705*
+
+The answer lives in `nomos-gate-orchestration` beside `Explain_Gate`, and the CLI verb is a
+transport onto it. That ordering is the load-bearing half: an LSP code action is the obvious
+second surface, `nomos-lsp` already names `Zone_Of`, and a verb that computed the answer inside
+`nomos-cli` would force that code action to compute it a second time. `OD-HOST-002` already
+decided which side of that line a host sits on.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#18
+
+*revision: authored · kind: heading · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / What the subject is: a crate pair · hash: sha256:4a4d6f8a9a397b90c6079c5e01ef4c595c4e24153a04e091f011bc7f7fc01d45*
+
+### What the subject is: a crate pair
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#19
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / What the subject is: a crate pair · hash: sha256:d511916918f5f830815132800efd4c3ab62b1a644665a5ba38ac032d6e001dd4*
+
+Not a proposed manifest edit, and not a planned change-set.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#20
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / What the subject is: a crate pair · hash: sha256:8e7cfb5d885a9f26a051739dcec883f9e15023b886f5e89a51f5911967b5c933*
+
+The measurement decides it: the answer is a pure function of two crate names, so a manifest
+edit adds a parse that yields exactly the pair, and a change-set is *n* pair questions with a
+roll-up. Neither carries information the pair does not, and both add a surface that can be
+wrong about something the pair cannot be wrong about. A caller wanting either builds it on the
+pair.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#21
+
+*revision: authored · kind: heading · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / What it says when a zone is unknown: it does not judge, and says so · hash: sha256:2177595840992a7d1cb3c34cf020b6860188a94c4ee654505f5faaa075e6d5a4*
+
+### What it says when a zone is unknown: it does not judge, and says so
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#22
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / What it says when a zone is unknown: it does not judge, and says so · hash: sha256:ba0c65c625b9bba72f97e947b194fbecd3ae764f0d45fec954fd0c55dfe7c976*
+
+This is the case that decides whether the verb is safe, and it has already been decided
+elsewhere. `Zone_Of` returns `None` for a crate with no declared zone, and that is the normal
+state of every crate in every other repository.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#23
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / What it says when a zone is unknown: it does not judge, and says so · hash: sha256:d1052608ebd132fbb57f49f7b89cd89c78cc38c5237e0bd39805d1a017a3ffb4*
+
+Three outcomes, never two:
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#24
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / What it says when a zone is unknown: it does not judge, and says so · hash: sha256:a13aa6aa74e06c768f3fa5d43e69aae427a408d5544eadb4b46d36b7fa00ea58*
+
+- **permitted** — both endpoints have a declared zone, and `Permits` or `SAME_ZONE_EDGES`
+  admits the edge;
+- **refused** — both have a declared zone and neither admits it;
+- **not judged** — either endpoint has no declared zone.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#25
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / What it says when a zone is unknown: it does not judge, and says so · hash: sha256:5c83c1f2e0f7f48046bc7ca7828ddfae1c8a0bca2617f2e37626526d3a7b47d4*
+
+The third is not an error and not a default. `OD-RULES-003` decided that a repository with no
+declared architecture gets `Applicability::NotApplicable`, "the only variant that is a
+positive statement about the absence of a judgment", and this session's work on
+`Check_Dependency_Completeness` already separates "declared, and this member is missing from
+it" from "declared nothing at all". The verb inherits that distinction rather than inventing a
+second vocabulary for it.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#26
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / What it says when a zone is unknown: it does not judge, and says so · hash: sha256:596514ea0e83da310482cbd5509cc8462e83be4fa305d920e08345583fdf655d*
+
+**What it must never do is default to permitted.** A prospective check that answers "fine" for
+a crate it has never heard of is worse than no check, because it is consulted precisely by
+someone who does not yet know the answer.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#27
+
+*revision: authored · kind: heading · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / Why the counter-argument does not carry · hash: sha256:e25b6fe7c92372294b480cb7daafa942abebe7c4d8fc1bd52c639a43adbf4dc0*
+
+### Why the counter-argument does not carry
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#28
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / Why the counter-argument does not carry · hash: sha256:b8a381f51ac42704c62422c673094b65b72e7b6346e4f9b6f64a874f7f316c40*
+
+`nomos check` answering retrospectively is a different answer to a different question. It
+requires the edge to exist, which means the developer has already done the thing they wanted
+checked — and `OD-RULES-020` records what that costs when the answer turns out to be no.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#29
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / Why the counter-argument does not carry · hash: sha256:fec28d46870f3a39eff626890f1384125a530b5fd8f35bfc543a3a5a5282ae2e*
+
+"Convenience rather than capability" is settled by the measurement: a total, public, pure
+function with no host surface is not a convenience being withheld, it is a seam nobody
+finished. The verb is roughly the arity of `explain`, which this workspace already ships.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#30
+
+*revision: authored · kind: heading · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / What `OD-RULES-029` changes about this, and what it does not · hash: sha256:753609fc700347bb75badaa9f370ae6ea720e718b91679a5b60406f39c73f9d3*
+
+### What `OD-RULES-029` changes about this, and what it does not
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#31
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / What `OD-RULES-029` changes about this, and what it does not · hash: sha256:e8b9b46cf43557b6e1eeb33cf63326c27226c1a2cc4f52e9b0ffc4881faf143b*
+
+`OD-RULES-029` decided the layering declaration becomes data read from the repository under
+check, and that two of `OD-RULES-003`'s three prerequisites are already built. A verb built now
+reads `ZONES` and `Permits` as they are.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#32
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / The Decision / What `OD-RULES-029` changes about this, and what it does not · hash: sha256:3e25ab421ab73f55ecd60e774ebafe47af9410e4c20e24008d49a81f72e39a11*
+
+That is deliberate and it is not a trap, because **the verb asks the same question either
+way**. `Zone_Of` and `Permits` are where the answer comes from today and where it will come
+from after the migration; what changes is where those get their data. The verb must therefore
+ask through those two functions and must not reach around them to `ZONES` directly — which is
+the one constraint this record puts on whoever builds it.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#33
+
+*revision: authored · kind: heading · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#34
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / What This Record Does Not Do · hash: sha256:81b3f87e5c713ea5f4c6dccd15d726020ddfe16e2cfe83b610e577f07c1a9040*
+
+It does not build the verb, the seam, or an LSP code action. It does not change `nomos-rules`,
+`nomos-gate-orchestration`, `nomos-cli` or `nomos-lsp`.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#35
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / What This Record Does Not Do · hash: sha256:7bb16ad97b3d0d94c86c931353eaa1d77a10e9df6df9c41f7911ce0dc87492f4*
+
+It does not decide the verb's spelling, its exit codes, or its output format. Those are the
+building item's, against `README.md`'s existing table.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#36
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / What This Record Does Not Do · hash: sha256:0553cda92cca66b2df2de963672a688186d08cef3663096b504730433e957b08*
+
+It does not reopen `OD-RULES-029` or schedule its migration. It states the one constraint that
+keeps the two compatible.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#37
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / What This Record Does Not Do · hash: sha256:89578daeeb8a3d988f3a9c27ed0f3ae7540439f73a10ed94257e99d174a5bb65*
+
+It does not extend the prospective answer beyond dependency admissibility. Whether any other
+rule has a prospective form is a separate question and no measurement here bears on it.
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#38
+
+*revision: authored · kind: heading · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#39
+
+*revision: authored · kind: prose · heading: Whether this workspace answers whether a dependency would be permitted before the edge exists / Status · hash: sha256:409e2331c39407ab30bf51d3b529200ae3bf6e8785ccc1f86bd7939f7ecb9204*
+
+Accepted. The prospective question is answered, by a fourth gate verb over a crate pair,
+seamed in `nomos-gate-orchestration` beside `Explain_Gate` so a second surface reuses it, with
+three outcomes of which the third — not judged, when an endpoint has no declared zone — is what
+keeps it from answering "fine" about a crate it has never heard of.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

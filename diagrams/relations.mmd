@@ -736,6 +736,9 @@ graph LR
     od_gate_024 -->|"relates-to"| od_gate_023
     od_gate_025 -->|"relates-to"| od_gate_017
     od_gate_025 -->|"relates-to"| od_gate_023
+    od_gate_026["OD-GATE-026"] -->|"relates-to"| od_rules_003
+    od_gate_026 -->|"relates-to"| od_rules_020
+    od_gate_026 -->|"relates-to"| od_rules_029["OD-RULES-029"]
     od_host_001 -->|"relates-to"| od_agent_004
     od_host_001 -->|"relates-to"| od_host_002
     od_host_001 -->|"relates-to"| od_host_003
@@ -1296,12 +1299,13 @@ graph LR
     od_rules_003 -->|"relates-to"| od_capability_002
     od_rules_003 -->|"relates-to"| od_capability_006
     od_rules_003 -->|"relates-to"| od_gate_020
+    od_rules_003 -->|"relates-to"| od_gate_026
     od_rules_003 -->|"relates-to"| od_package_008
     od_rules_003 -->|"relates-to"| od_package_014
     od_rules_003 -->|"relates-to"| od_rules_001
     od_rules_003 -->|"relates-to"| od_rules_023
     od_rules_003 -->|"relates-to"| od_rules_026
-    od_rules_003 -->|"relates-to"| od_rules_029["OD-RULES-029"]
+    od_rules_003 -->|"relates-to"| od_rules_029
     od_rules_004 -->|"relates-to"| d_135
     od_rules_004 -->|"relates-to"| od_gate_020
     od_rules_004 -->|"relates-to"| od_host_004
@@ -1414,6 +1418,7 @@ graph LR
     od_rules_020 -->|"affected_by"| od_rules_028
     od_rules_020 -->|"relates-to"| arc_ecosystem_001
     od_rules_020 -->|"relates-to"| od_capability_015
+    od_rules_020 -->|"relates-to"| od_gate_026
     od_rules_020 -->|"relates-to"| od_host_010
     od_rules_020 -->|"relates-to"| od_project_004
     od_rules_020 -->|"relates-to"| od_rules_023
@@ -1452,6 +1457,7 @@ graph LR
     od_rules_028 -->|"relates-to"| od_host_001
     od_rules_028 -->|"relates-to"| od_platform_002
     od_rules_028 -->|"relates-to"| od_rules_020
+    od_rules_029 -->|"relates-to"| od_gate_026
     od_rules_029 -->|"relates-to"| od_rules_003
     od_rules_029 -->|"relates-to"| od_rules_011
     od_rules_029 -->|"relates-to"| od_rules_020
@@ -1721,6 +1727,7 @@ graph LR
     od_gate_023
     od_gate_024
     od_gate_025
+    od_gate_026
     od_host_001
     od_host_002
     od_host_003
