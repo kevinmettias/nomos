@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:d082c8c54a8dcdd47246697eea900d7ac370b3f0005064437377a4603a24d4f1",
-  "inputs_digest": "sha256:34748f7d0f13c893d358f808ea5266ac243adcb33bfca1d29869015095739ef4",
+  "content_digest": "sha256:bc94838889cdc99c4ec09693eabd106de1bce327b7d03ab8a433ab9106d6fce0",
+  "inputs_digest": "sha256:8075183e60af4d39edd8118535637225f16379a3502218611e003c35ad0f38d3",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1905
+      1909
     ],
     [
       "Source blocks",
-      6606
+      6621
     ]
   ],
   "inputs": [
@@ -1028,7 +1028,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md@authored",
-      "hash": "sha256:96cfa9e9e05cd504f39e05233485d9606967f40dfe7f6c061d1b8a4ecfdcc9c6"
+      "hash": "sha256:194a79f00c4934f15b88c83b104b3eb2e9db06f8b1d94e94886ed5ed9daf9c70"
     },
     {
       "content": "documents",
@@ -9308,7 +9308,27 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#36",
-      "hash": "sha256:15a5d5e4f1207d2f0bce80793f22edc852b6f1af57a1a2476d1065953bbdcc3e"
+      "hash": "sha256:bb79109840411547b6578d96442c800e32693be341f890e7a2c14b28effa03e7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#42",
+      "hash": "sha256:5b28c26a4967531b90af1ee363ca8333007e437b6b2d42f32e70cff2cea638e9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#46",
+      "hash": "sha256:c57ae9f4d1e2e6189ca1f5fce4ad6ee63d8c30b9926a5fdcd83e72073f59e87f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#49",
+      "hash": "sha256:5d4d9ee05108cf14832b4c8db18873340b3238b22927036dcbc443a46ea3a146"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#51",
+      "hash": "sha256:7f11299c4cec1c3eebc43a6b9610aaf3c27e21d4c5e727dce7d738e82cf2656c"
     },
     {
       "content": "headings",
@@ -39093,12 +39113,87 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#36",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:f4c92e66fe32a9aa4083aefc1d461cd8313e738cb6db5b000238df39ce80bb08"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#37",
-      "hash": "sha256:fd133e5b9e4328e59b69d7e377f2f1c1ce928fe8a488e0d1ef1803a91b5bbdbb"
+      "hash": "sha256:7dacaf5e1a0202231a5c02c7de1ed64175b06d862f4777cdfb136f02b430e43c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#38",
+      "hash": "sha256:cd343de8bb651e63d8a7a0d19a311cd8b58c84368074aed672b70209ad2e4c54"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#39",
+      "hash": "sha256:a77357d509abe80cf2ea9034fb5a76f775f7d40ea4b2eab685aa240e7bbea05a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#40",
+      "hash": "sha256:64443a623e3b6c1b20cc480ad30c1829d404c0f5e34f4800b59acea567fd0eba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#41",
+      "hash": "sha256:602b6b93d8cf909304bf2fe8ebc3565d4dded34d6f22d3f7bdc610a78d7e023e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#42",
+      "hash": "sha256:785e6ce8ea2157a3eae77cb2b514b4936945be982979a3e0ded8d7d77a045271"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#43",
+      "hash": "sha256:7cac1c479f1bffb74d786bdfa653bda3c58075e77adc4cc58e12ce59a41a6022"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#44",
+      "hash": "sha256:bf85edf76adc281fbc538d4d6dafc2942ed4d8419ff432b2bb60ee8f883685a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#45",
+      "hash": "sha256:16a61306c95caa3a30e558f0f2e9fc6b4c421129796d2dc7a02154f598387ceb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#46",
+      "hash": "sha256:c6c891b4e045caad6f265bc6374b3f7e170402dd5b70f7a0ccbbbbf48d1d9a7b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#47",
+      "hash": "sha256:02f55155029282f0df603f0491c379aafbba0397d9fb3665c1c4466ecac889b4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#48",
+      "hash": "sha256:5ba2a485c000592fabd342bbd2c8e24d2f01e0c97db461c70e0e613f02211299"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#49",
+      "hash": "sha256:76b487bdbf984d828fa64fa7a27f390468c74b3a7d0ef67e38c9b24a8ea9a92c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#50",
+      "hash": "sha256:3254e64fe80a49ede2c6dacfcaa9af94e81e086f2b6d9038b82fe1226af30d97"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#51",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#52",
+      "hash": "sha256:b45ad05e05b07457e2ed631dcddc5aa7638ea0b87b99ffe0d9d405524b645a7a"
     },
     {
       "content": "blocks",

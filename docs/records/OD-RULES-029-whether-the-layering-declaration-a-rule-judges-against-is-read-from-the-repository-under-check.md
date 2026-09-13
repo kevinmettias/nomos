@@ -3,7 +3,7 @@ id: OD-RULES-029
 type: decision
 title: Whether the layering declaration a rule judges against is read from the repository under check
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -163,11 +163,68 @@ It does not schedule the migration. `OD-RULES-003` declined to, deliberately, an
 measured here changes that — except that the cost is now two-thirds lower than when that
 record declined it, which is worth knowing the next time somebody asks.
 
+## Amendment: The `tiers` Array Has A Reader, Outside This Repository
+
+Version 1 disposed of `standards.json`'s `tiers` array as "a second authority to delete", on
+the measurement that nothing in this tree reads it. **The measurement was right and the test
+was wrong.** Nothing in this tree reads it because the reader is not in this tree.
+
+`code-standards` deserializes the array directly, at `kernel/config/limits/limits.go` line 183
+— `Tiers []dependencyTier` with the JSON tag `tiers` — and that package's own documentation
+states the contract it belongs to: "A workspace whose shape is a layering declares tiers",
+which its `check-dependency-direction` then judges. That is exactly what
+`P26-DEPENDENCY-TIER-POLICY` authored the array for, in those words.
+
+Two **Done** items in this repository's own ledger have verified conditions depending on it:
+
+| item | its verified condition |
+|---|---|
+| `P26-DEPENDENCY-TIER-POLICY` | "`standards.json` declares the README crate bands as dependency tiers and `check.exe dependency-direction` passes for the repository" |
+| `P36-STANDARDS-JSON-SCHEMA-DRIFT` | "`check doctor .` reports no BROKEN line for `standards.json`, and the file still declares … `tiers` …" |
+
+Deleting the array would have silently falsified a finished item's own stated condition, which
+is a worse defect than the stale one version 1 set out to remove.
+
+### The distinction version 1 missed
+
+That version considered the disposition that actually fits — "code-standards' own input this
+workspace does not own" — and rejected it, because "the file is this repository's own, and its
+five `OD-RULES-011` families read from it."
+
+**That conflates the file with the key.** `standards.json` is a shared configuration file: of
+its twelve top-level keys, most are `code-standards`' and five are `nomos-repo-policy`'s. A
+shared file's disposition is decided **per key, not per file**, and "does this repository own
+the file" answers a different question from "does this repository own this key".
+
+So the corrected disposition: **`tiers` is another tool's declared input, which this repository
+holds and does not own.** It stays. That it is in the `band-N` vocabulary `OD-RULES-020`
+retired, and 16 of 66 members short, are real observations about it — and they are that tool's
+concern to act on, not a licence for this one to delete it.
+
+### What that changes about the third prerequisite
+
+Nothing about the decision above, and one thing about the migration.
+
+Version 1 reasoned that reviving `tiers` when the format exists would import its 16-member gap
+into the mechanism's first consumer. That still holds, and is now load-bearing for a second
+reason: **the future declaration cannot re-use this key even if it wanted to**, because another
+tool already reads it under its own schema, and two readers with different expectations of one
+key is the shape this repository files records about. Whatever `OD-RULES-003`'s third
+prerequisite authors, it authors somewhere `tiers` is not.
+
+### Why this record made the mistake
+
+It grepped this repository and concluded from silence. A shared file's other readers are
+invisible to that method by construction — and the ledger already held the evidence, in two
+Done items naming the tool and the check outright.
+
 ## Status
 
-Accepted. The declaration is data read from the repository under check, per `OD-RULES-003`; it
+Accepted, version 2. The declaration is data read from the repository under check, per `OD-RULES-003`; it
 is that record's triple and not an `OD-RULES-011` family, because a membership map without its
 lattice externalizes nothing; two of the three prerequisites are built to specification and the
 third is unowned; the foreign-repository behaviour contradicts `OD-RULES-003`'s `NotApplicable`
-and is filed as a defect; and `standards.json`'s `tiers` array is a second authority to delete
-rather than the declaration to revive.
+and is filed as a defect; and `standards.json`'s `tiers` array is **not** deleted — the amendment
+above corrects that, naming the reader outside this repository and the two Done items whose
+verified conditions depend on it. It is another tool's declared input, and the future
+declaration is authored somewhere it is not.

@@ -211,7 +211,7 @@ profile: domain-specification
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md@authored | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md | authored | 16 | 6 | sha256:66d2427694c21ad26b870820393f14285fbb1678448d0a33f4490a61fd0f1118 |
 | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md@authored | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md | authored | 28 | 8 | sha256:65229767fb7df92fdb3e15faa97875746dd70f7a86d656248cfd622909967161 |
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md@authored | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md | authored | 22 | 7 | sha256:eef4a3f365ef12f634f1fee88c3cf1b2ad45aad74e471e1daf8c8c26603a4228 |
-| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md@authored | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md | authored | 37 | 10 | sha256:96cfa9e9e05cd504f39e05233485d9606967f40dfe7f6c061d1b8a4ecfdcc9c6 |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md@authored | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md | authored | 52 | 14 | sha256:194a79f00c4934f15b88c83b104b3eb2e9db06f8b1d94e94886ed5ed9daf9c70 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1872,7 +1872,11 @@ profile: domain-specification
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#23 | authored | 3 | The `dependency-completeness` behaviour is a defect against an accepted record, not an open question |
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#27 | authored | 3 | `standards.json`'s `tiers` array is a second authority, and it is to be deleted |
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#31 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#36 | authored | 2 | Status |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#36 | authored | 2 | Amendment: The `tiers` Array Has A Reader, Outside This Repository |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#42 | authored | 3 | The distinction version 1 missed |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#46 | authored | 3 | What that changes about the third prerequisite |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#49 | authored | 3 | Why this record made the mistake |
+| docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#51 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -54990,20 +54994,137 @@ record declined it, which is worth knowing the next time somebody asks.
 
 ### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#36
 
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository · hash: sha256:f4c92e66fe32a9aa4083aefc1d461cd8313e738cb6db5b000238df39ce80bb08*
+
+## Amendment: The `tiers` Array Has A Reader, Outside This Repository
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#37
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository · hash: sha256:7dacaf5e1a0202231a5c02c7de1ed64175b06d862f4777cdfb136f02b430e43c*
+
+Version 1 disposed of `standards.json`'s `tiers` array as "a second authority to delete", on
+the measurement that nothing in this tree reads it. **The measurement was right and the test
+was wrong.** Nothing in this tree reads it because the reader is not in this tree.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#38
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository · hash: sha256:cd343de8bb651e63d8a7a0d19a311cd8b58c84368074aed672b70209ad2e4c54*
+
+`code-standards` deserializes the array directly, at `kernel/config/limits/limits.go` line 183
+— `Tiers []dependencyTier` with the JSON tag `tiers` — and that package's own documentation
+states the contract it belongs to: "A workspace whose shape is a layering declares tiers",
+which its `check-dependency-direction` then judges. That is exactly what
+`P26-DEPENDENCY-TIER-POLICY` authored the array for, in those words.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#39
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository · hash: sha256:a77357d509abe80cf2ea9034fb5a76f775f7d40ea4b2eab685aa240e7bbea05a*
+
+Two **Done** items in this repository's own ledger have verified conditions depending on it:
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#40
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository · hash: sha256:64443a623e3b6c1b20cc480ad30c1829d404c0f5e34f4800b59acea567fd0eba*
+
+| item | its verified condition |
+|---|---|
+| `P26-DEPENDENCY-TIER-POLICY` | "`standards.json` declares the README crate bands as dependency tiers and `check.exe dependency-direction` passes for the repository" |
+| `P36-STANDARDS-JSON-SCHEMA-DRIFT` | "`check doctor .` reports no BROKEN line for `standards.json`, and the file still declares … `tiers` …" |
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#41
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository · hash: sha256:602b6b93d8cf909304bf2fe8ebc3565d4dded34d6f22d3f7bdc610a78d7e023e*
+
+Deleting the array would have silently falsified a finished item's own stated condition, which
+is a worse defect than the stale one version 1 set out to remove.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#42
+
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository / The distinction version 1 missed · hash: sha256:785e6ce8ea2157a3eae77cb2b514b4936945be982979a3e0ded8d7d77a045271*
+
+### The distinction version 1 missed
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#43
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository / The distinction version 1 missed · hash: sha256:7cac1c479f1bffb74d786bdfa653bda3c58075e77adc4cc58e12ce59a41a6022*
+
+That version considered the disposition that actually fits — "code-standards' own input this
+workspace does not own" — and rejected it, because "the file is this repository's own, and its
+five `OD-RULES-011` families read from it."
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#44
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository / The distinction version 1 missed · hash: sha256:bf85edf76adc281fbc538d4d6dafc2942ed4d8419ff432b2bb60ee8f883685a4*
+
+**That conflates the file with the key.** `standards.json` is a shared configuration file: of
+its twelve top-level keys, most are `code-standards`' and five are `nomos-repo-policy`'s. A
+shared file's disposition is decided **per key, not per file**, and "does this repository own
+the file" answers a different question from "does this repository own this key".
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#45
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository / The distinction version 1 missed · hash: sha256:16a61306c95caa3a30e558f0f2e9fc6b4c421129796d2dc7a02154f598387ceb*
+
+So the corrected disposition: **`tiers` is another tool's declared input, which this repository
+holds and does not own.** It stays. That it is in the `band-N` vocabulary `OD-RULES-020`
+retired, and 16 of 66 members short, are real observations about it — and they are that tool's
+concern to act on, not a licence for this one to delete it.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#46
+
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository / What that changes about the third prerequisite · hash: sha256:c6c891b4e045caad6f265bc6374b3f7e170402dd5b70f7a0ccbbbbf48d1d9a7b*
+
+### What that changes about the third prerequisite
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#47
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository / What that changes about the third prerequisite · hash: sha256:02f55155029282f0df603f0491c379aafbba0397d9fb3665c1c4466ecac889b4*
+
+Nothing about the decision above, and one thing about the migration.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#48
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository / What that changes about the third prerequisite · hash: sha256:5ba2a485c000592fabd342bbd2c8e24d2f01e0c97db461c70e0e613f02211299*
+
+Version 1 reasoned that reviving `tiers` when the format exists would import its 16-member gap
+into the mechanism's first consumer. That still holds, and is now load-bearing for a second
+reason: **the future declaration cannot re-use this key even if it wanted to**, because another
+tool already reads it under its own schema, and two readers with different expectations of one
+key is the shape this repository files records about. Whatever `OD-RULES-003`'s third
+prerequisite authors, it authors somewhere `tiers` is not.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#49
+
+*revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository / Why this record made the mistake · hash: sha256:76b487bdbf984d828fa64fa7a27f390468c74b3a7d0ef67e38c9b24a8ea9a92c*
+
+### Why this record made the mistake
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#50
+
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Amendment: The `tiers` Array Has A Reader, Outside This Repository / Why this record made the mistake · hash: sha256:3254e64fe80a49ede2c6dacfcaa9af94e81e086f2b6d9038b82fe1226af30d97*
+
+It grepped this repository and concluded from silence. A shared file's other readers are
+invisible to that method by construction — and the ledger already held the evidence, in two
+Done items naming the tool and the check outright.
+
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#51
+
 *revision: authored · kind: heading · heading: Whether the layering declaration a rule judges against is read from the repository under check / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#37
+### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#52
 
-*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Status · hash: sha256:fd133e5b9e4328e59b69d7e377f2f1c1ce928fe8a488e0d1ef1803a91b5bbdbb*
+*revision: authored · kind: prose · heading: Whether the layering declaration a rule judges against is read from the repository under check / Status · hash: sha256:b45ad05e05b07457e2ed631dcddc5aa7638ea0b87b99ffe0d9d405524b645a7a*
 
-Accepted. The declaration is data read from the repository under check, per `OD-RULES-003`; it
+Accepted, version 2. The declaration is data read from the repository under check, per `OD-RULES-003`; it
 is that record's triple and not an `OD-RULES-011` family, because a membership map without its
 lattice externalizes nothing; two of the three prerequisites are built to specification and the
 third is unowned; the foreign-repository behaviour contradicts `OD-RULES-003`'s `NotApplicable`
-and is filed as a defect; and `standards.json`'s `tiers` array is a second authority to delete
-rather than the declaration to revive.
+and is filed as a defect; and `standards.json`'s `tiers` array is **not** deleted — the amendment
+above corrects that, naming the reader outside this repository and the two Done items whose
+verified conditions depend on it. It is another tool's declared input, and the future
+declaration is authored somewhere it is not.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
