@@ -61015,7 +61015,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -61028,7 +61028,27 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "tests::Test_Run_Gate_Should_Pass_When_A_Phase_Approval_Covers_Every_Blocking_Finding ... ok\ntest tests::Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed ... ok\ntest tests::Test_Explain_Should_Report_A_Calibration_That_Applies ... ok\ntest tests::Test_A_Suppressed_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrated ... ok\ntest tests::Test_Explain_Should_Report_A_Baseline_That_Applies ... ok\n\ntest result: ok. 91 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 25.47s\n\n\nrunning 4 tests\ntest Test_Run_Gate_Should_Report_An_Unreadable_Check_Outcome_As_Indeterminate ... ok\ntest Test_Run_Gate_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestration_Seam ... ok\ntest Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.72s\n\n\nrunning 4 tests\ntest Test_Disposition_Of_Findings_Should_Fail_On_A_Blocking_Finding ... ok\ntest Test_Disposition_Of_Findings_Should_Fail_With_One_Blocking_Finding_Among_Many ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_With_No_Findings ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_When_Nothing_Can_Fail_A_Build ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-4281b14ceca8e621.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-23ff7cc352e6b2e5.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-8bad2a3e6bf12a8f.exe)\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1789259576,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2a7a3e9b0c00f6ea7fd664668e2aa3c4f2b2083e"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -64623,6 +64643,41 @@
         },
         "revision": "3afed432d25f5d8fdf453712b396675dab84f879"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P76-POLICY-ENTRIES-MATCH-BY-NAME-AND-REPORT-WHAT-MATCHED-NOTHING",
+      "title": "A declared policy entry still resolves to a digest and still matches nothing in silence",
+      "why": "OD-GATE-024 decided that a person names a sub-item finding by the subject_name the run already prints, that the comparison moves off the re-derived digest onto that name, and that an entry matching nothing is reported. It implements none of it, deliberately: the change reaches gate_policy_file.rs's entry resolution, the three Matches implementations in policy/suppression_disposition/suppression.rs, policy/baseline_debt.rs and policy/rule_calibration.rs, and the run's own reporting, none of which that record's territory held. Until then an author who writes a suppression for a name-addressed finding -- completeness-mirror, single-letter-names -- still gets no error, no warning and no effect, because Subject_Of_Path lowercases the name it digests and a name-addressed finding digests raw bytes, so an exactly-correct name cannot match.",
+      "done_when": "A declared entry names a subject as the run prints it; Suppression, BaselineDebt and RuleCalibration match against Finding::subject_name rather than a digest the entry resolved to, with a test proving a case-bearing name-addressed finding is matched by an entry naming it and was not before; a file-addressed entry still works by its path; and a run names every declared entry that matched no finding, without failing for it.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/baseline_debt.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/rule_calibration.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null

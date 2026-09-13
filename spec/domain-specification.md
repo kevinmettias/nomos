@@ -103,6 +103,7 @@ profile: domain-specification
 | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md@authored | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md | authored | 24 | 6 | sha256:a1950bc3193e80ab3048937686ee5af16afe5f70f160c318aa0fad2915067313 |
 | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md@authored | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md | authored | 21 | 6 | sha256:5e4ffc056879a2325a78cf957dd7e176cd0a0ebc73c27b1b2a8d90553bd65891 |
 | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md@authored | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md | authored | 23 | 7 | sha256:7ffcec3773752326a5ba599808f3454e1385db25737f73d58c74cbc762307665 |
+| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md@authored | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md | authored | 23 | 6 | sha256:51ccba08aacf5cd5d6f1909e3ba5475b2104050325a3511938da75711674bfde |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -962,6 +963,12 @@ profile: domain-specification
 | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#18 | authored | 2 | What This Says About Declining A Root |
 | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#20 | authored | 2 | What Would Decide It Differently |
 | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md#22 | authored | 2 | Status |
+| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#1 | authored | 1 | A finding a rule addresses by sub-item cannot be named by a person in a declared policy |
+| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#11 | authored | 2 | The Decision |
+| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#17 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#22 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -25367,6 +25374,203 @@ measurement a claim does: each dependent checked against the tree, not against t
 
 Accepted. Five items measured individually at `cff9df40`; three declined, two re-authored free
 of an inherited edge, and nothing left stranded behind `P41-RUN-PLANNER`.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#1
+
+*revision: authored · kind: heading · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy · hash: sha256:a535fa3569593a07339ef80e06cdf20e059a2bf5ab30297490f09abbd23703ee*
+
+# A finding a rule addresses by sub-item cannot be named by a person in a declared policy
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#2
+
+*revision: authored · kind: heading · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#3
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Question · hash: sha256:6d0fa8a9f5321144619906396f97057c339674d1c02227da7886c1ba4b720da8*
+
+`P40-GATE-POLICY-AUTHORING-3` gave the four gate policies a declared source. Entries in it
+name a **path**, because `SubjectId` is a digest nobody can write by hand, and
+`nomos_model::Subject_Of_Path` turns that path into the identity a run matches on.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#4
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Question · hash: sha256:dec3c5235908c350c1ff8284c44abb5a0962ee6ccbfa45298b8245a096003e35*
+
+That works for a finding a rule addresses by the file. It does not work for one addressed by
+something inside the file, and the failure is silent: an author writes a suppression for
+`completeness-mirror`, gets no error and no warning, and the finding keeps blocking with
+nothing saying why the entry did not take.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#5
+
+*revision: authored · kind: heading · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#6
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / What Was Measured · hash: sha256:541c8961588825aa4c3548cc5646854f6dc5fbd6b21ad6ac8b4b296acb7836a6*
+
+**Matching is digest equality, and nothing in it can see a name.** Both
+`Suppression::Matches` and `BaselineDebt::Matches` are
+`self.rule == finding.rule && self.subject == finding.subject`
+(`policy/suppression_disposition/suppression.rs:36`, `policy/baseline_debt.rs:49`). A
+declared entry resolves its `path` to a `SubjectId` once, up front, and the comparison is
+between two digests from then on.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#7
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / What Was Measured · hash: sha256:0f090266aa576d62bd9e397c8db4a36ffb6e651f6ab4412d673235b3cafb604a*
+
+**The two sides digest different preimages, and one of them folds case.**
+`Subject_Of_Path` is `SubjectId::From_Digest(Content_Digest(Normalize_Path(path).as_bytes()))`,
+and `Normalize_Path` unifies separators and **lowercases**. A name-addressed finding computes
+`SubjectId::From_Digest(Content_Digest(qualified.as_bytes()))` over the raw bytes — eight
+sites across `checks/naming/` do exactly this. So for a finding whose subject is `OrderBook`,
+a declared entry naming `OrderBook` resolves to the digest of `orderbook` and cannot match it.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#8
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / What Was Measured · hash: sha256:a7190a33d19ce520e8a0a85337cffc139758fe7af2e17bccc3b5c28301af70d1*
+
+That is the part worth a record rather than a bug report: **an author who types the name
+exactly right still misses.** This is not a resolver that needs a wider lookup; it is two
+identity derivations that were never meant to meet.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#9
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / What Was Measured · hash: sha256:ce829e2af2a3f6fde2559c6da4b45905d04233862a9852b02a9ead78304ea879*
+
+**`subject_name` already exists, on every finding, and is exactly the preimage.**
+`Finding::subject_name` is documented as "the human-authored name the identity was derived
+from ... the preimage of `subject`, so the two cannot disagree without the digest being
+computed from something else," and it is there because "a digest alone cannot be read." The
+addressable name the `done_when` asks for is not a field that has to be added.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#10
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / What Was Measured · hash: sha256:1298d6160917ea019db3580951315fb40d1af38d0bc99130aff4ae27b8e6182e*
+
+**It is already heterogeneous, which is a feature here rather than an obstacle.** Sampled
+across the rule set, `subject_name` is written three ways: a bare path
+(`crosslang/comparison.rs`), a `path:line` (`concurrency_text.rs`, `constant_scope.rs`), and
+a qualified name (`checks/naming/*`). A person naming a finding does not have to learn which,
+because the run prints the one the rule used.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#11
+
+*revision: authored · kind: heading · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#12
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / The Decision · hash: sha256:b422c9713cc6a17a537b7b75039936a61996144ec761a495f54013fba7c4eed9*
+
+**They can, and the mechanism is `subject_name` — a declared entry names a subject the way
+the run prints it, and the resolver compares names rather than re-deriving a digest.**
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#13
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / The Decision · hash: sha256:46c28455afd79478a318f8a41d0a91c2ad2c8ec52dde3e0d565a3ef7c92d0dde*
+
+1. **A policy entry's subject key is an authored name, not a path.** `path` stays as its
+   spelling wherever the entry names a file, because there the subject's name *is* the path;
+   it stops being the only spelling. Nothing unauthorable enters the file — a digest is still
+   never written by hand, which is the property the original design exists to protect.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#14
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / The Decision · hash: sha256:e34e8f1a411535f11d59f1c1796813aea0a136f299d3e02f1a85b931861127d4*
+
+2. **The comparison is against `Finding::subject_name`, not against a digest the entry
+   resolved to.** This is the substantive change, and the measurement above is why: resolving
+   through `Subject_Of_Path` re-derives an identity under path normalization that a
+   name-addressed finding never used, so no amount of care by the author can make the two
+   meet. Comparing the authored string to the finding's own preimage removes the second
+   derivation entirely.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#15
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / The Decision · hash: sha256:53972836068ecc6428a3009e21ea33da80c8fee1d78f5e6f75938764ca48b270*
+
+3. **The trade this makes, stated rather than discovered later:** a name comparison is exact,
+   so a file entry must spell the path as the run prints it, where `Subject_Of_Path` would
+   previously have forgiven a case or separator difference. That forgiveness is not free to
+   keep — it is the same folding that makes case-bearing names unmatchable — and the report
+   already prints the exact string, so the author is not being asked to guess. Where two
+   files on a case-insensitive host differ only in case, `Normalize_Path`'s own reasoning
+   still applies to *territory and fact identity* and is untouched by this; what changes is
+   only how a person's declared policy entry finds a finding.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#16
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / The Decision · hash: sha256:2c489043a748492a164e59bc2ff0a4007cca15188b8afa8edb0d215a90c942cc*
+
+4. **An entry that matches nothing is reported, and this holds whichever way the rest is
+   decided.** A declared suppression, baseline debt or calibration that matched no finding in
+   a run is named in that run's output. It is not an error — a policy legitimately outlives
+   the finding it was written for, and a repository whose debt was paid should not fail its
+   own gate — but it is never silent again, which is the whole of the defect this record was
+   filed for.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#17
+
+*revision: authored · kind: heading · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#18
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / What This Record Does Not Do · hash: sha256:9f11df57b386c1a7603c018f148bf142ab0f53a740481451454ef2f9df1bf261*
+
+It does not add a digest field to the declared file. That would reintroduce exactly the
+unauthorable identity the design exists to avoid, and the item that filed this said so first.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#19
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / What This Record Does Not Do · hash: sha256:71f1a30c8f0cb223fb6affb2a3c1006189c975e99fed7c0873ab11a1ad453316*
+
+It does not change `Normalize_Path`, `Subject_Of_Path`, or how territory and fact identity
+are computed. Those answer a different question — whether two paths are one file — and the
+reasoning in `Normalize_Path`'s own doc about a lost edit is untouched.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#20
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / What This Record Does Not Do · hash: sha256:01e8e5ae928898020fd3fdc01924f641312c8af81231cbac6d4c3c19ac79e4b9*
+
+It does not implement any of this. Making the entry name-keyed, moving the comparison onto
+`subject_name`, and reporting unmatched entries are a follow-up item's own territory, reaching
+`gate_policy_file.rs`, the three `Matches` implementations and the run's reporting — none of
+which this record holds.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#21
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / What This Record Does Not Do · hash: sha256:1a331f3761cce8154f7dc648be99083486067873c30ab0af84115458a3d0b5cc*
+
+It does not exhaustively enumerate every rule's `subject_name` shape. Three were sampled and
+found to differ; the decision does not depend on the census being complete, because comparing
+to whatever preimage the rule used is what makes the shape not matter.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#22
+
+*revision: authored · kind: heading · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#23
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Status · hash: sha256:58931eb1a157337e1ae06757410d307cf54e4c0c530292fe7333d54c5ed75908*
+
+Accepted. A sub-item finding is nameable, by the `subject_name` the run already prints and
+the finding already carries. The blocker was never that findings lack a readable name — it
+was that a declared entry's path was re-derived into a digest under a normalization the
+finding never used, so an exactly-correct name still could not match. The comparison moves to
+the name; the path spelling survives for file-addressed entries; and an entry that matches
+nothing is reported rather than silently ignored, which holds regardless of the rest.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

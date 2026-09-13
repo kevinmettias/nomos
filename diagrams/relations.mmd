@@ -693,6 +693,7 @@ graph LR
     od_gate_017 -->|"relates-to"| arc_roadmap_001
     od_gate_017 -->|"relates-to"| od_gate_014
     od_gate_017 -->|"relates-to"| od_gate_023
+    od_gate_017 -->|"relates-to"| od_gate_024["OD-GATE-024"]
     od_gate_017 -->|"relates-to"| od_host_004
     od_gate_017 -->|"relates-to"| od_roadmap_002
     od_gate_017 -->|"relates-to"| od_rules_008
@@ -717,7 +718,10 @@ graph LR
     od_gate_023 -->|"relates-to"| od_agent_004
     od_gate_023 -->|"relates-to"| od_gate_014
     od_gate_023 -->|"relates-to"| od_gate_017
+    od_gate_023 -->|"relates-to"| od_gate_024
     od_gate_023 -->|"relates-to"| od_rules_009
+    od_gate_024 -->|"relates-to"| od_gate_017
+    od_gate_024 -->|"relates-to"| od_gate_023
     od_host_001 -->|"relates-to"| od_agent_004
     od_host_001 -->|"relates-to"| od_host_002
     od_host_001 -->|"relates-to"| od_host_003
@@ -1684,6 +1688,7 @@ graph LR
     od_gate_020
     od_gate_022
     od_gate_023
+    od_gate_024
     od_host_001
     od_host_002
     od_host_003
