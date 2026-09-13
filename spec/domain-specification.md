@@ -11,6 +11,7 @@ profile: domain-specification
 | identity | path | revision | blocks | headings | hash |
 | --- | --- | --- | --- | --- | --- |
 | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md@authored | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md | authored | 25 | 8 | sha256:a62eddf64a82e534bbdbd720c1057e1dcd3131c1264077c83d7029d15b52f8cf |
+| docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md@authored | docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md | authored | 25 | 6 | sha256:ccc429c5e9f4e7b008d8b8a5bb1ccca4cb0704cfbfa2b25aa891ebab3c538ebc |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md@authored | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md | authored | 40 | 12 | sha256:963e9cdbf1905450ef8455935dc914a29fc45b35f5d958d5d94a4b0e002c1a20 |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 73 | 15 | sha256:9c180099cbe0676f26fbb605bcf1696c99b2ff6fb542c0d367a429cfeb236d87 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
@@ -260,6 +261,12 @@ profile: domain-specification
 | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#18 | authored | 2 | Conflicts With Existing Decisions |
 | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#22 | authored | 2 | What This Record Does Not Do |
 | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#24 | authored | 2 | Status |
+| docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#1 | authored | 1 | A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it |
+| docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#2 | authored | 2 | Question |
+| docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#4 | authored | 2 | The census |
+| docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#13 | authored | 2 | Decision |
+| docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#19 | authored | 2 | What this record does not do |
+| docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#24 | authored | 2 | Status |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#1 | authored | 1 | External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#2 | authored | 2 | Question |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#7 | authored | 2 | The Third Crossing, And Its Layers |
@@ -2464,6 +2471,232 @@ they already answer.
 *revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / Status · hash: sha256:2d3706bb718adeb1de2082573eb6e583002fb4d6ecc22d719c4db4dea6e44bfb*
 
 Closed by `P12-CONFORMANCE-SEAM`.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#1
+
+*revision: authored · kind: heading · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it · hash: sha256:31ff55f83d7fc90aa13e0981692fdb41a8bcaeecbdd92dc8cb5f46a5db92e169*
+
+# A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#2
+
+*revision: authored · kind: heading · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#3
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / Question · hash: sha256:85dfc3cb388fefe65e74655c7eed17e0d1d0234ec18d2163572ccd3174189aab*
+
+The `xvpe` checkout beside this workspace — the one `OD-PLATFORM-003` made this build depend
+on, so it is always on disk — ships a committed, machine-readable standards corpus under
+`docs/arch/standards`, behind a `rule.schema.json` requiring every rule document to declare
+`id`, `severity`, `enforced_by` and `gate` in YAML front matter. `ARC-ECOSYSTEM-001` makes
+Nomos the ecosystem's conformance layer. Nomos appears in `enforced_by` zero times, and
+Nomos's own rule set was ported from `code-standards` instead. What relationship the two have
+is the question this record answers.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#4
+
+*revision: authored · kind: heading · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / The census · hash: sha256:f66dccbd07fd06d21718eb91b9b9536f1e675681091895b27aeff08dcf7e69d0*
+
+## The census
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#5
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / The census · hash: sha256:e9fe279e755b5581f79b1a44a805ec429a6e748cee0edccccf144e87b3efbf39*
+
+Parsed directly from the front matter of all 375 documents rather than taken from the item
+that raised this; every figure below reproduced.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#6
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / The census · hash: sha256:d4449364064eeb79ffa63d648b64d00aa5d5fe7d4910d5317e78c1fda6672700*
+
+**375 markdown documents: 261 `rule`, 109 `index`, 5 `reference`.** Every one carries front
+matter; none is missing it.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#7
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / The census · hash: sha256:48e1d3ae2cfc6f6bc390db658b6acef7db22f32746bef6401fb2a47bb5cccae3*
+
+**Severity:** 161 `MUST`, 5 `MUST NOT`, 83 `SHOULD`, 1 `SHOULD NOT`, 11 `MAY`.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#8
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / The census · hash: sha256:3cd644b81c20662eace1f075b503ae07198bc62fd278e675cc62d278fde1d982*
+
+**Gate:** 224 `review`, 31 `blocking`, 6 `unreachable`. So **86 percent of the corpus declares
+that no tool reaches it.**
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#9
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / The census · hash: sha256:f0c100b1cbb6682a178397f922d077c02114418a1a86da6ae4f6277d9f4d0cd6*
+
+**`enforced_by` names Nomos zero times.** What it does name, in descending order:
+`review` (224 — the value *is* the word, a human), `check-impact-map` (11), `lint` (10),
+`check-arch-doc-structure` (3), `check-strategy-docs` (3), `check-platform-boundaries` (3),
+`discipline` (2), `strategy-determinism-gate` (2), `layering-direction` (2), then singletons.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#10
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / The census · hash: sha256:d4ee1a92ecb6c01e8c014cd07a7ab04c61c4053a6e80a8742eca2e1f02a3ed1c*
+
+**The 224 are not a uniform mass, and where they sit is what decides this record.** Narrowing
+to the ones that carry real force — `review`-gated and `MUST` or `MUST NOT` — leaves **132**,
+and they cluster:
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#11
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / The census · hash: sha256:0920258355b806c19e02be9fac4f915eb45469ce7f4f303315ec31fbc8973be4*
+
+| count | area |
+|---|---|
+| 52 | `strategy-surfaces` |
+| 19 | `determinism-and-numerics` |
+| 16 | `measurement` |
+| 12 | `documentation` |
+| 12 | `ui` |
+| 9 | `workspace-layout` |
+| 8 | `security` |
+| 4 | `verification` |
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#12
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / The census · hash: sha256:e1fd2a143b1dadc5a7651fd78b82a8d5c851a9b3b4d9657be7de6b0ca300cb99*
+
+**71 of those 132 — 54 percent — are in the two domains this workspace already models
+natively.** Nomos has declared determinism domains and a `DeterminismStrength` on every
+production; `OD-DETERMINISM-001`/`-002` govern them; one file per `Strategy` declaration is
+already this repository's own convention. Titles from that half read *Determinism Boundary
+Isolation*, *Forbidden Nondeterminism Sources*, *Strategies Declare Honestly*, *Temporal
+Strength Requires Ordering Discipline*. These are not style rules a linter was too lazy to
+implement. They are `ARC-CONFORMANCE-001`'s category in its own words — *does this system,
+built the way its own records say it should be built, still hold the shape its architecture
+commits it to* — asked 132 times by a product that wrote them down and then had to admit
+nothing could check them.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#13
+
+*revision: authored · kind: heading · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#14
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / Decision · hash: sha256:84dca1eaaa39b8f0948db51d2d5443b5725ae50306902d1d803ff5f97c10e8b7*
+
+**The corpus is an external declaration Nomos reads as a fact, and Nomos's absence from
+`enforced_by` is correct and stays.** Those are not in tension; they are the two directions of
+one relationship, and collapsing them is how this question gets answered wrongly.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#15
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / Decision · hash: sha256:38a66b3714c12069290591420fe645d3d3005cadbd40a29b2b0f71375f1c2a47*
+
+**Nomos does not write itself into `enforced_by`.** Those files are `xvpe`'s, this workspace
+does not own them, and a conformance layer that edits its subject's declarations to name
+itself has stopped measuring and started asserting. `enforced_by: review` is also *true* today
+— a human does enforce it — so changing it would be replacing a fact with an intention. The
+relationship is one-directional: `xvpe` declares, Nomos reads.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#16
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / Decision · hash: sha256:379c81adca165590af1eb5819c7ee1348af852e1a8818641e929855068421a83*
+
+**The corpus's location and shape are declared, never compiled in.** Nomos must not carry
+`rule.schema.json`'s field names in its source. A repository under check declares where its
+external standards corpus is and what shape it has, in the `OD-RULES-011` form this workspace
+already uses for every other rule parameter — the same discipline `OD-RULES-031` applied to a
+benchmark's oracle convention a day earlier. A Nomos that hardcodes one sibling's schema is a
+Nomos that means nothing for the second sibling, which is the defect `OD-RULES-011` exists to
+end.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#17
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / Decision · hash: sha256:8732eb15838b615f9b85051fb1b67ab0f32c3e22bb8c2b74ca1dc8b270ff4f8e*
+
+**What a rule does with the three declared fields**, so that a later increment does not decide
+it by accident:
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#18
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / Decision · hash: sha256:c8d0f866c1e470ae77d9f19eeb57107682e003f7e605ccfc4be6dad4f5e2c3bb*
+
+- **`severity` maps to `GateCategory`.** `MUST`/`MUST NOT` are `Blocking`; `SHOULD`/`SHOULD
+  NOT` are `Advisory`; **`MAY` produces no finding at all.** A permission is not a claim, and a
+  rule reporting on one would be reporting that something was allowed.
+- **`gate: blocking` produces no Nomos finding.** `xvpe` declares a tool already reaches these
+  31. A second enforcement of one rule is two authorities for one fact, which this repository
+  refuses everywhere else; reading them is for knowing they are covered, not for covering them
+  again.
+- **`gate: review` is the population**, and `Applicability::AgentRequired` is what it becomes.
+  `OD-CONTRACTS-002` is exact about what that state does: a run decides only that it can *say*
+  a subject needs a model. That is a deterministic answer about an undecidable question, which
+  is precisely the seam `ARC-ECOSYSTEM-001` draws — Nomos does not judge *Strategies Declare
+  Honestly*, it enumerates every subject that rule reaches and says which need judging.
+  `declared-role-matches-surface` is already this exact shape, built and composed.
+- **`gate: unreachable` is a finding Nomos can make on its own authority**, and it is the one
+  place reading this corpus produces a deterministic verdict rather than a routing decision. A
+  declared `MUST` that its own author marks as reachable by nothing is a governing requirement
+  with no path to evidence — `ARC-CONFORMANCE-001`'s subject exactly, stated by the subject.
+  Six of them today.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#19
+
+*revision: authored · kind: heading · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / What this record does not do · hash: sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4*
+
+## What this record does not do
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#20
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / What this record does not do · hash: sha256:69f6a70c4e8d3ce8ff1847dd9b2cd838a6a8d114e83fec4fb2e8265f2149d385*
+
+It writes no contract crate, no provider, no rule, and changes nothing in `nomos-rules`. It
+edits nothing anywhere in the `xvpe` tree, which this workspace does not own and must not
+modify to make its own reading easier.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#21
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / What this record does not do · hash: sha256:6000d88730efde883e11a990a01211adf3c8adadebed4effef006346020b30ff*
+
+It does not decide when the reading increment is built, how the corpus is addressed as a
+subject, or how a run is asked for a subset of 224 routing findings rather than all of them.
+That last is a real cost and is named here rather than discovered later: a run that emitted
+224 `AgentRequired` findings unbidden would be unusable, and `gate run --rule` narrowing
+existing today is not the same as selecting by severity, gate or area.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#22
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / What this record does not do · hash: sha256:e5bb7e4830175a536a4d50a884419a11c5ed62d84bc579ec7761023cdc7206f8*
+
+It does not re-open `OD-PLATFORM-003`. The sibling checkout's presence is the precondition
+that makes this corpus readable at all, and it is also why this reading can never run in CI —
+the same hole the three corpora already sit in, which any increment here inherits and must
+declare rather than discover.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#23
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / What this record does not do · hash: sha256:14173a838cfe6ef9b441799da90dd619e3bd2b7e186de3e51d1ced850d30f1e7*
+
+It does not claim the 132 are violations, or that any of them fails. They are a population of
+declared requirements whose authors recorded that nothing checks them. What is measured here
+is the size and shape of that population, not its verdict.
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#24
+
+*revision: authored · kind: heading · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#25
+
+*revision: authored · kind: prose · heading: A sibling's declared standards corpus is a fact Nomos reads, and Nomos does not write itself into what enforces it / Status · hash: sha256:526312ebb84397a2135a7cb7fb4bf08c6c7895a3f100c49b26506c6675f24294*
+
+Accepted. `xvpe`'s standards corpus is a fact Nomos reads through a declared, per-repository
+policy; Nomos stays out of `enforced_by`; severity maps to gate category with `MAY` producing
+nothing; `blocking` is already covered; `review` becomes `AgentRequired`; and `unreachable` is
+the one Nomos verdict this reading yields. No code moves here.
 
 ### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#1
 

@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:573d08abb40107f135598f57bb89698532824a7d91294eafb3a00df2a9302845",
-  "inputs_digest": "sha256:570ed9a837ca00784d88d6c9548a24e76fd59b5e1f39b3b4988ba2b7a5870422",
+  "content_digest": "sha256:996ee5f82701eae5e6826bb2f64dacbb17b487014bc47c8d3a1f5e1c997fd69c",
+  "inputs_digest": "sha256:be84d9ae0fd626f7427160b6f58fc0799889cd7aa01363f844972e47f3ba80e5",
   "sections": [
     [
       "Relations",
-      1676
+      1686
     ],
     [
       "Decisions",
-      229
+      230
     ]
   ],
   "inputs": [
@@ -30,6 +30,11 @@
       "content": "relations",
       "identity": "AGT-006 relates-to OD-HOST-013",
       "hash": "sha256:83e17805b5e96869e36071698add4a539b50a129ddbba0202d69631a6a6700bf"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-001 relates-to ARC-CONFORMANCE-002",
+      "hash": "sha256:ba415976f97ce23803016b9b09b271f877f347fc0aa213b693ceb35eb371047b"
     },
     {
       "content": "relations",
@@ -70,6 +75,31 @@
       "content": "relations",
       "identity": "ARC-CONFORMANCE-001 relates-to OD-RULES-003",
       "hash": "sha256:0c7daef31102bafc01be79d7f7a176f98f1145989f0f05efae9a44021f10190e"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-002 relates-to ARC-CONFORMANCE-001",
+      "hash": "sha256:39a1317c84349d8b0a6d8a46db1327f866d9b05ccc362d044f714a4187d80ebe"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-002 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:aaf4a9c357643237b019734af98c0a58bf8e956f2c31551db5b0eeb8d2babe67"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-002 relates-to OD-CONTRACTS-002",
+      "hash": "sha256:c053c6fc48f97209cef344f156c83b276c19f4ffc8d3d799f97e3163bbb09f42"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-002 relates-to OD-PLATFORM-003",
+      "hash": "sha256:b03da859da366ba93a143682936deb676cab94654b467ed8647af2877eb195b4"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-002 relates-to OD-RULES-011",
+      "hash": "sha256:5cb451a8886588f88f504f32b48e128f88d17bb2d6a17ab868b993ab7b0617a8"
     },
     {
       "content": "relations",
@@ -145,6 +175,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to ARC-CONFORMANCE-001",
       "hash": "sha256:d6b729284a105da53d4b744e88e3892d0d30b7acaf2358141352857a77605104"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to ARC-CONFORMANCE-002",
+      "hash": "sha256:4826ec4498ec69e6ab4b7b5fc99a4c2ff2b83a002272f8783387b3a12d0c3dce"
     },
     {
       "content": "relations",
@@ -2365,6 +2400,11 @@
       "content": "relations",
       "identity": "OD-CONTRACTS-001 relates-to OD-WORKFLOW-003",
       "hash": "sha256:c19fcb67e116840550935d4878ab471903a46f5b153b3cedaac9d4db777cdf52"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONTRACTS-002 relates-to ARC-CONFORMANCE-002",
+      "hash": "sha256:d55d7ba5f9b5730635255d053930ca1da95949bd0c084ca9429036054a6f2bba"
     },
     {
       "content": "relations",
@@ -6173,6 +6213,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PLATFORM-003 relates-to ARC-CONFORMANCE-002",
+      "hash": "sha256:6e81655b3d543fbc3a84c861666aa3e6dd77da31810240548b914b704ee23163"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PLATFORM-003 relates-to OD-EXECUTOR-010",
       "hash": "sha256:df706861e96bcd8dc18e8df85fc8f9fcd2e4b41e7757896e744ea9da89cac56d"
     },
@@ -6995,6 +7040,11 @@
       "content": "relations",
       "identity": "OD-RULES-010 relates-to OD-RULES-026",
       "hash": "sha256:3a6025fecee2a8c486118b7c1f1370d00a7e24dd1892894d85426aecb143fe87"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-011 relates-to ARC-CONFORMANCE-002",
+      "hash": "sha256:5979866453ce2d2d6823c69204a64166a94d433df31e7969af054b5d33a0b19e"
     },
     {
       "content": "relations",
@@ -8395,6 +8445,11 @@
       "content": "relations",
       "identity": "P43-SCRIPT-RULES-CANNOT-FIRE relates-to OD-ANALYSIS-012",
       "hash": "sha256:ad697cb14f8a5314db91044d393d3f8de5771750412d88236c27491f74b84caa"
+    },
+    {
+      "content": "nodes",
+      "identity": "ARC-CONFORMANCE-002",
+      "hash": "sha256:a6f2612ae195752ca2a4e4d2d2c18cd4f65e782087daffbda52792382ce1e0c4"
     },
     {
       "content": "nodes",

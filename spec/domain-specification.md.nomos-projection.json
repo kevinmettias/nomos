@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:27883cf2cde1c6aa5c2ecd5fba3742c7436e2c116fecc7decf71e6cb0fe1bb81",
-  "inputs_digest": "sha256:ae0acd6faf393c6f304df250091e9b137db603559998d5a97aa0371b7cac900d",
+  "content_digest": "sha256:ff07ed05a238609ab7e34af806f76cfbed9e404691e24ee66f468c11006bf930",
+  "inputs_digest": "sha256:f5bae3cdcab2c2cca0c003c1e07239b1f840be2090ea18ce840f5529b151ba48",
   "sections": [
     [
       "Documents",
-      237
+      238
     ],
     [
       "Sections",
-      1952
+      1958
     ],
     [
       "Source blocks",
-      6777
+      6802
     ]
   ],
   "inputs": [
@@ -24,6 +24,11 @@
       "content": "documents",
       "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md@authored",
       "hash": "sha256:a62eddf64a82e534bbdbd720c1057e1dcd3131c1264077c83d7029d15b52f8cf"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md@authored",
+      "hash": "sha256:ccc429c5e9f4e7b008d8b8a5bb1ccca4cb0704cfbfa2b25aa891ebab3c538ebc"
     },
     {
       "content": "documents",
@@ -1244,6 +1249,36 @@
       "content": "headings",
       "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#24",
       "hash": "sha256:27dc49523c3f53b67d91c939c70e4e2b35719f673d5859b20064b78f3e246a92"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#1",
+      "hash": "sha256:f6c332be4514d2969e42484826516d7a3717b8430ebdd6cead5ef59cae060d3c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#2",
+      "hash": "sha256:f16514d81b06e767ecaaedc20495ac7266b7927c98595da6f2228922faf6a004"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#4",
+      "hash": "sha256:2f5f0a05c779128a2d2d136c1752102357b00e8dffdbdfd043c0a1509190eb56"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#13",
+      "hash": "sha256:7d639f4622a343d668dba196ae17fb36535e7f8ac1e50716c8d016bc9d1ceff0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#19",
+      "hash": "sha256:ac63c1c5c987def1f615b1aebf322d9554d8d41e2a211f8776fbd8a04abef428"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#24",
+      "hash": "sha256:bbbf3edd03f08d6715b44cc38b66d1d8e4ec2dfa93b1f3e5bf124fdd6aa14225"
     },
     {
       "content": "headings",
@@ -11089,6 +11124,131 @@
       "content": "blocks",
       "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#25",
       "hash": "sha256:2d3706bb718adeb1de2082573eb6e583002fb4d6ecc22d719c4db4dea6e44bfb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#1",
+      "hash": "sha256:31ff55f83d7fc90aa13e0981692fdb41a8bcaeecbdd92dc8cb5f46a5db92e169"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#3",
+      "hash": "sha256:85dfc3cb388fefe65e74655c7eed17e0d1d0234ec18d2163572ccd3174189aab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#4",
+      "hash": "sha256:f66dccbd07fd06d21718eb91b9b9536f1e675681091895b27aeff08dcf7e69d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#5",
+      "hash": "sha256:e9fe279e755b5581f79b1a44a805ec429a6e748cee0edccccf144e87b3efbf39"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#6",
+      "hash": "sha256:d4449364064eeb79ffa63d648b64d00aa5d5fe7d4910d5317e78c1fda6672700"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#7",
+      "hash": "sha256:48e1d3ae2cfc6f6bc390db658b6acef7db22f32746bef6401fb2a47bb5cccae3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#8",
+      "hash": "sha256:3cd644b81c20662eace1f075b503ae07198bc62fd278e675cc62d278fde1d982"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#9",
+      "hash": "sha256:f0c100b1cbb6682a178397f922d077c02114418a1a86da6ae4f6277d9f4d0cd6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#10",
+      "hash": "sha256:d4ee1a92ecb6c01e8c014cd07a7ab04c61c4053a6e80a8742eca2e1f02a3ed1c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#11",
+      "hash": "sha256:0920258355b806c19e02be9fac4f915eb45469ce7f4f303315ec31fbc8973be4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#12",
+      "hash": "sha256:e1fd2a143b1dadc5a7651fd78b82a8d5c851a9b3b4d9657be7de6b0ca300cb99"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#13",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#14",
+      "hash": "sha256:84dca1eaaa39b8f0948db51d2d5443b5725ae50306902d1d803ff5f97c10e8b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#15",
+      "hash": "sha256:38a66b3714c12069290591420fe645d3d3005cadbd40a29b2b0f71375f1c2a47"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#16",
+      "hash": "sha256:379c81adca165590af1eb5819c7ee1348af852e1a8818641e929855068421a83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#17",
+      "hash": "sha256:8732eb15838b615f9b85051fb1b67ab0f32c3e22bb8c2b74ca1dc8b270ff4f8e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#18",
+      "hash": "sha256:c8d0f866c1e470ae77d9f19eeb57107682e003f7e605ccfc4be6dad4f5e2c3bb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#19",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#20",
+      "hash": "sha256:69f6a70c4e8d3ce8ff1847dd9b2cd838a6a8d114e83fec4fb2e8265f2149d385"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#21",
+      "hash": "sha256:6000d88730efde883e11a990a01211adf3c8adadebed4effef006346020b30ff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#22",
+      "hash": "sha256:e5bb7e4830175a536a4d50a884419a11c5ed62d84bc579ec7761023cdc7206f8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#23",
+      "hash": "sha256:14173a838cfe6ef9b441799da90dd619e3bd2b7e186de3e51d1ced850d30f1e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#24",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md#25",
+      "hash": "sha256:526312ebb84397a2135a7cb7fb4bf08c6c7895a3f100c49b26506c6675f24294"
     },
     {
       "content": "blocks",
