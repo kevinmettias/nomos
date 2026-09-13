@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:d3be11772987befa85e57e1904b6bd06e3174d987e612a44c64adf1aaafa9f6d",
-  "inputs_digest": "sha256:2eb2473bc5f96e20f8b17c1a0d135785bdbcbeefaa065f7bfa748b3f6d090916",
+  "content_digest": "sha256:f6cf1685b97275635b7ba860615729a5f5d1e0a91e62f1feb9697b836cdba1ee",
+  "inputs_digest": "sha256:ae5977d208bb3bc6f314bc0de5e006bb174c581c78cc14409a253080b20c26e9",
   "sections": [
     [
       "Documents",
-      234
+      235
     ],
     [
       "Sections",
-      1930
+      1939
     ],
     [
       "Source blocks",
-      6693
+      6722
     ]
   ],
   "inputs": [
@@ -1039,6 +1039,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md@authored",
       "hash": "sha256:194a79f00c4934f15b88c83b104b3eb2e9db06f8b1d94e94886ed5ed9daf9c70"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md@authored",
+      "hash": "sha256:46eb5765b153256b27f6e7b97a860369739ba32c2365cc8084f12e20553605ed"
     },
     {
       "content": "documents",
@@ -9444,6 +9449,51 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#51",
       "hash": "sha256:7f11299c4cec1c3eebc43a6b9610aaf3c27e21d4c5e727dce7d738e82cf2656c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#1",
+      "hash": "sha256:392302e689e35e4f93724f5ab90b16c78f2cedff2b45788d72d32565fc5b72d4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#2",
+      "hash": "sha256:6ded745652bf4eb7353770629431234592cf7fdf0acb3f54799c21958d872a12"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#5",
+      "hash": "sha256:14ef11e5372bbfda7d77af4596c2f848f8cd65f6707f72bb11593860403f1837"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#13",
+      "hash": "sha256:e808f9e27e5362d0730ac614eb7a40f5dc85dcaff1c1b9451b86f908be714ca1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#15",
+      "hash": "sha256:92ed297312aac1de14b7f4aeebc71748c2c63220c652c32bbb21235faf2e6cef"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#18",
+      "hash": "sha256:1e310d5c67b0a1ef3e9eafcdbc09ba5178b1e2bbe3eda3092b820b05df4da2b1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#22",
+      "hash": "sha256:234fd17ef6cf63dd3f071e7308f7ded4d91161779953168c97a4979c87b8f665"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#24",
+      "hash": "sha256:ab39d27120206470b5d4eeb86f08bf8fd002167d88ed9849bfae994a66041528"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#28",
+      "hash": "sha256:1ec6bf5aaa6c6b5611dec05737611c11ae187b425538ed86c5f9c789145bda9b"
     },
     {
       "content": "headings",
@@ -39669,6 +39719,151 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#52",
       "hash": "sha256:b45ad05e05b07457e2ed631dcddc5aa7638ea0b87b99ffe0d9d405524b645a7a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#1",
+      "hash": "sha256:1948717057412580a8d2932e0bf8a13fa1451bb76e0f3e015e3a1616ef84f028"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#3",
+      "hash": "sha256:d3cf68f5f03d0cc79819866c5d03867190913c2a42fbdeff610bff24864df88f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#4",
+      "hash": "sha256:85b61bd1bd8361a03bbf9b36db40caac081864042896298007970b64abed35cf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#6",
+      "hash": "sha256:119d9617b4f750c3a62ee3d9fd67079d5ca1d314fc86b1d5d5597e3a17725ec0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#7",
+      "hash": "sha256:c9f106ede91e032dedba4712e88d3e7872817d444f3ec5df441ea371fc54d354"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#8",
+      "hash": "sha256:53cd09c0c129b82700c23d15dedf8d13a36f21877b0c275a3c5268a710e34feb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#9",
+      "hash": "sha256:78d54a09c00e52a7ecd896154a88f4cc1d8af55d019b8d7f512fc7aaf11f6dbe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#10",
+      "hash": "sha256:93437450d4157c5d85c7cd09b42b967c74e69fc49b8ef03c7c8832255e0ea31f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#11",
+      "hash": "sha256:abe5fea275d199c9fb8118429d50c4eacb00d8c1c8e4173c716ee319ef1f0df2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#12",
+      "hash": "sha256:0eed2ded1e7e53acbcde060435c9df97f6c6926529e6dc84bfc8da14dfc292df"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#13",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#14",
+      "hash": "sha256:e67ba42a4992ef0ad75de5f15d18bad990e8f5db77580d72af479d96a7c4a1ff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#15",
+      "hash": "sha256:d186fe4d201ccb80074be27446e04eb29b5a23eaf888c70e0fed2394fb96893a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#16",
+      "hash": "sha256:729340419f3df8a11b478ac98ef01e22f9c6e6952cb012a8b81ad592530c2a28"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#17",
+      "hash": "sha256:71db9079207d4c5316f24d3a8e6c59a9c68645f22316045f01e1adc690d78b79"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#18",
+      "hash": "sha256:741910d174ca5a83e62105ed965f98a7e3e999f36c01c2af8e88842a723eb8af"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#19",
+      "hash": "sha256:4acad3116f4816cc5ce6d56f2c3e72f0e4aaa8ce56edca77aafc98df529ba361"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#20",
+      "hash": "sha256:ccac7b1ad4df9514c9d3fb1c8b2befcf9c6cc7bd0b2e3506f0ab3cbddce4ba18"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#21",
+      "hash": "sha256:4a01ad7a514245fd03d26eb275e3dbc03422c7dd98192a7afff752d5084dc114"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#22",
+      "hash": "sha256:83edc89fef0c8a7db94eb033aebb5cab54658f7dd5b170de711582811f319f09"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#23",
+      "hash": "sha256:dab49099e642334b22ae0fd7fcfbc65c3a6ea8b0170bf9b4181b6d82b40415d2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#24",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#25",
+      "hash": "sha256:f5868ad47e10badf13c4925895acbb42b673c608865de221ca0cc3d1bc3dd5d4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#26",
+      "hash": "sha256:f287cac3978817198ce859b20a20470493c6d6354de45117fd5a33083c4271a0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#27",
+      "hash": "sha256:b84262e2abdf3290bec06695062092f75c42d1ac7b88b93f5bed09ded56094cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#28",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#29",
+      "hash": "sha256:0f6e947b7aaad0842139593901e6766ff5e3c07a9625daa470519b999be3da08"
     },
     {
       "content": "blocks",

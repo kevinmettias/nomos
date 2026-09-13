@@ -214,6 +214,7 @@ profile: domain-specification
 | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md@authored | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md | authored | 28 | 8 | sha256:65229767fb7df92fdb3e15faa97875746dd70f7a86d656248cfd622909967161 |
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md@authored | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md | authored | 22 | 7 | sha256:eef4a3f365ef12f634f1fee88c3cf1b2ad45aad74e471e1daf8c8c26603a4228 |
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md@authored | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md | authored | 52 | 14 | sha256:194a79f00c4934f15b88c83b104b3eb2e9db06f8b1d94e94886ed5ed9daf9c70 |
+| docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md@authored | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md | authored | 29 | 9 | sha256:46eb5765b153256b27f6e7b97a860369739ba32c2365cc8084f12e20553605ed |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1900,6 +1901,15 @@ profile: domain-specification
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#46 | authored | 3 | What that changes about the third prerequisite |
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#49 | authored | 3 | Why this record made the mistake |
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#51 | authored | 2 | Status |
+| docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#1 | authored | 1 | Why the discovered-source type stays in the rules package |
+| docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#13 | authored | 2 | The Decision |
+| docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#15 | authored | 3 | The chain, stated once so it can be checked rather than retold |
+| docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#18 | authored | 3 | What would have to change first |
+| docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#22 | authored | 3 | What a reader should conclude on noticing the inversion again |
+| docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#24 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#28 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -55703,6 +55713,238 @@ and is filed as a defect; and `standards.json`'s `tiers` array is **not** delete
 above corrects that, naming the reader outside this repository and the two Done items whose
 verified conditions depend on it. It is another tool's declared input, and the future
 declaration is authored somewhere it is not.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#1
+
+*revision: authored · kind: heading · heading: Why the discovered-source type stays in the rules package · hash: sha256:1948717057412580a8d2932e0bf8a13fa1451bb76e0f3e015e3a1616ef84f028*
+
+# Why the discovered-source type stays in the rules package
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#2
+
+*revision: authored · kind: heading · heading: Why the discovered-source type stays in the rules package / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#3
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / Question · hash: sha256:d3cf68f5f03d0cc79819866c5d03867190913c2a42fbdeff610bff24864df88f*
+
+`SourceFile` is declared in `nomos-rules`, and it is what every walker returns and what the
+whole orchestration passes around. `P41-SOURCE-ARTIFACT-OWNERSHIP` complained that this
+inverts ownership — a discovered artifact exists before any rule does, so the discovery layer
+should not depend on the judging layer to describe its own input — and asked for the type to
+be owned by `nomos-workspace`, `nomos-model` or `nomos-analysis` instead.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#4
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / Question · hash: sha256:85b61bd1bd8361a03bbf9b36db40caac081864042896298007970b64abed35cf*
+
+That item has now been raised, stranded on a dependency edge that had gone stale, and declined.
+It will be raised again, because the complaint is correct and nothing records the answer.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#5
+
+*revision: authored · kind: heading · heading: Why the discovered-source type stays in the rules package / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#6
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / What Was Measured · hash: sha256:119d9617b4f750c3a62ee3d9fd67079d5ca1d314fc86b1d5d5597e3a17725ec0*
+
+Measured 2026-09-13.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#7
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / What Was Measured · hash: sha256:c9f106ede91e032dedba4712e88d3e7872817d444f3ec5df441ea371fc54d354*
+
+**The inversion is real, and it is two crates wide.** Of the seventeen crates naming
+`nomos-rules`, exactly two use nothing from it but `SourceFile`: `nomos-lang-rust-cargo` and
+`nomos-workspace-discovery`. Every other dependent also names rule identifiers, checks,
+descriptors or the registry, so it would depend on `nomos-rules` whatever happened to this
+type. And the second of the two is the discovery service itself, which is precisely the
+inversion the complaint names rather than an incidental case of it.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#8
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / What Was Measured · hash: sha256:53cd09c0c129b82700c23d15dedf8d13a36f21877b0c275a3c5268a710e34feb*
+
+**The move is refused by this workspace's own layering.** `SourceFile` carries
+`language: Option<Language>`, and `Language` is declared in `nomos-cap-syntax`, a Capability
+Contract crate. Asked directly:
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#9
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / What Was Measured · hash: sha256:78d54a09c00e52a7ecd896154a88f4cc1d8af55d019b8d7f512fc7aaf11f6dbe*
+
+| | |
+|---|---|
+| `nomos-model` → `nomos-cap-syntax` | **refused** |
+| `nomos-workspace` → `nomos-cap-syntax` | **refused** |
+| `nomos-analysis` → `nomos-cap-syntax` | **refused** |
+| `nomos-rules` → `nomos-cap-syntax` | permitted |
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#10
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / What Was Measured · hash: sha256:93437450d4157c5d85c7cd09b42b967c74e69fc49b8ef03c7c8832255e0ea31f*
+
+All three candidate owners are Substrate, and `Permits` does not admit Substrate → Capability
+Contract. `nomos-rules` is Rules, and does. **That is why the type sits where it sits**, and
+nothing about it was accidental.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#11
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / What Was Measured · hash: sha256:abe5fea275d199c9fb8118429d50c4eacb00d8c1c8e4173c716ee319ef1f0df2*
+
+**Both halves of that constraint are accepted decisions, not accidents.**
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#12
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / What Was Measured · hash: sha256:0eed2ded1e7e53acbcde060435c9df97f6c6926529e6dc84bfc8da14dfc292df*
+
+- `OD-RULES-014` decided a rule's language restriction is *carried* rather than derived, having
+  measured the alternative: eleven functions across nine modules each answering it privately
+  from the file extension, "the same three lines" eleven times.
+- That record's own amendment, *The Carried Type Belongs At Band 23, Not Band 0*, moved the
+  language identity from `nomos-contracts` to `nomos-cap-syntax` **deliberately**, because a
+  language identity fails `OD-CONTRACTS-001`'s deciding question — whether a peer that never
+  compiles the crate would be unable to agree with us without the type. Nothing exchanges a
+  language name with a peer; the parties that must agree are five crates inside this workspace.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#13
+
+*revision: authored · kind: heading · heading: Why the discovered-source type stays in the rules package / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#14
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / The Decision · hash: sha256:e67ba42a4992ef0ad75de5f15d18bad990e8f5db77580d72af479d96a7c4a1ff*
+
+**The discovered-source type stays in `nomos-rules`. The ownership inversion is a consequence
+of two accepted decisions acting together, not an oversight, and this record exists so the
+next reader who notices it finds that out instead of re-deriving it.**
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#15
+
+*revision: authored · kind: heading · heading: Why the discovered-source type stays in the rules package / The Decision / The chain, stated once so it can be checked rather than retold · hash: sha256:d186fe4d201ccb80074be27446e04eb29b5a23eaf888c70e0fed2394fb96893a*
+
+### The chain, stated once so it can be checked rather than retold
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#16
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / The Decision / The chain, stated once so it can be checked rather than retold · hash: sha256:729340419f3df8a11b478ac98ef01e22f9c6e6952cb012a8b81ad592530c2a28*
+
+1. A rule's language restriction is carried on the source, not derived by the rule —
+   `OD-RULES-014`, against eleven measured duplicates.
+2. The carried language identity lives at Capability Contract, not Protocol — `OD-RULES-014`'s
+   amendment, against `OD-CONTRACTS-001`'s peer-visibility test.
+3. Substrate may not name a Capability Contract — `Permits`, and `OD-RULES-020` is where that
+   lattice was decided.
+4. Therefore a type carrying a language identity cannot live in Substrate, and the three
+   owners the complaint proposes are all Substrate.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#17
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / The Decision / The chain, stated once so it can be checked rather than retold · hash: sha256:71db9079207d4c5316f24d3a8e6c59a9c68645f22316045f01e1adc690d78b79*
+
+Each link is a decision somebody made for a stated reason. The inversion is what those reasons
+cost, and it is a smaller cost than any of them: two crates naming one type they do not judge
+with.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#18
+
+*revision: authored · kind: heading · heading: Why the discovered-source type stays in the rules package / The Decision / What would have to change first · hash: sha256:741910d174ca5a83e62105ed965f98a7e3e999f36c01c2af8e88842a723eb8af*
+
+### What would have to change first
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#19
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / The Decision / What would have to change first · hash: sha256:4acad3116f4816cc5ce6d56f2c3e72f0e4aaa8ce56edca77aafc98df529ba361*
+
+Not "move `SourceFile`". One of the three:
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#20
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / The Decision / What would have to change first · hash: sha256:ccac7b1ad4df9514c9d3fb1c8b2befcf9c6cc7bd0b2e3506f0ab3cbddce4ba18*
+
+- **`Language` stops being a Capability Contract type**, which means arguing against
+  `OD-RULES-014`'s amendment on `OD-CONTRACTS-001`'s test — and the amendment's own measurement
+  stands until something is exchanged with a peer that names a language. `PackageManifest`
+  carrying `language_versions` but no language name is where that would first show.
+- **`SourceFile` stops carrying a language**, which reopens `OD-RULES-014`'s main decision and
+  owes a better answer than the eleven duplicates it removed.
+- **Substrate is permitted to name a Capability Contract**, which is a change to the zone
+  lattice and belongs in a record amending `OD-RULES-020`, argued over every edge it would
+  admit rather than the one that prompted it.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#21
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / The Decision / What would have to change first · hash: sha256:4a01ad7a514245fd03d26eb275e3dbc03422c7dd98192a7afff752d5084dc114*
+
+None of the three is proposed here. What this record refuses is the fourth option that has been
+tried twice: moving the type without touching any of them, which the lattice declines.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#22
+
+*revision: authored · kind: heading · heading: Why the discovered-source type stays in the rules package / The Decision / What a reader should conclude on noticing the inversion again · hash: sha256:83edc89fef0c8a7db94eb033aebb5cab54658f7dd5b170de711582811f319f09*
+
+### What a reader should conclude on noticing the inversion again
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#23
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / The Decision / What a reader should conclude on noticing the inversion again · hash: sha256:dab49099e642334b22ae0fd7fcfbc65c3a6ea8b0170bf9b4181b6d82b40415d2*
+
+That it was noticed before, measured, and left deliberately. The complaint is not wrong and the
+answer is not "it is fine" — it is that the cost was weighed against three named alternatives
+and is the smallest of the four. Raising it again is worthwhile only with an argument against
+one of the three above, and an item that proposes the move alone is refused by `Permits` before
+any reviewer reads it.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#24
+
+*revision: authored · kind: heading · heading: Why the discovered-source type stays in the rules package / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#25
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / What This Record Does Not Do · hash: sha256:f5868ad47e10badf13c4925895acbb42b673c608865de221ca0cc3d1bc3dd5d4*
+
+It does not move any type, change any crate, edit any manifest, or touch the zone table.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#26
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / What This Record Does Not Do · hash: sha256:f287cac3978817198ce859b20a20470493c6d6354de45117fd5a33083c4271a0*
+
+It does not reopen `OD-RULES-014`, its amendment, `OD-CONTRACTS-001` or `OD-RULES-020`. It
+reads all four and states what they imply together, which none of them says on its own.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#27
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / What This Record Does Not Do · hash: sha256:b84262e2abdf3290bec06695062092f75c42d1ac7b88b93f5bed09ded56094cd*
+
+It does not decide that two crates depending on `nomos-rules` for one type is good. It decides
+that it is the cheapest of four options, and names the other three so a future argument has
+somewhere to start.
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#28
+
+*revision: authored · kind: heading · heading: Why the discovered-source type stays in the rules package / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#29
+
+*revision: authored · kind: prose · heading: Why the discovered-source type stays in the rules package / Status · hash: sha256:0f6e947b7aaad0842139593901e6766ff5e3c07a9625daa470519b999be3da08*
+
+Accepted. `SourceFile` stays in `nomos-rules`, because it carries a language identity that
+`OD-RULES-014` decided it must carry and that the same record's amendment placed at Capability
+Contract, and `Permits` does not let Substrate name a Capability Contract — so all three
+proposed owners are refused the edge the type needs. The inversion costs two crates naming one
+type they never judge with, and the three changes that would make the move available are named
+above.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
