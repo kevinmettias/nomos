@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:69b00691b2bc6d938290bc5b533ea7c40af203535436aae055595bfb5ab4733f",
-  "inputs_digest": "sha256:708e5fc79a47f12a6922e429fe61cc0b778677e2d322352baf528bdb9dd5c988",
+  "content_digest": "sha256:c38927a6f8d349c7b6aa08e4ee532999d9e42b9fe17631e6905c2ebfdc21de80",
+  "inputs_digest": "sha256:33e1384c392a55686fd689a7b6cca0fba35830f2ca47d0a60dc29b5576c475fb",
   "sections": [
     [
       "Documents",
-      235
+      236
     ],
     [
       "Sections",
-      1939
+      1945
     ],
     [
       "Source blocks",
-      6722
+      6750
     ]
   ],
   "inputs": [
@@ -1044,6 +1044,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md@authored",
       "hash": "sha256:c7d51d0052bf5bf9d6198fe75095c23e3079efba7af49973d3e12360dbae7606"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md@authored",
+      "hash": "sha256:178c45747a9bfc80be65983afb89cd9b8caa6f49345f3e8dd5a8c01080a90d4b"
     },
     {
       "content": "documents",
@@ -9494,6 +9499,36 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#28",
       "hash": "sha256:1ec6bf5aaa6c6b5611dec05737611c11ae187b425538ed86c5f9c789145bda9b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#1",
+      "hash": "sha256:916f2919379440f1778459f04fce95f2c46770e9c8df6aab58fe94b58507b510"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#2",
+      "hash": "sha256:7919915782a64fa39aa184103e5d88ac3e2294bfd3545e5764c769715c9ea808"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#4",
+      "hash": "sha256:5675a576c3d25f8499a32c55b835332432d2dd9d6724fbd225d5fb059b1433b5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#12",
+      "hash": "sha256:6635986aa4b333c293f3ced5f7191c2d61e789ce9462e2a1daffee3de5617056"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#22",
+      "hash": "sha256:0e2a87c0468f41cb944a2de095fdf268b3c699cdc718111f6d577fb744eaa3aa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#27",
+      "hash": "sha256:0da2698f9bac8486ee66fe16c895f7d7028004977d6af23fd68878beabb72dba"
     },
     {
       "content": "headings",
@@ -39864,6 +39899,146 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#29",
       "hash": "sha256:0f6e947b7aaad0842139593901e6766ff5e3c07a9625daa470519b999be3da08"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#1",
+      "hash": "sha256:9e7d0588550cedf902b7f6689d5201b52b12af150d36177b9a25b6065a27cd19"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#3",
+      "hash": "sha256:eca40e865a85181d66197fb259736a20ac047ed55ba6f40bcd1300171dfec0f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#4",
+      "hash": "sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#5",
+      "hash": "sha256:a665b61b272be7f8fd8c18125855ed966c1e3ef281446282611158a39dbbab4e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#6",
+      "hash": "sha256:5516e9f4f7aa6a4a77cf3e6356f3c6569ed5d73f67a85af2ec9fd8e79f57fcf0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#7",
+      "hash": "sha256:0ae1efa56485db9c60ef12615cc92755eccc833aa61f82d32f282a380c0f2d64"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#8",
+      "hash": "sha256:a06a51717d5c9b78c0726c64aa44352d63b7b4c5473afdda520699e49a74f652"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#9",
+      "hash": "sha256:4931e8448ed182231595627202e1f4c42e0825548940c7b71ade9f3a2e3ea0cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#10",
+      "hash": "sha256:57bc13abda0d2874d86d317a6bbf6e68e1d8d35986427449168317809ae4f489"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#11",
+      "hash": "sha256:0b6287df567e7a92eb51efbeaed436a2b73a673aed5874bb7e353fca1816e101"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#12",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#13",
+      "hash": "sha256:52fba352194660021bbb1bdc6508d76afec7bfe8ba8afab6f5dbeeeacb819ada"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#14",
+      "hash": "sha256:0b63788eedcea78c92a53b094438703befcbede18407a85c6b3449877a5ead3e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#15",
+      "hash": "sha256:3a900d8571a3db5fe059d30b4aab2010d6a505e64b4062b8b12e34c189aa0ff5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#16",
+      "hash": "sha256:37c2a3cee238f2b361eb6e13b55d2bb7c570e4b897c5149bf3845971b06a46fa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#17",
+      "hash": "sha256:593cd914de87ae2f0d7c3dee72d09e7be285496dcc33b05e223108612e903f34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#18",
+      "hash": "sha256:25e5b43300d701142b6fa5b9aed9284529a00f7ba1443f3e4daa183da8530a09"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#19",
+      "hash": "sha256:b04ec2d60e7d8894c066bef5dff096e1a22e2a52326349827652e7c570478066"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#20",
+      "hash": "sha256:cf06e182207db8a9b23e8139e6ce7c16c5afa6b184da27b2cff3e4bf62ea40ea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#21",
+      "hash": "sha256:35fa83d0901feadaea302ea58361b5492e79cef16a1751b7c5e9e243c6c63254"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#22",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#23",
+      "hash": "sha256:c3317386b4fe9b18ba98b671cb89d652cf917e94bb0b00d48a564db7c259fd19"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#24",
+      "hash": "sha256:78b0048e78f0d9192310362a1bef9ec8a5cce485069007d68879b6daea849190"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#25",
+      "hash": "sha256:d6ca8948e289f7a6fa5535ea28f8d9d05a5a3b12c6c983880a9ac3ddde937df3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#26",
+      "hash": "sha256:62dc6983471e487abf98641f78b8ad3659e552c003726531d655a3345df951da"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#27",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#28",
+      "hash": "sha256:dc1812a9fde74cf424c30e870bafca434254574656e730c9ea46ee14c0dee476"
     },
     {
       "content": "blocks",

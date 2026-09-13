@@ -215,6 +215,7 @@ profile: domain-specification
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md@authored | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md | authored | 22 | 7 | sha256:eef4a3f365ef12f634f1fee88c3cf1b2ad45aad74e471e1daf8c8c26603a4228 |
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md@authored | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md | authored | 52 | 14 | sha256:194a79f00c4934f15b88c83b104b3eb2e9db06f8b1d94e94886ed5ed9daf9c70 |
 | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md@authored | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md | authored | 29 | 9 | sha256:c7d51d0052bf5bf9d6198fe75095c23e3079efba7af49973d3e12360dbae7606 |
+| docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md@authored | docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md | authored | 28 | 6 | sha256:178c45747a9bfc80be65983afb89cd9b8caa6f49345f3e8dd5a8c01080a90d4b |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1910,6 +1911,12 @@ profile: domain-specification
 | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#22 | authored | 3 | What a reader should conclude on noticing the inversion again |
 | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#24 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md#28 | authored | 2 | Status |
+| docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#1 | authored | 1 | A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename |
+| docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#4 | authored | 2 | What was measured |
+| docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#12 | authored | 2 | Decision |
+| docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#22 | authored | 2 | What this record does not do |
+| docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#27 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -55945,6 +55952,265 @@ Contract, and `Permits` does not let Substrate name a Capability Contract — so
 proposed owners are refused the edge the type needs. The inversion costs two crates naming one
 type they never judge with, and the three changes that would make the move available are named
 above.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#1
+
+*revision: authored · kind: heading · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename · hash: sha256:9e7d0588550cedf902b7f6689d5201b52b12af150d36177b9a25b6065a27cd19*
+
+# A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#2
+
+*revision: authored · kind: heading · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#3
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Question · hash: sha256:eca40e865a85181d66197fb259736a20ac047ed55ba6f40bcd1300171dfec0f1*
+
+XVPE's own testing standard states a Benchmark Correctness Rule: every benchmark must
+exercise behaviour covered by a correctness test or an equivalent pre-benchmark oracle, and
+results from an implementation that does not pass its oracle are invalid and must not
+participate in performance comparison or default selection. Nomos is the layer that would
+judge such a rule and has none of the kind. Whether one is built — and if so, what decides
+which benches owe an oracle, what the subject is, what is reported when the oracle cannot be
+seen, and how any of it is verified from a workspace with no benchmarks at all — is the
+question this record answers.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#4
+
+*revision: authored · kind: heading · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / What was measured · hash: sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491*
+
+## What was measured
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#5
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / What was measured · hash: sha256:a665b61b272be7f8fd8c18125855ed966c1e3ef281446282611158a39dbbab4e*
+
+Counted directly rather than taken from the item that raised this.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#6
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / What was measured · hash: sha256:5516e9f4f7aa6a4a77cf3e6356f3c6569ed5d73f67a85af2ec9fd8e79f57fcf0*
+
+**This workspace has no benchmarks, and no rule mentioning one.** Zero files match
+`*/benches/*.rs` anywhere under this repository. Across every rule module under
+`crates/rules/nomos-rules/src/checks`, the word *bench* occurs exactly once, and it is a
+fixture string inside `rust_text.rs` — a comment in a test case, not a subject.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#7
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / What was measured · hash: sha256:0ae1efa56485db9c60ef12615cc92755eccc833aa61f82d32f282a380c0f2d64*
+
+**The sibling checkout has 266 of them.** Counting a benchmark target the way a cargo
+workspace defines one — a `benches/` directory sitting beside a `Cargo.toml` — `F:/repos/xvpe`
+holds 84 such crates and 266 bench `.rs` files in them. Of those 266, **112 have no
+same-stem `.rs` file under `tests/` or `src/` in the same crate.**
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#8
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / What was measured · hash: sha256:a06a51717d5c9b78c0726c64aa44352d63b7b4c5473afdda520699e49a74f652*
+
+**That 112 is a count of candidates and emphatically not a count of findings**, which is the
+measurement that decides this record's shape rather than merely motivating it. The standard's
+own words are "exercises behaviour covered by a correctness test": a semantic correspondence.
+Same-stem is a filename correspondence, and the two are different claims. A bench named
+`throughput_wait_scaling_wakeup.rs` may be covered in full by a test named nothing like it,
+and a rule reporting 112 violations on that basis would be reporting its own heuristic back
+to itself. Nothing measured here establishes that any of the 112 is a real violation.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#9
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / What was measured · hash: sha256:4931e8448ed182231595627202e1f4c42e0825548940c7b71ade9f3a2e3ea0cd*
+
+**The population is reachable from here, and CI cannot reach it.**
+`crates/languages/nomos-lang-rust/tests/corpus/claims.rs` already parses that checkout —
+`DEFAULT_ROOT` is the literal `F:/repos/xvpe`, so the corpus is found on a developer machine
+whether or not `NOMOS_RUST_CORPUS` is set — and it already parses the bench files
+specifically: its own comment names `xvpe-thread-pool`'s `benches/fiber/throughput_*.rs`.
+So there is a real mechanism carrying these 266 files into this workspace's reach, and it is
+one of the three corpora no CI runner has.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#10
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / What was measured · hash: sha256:57bc13abda0d2874d86d317a6bbf6e68e1d8d35986427449168317809ae4f489*
+
+**The resolver this needs already exists at one scale over.** `checks/mirror.rs` reads a name
+declared at a site, resolves it against the real parsed source set, and reports a phantom when
+it resolves to nothing. Its own module doc records the property that matters most here:
+resolution is cross-file, and a run over a truncated source set resolves a real check to
+nothing and reports a blocking finding against a declaration that is in fact satisfied.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#11
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / What was measured · hash: sha256:0b6287df567e7a92eb51efbeaed436a2b73a673aed5874bb7e353fca1816e101*
+
+**`OD-RULES-026` deferred a different question and does not answer this one.** That record
+deferred *benchmark history* — a performance requirement judged against past results — for
+want of any benchmarking convention or results store, and said a benchmark capability
+"becomes reachable the moment this workspace adopts a benchmarking convention for its own
+purposes." A bench-to-oracle correspondence needs no history, no results format and no
+runtime evidence: it is a question about static structure, answerable from the same syntax
+facts every other rule here reads. It is not blocked by that deferral and this record does
+not reopen it.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#12
+
+*revision: authored · kind: heading · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#13
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Decision · hash: sha256:52fba352194660021bbb1bdc6508d76afec7bfe8ba8afab6f5dbeeeacb819ada*
+
+**The rule is built.** A standard stating that every benchmark owes a correctness oracle,
+with 266 real subjects one checkout away and nobody enforcing it, is the exact condition
+this workspace exists to remove. `OD-ROADMAP-001` retired the population-of-zero caution, so
+having none here is not a reason; and a decline would have had to rest on the 112 candidates
+being uninteresting, which nothing measured supports either.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#14
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Decision · hash: sha256:0b63788eedcea78c92a53b094438703befcbede18407a85c6b3449877a5ead3e*
+
+Four things are fixed here, because each is a place the rule could be built wrong in a way no
+test would catch.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#15
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Decision · hash: sha256:3a900d8571a3db5fe059d30b4aab2010d6a505e64b4062b8b12e34c189aa0ff5*
+
+**1. What a bench owes is declared by the repository, never assumed by the rule.** The
+correspondence convention is a fact the repository under check declares, in the shape
+`OD-RULES-011` decided for a rule's parameters: a policy read, resolved per repository, with
+no convention compiled into the rule. A repository that declares none gets `NotApplicable`
+and no findings — not a pass, and not 266 of them.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#16
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Decision · hash: sha256:37c2a3cee238f2b361eb6e13b55d2bb7c570e4b897c5149bf3845971b06a46fa*
+
+Two conventions are named as the closed set this rule admits, and a third is refused:
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#17
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Decision · hash: sha256:593cd914de87ae2f0d7c3dee72d09e7be285496dcc33b05e223108612e903f34*
+
+- **declared-at-the-site** — the bench names its oracle, and the rule resolves that name
+  against the real parsed source the way `mirror.rs` already resolves a declared mirror. This
+  is the only one that expresses what the standard actually says, because only the author
+  knows which test covers the behaviour being measured.
+- **same-stem** — the bench's own stem must resolve to a file under the repository's declared
+  test roots. A weaker claim, and admitted only because it is the one a repository with 266
+  unannotated benches can adopt *today* to get a first, honest signal; a repository choosing
+  it is choosing a proxy and the finding text must say so at the finding, not only here.
+- **a directory-name assumption compiled into the rule is refused.** `benches/` beside
+  `tests/` is a cargo convention, not a universal one, and a rule that hardcodes it is a rule
+  that silently means nothing in every repository shaped differently — the defect
+  `OD-RULES-011` was written to end.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#18
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Decision · hash: sha256:25e5b43300d701142b6fa5b9aed9284529a00f7ba1443f3e4daa183da8530a09*
+
+**2. The subject is the bench target file, addressed by its path.** Not the oracle, and not
+the pair. The oracle may live in another file, another directory, or nowhere; keying the
+subject on it would make a finding's identity depend on the answer being computed, so a bench
+that gained an oracle would report under a different subject than the one that reported it
+missing, and no baseline or waiver could follow it across the fix. Every other file-scoped
+rule here keys on the path and this one does the same.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#19
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Decision · hash: sha256:b04ec2d60e7d8894c066bef5dff096e1a22e2a52326349827652e7c570478066*
+
+**3. Absence is neither a pass nor a failure, and there are three different absences.**
+`OD-RULES-001` is the authority; what it forces here is that the three are told apart rather
+than collapsed:
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#20
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Decision · hash: sha256:cf06e182207db8a9b23e8139e6ce7c16c5afa6b184da27b2cff3e4bf62ea40ea*
+
+- *the repository declared no benchmark policy* — `NotApplicable`. The rule has no claim to
+  make, and reporting one would be inventing a convention on the repository's behalf.
+- *the policy is declared and this bench does not satisfy it* — a finding, and a real one.
+  Under declared-at-the-site that is a bench declaring no oracle or declaring one that
+  resolves to nothing; under same-stem it is a stem resolving to nothing.
+- *the bench's own syntax fact could not be read* — the `Unread_As_This_Rule` shape every rule
+  in this crate already carries: an advisory saying this file could not be judged, which is
+  the one answer that must never render as clean.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#21
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Decision · hash: sha256:35fa83d0901feadaea302ea58361b5492e79cef16a1751b7c5e9e243c6c63254*
+
+**4. It is verified in two halves, and the second is corpus-gated and must be registered as
+such.** The rule's own judgment is tested the way every rule here is tested: hand-built
+payloads, both conventions, all three absences, no corpus required, running in CI. The claim
+that it says anything *true about real benchmarks* can only be tested against the 266, and
+that assertion is corpus-gated and must be counted in
+`tests/contract/tests/corpus_gates.rs` so the size of the hole is declared rather than
+discovered. A green CI run is not evidence this rule was exercised against a real benchmark,
+and the increment that builds it does not get to claim otherwise.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#22
+
+*revision: authored · kind: heading · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / What this record does not do · hash: sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4*
+
+## What this record does not do
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#23
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / What this record does not do · hash: sha256:c3317386b4fe9b18ba98b671cb89d652cf917e94bb0b00d48a564db7c259fd19*
+
+It does not write the rule, register it, compose it into any run, or add a policy family to
+any provider. A follow-up increment does that against these four constraints; this record
+names the shape, as `OD-CAPABILITY-014` named one before the increment that built it.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#24
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / What this record does not do · hash: sha256:78b0048e78f0d9192310362a1bef9ec8a5cce485069007d68879b6daea849190*
+
+It does not decide which convention *this* repository declares, because this repository has
+no benchmarks to declare one for. The question becomes live the day it gains its first, and
+`OD-RULES-026`'s own note — that a benchmark capability becomes reachable once a benchmarking
+convention is adopted here — is where that lands.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#25
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / What this record does not do · hash: sha256:d6ca8948e289f7a6fa5535ea28f8d9d05a5a3b12c6c983880a9ac3ddde937df3*
+
+It does not decide anything about benchmark results, history, regression thresholds or
+performance comparison. `OD-RULES-026` holds all of that, deferred, and nothing here disturbs
+it. The standard's second sentence — that results from an implementation failing its oracle
+must not participate in comparison or default selection — is a claim about a *results
+pipeline* this workspace does not have, and is out of scope for a rule that judges source.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#26
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / What this record does not do · hash: sha256:62dc6983471e487abf98641f78b8ad3659e552c003726531d655a3345df951da*
+
+It does not assert that any of the 112 same-stem candidates is a violation. That number is an
+upper bound on candidates under the weaker of the two admitted conventions, and this record
+is explicit that a finding count derived from it would be the rule reporting its own heuristic
+back to itself.
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#27
+
+*revision: authored · kind: heading · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md#28
+
+*revision: authored · kind: prose · heading: A bench-to-oracle rule is built, and what a bench owes is declared by the repository rather than inferred from a filename / Status · hash: sha256:dc1812a9fde74cf424c30e870bafca434254574656e730c9ea46ee14c0dee476*
+
+Accepted. The rule is built, its convention is declared by the repository under check, its
+subject is the bench file, its three absences are distinguished, and its real-population
+verification is corpus-gated and counted. No code moves here.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
