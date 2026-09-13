@@ -59,6 +59,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md@authored | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md | authored | 23 | 6 | sha256:8464e7bf3a1b75d087bbd7ed1b6608955c4c9bafb6ee1a2d2e8c55c66bf06460 |
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md@authored | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md | authored | 23 | 8 | sha256:33f282b8156d4f3dd172d5ee4c250a2cb2d4efb04987e2efcae89ba263371d43 |
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md | authored | 22 | 6 | sha256:c73b6568e987da09a2256a0e13c66b1d768911f443b0fa014c71ff319d11591f |
+| docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md@authored | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md | authored | 27 | 7 | sha256:cae971023f2e38fc400fcb48c0f851cf958af99faf124d0caaba5d34226ee492 |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ea548df7de6d318f3946ffc3c153f837e4289c5b25045352897d0221c1c1d3f7 |
@@ -615,6 +616,13 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#11 | authored | 2 | The Decision |
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#17 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#21 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#1 | authored | 1 | The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised |
+| docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#2 | authored | 2 | Question |
+| docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#5 | authored | 2 | The census |
+| docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#13 | authored | 3 | The raw `Assurance::Sound` count answers neither question |
+| docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#16 | authored | 2 | Decision |
+| docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#21 | authored | 2 | What this record does not do |
+| docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#26 | authored | 2 | Status |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1 | authored | 1 | A completeness guard is only as complete as the universe it quantifies over |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#2 | authored | 2 | Question |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#5 | authored | 2 | The Shape, Which Is Not The One The Item Assumed |
@@ -13944,6 +13952,248 @@ zone, because `Permits` has always granted it; being reachable from `nomos-rules
 qualify one, because that reasoning would empty the `Rules ↛ Provider` edge of meaning. The
 split stays owed at `OD-CAPABILITY-002`'s existing trigger, a second provider, and the
 boundary tests are recorded as asserting downward dependency only.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#1
+
+*revision: authored · kind: heading · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised · hash: sha256:8ff574995804ccab74ea8ee766d6427612b122bada14383841f85db0cca5f4db*
+
+# The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#2
+
+*revision: authored · kind: heading · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#3
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / Question · hash: sha256:ebab491b0fa575a8282b27990079afc15e1bf1221c05275ceb9b124068ce160d*
+
+`nomos-lang-rust/src/guarantee.rs` and `nomos-lang-go/src/guarantee.rs` open with the same
+sentence — *what this provider promises, stated as a value and checked in two directions* —
+and name both. Downward, `nomos_capability::Registry` refuses an offer claiming more than the
+capability ceiling permits, so a provider does not grade its own work. Upward, a test asserts
+one property per axis against what the provider actually emits, so the declaration is not
+merely permitted but true. The Rust one states the principle outright: a declaration nobody
+exercises is a comment rather than a fact.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#4
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / Question · hash: sha256:9896fe405d7686d9cc95e08e8ead6531da42540af70ef0411c319f48ba06c9b4*
+
+That convention lives in those two module docs and nowhere else — no record carries it.
+Whether it is a requirement every provider owes, or a practice two crates chose, is the
+question this record answers.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#5
+
+*revision: authored · kind: heading · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / The census · hash: sha256:f66dccbd07fd06d21718eb91b9b9536f1e675681091895b27aeff08dcf7e69d0*
+
+## The census
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#6
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / The census · hash: sha256:6142c53f4e9c986f330f82daa6108f0ac90e1afb5aac02e217cd5b3bd7dcb13b*
+
+Read per crate rather than grepped, because the distinction that matters is invisible to a
+pattern. Three things are separated:
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#7
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / The census · hash: sha256:0307efd2614f446b473048b7704d8b12081faa8eff189161a5f61016bf84ba7e*
+
+- **downward** — the ceiling admits the claim (`Ceiling().Satisfies(&Declared_Guarantee())`)
+  or the registry accepts the offer (`registry.Offer(Provider_Offer()) == Ok(())`);
+- **plumbing** — an emitted fact carries the declared value
+  (`fact.guarantee == Declared_Guarantee()`);
+- **upward** — a claimed property is asserted to hold of what the provider actually emits.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#8
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / The census · hash: sha256:d94a58c7d5acfffc28feb5f83a176a7601043219297b5625439a9ea0ddba8d66*
+
+A fourth appears in the reading and is listed separately, because calling it upward would
+overstate it: a **value-algebra** assertion, which checks what the declared `Guarantee`
+satisfies or fails to satisfy as a value (`Declared_Guarantee().Satisfies(&requirement)`).
+That is a fact about the type's ordering, not about anything the provider emitted.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#9
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / The census · hash: sha256:6fc2bd531df11819a0c4a8cee3ca0a569f66d0e2e848a6d35afffedc7a57fe6d*
+
+Eleven crates declare a provider guarantee; between them they define **18**
+`Declared_Guarantee()` functions, because five live in `nomos-repo-policy` and three in
+`nomos-lang-rust`.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#10
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / The census · hash: sha256:4d59ac4a30855073dcad85da93a57cbe741440109b59e6f85aaae8ed9c7edd72*
+
+| crate | downward | plumbing | upward, on an axis of its own guarantee |
+|---|---|---|---|
+| `nomos-lang-rust` | yes | yes | **yes** — `tests/guarantee.rs`, one property per axis, including the axis it declares it fails |
+| `nomos-lang-rust-scan` | yes | yes | **yes** — `Test_The_Declared_Unsoundness_Should_Be_Demonstrable` exhibits four real inputs the scanner mis-reports |
+| `nomos-lang-go` | yes | yes | no |
+| `nomos-lang-go-modules` | yes, plus value-algebra | yes | no |
+| `nomos-lang-rust-cargo` | yes | yes | no |
+| `nomos-lang-rust-clippy` | yes | yes | no |
+| `nomos-lang-rust-deny` | yes | yes | no on any axis; see below |
+| `nomos-lang-rust-compiler` | yes | yes | no — no `tests/` directory |
+| `nomos-cap-requirement-trace` | yes | yes | no |
+| `nomos-connector-coderabbit` | yes | yes | no |
+| `nomos-repo-policy` (five) | yes | yes | no — no `tests/` directory |
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#11
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / The census · hash: sha256:4069592ff1281f0328403c37fc9fb4e828133c34240878fb04c5addfd346a978*
+
+**Two of eleven hold the convention, and one of the two stating it is not among them.**
+`nomos-lang-go`'s module doc says "Upward, this crate's own tests assert what it actually
+emits against the claim" — it names no test, and its only test file asserts the declared value
+is carried and the registry accepts the offer. Its nearest candidate,
+`Test_Declared_Guarantee_Should_State_A_Sound_Syntactic_File_Granular_Claim`, asserts the
+value equals itself; a provider that emitted nothing at all would pass it. The crate that does
+hold the convention without stating it, `nomos-lang-rust-scan`, has no test file named for a
+guarantee — which is why file naming was not the measure taken here.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#12
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / The census · hash: sha256:4b2ba77a1d305fe1563711cda4a148219613a9a04412fa4bccfb6f4926917644*
+
+**`nomos-lang-rust-deny` is listed as no and deserves its sentence.**
+`Test_A_Real_Run_That_Resolved_No_Workspace_Should_Be_Refused_Rather_Than_Reported_Clean` is a
+real property assertion against a real subprocess, and a valuable one — it holds that a run
+which could not look is refused rather than reported clean. But that is `OD-RULES-001`'s
+absence rule, not an axis of this provider's guarantee, and counting it as upward would make
+the census report a property nobody declared.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#13
+
+*revision: authored · kind: heading · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / The census / The raw `Assurance::Sound` count answers neither question · hash: sha256:134cd4b9ce1a66943696b392b7ea5aa67d9748405f934b51e2489a75f008a02e*
+
+### The raw `Assurance::Sound` count answers neither question
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#14
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / The census / The raw `Assurance::Sound` count answers neither question · hash: sha256:7ce35a20059ff51d4f1310ef380f93933ca4e17d5d791ce2919830715747ed35*
+
+255 occurrences across the workspace. **17 are in a `Ceiling()` and 18 in a
+`Declared_Guarantee()`** — the only two places the value means *a contract's permission* or *a
+provider's claim*. The other 220 are fixtures, doc examples and `Guarantee` values constructed
+in `nomos-analysis`, `nomos-capability` and `nomos-rules` to exercise something else entirely;
+65 are in a test file or `tests/` directory outright. So the single number is dominated by
+occurrences that declare nothing, and no reading of it distinguishes a ceiling from a claim.
+That is why it is split here rather than quoted.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#15
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / The census / The raw `Assurance::Sound` count answers neither question · hash: sha256:05772cf0dc1aef02bf1f8f2362ad1f7b08a7d24f9090da15d10648e86b114225*
+
+The counts are per-file and per-function textual, and nested `#[cfg(test)]` modules are not
+subtracted from the enclosing function's scope, so the 17 and 18 are exact (they count
+definitions) while the 220 remainder is a difference and carries that method's slack.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#16
+
+*revision: authored · kind: heading · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#17
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / Decision · hash: sha256:829ae1548c9f6530905a201826b254adbbc9e3c270d1d09c138adb704a5777b0*
+
+**A requirement, not a practice.** `Assurance::Sound` is the single value for which
+`Satisfies_Requirement` returns true, so it is the one value that clears a rule's requirement
+floor — and the downward direction establishes only that a claim is *permitted*, never that it
+is *true*. The registry would accept a provider declaring `Syntactic` that secretly resolved
+names, and one declaring `Sound` that invented items; `nomos-lang-rust`'s own test module doc
+says exactly that. Nine of eleven crates clearing that floor on an unexercised claim is the
+defect this workspace exists to remove, stated in its own words in two of its own files.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#18
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / Decision · hash: sha256:96a40d3f8a6f6c8d8c45f0f83b9ad83daf35e1c1b6ce9c80488f0f36ffc4a0fa*
+
+**What is required is a named exerciser at the declaring site, not a test per axis.** A
+`Declared_Guarantee()` names, in its own doc, what exercises it — or states that it cannot be
+exercised, and why. Both halves are the requirement; the second is not an escape from it.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#19
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / Decision · hash: sha256:7d184c73d1345451f8bf219672220b3220ed7cd58159cb28d1cb201a67da12e1*
+
+The reason it is shaped that way rather than as "every axis owes a test" is that some axes are
+not demonstrable and forcing a test for them produces exactly the tautology this census found:
+`nomos-lang-go`'s value-equals-itself assertion, which a provider emitting nothing would pass.
+A policy provider that reads a declared file and reports its contents may have no way to
+exhibit unsoundness, and the honest answer there is a stated one, not a manufactured test.
+`OD-RULES-001` is the same principle one level down: an absence must be declared rather than
+silent.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#20
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / Decision · hash: sha256:59df876d7fdadbca3a640a325c133f3622d717db51836abe1406ba02cf5ca24d*
+
+**It is enforced mechanically, by the `completeness-mirror` precedent.** `checks/mirror.rs`
+already reads a name declared at a site and resolves it against real parsed test functions,
+reporting a phantom when it resolves to nothing. A guarantee declaring an exerciser is the
+identical shape, and `OD-RULES-031` chose the same mechanism for a benchmark naming its oracle
+one week of work earlier. What makes it worth the mechanism rather than a review habit is that
+this census is the second time the convention has been found stated and unheld, and prose is
+what failed both times.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#21
+
+*revision: authored · kind: heading · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / What this record does not do · hash: sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4*
+
+## What this record does not do
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#22
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / What this record does not do · hash: sha256:95694926ff1dcbaba11fd72695accc2e029f04dce1d6450d57b147451bbb285c*
+
+It does not write any test, weaken any guarantee, or change any provider, contract, ceiling or
+offer. Nine crates owe an exerciser or a stated reason under this decision and none of them
+gains one here.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#23
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / What this record does not do · hash: sha256:1a8526a1386ef9129a053a2ce78da0861428dcd735c1c7fe960604f6b95d97f9*
+
+It does not amend the two module docs, which is outside this item's territory and is named as
+the first thing the enforcing increment does. One of them needs it on accuracy grounds and not
+only on convention: `nomos-lang-go/src/guarantee.rs` presently asserts that its own tests check
+what it emits against its claim, and they do not.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#24
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / What this record does not do · hash: sha256:587203cb11328374e16d0c5a241b5d6eea0aa14e864d48c9fb7f3ec03246090c*
+
+It does not decide the rule's identifier, its gate category, or whether a missing exerciser is
+blocking or advisory. Those belong with the increment that builds it, against the constraints
+`OD-RULES-031` already fixed for the sibling mechanism.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#25
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / What this record does not do · hash: sha256:65c760251cef4d660b94c7b51771a3c48ddcb4e6293ca71382de3602164535c2*
+
+It does not re-open what a `Guarantee` is, what its axes are, or what `Satisfies_Requirement`
+returns. Every one of those is load-bearing here exactly as it already stands.
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#26
+
+*revision: authored · kind: heading · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#27
+
+*revision: authored · kind: prose · heading: The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised / Status · hash: sha256:cf132bf090f8267b045bec1ac698f284884a5348c33ff7c47b1c23115f359b21*
+
+Accepted. The two-direction check is a requirement; a declared guarantee names what exercises
+it or states that it cannot be exercised; and the naming is enforced the way a declared mirror
+already is. No code moves here.
 
 ### docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1
 

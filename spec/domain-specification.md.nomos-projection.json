@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:c38927a6f8d349c7b6aa08e4ee532999d9e42b9fe17631e6905c2ebfdc21de80",
-  "inputs_digest": "sha256:33e1384c392a55686fd689a7b6cca0fba35830f2ca47d0a60dc29b5576c475fb",
+  "content_digest": "sha256:27883cf2cde1c6aa5c2ecd5fba3742c7436e2c116fecc7decf71e6cb0fe1bb81",
+  "inputs_digest": "sha256:ae0acd6faf393c6f304df250091e9b137db603559998d5a97aa0371b7cac900d",
   "sections": [
     [
       "Documents",
-      236
+      237
     ],
     [
       "Sections",
-      1945
+      1952
     ],
     [
       "Source blocks",
-      6750
+      6777
     ]
   ],
   "inputs": [
@@ -264,6 +264,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored",
       "hash": "sha256:c73b6568e987da09a2256a0e13c66b1d768911f443b0fa014c71ff319d11591f"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md@authored",
+      "hash": "sha256:cae971023f2e38fc400fcb48c0f851cf958af99faf124d0caaba5d34226ee492"
     },
     {
       "content": "documents",
@@ -3019,6 +3024,41 @@
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#21",
       "hash": "sha256:89e58c5a8dca4b2131792183be62dcf419d3c0cb50adc3979efee156b988ee1a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#1",
+      "hash": "sha256:b6724dd09ebce5393cf9bda018d961d6bf8c9e113b247e24c949a538dbe9c885"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#2",
+      "hash": "sha256:2e41bfb7b2806ed0bb4661cc09d3c857808dacbfd282a9c4db8fd261686c25b8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#5",
+      "hash": "sha256:5c8b33db3ffd3786627a647c8f1172bacc773ee6d6b489c5e8046c8774c5aa5c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#13",
+      "hash": "sha256:f87efd15fa24d1f2364eb76752ec861fb41eb71430e09328821d21fd59b007bd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#16",
+      "hash": "sha256:74e4782e34afc75076ff98b88b74e8261bcd2a49fba6fda5dc79a97a74289a03"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#21",
+      "hash": "sha256:d8431b55b9df1e5aed5b0d978cee171d00d13ab68ea660e21ebb259e231cca96"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#26",
+      "hash": "sha256:b99fe279689d898b6fee890572f3d0f6afdb9ee587977c5ac881377e84313a37"
     },
     {
       "content": "headings",
@@ -17144,6 +17184,141 @@
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#22",
       "hash": "sha256:2c7613e110e6bd36a471654cd8f8900008c4f862f20cda5e4848d3e60ea734c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#1",
+      "hash": "sha256:8ff574995804ccab74ea8ee766d6427612b122bada14383841f85db0cca5f4db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#3",
+      "hash": "sha256:ebab491b0fa575a8282b27990079afc15e1bf1221c05275ceb9b124068ce160d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#4",
+      "hash": "sha256:9896fe405d7686d9cc95e08e8ead6531da42540af70ef0411c319f48ba06c9b4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#5",
+      "hash": "sha256:f66dccbd07fd06d21718eb91b9b9536f1e675681091895b27aeff08dcf7e69d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#6",
+      "hash": "sha256:6142c53f4e9c986f330f82daa6108f0ac90e1afb5aac02e217cd5b3bd7dcb13b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#7",
+      "hash": "sha256:0307efd2614f446b473048b7704d8b12081faa8eff189161a5f61016bf84ba7e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#8",
+      "hash": "sha256:d94a58c7d5acfffc28feb5f83a176a7601043219297b5625439a9ea0ddba8d66"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#9",
+      "hash": "sha256:6fc2bd531df11819a0c4a8cee3ca0a569f66d0e2e848a6d35afffedc7a57fe6d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#10",
+      "hash": "sha256:4d59ac4a30855073dcad85da93a57cbe741440109b59e6f85aaae8ed9c7edd72"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#11",
+      "hash": "sha256:4069592ff1281f0328403c37fc9fb4e828133c34240878fb04c5addfd346a978"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#12",
+      "hash": "sha256:4b2ba77a1d305fe1563711cda4a148219613a9a04412fa4bccfb6f4926917644"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#13",
+      "hash": "sha256:134cd4b9ce1a66943696b392b7ea5aa67d9748405f934b51e2489a75f008a02e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#14",
+      "hash": "sha256:7ce35a20059ff51d4f1310ef380f93933ca4e17d5d791ce2919830715747ed35"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#15",
+      "hash": "sha256:05772cf0dc1aef02bf1f8f2362ad1f7b08a7d24f9090da15d10648e86b114225"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#16",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#17",
+      "hash": "sha256:829ae1548c9f6530905a201826b254adbbc9e3c270d1d09c138adb704a5777b0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#18",
+      "hash": "sha256:96a40d3f8a6f6c8d8c45f0f83b9ad83daf35e1c1b6ce9c80488f0f36ffc4a0fa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#19",
+      "hash": "sha256:7d184c73d1345451f8bf219672220b3220ed7cd58159cb28d1cb201a67da12e1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#20",
+      "hash": "sha256:59df876d7fdadbca3a640a325c133f3622d717db51836abe1406ba02cf5ca24d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#21",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#22",
+      "hash": "sha256:95694926ff1dcbaba11fd72695accc2e029f04dce1d6450d57b147451bbb285c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#23",
+      "hash": "sha256:1a8526a1386ef9129a053a2ce78da0861428dcd735c1c7fe960604f6b95d97f9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#24",
+      "hash": "sha256:587203cb11328374e16d0c5a241b5d6eea0aa14e864d48c9fb7f3ec03246090c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#25",
+      "hash": "sha256:65c760251cef4d660b94c7b51771a3c48ddcb4e6293ca71382de3602164535c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#26",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#27",
+      "hash": "sha256:cf132bf090f8267b045bec1ac698f284884a5348c33ff7c47b1c23115f359b21"
     },
     {
       "content": "blocks",

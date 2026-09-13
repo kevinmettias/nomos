@@ -404,14 +404,20 @@ graph LR
     od_capability_013 -->|"relates-to"| od_rules_010["OD-RULES-010"]
     od_capability_014 -->|"relates-to"| od_capability_011
     od_capability_014 -->|"relates-to"| od_capability_013
+    od_capability_014 -->|"relates-to"| od_capability_016["OD-CAPABILITY-016"]
     od_capability_015 -->|"relates-to"| arc_connector_001
     od_capability_015 -->|"relates-to"| od_capability_002
     od_capability_015 -->|"relates-to"| od_rules_020
+    od_capability_016 -->|"relates-to"| od_capability_014
+    od_capability_016 -->|"relates-to"| od_completeness_001
+    od_capability_016 -->|"relates-to"| od_rules_001
+    od_capability_016 -->|"relates-to"| od_rules_031
     od_completeness_001 -->|"affected_by"| d_134
     od_completeness_001 -->|"affected_by"| od_completeness_002
     od_completeness_001 -->|"affected_by"| od_completeness_004
     od_completeness_001 -->|"relates-to"| od_analysis_012
     od_completeness_001 -->|"relates-to"| od_capability_010
+    od_completeness_001 -->|"relates-to"| od_capability_016
     od_completeness_001 -->|"relates-to"| od_contracts_002
     od_completeness_001 -->|"relates-to"| od_determinism_002
     od_completeness_001 -->|"relates-to"| od_gate_001
@@ -1288,6 +1294,7 @@ graph LR
     od_rules_001 -->|"relates-to"| od_capability_002
     od_rules_001 -->|"relates-to"| od_capability_003
     od_rules_001 -->|"relates-to"| od_capability_010
+    od_rules_001 -->|"relates-to"| od_capability_016
     od_rules_001 -->|"relates-to"| od_completeness_001
     od_rules_001 -->|"relates-to"| od_completeness_004
     od_rules_001 -->|"relates-to"| od_gate_001
@@ -1483,6 +1490,7 @@ graph LR
     od_rules_030 -->|"relates-to"| od_rules_014
     od_rules_030 -->|"relates-to"| od_rules_020
     od_rules_031 -->|"relates-to"| arc_ecosystem_001
+    od_rules_031 -->|"relates-to"| od_capability_016
     od_rules_031 -->|"relates-to"| od_completeness_001
     od_rules_031 -->|"relates-to"| od_rules_001
     od_rules_031 -->|"relates-to"| od_rules_011
@@ -1714,6 +1722,7 @@ graph LR
     od_capability_013
     od_capability_014
     od_capability_015
+    od_capability_016
     od_completeness_001
     od_completeness_002
     od_completeness_004
