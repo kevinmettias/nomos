@@ -64664,6 +64664,277 @@
         ],
         "patterns": []
       },
+      "state": {
+        "Declined": {
+          "reason": "Under-reserved by its own author, found by grep before claiming rather than after. Moving the comparison onto Finding::subject_name changes a public field on Suppression and BaselineDebt, which reaches their constructions in policy/suppression_disposition/suppression_policy.rs and policy/baseline_debt/baseline_policy.rs, the crate's own tests.rs, two nomos-api response builders (response/suppression_response.rs, response/baseline_debt_response.rs) and two surface snapshots -- none of which the four reserved paths covered. Also split, because the two halves are independently landable and bundling them made an all-or-nothing change out of two that are not: matching by name is a type change across two crates, and reporting entries that matched nothing needs a field on GateRunResult, the reducer that fills it and the CLI that renders it. Re-authored as P76-POLICY-ENTRIES-MATCH-BY-SUBJECT-NAME with the measured territory; the reporting half is P76-A-POLICY-ENTRY-THAT-MATCHED-NOTHING-IS-REPORTED."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1789259697
+      }
+    },
+    {
+      "id": "P76-POLICY-ENTRIES-MATCH-BY-SUBJECT-NAME",
+      "title": "A declared policy entry still resolves to a digest, so an exactly-correct name cannot match",
+      "why": "OD-GATE-024 decided that a person names a sub-item finding by the subject_name a run already prints, and that the comparison moves off a digest the entry re-derived onto that name. It implements none of it. Until it is implemented, Subject_Of_Path lowercases the name it digests while a name-addressed finding digests raw bytes, so an author who writes a suppression for completeness-mirror or single-letter-names and types the name exactly right still gets no error, no warning and no effect. Measured blast radius, because the field is public: the three Is_Applicable_To predicates in policy/baseline_debt.rs, policy/rule_calibration.rs and policy/suppression_disposition/suppression.rs, the entry resolution in policy/gate_policy_file.rs, the constructions in policy/suppression_disposition/suppression_policy.rs and policy/baseline_debt/baseline_policy.rs, this crate's own tests.rs, two nomos-api response builders that copy the field onto the wire, and two surface snapshots.",
+      "done_when": "Suppression and BaselineDebt carry the authored subject name rather than a SubjectId, and their Is_Applicable_To compares it against Finding::subject_name; a declared entry names a subject as a run prints it, with the path spelling still working for a file-addressed entry; a test proves a case-bearing name-addressed finding is matched by an entry naming it, watched failing against the digest comparison before it is believed; nomos-api's two response builders carry the name; and both surface snapshots are blessed in the same change.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/baseline_debt.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/baseline_debt/baseline_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/rule_calibration.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/host/nomos-api/src/response/suppression_response.rs",
+          "crates/host/nomos-api/src/response/baseline_debt_response.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Implemented, measured against the real suite, and reverted: the approach OD-GATE-024 decided is unsound as written, and the implementation attempt is what proved it. Finding::subject's own doc says it is derived from Finding::subject_name, never from a path. crates/rules/nomos-rules/src/checks/formatting.rs writes the opposite -- subject: source.subject, the file's own path-derived digest, with subject_name formatted as path:line. So for the whole formatting family, which includes no-single-line-function-bodies and todo-format-is-todo-name-description-ticket, subject_name is not the preimage of subject and the two disagree. Moving the comparison onto subject_name therefore breaks the file-addressed case it was meant to preserve: the existing end-to-end test Test_A_Declared_Policy_File_Should_Tolerate_Findings_A_Command_Never_Mentioned declares paths b.rs and c.rs and stops matching, because those findings are named b.rs:1 and c.rs:1. There is no single field that matches both families today. The real defect is one layer down -- a documented invariant on Finding that a rule family does not hold -- and deciding the policy key before that is settled would ship the same silence under a different spelling. OD-GATE-024 is amended with this measurement rather than leaving the next session to walk the same path."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-dev-session",
+          "reason": "Releasing to decline: the approach is unsound and the implementation that proved it has been reverted.",
+          "abandoned_at": 1789260056
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1789260056
+      }
+    },
+    {
+      "id": "P76-A-POLICY-ENTRY-THAT-MATCHED-NOTHING-IS-REPORTED",
+      "title": "A declared policy entry that matched no finding is silently ignored",
+      "why": "OD-GATE-024's fourth clause, which it says holds whichever way the addressing question is answered: an entry that matches nothing is reported rather than silently ignored, because the silence is the actual defect the item was filed for. An author gets no error, no warning and no effect today, whether the entry was mis-spelled, written for a finding that has since been fixed, or aimed at a sub-item the addressing cannot reach. Split from the matching half (P76-POLICY-ENTRIES-MATCH-BY-SUBJECT-NAME) because the two are independently landable and bundling them made an all-or-nothing change out of two that are not: this one is a field on GateRunResult, the reducer in gate_environment.rs that fills it, and the CLI that renders it, and it is worth having even if the addressing question were answered the other way.",
+      "done_when": "A gate run reports every declared suppression, baseline debt and rule calibration that matched no finding in it, naming the entry; the run does not fail for it, because a policy legitimately outlives the finding it was written for and a repository whose debt was paid must not fail its own gate; a test proves an entry naming nothing is reported and one naming something is not; and the surface snapshots of every crate whose public shape moves are blessed in the same change.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_run_result.rs",
+          "crates/host/nomos-cli/src/gate/report.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Stranded by the decline of P76-POLICY-ENTRIES-MATCH-BY-SUBJECT-NAME, which it named as a dependency. The dependency was wrong: reporting an entry that matched no finding does not depend on how matching is spelled, and OD-GATE-024 says so in as many words -- that clause holds whichever way the addressing question is answered. Re-authored as P76-A-POLICY-ENTRY-THAT-MATCHED-NOTHING-IS-REPORTED-2 with no depends_on, unchanged otherwise."
+        }
+      },
+      "depends_on": [
+        "P76-POLICY-ENTRIES-MATCH-BY-SUBJECT-NAME"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1789260074
+      }
+    },
+    {
+      "id": "P76-SUPPRESSION-DISPOSITION-MODULE-CONSTRUCTS-THE-SUPPRESSION",
+      "title": "The suppression-disposition module's own tests construct a Suppression by its old subject field",
+      "why": "P76-POLICY-ENTRIES-MATCH-BY-SUBJECT-NAME replaces Suppression's SubjectId with the authored subject name, per OD-GATE-024. crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition.rs constructs a Suppression in its own tests and stops compiling. It is the parent module of the two files that item reserved -- suppression_disposition/suppression.rs and suppression_disposition/suppression_policy.rs -- and is not itself among them, which is the gap a path-by-path reservation leaves when a directory and its parent module file share a name. A third disjoint claim rather than a decline and re-author, which would strand the eleven-path change already in flight.",
+      "done_when": "The module's own test fixtures construct a Suppression by subject_name, still asserting what they asserted about disposition resolution, and cargo test -p nomos-gate-orchestration passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "ts::Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrated ... ok\ntest tests::Test_A_Baselined_Finding_Should_Not_Block ... ok\ntest gate_environment::tests::Test_Run_Gate_Should_Pass_When_A_Phase_Approval_Covers_Every_Blocking_Finding ... ok\ntest tests::Test_Explain_Should_Report_A_Suppression_That_Applies ... ok\ntest tests::Test_Explain_Should_Report_A_Calibration_That_Applies ... ok\ntest tests::Test_Explain_Should_Report_A_Baseline_That_Applies ... ok\n\ntest result: ok. 91 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 26.83s\n\n\nrunning 4 tests\ntest Test_Run_Gate_Should_Report_An_Unreadable_Check_Outcome_As_Indeterminate ... ok\ntest Test_Run_Gate_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified ... ok\ntest Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestration_Seam ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.84s\n\n\nrunning 4 tests\ntest Test_Disposition_Of_Findings_Should_Fail_On_A_Blocking_Finding ... ok\ntest Test_Disposition_Of_Findings_Should_Fail_With_One_Blocking_Finding_Among_Many ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_When_Nothing_Can_Fail_A_Build ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_With_No_Findings ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-4281b14ceca8e621.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-23ff7cc352e6b2e5.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-8bad2a3e6bf12a8f.exe)\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1789260018,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "09b293a90d4557233baa9df0cd196418ce748e79"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P76-A-POLICY-ENTRY-THAT-MATCHED-NOTHING-IS-REPORTED-2",
+      "title": "A declared policy entry that matched no finding is silently ignored",
+      "why": "OD-GATE-024's fourth clause, which that record says holds whichever way the addressing question is answered: an entry that matches nothing is reported rather than silently ignored, because the silence is the defect the item was filed for. An author gets no error, no warning and no effect today, whether the entry was mis-spelled, written for a finding that has since been fixed, or aimed at a sub-item the addressing cannot reach. Independent of how matching is spelled, which is why this is re-authored without the dependency its first spelling carried on the matching change -- that change was declined when implementing it proved the approach unsound, and this half was stranded behind it for no reason.",
+      "done_when": "A gate run reports every declared suppression, baseline debt and rule calibration that matched no finding in it, naming the entry; the run does not fail for it, because a policy legitimately outlives the finding it was written for and a repository whose debt was paid must not fail its own gate; a test proves an entry naming nothing is reported and one naming something is not; and the surface snapshot of every crate whose public shape moves is blessed in the same change.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_run_result.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P76-A-FINDINGS-SUBJECT-NAME-IS-NOT-ALWAYS-ITS-SUBJECTS-PREIMAGE",
+      "title": "A rule family writes a subject_name that is not the preimage of the subject beside it, against that field's own documented contract",
+      "why": "Finding::subject documents itself as Derived from Finding::subject_name, never from a path, and Finding::subject_name as the preimage of subject, so the two cannot disagree without the digest being computed from something else. crates/rules/nomos-rules/src/checks/formatting.rs does compute it from something else: subject is source.subject, the file's own path-derived digest, while subject_name is the line-qualified path. Every rule in that family is affected, including no-single-line-function-bodies and todo-format-is-todo-name-description-ticket. The naming family holds the invariant properly -- subject is the digest of the qualified name that subject_name carries -- so the workspace has two rule families with contradictory readings of one contract. Measured while implementing P76-POLICY-ENTRIES-MATCH-BY-SUBJECT-NAME, which was declined because of it: no policy key can address both families while this holds, so the silent-suppression defect OD-GATE-024 was filed for cannot be closed above this layer. A reader of either field cannot tell which reading applies without opening the rule.",
+      "done_when": "Every rule either writes a subject_name that is the preimage of the subject beside it, or the contract on Finding is changed to state what is actually true and why, with the reason a line-qualified name cannot be the preimage stated rather than left implied; the two families no longer read one contract two ways; and a test holds whichever answer is chosen, so the invariant stops being prose alone.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md",
+          "crates/spec/nomos-spec-store/records/OD-ANALYSIS-011.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P76-SUPPRESSION-DISPOSITION-FIXTURES-WERE-NEVER-CHANGED",
+      "title": "An item recorded Done for a fixture change that was reverted before it was finished",
+      "why": "P76-SUPPRESSION-DISPOSITION-MODULE-CONSTRUCTS-THE-SUPPRESSION was authored to update policy/suppression_disposition.rs's own test fixtures to construct a Suppression by subject_name, as a companion to P76-POLICY-ENTRIES-MATCH-BY-SUBJECT-NAME. That parent change was then measured unsound and reverted, which put the fixtures back to constructing by subject -- and the companion was finished afterwards anyway. Its predicate, cargo test -p nomos-gate-orchestration, passed precisely because the revert had restored a green tree, so the verification recorded a real passing run of a check that had nothing to do with the item's own done_when. This is the shape AGENTS.md warns about in the other direction: a predicate that cannot see the work is not evidence the work happened. Recorded rather than quietly left, because a Done item whose work is not in the tree is exactly what a future reader would trust.",
+      "done_when": "The board carries an honest account of what P76-SUPPRESSION-DISPOSITION-MODULE-CONSTRUCTS-THE-SUPPRESSION actually left in the tree, which is nothing; and if the matching change is ever revived under a new id, the fixture work is part of that item rather than assumed already done.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition.rs"
+        ],
+        "patterns": []
+      },
       "state": "Ready",
       "depends_on": [],
       "blocked": null,
@@ -64678,6 +64949,58 @@
         "timeout_seconds": 600
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P76-GATE-024-AMENDED-BY-WHAT-IMPLEMENTING-IT-MEASURED",
+      "title": "OD-GATE-024 decided a matching key that implementing it proved unsound",
+      "why": "OD-GATE-024 decided that a declared policy entry names a subject by Finding::subject_name and that the comparison moves onto that name, resting on that field's own documented contract: it is the preimage of subject, so the two cannot disagree. Implementing it measured that the contract does not hold. crates/rules/nomos-rules/src/checks/formatting.rs writes subject as source.subject, the file's path-derived digest, and subject_name as the line-qualified path, so for that whole family the two disagree -- and the existing end-to-end test declaring paths b.rs and c.rs stops matching under a name comparison, because those findings are named b.rs:1 and c.rs:1. The record's own premise is therefore false, its first three clauses cannot be implemented as written, and its fourth is independent and still stands. Leaving it accepted as written sends the next session down the path this one already walked and reverted.",
+      "done_when": "OD-GATE-024 carries the measurement that Finding::subject_name is not universally the preimage of Finding::subject, names the rule family where it is not and the one where it is, retracts the clauses that rest on the false premise, and states what must be settled first -- the invariant itself, which P76-A-FINDINGS-SUBJECT-NAME-IS-NOT-ALWAYS-ITS-SUBJECTS-PREIMAGE holds -- while leaving the report-what-matched-nothing clause standing as the record already says it does.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 15 tests\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789260306,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "09b293a90d4557233baa9df0cd196418ce748e79"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

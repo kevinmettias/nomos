@@ -103,7 +103,7 @@ profile: domain-specification
 | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md@authored | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md | authored | 24 | 6 | sha256:a1950bc3193e80ab3048937686ee5af16afe5f70f160c318aa0fad2915067313 |
 | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md@authored | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md | authored | 21 | 6 | sha256:5e4ffc056879a2325a78cf957dd7e176cd0a0ebc73c27b1b2a8d90553bd65891 |
 | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md@authored | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md | authored | 23 | 7 | sha256:7ffcec3773752326a5ba599808f3454e1385db25737f73d58c74cbc762307665 |
-| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md@authored | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md | authored | 23 | 6 | sha256:51ccba08aacf5cd5d6f1909e3ba5475b2104050325a3511938da75711674bfde |
+| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md@authored | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md | authored | 36 | 9 | sha256:976dbc3e7de91a5dcca2d62ad0b6ab43726a8e065cbcd1aa5516963cc03ebd93 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -968,7 +968,10 @@ profile: domain-specification
 | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#5 | authored | 2 | What Was Measured |
 | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#11 | authored | 2 | The Decision |
 | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#17 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#22 | authored | 2 | Status |
+| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#22 | authored | 2 | Amendment: The Premise This Rested On Does Not Hold |
+| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#27 | authored | 3 | What is retracted, and what still stands |
+| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#31 | authored | 3 | Why this is recorded rather than quietly rewritten |
+| docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#33 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -25557,20 +25560,130 @@ to whatever preimage the rule used is what makes the shape not matter.
 
 ### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#22
 
+*revision: authored · kind: heading · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Amendment: The Premise This Rested On Does Not Hold · hash: sha256:20c7d78183494ad7bba41c72babed6a8508458df0450abd03d8ed1fc8259e1d8*
+
+## Amendment: The Premise This Rested On Does Not Hold
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#23
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Amendment: The Premise This Rested On Does Not Hold · hash: sha256:3f297d558a2a9f497c01a4041ab7f88478389e8ab7765ced88d180b478508f76*
+
+Added at version 2, by the item filed to implement this one. The implementation was written,
+run against the real suite, and reverted, and what it measured retracts the decision above.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#24
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Amendment: The Premise This Rested On Does Not Hold · hash: sha256:160c3079cfe041b63a98ed8f24ba92c8147a4fbe5968cb1ae444b5df60ed615c*
+
+**`Finding::subject_name` is not universally the preimage of `Finding::subject`.** This
+record leaned on that field's own documented contract — `subject` is "Derived from
+[`Finding::subject_name`], never from a path", and `subject_name` is "the preimage of
+`subject`, so the two cannot disagree without the digest being computed from something else."
+One rule family computes it from something else. `crates/rules/nomos-rules/src/checks/
+formatting.rs` builds every finding with `subject: source.subject` — the file's own
+path-derived digest — and `subject_name: format!("{}:{line_number}", source.path)`. The two
+disagree by construction, for the whole family, which includes
+`no-single-line-function-bodies` and `todo-format-is-todo-name-description-ticket`.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#25
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Amendment: The Premise This Rested On Does Not Hold · hash: sha256:4ad6e5b4f150576620d8fde1adb66e3f6770dab77041805742e1be90de47c0b9*
+
+**So moving the comparison onto the name breaks the case it was meant to preserve.** Under a
+name comparison, the existing end-to-end test
+`Test_A_Declared_Policy_File_Should_Tolerate_Findings_A_Command_Never_Mentioned` stops
+matching: it declares `"path": "b.rs"` and `"path": "c.rs"`, and those findings are named
+`b.rs:1` and `c.rs:1`. The path spelling this record promised would keep working does not.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#26
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Amendment: The Premise This Rested On Does Not Hold · hash: sha256:d3c6e620e682e681e9028b4fe0f910f40cd14c481e615744b3c1a6b41d73c5c3*
+
+**There is no single field that addresses both families today.** The naming family holds the
+invariant properly — `subject` is the digest of the qualified name `subject_name` carries —
+so matching by name reaches it and matching by path cannot. The formatting family is the
+reverse. One contract is being read two ways, and a policy key chosen above that layer
+inherits the contradiction whichever field it picks.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#27
+
+*revision: authored · kind: heading · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Amendment: The Premise This Rested On Does Not Hold / What is retracted, and what still stands · hash: sha256:d72a0176563eaa09138880f4c53401afcf0a66081cf8f3371c2ecfb8cf17561e*
+
+### What is retracted, and what still stands
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#28
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Amendment: The Premise This Rested On Does Not Hold / What is retracted, and what still stands · hash: sha256:07cbde841bd3505ee0ae3a2c5db0b2160af67c6d0dae547716ffc5a8316e854f*
+
+Decisions 1, 2 and 3 above are **retracted**. Naming a subject in a declared entry, comparing
+against `subject_name`, and the case-sensitivity trade that followed from it all rest on the
+premise this amendment falsifies.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#29
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Amendment: The Premise This Rested On Does Not Hold / What is retracted, and what still stands · hash: sha256:986802df111c396bce4be7b2038922baec0642f355d4ae782ae00bf6e66f3f0a*
+
+Decision 4 **stands**, unchanged and independent, exactly as it was written to be: an entry
+that matches nothing is reported rather than silently ignored, whichever way the addressing
+question is answered. It is filed separately and does not wait on any of this.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#30
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Amendment: The Premise This Rested On Does Not Hold / What is retracted, and what still stands · hash: sha256:cb6aa3125f4fa459aa72e0a1eb953498550026f4412ff54fd99152d9896543db*
+
+The question this record was filed for is not answered, and is not answerable at this layer.
+What has to be settled first is the invariant itself —
+`P76-A-FINDINGS-SUBJECT-NAME-IS-NOT-ALWAYS-ITS-SUBJECTS-PREIMAGE` holds it. Until then, a
+person still cannot name a sub-item finding, and the reason is one layer further down than
+this record looked.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#31
+
+*revision: authored · kind: heading · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Amendment: The Premise This Rested On Does Not Hold / Why this is recorded rather than quietly rewritten · hash: sha256:6f47014b17209610b371d106710ef90ea87502bddac263d0353d20b162f3ae7b*
+
+### Why this is recorded rather than quietly rewritten
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#32
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Amendment: The Premise This Rested On Does Not Hold / Why this is recorded rather than quietly rewritten · hash: sha256:bd292367c381ead015304cf4a9694b507c33de6e40d012662451a53de8e76034*
+
+The implementation is what produced the measurement; reading the code the record cited was
+not enough, because the contract said the opposite of what the code did. A record that was
+wrong for a reason worth knowing is more useful amended than replaced, and the next session
+to ask this question should find the measurement rather than repeat the attempt.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#33
+
 *revision: authored · kind: heading · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#23
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#34
 
-*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Status · hash: sha256:58931eb1a157337e1ae06757410d307cf54e4c0c530292fe7333d54c5ed75908*
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Status · hash: sha256:a7dcccc6011a7aeeb3745c33b6152d5bfdcc7b716536c57d61aa61caca793b82*
 
-Accepted. A sub-item finding is nameable, by the `subject_name` the run already prints and
-the finding already carries. The blocker was never that findings lack a readable name — it
-was that a declared entry's path was re-derived into a digest under a normalization the
-finding never used, so an exactly-correct name still could not match. The comparison moves to
-the name; the path spelling survives for file-addressed entries; and an entry that matches
-nothing is reported rather than silently ignored, which holds regardless of the rest.
+Accepted at version 1, **substantially retracted at version 2**. A sub-item finding is not
+nameable by `subject_name` after all, because that field is not reliably the preimage of the
+subject beside it.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#35
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Status · hash: sha256:e6f9fea856da7a21a1265e2e1aebb8a19551600117e781a55d0fc47f4327af59*
+
+Version 1's measurement still stands as far as it went: a declared entry's path is re-derived
+into a digest under a normalization the finding never used, so an exactly-correct name cannot
+match a name-addressed finding. What version 1 got wrong was the remedy. Comparing against
+`subject_name` instead does not reach both rule families, because one of them writes a
+`subject_name` its own `subject` was not derived from — so that comparison would fix the
+naming family and break the formatting family, trading one silence for another.
+
+### docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#36
+
+*revision: authored · kind: prose · heading: A finding a rule addresses by sub-item cannot be named by a person in a declared policy / Status · hash: sha256:ed966d38d96e8742321ed0be856f486547b12753e834502c212ae0084f71eb41*
+
+What survives unqualified is the fourth decision: an entry that matches nothing is reported
+rather than silently ignored. It was written to hold regardless of how the addressing question
+was answered, and it does, including when the answer turns out to be "not yet".
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

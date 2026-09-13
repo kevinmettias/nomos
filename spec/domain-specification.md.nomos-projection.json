@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:15f926256ab212c45cce70f2d202494484217554cad88f9a3c5ec3d82534b73e",
-  "inputs_digest": "sha256:a9965ab69f7d5512d55eca83816beb5ecedb4a95f0b7fb7810ce76b611ae4cde",
+  "content_digest": "sha256:5a4e26f7d395b533bde5a0f61c36e1a55578b2577c46a77d0e9e08d612f3418e",
+  "inputs_digest": "sha256:8f80129af3917706a2473626bc0fd489976b51c6526bacb2e1b9151dc32ee77c",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1815
+      1818
     ],
     [
       "Source blocks",
-      6273
+      6286
     ]
   ],
   "inputs": [
@@ -488,7 +488,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md@authored",
-      "hash": "sha256:51ccba08aacf5cd5d6f1909e3ba5475b2104050325a3511938da75711674bfde"
+      "hash": "sha256:976dbc3e7de91a5dcca2d62ad0b6ab43726a8e065cbcd1aa5516963cc03ebd93"
     },
     {
       "content": "documents",
@@ -4788,7 +4788,22 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#22",
-      "hash": "sha256:81368eb77833839c5bb3c2b597c103c42d9c12d6319e842791a10da5d41f2210"
+      "hash": "sha256:dc16b50634116efaf1d4a6793e0dd1fd28223646477437eec2c4a4ef3266c2f5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#27",
+      "hash": "sha256:aec8f5f3b130e30feec9d94d8ff98382fa37fe5be71a5ab18d1f4cf00b02dae5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#31",
+      "hash": "sha256:a39b30a10d06adeae3205ee13902329a5e6f7ecafed16d5acbc5a336ba1c00cb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#33",
+      "hash": "sha256:f45a99c8d38c65b15434c0e561bb5099c8dc693b25797d228df5b41515b1e68a"
     },
     {
       "content": "headings",
@@ -22633,12 +22648,77 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#22",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:20c7d78183494ad7bba41c72babed6a8508458df0450abd03d8ed1fc8259e1d8"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#23",
-      "hash": "sha256:58931eb1a157337e1ae06757410d307cf54e4c0c530292fe7333d54c5ed75908"
+      "hash": "sha256:3f297d558a2a9f497c01a4041ab7f88478389e8ab7765ced88d180b478508f76"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#24",
+      "hash": "sha256:160c3079cfe041b63a98ed8f24ba92c8147a4fbe5968cb1ae444b5df60ed615c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#25",
+      "hash": "sha256:4ad6e5b4f150576620d8fde1adb66e3f6770dab77041805742e1be90de47c0b9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#26",
+      "hash": "sha256:d3c6e620e682e681e9028b4fe0f910f40cd14c481e615744b3c1a6b41d73c5c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#27",
+      "hash": "sha256:d72a0176563eaa09138880f4c53401afcf0a66081cf8f3371c2ecfb8cf17561e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#28",
+      "hash": "sha256:07cbde841bd3505ee0ae3a2c5db0b2160af67c6d0dae547716ffc5a8316e854f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#29",
+      "hash": "sha256:986802df111c396bce4be7b2038922baec0642f355d4ae782ae00bf6e66f3f0a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#30",
+      "hash": "sha256:cb6aa3125f4fa459aa72e0a1eb953498550026f4412ff54fd99152d9896543db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#31",
+      "hash": "sha256:6f47014b17209610b371d106710ef90ea87502bddac263d0353d20b162f3ae7b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#32",
+      "hash": "sha256:bd292367c381ead015304cf4a9694b507c33de6e40d012662451a53de8e76034"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#33",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#34",
+      "hash": "sha256:a7dcccc6011a7aeeb3745c33b6152d5bfdcc7b716536c57d61aa61caca793b82"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#35",
+      "hash": "sha256:e6f9fea856da7a21a1265e2e1aebb8a19551600117e781a55d0fc47f4327af59"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md#36",
+      "hash": "sha256:ed966d38d96e8742321ed0be856f486547b12753e834502c212ae0084f71eb41"
     },
     {
       "content": "blocks",

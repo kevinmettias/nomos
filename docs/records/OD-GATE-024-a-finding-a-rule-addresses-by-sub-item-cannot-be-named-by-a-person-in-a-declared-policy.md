@@ -3,7 +3,7 @@ id: OD-GATE-024
 type: decision
 title: A finding a rule addresses by sub-item cannot be named by a person in a declared policy
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - gate
@@ -111,11 +111,69 @@ It does not exhaustively enumerate every rule's `subject_name` shape. Three were
 found to differ; the decision does not depend on the census being complete, because comparing
 to whatever preimage the rule used is what makes the shape not matter.
 
+## Amendment: The Premise This Rested On Does Not Hold
+
+Added at version 2, by the item filed to implement this one. The implementation was written,
+run against the real suite, and reverted, and what it measured retracts the decision above.
+
+**`Finding::subject_name` is not universally the preimage of `Finding::subject`.** This
+record leaned on that field's own documented contract — `subject` is "Derived from
+[`Finding::subject_name`], never from a path", and `subject_name` is "the preimage of
+`subject`, so the two cannot disagree without the digest being computed from something else."
+One rule family computes it from something else. `crates/rules/nomos-rules/src/checks/
+formatting.rs` builds every finding with `subject: source.subject` — the file's own
+path-derived digest — and `subject_name: format!("{}:{line_number}", source.path)`. The two
+disagree by construction, for the whole family, which includes
+`no-single-line-function-bodies` and `todo-format-is-todo-name-description-ticket`.
+
+**So moving the comparison onto the name breaks the case it was meant to preserve.** Under a
+name comparison, the existing end-to-end test
+`Test_A_Declared_Policy_File_Should_Tolerate_Findings_A_Command_Never_Mentioned` stops
+matching: it declares `"path": "b.rs"` and `"path": "c.rs"`, and those findings are named
+`b.rs:1` and `c.rs:1`. The path spelling this record promised would keep working does not.
+
+**There is no single field that addresses both families today.** The naming family holds the
+invariant properly — `subject` is the digest of the qualified name `subject_name` carries —
+so matching by name reaches it and matching by path cannot. The formatting family is the
+reverse. One contract is being read two ways, and a policy key chosen above that layer
+inherits the contradiction whichever field it picks.
+
+### What is retracted, and what still stands
+
+Decisions 1, 2 and 3 above are **retracted**. Naming a subject in a declared entry, comparing
+against `subject_name`, and the case-sensitivity trade that followed from it all rest on the
+premise this amendment falsifies.
+
+Decision 4 **stands**, unchanged and independent, exactly as it was written to be: an entry
+that matches nothing is reported rather than silently ignored, whichever way the addressing
+question is answered. It is filed separately and does not wait on any of this.
+
+The question this record was filed for is not answered, and is not answerable at this layer.
+What has to be settled first is the invariant itself —
+`P76-A-FINDINGS-SUBJECT-NAME-IS-NOT-ALWAYS-ITS-SUBJECTS-PREIMAGE` holds it. Until then, a
+person still cannot name a sub-item finding, and the reason is one layer further down than
+this record looked.
+
+### Why this is recorded rather than quietly rewritten
+
+The implementation is what produced the measurement; reading the code the record cited was
+not enough, because the contract said the opposite of what the code did. A record that was
+wrong for a reason worth knowing is more useful amended than replaced, and the next session
+to ask this question should find the measurement rather than repeat the attempt.
+
 ## Status
 
-Accepted. A sub-item finding is nameable, by the `subject_name` the run already prints and
-the finding already carries. The blocker was never that findings lack a readable name — it
-was that a declared entry's path was re-derived into a digest under a normalization the
-finding never used, so an exactly-correct name still could not match. The comparison moves to
-the name; the path spelling survives for file-addressed entries; and an entry that matches
-nothing is reported rather than silently ignored, which holds regardless of the rest.
+Accepted at version 1, **substantially retracted at version 2**. A sub-item finding is not
+nameable by `subject_name` after all, because that field is not reliably the preimage of the
+subject beside it.
+
+Version 1's measurement still stands as far as it went: a declared entry's path is re-derived
+into a digest under a normalization the finding never used, so an exactly-correct name cannot
+match a name-addressed finding. What version 1 got wrong was the remedy. Comparing against
+`subject_name` instead does not reach both rule families, because one of them writes a
+`subject_name` its own `subject` was not derived from — so that comparison would fix the
+naming family and break the formatting family, trading one silence for another.
+
+What survives unqualified is the fourth decision: an entry that matches nothing is reported
+rather than silently ignored. It was written to hold regardless of how the addressing question
+was answered, and it does, including when the answer turns out to be "not yet".
