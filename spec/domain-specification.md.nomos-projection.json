@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5bf555a1460c0afb5123af2904e962530e8b7bc2b7b4aea636d21dcbacc30fe1",
-  "inputs_digest": "sha256:ec3bc33cc94012955364b5ba46013c7c4ceaceeff2bfc30679e09f9a84987cb8",
+  "content_digest": "sha256:907075129f95850e7f3e9df0febf08822234d4e375ebce36498f0c649bbc873e",
+  "inputs_digest": "sha256:cd7dde021c1fef1c00c2d435c8112c4ba19e5b33b270a4ace3c58ba622d6d6a7",
   "sections": [
     [
       "Documents",
-      227
+      228
     ],
     [
       "Sections",
-      1845
+      1855
     ],
     [
       "Source blocks",
-      6388
+      6424
     ]
   ],
   "inputs": [
@@ -1084,6 +1084,11 @@
       "content": "documents",
       "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md@authored",
       "hash": "sha256:227009cdd4296112242bd4f960cab6549a198a1359f288aca43bbec584cc5247"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md@authored",
+      "hash": "sha256:0a6d2a8d267b11294fae15ddfc5418b3015cf7f3996d29b1f1f013026f6ca5cc"
     },
     {
       "content": "documents",
@@ -9779,6 +9784,56 @@
       "content": "headings",
       "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#13",
       "hash": "sha256:dfea26804ed4b8a63e6bd971a9bdb218ac1fc2635bbdfe5ad8935e554a657f01"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#1",
+      "hash": "sha256:4ce2e95632ad01bc79cd1711fb3607aef887843fdb5be10e08addaeb24a89932"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#2",
+      "hash": "sha256:be1a87cd3825e37700002ff6f57f29cba1a8592c05c3536db93d304cdf4fb7ce"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#6",
+      "hash": "sha256:d7b7d7a09b8b972075713b5649c5e7ba4484295aec1af08764e0692285f6ba5e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#15",
+      "hash": "sha256:9819c95e708dd89090c0fbedf40ea2af1a01153d04014d2bdb54c26c27783d95"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#17",
+      "hash": "sha256:72516eba531736359883b79693c1f6bedc912815ef6aae3bec39d930d6dc19b0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#20",
+      "hash": "sha256:e3f86d60eefe88c1395693d3136b31eff1a54603428c9a6b9ef6b5ea670bb9f3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#24",
+      "hash": "sha256:431cd685cda9594a5d1f340f1ccd0da20840294e3f59c5f3dc26f49835d87ca3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#28",
+      "hash": "sha256:10f726cb960957115245e934d946bf6b70460b09373effad0ca27130357a7bae"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#31",
+      "hash": "sha256:57a1e81002b8d03f4a70685fb56e6131b9ffffae89432bfb24fa251dfb4083c9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#35",
+      "hash": "sha256:e04b5b60e9f2bc73ddc6b6637fb29ecfca75e459a7312d5ce07cddad869fed89"
     },
     {
       "content": "headings",
@@ -40514,6 +40569,186 @@
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#14",
       "hash": "sha256:c17636245cf090184f38cd5f2d563abdd48ac59c5f0a9976bbe7e4a94fb7e411"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#1",
+      "hash": "sha256:778187bcd588131984540b19a396c89580e4e4c62d932bcd0c76e4963404e529"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#3",
+      "hash": "sha256:4959932579f517c99b681cd4281b397f8fc280882c3236b9970556ab1d476b88"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#4",
+      "hash": "sha256:a16df833e98dee1b70164ee187b90bd7a5912dac07e50b91331a128e5a3922c9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#5",
+      "hash": "sha256:e6ed826d78699144522268470516988d89b4fcb53e75453b4e33264e878e92c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#7",
+      "hash": "sha256:0b9d7a27c2fd95ab6510d7d78fb13047df2d5be8a5880c0b7ef25988b791edf0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#8",
+      "hash": "sha256:5b92a6feeb5b779cfa6d0c1e58573d1f3730c4742917abe79b2dbb095c936d84"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#9",
+      "hash": "sha256:32ab83e2e3628a2c5f26f725ede6765915fd3305356067cc604d512148cf54e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#10",
+      "hash": "sha256:de5f936aa00cd4b16b71b2a5814ece3f2886c5c80d02cd76aa010779d54e1069"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#11",
+      "hash": "sha256:3f1c8ce38dd0b50375b9f9ffc16075c823a23019d0773d02ad26c4c5fe12f6a3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#12",
+      "hash": "sha256:9442037d9fc85a760546716535ff1fa6174fdaaa3b66cb4ebcf8b389e4bf6a0e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#13",
+      "hash": "sha256:6b4dca70cf799925708c8d3605f1312cd2cf7dcc89650e921c9df5c76d5c2a7c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#14",
+      "hash": "sha256:287c288563c0b250c4c538a7dfb2038c15fd310685e50dc33209e7437408e9e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#15",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#16",
+      "hash": "sha256:3217ef9999c0016356b5672b2ec96a43aa9ef8b450c79273baf77e35763368bd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#17",
+      "hash": "sha256:e6e746734c77034254029b82e59abd08a84d8283c5e9c4a56bc567509f5f01b6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#18",
+      "hash": "sha256:aad503a54389cd7dcfa47dad1d10d12401b9247e6e5e82d48a832f4024c35e78"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#19",
+      "hash": "sha256:e71c57bd0b0702518cf4780b7b78a3b542733fc148284c81d61f32dc8cd02ad1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#20",
+      "hash": "sha256:47a9a05a1cef819c47c024c1fe1aa78c51d03083a65b638763d9162f0fcd39f2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#21",
+      "hash": "sha256:89d0ed6e9209083fd531ed07b8eb75022fdef46e562fe80b379cce4c2120ffff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#22",
+      "hash": "sha256:4fdad0067693b1371b57cc987327034d0c01a82b4d88daa1807962a3b5828539"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#23",
+      "hash": "sha256:16a03e8b9f433fd730378be62cf21e73fdf47429973db8db23129d3546737722"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#24",
+      "hash": "sha256:8c3f139d47e2c1279d6c74477f449134ffbfc642a90d99a7cc9a20ed4df62038"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#25",
+      "hash": "sha256:0940b32cac171b58a6cc5ba50f5b5541fc83515d7028eccbfcb6d36f8fa608ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#26",
+      "hash": "sha256:bf7fad937f45a981a74af3c232fe067e8895c75871d282c95036fee31320e5c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#27",
+      "hash": "sha256:f086ceb027e8eea09e750fb9276763c4aabe28de2bc5c3c3cb061bdab9d90582"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#28",
+      "hash": "sha256:4e1199139cde855053249c027ca9832c48ad9c9c499c236801a6d1235e5da066"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#29",
+      "hash": "sha256:7f02db5b3a9cea65ea45ab40ea9f2d523e0c1d49fc1d6fca52845c8695a6d127"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#30",
+      "hash": "sha256:d6b67fc9520796b22e84215ab0632918c2f023c17a357caaebac01f9c699d5fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#31",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#32",
+      "hash": "sha256:65bc79855ee70e943cdafe64c12f1e9de659841d70feda4a497ded2aafe38fc9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#33",
+      "hash": "sha256:e812031f5ebee0ff5d94c9b6dc9a6d33dfbbe771bb9401cb4c029c7af5b2b587"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#34",
+      "hash": "sha256:564c828ec7559d21f6993d27f587c5ae8fba3004f3f00af526c16ec59148a8a8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#35",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#36",
+      "hash": "sha256:56bf0e03e8b3c8381f2a1ff4f05cb9d2de2179e766fd15739e55bc2581374996"
     },
     {
       "content": "blocks",

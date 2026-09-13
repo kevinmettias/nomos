@@ -62926,7 +62926,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Its done_when requires a governing record and its territory reserves no record identifier -- only crates/spec/nomos-spec-store/src/store/specification_store.rs. A record is not governing until a file exists under docs/records/ and a registration exists under crates/spec/nomos-spec-store/records/, and neither is reservable after the fact, so this item cannot be finished honestly as written. Re-authored as -2 reserving OD-SPEC-015 in both places, with the measurement and the question unchanged."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -62942,7 +62946,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-dev-session",
+        "declined_at": 1789283137
+      }
     },
     {
       "id": "P87-RUST-PROVIDERS-READ-THE-ENVIRONMENT-PAST-THE-INJECTED-LAUNCHER",
@@ -66110,6 +66117,60 @@
         "timeout_seconds": 2700
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P87-THE-SPECIFICATION-STORE-HANDS-OUT-ITS-CONNECTION-2",
+      "title": "Whether the specification store seals its rusqlite connection, given that 107 production call sites hold it",
+      "why": "SpecificationStore::Connection(&self) -> &Connection is public, and measured 2026-09-12 there are 107 production calls to it outside the owning crate: nomos-spec-bundle 52, nomos-spec-ingest 34, nomos-spec-project 18, nomos-spec-validate 3 (137 including tests). Those four crates write SQL against SQLite's own handle and each names rusqlite in its manifest. OD-SPEC-001 says the test that keeps the store trait honest is store-backend equivalence, and that test is unreachable while callers hold the connection, because a query written against a rusqlite handle cannot be satisfied by any other backend. The record already declines to build Postgres and that is not in question; what is in question is whether the seam it names can exist at all in the current shape. Note the escape is a method on the store, not a mention of the library, so a grep for rusqlite double-colon undercounts it badly: that grep finds 65 sites where the real figure is 107. Re-authored from P87-THE-SPECIFICATION-STORE-HANDS-OUT-ITS-CONNECTION, which demanded a record and reserved no record identifier; OD-SPEC-015 was taken by an open peer item, so this reserves OD-SPEC-016.",
+      "done_when": "A governing record, registered, stating whether the connection stays public, is sealed behind named operations, or is replaced by a narrower query seam -- and if it is to be sealed, what the first increment is and why 107 call sites is or is not worth paying. The measurement above is the input; the decision is which of those three the workspace takes, with the cost of each measured rather than implied. Sealing is not assumed to be the answer: a store that grows one method per query is a different problem, and the record says so if that is the conclusion.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md",
+          "crates/spec/nomos-spec-store/records/OD-SPEC-016.record",
+          "crates/spec/nomos-spec-store/src/store/specification_store.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": ". 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 15 tests\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.64s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789283551,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "654b9824ad5234b5e4e96371930e92a603ddd267"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

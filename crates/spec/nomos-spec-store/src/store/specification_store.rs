@@ -453,6 +453,33 @@ impl SpecificationStore
             .query_row(table.Tally_Sql(), [], |row| row.get(1))?);
     }
 
+    /// This store's own SQLite handle, for a caller that writes its own SQL.
+    ///
+    /// This is the widest escape in the workspace and it is deliberate, not an oversight.
+    /// `OD-SPEC-016` measured it: 107 production calls outside this crate, writing 159
+    /// distinct statements over 22 tables, from `nomos-spec-bundle`, `nomos-spec-ingest`,
+    /// `nomos-spec-project` and `nomos-spec-validate`.
+    ///
+    /// # Why it is not sealed behind named operations
+    ///
+    /// Because that is 159 methods against a public surface that is 266 lines today, and
+    /// more than half of them would be `nomos-spec-bundle`'s schema traversal re-typed as an
+    /// API. That crate's contract is "every column of the store reaches the bundle"; an API
+    /// restating it would be a second authority over the schema, not a seam over it.
+    ///
+    /// # What this actually costs, which is not what the call count suggests
+    ///
+    /// All 107 sites reach this handle for five operations and no others -- `prepare`,
+    /// `execute`, `query_row`, `execute_batch`, `last_insert_rowid` -- so the number of
+    /// callers is not what stands between here and the store-backend equivalence test
+    /// `OD-SPEC-001` names. 151 of the 159 statements are portable SQL that any backend
+    /// carrying this schema would run unchanged. What is not portable is that these five
+    /// operations are spelled on a concrete type: 84 `rusqlite::` mentions across those four
+    /// crates, plus 8 statements in SQLite-only syntax.
+    ///
+    /// `OD-SPEC-016` records the three steps that would close it and the order they have to
+    /// be paid in. It waits on `OD-SPEC-001`'s second backend, because that backend is the
+    /// only thing the seam would be for.
     #[must_use]
     pub fn Connection(&self) -> &Connection
     {

@@ -223,6 +223,7 @@ profile: domain-specification
 | docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md@authored | docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md | authored | 36 | 14 | sha256:9a0f5a872ff7f769ee63d68312e1af6fdbfbf7c6e18e69652864c6f030e15ffa |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md@authored | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md | authored | 41 | 13 | sha256:8dcf5d25a7f6914387cc79e86eeb50d23edb944694fefdfdefc1d1cd468ae003 |
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md@authored | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md | authored | 14 | 5 | sha256:227009cdd4296112242bd4f960cab6549a198a1359f288aca43bbec584cc5247 |
+| docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md@authored | docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md | authored | 36 | 10 | sha256:0a6d2a8d267b11294fae15ddfc5418b3015cf7f3996d29b1f1f013026f6ca5cc |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md@authored | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md | authored | 28 | 8 | sha256:3e2b7309bfc8cd5f7083b3e96924cffe4cebfbd23f7d604f7c1b5fe8d4c339fa |
 | docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md@authored | docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md | authored | 29 | 9 | sha256:c6a7a7c0db9ecc42434859889d7851a22f1a4349bfc2b6b0855b281638738901 |
 | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md@authored | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md | authored | 29 | 8 | sha256:1c14ec80ab265a141f114e04b9391559cf6eda8cba021361e8dd4ee10aee41cf |
@@ -1967,6 +1968,16 @@ profile: domain-specification
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#6 | authored | 2 | Current Position |
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#9 | authored | 2 | What Would Decide It |
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#13 | authored | 2 | Status |
+| docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#1 | authored | 1 | Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it |
+| docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#2 | authored | 2 | Question |
+| docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#15 | authored | 2 | The Decision |
+| docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#17 | authored | 3 | Named operations is refused, and the number that refuses it is 159 |
+| docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#20 | authored | 3 | Why 107 was the wrong number |
+| docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#24 | authored | 3 | What it would cost, in the order it would have to be paid |
+| docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#28 | authored | 3 | Why it is not paid now |
+| docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#31 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#35 | authored | 2 | Status |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#1 | authored | 1 | A document kind is a behaviour, not a label — and one of them was misnamed |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#2 | authored | 2 | Question |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#5 | authored | 2 | The Criterion |
@@ -57837,6 +57848,280 @@ measured against this one rather than assumed from it.
 Open. Revisit when KWB's Rust rewrite reaches the point of needing its own graph-and-lineage
 storage, or at Phase 5 when `D-130`'s gate lifts — whichever comes first. Recorded here so the
 intent is legible rather than lost between sessions, not because either gate has moved.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#1
+
+*revision: authored · kind: heading · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it · hash: sha256:778187bcd588131984540b19a396c89580e4e4c62d932bcd0c76e4963404e529*
+
+# Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#2
+
+*revision: authored · kind: heading · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#3
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / Question · hash: sha256:4959932579f517c99b681cd4281b397f8fc280882c3236b9970556ab1d476b88*
+
+`SpecificationStore::Connection(&self) -> &Connection` is public, and four crates use it to
+write SQL against SQLite's own handle. `OD-SPEC-001` says the test that keeps a store trait
+honest is store-backend equivalence — in-memory, SQLite and Postgres yielding the same store
+hash over the same corpus — and that test cannot be written while callers hold a `rusqlite`
+handle, because a query written against one cannot be satisfied by any other backend.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#4
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / Question · hash: sha256:a16df833e98dee1b70164ee187b90bd7a5912dac07e50b91331a128e5a3922c9*
+
+Postgres itself is not in question; `OD-SPEC-001` declines it and that decline stands. What
+is in question is whether the seam that record names can exist at all in the current shape,
+and the answer was assumed to turn on a count of call sites.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#5
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / Question · hash: sha256:e6ed826d78699144522268470516988d89b4fcb53e75453b4e33264e878e92c2*
+
+It does not. The count is the wrong measurement, and this record is mostly about why.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#6
+
+*revision: authored · kind: heading · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#7
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / What Was Measured · hash: sha256:0b9d7a27c2fd95ab6510d7d78fb13047df2d5be8a5880c0b7ef25988b791edf0*
+
+Measured 2026-09-13, against the whole workspace.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#8
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / What Was Measured · hash: sha256:5b92a6feeb5b779cfa6d0c1e58573d1f3730c4742917abe79b2dbb095c936d84*
+
+**The escape, by caller.** 107 production calls to `Connection()` outside the owning crate,
+144 counting tests:
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#9
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / What Was Measured · hash: sha256:32ab83e2e3628a2c5f26f725ede6765915fd3305356067cc604d512148cf54e8*
+
+| crate | production | tests |
+|---|---|---|
+| `nomos-spec-bundle` | 52 | 7 |
+| `nomos-spec-ingest` | 34 | 21 |
+| `nomos-spec-project` | 18 | 5 |
+| `nomos-spec-validate` | 3 | 4 |
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#10
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / What Was Measured · hash: sha256:de5f936aa00cd4b16b71b2a5814ece3f2886c5c80d02cd76aa010779d54e1069*
+
+**The SQL, by statement.** 159 distinct statements over 22 tables — 118 `SELECT`, 46
+`INSERT INTO`, 9 `INSERT OR …`, 5 `CREATE TABLE`, 1 `PRAGMA`.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#11
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / What Was Measured · hash: sha256:3f1c8ce38dd0b50375b9f9ffc16075c823a23019d0773d02ad26c4c5fe12f6a3*
+
+**The handle, by operation.** Five. Every one of those 107 sites reaches the connection for
+`prepare` (13), `execute` (7), `query_row` (4), `execute_batch` (3) or `last_insert_rowid`
+(1), and for nothing else. There is no sixth.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#12
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / What Was Measured · hash: sha256:9442037d9fc85a760546716535ff1fa6174fdaaa3b66cb4ebcf8b389e4bf6a0e*
+
+**Dialect lock-in.** 151 of the 159 statements are plain portable SQL. Eight are not: six
+`INSERT OR IGNORE`, one `INSERT OR REPLACE`, one `PRAGMA`.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#13
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / What Was Measured · hash: sha256:6b4dca70cf799925708c8d3605f1312cd2cf7dcc89650e921c9df5c76d5c2a7c*
+
+**Type lock-in.** 84 direct `rusqlite::` mentions across the four crates — `params!` 34,
+`Result` 22, `Row` 6, `Error` 5, `Connection` 5, `Error::QueryReturnedNoRows` 4, `FromSql` 2,
+`Statement` 2, and one each of `params_from_iter`, `Transaction`, `ToSql`,
+`Connection::open_in_memory`.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#14
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / What Was Measured · hash: sha256:287c288563c0b250c4c538a7dfb2038c15fd310685e50dc33209e7437408e9e7*
+
+**Two populations, not one.** `nomos-spec-bundle` is half the escape and is not asking the
+store questions. Its own module doc states its contract: "every column of the store reaches
+the bundle." It is a schema traversal — a backup format whose job is the database — and it is
+checked three ways precisely so no column escapes it. The other 55 sites, in `ingest`,
+`project` and `validate`, do ask questions.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#15
+
+*revision: authored · kind: heading · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#16
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision · hash: sha256:3217ef9999c0016356b5672b2ec96a43aa9ef8b450c79273baf77e35763368bd*
+
+**The connection stays public. Sealing it behind named operations is refused. The seam
+`OD-SPEC-001` needs is real and buildable, but it is narrow in the type dimension, not the
+operation dimension, and it is not paid for now.**
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#17
+
+*revision: authored · kind: heading · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / Named operations is refused, and the number that refuses it is 159 · hash: sha256:e6e746734c77034254029b82e59abd08a84d8283c5e9c4a56bc567509f5f01b6*
+
+### Named operations is refused, and the number that refuses it is 159
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#18
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / Named operations is refused, and the number that refuses it is 159 · hash: sha256:aad503a54389cd7dcfa47dad1d10d12401b9247e6e5e82d48a832f4024c35e78*
+
+One method per query is 159 methods against a public surface that is 266 lines today. The
+store would roughly triple, and more than half of the additions would be `nomos-spec-bundle`'s
+schema re-typed as an API: a method per table per direction, whose only caller is the one
+crate that already declares its coverage column by column and tests it three ways. That is
+not a seam, it is the schema with a second spelling, and a second spelling of the schema is a
+second authority over it.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#19
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / Named operations is refused, and the number that refuses it is 159 · hash: sha256:e71c57bd0b0702518cf4780b7b78a3b542733fc148284c81d61f32dc8cd02ad1*
+
+The item that raised this said a store growing one method per query is a different problem.
+It is, and 159 is the size of it.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#20
+
+*revision: authored · kind: heading · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / Why 107 was the wrong number · hash: sha256:47a9a05a1cef819c47c024c1fe1aa78c51d03083a65b638763d9162f0fcd39f2*
+
+### Why 107 was the wrong number
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#21
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / Why 107 was the wrong number · hash: sha256:89d0ed6e9209083fd531ed07b8eb75022fdef46e562fe80b379cce4c2120ffff*
+
+The call sites do not vary. **Five operations** serve all 107, and four of those five are
+`prepare`, `execute`, `query_row` and `execute_batch` — the same four any SQL library exposes
+under those or adjacent names. Nothing about the *count* of callers makes a second backend
+harder; a thousand `SELECT`s through one `prepare` cost exactly what one does.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#22
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / Why 107 was the wrong number · hash: sha256:4fdad0067693b1371b57cc987327034d0c01a82b4d88daa1807962a3b5828539*
+
+What makes a second backend impossible is that those five operations are spelled on a
+concrete type. 151 of 159 statements would run unchanged against any SQL backend carrying
+this schema. What would not compile is `rusqlite::params!`, `rusqlite::Row` and
+`rusqlite::Statement`, at 84 sites.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#23
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / Why 107 was the wrong number · hash: sha256:16a03e8b9f433fd730378be62cf21e73fdf47429973db8db23129d3546737722*
+
+So the obstacle is 84 type mentions and 8 statements, not 107 call sites — and it is smaller
+than the framing suggested, in a different place than the framing pointed.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#24
+
+*revision: authored · kind: heading · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / What it would cost, in the order it would have to be paid · hash: sha256:8c3f139d47e2c1279d6c74477f449134ffbfc642a90d99a7cc9a20ed4df62038*
+
+### What it would cost, in the order it would have to be paid
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#25
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / What it would cost, in the order it would have to be paid · hash: sha256:0940b32cac171b58a6cc5ba50f5b5541fc83515d7028eccbfcb6d36f8fa608ce*
+
+Recorded so that whoever revives `OD-SPEC-001` does not re-derive it:
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#26
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / What it would cost, in the order it would have to be paid · hash: sha256:bf7fad937f45a981a74af3c232fe067e8895c75871d282c95036fee31320e5c6*
+
+1. **The 8 dialect-bound statements become portable.** `INSERT OR IGNORE` and
+   `INSERT OR REPLACE` have a portable spelling; the `PRAGMA` is configuration, not a query.
+   Smallest of the three, independently worth doing, and the only one that removes a lock-in
+   that is invisible today.
+2. **The five operations move behind a trait the store owns**, yielding store-owned row and
+   parameter types rather than `rusqlite`'s. This is the actual seam, and it is five methods
+   wide — not 159.
+3. **The 84 `rusqlite::` mentions follow mechanically from 2** and the four manifests drop
+   the dependency.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#27
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / What it would cost, in the order it would have to be paid · hash: sha256:f086ceb027e8eea09e750fb9276763c4aabe28de2bc5c3c3cb061bdab9d90582*
+
+Step 2 is the one with judgment in it. Steps 1 and 3 are mechanical once it is decided.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#28
+
+*revision: authored · kind: heading · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / Why it is not paid now · hash: sha256:4e1199139cde855053249c027ca9832c48ad9c9c499c236801a6d1235e5da066*
+
+### Why it is not paid now
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#29
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / Why it is not paid now · hash: sha256:7f02db5b3a9cea65ea45ab40ea9f2d523e0c1d49fc1d6fca52845c8695a6d127*
+
+`OD-SPEC-001` declines the second backend, and a second backend is the only consumer of this
+seam. Building the seam first would be building an abstraction over one implementation and
+calling the absence of the second a design — which is the shape this workspace refuses by
+default and has refused for this exact record before.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#30
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / The Decision / Why it is not paid now · hash: sha256:d6b67fc9520796b22e84215ab0632918c2f023c17a357caaebac01f9c699d5fc*
+
+The equivalence test stays unwritten, and this record is what makes that a stated cost rather
+than an unnoticed one.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#31
+
+*revision: authored · kind: heading · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#32
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / What This Record Does Not Do · hash: sha256:65bc79855ee70e943cdafe64c12f1e9de659841d70feda4a497ded2aafe38fc9*
+
+It does not reopen `OD-SPEC-001` or decide anything about Postgres. Its trigger is unchanged:
+concurrent authoring across machines.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#33
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / What This Record Does Not Do · hash: sha256:e812031f5ebee0ff5d94c9b6dc9a6d33dfbbe771bb9401cb4c029c7af5b2b587*
+
+It does not touch `nomos-spec-bundle`'s design. That crate holding the schema is correct for
+what it is, and no seam should try to take it away.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#34
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / What This Record Does Not Do · hash: sha256:564c828ec7559d21f6993d27f587c5ae8fba3004f3f00af526c16ec59148a8a8*
+
+It does not build any of the three steps. What it changes is one thing:
+`SpecificationStore::Connection` carried no documentation at all — the widest escape in this
+workspace, public, `#[must_use]`, and silent about why it exists. It now says what it is, what
+it costs and which record decided that, so the next reader inherits this measurement instead
+of taking it again.
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#35
+
+*revision: authored · kind: heading · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-SPEC-016-whether-the-specification-store-seals-its-rusqlite-connection-given-that-a-hundred-and-seven-production-call-sites-hold-it.md#36
+
+*revision: authored · kind: prose · heading: Whether the specification store seals its rusqlite connection, given that a hundred and seven production call sites hold it / Status · hash: sha256:56bf0e03e8b3c8381f2a1ff4f05cb9d2de2179e766fd15739e55bc2581374996*
+
+Accepted. The connection stays public; named operations are refused at 159 statements; the
+seam `OD-SPEC-001` would need is five operations wide and blocked by 84 type mentions and 8
+statements, not by 107 call sites; and it waits on the backend that would consume it.
 
 ### docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#1
 
