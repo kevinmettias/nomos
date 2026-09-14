@@ -71607,14 +71607,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Territory measured one indirection short. -4's set was built by grepping every reader of the symbols being removed, which found admissibility.rs and walk_outward/architectural_component.rs. A signature change does not stop at the symbol: ArchitecturalComponent::Of gains the declaration, so WalkOutward::Of does, so file_diagnostic.rs's Diagnostics_For does, so nomos_diagnostic_provider.rs and nomos-lsp's own tests/fixture_tree.rs do. None of those three names a zone symbol anywhere, which is why the symbol grep could not see them. Re-authored as -5 with those three added and with the LSP threading stated as a signature change and nothing more, before any claim rather than widened mid-claim."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p100",
-        "acquired_at": 1789417122,
-        "lease_expires_at": 1789431522
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -71638,9 +71638,18 @@
         "timeout_seconds": 3600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-p100",
+          "reason": "Claimed to implement, traced the caller chain of the signature change before editing anything, and three nomos-lsp files it reaches are outside the reserved set. Abandoning so it can be declined and re-authored rather than widened mid-claim.",
+          "abandoned_at": 1789417296
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p100",
+        "declined_at": 1789417296
+      }
     },
     {
       "id": "P103-A-TEMPORARY-WAIVER-CLAIMS-A-BOUNDED-PERIOD-AND-NEVER-ENDS-2",
@@ -71721,7 +71730,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Stranded by a stale edge, not by the work ceasing to be work: it depended on P100-...-4, which was declined and re-authored as -5 after its caller chain was traced. Re-added as -4 of its own name pointing at -5. The finding it records is unchanged."
+        }
+      },
       "depends_on": [
         "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-4"
       ],
@@ -71740,7 +71753,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p100",
+        "declined_at": 1789417318
+      }
     },
     {
       "id": "P103-A-TEMPORARY-WAIVER-CLAIMS-A-BOUNDED-PERIOD-AND-NEVER-ENDS-3",
@@ -72543,7 +72559,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -72559,7 +72575,30 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "family_counts"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 6 tests\ntest structure::Test_Every_Entry_Should_Say_What_It_Counted_And_Over_What ... ok\ntest structure::Test_A_Plan_Figure_Should_Be_Superseded_Exactly_When_It_Differs ... ok\ntest structure::Test_The_Registered_Families_Should_Be_Exactly_The_Required_Ones ... ok\ntest structure::Test_Entry_Identifiers_Should_Be_Unique ... ok\ntest measurement::Test_The_Register_Should_Agree_With_The_Store_Census ... ok\ntest measurement::Test_Every_Registered_Count_Should_Reproduce_From_The_Corpus ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.42s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.59s\n     Running tests\\family_counts\\main.rs (target\\debug\\deps\\family_counts-0d6551e8953f8961.exe)\n",
+        "verified_at": 1789417477,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "627ad8a322f3e19e2865a108dafaad6c56b7737d"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -72663,6 +72702,136 @@
           "nomos-gate-orchestration"
         ],
         "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-5",
+      "title": "The architecture the dependency rules judge is 66 compiled-in nomos crate names, so the family cannot judge any other repository",
+      "why": "Five policy families already take their criterion from a declared fact under OD-RULES-011, and tests/integration/fixtures/third-party/hex-0.4.3/standards.json already declares its own naming policy for the same rules to judge. The architecture family is the exception. Check_Dependency_Direction, Check_Every_Member_Declares_A_Band and Check_Write_Authority resolve every package through Zone_Of, and ZONES is a literal of 66 entries every one of which is a nomos crate name. The dependency edges are provider-derived and generalize; the architecture they are judged against is source code in nomos-rules. In any other repository Zone_Of returns None and the family reports NotApplicable, which is honest and is also the whole family declining for every repository that is not this one. OD-RULES-024 named this as a fact this workspace does not yet produce; the missing fact is a declared architecture, not an inference engine.\n\nOD-RULES-029 already settled two things this item must not re-decide. The declaration is read from the repository under check, per OD-RULES-003. And it is not an OD-RULES-011 sixth family, because what travels is a triple -- a finite set of named components, an order over them, and named exceptions the order alone cannot express -- so a membership map shipped without its lattice and its vocabulary externalizes nothing. That record also settled where it is not authored: the tiers array in standards.json is another tool's declared input, which this repository holds and does not own.\n\nVersion -3 of this item was declined after its territory was measured rather than estimated. The readers of the surface being removed are fourteen files beyond what -3 reserved, and two of them are why this item cannot be scoped to the check run: admissibility.rs in nomos-gate-orchestration and walk_outward/architectural_component.rs in nomos-lsp both call Zone_Of and Permits with no FactReader anywhere between them. OD-GATE-026 anticipated exactly that, saying the question admissibility asks is the same either way and that what this migration changes is where those two functions get their answer -- which makes it a thing this item has to decide, not a consequence it can leave to fall out.\n\nVersion -4 was declined for the same class of mistake one indirection out. Its territory was measured by grepping every reader of the symbols being removed -- Zone, ZONES, ZONE_LIST, SAME_ZONE_EDGES, WRITE_DOORS, Zone_Of and Permits -- which found admissibility.rs and walk_outward/architectural_component.rs and stopped there. A signature change does not stop at the symbol: ArchitecturalComponent::Of gains the declaration, so WalkOutward::Of does, so file_diagnostic.rs's Diagnostics_For does, so nomos_diagnostic_provider.rs and nomos-lsp's own tests/fixture_tree.rs do. None of those three names a zone symbol anywhere, which is exactly why the first grep could not see them. Territory for a signature change follows the caller chain, not the symbol. Measured 2026-09-14: three files, and the chain ends there -- NomosDiagnosticProvider::New takes no arguments and the declaration is read inside the method that already holds root and a FileSystem, so the provider's own tests are untouched.",
+      "done_when": "The acceptance test is the direction of dependency between rule mechanism and project description, not the representation chosen. Concretely: if the repository-specific description changes completely while the governing rule concept stays the same, the rules crate is unchanged. A relocated table whose schema and interpretation the rules crate still owns does not satisfy this even though it looks data-driven, and neither does moving the membership map while the category vocabulary stays a closed enum in nomos-rules: a repository dividing its architecture into Domain, Infrastructure and Api must not have to edit nomos-rules to say so. Which mechanism carries the description is the implementer's to determine from what already exists -- a capability payload, a repository manifest, or another existing contract -- and a new mechanism is not required; what it carries is the whole triple OD-RULES-029 names, not one third of it.\n\nThen: no nomos crate name and no nomos-specific architectural category remains compiled into nomos-rules, and deleting every such name does not reduce this workspace's ability to enforce its own architecture, because this workspace now declares what the ZONES table, the Zone enum, SAME_ZONE_EDGES, Permits and WRITE_DOORS between them encoded. A name that is in today's ZONES table, with its declaration removed, resolves to unresolved rather than to its legacy zone: that is the query where a correct implementation and a surviving compiled-in fallback must disagree, and confirming the cases that already pass is not evidence about it.\n\nThe same three rule implementations, unchanged in what they judge, enforce a foreign declaration with a different package vocabulary and different category names, proved against the hex-0.4.3 third-party fixture. The two consumers outside the check run each reach the declaration through the same seam the rules do rather than through a second copy: nomos gate admits answers from the declared architecture, and the LSP architectural component resolves from it, with no path anywhere still short-circuiting to a hardcoded classification. Threading it to the LSP is a signature change and nothing more -- no renderer decides differently, no diagnostic gains or loses a field, and the declaration is read where a root and a FileSystem are already held rather than from ambient state, which OD-HOST-001 reserves to a composition root.\n\nA repository declaring no architecture still reports NotApplicable rather than passing clean, and an incomplete or unparseable declaration reports a refusal or an applicability state rather than silently dropping the checks. OD-RULES-024 is amended to say the fact now exists and what it is, and both projections are re-rendered from a tree publishing exactly that record.\n\nThis item does not design an ownership, required-mechanism or general engineering-model schema, and does not decide what a declared component with no observed implementation means.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-architecture",
+          "crates/repository/nomos-repo-policy",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/checks/dependency.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/reading.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/completeness.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/violations.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/write_authority.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/tests/incremental_equivalence.rs",
+          "crates/orchestration/nomos-gate-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/admissibility.rs",
+          "crates/host/nomos-lsp/Cargo.toml",
+          "crates/host/nomos-lsp/src/lib.rs",
+          "crates/host/nomos-lsp/src/walk_outward.rs",
+          "crates/host/nomos-lsp/src/walk_outward/architectural_component.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/tests/boundaries/graph.rs",
+          "tests/contract/tests/boundaries/readme.rs",
+          "tests/contract/tests/boundaries/manifest_bands.rs",
+          "tests/contract/tests/completeness_universes/table.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-cap-architecture.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-lsp.txt",
+          "tests/contract/surface/nomos-repo-policy.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "crates/host/nomos-lsp/src/file_diagnostic.rs",
+          "crates/host/nomos-lsp/src/nomos_diagnostic_provider.rs",
+          "crates/host/nomos-lsp/tests/fixture_tree.rs",
+          "tests/integration/tests/calibration.rs",
+          "tests/integration/fixtures/third-party/hex-0.4.3/standards.json",
+          "standards.json",
+          "README.md",
+          "Cargo.toml",
+          "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p100",
+        "acquired_at": 1789417303,
+        "lease_expires_at": 1789431703
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-architecture",
+          "-p",
+          "nomos-repo-policy",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-4",
+      "title": "The security rules decide what is test material from an eight-clause hardcoded path convention, so a repository that files fixtures elsewhere gets false credential findings",
+      "why": "Auditing all 42 SourceText rules for repository-specific criteria found exactly one family. Is_Test_Or_Fixture_Source in security_text.rs matches tests/, /tests/, /test/, /testdata/, /fixtures/, /examples/, _test.rs, _tests.rs and _test.go, and the three security rules all exempt a source on that basis; rust_text.rs carries the same notion independently in its unwrap-outside-tests-and-examples wording. Some clauses are toolchain-fixed and portable: Cargo owns tests/ and examples/, Go owns _test.go. testdata and fixtures are neither, they are a project convention. A repository filing its fixtures under resources or spec or samples is judged as if a fixture credential were a real one, and an exemption that is too narrow produces false positives rather than misses, which is the damaging direction for a security rule.",
+      "done_when": "What counts as test material reaches the security rules as a declared criterion rather than a path list compiled into security_text.rs, composed from the toolchain-fixed clauses plus whatever the repository declares, so that stable Cargo and Go semantics do not become configuration. It uses whichever declaration path P100-...-5 establishes rather than inventing a second one. A repository declaring nothing keeps today behaviour. A repository declaring its own fixture locations has them exempted, proved against a fixture whose test material sits under none of the nine current clauses. rust_text.rs stops carrying a second independent notion of the same thing.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/security_text.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-5"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 1200
       },
       "verified": null,
       "abandoned": [],

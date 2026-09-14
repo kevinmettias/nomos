@@ -47,18 +47,32 @@ fn Test_Every_Registered_Count_Should_Reproduce_From_The_Corpus()
         return;
     };
     let mut checked = 0_u32;
+    // Collected rather than asserted one at a time, deliberately. Asserting inside the loop
+    // stops at the first divergence, so a register that has fallen behind the corpus by five
+    // entries takes five runs to enumerate, and each run reports one number without saying
+    // whether it is the only one. `P103` needed the whole set before re-measuring anything,
+    // because which entries moved is a measurement rather than a prediction.
+    let mut diverged: Vec<String> = Vec::new();
     for entry in Register()
     {
         let measured = Measure(&entry.id, &corpus, &archives);
 
-        assert_eq!(
-            measured, entry.measured,
-            "{}: the register says {} {}(s) and the corpus says {measured}. \
-             Definition: {}",
-            entry.id, entry.measured, entry.unit, entry.definition
-        );
+        if measured != entry.measured
+        {
+            diverged.push(format!(
+                "{}: register says {} {}(s), corpus says {measured}, provenance {}",
+                entry.id, entry.measured, entry.unit, entry.corpus
+            ));
+        }
         checked = checked.saturating_add(1);
     }
+
+    assert!(
+        diverged.is_empty(),
+        "{} of {checked} register entries no longer reproduce from the corpus:\n  {}",
+        diverged.len(),
+        diverged.join("\n  ")
+    );
 
     assert_eq!(
         checked,

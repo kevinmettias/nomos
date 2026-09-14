@@ -2,10 +2,10 @@
   {
     "id": "table.pipe_lines",
     "family": "table_row",
-    "measured": 282,
+    "measured": 286,
     "unit": "pipe line",
     "definition": "Lines that, once trimmed, begin and end with a pipe, over every block the segmenter produces.",
-    "corpus": "v14.36 01_authoring/domain_volumes, all ten documents",
+    "corpus": "v14.36 plus cace351ac, re-measured 2026-09-14 at code-standards c7538d65, 01_authoring/domain_volumes, all ten documents",
     "plan": {
       "figure": 282,
       "named": "markdown table rows",
@@ -25,10 +25,10 @@
   {
     "id": "table.content_rows",
     "family": "table_row",
-    "measured": 234,
+    "measured": 238,
     "unit": "data row",
     "definition": "Pipe lines following their table's delimiter.",
-    "corpus": "v14.36 01_authoring/domain_volumes, all ten documents",
+    "corpus": "v14.36 plus cace351ac, re-measured 2026-09-14 at code-standards c7538d65, 01_authoring/domain_volumes, all ten documents",
     "plan": null
   },
   {
@@ -43,10 +43,10 @@
   {
     "id": "table.non_separator_rows",
     "family": "table_row",
-    "measured": 258,
+    "measured": 262,
     "unit": "authored row",
     "definition": "Pipe lines that are not delimiters: header and data together.",
-    "corpus": "v14.36 01_authoring/domain_volumes, all ten documents",
+    "corpus": "v14.36 plus cace351ac, re-measured 2026-09-14 at code-standards c7538d65, 01_authoring/domain_volumes, all ten documents",
     "plan": null
   },
   {
@@ -162,19 +162,19 @@
   {
     "id": "service.section_6_headings",
     "family": "service",
-    "measured": 56,
+    "measured": 57,
     "unit": "heading",
     "definition": "Every heading at any depth from '6. Systems and subsystem responsibilities' to the next heading of depth 2 or less, the section heading included.",
-    "corpus": "v14.36 02-core-architecture-identity-and-configuration.md",
+    "corpus": "v14.36 plus cace351ac, re-measured 2026-09-14 at code-standards c7538d65, 02-core-architecture-identity-and-configuration.md",
     "plan": null
   },
   {
     "id": "service.leaf_headings",
     "family": "service",
-    "measured": 51,
+    "measured": 52,
     "unit": "leaf heading",
     "definition": "Depth-4 headings within section 6.",
-    "corpus": "v14.36 02-core-architecture-identity-and-configuration.md",
+    "corpus": "v14.36 plus cace351ac, re-measured 2026-09-14 at code-standards c7538d65, 02-core-architecture-identity-and-configuration.md",
     "plan": null
   },
   {
@@ -194,10 +194,10 @@
   {
     "id": "service.subsystem_table_rows",
     "family": "service",
-    "measured": 29,
+    "measured": 31,
     "unit": "subsystem",
     "definition": "Data rows of the single table directly under '6. Systems and subsystem responsibilities'.",
-    "corpus": "v14.36 02-core-architecture-identity-and-configuration.md",
+    "corpus": "v14.36 plus cace351ac, re-measured 2026-09-14 at code-standards c7538d65, 02-core-architecture-identity-and-configuration.md",
     "plan": null
   },
   {
