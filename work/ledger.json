@@ -70809,7 +70809,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -70824,7 +70824,29 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api-transport",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t(s) in 1.95s\n     Running unittests src\\lib.rs (F:/repos/render-p101-target\\debug\\deps\\nomos_api_transport-1f07b362156739f0.exe)\n     Running unittests src\\lib.rs (F:/repos/render-p101-target\\debug\\deps\\nomos_contract_tests-016b9c52c615e3be.exe)\n     Running tests\\agent_harness.rs (F:/repos/render-p101-target\\debug\\deps\\agent_harness-b81a92c677776ac2.exe)\n     Running tests\\boundaries\\main.rs (F:/repos/render-p101-target\\debug\\deps\\boundaries-c21b7099914af97a.exe)\n     Running tests\\completeness_universes\\main.rs (F:/repos/render-p101-target\\debug\\deps\\completeness_universes-d13fca8cc24f6294.exe)\n     Running tests\\corpus_gates.rs (F:/repos/render-p101-target\\debug\\deps\\corpus_gates-1f3c254037cac286.exe)\n     Running tests\\crossing_cold.rs (F:/repos/render-p101-target\\debug\\deps\\crossing_cold-808f47ba3cc50d2a.exe)\n     Running tests\\determinism_declarations.rs (F:/repos/render-p101-target\\debug\\deps\\determinism_declarations-c8bda3c66ee34d68.exe)\n     Running tests\\determinism_vocabulary.rs (F:/repos/render-p101-target\\debug\\deps\\determinism_vocabulary-1f343b0d6ea667ce.exe)\n     Running tests\\public_surface\\main.rs (F:/repos/render-p101-target\\debug\\deps\\public_surface-b6a72872a0a0cd54.exe)\n     Running tests\\record_citation.rs (F:/repos/render-p101-target\\debug\\deps\\record_citation-e1a2430dc6b23454.exe)\n     Running tests\\requirement_trace\\main.rs (F:/repos/render-p101-target\\debug\\deps\\requirement_trace-ed5c218b805487d8.exe)\n     Running tests\\rule_composition.rs (F:/repos/render-p101-target\\debug\\deps\\rule_composition-239ab1b0332629d6.exe)\n     Running tests\\rule_contract_citation.rs (F:/repos/render-p101-target\\debug\\deps\\rule_contract_citation-903795045a822666.exe)\n     Running tests\\rule_descriptors.rs (F:/repos/render-p101-target\\debug\\deps\\rule_descriptors-3dd687c5483585b0.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/render-p101-target\\debug\\deps\\toolchain_floor-7910cbd5133dd8a9.exe)\n   Doc-tests nomos_api_transport\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789411479,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

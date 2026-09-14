@@ -50,9 +50,16 @@ fn Refusal_Code(outcome: &RemoteCallOutcome) -> i32
     return refusal.code;
 }
 
-/// The registry is the four verbs, and its length is part of the declaration.
+/// What is served is exactly what `ServedMethod::REGISTRY` admits -- every entry served, and
+/// no more than the entries -- whatever length that list happens to be.
+///
+/// The assertion is deliberately against the registry's own length rather than a literal, so
+/// adding a verb there is enough to extend what this test demands. Naming a number here would
+/// pin the one thing the code was written not to depend on, and would go stale silently while
+/// the assertion stayed correct: it already did once, when `P101` added a fifth verb for gate
+/// compare and only the label was wrong.
 #[test]
-fn Test_The_Served_Registry_Should_Be_The_Four_Admitted_Verbs()
+fn Test_The_Served_Methods_Should_Be_Exactly_The_Admitted_Registry()
 {
     let served = NomosApiService.Served_Methods();
 
