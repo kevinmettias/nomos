@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:46646be1b933187e79d4e4fcf1240ddabdd6bdf187059da0dfce5675c683b265",
-  "inputs_digest": "sha256:45dafaa5a7fb0b62e5aad935af76a87edbeb2e6825ee47d0a67b923207ac349e",
+  "content_digest": "sha256:971830ee647f5ad5e057f1ab9427580c5377fba848f7b1450e34b4de6b0a9fc9",
+  "inputs_digest": "sha256:4c134d8a4d24d5a7573387786976a213295a2f8c2762b2fc7fdc9c9503c0e168",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1983
+      1987
     ],
     [
       "Source blocks",
-      6896
+      6919
     ]
   ],
   "inputs": [
@@ -38,7 +38,7 @@
     {
       "content": "documents",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored",
-      "hash": "sha256:9c180099cbe0676f26fbb605bcf1696c99b2ff6fb542c0d367a429cfeb236d87"
+      "hash": "sha256:516e6bdb8000bb760e2fdfcfc587246e75d436f7bc10ac0d645921f0f3d2bae5"
     },
     {
       "content": "documents",
@@ -73,7 +73,7 @@
     {
       "content": "documents",
       "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md@authored",
-      "hash": "sha256:bdf0569224ca6b8b8524f1217f056e7fcbbe40ee65d530d3732c1f5a65ebd0d6"
+      "hash": "sha256:db6d93162a245fc419ded05527c39e0fb6784e8ad5c2ef0123987517bbbaf010"
     },
     {
       "content": "documents",
@@ -1427,6 +1427,11 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#74",
+      "hash": "sha256:263cfbd04d08cd788da91cc252747d18e39717d0c920ed28f451df2b78a7c97f"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#1",
       "hash": "sha256:967df54c439fd7efdb4472f859f6179789f45e05e9a4ca66a3310b054aa3b839"
     },
@@ -1699,6 +1704,21 @@
       "content": "headings",
       "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#16",
       "hash": "sha256:18e59a7c741b951eef8acfe970c61d2204778c21a4d5267536429fdb6ed58df6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#21",
+      "hash": "sha256:1a2122127d72f316075d4d8d87b461936ad1cddf4dbe99e39214d1fb16d46f69"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#28",
+      "hash": "sha256:ad5e73aae4b92909d137883b4a162584d89f464584449351231e32116e8802e4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#32",
+      "hash": "sha256:1286f36bb24f08e74f173bd3e9ac023204143d8e1ebcfa1d766a9796b1892dcd"
     },
     {
       "content": "headings",
@@ -11678,7 +11698,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#19",
-      "hash": "sha256:5c4ed70772fb9a6ecf95050ab43a238ab9289cf974a3bfe51184fa098d1bf6cf"
+      "hash": "sha256:c80f098e51577b2df1b145b01ce9f888bce34e1fcc1636c9ed63edd7e5b3cd43"
     },
     {
       "content": "blocks",
@@ -11903,7 +11923,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#64",
-      "hash": "sha256:2a7709d7ac89110844dbcd69596c572af299e35e06caca1511d89b10090704f5"
+      "hash": "sha256:aa68879a217873476a55239424f6844c85b903bf7c1eac85b27cecc48fedb6af"
     },
     {
       "content": "blocks",
@@ -11949,6 +11969,41 @@
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#73",
       "hash": "sha256:13e3aaa695e638a6b24cb7a19b0bf9b0fcdbd4e7ce43ba708dc3d07ca731db41"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#74",
+      "hash": "sha256:aacae50b2373a11be9596b0d74c6ba52ec361ae462bd0b7856ae60b882d6949c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#75",
+      "hash": "sha256:fb70f91189d6147c8c1771914f3d4fb79844ed985a611aed3708f945d835aae4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#76",
+      "hash": "sha256:92e5eed5dbf7d3c1f603086475d206cbf962312b8be02e9b4b5264ce2d4d2046"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#77",
+      "hash": "sha256:298cbaf2dda45618a34aa3029e95fb2c7dd7f93804179812f542427f2fc5c3d9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#78",
+      "hash": "sha256:b525083057513d862ead2e013b6de82aaa1473b729853d79e4e2e2bf8e03b885"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#79",
+      "hash": "sha256:cee6a62abce007f6b42f36345023507ca6dd50ce5fd74e6cd2b934b525eae66d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#80",
+      "hash": "sha256:8dbafbfc24e06e9d53f0124feeff8e60b671d0babac3efb223782ece98cce4b8"
     },
     {
       "content": "blocks",
@@ -12854,6 +12909,86 @@
       "content": "blocks",
       "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#20",
       "hash": "sha256:ae7ccc7a68687780e2c47692c96ac0ab03869f1e7318e00a60f41216eb43b3b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#21",
+      "hash": "sha256:f733b6a6256fe37926cae3a1bd0a999c30cff725906823a89b5a5bc184d5df9e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#22",
+      "hash": "sha256:101fd1c696284177a10bc4647fa62e160702edb028803975c45280485262bd86"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#23",
+      "hash": "sha256:69059eb0978be59ccd7fa64b6a1fa79b2a78fd062ccc89ced9d240d30d40648f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#24",
+      "hash": "sha256:00ce583d58c280999c79eb42e6f2901c02581111cb188de13744b1c5cf48d4e1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#25",
+      "hash": "sha256:8430aaeb33c33e73bad2fd1a44be835f6f80da7d997043fdb32335ef0d0f41e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#26",
+      "hash": "sha256:76cfaa3b0dd5319ea165638eaa4031cd1de4b318352897b4f9e094efbf1ff806"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#27",
+      "hash": "sha256:2b65856a34813659153038861f689c7e54f0a2007296a94848df4741c0cfb51e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#28",
+      "hash": "sha256:c9ca11ea9f7ffa78e6224ddd70ad27a788448b54c73910c0d072dbbc72366ab3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#29",
+      "hash": "sha256:6d17af10c098d89ddc8bd18960a4518c0288a5c2305d1785d5602b134c581412"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#30",
+      "hash": "sha256:7ffef9edb490a8e53e8f6bc63d5b29cf3a3491cccfc6446b47359a7de1096af0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#31",
+      "hash": "sha256:76de66ac414a2b28265e60480b816612a979420273ab1c52be74ac585af5a2f7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#32",
+      "hash": "sha256:73e2efa56b6f2939a6dff60781160343046aa261d45f7ea954377c421fec5482"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#33",
+      "hash": "sha256:30edcb241dc9b6272bbcafb7d0236e44bd8ed870e220ce7bd9aaed10ee9689ad"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#34",
+      "hash": "sha256:deff27c7bc18e44cb8e8e575f6114c0fc3435ec847a72bdfad17b168263ae6e4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#35",
+      "hash": "sha256:b87c63ca113b53d4582feef2d9d6e55e3f994311a2f04d68bc6bb49320dfb05f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#36",
+      "hash": "sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17"
     },
     {
       "content": "blocks",

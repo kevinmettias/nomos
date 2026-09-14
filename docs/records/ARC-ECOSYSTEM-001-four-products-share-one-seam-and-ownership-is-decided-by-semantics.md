@@ -3,7 +3,7 @@ id: ARC-ECOSYSTEM-001
 type: architecture
 title: Four products share one seam, and ownership is decided by semantics rather than by location
 status: accepted
-version: 4
+version: 5
 authority: canonical-normative-record
 tags:
   - ecosystem
@@ -125,9 +125,11 @@ Nomos-specific service
 Generic capability is consumed by adaptation, never by extension of the generic thing with
 software-engineering meaning. When a primitive would have to learn what a crate, a rule or
 a finding is in order to serve Nomos, the primitive is not the thing that should change:
-the adapter is. `D-130` already fixes the mechanical form of this crossing — a single named
-adapter, no path dependency — and this record supplies the reason that rule was the right
-shape.
+the adapter is. `D-130` fixes the mechanical form of this crossing, and this record supplies
+the reason that rule was the right shape. That form had two clauses and they have since
+diverged: the single-named-adapter clause was retired on 2026-09-10, and the
+no-path-dependency clause was not. The amendment at the end of this record says which of the
+two this reasoning still rests on.
 
 ```
 Nomos run observation
@@ -347,9 +349,11 @@ accounting — is the list of mechanism `PackageKind`'s eventual consumer must n
 Checked deliberately rather than assumed, because a record that quietly reinterprets an
 earlier one is worse than no record.
 
-`D-130` is untouched and unweakened. It governs linking; this governs belonging. Where they
-meet — the single adapter crate — they agree, and this record supplies the reason `D-130`
-recorded only as a rule.
+`D-130` was untouched and unweakened when this section was written, and is no longer. Its
+single-adapter clause was retired on 2026-09-10; its path clause and its Phase 5 adoption
+gate were not. It governs linking; this governs belonging. Where they met — the single
+adapter crate — they agreed, and this record supplies the reason `D-130` recorded only as a
+rule. What survives of that meeting point is the amendment at the end of this record.
 
 `ARC-SPECDB-001` is untouched. Naming the specification system as a candidate for a
 different mature home says nothing about whether the specification is a database, which it
@@ -400,3 +404,36 @@ second-source requirement on the review that promotes a lesson into a rule. Amen
 version 4 by `P13-XVPE-PACKAGE-ADOPT`, which adopted `D-091` on the same footing as `D-122`:
 the generic package-management platform moves toward XVPE, `PackageKind`'s semantics stay
 here, and `P10-PACKAGE-SEAM`'s open remedy now has a direction without being implemented.
+
+## Amendment: What Changed Under The `D-130` Clause, And What This Record Still Decides
+
+Two statements above rested on `D-130` holding a single mechanical form, and that form has
+since split in two. Both have been corrected in place rather than left standing; this section
+says what replaced them and how far the change reaches.
+
+**What changed.** `D-130`'s single-named-adapter clause was retired on 2026-09-10 by the
+owner's decision, recorded in `OD-PLATFORM-003` and tombstoned in
+`tests/contract/tests/boundaries/graph.rs`, on the premise this record itself already holds:
+nomos is an application over XVPE rather than its peer. More than one crate here may now name
+`xvpe-`.
+
+**What did not change.** `D-130`'s separate clause on the *form* of the dependency, and its
+Phase 5 adoption gate, both survive that retirement. `D-130`'s own amendment dispositions them
+one at a time and is the authority; this record does not restate the conditions, because a
+summary of a checked file is an unchecked copy of it.
+
+**How far this reaches into this record.** Not far, and deliberately so. What this record
+decides is *belonging* — that generic capability is consumed by adaptation, and that a
+primitive never learns what a crate, a rule or a finding is in order to serve Nomos. That
+reasoning was never a claim about how many crates may link `xvpe-`, and the retirement does not
+touch it. The adapter *pattern* is intact; only the rule that exactly one crate may embody it
+is gone. Where this record said the two decisions meet at the single adapter crate, they now
+meet at the boundary itself: an adaptation layer this workspace owns, however many crates it
+takes, and a dependency whose adopted revision is a recorded fact rather than an ambient one.
+
+The `AGT-006` clauses this record and `OD-PLATFORM-003` both rely on are unaffected.
+`nomos-contracts` still names no dependency, and `nomos-mcp` is still a real MCP server. The
+knowledge crossing is untouched: nothing here says this workspace may name `kwb-`, and both
+systems being built on XVPE says nothing about either naming the other.
+
+Checked 2026-09-14, this workspace at `8503ddb3`.

@@ -13,14 +13,14 @@ profile: domain-specification
 | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md@authored | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md | authored | 25 | 8 | sha256:a62eddf64a82e534bbdbd720c1057e1dcd3131c1264077c83d7029d15b52f8cf |
 | docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md@authored | docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md | authored | 25 | 6 | sha256:ccc429c5e9f4e7b008d8b8a5bb1ccca4cb0704cfbfa2b25aa891ebab3c538ebc |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md@authored | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md | authored | 40 | 12 | sha256:963e9cdbf1905450ef8455935dc914a29fc45b35f5d958d5d94a4b0e002c1a20 |
-| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 73 | 15 | sha256:9c180099cbe0676f26fbb605bcf1696c99b2ff6fb542c0d367a429cfeb236d87 |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 80 | 16 | sha256:516e6bdb8000bb760e2fdfcfc587246e75d436f7bc10ac0d645921f0f3d2bae5 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 31 | 8 | sha256:1931b6cbe939acaa26774b46b8533002d2ff588626d1e25834dd6b8f8dc5b802 |
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 29 | 12 | sha256:b333cce918ab3abd2faaf20b50cbd64be30d8c5b15c3eb5f81c63e6ed9562723 |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
 | docs/records/D-129-the-store-is-the-identity-substrate.md@authored | docs/records/D-129-the-store-is-the-identity-substrate.md | authored | 28 | 7 | sha256:c1f3eeec14e44a3f55d1f71522686a9f695f79060ac32e84aacdd0ff245d7778 |
-| docs/records/D-130-no-xvpe-dependency-before-phase-5.md@authored | docs/records/D-130-no-xvpe-dependency-before-phase-5.md | authored | 20 | 6 | sha256:bdf0569224ca6b8b8524f1217f056e7fcbbe40ee65d530d3732c1f5a65ebd0d6 |
+| docs/records/D-130-no-xvpe-dependency-before-phase-5.md@authored | docs/records/D-130-no-xvpe-dependency-before-phase-5.md | authored | 36 | 9 | sha256:db6d93162a245fc419ded05527c39e0fb6784e8ad5c2ef0123987517bbbaf010 |
 | docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md@authored | docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md | authored | 18 | 6 | sha256:52ac14153a8e5741c1adf31bef3d15ecaaa5ae2548e5cff1b2714430c091c91c |
 | docs/records/D-132-the-plan-is-a-game-plan.md@authored | docs/records/D-132-the-plan-is-a-game-plan.md | authored | 18 | 5 | sha256:2792ff01e2e1a01aa2dec6f047ebc1bae3ceee8a124b2c1e31c53c190f4f8c2c |
 | docs/records/D-133-the-read-surface-assembles-its-store-and-names-what-is-missing.md@authored | docs/records/D-133-the-read-surface-assembles-its-store-and-names-what-is-missing.md | authored | 22 | 6 | sha256:c213c15cd3c026704b1c20907af9e1689b203b1e60d94e222cdcef97e02ea552 |
@@ -296,6 +296,7 @@ profile: domain-specification
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#62 | authored | 2 | Conflicts With Existing Decisions |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#69 | authored | 2 | What This Record Does Not Do |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#72 | authored | 2 | Status |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#74 | authored | 2 | Amendment: What Changed Under The `D-130` Clause, And What This Record Still Decides |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#1 | authored | 1 | The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#2 | authored | 2 | Question |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#5 | authored | 2 | Decision |
@@ -351,6 +352,9 @@ profile: domain-specification
 | docs/records/D-130-no-xvpe-dependency-before-phase-5.md#9 | authored | 2 | Consequences |
 | docs/records/D-130-no-xvpe-dependency-before-phase-5.md#13 | authored | 2 | Alternatives Considered |
 | docs/records/D-130-no-xvpe-dependency-before-phase-5.md#16 | authored | 2 | Amendment: The Build-Instability Premise Resolved; The Gate Did Not |
+| docs/records/D-130-no-xvpe-dependency-before-phase-5.md#21 | authored | 2 | Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not |
+| docs/records/D-130-no-xvpe-dependency-before-phase-5.md#28 | authored | 3 | The gate conditions, dispositioned one at a time |
+| docs/records/D-130-no-xvpe-dependency-before-phase-5.md#32 | authored | 3 | What the tree carries against the surviving clause |
 | docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md#1 | authored | 1 | A byte order mark belongs to the front matter fence |
 | docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md#2 | authored | 2 | Decision |
 | docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md#4 | authored | 2 | Why It Had To Be Settled First |
@@ -3290,14 +3294,16 @@ Nomos-specific service
 
 ### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#19
 
-*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Boundaries Are Projections, Not A Partition · hash: sha256:5c4ed70772fb9a6ecf95050ab43a238ab9289cf974a3bfe51184fa098d1bf6cf*
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Boundaries Are Projections, Not A Partition · hash: sha256:c80f098e51577b2df1b145b01ce9f888bce34e1fcc1636c9ed63edd7e5b3cd43*
 
 Generic capability is consumed by adaptation, never by extension of the generic thing with
 software-engineering meaning. When a primitive would have to learn what a crate, a rule or
 a finding is in order to serve Nomos, the primitive is not the thing that should change:
-the adapter is. `D-130` already fixes the mechanical form of this crossing — a single named
-adapter, no path dependency — and this record supplies the reason that rule was the right
-shape.
+the adapter is. `D-130` fixes the mechanical form of this crossing, and this record supplies
+the reason that rule was the right shape. That form had two clauses and they have since
+diverged: the single-named-adapter clause was retired on 2026-09-10, and the
+no-path-dependency clause was not. The amendment at the end of this record says which of the
+two this reasoning still rests on.
 
 ### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#20
 
@@ -3695,11 +3701,13 @@ earlier one is worse than no record.
 
 ### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#64
 
-*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:2a7709d7ac89110844dbcd69596c572af299e35e06caca1511d89b10090704f5*
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:aa68879a217873476a55239424f6844c85b903bf7c1eac85b27cecc48fedb6af*
 
-`D-130` is untouched and unweakened. It governs linking; this governs belonging. Where they
-meet — the single adapter crate — they agree, and this record supplies the reason `D-130`
-recorded only as a rule.
+`D-130` was untouched and unweakened when this section was written, and is no longer. Its
+single-adapter clause was retired on 2026-09-10; its path clause and its Phase 5 adoption
+gate were not. It governs linking; this governs belonging. Where they met — the single
+adapter crate — they agreed, and this record supplies the reason `D-130` recorded only as a
+rule. What survives of that meeting point is the amendment at the end of this record.
 
 ### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#65
 
@@ -3786,6 +3794,67 @@ second-source requirement on the review that promotes a lesson into a rule. Amen
 version 4 by `P13-XVPE-PACKAGE-ADOPT`, which adopted `D-091` on the same footing as `D-122`:
 the generic package-management platform moves toward XVPE, `PackageKind`'s semantics stay
 here, and `P10-PACKAGE-SEAM`'s open remedy now has a direction without being implemented.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#74
+
+*revision: authored · kind: heading · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Amendment: What Changed Under The `D-130` Clause, And What This Record Still Decides · hash: sha256:aacae50b2373a11be9596b0d74c6ba52ec361ae462bd0b7856ae60b882d6949c*
+
+## Amendment: What Changed Under The `D-130` Clause, And What This Record Still Decides
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#75
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Amendment: What Changed Under The `D-130` Clause, And What This Record Still Decides · hash: sha256:fb70f91189d6147c8c1771914f3d4fb79844ed985a611aed3708f945d835aae4*
+
+Two statements above rested on `D-130` holding a single mechanical form, and that form has
+since split in two. Both have been corrected in place rather than left standing; this section
+says what replaced them and how far the change reaches.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#76
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Amendment: What Changed Under The `D-130` Clause, And What This Record Still Decides · hash: sha256:92e5eed5dbf7d3c1f603086475d206cbf962312b8be02e9b4b5264ce2d4d2046*
+
+**What changed.** `D-130`'s single-named-adapter clause was retired on 2026-09-10 by the
+owner's decision, recorded in `OD-PLATFORM-003` and tombstoned in
+`tests/contract/tests/boundaries/graph.rs`, on the premise this record itself already holds:
+nomos is an application over XVPE rather than its peer. More than one crate here may now name
+`xvpe-`.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#77
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Amendment: What Changed Under The `D-130` Clause, And What This Record Still Decides · hash: sha256:298cbaf2dda45618a34aa3029e95fb2c7dd7f93804179812f542427f2fc5c3d9*
+
+**What did not change.** `D-130`'s separate clause on the *form* of the dependency, and its
+Phase 5 adoption gate, both survive that retirement. `D-130`'s own amendment dispositions them
+one at a time and is the authority; this record does not restate the conditions, because a
+summary of a checked file is an unchecked copy of it.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#78
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Amendment: What Changed Under The `D-130` Clause, And What This Record Still Decides · hash: sha256:b525083057513d862ead2e013b6de82aaa1473b729853d79e4e2e2bf8e03b885*
+
+**How far this reaches into this record.** Not far, and deliberately so. What this record
+decides is *belonging* — that generic capability is consumed by adaptation, and that a
+primitive never learns what a crate, a rule or a finding is in order to serve Nomos. That
+reasoning was never a claim about how many crates may link `xvpe-`, and the retirement does not
+touch it. The adapter *pattern* is intact; only the rule that exactly one crate may embody it
+is gone. Where this record said the two decisions meet at the single adapter crate, they now
+meet at the boundary itself: an adaptation layer this workspace owns, however many crates it
+takes, and a dependency whose adopted revision is a recorded fact rather than an ambient one.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#79
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Amendment: What Changed Under The `D-130` Clause, And What This Record Still Decides · hash: sha256:cee6a62abce007f6b42f36345023507ca6dd50ce5fd74e6cd2b934b525eae66d*
+
+The `AGT-006` clauses this record and `OD-PLATFORM-003` both rely on are unaffected.
+`nomos-contracts` still names no dependency, and `nomos-mcp` is still a real MCP server. The
+knowledge crossing is untouched: nothing here says this workspace may name `kwb-`, and both
+systems being built on XVPE says nothing about either naming the other.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#80
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Amendment: What Changed Under The `D-130` Clause, And What This Record Still Decides · hash: sha256:8dbafbfc24e06e9d53f0124feeff8e60b671d0babac3efb223782ece98cce4b8*
+
+Checked 2026-09-14, this workspace at `8503ddb3`.
 
 ### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#1
 
@@ -5342,6 +5411,145 @@ currently exits zero.
 *revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Build-Instability Premise Resolved; The Gate Did Not · hash: sha256:ae7ccc7a68687780e2c47692c96ac0ab03869f1e7318e00a60f41216eb43b3b7*
 
 Checked 2026-08-18 against xvpe dev HEAD `557dada32ed0c33c7c2fde09b5320d3fdbc94d91`.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#21
+
+*revision: authored · kind: heading · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not · hash: sha256:f733b6a6256fe37926cae3a1bd0a999c30cff725906823a89b5a5bc184d5df9e*
+
+## Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#22
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not · hash: sha256:101fd1c696284177a10bc4647fa62e160702edb028803975c45280485262bd86*
+
+This record made two mechanical decisions about the XVPE crossing, and only one of them has
+been retired. Read together they looked like a single rule, which is how the other came to
+lapse without anybody deciding that it should.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#23
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not · hash: sha256:69059eb0978be59ccd7fa64b6a1fa79b2a78fd062ccc89ced9d240d30d40648f*
+
+**What was retired.** The boundary test this record's Consequences section describes is gone.
+`Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` does not resolve: it was
+removed on 2026-09-10 by the owner's decision, and `tests/contract/tests/boundaries/graph.rs`
+carries the tombstone where it stood. What it enforced was an adapter *count* — that exactly
+one named crate may reach an `xvpe-` dependency. `OD-PLATFORM-003` holds the reasoning: nomos
+is built on top of XVPE as the knowledge workbench is, XVPE is the engine and this workspace
+an application over it, so a rule forbidding that dependency does not describe an architecture
+worth keeping. The tombstone records why it was retired rather than widened — an allow-list of
+nine crates would have left a rule that still reads as a boundary while enforcing nothing,
+which is worse than no rule.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#24
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not · hash: sha256:00ce583d58c280999c79eb42e6f2901c02581111cb188de13744b1c5cf48d4e1*
+
+**That retirement is accepted, and this record's quarantine clause is withdrawn with it.** More
+than one crate here may name `xvpe-`, and `nomos-platform-xvpe` is no longer the sole permitted
+crossing.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#25
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not · hash: sha256:8430aaeb33c33e73bad2fd1a44be835f6f80da7d997043fdb32335ef0d0f41e5*
+
+**What was not retired.** Two clauses survive, and neither is a claim about how many crates may
+cross.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#26
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not · hash: sha256:76cfaa3b0dd5319ea165638eaa4031cd1de4b318352897b4f9e094efbf1ff806*
+
+The first is the *form* of the dependency: adoption is "by git reference and commit SHA", and
+"never a `path` dependency". Retiring the quarantine did not decide the pinning. They answer
+different questions — one asks how many crates may cross, the other asks whether this
+workspace's buildability and reproducibility are a function of another product's working tree
+at whatever revision that tree happens to be sitting at, with nothing recording which revision
+that was. The second question's answer does not change with the number of crossings, so
+nothing about the 2026-09-10 decision reaches it.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#27
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not · hash: sha256:2b65856a34813659153038861f689c7e54f0a2007296a94848df4741c0cfb51e*
+
+The second is the **Phase 5 adoption gate**, which stands unless a record supersedes it
+deliberately. It is not superseded here.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#28
+
+*revision: authored · kind: heading · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not / The gate conditions, dispositioned one at a time · hash: sha256:c9ca11ea9f7ffa78e6224ddd70ad27a788448b54c73910c0d072dbbc72366ab3*
+
+### The gate conditions, dispositioned one at a time
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#29
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not / The gate conditions, dispositioned one at a time · hash: sha256:6d17af10c098d89ddc8bd18960a4518c0288a5c2305d1785d5602b134c581412*
+
+The amendment above dispositioned this record's build-instability premise and deliberately did
+not let the gate fall with it. The same discipline applies now: the conditions are checked
+individually rather than lapsing together because a different clause was retired. Measured
+2026-09-14, this workspace at `8503ddb3`, xvpe `dev` at
+`82a3c8fccf4ef7f3759f36d3f320a91d0f96341c` with a clean tree.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#30
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not / The gate conditions, dispositioned one at a time · hash: sha256:7ffef9edb490a8e53e8f6bc63d5b29cf3a3491cccfc6446b47359a7de1096af0*
+
+| Condition, as this record stated it | 2026-08-18 | 2026-09-14 |
+|---|---|---|
+| xvpe does not compile; dataflow fails on 62 errors | resolved | resolved, and still so |
+| xvpe's workspace contains no storage crate | true, blocking | **still true.** Across 262 member manifests the only `[package]` name suggesting one is `xvpe-collections-persistent`, under `foundations/data/collections` — an immutable-collections data structure, not a store |
+| xvpe's workspace contains no package crate | true, blocking | **still true.** No `[package]` name matches a package or registry crate |
+| `xvpe-telemetry` names `xvpe-os-backend-desktop` as a direct dependency | true, blocking | **resolved.** Its dependencies are now `xvpe-collections-pool`, `xvpe-primitives` and `xvpe-thread-pool`, and the only manifests naming the desktop backend are two demo apps and the two os-backend crates themselves |
+| a `path` dependency selects the workspace, and this is a game engine's workspace | true | **changed, and narrower in practice.** The tree is now 262 members across eleven top-level groups, against 112 when this was written. But what this workspace actually reaches is twelve `xvpe-` crates, and no member reaches a GPU, windowing or UI crate |
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#31
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not / The gate conditions, dispositioned one at a time · hash: sha256:76de66ac414a2b28265e60480b816612a979420273ab1c52be74ac585af5a2f7*
+
+**Two conditions still block, one has resolved, and one is narrower than feared.** Phase 5 has
+therefore not opened, and the adoption now standing in the tree preceded it. That is a fact
+about sequence, not a licence: this record does not retroactively admit what arrived early.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#32
+
+*revision: authored · kind: heading · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not / What the tree carries against the surviving clause · hash: sha256:73e2efa56b6f2939a6dff60781160343046aa261d45f7ea954377c421fec5482*
+
+### What the tree carries against the surviving clause
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#33
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not / What the tree carries against the surviving clause · hash: sha256:30edcb241dc9b6272bbcafb7d0236e44bd8ed870e220ce7bd9aaed10ee9689ad*
+
+Sixteen dependencies across eight workspace members — seven crates under `crates/` and the
+contract test crate, itself a member — are spelled as a relative path climbing out of this
+repository into a sibling directory named `xvpe`. Each is the form this record's surviving
+clause names as the one adoption never takes.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#34
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not / What the tree carries against the surviving clause · hash: sha256:deff27c7bc18e44cb8e8e575f6114c0fc3435ec847a72bdfad17b168263ae6e4*
+
+Replacing them is available rather than theoretical: the sibling checkout has a real remote at
+`https://github.com/kevinmettias/xvpe.git`, so a `git` and `rev` dependency of exactly the
+shape decided above can be fetched today, and a pinned revision is what makes the adopted
+commit a recorded fact rather than an ambient one.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#35
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not / What the tree carries against the surviving clause · hash: sha256:b87c63ca113b53d4582feef2d9d6e55e3f994311a2f04d68bc6bb49320dfb05f*
+
+No manifest moves by this record, the same as everywhere else in it.
+`P98-SIXTEEN-PATH-DEPENDENCIES-CROSSED-A-BOUNDARY-NO-DECISION-RETIRED` holds that work and
+carries the alternative this record does not foreclose: if replacing them is refused for a
+measured reason, the refusal is adjudicated and this clause superseded explicitly, rather than
+left contradicted by a tree that outvoted it.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#36
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not / What the tree carries against the surviving clause · hash: sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17*
+
+Checked 2026-09-14.
 
 ### docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md#1
 
