@@ -68470,14 +68470,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Cannot be completed as authored, measured 2026-09-14 while holding it. Territory reserves two files, real_corpus.rs and table_rows/corpus.rs, and the eight failures live in five: family_counts/measurement.rs carries two, restoration.rs one, siblings.rs one, none reserved. The owner chose the third resolution the done_when lists, refreshing source-block-lineage.yaml, and that route needs a mechanism this workspace does not have. The lineage's authored fields are disposition, authority, target_volumes and stable_ids; its mechanical fields are block_ordinal, heading_path, block_kind, content_hash and normalized_hash. Only a segmenter agreeing with nomos can produce hashes Test_I1 accepts, and the corpus's own validate_bundle.py is not one: read at 05_tools/validate_bundle.py, editorial_source_errors checks only that an entry HAS a disposition, HAS both hashes and HAS a target volume, never recomputing or comparing them, which is why it reports ok while nomos reports 494 mismatches. No nomos verb emits block lineage: spec offers record, table, render, freshness, markdown, preview, commit, profiles, sources, and the only readers of source-block-lineage.yaml are three test files. Confirmed against the item's own why: the archive still reproduces every pinned figure (revisions.rs, 12 passed), no archive newer than v14.36 exists, and the cause is one act, cace351ac on 2026-08-17, whose volume 02 diff splits one service heading into two and one table row into three, taking that document from 202 recorded blocks to 204 and shifting every ordinal after it. The why's claim that catalog.json is eleven days behind the markdown is true by mtime and false by content: rebuild_bundle.py does not write catalog.json. Re-authored with measured territory rather than closed by editing a constant, which this item's own done_when forbids."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p96",
-        "acquired_at": 1789409845,
-        "lease_expires_at": 1789420645
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -68490,9 +68490,18 @@
         "timeout_seconds": 1800
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-p96",
+          "reason": "Measured while holding it: the item cannot be completed as authored, so the claim is released for the decline that follows rather than carried while re-authoring.",
+          "abandoned_at": 1789410367
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p96",
+        "declined_at": 1789410367
+      }
     },
     {
       "id": "P95-NO-NOMOS-RULE-HAS-BEEN-MEASURED-AGAINST-A-SECOND-REPOSITORYS-DECLARED-MUST-LIST",
@@ -70882,14 +70891,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Territory reserves sixteen paths and the change provably touches at least fourteen more, measured by grepping every reader of the surface being removed rather than estimating it. Inside nomos-rules: lib.rs and checks.rs both re-export Zone, Zone_Of, Permits, ZONES, ZONE_LIST, SAME_ZONE_EDGES and WRITE_DOORS, and Cargo.toml must name whichever crate carries the declaration. Outside the check run: nomos-gate-orchestration admissibility.rs and nomos-lsp walk_outward/architectural_component.rs both call Zone_Of and Permits with no FactReader anywhere between them, so where those two get their answer is a design question the done_when never states, and their own callers move with their signatures. Registration and materialization need composition.rs, facts.rs and facts/policy_materialization.rs beside the one reserved run_context.rs. In tests/contract: completeness_universes/table.rs names ZONES, SAME_ZONE_EDGES, ALL and WRITE_DOORS by file and constant, and readme.rs reads ZONE_LIST and ZONES to check README.md own zone table. Re-authored as -4 with the measured set, and with the two consumers outside the check run named in the done_when, before any claim rather than widened mid-claim."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p100",
-        "acquired_at": 1789409988,
-        "lease_expires_at": 1789424388
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -70905,9 +70914,18 @@
         "timeout_seconds": 2400
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-p100",
+          "reason": "Claimed to implement, then measured the readers of the surface being removed before editing anything, and the reserved territory cannot carry the change. Abandoning so the item can be declined and re-authored rather than widened mid-claim.",
+          "abandoned_at": 1789410295
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p100",
+        "declined_at": 1789410305
+      }
     },
     {
       "id": "P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-2",
@@ -71199,6 +71217,265 @@
         },
         "revision": "612bb7d1e78b2f393b2aa324b9f74856989881e4"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P102-THE-CONSOLIDATION-LEFT-FIFTEEN-RULE-NAMES-IMPORTED-AND-UNUSED",
+      "title": "The consolidation left fifteen rule names imported and unused",
+      "why": "P102 moved materialization's demand onto RuleDescriptor.requires and deleted the hand-written guards that named rules one by one. The imports those guards needed stayed. run_context.rs still imports fifteen rule-name constants -- ABBREVIATIONS, DATA_NAMES_STAY_LOWER_SNAKE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_SIZE_JUSTIFICATION_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER, GOALS_AND_PARTS_LINE_UP, GO_HELPERS_PACKAGE_FIVE_INPUTS, NAMING_CONVENTION, ONE_THOUSAND_LINE_HARD_TRIGGER, PARAMETER_COUNT, REQUIREMENT_TRACE_STALENESS, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER and UNREAD_REACHES_FINDING -- and uses none of them, which the compiler reports as an unused_imports warning this workspace did not have before that commit. The names being dead is the point rather than an accident: production code no longer needs to know which rule feeds which family, because DESCRIPTORS says. OD-RULES-027 made the same observation when it removed the composed-rule array, and run_context.rs's own test module already carries a comment explaining that COMPLETENESS_MIRROR is imported there rather than at module scope precisely because production code stopped naming it. Leaving fifteen more at module scope contradicts that note.",
+      "done_when": "run_context.rs imports no rule-name constant its own code does not use, and cargo check -p nomos-check-orchestration reports no unused_imports warning for that file. A name still needed by the module's tests is imported where the tests use it, the arrangement that file's own comment already describes for COMPLETENESS_MIRROR, rather than kept at module scope to satisfy them. The demand derivation and every control P102 added still pass unchanged, so this is removal and not a behaviour change. cargo test -p nomos-check-orchestration -p nomos-contract-tests passes and the gate lint step is clean.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-A-TEMPORARY-WAIVER-CLAIMS-A-BOUNDED-PERIOD-AND-NEVER-ENDS",
+      "title": "A temporary waiver claims a bounded period and nothing can make it stop applying",
+      "why": "SuppressionDisposition::TemporaryWaiver documents itself as accepted for a bounded period, expected to be revisited, and distinguishes itself from AcceptedBaselineDebt as the one which names an end date this does not. No end date exists. Suppression carries rule, subject, disposition, rationale and owner and nothing else, and no file under policy/ reads a clock, a deadline or an expiry. So a TemporaryWaiver is behaviourally identical to a FormalRiskAcceptance: it suppresses forever. This is worse than a missing feature. The type name and its documentation promise a behaviour the engine does not implement, so a repository that tolerates something temporarily has in fact tolerated it permanently and has been told otherwise, which is the hiding half of the adoption question a gate exists to answer. The declared file refuses an expires key today under deny_unknown_fields, so an author reaching for one is told no rather than silently dropped -- honest, and evidence the key has been wanted. baseline_debt.rs already records the order this should follow: the key appears on the declared entry first, and the domain type grows a field to carry it.",
+      "done_when": "A TemporaryWaiver expires. Suppression carries an expiry, the declared entry in nomos-gate.json accepts it, and a waiver without one is refused rather than accepted as permanent -- the disposition whose meaning requires an end date cannot be written without it. A disposition whose contract does not call for an end date is refused one rather than silently carrying an ignored field. Evaluation reads a time the caller supplies rather than an ambient clock read inside policy logic, so a run judged against a past moment answers as that moment and a replay is not a function of today's date; the time arrives by the same route a run's other execution facts already do rather than through a new parameter that would push Run_Gate past this workspace's own parameter-count rule. A waiver before its expiry suppresses, a waiver at or after it does not, and the second case is visible as an expired waiver rather than as a suppression that silently stopped matching -- a reader must be able to tell a finding that is blocking because a waiver lapsed from one that was never waived. The status is an enum rather than a boolean, and its documentation says what a third state would mean and why it is not invented before something produces it. Controls in both directions and at the boundary: before, at, and after the expiry instant. cargo test -p nomos-gate-orchestration -p nomos-cli -p nomos-api -p nomos-contract-tests passes, the public surface snapshot is updated in the same commit, and the gate lint step is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-api/src/response/gate_run_response.rs",
+          "crates/host/nomos-api/src/response/gate_explain_response.rs",
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P103-A-TEMPORARY-WAIVER-CLAIMS-A-BOUNDED-PERIOD-AND-NEVER-ENDS-2, which reserves the status module alongside the files it is exported from."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "fable-p103",
+          "reason": "Under-scoped territory. The status taxonomy needs its own module: this workspace's file-name rule reports a file with more than one top-level public type, suppression_disposition.rs and suppression.rs each declare exactly one and export no free function, so neither can host a second type the way gate_compare.rs can. The new sibling file is not reserved.",
+          "abandoned_at": 1789410444
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p103",
+        "declined_at": 1789410444
+      }
+    },
+    {
+      "id": "P102-THE-V14-BLOCK-LINEAGE-IS-REFRESHED-AT-ITS-SOURCE-AND-THE-PINNED-FIGURES-ARE-RE-MEASURED",
+      "title": "Refresh the v14 corpus block lineage against the volumes cace351ac produced, then re-measure the figures this workspace pins",
+      "why": "Successor to P96-THE-LIVE-V14-CORPUS-HAS-DIVERGED-FROM-THE-ARCHIVE-ITS-FIGURES-ARE-PINNED-FROM, declined 2026-09-14 for territory that could not hold it: it reserved two files and the eight failures live in five. The owner chose the resolution P96's done_when listed third, refreshing source-block-lineage.yaml, over cutting a v14.37 archive (66 files here name v14.36 or DEFAULT_REVISION) and over reverting the live tree (cace351ac resolved four architecture drifts found by a spec review, and discarding it would make the corpus less correct to quiet a harness). One cause, measured: cace351ac on 2026-08-17 edited five of ten domain volumes, 31 insertions against 21 deletions. Its volume 02 diff splits the Indexer and Identity Service table row into three and the Contract Discovery and Calibration Service heading into two, taking that document from the 202 blocks source-block-lineage.yaml records to the 204 segmentation produces, so every ordinal after the insertion shifts and 494 recorded content hashes stop matching. source-block-lineage.yaml is untouched since 2026-08-06; the volumes moved on 08-17. Nothing downstream was refreshed. The mechanism this needs does not exist yet, which is why the item is a capability and not a correction. The lineage's authored fields are disposition, authority, target_volumes and stable_ids; its mechanical ones are block_ordinal, heading_path, block_kind, content_hash and normalized_hash. Only a segmenter that agrees with nomos can produce hashes Test_I1 accepts, and the corpus's own validate_bundle.py is not one: its editorial_source_errors checks only that an entry HAS a disposition, HAS both hashes and HAS a target volume, never recomputing or comparing them, which is exactly why it reports ok while nomos reports 494 mismatches. Those are two different measurements and neither is evidence about the other. No nomos verb emits block lineage either, so the recomputed hashes have no way out of this workspace today.",
+      "done_when": "A mechanism in this workspace emits, for the live corpus, every block's document, ordinal, heading_path, block_kind, content_hash and normalized_hash as the same segmentation Test_I1 judges against produces them -- the same segmenter, not a second implementation of it, because a reimplementation that disagreed would be a second authority for what a block is. Its first and only consumer is the corpus refresh, so it is test-gated in real_corpus.rs rather than given a spec verb ahead of a second caller. source-block-lineage.yaml is then refreshed in the code-standards repository from that emission, preserving every authored field where a block still exists and authoring disposition, authority, target_volumes and stable_ids for each genuinely new block; the corpus's own policy content_hash_change_requires_manifest_refresh_and_review is satisfied by the owner reviewing the refresh, which is recorded in the corpus commit rather than assumed here. Only then are this workspace's pinned figures re-measured, each recorded with what it was measured against and on what date so a later reader can tell a deliberate re-measurement from a drift nobody noticed. All eight tests go green together with the corpus set -- Test_I1, Test_Re_Ingesting_The_Corpus_Should_Be_A_No_Op and Test_The_Whole_Corpus_Should_Ingest_Into_One_Store in real_corpus.rs, Test_The_Domain_Volumes_Should_Answer_282_258_And_234 in table_rows/corpus.rs, both measurement tests in family_counts/measurement.rs, and the preservation tests in restoration.rs and siblings.rs -- and a corpus-unset run stays green too, since these are corpus-gated and a vacuous pass is not evidence either way. No figure moves before the corpus does, which is what P96 refused to allow and this item keeps.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/tests/real_corpus.rs",
+          "crates/spec/nomos-spec-ingest/tests/family_counts/measurement.rs",
+          "crates/spec/nomos-spec-ingest/tests/restoration.rs",
+          "crates/spec/nomos-spec-ingest/tests/siblings.rs",
+          "crates/spec/nomos-spec-store/tests/table_rows/corpus.rs",
+          "tests/contract/tests/corpus_gates.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-ingest",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P102-A-LEDGER-PREDICATE-INHERITS-CORPUS-OBLIGATIONS-FROM-THE-CRATE-IT-NAMES",
+      "title": "A whole-crate verification predicate inherits unrelated corpus-gated obligations, and one item was verified around that rather than by it",
+      "why": "Recorded as a candidate rather than acted on, because one instance is not yet a pattern. P99-THREE-RECORDS-REPEAT-A-BARE-CHECKED-ON-LINE declared the predicate cargo test --no-fail-fast -p nomos-spec-validate -p nomos-spec-store, and its acceptance criterion was one thing: that Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously stops reporting a violation with the corpus present. Run with the corpus exported, that predicate failed -- on Test_The_Domain_Volumes_Should_Answer_282_258_And_234, which counts pipe lines in a directory outside this repository and read 286 against a pinned 282. That is the divergence P96 named and P102 now carries, and nothing in the commit could move it. So work finish ran in the default corpus-unset environment where the predicate passes, and the corpus-set obligation the done_when stated was discharged by hand. Both halves were honest and the commit says so, but the ledger's machine-recorded verification does not itself prove the corpus-set run, and that gap is the defect worth naming: a predicate naming a crate inherits every conditional obligation that lives in it, including ones whose truth drifts for reasons the item never touches. The narrower rule this suggests is that a predicate should execute the smallest command directly proving its own done_when, plus any specifically required surrounding regression check, rather than inheriting unrelated obligations by crate membership. It is deliberately NOT that a corpus-gated crate should always be addressed by --test: a whole-crate predicate is right when the item's claim really is that the crate remains valid, and the distinction is driven by done_when scope rather than by where a test happens to live.",
+      "done_when": "Decided after P102-THE-V14-BLOCK-LINEAGE-IS-REFRESHED-AT-ITS-SOURCE finishes, not before, because that item is expected to make these whole-crate predicates clean again and the answer depends on what happens then. If another item's predicate fails for an unrelated corpus obligation after the v14 divergence is resolved, that is a second instance and enough evidence to state the narrower rule as a convention -- where it belongs, whether a record or a line in the work skill, and what it says about items whose claim genuinely is whole-crate validity. If no second instance appears, this declines with that as its reason: one occurrence caused by a single outstanding corpus divergence is a stale invariant rather than a structural defect in how predicates are declared, and a convention written from one case would be the speculative surface this workspace refuses elsewhere. Either way the outcome is recorded, so the next session finds the measurement rather than re-deriving it from the same symptom.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-039"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P102-THE-V14-BLOCK-LINEAGE-IS-REFRESHED-AT-ITS-SOURCE-AND-THE-PINNED-FIGURES-ARE-RE-MEASURED"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-4",
+      "title": "The architecture the dependency rules judge is 66 compiled-in nomos crate names, so the family cannot judge any other repository",
+      "why": "Five policy families already take their criterion from a declared fact under OD-RULES-011, and tests/integration/fixtures/third-party/hex-0.4.3/standards.json already declares its own naming policy for the same rules to judge. The architecture family is the exception. Check_Dependency_Direction, Check_Every_Member_Declares_A_Band and Check_Write_Authority resolve every package through Zone_Of, and ZONES is a literal of 66 entries every one of which is a nomos crate name. The dependency edges are provider-derived and generalize; the architecture they are judged against is source code in nomos-rules. In any other repository Zone_Of returns None and the family reports NotApplicable, which is honest and is also the whole family declining for every repository that is not this one. OD-RULES-024 named this as a fact this workspace does not yet produce; the missing fact is a declared architecture, not an inference engine.\n\nOD-RULES-029 already settled two things this item must not re-decide. The declaration is read from the repository under check, per OD-RULES-003. And it is not an OD-RULES-011 sixth family, because what travels is a triple -- a finite set of named components, an order over them, and named exceptions the order alone cannot express -- so a membership map shipped without its lattice and its vocabulary externalizes nothing. That record also settled where it is not authored: the tiers array in standards.json is another tool's declared input, which this repository holds and does not own.\n\nVersion -3 of this item was declined after its territory was measured rather than estimated. The readers of the surface being removed are fourteen files beyond what -3 reserved, and two of them are why this item cannot be scoped to the check run: admissibility.rs in nomos-gate-orchestration and walk_outward/architectural_component.rs in nomos-lsp both call Zone_Of and Permits with no FactReader anywhere between them. OD-GATE-026 anticipated exactly that, saying the question admissibility asks is the same either way and that what this migration changes is where those two functions get their answer -- which makes it a thing this item has to decide, not a consequence it can leave to fall out.",
+      "done_when": "The acceptance test is the direction of dependency between rule mechanism and project description, not the representation chosen. Concretely: if the repository-specific description changes completely while the governing rule concept stays the same, the rules crate is unchanged. A relocated table whose schema and interpretation the rules crate still owns does not satisfy this even though it looks data-driven, and neither does moving the membership map while the category vocabulary stays a closed enum in nomos-rules: a repository dividing its architecture into Domain, Infrastructure and Api must not have to edit nomos-rules to say so. Which mechanism carries the description is the implementer's to determine from what already exists -- a capability payload, a repository manifest, or another existing contract -- and a new mechanism is not required; what it carries is the whole triple OD-RULES-029 names, not one third of it.\n\nThen: no nomos crate name and no nomos-specific architectural category remains compiled into nomos-rules, and deleting every such name does not reduce this workspace's ability to enforce its own architecture, because this workspace now declares what the ZONES table, the Zone enum, SAME_ZONE_EDGES, Permits and WRITE_DOORS between them encoded. A name that is in today's ZONES table, with its declaration removed, resolves to unresolved rather than to its legacy zone: that is the query where a correct implementation and a surviving compiled-in fallback must disagree, and confirming the cases that already pass is not evidence about it.\n\nThe same three rule implementations, unchanged in what they judge, enforce a foreign declaration with a different package vocabulary and different category names, proved against the hex-0.4.3 third-party fixture. The two consumers outside the check run each reach the declaration through the same seam the rules do rather than through a second copy: nomos gate admits answers from the declared architecture, and the LSP architectural component resolves from it, with no path anywhere still short-circuiting to a hardcoded classification.\n\nA repository declaring no architecture still reports NotApplicable rather than passing clean, and an incomplete or unparseable declaration reports a refusal or an applicability state rather than silently dropping the checks. OD-RULES-024 is amended to say the fact now exists and what it is, and both projections are re-rendered from a tree publishing exactly that record.\n\nThis item does not design an ownership, required-mechanism or general engineering-model schema, and does not decide what a declared component with no observed implementation means.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-architecture",
+          "crates/repository/nomos-repo-policy",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/checks/dependency.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/reading.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/completeness.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/violations.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/write_authority.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/tests/incremental_equivalence.rs",
+          "crates/orchestration/nomos-gate-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/admissibility.rs",
+          "crates/host/nomos-lsp/Cargo.toml",
+          "crates/host/nomos-lsp/src/lib.rs",
+          "crates/host/nomos-lsp/src/walk_outward.rs",
+          "crates/host/nomos-lsp/src/walk_outward/architectural_component.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/tests/boundaries/graph.rs",
+          "tests/contract/tests/boundaries/readme.rs",
+          "tests/contract/tests/boundaries/manifest_bands.rs",
+          "tests/contract/tests/completeness_universes/table.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-cap-architecture.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-lsp.txt",
+          "tests/contract/surface/nomos-repo-policy.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/integration/tests/calibration.rs",
+          "tests/integration/fixtures/third-party/hex-0.4.3/standards.json",
+          "standards.json",
+          "README.md",
+          "Cargo.toml",
+          "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-architecture",
+          "-p",
+          "nomos-repo-policy",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
