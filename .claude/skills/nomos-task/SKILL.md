@@ -89,6 +89,41 @@ contention.
 An item that reserves nothing is refused. A territory of `.` reserves the whole repository
 and blocks every other claim; never author one.
 
+**The predicate is authored in the same call, and its scope is the item's claim.** Territory
+says which files the item may change; the argv after `--` says what will be run to establish
+that it changed them correctly. A predicate establishes *this item's* `done_when`. It does not
+inherit the independent obligations a crate or package happens to own, unless those
+obligations are themselves part of what the item claims.
+
+That is scope matching, not breadth minimising. `cargo test -p <crate>` is exactly right for
+an item whose claim really is that the crate remains valid; what is wrong is a verification
+scope wider than the obligation scope the item declared, whatever shape the command has. It is
+also a different argument from the one
+`crates/substrate/nomos-ledger/src/gate_unknown.rs` makes for keeping the gate's test step
+authored per item. That one is about cost, minutes spent on every finish. This one is about
+attribution: a predicate wider than the claim goes red for somebody else's reason, and the
+item cannot finish although its own acceptance condition passes.
+
+Two items paid for that in one day. The first declared both spec crates while claiming a
+single thing — that a preservation test stops reporting a violation once the corpus is
+present. Run with the corpus exported it failed instead on a volume count over a directory
+outside this repository, and it finished corpus-unset with its real obligation discharged by
+hand, so the ledger's machine-recorded verification did not prove what the item claimed. The
+second declared the whole contract-tests package and changed one markdown file. It could not
+finish because `public_surface` was red on a peer's unblessed snapshot, while `agent_harness`
+— the obligation that governs skill text, and the only one the item claimed — was green
+throughout.
+
+Find the scope where the territory was found, in the same dependency cone. Where a single test
+binary is the obligation, `cargo test -p <package> --test <target>` names it and nothing else.
+The item that added this paragraph declared
+`cargo test --no-fail-fast -p nomos-contract-tests --test agent_harness`, because
+`tests/contract/tests/agent_harness.rs` is what judges skill text and no other obligation in
+that package was any part of its claim.
+
+No mechanism checks this, for the reason given above: two instances justify a rule and not a
+predicate-scope validator, a scope algebra, or automatic dependency analysis.
+
 ## 4. Claim it, and branch on the exit code
 
 **Exit 0 is the only thing that means you hold it.** The listing column is a snapshot and

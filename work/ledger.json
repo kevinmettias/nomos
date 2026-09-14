@@ -73852,7 +73852,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "The defect is right and only the carrier was wrong. This item's done_when deliberately left the carrier to be chosen when the item was claimed, a record or a line in the task skill, but its territory reserved only docs/records/OD-LEDGER-039 and there is no work edit, so choosing the skill makes the item impossible to execute rather than merely different. Claimed and inspected 2026-09-14: the convention is procedural, not a ledger semantic. VerificationPredicate is not declared in nomos-ledger, OD-LEDGER-037 having found it ledger-agnostic and moved it to nomos-scope-verification, so this item's own predicate of cargo test -p nomos-ledger could not have established its done_when either way. Finish already keeps a failing predicate apart from one that could not be asked and Record_From_Argv already stores exactly what ran, so both incidents are the ledger honestly reporting an author's choice. The only ledger semantic about inherited obligation is OD-LEDGER-003, which makes every item inherit the gate's lint step on purpose, and gate_unknown.rs already states the cost reason the test step stays per-item. OD-GATE-028 is the nearest record about verification predicates and is the opposite polarity, a predicate green for the wrong reason. A record would therefore restate a decided semantic rather than decide a new one. Replaced by P103-A-VERIFICATION-SCOPE-MATCHES-THE-CLAIMED-OBLIGATION-AND-THE-TASK-SKILL-CARRIES-IT, which reserves .claude/skills/nomos-task/SKILL.md, carries both incidents unchanged, and declares cargo test -p nomos-contract-tests --test agent_harness, the one obligation that governs skill text and the scope this convention would have chosen. OD-LEDGER-039 is released unallocated."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -73867,6 +73871,149 @@
         "timeout_seconds": 1200
       },
       "verified": null,
+      "abandoned": [
+        {
+          "holder": "fable-p103a",
+          "reason": "Claimed to decide the carrier its own done_when deliberately left open. The inspection answered skill rather than record, and the territory reserves only docs/records/OD-LEDGER-039, so the item cannot be executed as written. Abandoned to decline it.",
+          "abandoned_at": 1789424016
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p103a",
+        "declined_at": 1789424029
+      }
+    },
+    {
+      "id": "P104-THE-COMPARE-FAILURE-TYPE-IS-UNREACHABLE-FROM-THE-CRATE-ROOT",
+      "title": "The compare failure type is unreachable from the crate root, so no caller can name it",
+      "why": "A second, disjoint claim beside P104-COMPARE-COLLAPSES-EVERY-FINDING-A-RULE-MAKES-ABOUT-ONE-SUBJECT-INTO-ONE-4, not a widening of it. That item is still valid and its four paths are still correct; the scope grew by exactly one file, which is the case the ledger answers with an additive item rather than with a decline.\n\nCompare_Gate_Runs currently returns GateCompareResult by value. -4 makes it refuse a run whose findings do not yield as many distinct occurrence identities, which means a typed failure in its signature. A type named in a public signature has to be reachable from the crate root or callers cannot name what they are handling, and the crate root is the one place a type declared in gate_compare.rs becomes public: lib.rs line 220 is where Compare_Gate_Runs, DispositionChange, FindingDisposition and GateCompareResult are already re-exported together.\n\nThe crate root also carries prose about the verb. Its compare paragraph says the verb reports each finding’s disposition change as a DispositionChange in a GateCompareResult. That stays literally true of the success path and becomes silent about a refusal the verb can now make, which is the half a reader would act on. Measured rather than assumed: the two other doc sites naming Compare_Gate_Runs were read and are not falsified -- nomos-cli/src/gate.rs describes the two-walk composition, and gate_command.rs describes reachability from a terminal, and neither states the return shape.\n\nNothing else in the crate root moves. The mod list, the other re-exports and every paragraph that is not about compare are untouched.",
+      "done_when": "The failure type -4 introduces in gate_compare.rs is re-exported from the crate root beside Compare_Gate_Runs, DispositionChange, FindingDisposition and GateCompareResult, so a caller outside the crate can name the thing it must handle.\n\nThe crate root’s compare paragraph states that comparison can refuse and what makes it refuse, rather than describing only the shape returned when it does not. It does not restate gate_compare.rs’s own reasoning, which is that file’s to hold.\n\nNothing else in lib.rs changes: the mod list, the other re-export lines and every paragraph not about compare are byte-identical.\n\nThe workspace builds and nomos-gate-orchestration’s public surface snapshot accounts for the new export, which is -4’s path to bless, so the two items are verified and committed together rather than separately -- neither half compiles without the other.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p104",
+        "acquired_at": 1789423452,
+        "lease_expires_at": 1789437852
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P104-THE-HEADLESS-COMPARE-RESPONSE-CANNOT-SAY-THAT-NO-COMPARISON-HAPPENED",
+      "title": "The headless compare response cannot say that no comparison happened",
+      "why": "A third disjoint claim beside P104-COMPARE-COLLAPSES-EVERY-FINDING-A-RULE-MAKES-ABOUT-ONE-SUBJECT-INTO-ONE-4 and P104-THE-COMPARE-FAILURE-TYPE-IS-UNREACHABLE-FROM-THE-CRATE-ROOT. Both of those remain valid and correctly scoped; this is scope growing by one more file, which the ledger answers additively rather than by declining a live item.\n\nOnce Compare_Gate_Runs can refuse, nomos-api has to say so. Handle_Gate_Compare is not library-only: nomos-api-transport dispatches nomos.gate.compare to it and serializes what it returns, so a refusal that is not representable in GateCompareResponse would be representable only as a response claiming an empty difference -- indistinguishable from two runs that genuinely agree, which is the exact class of silent false claim this whole P104 line of work exists to remove.\n\nMeasured before choosing the shape rather than after. Every one of nomos-api's twenty-plus handlers returns a plain response type and not one returns a Result, so refusals in this crate live inside the response; making this the single exception would invent a second convention for one caller. deny_unknown_fields appears on the transport parameter types and on no response type, so an added response field is additive on the wire and breaks no existing consumer. The api-transport surface names only ServedMethod::GateCompare and is unaffected.\n\nThis does not contradict -4's clause about leaving the headless response alone. That clause governs the occurrence identity -- FindingOccurrenceId stays internal to compare and is serialized nowhere -- and a refusal is not the identity.",
+      "done_when": "GateCompareResponse can say that no comparison happened, so a wire consumer can tell a refusal from two runs that agreed. A response carrying a refusal is not also carrying differences, and a test asserts both directions: a real comparison reports no refusal, and a refused one reports no added, removed or changed entries that a reader could mistake for a result.\n\nThe shape stays minimal on purpose and the reason is stated where the field is declared: no wire consumer needs the colliding pairs today, the only caller is the transport dispatcher, and the full typed pairing is already available to a Rust caller as CollidingOccurrences. Inventing a serialized failure taxonomy ahead of a caller that reads one is the shape this crate refuses elsewhere by name.\n\nnomos-api's public surface snapshot accounts for the added field, and nomos-api-transport still compiles and serializes without change, asserted by building it rather than by reasoning about it.\n\nVerified and committed together with -4 and the crate-root item: none of the three compiles without the others.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p104",
+        "acquired_at": 1789423786,
+        "lease_expires_at": 1789438186
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-api-transport"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-A-VERIFICATION-SCOPE-MATCHES-THE-CLAIMED-OBLIGATION-AND-THE-TASK-SKILL-CARRIES-IT",
+      "title": "A verification predicate scoped to a crate inherits every obligation that crate owns, and the task skill does not say it must not",
+      "why": "A work item's verification predicate must establish that item's own done_when, not every independent obligation owned by the crate or package named in its command. Two instances, both 2026-09-14. FIRST: P99-THREE-RECORDS-REPEAT-A-BARE-CHECKED-ON-LINE declared cargo test -p nomos-spec-validate -p nomos-spec-store and claimed one thing, that Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously stops reporting a violation with the corpus present. Run with the corpus exported it failed instead on Test_The_Domain_Volumes_Should_Answer_282_258_And_234, which counts pipe lines in a directory outside this repository. The item finished corpus-unset with its real obligation discharged by hand, so the ledger's machine-recorded verification did not prove what the item claimed. SECOND: P103-THE-TASK-SKILL declared cargo test -p nomos-contract-tests and changed one markdown file. It could not finish because public_surface failed on a peer's unblessed nomos-gate-orchestration snapshot, while agent_harness, the obligation that governs skill text and the only one the item claimed, was green throughout. No corpus involved, same shape. This item replaces P103-A-LEDGER-PREDICATE-MUST-NOT-INHERIT-UNRELATED-CRATE-OBLIGATIONS, which stated the same defect and reserved docs/records/OD-LEDGER-039 as its territory. Claiming that item and inspecting the carrier question showed the convention is procedural rather than semantic, on four measurements. VerificationPredicate is not declared in nomos-ledger at all: OD-LEDGER-037 found it ledger-agnostic and nomos-scope-verification is where it lives. Finish already keeps a failing predicate apart from one that could not be asked, and Record_From_Argv already stores exactly what ran, so both incidents are the ledger reporting an author's choice honestly rather than a semantic gap. The one ledger semantic about inherited obligation already exists and points the other way on purpose: OD-LEDGER-003 makes every item inherit the gate's lint step, and gate_unknown.rs says the test step stays authored per item. And OD-GATE-028, the nearest record about verification predicates, is the opposite polarity, a predicate green for the wrong reason rather than red for one. Nothing in the ledger's definition changes, so a governing record would restate a decided semantic instead of deciding a new one. What the rule constrains is the argv an author supplies inside work add, which is the call step 3 of the task skill already governs, and whose sibling rule, territory follows the acceptance predicate's dependency cone, landed there one commit earlier at dbc57676.",
+      "done_when": "Step 3 of .claude/skills/nomos-task/SKILL.md states the convention beside the territory rule it is a sibling of: a verification predicate establishes the item's own done_when, and does not inherit independent sibling obligations merely because they share a crate or package, unless those obligations are themselves part of the item's acceptance criterion. It is stated as scope matching rather than as breadth minimising, and the text says so explicitly: cargo test -p <crate> stays correct for an item whose claim really is that the crate remains valid, and what is rejected is verification scope wider than claimed obligation scope, not any particular command shape. It is also distinguished from the cost argument gate_unknown.rs already makes for keeping the test step per-item, so a reader does not take one for the other. Both incidents are carried as the evidence, naming which obligation each item actually claimed and which unrelated one blocked it, so a later reader can check the generalization rather than trust it. The text says how the right scope is found: the predicate comes from the same dependency cone the territory came from, and cargo test -p <package> --test <target> names one test binary where one test binary is the obligation. This item's own predicate is authored that way and the text names it as the worked example. No mechanism is built and the text says so rather than leaving the absence to read as an oversight: two instances justify a convention, not a predicate-scope validator, a scope algebra, or automatic dependency analysis. Two things are explicitly out of scope and the item is not read as covering them. The shell-status hazard found alongside the second incident, where a pipeline's exit code belonged to head rather than cargo, is a different defect class: that is observing a verdict wrongly, and this is a correct verdict about the wrong scope. And restating the convention in AGENTS.md is not owed, because that file routes to authority rather than stating rules; the cost, that a convention in a Claude-only adapter is invisible to another agent, is accepted on the same terms the sibling territory rule accepted it one commit earlier.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-task/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 14 tests\ntest Test_The_Contract_Should_Name_The_Selection_Authority_Rather_Than_Instruct_Picking ... ok\ntest checks::Test_The_Adapter_Should_Import_The_Contract_Rather_Than_Repeat_It ... ok\ntest checks::Test_The_Contract_Should_Stay_Inside_Its_Line_Budget ... ok\ntest checks::Test_The_Repository_Should_Have_An_Agent_Front_Door ... ok\ntest Test_A_Cited_Contract_Step_Should_Still_Say_What_Is_Quoted_From_It ... ok\ntest checks::Test_The_Contract_Should_Name_Every_Authority_It_Routes_To ... ok\ntest checks::Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Ledger_Verb_Reference ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Gate_Command_List ... ok\ntest checks::Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard ... ok\ntest checks::Test_Every_Path_The_Harness_Names_Should_Exist ... ok\ntest controls::Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It ... ok\ntest checks::Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-cb6ddcb0c46d55b5.exe)\n",
+        "verified_at": 1789424170,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c7684a56d91355268d7b5a6cb4368139f8b181ad"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
