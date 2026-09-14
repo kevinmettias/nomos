@@ -85,6 +85,14 @@ pub fn Capability_Contract() -> CapabilityContract
 ///
 /// [`IncrementalGranularity::Project`] is the module doc's reason: there is no partial
 /// refresh to offer.
+///
+/// Exercised by `Test_The_Derived_Fact_Should_Claim_No_More_Than_Its_Inputs`.
+///
+/// It is the right one to name because it is about what this rollup *emits*: it pulls a
+/// real rolled-up fact back out of the store and asserts the derived guarantee is bounded
+/// by the leaf guarantee it derived from, on every axis. A derivation claiming more than
+/// its inputs is the one way this declaration could be false, and that test is what would
+/// catch it.
 #[must_use]
 pub const fn Declared_Guarantee() -> Guarantee
 {

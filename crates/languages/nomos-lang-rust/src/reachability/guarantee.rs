@@ -34,6 +34,20 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity,
 ///
 /// The identical argument `crate::Declared_Guarantee` gives: `syn` parses one file's bytes
 /// or fails, with no partial reparse a coarser or finer claim could ride on.
+///
+/// Exercised by nothing, and that is a gap rather than an impossibility.
+///
+/// `tests/reachability_capability.rs` holds three tests and all three are the downward
+/// direction: the offer is accepted by the contract, an offer claiming more than the ceiling
+/// is refused, and the declared guarantee satisfies that ceiling. Every one of them would
+/// pass against a provider that emitted nothing at all.
+///
+/// What is missing is nameable, which is why this says "gap". Soundness here would assert
+/// that every site this offer reports as reaching a finding really does — `crate::Declared_Guarantee`'s
+/// own `Test_Soundness_Should_Hold_Every_Reported_Name_Occurs_In_The_Source` is the shape,
+/// against control-flow sites instead of names. Writing it is a separate increment;
+/// `OD-CAPABILITY-016` requires the absence to be stated here rather than left silent, and
+/// a stated gap somebody can pick up is what that record means by information.
 #[must_use]
 pub const fn Declared_Guarantee() -> Guarantee
 {

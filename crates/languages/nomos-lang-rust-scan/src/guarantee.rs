@@ -42,9 +42,11 @@ pub const LANGUAGE: &str = "rust";
 /// [`Assurance::Unsound`] for soundness, not `Unknown`. `Unknown` means nobody has
 /// established it either way; this is established, and it is false.
 ///
-/// `Test_The_Declared_Unsoundness_Should_Be_Demonstrable`, in `crate::scanned_item`'s own
-/// test module, is what establishes it — named here rather than gestured at, so that
-/// `OD-CAPABILITY-016`'s resolver can find it and fail if it ever resolves to nothing. It
+/// Exercised by `Test_The_Declared_Unsoundness_Should_Be_Demonstrable`.
+///
+/// That test, in `crate::scanned_item`'s own test module, is what establishes it — named
+/// behind the marker `OD-CAPABILITY-016`'s resolver reads, rather than gestured at, so it
+/// fails if it ever resolves to nothing. It
 /// exhibits four real inputs: a declaration inside a block comment and one behind
 /// `#[cfg(never)]` are both reported though neither is there, which is the unsoundness; an
 /// item nested on one line and a declaration split across two lines are missed or

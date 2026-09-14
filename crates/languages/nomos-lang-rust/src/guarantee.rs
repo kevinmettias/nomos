@@ -71,6 +71,13 @@ pub const LANGUAGE: &str = "rust";
 /// requires reparsing exactly that file. Not `Symbol`: `syn` parses a whole file or
 /// fails, and there is no partial reparse to offer. Claiming `Symbol` would let the
 /// invalidation engine refresh one function and believe the rest of the file current.
+///
+/// Exercised by `Test_Soundness_Should_Hold_Every_Reported_Name_Occurs_In_The_Source`.
+///
+/// One name, and `tests/guarantee.rs` holds ten. `OD-CAPABILITY-016` requires a named
+/// exerciser rather than a test per axis, so the marker names the assertion the other nine
+/// rest on: soundness is the axis `Satisfies_Requirement` turns on, and a provider that
+/// invented items would fail this one first. The file beside it is the rest.
 #[must_use]
 pub const fn Declared_Guarantee() -> Guarantee
 {

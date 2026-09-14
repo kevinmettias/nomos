@@ -68725,6 +68725,69 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P96-THE-RUST-PROVIDER-FAMILYS-GUARANTEES-NAME-THEIR-EXERCISERS",
+      "title": "Four guarantee declarations in the Rust provider family name nothing a resolver can find",
+      "why": "b8cc19d6 composed guarantee-declares-its-exerciser and it reports 20 findings, 19 of them real declarations plus one unreadable corpus file. Four of the 19 are the Rust provider family, and three of those four already have a real upward exerciser -- the work is naming it in the form the resolver reads, not writing a test. nomos-lang-rust has tests/guarantee.rs, one property per axis including the axis it declares it fails. nomos-lang-rust-scan has Test_The_Declared_Unsoundness_Should_Be_Demonstrable, which exhibits four real inputs it mis-reports. nomos-lang-rust rollup has Test_The_Derived_Fact_Should_Claim_No_More_Than_Its_Inputs, read before claiming it: it pulls a real rolled-up fact out of the store and asserts the derived guarantee is bounded by its inputs on every axis, which is an assertion about emitted output and not about a value. The fourth, nomos-lang-rust reachability, has only downward tests -- the offer is accepted, an offer claiming more is refused, the ceiling is satisfied -- and owes a stated absence rather than a name.",
+      "done_when": "Each of the four declarations carries the marker the rule reads. Three name a test that resolves: the name is checked to exist rather than assumed, and each is a real assertion about what the provider emits rather than about the declared value. The fourth states it has no exerciser and why, which is the requirements other half and not an escape from it -- the reason names what a test would have to assert rather than merely recording that none exists. nomos gate run --root . reports exactly four fewer guarantee-declares-its-exerciser findings than the 20 b8cc19d6 measured, and the number is stated in the commit rather than left to be inferred. No test is written, no guarantee value changes, and cargo test -p nomos-lang-rust -p nomos-lang-rust-scan -p nomos-rules passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust/src/guarantee.rs",
+          "crates/languages/nomos-lang-rust/src/reachability/guarantee.rs",
+          "crates/languages/nomos-lang-rust/src/rollup/contract.rs",
+          "crates/languages/nomos-lang-rust-scan/src/guarantee.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-rust-scan",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-rust-scan",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "r ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.81s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-23b50e3a2e32639c.exe)\n     Running tests\\corpus\\main.rs (target\\debug\\deps\\corpus-c2720b79780b5f02.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-2cdba526d7fcc0bc.exe)\n     Running tests\\reachability_capability.rs (target\\debug\\deps\\reachability_capability-d29c195146664ce9.exe)\n     Running tests\\rollup.rs (target\\debug\\deps\\rollup-75d955981501455d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_scan-0ac8f03a58a32733.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-ad83106c024b1dca.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-1afa514ca14385db.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-fb22c2e5d43d8a36.exe)\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_lang_rust_scan\n   Doc-tests nomos_rules\n",
+        "verified_at": 1789349192,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b8cc19d64898dd1714e239eb255903ffed91497e"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
