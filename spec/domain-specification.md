@@ -111,6 +111,8 @@ profile: domain-specification
 | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md@authored | docs/records/OD-GATE-024-a-finding-a-rule-addresses-by-sub-item-cannot-be-named-by-a-person-in-a-declared-policy.md | authored | 36 | 9 | sha256:976dbc3e7de91a5dcca2d62ad0b6ab43726a8e065cbcd1aa5516963cc03ebd93 |
 | docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md@authored | docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md | authored | 35 | 9 | sha256:ee8f60df55168698b0463998c8b6c953f0356311dfed9d1293e434cdc3117461 |
 | docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md@authored | docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md | authored | 39 | 11 | sha256:acbbd697996692163827ea080880c27e2aeb1a5a97947ce8eac52c8ae6f095d5 |
+| docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md@authored | docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md | authored | 25 | 7 | sha256:6e06898cbe0b96289a1aeb71c9910b523db4ff387c6fa72afcf1b8bb541605ee |
+| docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md@authored | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md | authored | 24 | 7 | sha256:c030a0d278ffdd46f798cdff6b73b5eaed0506d69bba9122f5883fe9f563ee05 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -1062,6 +1064,20 @@ profile: domain-specification
 | docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#30 | authored | 3 | What `OD-RULES-029` changes about this, and what it does not |
 | docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#33 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#38 | authored | 2 | Status |
+| docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#1 | authored | 1 | Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled |
+| docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#10 | authored | 2 | Decision |
+| docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#14 | authored | 2 | What This Does And Does Not Invalidate |
+| docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#20 | authored | 2 | Recovery |
+| docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#23 | authored | 2 | Alternatives Considered |
+| docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#1 | authored | 1 | A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail |
+| docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#5 | authored | 2 | The Three Instances |
+| docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#10 | authored | 2 | The Common Cause |
+| docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#13 | authored | 2 | Why This Earns A Record |
+| docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#16 | authored | 2 | The Obligation |
+| docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#22 | authored | 2 | What This Does Not Do |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -28317,6 +28333,403 @@ Accepted. The prospective question is answered, by a fourth gate verb over a cra
 seamed in `nomos-gate-orchestration` beside `Explain_Gate` so a second surface reuses it, with
 three outcomes of which the third — not judged, when an endpoint has no declared zone — is what
 keeps it from answering "fine" about a crate it has never heard of.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#1
+
+*revision: authored · kind: heading · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled · hash: sha256:d99e20328bbe187bd8b9f51399c6f7754fa9e741dc7745291e27bee3596719bc*
+
+# Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#2
+
+*revision: authored · kind: heading · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#3
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / Question · hash: sha256:b6fe122874e5e15df3e2705f1585f99c6c303413d78ca2da7a967c77cbdde044*
+
+`OD-GATE-006` decided that a declaration of enforcement is incomplete until something executes
+it, in every environment the claim needs. One of those environments has stopped executing.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#4
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / Question · hash: sha256:1ec8f5ce92c9cf5209f17594abfb09a4e62a5a2befc551ee9bb9439875fbb15f*
+
+What does a red check on a commit mean while that is true, and what exactly has and has not been
+established about the commits landed during it?
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#5
+
+*revision: authored · kind: heading · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#6
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / What Was Measured · hash: sha256:347de15fee1cbc99a8d2ef55cac47d289803e87f0a937f50de1c7017fdfe69c7*
+
+Taken from the run history on 2026-09-14, not inferred from a single failure.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#7
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / What Was Measured · hash: sha256:be7e77d13db281bec8a2a720c06fc9b33473c069defb9ee7621027409e2ad280*
+
+| | |
+|---|---|
+| Last run that actually executed | `2026-09-07T06:19:25Z`, duration **25m44s** |
+| First refusal | `2026-09-07T06:35:58Z`, duration **5s** — sixteen minutes later |
+| Refusals since | **23**, every one between 2 and 9 seconds |
+| Most recent | `2026-09-14T17:19:00Z` |
+| Steps executed in a refusal | **zero**, on both `ubuntu-latest` and `windows-latest` |
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#8
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / What Was Measured · hash: sha256:6d51274b3ae32d204e9569082cc133a689d0e3e2183be474b93c4165e99fe7da*
+
+The run annotation is the cause and names itself: *"The job was not started because recent
+account payments have failed or your spending limit needs to be increased."*
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#9
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / What Was Measured · hash: sha256:fbd2757000a175f1a2a760054c1238e07a003b563308bb40873b8dd59781b7d0*
+
+Duration is what separates the two populations and is why this is measurable at all. A real gate
+run on this workspace takes six to twenty-six minutes. Nothing between nine seconds and one
+minute appears in two hundred runs, so there is no ambiguous middle to argue about.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#10
+
+*revision: authored · kind: heading · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#11
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / Decision · hash: sha256:82273dc70ec62995ebe2bb308a8c03cec03fe14ac073607d980855dfff1e8eee*
+
+**Remote gate availability is `Unavailable`, with a recorded reason and a recorded date, and it
+is not a failure.**
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#12
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / Decision · hash: sha256:5c9dcf35c693b70bab497d7fe175c5d85b6f9f049bbd553ce39471b350b5c414*
+
+This workspace already owns the distinction rather than needing a new one, and this record
+borrows it rather than declaring a parallel vocabulary. `Applicability` separates
+`MissingCapability` and `ProviderUnavailable` from a judgment, precisely so that "nothing could
+look" never reads as "nothing was wrong". `SynchronizationState::Unavailable` carries the same
+note in its own test: unavailable is not agreement, and it is not divergence either. A refused
+workflow is that state for the gate.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#13
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / Decision · hash: sha256:94008ab9e79d5880e86f488f3c97928173afd59482b2806b536082174a697594*
+
+**A red check on a commit in this window means the workflow was never scheduled.** It does not
+mean a step ran and reported something. Anyone reading the history — a person, or a later
+session reasoning about whether a commit was sound — must not read these as gate failures, and
+the distinction is not visible from the check mark alone, which is the entire reason this is
+written down.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#14
+
+*revision: authored · kind: heading · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / What This Does And Does Not Invalidate · hash: sha256:4a4f2d4d6cb5c72ec9ac49e5eda4ec4472c287391b5996e60e31ec8d133eddb2*
+
+## What This Does And Does Not Invalidate
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#15
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / What This Does And Does Not Invalidate · hash: sha256:eaff04bfe2cdfca49a8830371cf168f8ea50ef75b8c537c1da1f990e0ac7340d*
+
+The precision here is the substance, and both errors are available.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#16
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / What This Does And Does Not Invalidate · hash: sha256:44ad1908f811ee0095ac599e851d66f0ee1ffff28a7cf38776e0ab4d33df9f5b*
+
+**Not invalidated.** Every commit in this window carries the verification its own ledger item
+declared. `nomos work finish` runs the gate's own lint step, derived from `gate.yml` rather than
+restated, and then the item's declared predicate, and records the item done only if both exit
+zero. That is real evidence, it was really produced, and nothing here weakens it. Saying these
+commits are "unverified" would be false.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#17
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / What This Does And Does Not Invalidate · hash: sha256:c0cab032ac31220e8ce4b21450fdb061c430bb4f32cccc5f93bd7ac6f0b3d536*
+
+**Invalidated, exactly.** What no commit after `2026-09-07T06:19:25Z` carries is **remote
+full-gate execution evidence**: the whole step set, on both runners, in an environment nobody's
+working tree influenced. The gate has steps no item predicate is obliged to run — the
+compatibility floor toolchain, the portability floor over freestanding targets, the supply-chain
+step, determinism over its named crate set, the required-projection freshness check — and a
+claim resting on any of those is currently unverified rather than merely unrepeated.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#18
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / What This Does And Does Not Invalidate · hash: sha256:921b5b902a2bc2934918221ce21c54cc5b5f2d95f696388b735dce1f2cc2fe7f*
+
+The gap between those two statements is the whole content of this record. A claim is supported by
+the commands that actually ran, and by no others.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#19
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / What This Does And Does Not Invalidate · hash: sha256:4b8efa2f9b1269ce3a51adb58843f123357f511a2553bb0cd2af0e1e4a659224*
+
+**A second-order consequence worth naming.** Because a shared working tree can warm a build and
+because a local predicate is run by the same machine that produced the change, the remote gate
+was the one observer with no relationship to the tree under test. `OD-GATE-028` records a defect
+class found while this was true, in which a verification mechanism modified or bypassed what it
+existed to observe; the remote gate is the environment that would have caught two of its three
+instances for free.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#20
+
+*revision: authored · kind: heading · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / Recovery · hash: sha256:1237cb3128050707a499c1e2850a080b6e767487e1247b945f6749273983a29e*
+
+## Recovery
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#21
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / Recovery · hash: sha256:b9ed95747621965125bd6d17304f072f4ed78ff6db2033fc7038a8995555fb6b*
+
+1. Restore Actions execution — a billing or spending-limit matter outside this repository.
+2. Run the full gate against current `dev` before treating any red check as informative again.
+   Until that one run succeeds, the state this record describes has not ended.
+3. Replay from `2026-09-07` only if historical remote evidence turns out to matter for a specific
+   claim. It is not owed by default: the commits carry their own predicates, and re-running a
+   week of history to produce evidence nobody has asked for is the kind of work this repository
+   declines elsewhere for the same reason.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#22
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / Recovery · hash: sha256:3ea99bbafcf53da6854dcb0733c942fd04f87548ebceaa41d3bef4c67b8dd2d7*
+
+**This record is retired by the first successful run, not by a decision.** Availability is a fact
+about the world, so what ends this is an observation and not an argument. Whoever sees a real
+execution complete should supersede it and say which run they saw.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#23
+
+*revision: authored · kind: heading · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / Alternatives Considered · hash: sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83*
+
+## Alternatives Considered
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#24
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / Alternatives Considered · hash: sha256:2b6a653c0bf0d082d6b1a41887b4a42801e6f36c4dd2d9520891a4ba031fc7bf*
+
+**Saying nothing and relying on people knowing.** Rejected on the evidence of this session: the
+red checks were present for a week and were not noticed until somebody went looking for an
+unrelated reason. A signal that reads as its own opposite is exactly what this repository writes
+records about.
+
+### docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#25
+
+*revision: authored · kind: prose · heading: Remote gate evidence is unavailable, and a red check currently means the workflow was never scheduled / Alternatives Considered · hash: sha256:611ac5c230e5846b9447edfe1f6b006ce51269861d45975fc514076506a9077e*
+
+**Treating the window's commits as unsound.** Rejected as false, and as the more damaging of the
+two available errors — it would discard real evidence and invite re-doing work that was verified.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#1
+
+*revision: authored · kind: heading · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail · hash: sha256:7929f292fd7100c05350c43b192033f322d2392aa5153b2699c8878e6b800a21*
+
+# A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#2
+
+*revision: authored · kind: heading · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#3
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Question · hash: sha256:1126039f50d5ec6c95c784358fdde67f4d6222fd3d12dcdbe50ca7c47917b87e*
+
+`OD-GATE-001` decided that a skipped test reports `ok`, and this workspace has built a good deal
+of machinery on the principle behind it: a check that verified nothing must not report what a
+check that verified everything reports. Every instance of that principle so far has concerned the
+*subject* — an empty corpus, a rule that judged no file, a universe with no members.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#4
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Question · hash: sha256:e56c4cf1b61cb4786ed1f06392494aff49177ee49026ae468755bb931c4fb012*
+
+Three defects found in one session share a different cause, and it is not an empty subject. In
+each, the subject was present and the violation was real, and the verification mechanism
+destroyed or stepped around the violation on its way to looking.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#5
+
+*revision: authored · kind: heading · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Three Instances · hash: sha256:5cca39d71c8fa4eb0b77e72c5ceddfaeded03d45b90bd65f5ab29bac8a067e33*
+
+## The Three Instances
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#6
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Three Instances · hash: sha256:01ad361b2bf331df05b4aa1aae09cffc22db32513596cffa23c38bf587cfb813*
+
+Evidence, not illustration. Each was measured, and each reported success.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#7
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Three Instances · hash: sha256:69ef47db27d30ef7689aaf4428ba191e191c13ea91fa2c40fe4c2d61a8849ec2*
+
+**A warm target directory answered for a build that never happened.** `cargo check --workspace
+--all-targets`, run to establish that this workspace builds against a pinned XVPE revision,
+exited zero in twenty seconds having compiled no `xvpe-` crate at all: a concurrent session had
+already warmed the shared target directory. The identical command with an isolated
+`CARGO_TARGET_DIR` compiled ten of them from the pinned revision by name. The exit code was
+evidence that nothing failed to typecheck against artifacts somebody else produced, which is not
+the claim it was being read as.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#8
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Three Instances · hash: sha256:aa966383735f63688182d4fb1f3bdc7986dac393f3785b463f58be4a55cbcffa*
+
+**An ambient configuration kept a violation alive, and was the only reason a guard could fail.**
+A guard over `Cargo.lock` was landed, and appeared to work: the lock was un-pinned, the guard went
+red. It went red because an auto-discovered `.cargo/config.toml` kept a Cargo patch applied
+throughout the test run. When `OD-PLATFORM-004`'s amendment made that substitution opt-in — a
+strictly better arrangement, for unrelated reasons — the guard stopped being able to fail at all.
+A correct change to something else silently disarmed it.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#9
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Three Instances · hash: sha256:5cad6416025407c7f1b47d8e8639edc62f77956b7c370897e5c3db4b8589cacf*
+
+**Test setup repaired the violation before the test body could see it.** The same guard read
+`Cargo.lock` from the working tree. Cargo re-resolves and re-pins that file on any invocation,
+including the `cargo test` that runs the guard. Measured: an opt-in build left the tree at zero of
+twelve packages pinned, and one ordinary `cargo metadata` call restored all twelve. By the time
+the test opened the file, the defect had been undone underneath it.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#10
+
+*revision: authored · kind: heading · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Common Cause · hash: sha256:d97cbaa85665530ddc6ba72c623c441e221152756c6079bafc29d72c0c401061*
+
+## The Common Cause
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#11
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Common Cause · hash: sha256:3723fcc124601c797c44e6312bfb36c428a3eb23b1fd5d3e502472edde8bcec1*
+
+**The verification mechanism modified or bypassed the condition it existed to observe.**
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#12
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Common Cause · hash: sha256:c721cff184affe5c154d5f0a80c0f6bc062a05edf7b78da0432428aeccd3c1e8*
+
+Not bad input. Not an empty subject. In all three the violation was really there, and the act of
+checking is what removed it — by reusing work done under other conditions, by depending on an
+ambient state that was itself the violation, or by running a tool that repairs the artifact under
+test as a side effect of starting.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#13
+
+*revision: authored · kind: heading · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Why This Earns A Record · hash: sha256:d6f6a49f4eec25a5ffa1f9ebfff63e1e243b66b6031e04a32197c21d08a0c228*
+
+## Why This Earns A Record
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#14
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Why This Earns A Record · hash: sha256:a57fcb2aacf88f8c0dbf2f5a605633cccced8ee59f2c7d0660bd2b2d45b6ac3f*
+
+Because of an asymmetry that makes it uniquely expensive: **a predicate in this state cannot
+report the problem itself.** An ordinary broken check goes red and somebody investigates. One of
+these is green, stays green, and is green *for the wrong reason*, so every signal available says
+the thing it guards is fine. Two of the three above were found by checking a `done_when` clause
+by hand; the third by reading the build log of a command that had already exited zero. None was
+found by anything failing, and none could have been.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#15
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Why This Earns A Record · hash: sha256:ba549ad3cd01eafb53e92dbeb4c7852a9f5334d5902121dfb69981bbb6ce6abe*
+
+It is also self-concealing in a way `OD-GATE-001`'s family is not. Vacuity over an empty subject
+is at least visible to anyone who asks how many subjects there were — which is why the vacuity
+tracking in the preservation run exists. Here the count is right, the subject is right, and the
+answer is still meaningless.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#16
+
+*revision: authored · kind: heading · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Obligation · hash: sha256:260d1cafe957519aecc3e578bb2f8f95fa12cc51be7cd043a4dc1f04fcdedcfb*
+
+## The Obligation
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#17
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Obligation · hash: sha256:6de3d2546498ef11368ef05ea0dc01fc91fe0f6635b0e7bb4ad6dad2a291409e*
+
+**A predicate is not established until it has been observed to fail on a real violation.**
+Passing on a tree that already satisfies it is not evidence that it can fail; it is consistent
+with a predicate that cannot.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#18
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Obligation · hash: sha256:91bee5852b9bcd707b111028b9d0ebd659420c4291c2f3b6499954c79126711f*
+
+Two consequences, both practised in the commits this record was written from.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#19
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Obligation · hash: sha256:db5d6ce3fad695df0ec6bc75b6c74fd41f50ff9afc30c9872393bfcfdf6565e7*
+
+**Separate the judging from the gathering.** Where the judgment can be a function over content —
+lock text, manifest text, a report's bytes — it can be handed a violating input directly and
+required to reject it, with no build and no repository state involved. That negative control
+answers the question independently of whatever the environment did.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#20
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Obligation · hash: sha256:11667fdd622bc98312fa26ca40e985955e1436f95b7b1dc4f5843c5155c56a5a*
+
+**Treat the environment as part of the subject.** Ask what the predicate's own execution does to
+what it measures, and what it inherits from a tree it does not control: a shared target
+directory, an auto-discovered configuration, a tool that rewrites its inputs, a cache, a lock, a
+previously generated artifact. Where that relationship is load-bearing, the predicate says so and
+arranges to be immune to it — an isolated target directory, the committed blob rather than the
+working file, an explicit opt-in rather than an ambient default.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#21
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / The Obligation · hash: sha256:acaf230669f5eb848a05cbeb82f8519207fe9401166a09c0ea4eab62b497006c*
+
+`OD-GATE-027` records a circumstance that sharpens this: while remote gate execution is
+unavailable, the one observer with no relationship to the tree under test is absent, and two of
+the three instances above would have been caught there for free.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#22
+
+*revision: authored · kind: heading · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#23
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / What This Does Not Do · hash: sha256:14ce53714aefe614162aa011f8bf2db68f6e03420698c9041ef8a1124aff1f4b*
+
+**It does not build an abstraction.** There is no trait, no harness and no generalized
+"environment-independent predicate" type, deliberately. Three instances in one session is a
+population worth naming and not yet a population worth designing against — the same criterion
+`OD-CAPABILITY-002` uses for when a contract earns a crate, and `OD-STORE-001` for when a thing
+earns its place: something must have to behave differently, not merely be tidier. What the three
+share today is a reading habit, and a record is the right shape for a reading habit.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#24
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / What This Does Not Do · hash: sha256:16ecadeaf24b17e865956dca63e819b71f37586ce20c1e46b728dd75e715289d*
+
+**It is expected to recur, and naming where is the point of writing it down now.** Cache
+validation and incremental analysis both answer from work done under prior conditions. Generated
+artifacts and projections are rewritten by the tools that check them — the freshness check already
+keeps *stale* and *edited* apart for a closely related reason. Correction staging mutates a tree
+and then judges it. Replay asserts that a rerun reaches the same place, which is the whole class
+in miniature. When the second or third of those arrives with the same shape, the population may
+be worth an abstraction, and this record is what a later reader should be holding when deciding
+that.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

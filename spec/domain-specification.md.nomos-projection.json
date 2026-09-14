@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:7960f18ed27ed58eb0ba39864b07effaf3d9b57d8e5fa74fa27fb353b0211e44",
-  "inputs_digest": "sha256:1133597a808d6787cf0d41534799c6fc61e0b6affba37c856414c927f179905d",
+  "content_digest": "sha256:205c7947493a2678f41eb73dcbf84d82ce267334f3101f00388a9e3af7d0e612",
+  "inputs_digest": "sha256:d289cf130807684a8ffb940644e6eca7639df6081c0e48996ea9cd1a066f41d4",
   "sections": [
     [
       "Documents",
-      242
+      244
     ],
     [
       "Sections",
-      2002
+      2016
     ],
     [
       "Source blocks",
-      6987
+      7036
     ]
   ],
   "inputs": [
@@ -524,6 +524,16 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md@authored",
       "hash": "sha256:acbbd697996692163827ea080880c27e2aeb1a5a97947ce8eac52c8ae6f095d5"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md@authored",
+      "hash": "sha256:6e06898cbe0b96289a1aeb71c9910b523db4ff387c6fa72afcf1b8bb541605ee"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md@authored",
+      "hash": "sha256:c030a0d278ffdd46f798cdff6b73b5eaed0506d69bba9122f5883fe9f563ee05"
     },
     {
       "content": "documents",
@@ -5254,6 +5264,76 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#38",
       "hash": "sha256:4499ff49736e56f9b24733b8a3b522f6339d0fd1e51651597085f368f88dfea8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#1",
+      "hash": "sha256:6cd2b0a7872572ad3a8608ecc0348c743ee995cb8874b11b5ac2ace265aeb4b6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#2",
+      "hash": "sha256:f5f58769da267ecee2eae286130972f0477d8cb1c5470b5709d6b8f93d25d23d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#5",
+      "hash": "sha256:8ce83d88ee6e471b67de574803f0053b4d773a7e32be055425126a8cac05f4eb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#10",
+      "hash": "sha256:f7a589c392e02e677a679862b74e2c272841a68453018507c8d2b087f373243d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#14",
+      "hash": "sha256:925e62b77c2b5414ee31ac01d26e19dc19f0297095f463a62865628a41f06cc2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#20",
+      "hash": "sha256:0229c17efe990590e27af8de052a70e02e0066e0114b90ed319bcf5e7fad7395"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#23",
+      "hash": "sha256:132c866f91dfddbc4df1b439fb2d63b61697a0e7d8879307f1534e87ca9c2d77"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#1",
+      "hash": "sha256:962636ca99ee6ce9ea72297458d4314dc1f9b11e12ca85cd323ffff1da6c6a67"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#2",
+      "hash": "sha256:3f035b6aa0a8bf564199e375f81b1724e4f4860e46355afbf5f21e92ce585e6b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#5",
+      "hash": "sha256:54412c2af535652d0dfa96dfb1445e2831478151c7a7ceba373322e7fd7a7463"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#10",
+      "hash": "sha256:c2fdd0b2899f98ed84923b5b65b581b9dbec82f819e5f4266c4d140eb8fd90ce"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#13",
+      "hash": "sha256:5ba73ecc8318c83b21644fd93bdaf023717fb781900f12d5e26d9462dec0dfb2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#16",
+      "hash": "sha256:0b0879eb41598a3e776c60a17b5224b752268ab8a8e8314c567c667c9f41e6d2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#22",
+      "hash": "sha256:77933af4c8c8012bb89822a794508679398b5136bdda45ed92bff9f3c93fdbcc"
     },
     {
       "content": "headings",
@@ -25159,6 +25239,251 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md#39",
       "hash": "sha256:409e2331c39407ab30bf51d3b529200ae3bf6e8785ccc1f86bd7939f7ecb9204"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#1",
+      "hash": "sha256:d99e20328bbe187bd8b9f51399c6f7754fa9e741dc7745291e27bee3596719bc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#3",
+      "hash": "sha256:b6fe122874e5e15df3e2705f1585f99c6c303413d78ca2da7a967c77cbdde044"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#4",
+      "hash": "sha256:1ec8f5ce92c9cf5209f17594abfb09a4e62a5a2befc551ee9bb9439875fbb15f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#6",
+      "hash": "sha256:347de15fee1cbc99a8d2ef55cac47d289803e87f0a937f50de1c7017fdfe69c7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#7",
+      "hash": "sha256:be7e77d13db281bec8a2a720c06fc9b33473c069defb9ee7621027409e2ad280"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#8",
+      "hash": "sha256:6d51274b3ae32d204e9569082cc133a689d0e3e2183be474b93c4165e99fe7da"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#9",
+      "hash": "sha256:fbd2757000a175f1a2a760054c1238e07a003b563308bb40873b8dd59781b7d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#10",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#11",
+      "hash": "sha256:82273dc70ec62995ebe2bb308a8c03cec03fe14ac073607d980855dfff1e8eee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#12",
+      "hash": "sha256:5c9dcf35c693b70bab497d7fe175c5d85b6f9f049bbd553ce39471b350b5c414"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#13",
+      "hash": "sha256:94008ab9e79d5880e86f488f3c97928173afd59482b2806b536082174a697594"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#14",
+      "hash": "sha256:4a4f2d4d6cb5c72ec9ac49e5eda4ec4472c287391b5996e60e31ec8d133eddb2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#15",
+      "hash": "sha256:eaff04bfe2cdfca49a8830371cf168f8ea50ef75b8c537c1da1f990e0ac7340d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#16",
+      "hash": "sha256:44ad1908f811ee0095ac599e851d66f0ee1ffff28a7cf38776e0ab4d33df9f5b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#17",
+      "hash": "sha256:c0cab032ac31220e8ce4b21450fdb061c430bb4f32cccc5f93bd7ac6f0b3d536"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#18",
+      "hash": "sha256:921b5b902a2bc2934918221ce21c54cc5b5f2d95f696388b735dce1f2cc2fe7f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#19",
+      "hash": "sha256:4b8efa2f9b1269ce3a51adb58843f123357f511a2553bb0cd2af0e1e4a659224"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#20",
+      "hash": "sha256:1237cb3128050707a499c1e2850a080b6e767487e1247b945f6749273983a29e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#21",
+      "hash": "sha256:b9ed95747621965125bd6d17304f072f4ed78ff6db2033fc7038a8995555fb6b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#22",
+      "hash": "sha256:3ea99bbafcf53da6854dcb0733c942fd04f87548ebceaa41d3bef4c67b8dd2d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#23",
+      "hash": "sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#24",
+      "hash": "sha256:2b6a653c0bf0d082d6b1a41887b4a42801e6f36c4dd2d9520891a4ba031fc7bf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md#25",
+      "hash": "sha256:611ac5c230e5846b9447edfe1f6b006ce51269861d45975fc514076506a9077e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#1",
+      "hash": "sha256:7929f292fd7100c05350c43b192033f322d2392aa5153b2699c8878e6b800a21"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#3",
+      "hash": "sha256:1126039f50d5ec6c95c784358fdde67f4d6222fd3d12dcdbe50ca7c47917b87e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#4",
+      "hash": "sha256:e56c4cf1b61cb4786ed1f06392494aff49177ee49026ae468755bb931c4fb012"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#5",
+      "hash": "sha256:5cca39d71c8fa4eb0b77e72c5ceddfaeded03d45b90bd65f5ab29bac8a067e33"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#6",
+      "hash": "sha256:01ad361b2bf331df05b4aa1aae09cffc22db32513596cffa23c38bf587cfb813"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#7",
+      "hash": "sha256:69ef47db27d30ef7689aaf4428ba191e191c13ea91fa2c40fe4c2d61a8849ec2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#8",
+      "hash": "sha256:aa966383735f63688182d4fb1f3bdc7986dac393f3785b463f58be4a55cbcffa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#9",
+      "hash": "sha256:5cad6416025407c7f1b47d8e8639edc62f77956b7c370897e5c3db4b8589cacf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#10",
+      "hash": "sha256:d97cbaa85665530ddc6ba72c623c441e221152756c6079bafc29d72c0c401061"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#11",
+      "hash": "sha256:3723fcc124601c797c44e6312bfb36c428a3eb23b1fd5d3e502472edde8bcec1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#12",
+      "hash": "sha256:c721cff184affe5c154d5f0a80c0f6bc062a05edf7b78da0432428aeccd3c1e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#13",
+      "hash": "sha256:d6f6a49f4eec25a5ffa1f9ebfff63e1e243b66b6031e04a32197c21d08a0c228"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#14",
+      "hash": "sha256:a57fcb2aacf88f8c0dbf2f5a605633cccced8ee59f2c7d0660bd2b2d45b6ac3f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#15",
+      "hash": "sha256:ba549ad3cd01eafb53e92dbeb4c7852a9f5334d5902121dfb69981bbb6ce6abe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#16",
+      "hash": "sha256:260d1cafe957519aecc3e578bb2f8f95fa12cc51be7cd043a4dc1f04fcdedcfb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#17",
+      "hash": "sha256:6de3d2546498ef11368ef05ea0dc01fc91fe0f6635b0e7bb4ad6dad2a291409e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#18",
+      "hash": "sha256:91bee5852b9bcd707b111028b9d0ebd659420c4291c2f3b6499954c79126711f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#19",
+      "hash": "sha256:db5d6ce3fad695df0ec6bc75b6c74fd41f50ff9afc30c9872393bfcfdf6565e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#20",
+      "hash": "sha256:11667fdd622bc98312fa26ca40e985955e1436f95b7b1dc4f5843c5155c56a5a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#21",
+      "hash": "sha256:acaf230669f5eb848a05cbeb82f8519207fe9401166a09c0ea4eab62b497006c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#22",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#23",
+      "hash": "sha256:14ce53714aefe614162aa011f8bf2db68f6e03420698c9041ef8a1124aff1f4b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#24",
+      "hash": "sha256:16ecadeaf24b17e865956dca63e819b71f37586ce20c1e46b728dd75e715289d"
     },
     {
       "content": "blocks",
