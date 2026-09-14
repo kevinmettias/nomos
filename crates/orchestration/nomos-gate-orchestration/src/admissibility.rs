@@ -36,6 +36,13 @@ use nomos_cap_architecture::ArchitecturePayload;
 use nomos_platform::FileSystem;
 use std::path::Path;
 
+/// The file a repository declares its architecture in, re-stated here for a composition root
+/// that has to find it before it can name a root to read it from.
+///
+/// Re-exported rather than re-spelled: `nomos_repo_policy::architecture` owns the name, and a
+/// host that typed the string itself would be a second place to change it.
+pub const ARCHITECTURE_DECLARATION_FILE: &str = nomos_repo_policy::architecture::ARCHITECTURE_JSON;
+
 /// The crate that would do the naming.
 pub struct DependingCrate<'a>(pub &'a str);
 

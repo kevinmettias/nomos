@@ -69,7 +69,7 @@ mod exit_code;
 
 pub(crate) use exit_code::ExitCode;
 pub(crate) use nomos_gate_orchestration::{FindingQuery, GateCommand};
-use nomos_platform::Clock;
+use nomos_platform::{Clock, FileSystem};
 use nomos_composer_std::{CLOCK, ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 
 use crate::arguments::Named_Value_From_String_Arguments;
@@ -77,6 +77,40 @@ use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::io::Write;
 use std::path::{Path, PathBuf};
+
+/// The nearest enclosing directory that declares an architecture, or the working directory
+/// when none does.
+///
+/// Every other gate verb takes a `--root` because it walks one. `OD-GATE-026` made `admits`
+/// the one that does not, on the ground that a crate pair needs no tree -- which was true
+/// while the architecture was a table compiled into `nomos-rules` and is not any more. Rather
+/// than give the verb a flag it had no reason to want, this composition root answers the
+/// question a developer is actually asking: the architecture of the repository I am standing
+/// in. Searching upward for the file that declares it is what `cargo` does for `Cargo.toml`
+/// and `git` does for `.git`, and it makes `nomos gate admits` work from a subdirectory, which
+/// reading the working directory alone would not.
+///
+/// This is the composition root choosing where a value comes from, which `OD-HOST-001`
+/// reserves to it, rather than a library reaching for ambient state.
+fn Declaring_Root() -> PathBuf
+{
+    let working = PathBuf::from(".");
+    let Ok(absolute) = std::fs::canonicalize(&working)
+    else
+    {
+        return working;
+    };
+
+    for ancestor in absolute.ancestors()
+    {
+        if FILE_SYSTEM.Exists(&ancestor.join(nomos_gate_orchestration::ARCHITECTURE_DECLARATION_FILE))
+        {
+            return ancestor.to_path_buf();
+        }
+    }
+
+    return working;
+}
 
 /// Runs the requested verb and renders what it says.
 pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
@@ -122,7 +156,7 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
             // and the answer is then `NotJudged` rather than a guess -- the same answer any
             // crate a declaration does not place already gets.
             let answer = nomos_gate_orchestration::Admits_Under(
-                Path::new("."),
+                &Declaring_Root(),
                 &FILE_SYSTEM,
                 nomos_gate_orchestration::DependingCrate(depending),
                 nomos_gate_orchestration::DependedCrate(depended),

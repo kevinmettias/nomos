@@ -644,28 +644,42 @@ fn Test_Admits_Should_Report_Each_Outcome_With_Its_Own_Code_And_Words()
     }
 }
 
-/// `admits` reads nothing from disk, which is what makes it answerable before the edge is
-/// written -- so it must work from a directory that is not a repository at all.
+/// `admits` walks no tree, which is what makes it answerable before the edge is written, and
+/// it takes no `--root` for the same reason. It does read one file: the architecture it judges
+/// against is the repository's own declaration, found by searching upward from the working
+/// directory the way `cargo` finds a manifest -- so the verb answers from any subdirectory,
+/// which is what this asserts. `cargo test` runs this binary with the crate directory as its
+/// working directory, four levels below the declaration, so a version that read only `.` fails
+/// here.
 ///
-/// Asserted rather than assumed: every other gate verb walks `--root`, and a later change
-/// that gave this one a walk would still pass every test above.
+/// # What this deliberately no longer does
+///
+/// It used to `set_current_dir` to the platform temporary directory and require a `permitted`
+/// answer from outside any repository, on the premise that `admits` reads nothing from disk.
+/// That premise was true while the architecture was compiled into `nomos-rules` and is not any
+/// more: outside a repository there is no architecture to answer from, and `not judged` is the
+/// honest outcome.
+///
+/// The property is still asserted -- in `nomos_gate_orchestration::admissibility`'s own
+/// `Test_A_Repository_That_Declared_Nothing_Should_Not_Be_Judged`, where a declaration that
+/// declares nothing is a value rather than a directory. That is the better home for it and not
+/// merely an available one: `set_current_dir` mutates process-global state, the Rust harness
+/// runs tests as threads of one process, and every other test resolving a relative path raced
+/// this one for as long as it stood here.
 #[test]
-fn Test_Admits_Should_Answer_Without_A_Tree()
+fn Test_Admits_Should_Answer_From_A_Subdirectory_Of_The_Declaring_Repository()
 {
-    let elsewhere = std::env::temp_dir();
-    let restore = std::env::current_dir().expect("a current directory exists");
-    std::env::set_current_dir(&elsewhere).expect("the platform temporary directory is enterable");
-
     let invocation = Invocation::Admits {
         depending: "nomos-rules".to_owned(),
         depended: "nomos-contracts".to_owned(),
     };
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
+
     let exited = Run(&invocation, &mut stdout, &mut stderr);
 
-    std::env::set_current_dir(restore).expect("the original directory is still there");
-
     assert_eq!(exited, ExitCode::Ok);
-    assert!(String::from_utf8_lossy(&stdout).contains("permitted"), "{}", String::from_utf8_lossy(&stdout));
+    let reported = String::from_utf8_lossy(&stdout).into_owned();
+    assert!(reported.contains("permitted"), "{reported}");
+    assert!(stderr.is_empty(), "an answer is not a diagnostic: {}", String::from_utf8_lossy(&stderr));
 }

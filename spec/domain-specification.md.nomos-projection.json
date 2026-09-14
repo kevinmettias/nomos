@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:307e5996e840c4d8a7c0b2bdf9910b092591ff743a68f2438c5fd54dd93016b3",
-  "inputs_digest": "sha256:c13d52200e5759aa9a3751e3150af4c232c769e4724f8d7d43b0dc8d74bf7015",
+  "content_digest": "sha256:8cc55db5240c50a5fb3974311b9b78ce230ad99592b61455af4e85d3b699183d",
+  "inputs_digest": "sha256:8fe6eb52f4df4d888bbfa7b400e43a4b6e6d005f4f85cc6e16afd12860dc5d8a",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2036
+      2037
     ],
     [
       "Source blocks",
-      7123
+      7129
     ]
   ],
   "inputs": [
@@ -1058,7 +1058,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md@authored",
-      "hash": "sha256:06d7276cc87daf98d5315060d60a9a8b745eb6a1e1af5b124691dc7e3ea0f097"
+      "hash": "sha256:7b0928d6ad02fa3bc89f07460d314ab0a71f65ce0fe9287353bf859b671c5f9a"
     },
     {
       "content": "documents",
@@ -9713,7 +9713,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#16",
-      "hash": "sha256:fa2b04417e8191b2e5be4d62c1dff7480ed76f84b6f150f5baf6828a721fbffd"
+      "hash": "sha256:7420ee69f81d9a982f097470e207f6f39f884ecdcbf373ad92e1d27da0370c47"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#22",
+      "hash": "sha256:ff7324a89e31a9d45db93497092a19e52b2c7abaa266f6a5b9d1e80b30cbfdd0"
     },
     {
       "content": "headings",
@@ -41298,12 +41303,42 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#16",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:a60d689e32da6068e58bc8c1e3ccacc77a81926645fe71be4187152c7b919bec"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#17",
-      "hash": "sha256:c6bbc0b4cbd32c1534c03bda7491c1fb484811f609f491c00725e4d099203d57"
+      "hash": "sha256:4f03cca3c81dd831804b9bfb5ab61d3d9a28800c89b40b3e921015ea3d88aebb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#18",
+      "hash": "sha256:906171ec5d8dff59afc508928e74d81bb1276ef443057c21380c4a0d0dbf81ed"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#19",
+      "hash": "sha256:66ff1571ee62312b5a818f9909289e304fa66c5355432d0e949a64709139e8a5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#20",
+      "hash": "sha256:bc5250ec800a3d416f85c803358de1d730773b359e95813c780981b0ca402519"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#21",
+      "hash": "sha256:ea37556e42b9a0572922fb55be997b3512ab991d07c5cf4d8a0764dbc9570429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#22",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#23",
+      "hash": "sha256:2ac0f00a87b6c87f98e30cede39bde81c0a00b51301ff1250f6e7b9062fe10d7"
     },
     {
       "content": "blocks",

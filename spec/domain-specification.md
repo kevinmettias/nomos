@@ -217,7 +217,7 @@ profile: domain-specification
 | docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md@authored | docs/records/OD-RULES-021-what-artifact-discharges-a-justification-requirement-and-whether-it-must-say-anything.md | authored | 20 | 6 | sha256:ea313379a437b3b5e7ba623617be84b08618537398e039ce978a91cec5a88df3 |
 | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md@authored | docs/records/OD-RULES-022-composition-resolves-a-declared-rule-package-against-a-linked-implementation.md | authored | 30 | 6 | sha256:ee25e5bafb0ab46ae96890e572a96aa4a970f0f854957c7e2474998c6a5949ad |
 | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md@authored | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md | authored | 16 | 6 | sha256:ce866cdba1b609d99736475258c51c1342b6274867a9c2e8f8703946cec253c3 |
-| docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md@authored | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md | authored | 17 | 6 | sha256:06d7276cc87daf98d5315060d60a9a8b745eb6a1e1af5b124691dc7e3ea0f097 |
+| docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md@authored | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md | authored | 23 | 7 | sha256:7b0928d6ad02fa3bc89f07460d314ab0a71f65ce0fe9287353bf859b671c5f9a |
 | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md@authored | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md | authored | 18 | 6 | sha256:93c4319371053698f6d4700251affa8044f571891fe4fe6831535c4d7cecbbc9 |
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md@authored | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md | authored | 16 | 6 | sha256:66d2427694c21ad26b870820393f14285fbb1678448d0a33f4490a61fd0f1118 |
 | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md@authored | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md | authored | 28 | 8 | sha256:65229767fb7df92fdb3e15faa97875746dd70f7a86d656248cfd622909967161 |
@@ -1953,7 +1953,8 @@ profile: domain-specification
 | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#9 | authored | 2 | The Decision |
 | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#12 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#16 | authored | 2 | Status |
+| docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#16 | authored | 2 | Amendment: One Of The Two Missing Facts Now Exists, And It Is A Declared Architecture |
+| docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#22 | authored | 2 | Status |
 | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#1 | authored | 1 | Duplicate authority needs a value-comparison fact and a canonical/projection convention |
 | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#4 | authored | 2 | What Was Measured |
@@ -57572,19 +57573,78 @@ nothing on this record's own side of it to build yet.
 
 ### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#16
 
+*revision: authored · kind: heading · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / Amendment: One Of The Two Missing Facts Now Exists, And It Is A Declared Architecture · hash: sha256:a60d689e32da6068e58bc8c1e3ccacc77a81926645fe71be4187152c7b919bec*
+
+## Amendment: One Of The Two Missing Facts Now Exists, And It Is A Declared Architecture
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#17
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / Amendment: One Of The Two Missing Facts Now Exists, And It Is A Declared Architecture · hash: sha256:4f03cca3c81dd831804b9bfb5ab61d3d9a28800c89b40b3e921015ea3d88aebb*
+
+Version 1 said both rules wait on "a real fact this workspace does not yet produce" and named
+what each would need. One of the two now exists (2026-09-14), and this record is entitled to
+say what it is rather than leave a reader to discover that its premise has half expired.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#18
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / Amendment: One Of The Two Missing Facts Now Exists, And It Is A Declared Architecture · hash: sha256:906171ec5d8dff59afc508928e74d81bb1276ef443057c21380c4a0d0dbf81ed*
+
+**What was built.** `nomos.cap.architecture.declaration`, contract in
+`crates/capabilities/nomos-cap-architecture`, one provider in `nomos-repo-policy`'s
+`architecture` module reading `nomos-architecture.json` at the repository root. It carries what
+`OD-RULES-029` insisted travels together and calls a triple: the components a repository
+divides itself into, the order over them, the named package pairs that order cannot express,
+and `OD-RULES-023`'s write authorities with it. `Check_Dependency_Direction`,
+`Check_Every_Member_Declares_A_Band` and `Check_Write_Authority` read it through the same
+`FactReader` seam they already read `nomos.cap.dependency.edges` through, and no component name
+or crate name of this workspace's survives in `nomos-rules`.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#19
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / Amendment: One Of The Two Missing Facts Now Exists, And It Is A Declared Architecture · hash: sha256:66ff1571ee62312b5a818f9909289e304fa66c5355432d0e949a64709139e8a5*
+
+**Which of this record's two rules it is for, and which it is not.** Neither, directly, and
+that is worth being exact about. This is the *declared* half of `OD-RULES-003`'s
+declared-against-observed pair — the third prerequisite that record named and left unowned. It
+is what an architecture-drift rule would judge *against*; it is not the observed call-graph or
+data-flow fact such a rule needs, and this record's measurement of that gap is unchanged.
+Representation leakage is untouched: its missing fact is a widened syntax payload or a
+provider-naming fact, and neither was built here.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#20
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / Amendment: One Of The Two Missing Facts Now Exists, And It Is A Declared Architecture · hash: sha256:bc5250ec800a3d416f85c803358de1d730773b359e95813c780981b0ca402519*
+
+**What it does change for architecture drift.** The half of that rule's input that would
+otherwise have had to be invented inside `architecture_drift.rs` now has a home, a schema and a
+provider, and a repository other than this one can author it. Version 1's warning that the
+materialization question is "not a detail to invent inside `architecture_drift.rs`" still
+stands for the observed half and is now answered for the declared half.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#21
+
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / Amendment: One Of The Two Missing Facts Now Exists, And It Is A Declared Architecture · hash: sha256:ea37556e42b9a0572922fb55be997b3512ab991d07c5cf4d8a0764dbc9570429*
+
+**The representation-leakage baseline is unchanged and still zero**, which this amendment does
+not re-measure and does not claim to have.
+
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#22
+
 *revision: authored · kind: heading · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#17
+### docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md#23
 
-*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / Status · hash: sha256:c6bbc0b4cbd32c1534c03bda7491c1fb484811f609f491c00725e4d099203d57*
+*revision: authored · kind: prose · heading: Architecture drift and representation leakage both need a fact this workspace does not yet produce / Status · hash: sha256:2ac0f00a87b6c87f98e30cede39bde81c0a00b51301ff1250f6e7b9062fe10d7*
 
-Accepted. Architecture drift and representation leakage are both real properties this
-workspace does not yet have a fact to check them against. A capability or fact decision is
-the next step for each, named here rather than improvised inside a rule's own
-implementation; representation leakage's clean baseline is recorded for whenever that
-decision lands.
+Accepted, version 2. Architecture drift and representation leakage are both real properties
+this workspace could not check when this record was written. The declared half of the first
+one's input now exists as `nomos.cap.architecture.declaration`, recorded in the amendment
+above; the observed call-graph or data-flow fact it would be judged against does not, and
+neither does representation leakage's. A capability or fact decision is still the next step for
+each of those, named here rather than improvised inside a rule's own implementation, and
+representation leakage's clean baseline is recorded for whenever that decision lands.
 
 ### docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md#1
 

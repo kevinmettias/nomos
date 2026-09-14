@@ -1,5 +1,6 @@
 pub const fn nomos_gate_orchestration::Admissibility::Is_A_Judgment(self) -> bool
 pub const fn nomos_gate_orchestration::SuppressionStatus::Suppresses(self) -> bool
+pub const nomos_gate_orchestration::ARCHITECTURE_DECLARATION_FILE: &str
 pub enum nomos_gate_orchestration::Admissibility
 pub enum nomos_gate_orchestration::CoveragePolicy
 pub enum nomos_gate_orchestration::Explanation

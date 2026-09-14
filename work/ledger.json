@@ -72875,10 +72875,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p103b",
+        "acquired_at": 1789421878,
+        "lease_expires_at": 1789429078
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -73502,14 +73506,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p100",
-        "acquired_at": 1789420834,
-        "lease_expires_at": 1789435234
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -73532,7 +73532,40 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-architecture",
+          "-p",
+          "nomos-repo-policy",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "4bb3726.exe)\n     Running tests\\record_citation.rs (F:/repos/render-p101-target\\debug\\deps\\record_citation-6dce0578a10ad979.exe)\n     Running tests\\requirement_trace\\main.rs (F:/repos/render-p101-target\\debug\\deps\\requirement_trace-61ed599bd1cad4c5.exe)\n     Running tests\\rule_composition.rs (F:/repos/render-p101-target\\debug\\deps\\rule_composition-922601583e2a18b5.exe)\n     Running tests\\rule_contract_citation.rs (F:/repos/render-p101-target\\debug\\deps\\rule_contract_citation-41a60be89467bf15.exe)\n     Running tests\\rule_descriptors.rs (F:/repos/render-p101-target\\debug\\deps\\rule_descriptors-425cc6cd0780f5c1.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/render-p101-target\\debug\\deps\\toolchain_floor-449818baa8601e8c.exe)\n     Running unittests src\\lib.rs (F:/repos/render-p101-target\\debug\\deps\\nomos_gate_orchestration-6fdf5ea7dc1da8c1.exe)\n     Running tests\\check_orchestration_seam.rs (F:/repos/render-p101-target\\debug\\deps\\check_orchestration_seam-684e14d545425906.exe)\n     Running tests\\gate_run_outcome.rs (F:/repos/render-p101-target\\debug\\deps\\gate_run_outcome-d4bc648e2964b5c1.exe)\n     Running unittests src\\lib.rs (F:/repos/render-p101-target\\debug\\deps\\nomos_lsp-d33cf656352c45f7.exe)\n     Running unittests src\\main.rs (F:/repos/render-p101-target\\debug\\deps\\nomos_lsp-12f3705af1828807.exe)\n     Running tests\\fixture_tree.rs (F:/repos/render-p101-target\\debug\\deps\\fixture_tree-532cf9694e0394e9.exe)\n     Running unittests src\\lib.rs (F:/repos/render-p101-target\\debug\\deps\\nomos_repo_policy-027f42620e579807.exe)\n     Running unittests src\\lib.rs (F:/repos/render-p101-target\\debug\\deps\\nomos_rules-a7e9a035fa86c9d3.exe)\n     Running tests\\integration_seams.rs (F:/repos/render-p101-target\\debug\\deps\\integration_seams-bc29887f4e16535e.exe)\n   Doc-tests nomos_cap_architecture\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n   Doc-tests nomos_lsp\n   Doc-tests nomos_repo_policy\n   Doc-tests nomos_rules\n",
+        "verified_at": 1789423249,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -73555,14 +73588,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p104",
-        "acquired_at": 1789421086,
-        "lease_expires_at": 1789431886
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -73577,7 +73606,32 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-model",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "public_surface"
+        ],
+        "exit_code": 0,
+        "output_tail": "Should_Add_A_Member_To_The_Set ... ok\ntest subject::set::tests::Test_Intersect_Should_Have_A_Nonempty_Set_Overlap_Itself ... ok\ntest subject::set::tests::Test_Intersection_Should_Be_Symmetric ... ok\ntest subject::set::tests::Test_Is_Empty_Should_Require_No_Members_And_No_Unexpanded_Patterns ... ok\ntest subject::set::tests::Test_Length_Should_Count_How_Many_Subjects_Are_Known ... ok\ntest subject::set::tests::Test_Members_Should_Iterate_In_A_Stable_Order ... ok\ntest subject::set::tests::Test_Mismatched_Resolutions_Should_Be_Unknown_Not_Disjoint ... ok\ntest subject::set::tests::Test_Of_Should_Build_A_Set_From_The_Given_Subjects ... ok\ntest subject::set::tests::Test_Overlapping_Sets_Should_Report_The_Shared_Members ... ok\ntest subject::set::tests::Test_Resolution_Should_Report_The_Resolution_The_Set_Was_Built_At ... ok\ntest subject::set::tests::Test_Unknown_Should_Never_Permit_Concurrency ... ok\ntest subject::set::tests::Test_With_Unexpanded_Pattern_Should_Make_The_Answer_Unknown ... ok\ntest subject::set_resolution::tests::Test_Label_Should_Return_The_Variants_Stable_Pascal_Case_Name ... ok\ntest subject::target::tests::Test_Kind_Should_Report_What_Each_Variant_Denotes ... ok\ntest subject::tests::Test_Target_Kind_Should_Follow_The_Variant ... ok\ntest subject::unknown_reason::tests::Test_Describe_Should_Name_What_Is_Unknown_For_Every_Variant ... ok\ntest transition::tests::Test_Asserted_Should_Construct_A_Transition_With_No_Evidence ... ok\ntest transition::tests::Test_Is_Evidenced_Should_Be_False_For_An_Asserted_Transition ... ok\n\ntest result: ok. 67 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.59s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-6db067559ac50d12.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0b67d1a17e2f82fa.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_model-5d14e3d33e41f235.exe)\n",
+        "verified_at": 1789423255,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0c0b699bd4f02bad3e83592ee8a12d4c128e5c53"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

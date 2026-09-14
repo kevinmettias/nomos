@@ -23,7 +23,7 @@ whether it would block.\n\
      compare walks --root and --against, judges each, and reports which findings were \
 added, removed, or moved between buckets.\n\
      admits answers whether --from may name --to under the declared architecture, before any \
-manifest carries the edge. It reads nothing from disk, so --root does not apply to it.\n\n\
+manifest carries the edge. It walks no tree, so --root does not apply to it: the architecture it answers from is read from the nearest enclosing directory that declares one, and outside a repository that declares none the answer is `not judged`.\n\n\
      --include/--exclude narrow which files `run` judges, by path prefix; repeat for \
 several. For plan/run, --rule (repeatable) narrows which rules' findings can fail the \
 build. For explain, --rule names the one rule whose finding to explain -- required, not \

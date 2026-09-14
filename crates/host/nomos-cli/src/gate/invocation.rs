@@ -41,7 +41,7 @@ pub enum Invocation
     /// Answer whether one crate may name another under the declared architecture, before any
     /// manifest carries the edge.
     ///
-    /// The one verb carrying no [`GateCommand`], because it reads nothing from disk: no root
+    /// The one verb carrying no [`GateCommand`], because it walks no tree: no root
     /// to walk, no scope to narrow, no rules to select. `OD-GATE-026` decided the subject is
     /// a crate pair rather than a proposed manifest edit or a change-set, since the answer is
     /// a pure function of two names and neither of those carries information the pair does
