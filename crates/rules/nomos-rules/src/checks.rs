@@ -40,6 +40,7 @@ mod lifetime_discipline;
 mod go_text;
 mod lint;
 mod mirror;
+mod guarantee_exerciser;
 mod naming;
 mod nesting_depth;
 mod orphan_modules;
@@ -115,6 +116,10 @@ pub use go_text::{
 pub use goals::{Check_Goals_And_Parts_Line_Up, GOALS_AND_PARTS_LINE_UP};
 pub use lint::{Check_Lint_Diagnostics, LINT_CONTRACT_RECORD, LINT_CONTRACT_RECORD_VERSION, LINT_DIAGNOSTICS};
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
+pub use guarantee_exerciser::{
+    Check_Guarantee_Declares_Its_Exerciser, GUARANTEE_DECLARES_ITS_EXERCISER, GUARANTEE_EXERCISER_CONTRACT_RECORD,
+    GUARANTEE_EXERCISER_CONTRACT_RECORD_VERSION,
+};
 pub use naming::{
     Check_Abbreviations, Check_Boolean_Predicates, Check_Data_Names_Stay_Lower_Snake, Check_File_Name_Matches_Declared_Type,
     Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Go_Constants_Split_By_Export, Check_Go_Type_Names_Use_Camel_Case,

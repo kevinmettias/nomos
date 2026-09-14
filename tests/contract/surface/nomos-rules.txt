@@ -56,6 +56,9 @@ pub const nomos_rules::GOALS_AND_PARTS_LINE_UP: &str
 pub const nomos_rules::GO_HELPERS_PACKAGE_FIVE_INPUTS: &str
 pub const nomos_rules::GO_LANGUAGE: &str
 pub const nomos_rules::GO_VARIABLES_USE_LOWER_SNAKE_CASE: &str
+pub const nomos_rules::GUARANTEE_DECLARES_ITS_EXERCISER: &str
+pub const nomos_rules::GUARANTEE_EXERCISER_CONTRACT_RECORD: &str
+pub const nomos_rules::GUARANTEE_EXERCISER_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::INLINE_ALWAYS_JUSTIFICATION: &str
 pub const nomos_rules::LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE: &str
 pub const nomos_rules::LINT_CONTRACT_RECORD: &str
@@ -206,6 +209,7 @@ pub fn nomos_rules::Check_Go_Helpers_Package_Five_Inputs( sources: &[SourceFile]
 pub fn nomos_rules::Check_Go_Type_Names_Use_Camel_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_Variables_Use_Lower_Snake_Case(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Goals_And_Parts_Line_Up(facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Guarantee_Declares_Its_Exerciser(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Inline_Always_Justification(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Lifetimes_Follow_The_Descriptive_Naming_Rule(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Lint_Diagnostics(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
