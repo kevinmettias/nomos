@@ -60,7 +60,7 @@ pub(super) fn Render_Run(result: &GateRunResult, stdout: &mut impl Write, stderr
         CheckOutcome::Contradictory(error) => Render_Run_Contradictory(error, stderr),
         CheckOutcome::NoSource => Render_Run_No_Source(&result.root, stderr),
         CheckOutcome::NoFacts { files } => Render_Run_No_Facts(&result.root, *files, stderr),
-        CheckOutcome::Judged { findings, .. } => Report_Judged(findings, result, stdout),
+        CheckOutcome::Judged { findings, .. } => Report_Judged(findings, result, stdout, stderr),
     };
 }
 
@@ -108,7 +108,7 @@ fn Render_Run_No_Facts(root: &Path, files: usize, stderr: &mut impl Write) -> Ex
 /// one arm of [`Render_Run`] that does real work, the same way `check::report::Render`
 /// delegates its own `Judged` arm to a dedicated function rather than folding it into the
 /// outer match.
-fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl Write) -> ExitCode
+fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
     let _ = writeln!(stdout, "run: {}", result.run);
 
@@ -129,7 +129,7 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
 
     Report_Unmatched_Policy(result, stdout);
 
-    return Exit_Code_For(result.disposition);
+    return Exit_Code_For(result.disposition, stderr);
 }
 
 /// Names every declared policy entry that matched no finding in this run.
@@ -287,21 +287,50 @@ fn Unjudged(result: &GateRunResult, flag: &str, stderr: &mut impl Write) -> Opti
 }
 
 /// Reduces a real run's disposition to the [`ExitCode`] it reports.
-fn Exit_Code_For(disposition: GateRunOutcome) -> ExitCode
+///
+/// Every arm is reachable from the `Judged` arm this is called under, `Indeterminate`
+/// included: `Run_Gate` assigns that disposition *after* a full judgment in two deliberate
+/// cases, which [`Render_Run_No_Verdict`] names. This function asserted the opposite and
+/// aborted the process on both until the cases were measured.
+fn Exit_Code_For(disposition: GateRunOutcome, stderr: &mut impl Write) -> ExitCode
 {
     return match disposition
     {
         GateRunOutcome::Failed => ExitCode::Violations,
         GateRunOutcome::Passed => ExitCode::Ok,
-        // Run_Gate only produces Indeterminate for a CheckOutcome that never reached Judged,
-        // and this function is only ever called from the Judged arm of Render_Run, so that
-        // disposition cannot arrive here.
-        GateRunOutcome::Indeterminate => unreachable!(
-            "nomos_gate_orchestration::Disposition never returns Indeterminate; \
-             Run_Gate only assigns it for a CheckOutcome that never reached Judged, \
-             and this arm is Judged's own"
-        ),
+        GateRunOutcome::Indeterminate => Render_Run_No_Verdict(stderr),
     };
+}
+
+/// The tree was judged, the findings reported above are all of them, and no verdict was
+/// reached.
+///
+/// Two deliberate mechanisms in `nomos_gate_orchestration::Run_Gate` produce this, and a
+/// `GateRunResult` records neither of them. A `nomos-gate.json` that is present and cannot
+/// be turned into a policy: the rules for reducing findings to a verdict were never
+/// assembled, so the run reports what it found and refuses to call it anything. And a
+/// declared coverage floor of `require-completeness` over a run whose selected findings are
+/// an incomplete claim, which is `OD-GATE-016`'s own decision that a run where some rules
+/// could not look must not be called a pass.
+///
+/// Which of the two is deliberately not named. The result does not carry it, and a guess
+/// here would be worse than the silence -- it would send a reader to the wrong file. What
+/// is named is the state and where to look first, the same discipline the non-judged
+/// renderers above already keep: say what did not happen, and never let it read as a clean
+/// result.
+fn Render_Run_No_Verdict(stderr: &mut impl Write) -> ExitCode
+{
+    let _ = writeln!(
+        stderr,
+        "\nthis run judged the tree and reached no verdict, so the findings above are \
+         complete and none of them decided anything.\n\
+         A `nomos-gate.json` that is present and cannot be read as a policy does this, and \
+         so does a declared coverage floor of `require-completeness` over a run that could \
+         not look everywhere it selected. This run does not record which, so the policy \
+         file is where to look first."
+    );
+
+    return ExitCode::Contradictory;
 }
 
 /// Renders what [`nomos_gate_orchestration::Explain_Gate`] answered for `explain`.
@@ -540,6 +569,46 @@ mod tests
         assert_eq!(code, ExitCode::Vacuous, "{rendered_stderr}");
         assert!(rendered_stderr.contains("nothing was judged"), "{rendered_stderr}");
         assert!(String::from_utf8_lossy(&stdout).is_empty());
+    }
+
+    /// A judged run whose disposition is `Indeterminate` says there is no verdict and
+    /// exits `Contradictory`, instead of aborting the process.
+    ///
+    /// The arm this covers was `unreachable!` until it was measured, on the claim that
+    /// `Run_Gate` only assigns `Indeterminate` to a run that never reached `Judged`. It
+    /// assigns it to a judged run in two deliberate cases -- an unreadable
+    /// `nomos-gate.json`, and a `require-completeness` floor over an incomplete claim --
+    /// and a real `nomos gate run` aborted with 101 on both.
+    ///
+    /// The findings are asserted on `stdout` as well, because the abort came *after* they
+    /// were written: what the panic destroyed was the verdict line and the exit code, and
+    /// a fix that reported the state by dropping the report would be a worse answer.
+    #[test]
+    fn Test_Render_Run_Should_Report_No_Verdict_When_A_Judged_Run_Is_Indeterminate()
+    {
+        let finding = Example_Finding(GateCategory::Advisory);
+        let result = GateRunResult {
+            unmatched_policy: Vec::new(),
+            run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
+            root: PathBuf::from("."),
+            check_outcome: CheckOutcome::Judged {
+                findings: vec![finding.clone()],
+                examined: Examined { files: 1, facts: 1 },
+                claim: Claim::Incomplete,
+            },
+            findings: Empty_Findings(),
+            disposition: GateRunOutcome::Indeterminate,
+        };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Run(&result, &mut stdout, &mut stderr);
+
+        let rendered_stdout = String::from_utf8_lossy(&stdout).into_owned();
+        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
+        assert_eq!(code, ExitCode::Contradictory, "{rendered_stderr}");
+        assert!(rendered_stderr.contains("reached no verdict"), "{rendered_stderr}");
+        assert!(rendered_stdout.contains(&finding.Describe()), "{rendered_stdout}");
     }
 
     /// A judged run with nothing blocking reports `Ok` and names its own `RunId` -- the

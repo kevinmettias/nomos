@@ -74437,7 +74437,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P104-THE-GATE-EXIT-CODE-DOC-ENUMERATES-THREE-CAUSES-AND-COMPARE-ADDED-A-FOURTH"
       ],
@@ -74452,7 +74452,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "eck_orchestration_seam-a57055934b00a412.exe)\n     Running tests\\composer_std_seam.rs (target\\debug\\deps\\composer_std_seam-3cd05d89f53c78a7.exe)\n     Running tests\\contracts_seam.rs (target\\debug\\deps\\contracts_seam-8e1a2473091902c5.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-928657b1f63d92ef.exe)\n     Running tests\\gate_orchestration_seam.rs (target\\debug\\deps\\gate_orchestration_seam-1be2b20dc844b5d5.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-341c588c1e48bcb6.exe)\n     Running tests\\lang_go_seam.rs (target\\debug\\deps\\lang_go_seam-80a1cd15fb76dddb.exe)\n     Running tests\\lang_rust_seam.rs (target\\debug\\deps\\lang_rust_seam-38fb83691da01121.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-2ee77951a1570c2c.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-99746b67ad10491e.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-9aedf337443dfc46.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-3ef6ac76e47a3def.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-4f3a92eec6250d30.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-050946cd96fe0099.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-4e13e3c4a30aec9e.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-d7608a90cf8c2235.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-97766ce0060fc2c1.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-b7b85e262cf1f915.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-5dcc2d48a001be85.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-a60294426c5d3ee5.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-54884038136b13b2.exe)\n",
+        "verified_at": 1789430173,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e3f4d380c7220992d1e8b351fd0f5b7f4ccb83e0"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -74496,6 +74516,181 @@
           "model_seam"
         ],
         "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS",
+      "title": "A corpus has no way to declare canonical text its own layout repeats, so its front matter is a form letter",
+      "why": "OD-SPEC-004 version 3 decided that a corpus may declare the text its own layout repeats, that the declaration is corpus-side data, and that it names structural roles rather than strings. Nothing carries such a declaration today. Measured 2026-09-14 over the ten v14.19 domain volumes, 2,988 subjects: NSV-PRESERVE-004 reports 16 violations and every one is contentful text repeated where the suite format puts it. Four are suite-wide front matter at 10 sections across 10 documents, the edition line, the suite title, the volume-ownership sentence and the Word navigation note. Eleven are volume abstracts at 3 sections across 2 documents, which is the cover line, the Document purpose section and the suite index entry, so a ten-volume suite crosses SHARED_BY by construction. A seventeenth case is a 51-character status line in the sibling suites. The amendment refuses both obvious shortcuts: extending FILLER_PATTERNS would make a lineage row say a volume abstract is prose that says a section exists without saying what it says, which is false, and a second compiled-in list is this repository's opinion about another corpus's layout and goes stale the way the blocklist did when one adjective changed. A store table is forced rather than chosen: Rule Evaluate receives only a SpecificationStore, so a declaration the rule can consult has to be rows, and a new table is a bundle change because the bundle is the authority committed to git and a table that does not travel in it is content a rebuilt store cannot hold.",
+      "done_when": "A corpus can declare that a canonical block is intentionally projected into named structural positions, the declaration is ingested into rows, and those rows survive a bundle round trip. The declaration names roles and derives expected multiplicity from them, not a whitelisted string: this is what keeps it a declaration rather than a suppression list, and an undeclared further occurrence of a declared block must remain distinguishable from the declared ones. The bundle budget is paid in full and is the part of this item that is easy to leave half-done, because none of it is reachable from the crate that owns the table: the column coverage list, an exporter, an importer, both driver lists, and the round-trip fixture that must insert at least one row per table. Expect nomos-spec-store to stay green through all of it while the bundle is still incomplete. Coverage is proved from an in-repo fixture, not from either corpus. THIS ITEM DOES NOT TURN THE TWO CORPUS TESTS GREEN and must not be judged as though it should: restoration.rs and siblings.rs go green only when the corpora themselves carry declarations, and the corpora live outside this repository and are not territory any item here can reserve. Neither file is edited and no count is pinned into either. The rule consulting these rows is the separate item that depends on this one, so nothing here changes what NSV-PRESERVE-004 reports. VERIFICATION SCOPE: the predicate is the three crates this item changes, selected as lib plus the named integration targets that judge transport, so that it excludes nomos-spec-ingest tests restoration.rs and siblings.rs, which are red by design and are not this item's obligation. That exclusion is the convention step 3 of the task skill carries.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/src/table.rs",
+          "crates/spec/nomos-spec-store/src/migration.rs",
+          "crates/spec/nomos-spec-bundle/src/columns.rs",
+          "crates/spec/nomos-spec-bundle/src/columns/coverage.rs",
+          "crates/spec/nomos-spec-bundle/src/columns/tests.rs",
+          "crates/spec/nomos-spec-bundle/src/export.rs",
+          "crates/spec/nomos-spec-bundle/src/import.rs",
+          "crates/spec/nomos-spec-bundle/src/bundle.rs",
+          "crates/spec/nomos-spec-bundle/tests/round_trip/populated.rs",
+          "crates/spec/nomos-spec-ingest/src/archive.rs",
+          "tests/contract/surface/nomos-spec-store.txt",
+          "tests/contract/surface/nomos-spec-bundle.txt",
+          "tests/contract/surface/nomos-spec-ingest.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-ingest",
+          "--lib",
+          "--test",
+          "round_trip",
+          "--test",
+          "durable_load",
+          "--test",
+          "store_holds",
+          "--test",
+          "round_trip_holds",
+          "--test",
+          "archive_reads"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE",
+      "title": "NSV-PRESERVE-004 cannot consult a repetition declaration, so declaring one would change nothing",
+      "why": "OD-SPEC-004 version 3 decided that a block appearing in the places its declaration names is admitted and is not filler, while a further undeclared occurrence of that same block is still a violation. The carrier item makes the declaration into rows a rule can read. This item is the half that makes reading them change an answer, and it is deliberately separate because the two have different falsifiers: the carrier is proved by a bundle round trip, and this is proved by what the rule reports. Landing the carrier alone would leave a corpus able to declare its layout and a rule that still calls it a form letter.",
+      "done_when": "NSV-PRESERVE-004 consults the declaration rows and admits a repetition whose occurrences are the ones its declaration names. The falsifier is asserted in the same run and is the whole point of the item: a block declared for three named roles that appears a fourth time, undeclared, is still reported, and a repetition nothing declared at all is still reported. Without that assertion the mechanism is a suppression list with extra steps, which is what the amendment refused. The blocklist keeps its separate job and is not extended: Get_Filler_Pattern still names which known pattern a template matched for a lineage row, and a declared block is admitted without being called filler, so no lineage row is made to assert something false about it. Both conditions are proved from an in-repo fixture. THIS ITEM DOES NOT TURN THE TWO CORPUS TESTS GREEN either: that needs the corpora to carry declarations, and they live outside this repository. restoration.rs and siblings.rs are not edited and no count is pinned into either. If, once the rule can see declarations, the ten-times-in-one-document parity note still reports, that is correct and is the question OD-SPEC-004 version 3 deliberately left open, not a defect in this item. VERIFICATION SCOPE: the predicate is nomos-spec-validate, the one crate whose behaviour this item claims and which owns no corpus-gated test; the ingest crate is not in it though the declaration rows come from there, because this item claims what the rule does with rows and not how they arrive.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-validate/src/rule/no_undeclared_filler_template.rs",
+          "crates/spec/nomos-spec-validate/tests/preservation_holds.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS",
+        "P103-A-REPEATED-FRAGMENT-BELOW-A-LENGTH-FLOOR-IS-NOT-A-TEMPLATE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-THE-CORPUS-HOLE-REPORT-IS-UNREACHABLE-FROM-THE-SCOPED-RUN-EVERY-PREDICATE-USES",
+      "title": "The corpus-gate report only speaks in a workspace run, and every item predicate is package-scoped",
+      "why": "On 2026-09-14 a session ran the filler-template predicate with NOMOS_V14_CORPUS set and NOMOS_SPEC_ARCHIVES unset, read nine passed from crates/spec/nomos-spec-ingest/tests/siblings.rs, and recorded the sibling corpus as clean. It was not: with both variables set the same file reports 103 violations over 18,873 subjects. The mechanism that should have caught this exists and is good. tests/contract/tests/corpus_gates.rs declares every gated file, the variables it reads and how many of its tests are gated, derives the same table from the source independently, and Test_A_Run_Should_Report_What_It_Did_Not_Check prints one line per variable naming how many assertions an unset one costs. It handles the partial case correctly, which is exactly the case that occurred. The gap is where it speaks. That report is a test inside nomos-contract-tests, so it runs in a workspace run and in CI, and never in a package-scoped run. Every verification predicate on this board is package-scoped, and the predicate-scope convention step 3 of the task skill now carries makes that correct rather than accidental, so the one mechanism that would say a run was hollow is the one an item predicate structurally cannot invoke. The hazard note in AGENTS.md says a test that cannot find its corpus passes, but it says so where somebody reads it before the run, not where they read the result. SECOND AND SEPARATE: line 22 of that file calls NOMOS_V14_CORPUS the v14.36 authoring tree. The tree on this machine is v14.19, with 51 occurrences of that version string and no occurrence of v14.36 anywhere in the corpus. OD-SPEC-004 carried the same stale edition and it is why its 13-of-482 calibration could not be re-run.",
+      "done_when": "Reading a package-scoped test result no longer requires having remembered the hazard beforehand: a run whose corpus variables are not all set says so where the result is read, not only in a workspace run that no predicate performs. What that costs is bounded deliberately, because the decision not to fail is already made and this item does not reopen it. The module doc of corpus_gates.rs states plainly that a gate which can never be green is a gate everybody learns to ignore, most machines will never hold these corpora, and the remedy is a declared and reported hole rather than a red test. Any answer here that makes an absent corpus fail contradicts that and is refused; the item is about reaching the reader, not about changing the verdict. The declared table keeps its two independent derivations and they still agree, and no test count in it moves unless the item genuinely adds a test, in which case the table is updated in the same commit. SECOND: the v14.36 reference at line 22 is corrected to the edition the corpus actually carries, or is stated as the edition the numbers in that paragraph were measured over with the note that it is not the tree present here, whichever is true. Do not repair the one and leave the other: they are one commit because they are one file, but they are two claims and the commit message says which evidence establishes each.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/corpus_gates.rs",
+          "tests/contract/tests/corpus_gates/declared.rs",
+          "tests/contract/tests/corpus_gates/derived.rs",
+          "tests/contract/tests/corpus_gates/report.rs",
+          "tests/contract/tests/corpus_gates/scan.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "corpus_gates"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-THE-PREDICATE-SCOPE-RULE-STATES-ITS-EVIDENCE-AND-NOT-WHETHER-IT-HELD",
+      "title": "The predicate-scope paragraph closes on the two incidents that caused it and never says what happened after",
+      "why": "Step 3 of the task skill closes by saying two instances justify a rule and not a validator. That is the right conclusion and it is the argument for building no mechanism, but it dates the paragraph to the day it was written and leaves a reader unable to tell whether the rule has been used since or has only been stated. The distinction matters here more than usual because the paragraph is the reason no mechanism exists: the evidence for leaving it unenforced is that the rule works when followed, and nothing in the file records whether it has been. Items authored under the rule since carry an explicit verification-scope clause naming what the predicate excludes and why, which is checkable on the board and is the behaviour the paragraph was trying to produce. That is what should be recorded, and it is deliberately not a count of declines: the ledger stores a decline as a holder and a timestamp and does not persist the reason, so a claim about how many items were declined for predicate scope cannot be checked from the board and must not be written as though it could.",
+      "done_when": "The closing of step 3 says what has happened since the rule landed, in a form a later reader can check, and does not assert anything the ledger cannot substantiate. It stays evidence rather than becoming an endorsement: the paragraph still concludes that no mechanism is justified, and it now says what would have to change for that to stop being true. No count of declines is written, because the decline reason is not persisted. No item identifier is named anywhere in the file, since agent_harness requires any identifier in an agent surface to be declared as a TEMPORARY_HAZARD and this change is not worth one; describe an item by the obligation it claimed, the way the two incidents above it are already described. Every backticked path added must exist, for the same check. VERIFICATION SCOPE: the predicate is the one test target that judges agent surface text, and no other obligation in that package is any part of this claim.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-task/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p103scope",
+        "acquired_at": 1789430175,
+        "lease_expires_at": 1789437375
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 1200
       },
       "verified": null,
       "abandoned": [],

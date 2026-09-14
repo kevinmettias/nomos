@@ -12,10 +12,11 @@
 /// carries the meaning `check`'s `Unreadable` and `spec`'s `StoreError` already gave `5` --
 /// the foundational thing this group depends on could not be assembled -- and now covers
 /// three cases: this gate's own rule registry refusing its own composition (`plan` and
-/// `run` alike), for `run` only, the tree beneath it being unreadable or the check
-/// registry beneath *that* being self-contradictory, and, for `compare` only, a run whose
-/// findings do not each carry an occurrence identity of their own. Each is "nothing here
-/// was ever assembled enough to judge", the same claim one layer down each time.
+/// `run` alike), for `run` only, a judgment or a verdict that could not be assembled at
+/// all, and, for `compare` only, a run whose findings do not each carry an occurrence
+/// identity of their own. Each is something this group needed and could not put together
+/// -- the judging, the verdict, or the comparison -- the same claim one layer down each
+/// time.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum ExitCode
 {
@@ -33,6 +34,14 @@ pub(crate) enum ExitCode
     /// `GateRunOutcome::Indeterminate` when it comes from `run`; `run` never carries this
     /// distinction any further than that shared exit code, the same discipline `check`'s
     /// and `spec`'s foundational-failure codes already hold to.
+    ///
+    /// Two more reach it from `run` *after* the tree was judged, rather than instead of
+    /// judging it: a `nomos-gate.json` that is present and could not be turned into a
+    /// policy, so there were no rules to reduce the findings by; and a declared coverage
+    /// floor of `require-completeness` over a run whose selected findings are an
+    /// incomplete claim (`OD-GATE-016`). Both are `GateRunOutcome::Indeterminate` as well,
+    /// and `run` carries which of them it was no further than this code either -- a
+    /// `GateRunResult` does not record it.
     ///
     /// `compare` reports it for a fourth cause: a run whose findings do not yield one
     /// occurrence identity each, so the two sides cannot be put side by side and the
