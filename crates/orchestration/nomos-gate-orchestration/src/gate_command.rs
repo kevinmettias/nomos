@@ -1,19 +1,35 @@
 //! What a `nomos gate` verb was asked for, independent of how it was spelled.
 //!
 //! `ARC-ROADMAP-001` names four eventual verbs -- `plan`, `run`, `explain`, `compare` -- and
-//! `Plan`, `Run_Gate` and `Explain_Gate` all have real computations behind them now.
-//! `explain` needs one more input `plan`/`run` do not, `crate::FindingQuery`, which travels
-//! as `Explain_Gate`'s own separate parameter rather than a field here: every verb shares
-//! `GateCommand`, `explain` alone also needs to name which finding, and folding that into
-//! this struct would make every other verb carry a field it never reads, the same
+//! all four have real computations behind them now. `explain` needs one more input
+//! `plan`/`run` do not, `crate::FindingQuery`, which travels as `Explain_Gate`'s own
+//! separate parameter rather than a field here: every verb shares `GateCommand`, `explain`
+//! alone also needs to name which finding, and folding that into this struct would make
+//! every other verb carry a field it never reads, the same
 //! `root`/`scope`/`rules`/`suppressions`/`baseline` asymmetry this struct already has for
-//! `Plan`. This
-//! stays a struct rather than an enum for the same reason it always has: the verbs share
-//! every field of it, so there is nothing for an enum to gain. `compare` is the one verb
-//! left with no real implementation -- inventing an argument shape for it now would be
-//! exactly the kind of premature surface this workspace has repeatedly declined to build
-//! ahead of a second real case (`OD-PACKAGE-006`, `OD-RULES-005`, `OD-RULES-006`) -- so it
-//! is simply absent, not stubbed, until an increment gives it a real body.
+//! `Plan`. This stays a struct rather than an enum for the same reason it always has: the
+//! verbs share every field of it, so there is nothing for an enum to gain.
+//!
+//! # `compare` is real, and reachable from a terminal
+//!
+//! This doc said `compare` was "simply absent, not stubbed" for longer than that was true,
+//! which is worth stating plainly because the claim was wrong in both directions a reader
+//! could check. `crate::Compare_Gate_Runs` (`gate_compare.rs`, which cites this file as the
+//! doc it falsified) takes two already-produced `crate::GateRunResult`s and reports which
+//! findings moved between `crate::GateFindings`' own buckets. And it is not library-only:
+//! `nomos gate compare` is a shipped verb with its own required `--against` flag and its
+//! own paragraph in the gate verb's printed usage, recognized by `nomos-cli`'s
+//! `gate/parsing.rs`, dispatched through its `Invocation::Compare` to `gate.rs`'s
+//! `Compare_Verb`, and rendered by `gate/report.rs`'s `Render_Compare`.
+//!
+//! The restraint this paragraph used to describe was vindicated by that body rather than
+//! overturned by it, which is the part of the old text worth keeping: **`compare` added no
+//! field to this struct.** It needs two whole `GateCommand`s, one per tree, and
+//! `Invocation::Compare` carries exactly that -- not one command holding a second root that
+//! every other verb would then ignore. A speculative `against: Option<PathBuf>` here, added
+//! ahead of the real body, would have been the wrong shape and would have had to come back
+//! out. That is what declining to invent an argument surface ahead of a second real case
+//! (`OD-PACKAGE-006`, `OD-RULES-005`, `OD-RULES-006`) is for.
 
 use crate::{AdoptionPolicy, BaselinePolicy, CoveragePolicy, GatePhase, PhaseApproval, RuleSelector, ScopeSelector, SuppressionPolicy};
 use nomos_model_package::ModelExecutionProfile;
