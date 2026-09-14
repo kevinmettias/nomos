@@ -147,7 +147,12 @@ fn Judged_Files(root: &Path) -> Vec<(String, PathBuf)>
                 continue;
             }
 
-            if name == "Cargo.toml" || name.ends_with(".rs")
+            // The extension is asked of the path rather than matched as a suffix of the name.
+            // The two agree over this tree -- every source file here is lowercase -- but the
+            // suffix form says so by relying on that convention holding, which is what
+            // `clippy::case_sensitive_file_extension_comparisons` is about, and `bands.rs`'s
+            // own walk beside this one already asks the path.
+            if name == "Cargo.toml" || path.extension().is_some_and(|extension| return extension == "rs")
             {
                 let Ok(relative) = path.strip_prefix(root)
                 else
