@@ -3,6 +3,7 @@ pub const fn nomos_model::Coverage::Has_Effective_Coverage(&self) -> bool
 pub const fn nomos_model::EntityId::Digest(&self) -> Digest128
 pub const fn nomos_model::EntityId::From_Digest(digest: Digest128) -> Self
 pub const fn nomos_model::Evidence::Is_Mechanical(&self) -> bool
+pub const fn nomos_model::FindingOccurrenceId::Digest(&self) -> Digest128
 pub const fn nomos_model::IdentityTransitionKind::Is_History_Preserving(self) -> bool
 pub const fn nomos_model::Intersection::Permits_Concurrency(&self) -> bool
 pub const fn nomos_model::SetResolution::Label(self) -> &'static str
@@ -81,8 +82,10 @@ pub fn nomos_model::Coverage::Debt(&self) -> impl Iterator<Item = &CoverageGap>
 pub fn nomos_model::Coverage::Is_Complete(&self) -> bool
 pub fn nomos_model::Digest_Of_Parts(parts: &[&[u8]]) -> Digest128
 pub fn nomos_model::EntityId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_model::FindingOccurrenceId::Of(finding: &Finding) -> Self
 pub fn nomos_model::Intersection::Conflicting(&self) -> &[SubjectId]
 pub fn nomos_model::Normalize_Path(path: &str) -> String
+pub fn nomos_model::Occurrence_Collisions_In(findings: &[&Finding]) -> Vec<OccurrenceCollision>
 pub fn nomos_model::SetResolution::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model::SubjectSet::Empty(resolution: SetResolution) -> Self
 pub fn nomos_model::SubjectSet::Insert(&mut self, subject: SubjectId)
@@ -120,6 +123,9 @@ pub struct field nomos_model::Evidence::supporting: Vec<EvidenceRef>
 pub struct field nomos_model::IdentityPolicy::distinguish_conditional_compilation: bool
 pub struct field nomos_model::IdentityPolicy::distinguish_generated: bool
 pub struct field nomos_model::IdentityPolicy::distinguish_overloads: bool
+pub struct field nomos_model::OccurrenceCollision::first: Finding
+pub struct field nomos_model::OccurrenceCollision::occurrence: FindingOccurrenceId
+pub struct field nomos_model::OccurrenceCollision::second: Finding
 pub struct field nomos_model::Resource::id: EntityId
 pub struct field nomos_model::Resource::kind: ResourceKind
 pub struct field nomos_model::Resource::locator: String
@@ -149,7 +155,9 @@ pub struct nomos_model::Coverage
 pub struct nomos_model::CoverageGap
 pub struct nomos_model::EntityId(Digest128)
 pub struct nomos_model::Evidence
+pub struct nomos_model::FindingOccurrenceId(Digest128)
 pub struct nomos_model::IdentityPolicy
+pub struct nomos_model::OccurrenceCollision
 pub struct nomos_model::Resource
 pub struct nomos_model::SnapshotEntity
 pub struct nomos_model::SourceProvenance

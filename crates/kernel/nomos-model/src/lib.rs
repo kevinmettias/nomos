@@ -26,6 +26,15 @@
 //! When identity does change, [`Transition`] records *how* and with what confidence,
 //! rather than presenting a rename as a deletion plus an unrelated arrival.
 //!
+//! [`FindingOccurrenceId`] does take a finding's locations, and that is not this rule being
+//! bent. The rule governs *what a claim is attributed to* — a finding's subject stays a digest,
+//! deliberately coarse, and stays what a suppression and a baseline match on, so a tolerated
+//! entry survives an edit above it. The occurrence identity answers the question after that one:
+//! given the subject, which occurrence within it. Two violations of one rule in one file differ
+//! by nothing else, so the location is the only occurrence-discriminating material there is. It
+//! is scoped to one pinned result, never used to match a tolerance across revisions, and
+//! [`Occurrence_Collisions_In`] keeps its injectivity a checked property rather than a hope.
+//!
 //! # One exclusion primitive
 //!
 //! [`SubjectSet`] and [`Intersection`] live here rather than beside the correction
@@ -58,7 +67,7 @@ pub use digest::{Content_Digest, Digest_Of_Parts};
 pub use confidence::Confidence;
 pub use entity::{Artifact, ArtifactKind, EntityId, Resource, ResourceKind, SnapshotEntity, Symbol, SymbolKind};
 pub use evidence::{Coverage, CoverageGap, Evidence, EvidenceRef};
-pub use identity::{CompositeIdentity, IdentityPolicy, IdentityTransition, IdentityTransitionKind, SourceProvenance, StructuralFingerprint};
+pub use identity::{CompositeIdentity, FindingOccurrenceId, IdentityPolicy, IdentityTransition, IdentityTransitionKind, Occurrence_Collisions_In, OccurrenceCollision, SourceProvenance, StructuralFingerprint};
 pub use path::{Normalize_Path, Subject_Of_Path};
 pub use subject::{Intersection, SetResolution, Subject, SubjectKind, SubjectSet, SubjectTarget, UnknownReason};
 pub use transition::Transition;
