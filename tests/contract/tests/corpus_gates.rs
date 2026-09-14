@@ -140,8 +140,8 @@ const GATES: &[Gate] = &[
     Gate {
         path: "crates/spec/nomos-spec-ingest/tests/real_corpus.rs",
         variables: &[V14],
-        gated: 4,
-        tests: 4,
+        gated: 5,
+        tests: 5,
     },
     Gate {
         // The suite's other five tests check the checked-in register against itself and
@@ -236,7 +236,7 @@ const GATES: &[Gate] = &[
 ///
 /// The headline. Stated once so it can be cited, and checked against the table so it cannot
 /// drift from it.
-const GATED_TOTAL: usize = 68;
+const GATED_TOTAL: usize = 69;
 
 /// The number this is worth reading against: how many tests the gated files hold in total.
 ///
@@ -258,4 +258,4 @@ const GATED_TOTAL: usize = 68;
 /// `spec_model_seam.rs` and `spec_orchestration_seam.rs` both name the variable only to strip
 /// it (`Run_Without_Corpus`'s `env_remove`), so neither gates a test. [`GATED_TOTAL`] is
 /// unchanged — three tests added to the denominator, none of them silent.
-const TESTS_IN_GATED_FILES: usize = 84;
+const TESTS_IN_GATED_FILES: usize = 85;

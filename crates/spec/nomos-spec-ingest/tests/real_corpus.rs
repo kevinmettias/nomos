@@ -231,3 +231,104 @@ fn Test_Re_Ingesting_The_Corpus_Should_Be_A_No_Op()
     assert_eq!(store.Count(Table::SourceDocuments).expect("counts"), 10);
     assert_eq!(store.Count(Table::SourceBlocks).expect("counts"), 2533);
 }
+
+/// The five volumes `cace351ac` did not touch, and why that list is the one worth naming.
+///
+/// `cace351ac` (2026-08-17) edited five of the ten domain volumes and nothing else. The
+/// other five have not moved since the lineage was recorded, so for them the recorded
+/// mechanical fields and a fresh segmentation must agree *exactly* -- and that agreement is
+/// the only thing separating an emitter compatible with the segmenter
+/// [`Test_I1_Should_Reproduce_Every_Recorded_Block`] judges against from a second segmenter
+/// that merely agrees with itself. A refresh built on the second kind would make every
+/// failing test pass by redefining what a block is, which is the outcome this file exists to
+/// prevent rather than to produce.
+const VOLUMES_THE_EDIT_DID_NOT_TOUCH: &[&str] = &[
+    "00-suite-index.md",
+    "01-product-definition-and-principles.md",
+    "03-packages-providers-rules-and-applicability.md",
+    "04-checks-gates-corrections-and-governance.md",
+    "05-atlas-architecture-features-tests-runtime.md",
+];
+
+/// One block's mechanical fields, as a refreshed lineage would have to record them.
+///
+/// Mechanical is the whole point of the split: these five are derived from the text by
+/// [`nomos_spec_model::Segment`] and nothing else, so a refresh may regenerate them. A
+/// block's `disposition`, `authority`, `target_volumes` and `stable_ids` are authored
+/// judgments that no segmentation can recover, and this function deliberately does not
+/// produce them.
+fn Emitted_Mechanical_Fields(markdown: &str) -> Vec<(u32, String, String, String)>
+{
+    return nomos_spec_model::Segment(markdown)
+        .iter()
+        .map(|block| {
+            return (
+                block.ordinal,
+                nomos_spec_store::Kind_Label(block.kind).to_owned(),
+                block.Content_Hash().As_String_Slice().to_owned(),
+                block.Normalized_Hash().As_String_Slice().to_owned(),
+            );
+        })
+        .collect();
+}
+
+/// The emitter reproduces what the lineage already records, for every volume whose text has
+/// not moved since it was recorded.
+///
+/// `P102`'s own acceptance step 2. This must pass *before* any emitted value is written back
+/// into the corpus: it is what makes the refresh a regeneration of fields the segmenter
+/// already owns rather than a re-blessing of whatever the current segmenter happens to say.
+#[test]
+fn Test_The_Emitter_Should_Reproduce_The_Recorded_Fields_For_Volumes_The_Edit_Did_Not_Touch()
+{
+    let Some(root) = Corpus()
+    else
+    {
+        return;
+    };
+    let manifest = Read(&root, "01_authoring/source_lineage/source-block-lineage.yaml");
+    let lineage = Parse_Block_Lineage(&manifest).expect("the manifest parses");
+    let documents = Domain_Volumes(&root);
+
+    let mut compared = 0_usize;
+    for name in VOLUMES_THE_EDIT_DID_NOT_TOUCH
+    {
+        let markdown = documents
+            .get(*name)
+            .unwrap_or_else(|| panic!("{name} is not among the domain volumes"));
+        let recorded: Vec<&nomos_spec_ingest::RecordedBlock> =
+            lineage.blocks.iter().filter(|block| return block.source_document == *name).collect();
+        let emitted = Emitted_Mechanical_Fields(markdown);
+
+        assert_eq!(
+            emitted.len(),
+            recorded.len(),
+            "{name}: the lineage records {} blocks and segmentation produces {}, for a volume \
+             cace351ac never edited -- so the emitter disagrees with the segmenter rather than \
+             the corpus having moved",
+            recorded.len(),
+            emitted.len()
+        );
+
+        for (want, got) in recorded.iter().zip(&emitted)
+        {
+            assert_eq!(
+                (want.block_ordinal, want.block_kind.as_str(), want.content_hash.as_str(), want.normalized_hash.as_str()),
+                (got.0, got.1.as_str(), got.2.as_str(), got.3.as_str()),
+                "{name}#{}: a volume the edit never touched must emit exactly what it records",
+                want.block_ordinal
+            );
+            compared = compared.saturating_add(1);
+        }
+    }
+
+    // Measured 2026-09-14 against the live corpus, not chosen: the five volumes above hold 929
+    // recorded blocks between them, and every one of them reproduced. Pinned as an equality
+    // rather than a floor so that a volume dropping out of `documents` -- renamed, unreadable,
+    // or quietly excluded -- fails here instead of shrinking the proof and still passing.
+    assert_eq!(
+        compared, 929,
+        "the five untouched volumes hold 929 blocks between them; comparing {compared} means \
+         the proof no longer covers what it was measured over"
+    );
+}
