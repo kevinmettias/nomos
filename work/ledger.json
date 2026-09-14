@@ -71607,10 +71607,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p100",
+        "acquired_at": 1789417122,
+        "lease_expires_at": 1789431522
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -72627,6 +72631,38 @@
           "nomos-ledger"
         ],
         "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P104-COMPARE-COLLAPSES-EVERY-FINDING-A-RULE-MAKES-ABOUT-ONE-SUBJECT-INTO-ONE",
+      "title": "Compare collapses every finding a rule makes about one subject into one, losing 41 percent of them",
+      "why": "Compare_Gate_Runs indexes a run's findings into a BTreeMap keyed by rule and subject, with insert. A rule emits one finding per occurrence -- rules push inside per-line loops and each finding carries a single location -- while the subject is the file, so a rule that finds five violations in one file emits five findings sharing one key and the map keeps the last. Measured against this repository's own tree on 2026-09-14: 253 findings emitted, 150 distinct rule-and-subject pairs, so 103 findings -- 41 percent -- are discarded before comparison begins. Thirty-seven keys hold more than one finding; lint-diagnostics on nomos-spec-project/src/project_error.rs holds fifteen and dependency-policy holds twenty-four. The consequences are false lifecycle claims in both directions. Fixing four of five violations in a file leaves one finding before and one after, so compare reports no change and an improvement is invisible. Going from one violation to five reports no change either, so a regression is invisible. added and removed are wrong by construction wherever a key holds more than one finding. Nothing acknowledges this: the only disjointness gate_compare documents is that a finding cannot fall into more than one bucket, which is true and about something else. This is the independent owner for occurrence identity that the baseline question could not supply on its own -- a shipped consumer that infers continuity from normative plus subject identity and makes false claims because of it.",
+      "done_when": "Two findings a rule makes about one subject are two findings to compare, not one. Comparison identifies a finding by something that distinguishes occurrences rather than by rule and subject alone, so a run emitting five findings for one key compares as five. The identity is derived from what the finding says rather than from the run that produced it -- a run identity would make every rerun manufacture new occurrences and every finding read as added, which is worse than the collapse it replaces. Measured on this repository's own tree, the number of findings entering comparison equals the number emitted, and that equality is asserted rather than stated. Four behaviours are exercised: some-but-not-all occurrences fixed reports a removal, occurrences multiplying reports additions, an unchanged multi-occurrence subject reports no change, and a subject with exactly one finding behaves as it does today. Whether suppression and baseline matching keep their deliberate rule-and-subject scope is decided rather than changed by accident, since a suppression that stopped covering every occurrence of a rule in a file would be a silent policy narrowing. The predicate covers the crates whose behaviour changes and the gate lint step is clean.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 2700
       },
       "verified": null,
       "abandoned": [],
