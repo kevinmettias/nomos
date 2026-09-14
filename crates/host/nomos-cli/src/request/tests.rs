@@ -101,6 +101,168 @@ fn Arguments_From_Text(text: &str) -> Vec<String>
     return text.split_whitespace().map(str::to_owned).collect();
 }
 
+/// The alternatives a `--flag a|b|c` segment of the help text lists.
+///
+/// The brackets and angle brackets a usage line wraps its alternatives in come off, so a caller
+/// compares words rather than punctuation -- this group spells one of its two as
+/// `<a|b|c>` and the other as `[--state a|b]`, and neither shape is about the vocabulary.
+fn Alternatives_After(usage: &str, flag: &str) -> Vec<String>
+{
+    let Some((_, rest)) = usage.split_once(&format!("{flag} "))
+    else
+    {
+        return Vec::new();
+    };
+    let listed = rest
+        .split_whitespace()
+        .next()
+        .unwrap_or_default()
+        .trim_matches(|character| return matches!(character, '[' | ']' | '<' | '>'));
+
+    return listed.split('|').map(str::to_owned).collect();
+}
+
+/// A list of words in ascending order, so that two of them can be compared as sets.
+fn Sorted_Words(words: impl Iterator<Item = String>) -> Vec<String>
+{
+    let mut sorted: Vec<String> = words.collect();
+    sorted.sort();
+    sorted.dedup();
+
+    return sorted;
+}
+
+/// Every kind a submission can declare.
+///
+/// `nomos_spec_model::submission::Kind`'s own file is not this item's territory, so the census
+/// is here, paired with [`Spelled_Kind`]'s wildcard-free match: a variant added to
+/// [`SubmissionKind`] fails this file to compile rather than to pass.
+fn Every_Submission_Kind() -> &'static [SubmissionKind]
+{
+    return &[
+        SubmissionKind::FeatureRequest,
+        SubmissionKind::DesignSpec,
+        SubmissionKind::FeatureResult,
+    ];
+}
+
+/// The spelling `request submit --kind` takes for a kind, as an exhaustive match.
+///
+/// Not trusted from here: the test below parses each spelling back through the real command
+/// line and asserts it produces the variant named beside it.
+fn Spelled_Kind(kind: SubmissionKind) -> &'static str
+{
+    return match kind
+    {
+        SubmissionKind::FeatureRequest => "feature-request",
+        SubmissionKind::DesignSpec => "design-spec",
+        SubmissionKind::FeatureResult => "feature-result",
+    };
+}
+
+/// Every state a submission can be in. [`Every_Submission_Kind`]'s reasoning, one set over.
+fn Every_Submission_State() -> &'static [SubmissionState]
+{
+    return &[SubmissionState::Draft, SubmissionState::Accepted];
+}
+
+/// The spelling `request submit --state` takes for a state, as an exhaustive match.
+fn Spelled_State(state: SubmissionState) -> &'static str
+{
+    return match state
+    {
+        SubmissionState::Draft => "draft",
+        SubmissionState::Accepted => "accepted",
+    };
+}
+
+/// A `submit` line carrying one `--kind` and one `--state`, so a spelling can be parsed back.
+fn Submit_Line(kind: &str, state: &str) -> Vec<String>
+{
+    return Arguments_From_Text(&format!(
+        "submit --kind {kind} --id FR-1 --by kevin --state {state} --field title=t --field goal=g"
+    ));
+}
+
+/// The submission the command line built.
+///
+/// An irrefutable binding rather than a match with a fallback arm: [`Command`] has exactly one
+/// variant today, so a fallback would be unreachable code the compiler rejects. A second verb
+/// added to this group turns this line into a compile error, which is the right place to be
+/// told.
+fn Submitted(arguments: &[String]) -> nomos_spec_orchestration::SubmitRequest
+{
+    let Command::Submit(request) = Command_From_String_Arguments(arguments).expect("parses");
+
+    return request;
+}
+
+/// The kinds `request submit` prints are the kinds a submission can declare, both directions.
+///
+/// `OD-AGENT-004` version 2: a help text may enumerate a compiled vocabulary only where a test
+/// compares that enumeration against the vocabulary's own authority. The set comparison is one
+/// direction each; the parse loop underneath is what makes the spellings in [`Spelled_Kind`]
+/// trustworthy rather than self-agreeing, since a word that drifted from `parsing.rs`'s own
+/// match would be refused there.
+#[test]
+fn Test_The_Listed_Submission_Kinds_Should_Be_Every_Kind_A_Submission_Can_Declare()
+{
+    let listed = Alternatives_After(&super::parsing::Usage_Text(), "--kind");
+
+    assert!(
+        !listed.is_empty(),
+        "no --kind alternative was parsed out of the usage text, so this compared nothing: {}",
+        super::parsing::Usage_Text()
+    );
+    assert_eq!(
+        Sorted_Words(listed.iter().cloned()),
+        Sorted_Words(Every_Submission_Kind().iter().map(|kind| return Spelled_Kind(*kind).to_owned())),
+        "the usage text and SubmissionKind disagree about what --kind takes"
+    );
+
+    for spelling in &listed
+    {
+        let submitted = Submitted(&Submit_Line(spelling, "draft"));
+        let named = Every_Submission_Kind()
+            .iter()
+            .find(|kind| return Spelled_Kind(**kind) == spelling.as_str())
+            .expect("the set comparison above already established the spelling is one of these");
+
+        assert_eq!(submitted.kind, *named, "--kind {spelling} does not parse to the kind spelled for it here");
+    }
+}
+
+/// The states `request submit` prints are the states a submission can be in, both directions.
+/// [`Test_The_Listed_Submission_Kinds_Should_Be_Every_Kind_A_Submission_Can_Declare`]'s
+/// reasoning, over this group's other closed set.
+#[test]
+fn Test_The_Listed_Submission_States_Should_Be_Every_State_A_Submission_Can_Be_In()
+{
+    let listed = Alternatives_After(&super::parsing::Usage_Text(), "--state");
+
+    assert!(
+        !listed.is_empty(),
+        "no --state alternative was parsed out of the usage text, so this compared nothing: {}",
+        super::parsing::Usage_Text()
+    );
+    assert_eq!(
+        Sorted_Words(listed.iter().cloned()),
+        Sorted_Words(Every_Submission_State().iter().map(|state| return Spelled_State(*state).to_owned())),
+        "the usage text and SubmissionState disagree about what --state takes"
+    );
+
+    for spelling in &listed
+    {
+        let submitted = Submitted(&Submit_Line("feature-request", spelling));
+        let named = Every_Submission_State()
+            .iter()
+            .find(|state| return Spelled_State(**state) == spelling.as_str())
+            .expect("the set comparison above already established the spelling is one of these");
+
+        assert_eq!(submitted.state, *named, "--state {spelling} does not parse to the state spelled for it here");
+    }
+}
+
 /// Every code this group can leave the process with.
 ///
 /// `request::ExitCode` carries no census of its own the way `check::ExitCode::All()` does,

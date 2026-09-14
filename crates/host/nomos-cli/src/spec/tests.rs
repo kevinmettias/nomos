@@ -271,33 +271,112 @@ fn Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With()
     );
 }
 
-/// Every `nomos spec` command name the usage text must mention.
-fn Every_Spec_Command_Name() -> [&'static str; 9]
+/// The verb each command name in the usage text sits on, first token of its own line.
+///
+/// The verb block is everything between the `<command>` header and the `common:` line, and
+/// every verb occupies one rendered line beginning with its own name. Read out of the text
+/// rather than listed here: a hand list beside a compiled vocabulary is the second authority
+/// `OD-AGENT-004` is about, and this replaced one.
+fn Named_Commands(usage: &str) -> Vec<String>
 {
-    return [
-        "record",
-        "table",
-        "render",
-        "freshness",
-        "markdown",
-        "preview",
-        "commit",
-        "profiles",
-        "sources",
-    ];
+    let Some((_, after_header)) = usage.split_once("<command>\n")
+    else
+    {
+        return Vec::new();
+    };
+    let Some((block, _)) = after_header.split_once("\ncommon:")
+    else
+    {
+        return Vec::new();
+    };
+
+    return block
+        .lines()
+        .filter_map(|line| return line.split_whitespace().next())
+        .map(str::to_owned)
+        .collect();
 }
 
+/// The command a name builds, as an exhaustive match, so that adding one stops the build here.
+///
+/// This is what makes the comparison below closed on the authority's side. A variant added to
+/// [`SpecCommand`] fails this file to *compile*, which is the forcing function that brings an
+/// author to [`Minimal_Line`] and to the usage text in the same edit.
+fn Named(command: &SpecCommand) -> &'static str
+{
+    return match *command
+    {
+        SpecCommand::Record(_) => "record",
+        SpecCommand::Table(_) => "table",
+        SpecCommand::Render(_) => "render",
+        SpecCommand::Freshness(_) => "freshness",
+        SpecCommand::Markdown(_) => "markdown",
+        SpecCommand::Preview(_) => "preview",
+        SpecCommand::Commit(_) => "commit",
+        SpecCommand::Profiles => "profiles",
+        SpecCommand::Sources => "sources",
+    };
+}
+
+/// The shortest argument list each verb accepts, so the parser can be asked what it builds.
+///
+/// [`None`] for a name with no line rather than a panic here, so the test reports *which* verb
+/// the usage text grew without a fixture — the failure a new command actually causes.
+fn Minimal_Line(verb: &str) -> Option<&'static str>
+{
+    return match verb
+    {
+        "record" => Some("record --id D-129"),
+        "table" => Some("table --document d"),
+        "render" => Some("render --profile p --into ."),
+        "freshness" => Some("freshness --into ."),
+        "markdown" => Some("markdown --id D-129"),
+        "preview" => Some("preview --id D-129 --from f"),
+        "commit" => Some("commit --id D-129 --from f"),
+        "profiles" => Some("profiles"),
+        "sources" => Some("sources"),
+        _ => None,
+    };
+}
+
+/// The commands the usage text names are the commands this group can build, both directions.
+///
+/// This replaces a check that compared the text against a nine-name array written beside it, in
+/// one direction. That array was a second authority for a vocabulary
+/// `nomos_spec_orchestration::SpecCommand` already declares, and one direction meant a verb the
+/// parser accepts and the text omits passed — which is exactly the shape of the defect
+/// `OD-AGENT-004` version 2 was amended for.
+///
+/// Each name is now driven through the real parser and the command it builds is named by an
+/// exhaustive match, so a name in the text that the parser refuses fails, a name that builds
+/// the wrong command fails, and a variant added to [`SpecCommand`] stops the build.
 #[test]
 fn Test_Usage_Text_Should_Name_Every_Command()
 {
-    use super::parsing::Usage_Text;
+    let named = Named_Commands(&super::parsing::Usage_Text());
 
-    let usage = Usage_Text();
+    assert!(
+        !named.is_empty(),
+        "no command was parsed out of the usage text, so this compared nothing: {}",
+        super::parsing::Usage_Text()
+    );
 
-    for command in Every_Spec_Command_Name()
+    let mut built = Vec::new();
+    for verb in &named
     {
-        assert!(usage.contains(command), "usage does not mention {command}");
+        let line = Minimal_Line(verb)
+            .unwrap_or_else(|| panic!("the usage text names `{verb}` and no minimal line is written for it here"));
+        let command = Spec_Command_From_String_Arguments(&Arguments(line))
+            .unwrap_or_else(|error| panic!("the usage text names `{verb}` and the parser refuses it: {error}"));
+
+        assert_eq!(Named(&command), verb, "`{verb}` builds a different command");
+        built.push(Named(&command));
     }
+
+    built.sort_unstable();
+    built.dedup();
+
+    assert_eq!(built.len(), named.len(), "two command names built the same command: {named:?}");
 }
 
 /// `--rename` is optional and `--from` is not, so a rename cannot be a second parse of

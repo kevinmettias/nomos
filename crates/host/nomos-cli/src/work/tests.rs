@@ -2,7 +2,8 @@
 
 use super::*;
 use super::parse::{Parse_Duration, Usage_Text};
-use nomos_ledger::{DEFAULT_LEASE, ItemState};
+use nomos_ledger::{DEFAULT_LEASE, ItemKind, ItemOrigin, ItemState};
+use nomos_platform::Timestamp;
 
 fn Arguments(text: &str) -> Vec<String>
 {
@@ -480,6 +481,327 @@ fn Test_Finish_Should_Work_Command_From_String_Arguments()
             holder: "agent-a".to_owned(),
         }
     );
+}
+
+/// The alternatives a `--flag a|b|c` segment of the help text lists.
+///
+/// `OD-AGENT-004` version 2 asks a printed vocabulary to be compared against its authority in
+/// both directions. That comparison needs the printed side as data, and the printed side is a
+/// pipe-joined run of words ending at the first whitespace — `[--state a|b]` closes with a
+/// bracket, which comes off here so a caller compares words rather than punctuation.
+///
+/// The first occurrence wins, which is what the callers want: every flag below is spelled bare
+/// in its own usage line and backticked (`` `--kind` ``) in the prose underneath, and the bare
+/// one is the line a reader copies from.
+fn Alternatives_After(usage: &str, flag: &str) -> Vec<String>
+{
+    let Some((_, rest)) = usage.split_once(&format!("{flag} "))
+    else
+    {
+        return Vec::new();
+    };
+    let listed = rest.split_whitespace().next().unwrap_or_default().trim_end_matches(']');
+
+    return listed.split('|').map(str::to_owned).collect();
+}
+
+/// A list of words in ascending order, so that two of them can be compared as sets.
+fn Sorted_Words(words: impl Iterator<Item = String>) -> Vec<String>
+{
+    let mut sorted: Vec<String> = words.collect();
+    sorted.sort();
+    sorted.dedup();
+
+    return sorted;
+}
+
+/// The instant every state fixture below treats as now.
+const LISTING_NOW: i64 = 2_000;
+
+/// A bare `Ready` item reserving one file named after it, and nothing else.
+///
+/// Every fixture below starts here and changes exactly the one thing whose label it is after,
+/// so a fixture that produces the wrong word is wrong about that one thing rather than about
+/// its whole shape.
+fn Listing_Item(id: &str) -> LedgerItem
+{
+    return LedgerItem {
+        id: ItemId::New(id),
+        title: format!("item {id}"),
+        why: "because".to_owned(),
+        done_when: "it prints".to_owned(),
+        kind: ItemKind::Correction,
+        origin: ItemOrigin::Proposed,
+        territory: Territory::Of_Files(vec![format!("src/{id}.rs")]),
+        state: ItemState::Ready,
+        depends_on: Vec::new(),
+        blocked: None,
+        claim: None,
+        verification: None,
+        verified: None,
+        abandoned: Vec::new(),
+        displaced: Vec::new(),
+        declined: None,
+    };
+}
+
+/// A claim held by somebody else, live or lapsed as of [`LISTING_NOW`].
+fn Listing_Claim(live: bool) -> nomos_ledger::Claim
+{
+    let expires = if live { LISTING_NOW + 1_000 } else { LISTING_NOW - 1 };
+
+    return nomos_ledger::Claim {
+        holder: "agent-b".to_owned(),
+        acquired_at: Timestamp::From_Unix_Seconds(LISTING_NOW - 2_000),
+        lease_expires_at: Timestamp::From_Unix_Seconds(expires),
+    };
+}
+
+/// What `nomos work list` would call the first item on a board of `items`.
+fn Labelled_First(items: Vec<LedgerItem>) -> &'static str
+{
+    let document = LedgerDocument {
+        schema_version: nomos_ledger::SCHEMA_VERSION,
+        items,
+    };
+    let first = document.items.first().expect("the fixture has an item");
+
+    return Listing_Label(&document, first, Timestamp::From_Unix_Seconds(LISTING_NOW));
+}
+
+/// Every word `nomos work list` can print in its claimability column, produced by running
+/// [`Listing_Label`] rather than by copying the two functions that decide it.
+///
+/// This is the authority `--state` is compared against, and it is deliberately observed rather
+/// than restated. `Listing_Label` answers out of `State_Label` (an exhaustive match over
+/// [`ItemState`], in `listing.rs`) or `Refusal_Label` (a match over `ClaimRefusal` in
+/// `report.rs`), and copying either list here would be the second authority `OD-AGENT-004` is
+/// about. So each fixture below is a board that really produces one word, and the word is
+/// whatever the function says it is.
+///
+/// **Why ten is the whole set, and not merely ten the author thought of.** The two ranges are
+/// closed from opposite directions. `State_Label`'s match is exhaustive over `ItemState`, so a
+/// sixth state fails `listing.rs` to compile — and the `match` in [`Listing_Item`]'s caller
+/// below fails this file too, which is what brings an author here. `Refusal_Label`'s match ends
+/// in a `(_, _)` catch-all returning `snagged`, so a new `ClaimRefusal` variant *cannot* add a
+/// word: adding one means writing a new arm, in the function this list sits beside.
+fn Every_Listing_Label() -> Vec<&'static str>
+{
+    let mut claimed = Listing_Item("b");
+    claimed.state = ItemState::Claimed;
+    claimed.claim = Some(Listing_Claim(true));
+
+    let mut lapsed = Listing_Item("c");
+    lapsed.state = ItemState::Claimed;
+    lapsed.claim = Some(Listing_Claim(false));
+
+    let mut blocked = Listing_Item("d");
+    blocked.state = ItemState::Blocked;
+
+    let mut done = Listing_Item("e");
+    done.state = ItemState::Done;
+
+    let mut declined = Listing_Item("f");
+    declined.Decline("superseded", "agent-a", Timestamp::From_Unix_Seconds(LISTING_NOW - 1));
+
+    let mut waiting = Listing_Item("g");
+    waiting.depends_on = vec![ItemId::New("h")];
+
+    let mut stranded = Listing_Item("i");
+    stranded.depends_on = vec![ItemId::New("j")];
+    let mut declined_dependency = Listing_Item("j");
+    declined_dependency.Decline("not work", "agent-a", Timestamp::From_Unix_Seconds(LISTING_NOW - 1));
+
+    let mut contested = Listing_Item("k");
+    contested.territory = Territory::Of_Files(vec!["src/shared.rs".to_owned()]);
+    let mut holder = Listing_Item("l");
+    holder.territory = Territory::Of_Files(vec!["src/shared.rs".to_owned()]);
+    holder.state = ItemState::Claimed;
+    holder.claim = Some(Listing_Claim(true));
+
+    let mut unprovable = Listing_Item("m");
+    unprovable.territory = Territory::Of_Files(vec!["src/m.rs".to_owned()]).With_Pattern("src/**/*.rs");
+
+    return vec![
+        Labelled_First(vec![Listing_Item("a")]),
+        Labelled_First(vec![claimed]),
+        Labelled_First(vec![lapsed]),
+        Labelled_First(vec![blocked]),
+        Labelled_First(vec![done]),
+        Labelled_First(vec![declined]),
+        Labelled_First(vec![waiting, Listing_Item("h")]),
+        Labelled_First(vec![stranded, declined_dependency]),
+        Labelled_First(vec![contested, holder.clone()]),
+        Labelled_First(vec![unprovable, holder]),
+    ];
+}
+
+/// The states `work list --state` prints are the words the listing can actually print.
+///
+/// This is the case that was wrong rather than merely unguarded. The printed list held nine
+/// words and `Listing_Label` produces ten: `lapsed` was missing, and it is not a word a reader
+/// can do without, because `Listed_As` filters by comparing the requested string against this
+/// same function's output — so `nomos work list --state lapsed` worked, and the help text did
+/// not say so. `OD-LEDGER-012` is the record that gave `lapsed` its own word in the first
+/// place, for the reason that a lapsed item and a merely unclaimable one have opposite
+/// remedies.
+///
+/// The fixture set is asserted to be ten distinct words before it is compared against
+/// anything. Without that, a fixture that silently stopped producing its word would shrink
+/// both sides of a set comparison and pass.
+#[test]
+fn Test_The_Listed_States_Should_Be_Every_Word_The_Listing_Can_Print()
+{
+    let observed = Every_Listing_Label();
+
+    assert_eq!(
+        Sorted_Words(observed.iter().map(|word| return (*word).to_owned())).len(),
+        observed.len(),
+        "two fixtures produced the same word, so this covers fewer labels than it claims: \
+         {observed:?}"
+    );
+
+    let listed = Alternatives_After(&Usage_Text(), "--state");
+
+    assert!(
+        !listed.is_empty(),
+        "no --state alternative was parsed out of the usage text, so this compared nothing: {}",
+        Usage_Text()
+    );
+    assert_eq!(
+        Sorted_Words(listed.into_iter()),
+        Sorted_Words(observed.iter().map(|word| return (*word).to_owned())),
+        "the usage text and the listing disagree about what an item can be called"
+    );
+}
+
+/// Every kind an item can declare.
+///
+/// `nomos_ledger::item::Kind`'s own file is not this item's territory, so the census is here,
+/// paired with [`Spelled_Kind`]'s wildcard-free match: a variant added to [`ItemKind`] fails
+/// this file to compile rather than to pass.
+fn Every_Item_Kind() -> &'static [ItemKind]
+{
+    return &[
+        ItemKind::Capability,
+        ItemKind::Decision,
+        ItemKind::Validation,
+        ItemKind::Correction,
+        ItemKind::Cleanup,
+    ];
+}
+
+/// The spelling `work add --kind` takes for a kind, as an exhaustive match.
+///
+/// Deliberately not trusted from here.
+/// `Test_The_Listed_Add_Kinds_Should_Be_Every_Kind_An_Item_Can_Declare` parses each spelling
+/// back through the real command line and asserts it produces the variant named beside it, so
+/// a word that drifted from `parse.rs`'s own match fails rather than agreeing with itself.
+fn Spelled_Kind(kind: ItemKind) -> &'static str
+{
+    return match kind
+    {
+        ItemKind::Capability => "capability",
+        ItemKind::Decision => "decision",
+        ItemKind::Validation => "validation",
+        ItemKind::Correction => "correction",
+        ItemKind::Cleanup => "cleanup",
+    };
+}
+
+/// Every origin an item can declare. [`Every_Item_Kind`]'s reasoning, one closed set over.
+fn Every_Item_Origin() -> &'static [ItemOrigin]
+{
+    return &[ItemOrigin::Required, ItemOrigin::Proposed];
+}
+
+/// The spelling `work add --origin` takes for an origin, as an exhaustive match.
+fn Spelled_Origin(origin: ItemOrigin) -> &'static str
+{
+    return match origin
+    {
+        ItemOrigin::Required => "required",
+        ItemOrigin::Proposed => "proposed",
+    };
+}
+
+/// An `add` line carrying one `--kind` and one `--origin`, so a spelling can be parsed back.
+fn Add_Line(kind: &str, origin: &str) -> String
+{
+    return format!(
+        "add --item T-1 --title t --why w --done-when d --kind {kind} --origin {origin} \
+         --territory src/a.rs"
+    );
+}
+
+/// The kinds `work add` prints are the kinds an item can declare, both directions.
+///
+/// `OD-AGENT-004` version 2: a help text may enumerate a compiled vocabulary only where a test
+/// compares that enumeration against the vocabulary's own authority. `--kind` is one of the two
+/// closed sets `OD-LEDGER-024` decided, the help text says so in the same breath ("both are
+/// closed sets: an unrecognized value is refused rather than stored"), and until this test
+/// nothing compared the words to the set.
+///
+/// Three assertions rather than one, because they fail for different reasons a reader has to
+/// tell apart: the printed list was not found at all, a kind exists that the text does not
+/// offer, and a word the text offers is not one the command line takes.
+#[test]
+fn Test_The_Listed_Add_Kinds_Should_Be_Every_Kind_An_Item_Can_Declare()
+{
+    let listed = Alternatives_After(&Usage_Text(), "--kind");
+
+    assert!(
+        !listed.is_empty(),
+        "no --kind alternative was parsed out of the usage text, so this compared nothing: {}",
+        Usage_Text()
+    );
+    assert_eq!(
+        Sorted_Words(listed.iter().cloned()),
+        Sorted_Words(Every_Item_Kind().iter().map(|kind| return Spelled_Kind(*kind).to_owned())),
+        "the usage text and ItemKind disagree about what --kind takes"
+    );
+
+    for spelling in &listed
+    {
+        let item = Added(&Add_Line(spelling, "proposed"));
+        let named = Every_Item_Kind()
+            .iter()
+            .find(|kind| return Spelled_Kind(**kind) == spelling.as_str())
+            .expect("the set comparison above already established the spelling is one of these");
+
+        assert_eq!(item.kind, *named, "--kind {spelling} does not parse to the kind spelled for it here");
+    }
+}
+
+/// The origins `work add` prints are the origins an item can declare, both directions.
+/// [`Test_The_Listed_Add_Kinds_Should_Be_Every_Kind_An_Item_Can_Declare`]'s reasoning, over the
+/// other of `OD-LEDGER-024`'s two closed sets.
+#[test]
+fn Test_The_Listed_Add_Origins_Should_Be_Every_Origin_An_Item_Can_Declare()
+{
+    let listed = Alternatives_After(&Usage_Text(), "--origin");
+
+    assert!(
+        !listed.is_empty(),
+        "no --origin alternative was parsed out of the usage text, so this compared nothing: {}",
+        Usage_Text()
+    );
+    assert_eq!(
+        Sorted_Words(listed.iter().cloned()),
+        Sorted_Words(Every_Item_Origin().iter().map(|origin| return Spelled_Origin(*origin).to_owned())),
+        "the usage text and ItemOrigin disagree about what --origin takes"
+    );
+
+    for spelling in &listed
+    {
+        let item = Added(&Add_Line("correction", spelling));
+        let named = Every_Item_Origin()
+            .iter()
+            .find(|origin| return Spelled_Origin(**origin) == spelling.as_str())
+            .expect("the set comparison above already established the spelling is one of these");
+
+        assert_eq!(item.origin, *named, "--origin {spelling} does not parse to the origin spelled for it here");
+    }
 }
 
 /// Every code this group can leave the process with.

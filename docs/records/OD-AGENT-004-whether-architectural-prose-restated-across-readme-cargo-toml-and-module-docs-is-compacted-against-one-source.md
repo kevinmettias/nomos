@@ -199,8 +199,47 @@ A fifth, `spec`'s nine command names, is compared — but against a hand-written
 test file rather than against a compiled authority, which is a weaker claim than the
 condition above asks for.
 
-Those five are named here so the condition reads as not-yet-met rather than as satisfied.
-This amendment does not correct them; each is its own item.
+Those five were named here so the condition read as not-yet-met rather than as satisfied.
+**All five now meet it**, closed by
+`P97-FIVE-PRINTED-VOCABULARIES-HAVE-NOTHING-COMPARING-THEM-AND-ONE-IS-ALREADY-SHORT`:
+`Test_The_Listed_States_Should_Be_Every_Word_The_Listing_Can_Print`,
+`Test_The_Listed_Add_Kinds_Should_Be_Every_Kind_An_Item_Can_Declare`,
+`Test_The_Listed_Add_Origins_Should_Be_Every_Origin_An_Item_Can_Declare`,
+`Test_The_Listed_Submission_Kinds_Should_Be_Every_Kind_A_Submission_Can_Declare`,
+`Test_The_Listed_Submission_States_Should_Be_Every_State_A_Submission_Can_Be_In`,
+`Test_The_Named_Effort_Levels_Should_Be_Every_Level_The_Command_Line_Takes`, and
+`Test_Usage_Text_Should_Name_Every_Command`, which stopped comparing against a hand-written
+array and now drives every name through the parser.
+
+**One of the five was wrong, not merely unguarded, and only measuring found it.** `work list`
+printed nine states and the listing produces ten. `lapsed` was missing, and `Listed_As` filters
+by comparing the requested word against that same function's output — so
+`nomos work list --state lapsed` worked and the help text did not say so. That is the second
+time in this record's history that writing the guard found the artifact already wrong, the
+first being `check`'s rule list, and it is the argument for building the comparison rather than
+reading the list and judging it correct.
+
+### Two further copies, found by the same measurement
+
+The five above were measured across every `nomos-cli` **test** that reads a usage text, which
+is the population the condition is about. Closing them surfaced two copies of the same
+vocabularies that population could not see, and neither meets the condition:
+
+- **`README.md` line 141 prints the `--state` list**, and is short `lapsed` exactly as the help
+  text was. This one bears on version 1's central measurement. That measurement found
+  `README.md` stayed correct while module prose went stale, because
+  `tests/contract/tests/boundaries/readme.rs` asserts its **tables** against the real
+  workspace. A pipe-joined vocabulary inside a fenced command line is not a table, nothing
+  checks it, and it went stale. So the README is not correct *because it is the README*; it is
+  correct where it is checked, which is this record's rule holding rather than an exception to
+  it.
+- **`crates/host/nomos-cli/src/spec/parsing.rs` holds a third copy of the nine command names**,
+  as nine `contains` assertions. It is weaker than the array it sits beside in two ways: one
+  direction, and substring rather than equality — renaming the verb to `recordx` leaves it
+  green, which is how it was found.
+
+Neither is corrected here; each is its own item. They are recorded so this section keeps saying
+what is true rather than what was true when the debt was first counted.
 
 ### What would decide this differently
 
@@ -222,3 +261,10 @@ one mirrored and one wrong by 69 of 70 rules, in a string constant no completene
 can see into. The rule extends to the text a command prints, and is stated there as a
 condition — enumerate only where a test compares, otherwise route — with the five printed
 vocabularies that do not yet meet it named rather than left implied.
+
+Those five were closed by
+`P97-FIVE-PRINTED-VOCABULARIES-HAVE-NOTHING-COMPARING-THEM-AND-ONE-IS-ALREADY-SHORT`, which
+found one of them already wrong rather than merely unguarded and two further copies the
+population it measured could not see. No version bump: the decision is untouched and the
+amendment's own coverage section is what moved, which is that section saying what is true
+rather than what was true when the debt was counted.

@@ -32,7 +32,7 @@ profile: domain-specification
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md@authored | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md | authored | 25 | 7 | sha256:df7c81eebf78e5affa6d79c9cad7dcc1cdd53f098c2877d29349fa98e78e7c20 |
 | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md@authored | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md | authored | 21 | 7 | sha256:8810daf833c1feccd5957668eeff0785f8149ba4bae604c0601bf7829fc91f81 |
 | docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md@authored | docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md | authored | 15 | 5 | sha256:9f320881faa41b945d440f86e3851dad8c56f5564b27d481fa52b9a4c8fd84aa |
-| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md@authored | docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md | authored | 43 | 11 | sha256:bf8810ad4425825f0e1ce0bd64c9c9b2f8b7cbf968503b4e8ad9028e5a81f183 |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md@authored | docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md | authored | 49 | 12 | sha256:441f6cbedfa91d351e7eae5dcdcda43c7fc0052b050ea144fcb5d14f9acaa21d |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md@authored | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md | authored | 28 | 8 | sha256:233727e11f1527ac6f184ca58502da78c2b49fc046da967d3aa1bcfc5e461fe9 |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md | authored | 29 | 8 | sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561 |
 | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md@authored | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md | authored | 26 | 8 | sha256:d3ae25e96ff37b5a8bee583bbfff827ddd125845ee968619d863300a96185557 |
@@ -420,8 +420,9 @@ profile: domain-specification
 | docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#26 | authored | 3 | Why this confirms version 1 rather than reopening it |
 | docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#28 | authored | 3 | The rule extends to the text a command prints |
 | docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#33 | authored | 3 | What is compared after this amendment, and what is not |
-| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#39 | authored | 3 | What would decide this differently |
-| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#41 | authored | 2 | Status |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#40 | authored | 3 | Two further copies, found by the same measurement |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#44 | authored | 3 | What would decide this differently |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#46 | authored | 2 | Status |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#1 | authored | 1 | The snapshot in a fact key is a third answer, and it defeats the other two |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#2 | authored | 2 | Question |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#4 | authored | 2 | What Was Found |
@@ -7459,18 +7460,77 @@ condition above asks for.
 
 ### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#38
 
-*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 2: The Third Trigger Fired, On A Printed Help Text / What is compared after this amendment, and what is not · hash: sha256:b46213fa3f255323bb465a2d462dae02c13148d2c9a1f5f37793cc870fd770fb*
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 2: The Third Trigger Fired, On A Printed Help Text / What is compared after this amendment, and what is not · hash: sha256:5eeb1fe4b7f9f4529f96178ebfcd627cbc30f224f63b102b00188b91ba5a0a03*
 
-Those five are named here so the condition reads as not-yet-met rather than as satisfied.
-This amendment does not correct them; each is its own item.
+Those five were named here so the condition read as not-yet-met rather than as satisfied.
+**All five now meet it**, closed by
+`P97-FIVE-PRINTED-VOCABULARIES-HAVE-NOTHING-COMPARING-THEM-AND-ONE-IS-ALREADY-SHORT`:
+`Test_The_Listed_States_Should_Be_Every_Word_The_Listing_Can_Print`,
+`Test_The_Listed_Add_Kinds_Should_Be_Every_Kind_An_Item_Can_Declare`,
+`Test_The_Listed_Add_Origins_Should_Be_Every_Origin_An_Item_Can_Declare`,
+`Test_The_Listed_Submission_Kinds_Should_Be_Every_Kind_A_Submission_Can_Declare`,
+`Test_The_Listed_Submission_States_Should_Be_Every_State_A_Submission_Can_Be_In`,
+`Test_The_Named_Effort_Levels_Should_Be_Every_Level_The_Command_Line_Takes`, and
+`Test_Usage_Text_Should_Name_Every_Command`, which stopped comparing against a hand-written
+array and now drives every name through the parser.
 
 ### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#39
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 2: The Third Trigger Fired, On A Printed Help Text / What is compared after this amendment, and what is not · hash: sha256:fa64f502a432c46b2e07244d7ae460979ab285c3799755ca30219505cd1c9c2f*
+
+**One of the five was wrong, not merely unguarded, and only measuring found it.** `work list`
+printed nine states and the listing produces ten. `lapsed` was missing, and `Listed_As` filters
+by comparing the requested word against that same function's output — so
+`nomos work list --state lapsed` worked and the help text did not say so. That is the second
+time in this record's history that writing the guard found the artifact already wrong, the
+first being `check`'s rule list, and it is the argument for building the comparison rather than
+reading the list and judging it correct.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#40
+
+*revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 2: The Third Trigger Fired, On A Printed Help Text / Two further copies, found by the same measurement · hash: sha256:f04ce77220ab3d7e3fcbd1cacb6b57b251a5fa0b8027a0b66781731d8e4fea61*
+
+### Two further copies, found by the same measurement
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#41
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 2: The Third Trigger Fired, On A Printed Help Text / Two further copies, found by the same measurement · hash: sha256:a0b427df8a9c81ae8aceacf9ee31c9345e618a8b9f5c9ff88c18e737c5f94aca*
+
+The five above were measured across every `nomos-cli` **test** that reads a usage text, which
+is the population the condition is about. Closing them surfaced two copies of the same
+vocabularies that population could not see, and neither meets the condition:
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#42
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 2: The Third Trigger Fired, On A Printed Help Text / Two further copies, found by the same measurement · hash: sha256:2c6c90c8135454c3934e4dd49253ae9911a3f3ea12394b1df7beb779dcf43f62*
+
+- **`README.md` line 141 prints the `--state` list**, and is short `lapsed` exactly as the help
+  text was. This one bears on version 1's central measurement. That measurement found
+  `README.md` stayed correct while module prose went stale, because
+  `tests/contract/tests/boundaries/readme.rs` asserts its **tables** against the real
+  workspace. A pipe-joined vocabulary inside a fenced command line is not a table, nothing
+  checks it, and it went stale. So the README is not correct *because it is the README*; it is
+  correct where it is checked, which is this record's rule holding rather than an exception to
+  it.
+- **`crates/host/nomos-cli/src/spec/parsing.rs` holds a third copy of the nine command names**,
+  as nine `contains` assertions. It is weaker than the array it sits beside in two ways: one
+  direction, and substring rather than equality — renaming the verb to `recordx` leaves it
+  green, which is how it was found.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#43
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 2: The Third Trigger Fired, On A Printed Help Text / Two further copies, found by the same measurement · hash: sha256:c6fc3ce8aec98fdd00e23288df1f536bb7238a65d78aeb6f167a69309332ea01*
+
+Neither is corrected here; each is its own item. They are recorded so this section keeps saying
+what is true rather than what was true when the debt was first counted.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#44
 
 *revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 2: The Third Trigger Fired, On A Printed Help Text / What would decide this differently · hash: sha256:74079d113a21192bf895a9922b56ea6d0e4b8e1ac6475821dd0ee5109aa25926*
 
 ### What would decide this differently
 
-### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#40
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#45
 
 *revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 2: The Third Trigger Fired, On A Printed Help Text / What would decide this differently · hash: sha256:6b9fc6b404ce81bc213264cd8e75aedca63bd0f9b38c66b9fecc384c707d23c2*
 
@@ -7478,13 +7538,13 @@ Version 1's three triggers stand, the third now having fired once. A fourth is a
 group whose exit-code comparison passes while the text a user is shown is wrong**, which
 would mean the comparison is reading something other than that text.
 
-### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#41
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#46
 
 *revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#42
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#47
 
 *revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Status · hash: sha256:c0ac4ea0ebfaa46a73db63d6b3359f0c7832218c78ef1b0435be71cfcd084192*
 
@@ -7493,7 +7553,7 @@ Accepted. Decided on a natural experiment rather than on a principle: one port c
 none in the two artifacts the review called bloated. The remedy is routing what is checked
 elsewhere, not writing less.
 
-### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#43
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#48
 
 *revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Status · hash: sha256:386eea5124672cdf852bef91bff6e51524bddf682e865ef94678ef58e80dd9df*
 
@@ -7504,6 +7564,17 @@ one mirrored and one wrong by 69 of 70 rules, in a string constant no completene
 can see into. The rule extends to the text a command prints, and is stated there as a
 condition — enumerate only where a test compares, otherwise route — with the five printed
 vocabularies that do not yet meet it named rather than left implied.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#49
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Status · hash: sha256:de3a574f0325ca232936ccbab364d1ba74d34441cfc8e5a09ef58ceaea470183*
+
+Those five were closed by
+`P97-FIVE-PRINTED-VOCABULARIES-HAVE-NOTHING-COMPARING-THEM-AND-ONE-IS-ALREADY-SHORT`, which
+found one of them already wrong rather than merely unguarded and two further copies the
+population it measured could not see. No version bump: the decision is untouched and the
+amendment's own coverage section is what moved, which is that section saying what is true
+rather than what was true when the debt was counted.
 
 ### docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#1
 
