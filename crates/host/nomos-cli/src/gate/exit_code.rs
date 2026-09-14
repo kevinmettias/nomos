@@ -11,10 +11,11 @@
 /// differently at the shell than a `check` that did. [`Contradictory`](ExitCode::Contradictory)
 /// carries the meaning `check`'s `Unreadable` and `spec`'s `StoreError` already gave `5` --
 /// the foundational thing this group depends on could not be assembled -- and now covers
-/// two cases: this gate's own rule registry refusing its own composition (`plan` and
-/// `run` alike), and, for `run` only, the tree beneath it being unreadable or the check
-/// registry beneath *that* being self-contradictory. Both are "nothing here was ever
-/// assembled enough to judge", the same claim one layer down each time.
+/// three cases: this gate's own rule registry refusing its own composition (`plan` and
+/// `run` alike), for `run` only, the tree beneath it being unreadable or the check
+/// registry beneath *that* being self-contradictory, and, for `compare` only, a run whose
+/// findings do not each carry an occurrence identity of their own. Each is "nothing here
+/// was ever assembled enough to judge", the same claim one layer down each time.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum ExitCode
 {
@@ -32,6 +33,13 @@ pub(crate) enum ExitCode
     /// `GateRunOutcome::Indeterminate` when it comes from `run`; `run` never carries this
     /// distinction any further than that shared exit code, the same discipline `check`'s
     /// and `spec`'s foundational-failure codes already hold to.
+    ///
+    /// `compare` reports it for a fourth cause: a run whose findings do not yield one
+    /// occurrence identity each, so the two sides cannot be put side by side and the
+    /// comparison refuses rather than silently dropping a finding. Neither an
+    /// `Indeterminate` nor from `run` -- both sides were judged -- but the same claim as
+    /// the three above, one layer further in: what `compare` needed in order to answer was
+    /// never assembled.
     Contradictory = 5,
     /// `run` found no source under the tree, or no fact was materialized for any of it, so
     /// nothing was judged. Also `GateRunOutcome::Indeterminate`; a clean result here would

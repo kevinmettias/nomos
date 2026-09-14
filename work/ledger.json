@@ -74222,14 +74222,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p106",
-        "acquired_at": 1789429545,
-        "lease_expires_at": 1789440345
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -74239,7 +74235,27 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "eck_orchestration_seam-a57055934b00a412.exe)\n     Running tests\\composer_std_seam.rs (target\\debug\\deps\\composer_std_seam-3cd05d89f53c78a7.exe)\n     Running tests\\contracts_seam.rs (target\\debug\\deps\\contracts_seam-8e1a2473091902c5.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-928657b1f63d92ef.exe)\n     Running tests\\gate_orchestration_seam.rs (target\\debug\\deps\\gate_orchestration_seam-1be2b20dc844b5d5.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-341c588c1e48bcb6.exe)\n     Running tests\\lang_go_seam.rs (target\\debug\\deps\\lang_go_seam-80a1cd15fb76dddb.exe)\n     Running tests\\lang_rust_seam.rs (target\\debug\\deps\\lang_rust_seam-38fb83691da01121.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-2ee77951a1570c2c.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-99746b67ad10491e.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-9aedf337443dfc46.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-3ef6ac76e47a3def.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-4f3a92eec6250d30.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-050946cd96fe0099.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-4e13e3c4a30aec9e.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-d7608a90cf8c2235.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-97766ce0060fc2c1.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-b7b85e262cf1f915.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-5dcc2d48a001be85.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-a60294426c5d3ee5.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-54884038136b13b2.exe)\n",
+        "verified_at": 1789429787,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "713eea6c3e3a1c796d001e947c9c28baf100af08"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -74435,6 +74451,51 @@
           "nomos-cli"
         ],
         "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-A-REPEATED-FRAGMENT-BELOW-A-LENGTH-FLOOR-IS-NOT-A-TEMPLATE",
+      "title": "NSV-PRESERVE-004 has no minimum length, so 102 connectives and a horizontal rule are form letters",
+      "why": "OD-SPEC-004 version 3 decided that repetition is necessary and not sufficient evidence of filler, and question one of that amendment is the length floor. Measured 2026-09-14 over the sibling suites, 18,873 subjects: NSV-PRESERVE-004 reports 103 violations and 102 of them are 30 characters or fewer. The largest single contributor is three characters of horizontal rule carried by 562 sections across 2 documents; the rest are ordinary connectives and labels, among them a single downward arrow at 9 sections, and Or, or:, So:, LLM, KWB, Add:, Use:, Bad:, Why?, Then:, Good:, Example:, For example: at 148. The rule groups prose blocks by normalized hash and has no eligibility test at all, so in any corpus of ordinary authored prose short fragments collide and every collision is reported as an undeclared form letter. The amendment derives the floor rather than guessing it: the longest accidental collision observed is 30 characters, the shortest body repeated by design is 43, the shortest entry in FILLER_PATTERNS is 50 and Get_Filler_Pattern is substring containment so every block this repository has ever declared to be filler is at least that long. The distribution is empty between 31 and 42 in both corpora and the record fixes the floor at 36.",
+      "done_when": "A prose block shorter than the floor is not eligible to be a template, and the floor is 36 characters of normalized block text as OD-SPEC-004 version 3 fixes it. The threshold lives beside SHARED_BY rather than in the rule, because the rule already documents that the value it enforces and the value archaeology Shared_Templates reports over a revision pair must stay one constant and not two numbers somebody has to notice disagree; census.rs and sections.rs both apply it or the item has created exactly that divergence. Boundary tests assert both sides from the measurement rather than from round numbers: a body of 30 characters repeated five times is not a violation, a body of 43 characters repeated three times is, and a body at the floor itself is decided explicitly rather than left to an off-by-one. The sibling measurement is re-run with both corpora exported and the new count is reported in the commit message; it is expected to fall from 103 to 1, the survivor being a 51-character status line that is question two of the amendment and not this item to fix. Neither restoration.rs nor siblings.rs is edited and no count is pinned into either: restoration stays at 16 because every one of those bodies is past the floor, and quieting a corpus test with an accepted number is the suppression the rule exists to make visible. VERIFICATION SCOPE: the predicate is the two crates this item changes, selected as lib plus named integration targets so that it excludes nomos-spec-ingest tests restoration.rs and siblings.rs, which are red by design until the declaration mechanism lands and are not this item's obligation to turn green. That exclusion is deliberate and is the convention step 3 of the task skill carries.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/src/archaeology.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/census.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/sections.rs",
+          "crates/spec/nomos-spec-validate/src/rule/no_undeclared_filler_template.rs",
+          "crates/spec/nomos-spec-validate/tests/preservation_holds.rs",
+          "tests/contract/surface/nomos-spec-ingest.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-spec-ingest",
+          "--lib",
+          "--test",
+          "preservation_holds",
+          "--test",
+          "model_seam"
+        ],
+        "timeout_seconds": 1800
       },
       "verified": null,
       "abandoned": [],
