@@ -112,7 +112,7 @@ profile: domain-specification
 | docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md@authored | docs/records/OD-GATE-025-include-selects-what-a-gate-run-reports-and-never-what-it-judges.md | authored | 35 | 9 | sha256:ee8f60df55168698b0463998c8b6c953f0356311dfed9d1293e434cdc3117461 |
 | docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md@authored | docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md | authored | 39 | 11 | sha256:acbbd697996692163827ea080880c27e2aeb1a5a97947ce8eac52c8ae6f095d5 |
 | docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md@authored | docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md | authored | 25 | 7 | sha256:6e06898cbe0b96289a1aeb71c9910b523db4ff387c6fa72afcf1b8bb541605ee |
-| docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md@authored | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md | authored | 24 | 7 | sha256:c030a0d278ffdd46f798cdff6b73b5eaed0506d69bba9122f5883fe9f563ee05 |
+| docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md@authored | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md | authored | 36 | 9 | sha256:855d8b317af7d76c6c6f78e25c68675633d826d2abfbbca039b201bdc462f2db |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -202,7 +202,7 @@ profile: domain-specification
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 18 | 6 | sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c |
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 19 | 6 | sha256:7f6c05ffa09f693ecfe8e7c14699257a1fe01da3a07c0614b09f227fd5be986b |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 76 | 17 | sha256:bb390d2976a56fcf195f29cd1e73ab108464ff25aab02fac64daa3d9b736bb24 |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 86 | 19 | sha256:38f6a9b571b3413cadfc1a777d3b018e3256a39dc29f02bb656ac96ee7b768ad |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 23 | 6 | sha256:841b1c5bb58bd645f7b84a43c5f4433923df78193de6b7e6e3ffecc92de628c9 |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md@authored | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md | authored | 38 | 10 | sha256:740a2ca81a0ba769b2370b32a0b5af4aeb3647f2c9a141f1ebaf058f08f9f6c1 |
@@ -1078,6 +1078,8 @@ profile: domain-specification
 | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#13 | authored | 2 | Why This Earns A Record |
 | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#16 | authored | 2 | The Obligation |
 | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#22 | authored | 2 | What This Does Not Do |
+| docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#25 | authored | 2 | Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable |
+| docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#30 | authored | 3 | The Heuristic |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -1850,6 +1852,8 @@ profile: domain-specification
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#68 | authored | 3 | What this round's five overlapping claims are worth |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#70 | authored | 3 | What the round actually produced, which was not an architectural argument |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#75 | authored | 2 | Status |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#77 | authored | 2 | Amendment: The Surface This Record Was Watching Has Been Removed Rather Than Grown |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#81 | authored | 3 | Why A Planner Is Now Speculative Rather Than Merely Unbuilt |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1 | authored | 1 | A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#4 | authored | 2 | What Was Measured |
@@ -28784,6 +28788,101 @@ in miniature. When the second or third of those arrives with the same shape, the
 be worth an abstraction, and this record is what a later reader should be holding when deciding
 that.
 
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#25
+
+*revision: authored · kind: heading · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable · hash: sha256:ff0d40fd680868de641f3747f2a8380ab5d395c515ea7e9ce2f5c6bce3be87c0*
+
+## Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#26
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable · hash: sha256:4796355353c8698f6353cfeb8c9adb7fa73785f4d7ba2d7ad944ed2c1e714c75*
+
+A fourth instance arrived, and it belongs to this record's class by the same test: the
+verification passed, stayed passing, and was passing for a reason unrelated to the property it
+was believed to establish.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#27
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable · hash: sha256:f9c10e6e06ed0d878649cd82fe2a24cce8c682cb372dd57e87161fb244995aa3*
+
+**What happened.** `NESTING_DEPTH` declared `RequiredFact::LimitsPolicy`. The hand-written guard
+deciding whether to materialize that family named five rules and not it. Every test was green,
+including tests that ran `NESTING_DEPTH` and judged its findings — because those runs selected
+everything, and five sibling rules that *were* named in the guard forced the limits-policy fact
+into existence anyway. The rule got its fact, from a demand nobody had recorded it as having.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#28
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable · hash: sha256:5fcc0359b96212175172990e521b2d7860c1585aa94d44b117968accb0002dfe*
+
+Narrowed, it did not. Selected without those siblings, `Check_Nesting_Depth` fell back to
+`MAX_NESTING_DEPTH`'s built-in default instead of the limit the repository configured, reported
+no `MissingCapability` and produced no finding. Narrowing is not an exotic path: it is what
+`RuleSelector` and `gate run --rule` give an end user.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#29
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable · hash: sha256:d656fbea0795e9d27c473082eb03e8f8e470306832eff464ead201d08d221e1f*
+
+**Why this is the same class rather than a neighbouring one.** The other three instances had the
+environment repair or supply the condition. Here a *sibling consumer* supplied it. In both shapes
+something outside the subject satisfies the subject's precondition, the check cannot tell the
+difference, and the green result is about a configuration the narrowed caller never runs in. A
+full-suite pass was not evidence about selective execution, and nothing said so.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#30
+
+*revision: authored · kind: heading · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable / The Heuristic · hash: sha256:9e5f6237671d4d84937fea3028deb392c36f0112661ac44dff814a461c06a6e8*
+
+### The Heuristic
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#31
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable / The Heuristic · hash: sha256:1bb4c601d1d4704ffc5caf8b3736914d75e657fed804cdb79f10d27603d7b0d8*
+
+For a dependency several consumers share, three populations rather than one:
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#32
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable / The Heuristic · hash: sha256:a1915e6d3e90bde0761668459a77085d6bdf094b7e498af3a8287a02da44bc5e*
+
+1. **The full population** — what a default run does, and what every existing test already covers.
+2. **The smallest consumer population** — one consumer alone, which is the only way its own
+   declared dependence is actually exercised rather than inherited from a neighbour.
+3. **A neighbouring population that does not require the dependency** — without which a
+   provider that supplies everything unconditionally passes the first two while making narrowing
+   buy nothing.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#33
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable / The Heuristic · hash: sha256:ec313430b5964f951c5cb25725c36d39d8886f39b0247c9662aa5bab5a93c3dd*
+
+The second is what was missing. The third is what stops the fix from overshooting.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#34
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable / The Heuristic · hash: sha256:1ab9a272df611e050fe780411495b3f2891dc9c085d07bd7c9eb21bb07849334*
+
+**Where the shape recurs.** Anywhere a shared precondition has several consumers and one of them
+can be selected alone: gate phases, workflow steps whose bodies share a composition, provider
+fallbacks where one consumer's requirement pulls in a provider another was relying on, and
+correction validation reusing a check run somebody else's selection produced.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#35
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable / The Heuristic · hash: sha256:832677bed7eda3e6ad93036abbd4f1874f4339949e4f2b3d6670855b876ca596*
+
+**No framework is needed and none is added.** This is the ordinary shape of a negative control,
+stated so the next reader recognises the masking rather than rediscovering it — the same reason
+this record declines a general abstraction for the three instances above it.
+
+### docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#36
+
+*revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable / The Heuristic · hash: sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17*
+
+Checked 2026-09-14.
+
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 
 *revision: authored · kind: heading · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one · hash: sha256:6925613f07a8adec8f661c0b63d21749b581b23a0ed5363cacefdc93401e3dfa*
@@ -54184,6 +54283,102 @@ side. Revisit if participation varies by a second axis, or if a *diverging* rule
 resumes growing the hand-written materialization surface past a point future evidence shows it
 stops absorbing cleanly, or if a future round's proposal names a trigger this record does not
 already track rather than restating one already found unfired.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#77
+
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Surface This Record Was Watching Has Been Removed Rather Than Grown · hash: sha256:028983cd6bea676cf2ed059917982810e2e9adc8132995a7da2e6cc93b57e320*
+
+## Amendment: The Surface This Record Was Watching Has Been Removed Rather Than Grown
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#78
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Surface This Record Was Watching Has Been Removed Rather Than Grown · hash: sha256:a3b3a58b9cea1ea31bb1a6b726f3b770662747338672b90034488d637371b9f1*
+
+The previous round closed by naming what would make this record revisit: a diverging rule
+population resuming growth of the hand-written materialization surface past the point it stops
+absorbing cleanly. That surface is gone. `P102` did not grow it and did not reconcile it; it
+deleted it.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#79
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Surface This Record Was Watching Has Been Removed Rather Than Grown · hash: sha256:fb395733881def05ea723bb25bfe4fc0d065d50a28f7cf6247b7fd443f289056*
+
+**What replaced it.** `run_context.rs` decided what to materialize through one hand-written
+guard per fact family, each of the form *is any rule that feeds on this family selected*, spelled
+as a list of rule identifiers. Materialization now derives its demand from the union of
+`nomos_rules::RuleDescriptor::requires` over the selected rules. The guards are deleted rather
+than left beside the derivation, so there is no second statement of the rule-to-fact relation for
+the first to drift against. This is the move `OD-RULES-027` already made between the gate registry
+and the composed rule list, applied to the other axis `OD-GATE-017` had named.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#80
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Surface This Record Was Watching Has Been Removed Rather Than Grown · hash: sha256:31b68d28410f1d3e0d97af9a33745bb218732070a32e864214e137702b211f84*
+
+**That removal was overdue, and the evidence is a defect rather than an aesthetic.** The two
+statements had already diverged. Six rules declare `RequiredFact::LimitsPolicy`; the guard named
+five, and `NESTING_DEPTH` appeared in no guard at all. Selected without its five siblings it ran
+with no limits-policy fact, and `Check_Nesting_Depth` fell back to `MAX_NESTING_DEPTH`'s built-in
+default rather than the limit the repository had configured — reporting no `MissingCapability`
+and no finding. A successful judgment under incomplete effective inputs is the failure this
+product exists to prevent, and a duplicate authority produced one.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#81
+
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Surface This Record Was Watching Has Been Removed Rather Than Grown / Why A Planner Is Now Speculative Rather Than Merely Unbuilt · hash: sha256:f2f3a70df9425e6980ada343441f046517da08de2518242982ac7ceeb44b5cc1*
+
+### Why A Planner Is Now Speculative Rather Than Merely Unbuilt
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#82
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Surface This Record Was Watching Has Been Removed Rather Than Grown / Why A Planner Is Now Speculative Rather Than Merely Unbuilt · hash: sha256:e00af2ed202abd498d9b93228e1e1f396d71fabcbffe4d35b9be60ea8cc3d1cf*
+
+Earlier rounds declined on sequencing: the trigger had not fired. This round can say something
+stronger, because the path was measured end to end rather than argued about.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#83
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Surface This Record Was Watching Has Been Removed Rather Than Grown / Why A Planner Is Now Speculative Rather Than Merely Unbuilt · hash: sha256:a4d8bae52254d28b21eaffc8070fb2801a17f7e4f10b33ce4b665b4d872e8acf*
+
+- **No duplicate rule-to-fact authority remains.** `Demanded_Families` reads `DESCRIPTORS`;
+  `gate-orchestration`'s `Registered` reads `DESCRIPTORS` and is pinned against `Composed_Rules`.
+- **No ordering between fact families exists to schedule.** Each family is materialized by one
+  section, and no section's input is another's output.
+- **No provider scheduling problem exists.** Choice is one `Registry::Resolve` per requirement,
+  at materialization, with nothing to sequence or arbitrate.
+- **No cache-aware decision is needed.** `Demanded_Families` reads no store state, no
+  `Materializations`, no cost and never asks whether a fact is already live — deliberately, since
+  that is the line this record's own prohibition draws.
+- **`Spread_Collecting_Reached` has no consumer** outside `nomos-analysis`. The dirty-propagation
+  primitive exists and nothing in orchestration or any host calls it.
+- **`Judged_Sources` is not duplicated normative data.** It maps a rule to a capability source
+  slice, which `run_context.rs` records as an orchestration concept a lower band's descriptor
+  table has no business naming.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#84
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Surface This Record Was Watching Has Been Removed Rather Than Grown / Why A Planner Is Now Speculative Rather Than Merely Unbuilt · hash: sha256:575d02597f1ef265b7156de47f6a6cc537cb0c9e5b2b757d8a6d41223683fca9*
+
+**Still declined, and now for a reason that is measured.** A planner today would schedule an
+ordering that does not exist, over a choice that has no alternatives, using cache state nothing
+consults. That is speculative infrastructure, not deferred infrastructure.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#85
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Surface This Record Was Watching Has Been Removed Rather Than Grown / Why A Planner Is Now Speculative Rather Than Merely Unbuilt · hash: sha256:fbcf25b2acf9ae7ec621bdf9d54df16d2b736ba0340c9378a22cf4053f9909a6*
+
+**What would change it** is unchanged in kind and worth restating precisely, because the old
+signal is gone: a fact family whose production depends on another family's output, so that an
+order exists to get wrong; or a capability with two installed providers where the choice is not
+obvious from the requirement alone; or a measured cost that makes materializing an unneeded
+family expensive enough that skipping it is worth deciding rather than deriving. None of the
+three is present.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#86
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Surface This Record Was Watching Has Been Removed Rather Than Grown / Why A Planner Is Now Speculative Rather Than Merely Unbuilt · hash: sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17*
+
+Checked 2026-09-14.
 
 ### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1
 

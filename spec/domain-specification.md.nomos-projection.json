@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:be02120639e3e1bdfe104331573365b99f993e051c52b595e7cdae615dd6b382",
-  "inputs_digest": "sha256:5eddbcf86da0577da87a8bd2c07d2542685cf00596548c2c91ecd9d17aae6686",
+  "content_digest": "sha256:a199dcf657aecef6835ad93f4b85fdb40473a13a19287c62447c710cd862ab49",
+  "inputs_digest": "sha256:462463332e24335722f6c6ac9dbac942524be303e829a5a3647255a7fc070a74",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2016
+      2020
     ],
     [
       "Source blocks",
-      7040
+      7062
     ]
   ],
   "inputs": [
@@ -533,7 +533,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md@authored",
-      "hash": "sha256:c030a0d278ffdd46f798cdff6b73b5eaed0506d69bba9122f5883fe9f563ee05"
+      "hash": "sha256:855d8b317af7d76c6c6f78e25c68675633d826d2abfbbca039b201bdc462f2db"
     },
     {
       "content": "documents",
@@ -983,7 +983,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored",
-      "hash": "sha256:bb390d2976a56fcf195f29cd1e73ab108464ff25aab02fac64daa3d9b736bb24"
+      "hash": "sha256:38f6a9b571b3413cadfc1a777d3b018e3256a39dc29f02bb656ac96ee7b768ad"
     },
     {
       "content": "documents",
@@ -5337,6 +5337,16 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#25",
+      "hash": "sha256:956ddab6b5b0dc6ef96139149116f6cda21c2b7fb5dba4d3f16b77dfa70566ea"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#30",
+      "hash": "sha256:569686aa60a610fb21dce9f138d33e4ddcbb5f051c8e7e8717388f67aca95d4f"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1",
       "hash": "sha256:11d78395f104b91661531c522c4aa34e898cde3f151eea44fb43b01d6ce9b462"
     },
@@ -9194,6 +9204,16 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#75",
       "hash": "sha256:8e3aacc927630907d48d11963e51430438be8d1d1b050da321d292b2454dad54"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#77",
+      "hash": "sha256:470e230c55cfb79e9b1fd1992e6216b5fb63c9906be01ebb510b8b8df92dfb36"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#81",
+      "hash": "sha256:148deb144bc9ae6e5d7576414169f4ce84f5ca3c8efd8ca0b19bdb100ff891cb"
     },
     {
       "content": "headings",
@@ -25507,6 +25527,66 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#25",
+      "hash": "sha256:ff0d40fd680868de641f3747f2a8380ab5d395c515ea7e9ce2f5c6bce3be87c0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#26",
+      "hash": "sha256:4796355353c8698f6353cfeb8c9adb7fa73785f4d7ba2d7ad944ed2c1e714c75"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#27",
+      "hash": "sha256:f9c10e6e06ed0d878649cd82fe2a24cce8c682cb372dd57e87161fb244995aa3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#28",
+      "hash": "sha256:5fcc0359b96212175172990e521b2d7860c1585aa94d44b117968accb0002dfe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#29",
+      "hash": "sha256:d656fbea0795e9d27c473082eb03e8f8e470306832eff464ead201d08d221e1f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#30",
+      "hash": "sha256:9e5f6237671d4d84937fea3028deb392c36f0112661ac44dff814a461c06a6e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#31",
+      "hash": "sha256:1bb4c601d1d4704ffc5caf8b3736914d75e657fed804cdb79f10d27603d7b0d8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#32",
+      "hash": "sha256:a1915e6d3e90bde0761668459a77085d6bdf094b7e498af3a8287a02da44bc5e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#33",
+      "hash": "sha256:ec313430b5964f951c5cb25725c36d39d8886f39b0247c9662aa5bab5a93c3dd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#34",
+      "hash": "sha256:1ab9a272df611e050fe780411495b3f2891dc9c085d07bd7c9eb21bb07849334"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#35",
+      "hash": "sha256:832677bed7eda3e6ad93036abbd4f1874f4339949e4f2b3d6670855b876ca596"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#36",
+      "hash": "sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1",
       "hash": "sha256:6925613f07a8adec8f661c0b63d21749b581b23a0ed5363cacefdc93401e3dfa"
     },
@@ -39409,6 +39489,56 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#76",
       "hash": "sha256:f73f67a046b2b3d950e63555aabc363e13c5c2d40a971a02441667b38ae21709"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#77",
+      "hash": "sha256:028983cd6bea676cf2ed059917982810e2e9adc8132995a7da2e6cc93b57e320"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#78",
+      "hash": "sha256:a3b3a58b9cea1ea31bb1a6b726f3b770662747338672b90034488d637371b9f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#79",
+      "hash": "sha256:fb395733881def05ea723bb25bfe4fc0d065d50a28f7cf6247b7fd443f289056"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#80",
+      "hash": "sha256:31b68d28410f1d3e0d97af9a33745bb218732070a32e864214e137702b211f84"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#81",
+      "hash": "sha256:f2f3a70df9425e6980ada343441f046517da08de2518242982ac7ceeb44b5cc1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#82",
+      "hash": "sha256:e00af2ed202abd498d9b93228e1e1f396d71fabcbffe4d35b9be60ea8cc3d1cf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#83",
+      "hash": "sha256:a4d8bae52254d28b21eaffc8070fb2801a17f7e4f10b33ce4b665b4d872e8acf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#84",
+      "hash": "sha256:575d02597f1ef265b7156de47f6a6cc537cb0c9e5b2b757d8a6d41223683fca9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#85",
+      "hash": "sha256:fbcf25b2acf9ae7ec621bdf9d54df16d2b736ba0340c9378a22cf4053f9909a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#86",
+      "hash": "sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17"
     },
     {
       "content": "blocks",

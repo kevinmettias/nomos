@@ -3,7 +3,7 @@ id: OD-RULES-009
 type: decision
 title: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it
 status: accepted
-version: 7
+version: 8
 authority: canonical-normative-record
 tags:
   - rules
@@ -612,3 +612,59 @@ side. Revisit if participation varies by a second axis, or if a *diverging* rule
 resumes growing the hand-written materialization surface past a point future evidence shows it
 stops absorbing cleanly, or if a future round's proposal names a trigger this record does not
 already track rather than restating one already found unfired.
+
+## Amendment: The Surface This Record Was Watching Has Been Removed Rather Than Grown
+
+The previous round closed by naming what would make this record revisit: a diverging rule
+population resuming growth of the hand-written materialization surface past the point it stops
+absorbing cleanly. That surface is gone. `P102` did not grow it and did not reconcile it; it
+deleted it.
+
+**What replaced it.** `run_context.rs` decided what to materialize through one hand-written
+guard per fact family, each of the form *is any rule that feeds on this family selected*, spelled
+as a list of rule identifiers. Materialization now derives its demand from the union of
+`nomos_rules::RuleDescriptor::requires` over the selected rules. The guards are deleted rather
+than left beside the derivation, so there is no second statement of the rule-to-fact relation for
+the first to drift against. This is the move `OD-RULES-027` already made between the gate registry
+and the composed rule list, applied to the other axis `OD-GATE-017` had named.
+
+**That removal was overdue, and the evidence is a defect rather than an aesthetic.** The two
+statements had already diverged. Six rules declare `RequiredFact::LimitsPolicy`; the guard named
+five, and `NESTING_DEPTH` appeared in no guard at all. Selected without its five siblings it ran
+with no limits-policy fact, and `Check_Nesting_Depth` fell back to `MAX_NESTING_DEPTH`'s built-in
+default rather than the limit the repository had configured — reporting no `MissingCapability`
+and no finding. A successful judgment under incomplete effective inputs is the failure this
+product exists to prevent, and a duplicate authority produced one.
+
+### Why A Planner Is Now Speculative Rather Than Merely Unbuilt
+
+Earlier rounds declined on sequencing: the trigger had not fired. This round can say something
+stronger, because the path was measured end to end rather than argued about.
+
+- **No duplicate rule-to-fact authority remains.** `Demanded_Families` reads `DESCRIPTORS`;
+  `gate-orchestration`'s `Registered` reads `DESCRIPTORS` and is pinned against `Composed_Rules`.
+- **No ordering between fact families exists to schedule.** Each family is materialized by one
+  section, and no section's input is another's output.
+- **No provider scheduling problem exists.** Choice is one `Registry::Resolve` per requirement,
+  at materialization, with nothing to sequence or arbitrate.
+- **No cache-aware decision is needed.** `Demanded_Families` reads no store state, no
+  `Materializations`, no cost and never asks whether a fact is already live — deliberately, since
+  that is the line this record's own prohibition draws.
+- **`Spread_Collecting_Reached` has no consumer** outside `nomos-analysis`. The dirty-propagation
+  primitive exists and nothing in orchestration or any host calls it.
+- **`Judged_Sources` is not duplicated normative data.** It maps a rule to a capability source
+  slice, which `run_context.rs` records as an orchestration concept a lower band's descriptor
+  table has no business naming.
+
+**Still declined, and now for a reason that is measured.** A planner today would schedule an
+ordering that does not exist, over a choice that has no alternatives, using cache state nothing
+consults. That is speculative infrastructure, not deferred infrastructure.
+
+**What would change it** is unchanged in kind and worth restating precisely, because the old
+signal is gone: a fact family whose production depends on another family's output, so that an
+order exists to get wrong; or a capability with two installed providers where the choice is not
+obvious from the requirement alone; or a measured cost that makes materializing an unneeded
+family expensive enough that skipping it is worth deciding rather than deriving. None of the
+three is present.
+
+Checked 2026-09-14.

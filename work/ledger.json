@@ -68470,10 +68470,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p96",
+        "acquired_at": 1789409845,
+        "lease_expires_at": 1789420645
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -70878,10 +70882,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p100",
+        "acquired_at": 1789409988,
+        "lease_expires_at": 1789424388
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -71137,6 +71145,59 @@
           "exit_code": 0
         },
         "revision": "1dab9f2a350a1bc8e99e033de9a552a5e43df1e1"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P102-THE-SURFACE-OD-RULES-009-WATCHED-FOR-GROWTH-NO-LONGER-EXISTS",
+      "title": "The surface OD-RULES-009 watched for growth no longer exists, and the masking that hid a defect is worth a heuristic",
+      "why": "OD-RULES-009 has declined the shared analysis planner across eight rounds and is at version 7. Its own closing sentence names what would make it revisit: participation varying by a second axis, or a diverging rule population resuming growth of the hand-written materialization surface past the point it stops absorbing cleanly. P102 removed that surface rather than growing it. Materialization now derives its demand from the union of RuleDescriptor.requires over the selected rules, the per-family hand-written guards are gone, and the record is entitled to know that the thing it was watching is no longer there. The evidence that a planner would now be speculative is measurable rather than argued: no duplicate rule-to-fact authority remains, since gate-orchestration's Registered already reads DESCRIPTORS and is pinned against Composed_Rules; no ordering between fact families exists to schedule; provider choice is one resolution per requirement with nothing to sequence; nothing needs a cache-aware decision, and the derivation deliberately reads no store state; Spread_Collecting_Reached has no consumer outside nomos-analysis; and Judged_Sources is orchestration-owned by a recorded decision rather than duplicated normative data. Separately, the defect P102 found is worth a heuristic rather than only a fix. NESTING_DEPTH declared LimitsPolicy, no guard named it, and a full run hid that completely because five sibling rules forced the fact into existence anyway. Full-suite success was not evidence about selective execution, and the same masking is available wherever a shared dependency has several consumers -- gates, phases, workflows, provider fallbacks, correction validation.",
+      "done_when": "OD-RULES-009 carries an amendment recording that the hand-written materialization surface its last round named as the thing to watch has been removed rather than grown, what replaced it, and the specific measurements that make a planner speculative today rather than merely unbuilt. It states the decline as still standing and names what would change it, without restating triggers earlier rounds already found unfired. OD-GATE-028 carries an amendment recording the masking shape as a member of the class it already names: a full population exercising a shared dependency can make a narrowed consumer's dependence on it unobservable, so a green suite proves less than it appears. It states the heuristic as three populations -- the full one, the smallest consumer, and a neighbouring one that does not require the dependency -- names NESTING_DEPTH as the case that produced it, and is explicit that this needs no framework and is the ordinary shape of a negative control. Both projections are re-rendered from a tree publishing exactly these records, and cargo test -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md",
+          "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n22 |     UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, UNREAD_REACHES_FINDING,\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-check-orchestration` (lib) generated 1 warning (run `cargo fix --lib -p nomos-check-orchestration` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.66s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-16521a1362e743b4.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4612ea488031f680.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-8e50c82cd1b18623.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-7c139115530dcaf9.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-930f1bbb112a171d.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-4e60d939d3808124.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-6d055a686bd8bf95.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-9b9a906e2f2cb06a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-70a759c22f1ec589.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-b84e992768820a4a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-75a077603592d3ef.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-a235932dedeaff21.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-b4d692f665383346.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-c59e3651e67c8b16.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-7f3867088e2e3e4a.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789410046,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "612bb7d1e78b2f393b2aa324b9f74856989881e4"
       },
       "abandoned": [],
       "displaced": [],

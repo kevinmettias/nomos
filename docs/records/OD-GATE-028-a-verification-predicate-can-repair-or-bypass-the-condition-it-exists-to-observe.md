@@ -3,7 +3,7 @@ id: OD-GATE-028
 type: decision
 title: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - gate
@@ -120,3 +120,50 @@ and then judges it. Replay asserts that a rerun reaches the same place, which is
 in miniature. When the second or third of those arrives with the same shape, the population may
 be worth an abstraction, and this record is what a later reader should be holding when deciding
 that.
+
+## Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable
+
+A fourth instance arrived, and it belongs to this record's class by the same test: the
+verification passed, stayed passing, and was passing for a reason unrelated to the property it
+was believed to establish.
+
+**What happened.** `NESTING_DEPTH` declared `RequiredFact::LimitsPolicy`. The hand-written guard
+deciding whether to materialize that family named five rules and not it. Every test was green,
+including tests that ran `NESTING_DEPTH` and judged its findings — because those runs selected
+everything, and five sibling rules that *were* named in the guard forced the limits-policy fact
+into existence anyway. The rule got its fact, from a demand nobody had recorded it as having.
+
+Narrowed, it did not. Selected without those siblings, `Check_Nesting_Depth` fell back to
+`MAX_NESTING_DEPTH`'s built-in default instead of the limit the repository configured, reported
+no `MissingCapability` and produced no finding. Narrowing is not an exotic path: it is what
+`RuleSelector` and `gate run --rule` give an end user.
+
+**Why this is the same class rather than a neighbouring one.** The other three instances had the
+environment repair or supply the condition. Here a *sibling consumer* supplied it. In both shapes
+something outside the subject satisfies the subject's precondition, the check cannot tell the
+difference, and the green result is about a configuration the narrowed caller never runs in. A
+full-suite pass was not evidence about selective execution, and nothing said so.
+
+### The Heuristic
+
+For a dependency several consumers share, three populations rather than one:
+
+1. **The full population** — what a default run does, and what every existing test already covers.
+2. **The smallest consumer population** — one consumer alone, which is the only way its own
+   declared dependence is actually exercised rather than inherited from a neighbour.
+3. **A neighbouring population that does not require the dependency** — without which a
+   provider that supplies everything unconditionally passes the first two while making narrowing
+   buy nothing.
+
+The second is what was missing. The third is what stops the fix from overshooting.
+
+**Where the shape recurs.** Anywhere a shared precondition has several consumers and one of them
+can be selected alone: gate phases, workflow steps whose bodies share a composition, provider
+fallbacks where one consumer's requirement pulls in a provider another was relying on, and
+correction validation reusing a check run somebody else's selection produced.
+
+**No framework is needed and none is added.** This is the ordinary shape of a negative control,
+stated so the next reader recognises the masking rather than rediscovering it — the same reason
+this record declines a general abstraction for the three instances above it.
+
+Checked 2026-09-14.
