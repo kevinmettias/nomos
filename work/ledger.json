@@ -70529,7 +70529,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "The done_when prescribed the representation -- a capability fact following OD-RULES-011's contract-plus-provider pattern -- when the property that actually matters is the direction of dependency between rule mechanism and project description. Both a capability payload and a repository manifest can satisfy that, and a relocated table can satisfy the named pattern without satisfying it. Re-authored as -3 with the acceptance criterion stated as the dependency reversal and the mechanism left open, before any claim."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -70550,7 +70554,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p100",
+        "declined_at": 1789408866
+      }
     },
     {
       "id": "P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES",
@@ -70567,7 +70574,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Stranded by a stale edge, not by the work ceasing to be work: it depended on P100-...-2, which was declined and re-authored as -3. Re-added as -2 of its own name pointing at -3. The finding it records is unchanged."
+        }
+      },
       "depends_on": [
         "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-2"
       ],
@@ -70586,7 +70597,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p100",
+        "declined_at": 1789408908
+      }
     },
     {
       "id": "P101-GATE-COMPARE-IS-REACHABLE-ONLY-FROM-A-TERMINAL",
@@ -70812,6 +70826,94 @@
           "nomos-contract-tests"
         ],
         "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-3",
+      "title": "The architecture the dependency rules judge is 66 compiled-in nomos crate names, so the family cannot judge any other repository",
+      "why": "Five policy families already take their criterion from a declared fact under OD-RULES-011, and tests/integration/fixtures/third-party/hex-0.4.3/standards.json already declares its own naming policy for the same rules to judge. The architecture family is the exception. Check_Dependency_Direction, Check_Every_Member_Declares_A_Band and Check_Write_Authority resolve every package through Zone_Of, and ZONES is a literal of 66 entries every one of which is a nomos crate name. The dependency edges are provider-derived and generalize; the architecture they are judged against is source code in nomos-rules. In any other repository Zone_Of returns None and the family reports NotApplicable, which is honest and is also the whole family declining for every repository that is not this one. OD-RULES-024 named this as a fact this workspace does not yet produce; the missing fact is a declared architecture, not an inference engine.",
+      "done_when": "The acceptance test is the direction of dependency between rule mechanism and project description, not the representation chosen. Concretely: if the repository-specific description changes completely while the governing rule concept stays the same, the rules crate is unchanged. A relocated table whose schema and interpretation the rules crate still owns does not satisfy this even though it looks data-driven. Which mechanism carries the description is the implementer's to determine from what already exists -- a capability payload, a repository manifest, or another existing contract -- and a new mechanism is not required. Then: no nomos crate name remains compiled into nomos-rules as architecture, and deleting every such name does not reduce this workspace's ability to enforce its own architecture, because this workspace now declares what the ZONES table encoded. The same three rule implementations, unchanged in what they judge, enforce a foreign declaration with a different package vocabulary, proved against the hex-0.4.3 third-party fixture. A repository declaring no architecture still reports NotApplicable rather than passing clean, and an incomplete or unparseable declaration reports a refusal or applicability state rather than silently dropping the checks. OD-RULES-024 is amended to say the fact now exists and what it is. This item does not design an ownership, required-mechanism or general engineering-model schema, and does not decide what a declared component with no observed implementation means.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-architecture",
+          "crates/rules/nomos-rules/src/checks/dependency.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/completeness.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/violations.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/write_authority.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/tests/boundaries/graph.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-cap-architecture.txt",
+          "standards.json",
+          "tests/integration/fixtures/third-party/hex-0.4.3/standards.json",
+          "Cargo.toml",
+          "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-2",
+      "title": "The security rules decide what is test material from an eight-clause hardcoded path convention, so a repository that files fixtures elsewhere gets false credential findings",
+      "why": "Auditing all 42 SourceText rules for repository-specific criteria found exactly one family. Is_Test_Or_Fixture_Source in security_text.rs matches tests/, /tests/, /test/, /testdata/, /fixtures/, /examples/, _test.rs, _tests.rs and _test.go, and the three security rules all exempt a source on that basis; rust_text.rs carries the same notion independently in its unwrap-outside-tests-and-examples wording. Some clauses are toolchain-fixed and portable: Cargo owns tests/ and examples/, Go owns _test.go. testdata and fixtures are neither, they are a project convention. A repository filing its fixtures under resources or spec or samples is judged as if a fixture credential were a real one, and an exemption that is too narrow produces false positives rather than misses, which is the damaging direction for a security rule.",
+      "done_when": "What counts as test material reaches the security rules as a declared criterion rather than a path list compiled into security_text.rs, composed from the toolchain-fixed clauses plus whatever the repository declares, so that stable Cargo and Go semantics do not become configuration. It uses whichever declaration path P100-...-3 establishes rather than inventing a second one. A repository declaring nothing keeps today behaviour. A repository declaring its own fixture locations has them exempted, proved against a fixture whose test material sits under none of the nine current clauses. rust_text.rs stops carrying a second independent notion of the same thing.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/security_text.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-3"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 1200
       },
       "verified": null,
       "abandoned": [],
