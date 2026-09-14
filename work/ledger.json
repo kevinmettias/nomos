@@ -72618,7 +72618,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Measured 2026-09-14 with both corpora exported, and the premise is wrong in three ways. FIRST, the population is not four strings. restoration reports 16 violations over the ten domain volumes, in three structurally different shapes: four suite-wide front-matter strings at 10 sections across 10 documents; eleven volume abstracts at 3 sections across 2 documents, which is the cover line, the Document purpose section and the suite index entry, three canonical places by publication convention; and one parity note repeated 10 times inside a single volume, once under each of ten capability tables. SECOND, the 103 siblings violations are not the same phenomenon at all, and the item asserts they are. Measured over 18,873 subjects: 102 of the 103 are 40 characters or fewer. The largest is three characters of horizontal rule repeated 562 times; the rest are ordinary connective fragments -- a single downward arrow repeated 9 times, Or, or:, So:, LLM, KWB, Add:, Use:, Bad:, Why?, Then:, Good:. Not one of them is front-matter and not one is a template. The defect there is that the rule has no minimum length before repetition is allowed to mean template, which is a different defect from repeated-by-design publication text and needs a different mechanism. Bundling them is the same defect that split this item out of P102. THIRD, the territory cannot carry any landing. The done_when requires the question be decided AND recorded, and reserves only the two test files while forbidding any count be written into them, so no file this item reserves may change. The decision is an amendment to OD-SPEC-004, which decided that repetition answers is this filler and is falsified by both measurements: OD-SPEC-004 calibrated that census on the ten v14.36 volumes at 13 sections out of 482 and its own record says so, and neither the 18,873-subject sibling corpus nor a three-place publication convention was in that calibration. An amendment needs the record and its registration reserved and this item reserves neither. Replaced by P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS, which carries both measurements and amends the record; the two mechanisms follow from that decision rather than being chosen ahead of it."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -72637,9 +72641,18 @@
         "timeout_seconds": 1800
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-p103v14",
+          "reason": "Claimed and measured; the item's premise does not survive the measurement. Abandoned to decline it.",
+          "abandoned_at": 1789426246
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p103v14",
+        "declined_at": 1789426263
+      }
     },
     {
       "id": "P103-A-LEDGER-PREDICATE-INHERITS-CORPUS-OBLIGATIONS-FROM-THE-CRATE-IT-NAMES",
@@ -73154,10 +73167,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p104",
+        "acquired_at": 1789426035,
+        "lease_expires_at": 1789436835
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -74168,6 +74185,179 @@
           "--lib"
         ],
         "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P104-THE-GATE-EXIT-CODE-DOC-ENUMERATES-THREE-CAUSES-AND-COMPARE-ADDED-A-FOURTH",
+      "title": "The gate exit-code doc enumerates three causes of Contradictory and compare added a fourth",
+      "why": "ExitCode::Contradictory's own doc enumerates where the code comes from: this gate's rule composition is self-contradictory, or run's tree could not be read at all, or the check registry beneath a run was itself self-contradictory. As of P104's compare rewrite there is a fourth: Render_Compare returns Contradictory when a run's findings do not yield one occurrence identity each, so the comparison refuses rather than dropping a finding.\n\nReusing the existing code was deliberate and is not what this item questions. Render_Compare already reuses run's refusals rather than restating them, and a self-contradictory identity is the same kind of thing as a self-contradictory registry -- the analysis contradicting itself rather than the tree being bad. Minting a fifth code would have cost exit_code.rs, its Every_Exit_Code census and gate/tests.rs's exhaustive match, for a distinction a caller has no different action for.\n\nWhat is wrong is only the enumeration. A reader who gets exit code 5 from nomos gate compare goes to this doc and finds three causes, none of which is theirs. The sentence is not false -- it does not say only these -- and it is incomplete in the one place a reader looks, which is the same defect class this repository files about its own prose elsewhere. Filed rather than folded into P104 because exit_code.rs was outside all three of that work's territories and widening a live claim mid-implementation for one sentence is the move this repository has declined five times.",
+      "done_when": "ExitCode::Contradictory's doc names the compare refusal beside the three causes it already lists, in the same register: what happened, not how the mechanism works, which gate_compare.rs holds. The existing three are unchanged and no code is minted. Nothing else in exit_code.rs moves, including the Every_Exit_Code census, which does not change because no variant does.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate/exit_code.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P104-A-DEAD-IMPORT-SITS-IN-THE-HEADLESS-COMPARE-RESPONSE",
+      "title": "A dead import sits in the headless compare response",
+      "why": "gate_compare_response.rs imports SuppressionReason from nomos-gate-orchestration and never names it. BucketChange::From reads change.before_reason.disposition and .status, and field access needs no import, so the name has been dead for as long as that conversion has existed.\n\nMeasured rather than assumed, because a dead import is exactly the claim that is easy to get backwards: git show HEAD of the file before P104 touched it contains one occurrence of the name, on the import line, and none anywhere else including its test module. So it predates P104 and was not created by it.\n\nIt was left alone on purpose while P104 was in flight. An item's predicate proves the claims that item introduces, and sweeping an unrelated warning into a claimed territory to make a build quieter is the opportunistic fix this repository has already been told not to make. The gate lint step carries no -D warnings, so nothing is red today and nothing is urgent.",
+      "done_when": "The import names only what the file uses. The warning is gone from cargo clippy -p nomos-api --all-targets, checked by running it rather than by reading the import list, and no behaviour changes. Nothing else in the file moves.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/response/gate_compare_response.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P104-A-VERIFICATION-PREDICATE-NEED-NOT-REACH-THE-CRATES-ITS-OWN-TERRITORY-NAMES",
+      "title": "A verification predicate need not reach the crates its own territory names",
+      "why": "An item can reserve a file and declare a predicate that never compiles it. Nothing refuses the combination, so the item finishes green having never built part of what it changed.\n\nMeasured on a real instance, not hypothesised. P104-COMPARE-COLLAPSES-EVERY-FINDING-A-RULE-MAKES-ABOUT-ONE-SUBJECT-INTO-ONE-4 reserved crates/host/nomos-cli/src/gate/report.rs and declared cargo test -p nomos-gate-orchestration -p nomos-api. That predicate does not build nomos-cli. The implementation added a directory walk that nested four levels, nesting-depth reported it as blocking, and two real-tree tests in nomos-cli went red -- Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree and Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report, both of which assert this workspace carries nothing that can fail a build. The declared predicate was green throughout. It was caught only by running a crate the item never named, and work finish would not have seen it either: the gate lint step is bare clippy with no -D warnings, and nesting-depth is a nomos rule that neither cargo test nor cargo clippy runs.\n\nThis is the mirror of a question already asked and left open. P103-A-LEDGER-PREDICATE-MUST-NOT-INHERIT-UNRELATED-CRATE-OBLIGATIONS and its two predecessors were declined, and all three are about a predicate being too *broad* -- inheriting sibling obligations because they share a crate. This is the opposite direction and does not reopen them: scope matching cuts both ways, and a predicate narrower than its own territory fails the same principle those items were trying to state.\n\nWhether the ledger should refuse such an item mechanically, or whether this is a convention a record states and an author follows, is the open question. Proposed rather than required because the cheap mechanical version -- map each reserved path to its owning crate and check the predicate names it -- is a guess at the right strictness: a territory naming a record, a snapshot or a JSON fixture belongs to no crate, and an item may legitimately verify a shared artifact through a different package than the one that owns the file.",
+      "done_when": "The question is decided and recorded where a ledger author reads it: whether a verification predicate must reach every crate its territory names, and if so what happens to reserved paths that belong to no crate -- records, surface snapshots, JSON fixtures, the ledger itself.\n\nThe record states the measured instance rather than describing the shape in the abstract, names the mirror relationship to P103-A-LEDGER-PREDICATE-MUST-NOT-INHERIT-UNRELATED-CRATE-OBLIGATIONS so a reader sees both directions of one principle, and says plainly that a green predicate proved nothing about a crate it never built.\n\nIf the decision is that the ledger should refuse the combination, the record says so and the enforcement is boarded as its own item rather than folded in, because the carrier -- work add, work finish, or a contract test over the committed board -- is a separate question this record does not answer. If the decision is convention only, the record says why mechanical enforcement was refused, so the next reader does not re-derive it.\n\nBoth projections are re-rendered from a tree holding exactly the records the commit publishes, per OD-GATE-005.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-040.record"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "The done_when invited the wrong next action. It said the question is decided and recorded, which reads as an instruction to decide it now, and the evidence for deciding it is one instance. Re-authored as -2 so the item holds the measurement and explicitly waits for a second independent instance before any ledger feature is designed. The why is unchanged and still correct; only what finishing means has changed."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p104",
+        "declined_at": 1789425954
+      }
+    },
+    {
+      "id": "P104-A-VERIFICATION-PREDICATE-NEED-NOT-REACH-THE-CRATES-ITS-OWN-TERRITORY-NAMES-2",
+      "title": "A verification predicate need not reach the crates its own territory names",
+      "why": "An item can reserve a file and declare a predicate that never compiles it. Nothing refuses the combination, so the item finishes green having never built part of what it changed.\n\nMeasured on a real instance, not hypothesised. P104-COMPARE-COLLAPSES-EVERY-FINDING-A-RULE-MAKES-ABOUT-ONE-SUBJECT-INTO-ONE-4 reserved crates/host/nomos-cli/src/gate/report.rs and declared cargo test -p nomos-gate-orchestration -p nomos-api. That predicate does not build nomos-cli. The implementation added a directory walk that nested four levels, nesting-depth reported it as blocking, and two real-tree tests in nomos-cli went red -- Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree and Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report, both of which assert this workspace carries nothing that can fail a build. The declared predicate was green throughout. It was caught only by running a crate the item never named, and work finish would not have seen it either: the gate lint step is bare clippy with no -D warnings, and nesting-depth is a nomos rule that neither cargo test nor cargo clippy runs.\n\nThis is the mirror of a question already asked and left open. P103-A-LEDGER-PREDICATE-MUST-NOT-INHERIT-UNRELATED-CRATE-OBLIGATIONS and its two predecessors were declined, and all three are about a predicate being too *broad* -- inheriting sibling obligations because they share a crate. This is the opposite direction and does not reopen them: scope matching cuts both ways, and a predicate narrower than its own territory fails the same principle those items were trying to state.\n\nWhether the ledger should refuse such an item mechanically, or whether this is a convention a record states and an author follows, is the open question. Proposed rather than required because the cheap mechanical version -- map each reserved path to its owning crate and check the predicate names it -- is a guess at the right strictness: a territory naming a record, a snapshot or a JSON fixture belongs to no crate, and an item may legitimately verify a shared artifact through a different package than the one that owns the file.\n\nWhy the obvious rule is refused, recorded 2026-09-14 so it is not re-proposed. Every crate touched by territory must appear in the verification predicate is too crude to state. Territory legitimately names things that map to no Cargo package at all -- records, surface snapshots, fixtures, generated projections, shared manifests, the ledger itself -- and the rule would also reward adding a meaningless cargo test -p to satisfy bookkeeping rather than to verify anything.\n\nThe abstraction the problem actually has is one level up, and is worth writing down even though it is not being built: every changed artifact class needs a declared verification obligation capable of detecting an invalid change to that class. Rust source resolves to compile plus tests plus the nomos checks for that tree; a surface snapshot resolves to the surface contract test; a governing record resolves to spec validation plus projection freshness; a fixture resolves to a consumer test that actually loads it. Territory to affected verification domains to predicate coverage, rather than territory to crate names scraped out of paths.\n\nThat model is bigger than one defect justifies, which is the whole reason this item waits.",
+      "done_when": "**This item is deliberately not finishable on one instance, and that is its point.** It holds the measurement so the next occurrence has something to be a second instance of.\n\nIt finishes when a second, independent instance is recorded in it: a different item whose declared predicate did not detect an invalid change to something its own territory reserved, with the artifact, the predicate, and what actually caught it named. One instance is an anecdote about a directory walk that nested too deeply; two is a defect class, and only the second one tells us whether the shape is crate coverage, artifact-class coverage, or something neither guess anticipated.\n\nWith that second instance in hand the record states the decision and nothing more: whether a predicate must reach every crate its territory names, what happens to reserved paths that belong to no crate, and why the crude rule was refused -- so the next reader does not re-derive it. It names the mirror relationship to P103-A-LEDGER-PREDICATE-MUST-NOT-INHERIT-UNRELATED-CRATE-OBLIGATIONS, since that item and this one are two directions of one principle and deciding either alone would leave the other contradicting it.\n\n**No ledger feature is designed or built here.** If the decision is that the combination should be refused mechanically, the enforcement is boarded as its own item, because the carrier -- work add, work finish, or a contract test over the committed board -- is a separate question. If the decision is convention only, the record says why mechanical enforcement was refused.\n\nUntil then the authoring convention applies without waiting for any of this, and is the part that is actionable today: for every source crate a territory names, at least one declared predicate must exercise that crate's product rules, not merely its compilation and linting. P104 proved those are not the same thing -- cargo test and cargo clippy were both clean over a file that nesting-depth reported as blocking.\n\nBoth projections are re-rendered from a tree holding exactly the records the commit publishes, per OD-GATE-005.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-040.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS",
+      "title": "OD-SPEC-004 decided that repetition answers whether a body is filler, and two corpora now falsify that",
+      "why": "OD-SPEC-004 chose its option 1, a repetition census with the blocklist retained as the naming layer, and states the principle plainly: repetition answers is this filler, which no pattern list can keep up with. It calibrated that on one corpus and its own record says which -- over the ten v14.36 domain volumes the test fires on 13 sections out of 482, so it is not a test that calls ordinary prose filler. Both halves of that calibration have now been exceeded, measured 2026-09-14 with both corpora exported, and the two failures are different from each other. FIRST, length. Over the sibling suites, 18,873 subjects, NSV-PRESERVE-004 reports 103 violations and 102 of them are 40 characters or fewer. The largest is three characters of horizontal rule repeated 562 times across 2 documents. The rest are ordinary connective fragments: a single downward arrow repeated 9 times, and Or, or:, So:, LLM, KWB, Now, Add:, Use:, and:, Bad:, Not:, Why?, Then:, Good:, Today, Show:, Uses:. The rule has no minimum length, so in any corpus of ordinary authored prose short fragments collide and every collision is reported as a form letter. That is not an edge case at 102 of 103. SECOND, publication convention. Over the ten domain volumes the count is 16, not the 13 OD-SPEC-004 measured, and every one of them is contentful text repeated by design in the places the suite's own layout puts it. Four are suite-wide front-matter at 10 sections across 10 documents: the edition line, the suite title, the volume-ownership sentence, the Word navigation note. Eleven are volume abstracts at 3 sections across 2 documents, which is exactly the cover line, the Document purpose section and the suite index entry -- three canonical places, so a ten-volume suite hits the threshold of 3 by construction. One is a parity note repeated 10 times inside a single volume, once beneath each of ten capability tables. None of the sixteen is prose that says a section exists without saying what it says, which is the definition FILLER_PATTERNS carries in its own doc, and none of them hollows a restored member, which is the harm OD-SPEC-004 measured over 44 of them. The two failures need different mechanisms, which is why the declined item that bundled them could not land, and both are downstream of one decision this record currently answers the other way.",
+      "done_when": "OD-SPEC-004 is amended to version 3 and the amendment decides, on the evidence above, that repetition is necessary but not sufficient evidence that a body is filler -- or decides the opposite explicitly and says what the 118 measured violations then are. It answers three questions separately, because the measurement shows they are not one question. ONE, the length floor: whether a body below some length may be counted as a template at all, and if so what the floor is and what it is derived from rather than guessed; the 102-of-103 figure and the 562-times horizontal rule are carried as its evidence. TWO, declared publication text: whether a corpus may declare the text its own layout repeats -- front-matter, a volume abstract in its three canonical places -- so that a declaration admits it while an undeclared repetition still violates, and if so whether that declaration is corpus-side data or a second Rust list beside FILLER_PATTERNS. The answer says explicitly whether extending FILLER_PATTERNS itself is refused, since Get_Filler_Pattern names why a block was judged filler for a lineage row and calling a volume abstract filler would make that row say something false. THREE, the parity note: whether ten identical paragraphs inside one document is the same case as an abstract appearing in three documents, or a third one, since a single-document repetition is not a cross-volume convention and the answer may differ. The amendment carries both measurements with the corpora and subject counts named, so a later reader can re-run them rather than trust them, and it states that OD-SPEC-004's original calibration was correct for the corpus it was taken over and is being extended rather than corrected. No mechanism is built here and no violation count is pinned into any test: the two mechanisms follow from this decision and are authored from it, one per defect, and restoration.rs and siblings.rs stay red until they land rather than being quieted by an accepted number, which is the suppression the rule exists to make visible. Both projections are re-rendered from a clean worktree per OD-GATE-005 and committed with the record, and the freshness check is run with both required profiles; that step is deliberately not in the predicate because work finish does not run it and AGENTS.md says why.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-SPEC-004.record",
+          "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
       },
       "verified": null,
       "abandoned": [],
