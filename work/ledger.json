@@ -70405,7 +70405,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Its own done_when names this disposition: any discovery that a host must change means the territory was wrong and the item is declined and re-authored rather than widened. Three hosts must. CheckOutcome::Judged is a struct variant, so every pattern binding all three of its fields without a rest pattern stops compiling when a field is added, and every construction needs the new value. Measured 2026-09-14: nomos-api check.rs, nomos-cli check/report.rs, nomos-gate-orchestration gate_environment.rs and tests/integration calibration.rs each bind all three; gate_environment.rs also reconstructs the variant and nomos-cli gate/report.rs builds four fixtures of it. None of the eight is a rendering decision and each needs a rest pattern or one field value, but none is reachable from the five paths reserved. Separately the done_when requires Claim_Of itself to read the new fact, and Claim_Of is called by nomos-gate-orchestration's Reduced_With_Coverage over the gate's rule-and-scope-selected findings under OD-GATE-016 -- a set carrying no population information -- so extending that signature would force a decision about gate coverage policy that no record has made. Re-authored as -2 with the measured territory, with the host edits stated as mechanical and bounded, and with the Claim_Of question left to the implementer under the constraint that a gate run's disposition does not change."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -70420,9 +70424,18 @@
         "timeout_seconds": 1800
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-p99-empty",
+          "reason": "Claimed to implement, grepped every site that binds or builds CheckOutcome::Judged before editing anything, and eight of them are outside the reserved five paths. The item's own done_when says that means decline and re-author rather than widen.",
+          "abandoned_at": 1789412611
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p99-empty",
+        "declined_at": 1789412611
+      }
     },
     {
       "id": "P98-THE-BAND-GUARDS-FILE-WALK-COMPARES-AN-EXTENSION-CASE-SENSITIVELY",
@@ -72065,6 +72078,58 @@
           "nomos-workflow-orchestration",
           "-p",
           "nomos-api"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P99-A-RULE-THAT-JUDGED-AN-EMPTY-POPULATION-REPORTS-IT-AS-OD-ANALYSIS-012-DECIDED-2",
+      "title": "Build the per-rule empty-population report OD-ANALYSIS-012 accepted and deliberately left unbuilt",
+      "why": "OD-ANALYSIS-012 is accepted at version 1 and its Status section states the answer completely: an empty population is a per-rule fact reported in CheckOutcome::Judged itself, Advisory and Claim-flipping the same way ProviderUnavailable already is, computed from population sizes run_context.rs already holds. Its own What This Record Does Not Do section says no code moves there and names the new field, the count computed in run_context.rs and Claim_Of's extension precisely enough for a follow-up item. That follow-up did not exist. The decision is governing and the mechanism is absent, which is the gap between a record and a build rather than a question needing another record.\n\nThe present instance is real and named by the record: the four rules P43-SCRIPT-RULES-CANNOT-FIRE measured all report an empty population in this tree today, and a reader cannot tell any of them apart from a rule that judged a real population and found it clean. Note what is already built and is not this: crates/host/nomos-cli/src/vacuity.rs satisfies OD-GATE-003 and guards the exit code main.rs produces when a whole group saw no subject at all. That is a per-run guarantee at the CLI boundary. This item is the per-rule fact inside a run that did see subjects, which vacuity.rs's own \"What this does not cover\" section puts outside itself.\n\nVersion -1 of this item reserved five paths and forbade any host renderer from changing, saying in as many words that discovering one must change means the territory was wrong and the item is declined and re-authored. Three do, and the cause is Rust rather than design: CheckOutcome::Judged is a struct variant, and a pattern that binds all of its fields without a rest pattern stops compiling the moment a field is added. Grepped 2026-09-14, four sites bind all three fields and four more construct the variant, and none of the eight is a rendering decision: nomos-api's check.rs converts the outcome into a response, nomos-cli's check/report.rs dispatches to Report_Findings, nomos-gate-orchestration's gate_environment.rs destructures and reconstructs it to narrow findings by scope, nomos-cli's gate/report.rs builds four fixtures, and tests/integration's calibration.rs destructures one. What each of them needs is a rest pattern or one more field value. That is mechanical, it is not a renderer change in any sense the -1 wording was protecting against, and it cannot be avoided by any placement of the field the record permits.\n\nTwo things -1 got wrong beyond the count. It required Claim_Of itself to read the new fact. Claim_Of is public, and nomos-gate-orchestration's Reduced_With_Coverage calls it over the gate's own rule-and-scope-selected findings under OD-GATE-016 -- a narrowed set that carries no population information at all. Extending that signature would force a decision about whether a gate run's coverage policy also fails on an empty population, which neither OD-ANALYSIS-012 nor OD-GATE-016 has made. And -1 named tests/contract/surface/nomos-check-orchestration.txt but not the three crates whose own compilation it breaks, so the item could not have been finished from inside what it reserved.",
+      "done_when": "CheckOutcome::Judged carries the per-rule empty-population fact OD-ANALYSIS-012 names, computed in run_context.rs from the population sizes it already holds at the point each rule is run, at no new materialization cost. The run's own claim is Incomplete whenever any composed rule examined an empty population, exactly as a coverage-debt finding already makes it Incomplete.\n\nWhether that flip is expressed by extending Claim_Of or by a sibling beside it is the implementer's to determine, under one constraint: nomos-gate-orchestration's Reduced_With_Coverage must keep answering exactly what it answers today. It calls Claim_Of over the gate's own rule-and-scope-selected findings under OD-GATE-016, a set that carries no population information, and whether a gate run's coverage policy should also fail on an empty population is a decision neither OD-ANALYSIS-012 nor OD-GATE-016 has made. This item does not make it, and a gate run's disposition is unchanged by this item in every case.\n\nApplicability is not touched and gains no variant, which OD-ANALYSIS-012 forbids by name: every existing variant presupposes a subject this fact does not have. No variant is added to Claim either; it stays a two-variant Copy enum rendered through Display, so the flip reaches a reader with no rendering change anywhere.\n\nThe eight sites that bind or build CheckOutcome::Judged are updated to keep compiling and to nothing more. No renderer decides differently, no response shape gains a field, and nothing new is printed or served: whether the identity of the rules that examined nothing should reach the CLI report or the API response is a separate item this one leaves open, since the claim flip is what OD-ANALYSIS-012 decided a reader is owed.\n\nA test drives a rule over a deliberately empty population and asserts it is reported apart from a rule that judged a real population clean, and is confirmed able to fail by giving that rule a real population and observing the two stop differing. The four rules P43-SCRIPT-RULES-CANNOT-FIRE measured are checked against the built mechanism and the resulting count is stated in the commit.\n\ntests/contract/surface/nomos-check-orchestration.txt is re-blessed from a clean worktree for the changed public surface, and any other surface snapshot the change moves is re-blessed with it. cargo test --no-fail-fast -p nomos-check-orchestration -p nomos-gate-orchestration -p nomos-api -p nomos-cli -p nomos-contract-tests passes, and so does the workspace self-check.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/examined/check_outcome.rs",
+          "crates/orchestration/nomos-check-orchestration/src/examined/claim.rs",
+          "crates/orchestration/nomos-check-orchestration/src/examined.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/host/nomos-api/src/check.rs",
+          "crates/host/nomos-cli/src/check/report.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "tests/integration/tests/calibration.rs",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
         ],
         "timeout_seconds": 2700
       },
