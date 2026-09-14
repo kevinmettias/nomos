@@ -72875,14 +72875,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p103b",
-        "acquired_at": 1789421878,
-        "lease_expires_at": 1789429078
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -72893,7 +72889,28 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "eclaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.53s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-6db067559ac50d12.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-cb6ddcb0c46d55b5.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-13f492cc821fa871.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-c9a4b6d00bbdbeaf.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-767f5d779d25e091.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-ca7970ae00691f36.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-a6f50ee708049e86.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-ada75cf816a09b98.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0b67d1a17e2f82fa.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-d82a8d9e3d8e4f88.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-56ef20b6bcf098f7.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-c5a77b19401b79f6.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-8b9bfb97d90ab381.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-c67c0a89699b9b66.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-09be4ba967731cf0.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789423360,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fbb065e9fb758cd09c0461f86d62ba634e1a28e9"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -73750,12 +73767,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P104-A-FINDING-HAS-NO-IDENTITY-OF-ITS-OWN-OCCURRENCE-2"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p104",
+        "acquired_at": 1789423289,
+        "lease_expires_at": 1789437689
+      },
       "verification": {
         "argv": [
           "cargo",

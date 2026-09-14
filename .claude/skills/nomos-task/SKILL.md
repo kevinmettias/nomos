@@ -54,6 +54,34 @@ repository has already had twice. Reserve, in addition to the code you will edit
 - the snapshot under `tests/contract/surface/` for the crate whose public API moves;
 - `tests/contract/tests/corpus_gates.rs` if you add a test to any corpus-gated file.
 
+Those four are instances of one rule, not a list to memorise, and the rule is what finds the
+fifth: **territory follows the acceptance predicate's dependency cone, not the sites where
+the failure appears.** The predicate names a test, the test reads inputs, and any input whose
+modification may be required to satisfy it is territory. Grep the target tests for
+`include_str!`, `include_bytes!`, `read_to_string`, `env::var` and any crate-local register
+or fixture module, then follow each to the file it lands on.
+
+Two items were declined in one day for missing exactly that. The first reserved two files
+while its failures lived in five. The second reserved all five failing test files and none of
+the data they read -- `crates/spec/nomos-spec-ingest/tests/family_counts/measurement.rs` takes
+every expectation it checks from an `include_str!` of `tests/corpus/families/counts.json`, the
+file holding the numbers. Both
+authors grepped; the second grepped every failure site and stopped there.
+
+A file that only *reads* the same input is not territory. It is a non-regression check the
+`done_when` names, and grounds for declining rather than widening if it turns out to need an
+edit.
+
+**A Rust corollary: `pub` is not reachability.** A `pub` item inside a private module is
+crate-private to every consumer. The crate's own snapshot under `tests/contract/surface/` is
+the oracle -- a name absent from it cannot be named by another crate, whatever its own
+modifier says. An item was
+authored on the premise that a host could call a `pub fn` it had no path to, and was declined
+before it was ever claimed.
+
+Nothing enforces any of this. Two instances justify stating a rule, not building one to check
+it, and that is deliberate rather than an omission.
+
 Check the record identifier is unused before adding the item. Nothing else will, and two
 items reserving one identifier turns a shared guard red for a reason that reads like
 contention.
