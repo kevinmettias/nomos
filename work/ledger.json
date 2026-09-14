@@ -72446,14 +72446,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p103",
-        "acquired_at": 1789413796,
-        "lease_expires_at": 1789424596
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -72465,7 +72461,29 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api"
+        ],
+        "exit_code": 0,
+        "output_tail": "esult: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.52s\n\n\nrunning 4 tests\ntest Test_Disposition_Of_Findings_Should_Fail_With_One_Blocking_Finding_Among_Many ... ok\ntest Test_Disposition_Of_Findings_Should_Fail_On_A_Blocking_Finding ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_When_Nothing_Can_Fail_A_Build ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_With_No_Findings ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: unused import: `SuppressionReason`\n  --> crates\\host\\nomos-api\\src\\response\\gate_compare_response.rs:28:115\n   |\n28 |     DispositionChange, FindingDisposition, GateCommand, GateCompareResult, GateRunResult, SuppressionDisposition, SuppressionReason,\n   |                                                                                                                   ^^^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-api` (lib) generated 1 warning (run `cargo fix --lib -p nomos-api` to apply 1 suggestion)\nwarning: `nomos-api` (lib test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.67s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-ef4f4d725df7d02d.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-55167436346b18b7.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-a5ce43e451d52012.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-b0d6f9e4752d125a.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-38a3a7db007fb88b.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1789416727,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2569cd0725ebcc33fb3eadd03af6e91c0f914966"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

@@ -1,4 +1,5 @@
 pub const fn nomos_gate_orchestration::Admissibility::Is_A_Judgment(self) -> bool
+pub const fn nomos_gate_orchestration::SuppressionStatus::Suppresses(self) -> bool
 pub enum nomos_gate_orchestration::Admissibility
 pub enum nomos_gate_orchestration::CoveragePolicy
 pub enum nomos_gate_orchestration::Explanation
@@ -9,6 +10,7 @@ pub enum nomos_gate_orchestration::PhaseDisposition
 pub enum nomos_gate_orchestration::PhaseThreshold
 pub enum nomos_gate_orchestration::RuleCompositionError
 pub enum nomos_gate_orchestration::SuppressionDisposition
+pub enum nomos_gate_orchestration::SuppressionStatus
 pub enum variant nomos_gate_orchestration::Admissibility::NotJudged
 pub enum variant nomos_gate_orchestration::Admissibility::Permitted
 pub enum variant nomos_gate_orchestration::Admissibility::Refused
@@ -38,6 +40,8 @@ pub enum variant nomos_gate_orchestration::SuppressionDisposition::FormalRiskAcc
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::InlineSuppression
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::RepositoryPolicyException
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::TemporaryWaiver
+pub enum variant nomos_gate_orchestration::SuppressionStatus::Active
+pub enum variant nomos_gate_orchestration::SuppressionStatus::Expired
 pub fn nomos_gate_orchestration::Admits(depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
 pub fn nomos_gate_orchestration::AdoptionPolicy::Calibrating<'a>(&'a self, finding: &Finding) -> Option<&'a RuleCalibration>
 pub fn nomos_gate_orchestration::BaselineDebt::Is_Applicable_To(&self, finding: &Finding) -> bool
@@ -68,7 +72,9 @@ pub struct field nomos_gate_orchestration::BaselineDebt::rule: RuleId
 pub struct field nomos_gate_orchestration::BaselineDebt::subject: SubjectId
 pub struct field nomos_gate_orchestration::BaselinePolicy::debt: Vec<BaselineDebt>
 pub struct field nomos_gate_orchestration::DispositionChange::after: FindingDisposition
+pub struct field nomos_gate_orchestration::DispositionChange::after_reason: Option<SuppressionReason>
 pub struct field nomos_gate_orchestration::DispositionChange::before: FindingDisposition
+pub struct field nomos_gate_orchestration::DispositionChange::before_reason: Option<SuppressionReason>
 pub struct field nomos_gate_orchestration::DispositionChange::rule: RuleId
 pub struct field nomos_gate_orchestration::DispositionChange::subject: SubjectId
 pub struct field nomos_gate_orchestration::DispositionChange::subject_name: String
@@ -101,6 +107,7 @@ pub struct field nomos_gate_orchestration::GateFindings::baselined_findings: Vec
 pub struct field nomos_gate_orchestration::GateFindings::blocking_findings: Vec<Finding>
 pub struct field nomos_gate_orchestration::GateFindings::calibrated_findings: Vec<Finding>
 pub struct field nomos_gate_orchestration::GateFindings::suppressed_findings: Vec<Finding>
+pub struct field nomos_gate_orchestration::GateFindings::suppression_reasons: std::collections::BTreeMap<(nomos_contracts::RuleId, nomos_contracts::SubjectId), crate::SuppressionReason>
 pub struct field nomos_gate_orchestration::GatePhase::name: String
 pub struct field nomos_gate_orchestration::GatePhase::rules: Vec<RuleId>
 pub struct field nomos_gate_orchestration::GatePhase::threshold: PhaseThreshold
@@ -130,6 +137,8 @@ pub struct field nomos_gate_orchestration::Suppression::rationale: String
 pub struct field nomos_gate_orchestration::Suppression::rule: RuleId
 pub struct field nomos_gate_orchestration::Suppression::subject: SubjectId
 pub struct field nomos_gate_orchestration::SuppressionPolicy::suppressions: Vec<Suppression>
+pub struct field nomos_gate_orchestration::SuppressionReason::disposition: SuppressionDisposition
+pub struct field nomos_gate_orchestration::SuppressionReason::status: SuppressionStatus
 pub struct nomos_gate_orchestration::AdoptionPolicy
 pub struct nomos_gate_orchestration::BaselineDebt
 pub struct nomos_gate_orchestration::BaselinePolicy
@@ -152,3 +161,4 @@ pub struct nomos_gate_orchestration::RuleSelector
 pub struct nomos_gate_orchestration::ScopeSelector
 pub struct nomos_gate_orchestration::Suppression
 pub struct nomos_gate_orchestration::SuppressionPolicy
+pub struct nomos_gate_orchestration::SuppressionReason

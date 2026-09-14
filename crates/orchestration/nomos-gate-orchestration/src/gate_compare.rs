@@ -28,7 +28,7 @@
 use nomos_contracts::{Finding, RuleId, RunId, SubjectId};
 use std::collections::BTreeMap;
 
-use crate::{GateFindings, GateRunResult};
+use crate::{GateFindings, GateRunResult, SuppressionReason};
 
 /// Which of [`GateFindings`]'s own four buckets a finding fell into.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -50,6 +50,15 @@ pub struct DispositionChange
     pub subject_name: String,
     pub before: FindingDisposition,
     pub after: FindingDisposition,
+    /// Why the finding was in `before`'s bucket, when a disposition named it.
+    ///
+    /// Carried so a change *within* one bucket is reportable. A `FalsePositiveDisposition`
+    /// becoming a `FormalRiskAcceptance` leaves `before` and `after` equal and is an opposite
+    /// engineering claim; a lapsed waiver leaves the suppressed bucket entirely, and a reader
+    /// needs to see that a tolerance came due rather than that a violation appeared.
+    pub before_reason: Option<SuppressionReason>,
+    /// Why the finding is in `after`'s bucket, when a disposition names it.
+    pub after_reason: Option<SuppressionReason>,
 }
 
 /// What changed between `baseline` and `candidate`'s own [`GateFindings`].
@@ -93,7 +102,13 @@ pub fn Compare_Gate_Runs(baseline: &GateRunResult, candidate: &GateRunResult) ->
         .iter()
         .filter_map(|(key, (after_disposition, finding))| {
             let (before_disposition, _) = before.get(key)?;
-            if before_disposition == after_disposition
+            let before_reason = baseline.findings.suppression_reasons.get(key).copied();
+            let after_reason = candidate.findings.suppression_reasons.get(key).copied();
+
+            // Two states are the same state only when the treatment and the reason
+            // producing it are both the same. Comparing the bucket alone made a
+            // disposition change within `Suppressed` report as nothing at all.
+            if before_disposition == after_disposition && before_reason == after_reason
             {
                 return None;
             }
@@ -104,6 +119,8 @@ pub fn Compare_Gate_Runs(baseline: &GateRunResult, candidate: &GateRunResult) ->
                 subject_name: finding.subject_name.clone(),
                 before: *before_disposition,
                 after: *after_disposition,
+                before_reason,
+                after_reason,
             });
         })
         .collect();
@@ -153,7 +170,7 @@ mod tests
         return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
     }
 
-    fn Run_Id_Of(fill: u8) -> RunId
+    pub(super) fn Run_Id_Of(fill: u8) -> RunId
     {
         return RunId::From_Digest(Digest128::From_Bytes([fill; Digest128::BYTE_LENGTH]));
     }
@@ -259,8 +276,8 @@ mod tests
             locations: vec!["a.rs".to_owned()],
         };
 
-        let baseline = Result_With(Run_Id_Of(7), GateFindings { blocking_findings: vec![finding.clone()], calibrated_findings: vec![], suppressed_findings: vec![], baselined_findings: vec![] });
-        let candidate = Result_With(Run_Id_Of(8), GateFindings { blocking_findings: vec![], calibrated_findings: vec![], suppressed_findings: vec![finding], baselined_findings: vec![] });
+        let baseline = Result_With(Run_Id_Of(7), GateFindings { blocking_findings: vec![finding.clone()], calibrated_findings: vec![], suppressed_findings: vec![], baselined_findings: vec![], suppression_reasons: Default::default() });
+        let candidate = Result_With(Run_Id_Of(8), GateFindings { blocking_findings: vec![], calibrated_findings: vec![], suppressed_findings: vec![finding], baselined_findings: vec![], suppression_reasons: Default::default() });
 
         let compared = Compare_Gate_Runs(&baseline, &candidate);
 
@@ -272,7 +289,7 @@ mod tests
         assert_eq!(change.after, FindingDisposition::Suppressed);
     }
 
-    fn Result_With(run: RunId, findings: GateFindings) -> GateRunResult
+    pub(super) fn Result_With(run: RunId, findings: GateFindings) -> GateRunResult
     {
         return GateRunResult {
             unmatched_policy: Vec::new(),
@@ -282,5 +299,148 @@ mod tests
             findings,
             disposition: crate::GateRunOutcome::Indeterminate,
         };
+    }
+}
+
+#[cfg(test)]
+mod reason_tests
+{
+    use super::tests::{Result_With, Run_Id_Of};
+    use crate::{
+        Compare_Gate_Runs, FindingDisposition, GateFindings, SuppressionDisposition, SuppressionReason, SuppressionStatus,
+    };
+    use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
+    use std::collections::BTreeMap;
+
+    fn Finding_Here() -> Finding
+    {
+        return Finding {
+            rule: RuleId::New("naming-convention"),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([7; Digest128::BYTE_LENGTH])),
+            subject_name: "src/lib.rs".to_string(),
+            applicability: Applicability::Supported,
+            evidence: EvidenceClass::Derived,
+            gate: GateCategory::Blocking,
+            summary: "a name".to_string(),
+            locations: Vec::new(),
+        };
+    }
+
+    fn Reason(disposition: SuppressionDisposition, status: SuppressionStatus) -> SuppressionReason
+    {
+        return SuppressionReason { disposition, status };
+    }
+
+    /// `findings` with one finding in `bucket`, and `reason` recorded against it.
+    fn Findings_With(bucket: FindingDisposition, reason: Option<SuppressionReason>) -> GateFindings
+    {
+        let finding = Finding_Here();
+        let mut reasons = BTreeMap::new();
+
+        if let Some(reason) = reason
+        {
+            reasons.insert((finding.rule.clone(), finding.subject), reason);
+        }
+
+        let mut findings = GateFindings {
+            blocking_findings: Vec::new(),
+            calibrated_findings: Vec::new(),
+            suppressed_findings: Vec::new(),
+            baselined_findings: Vec::new(),
+            suppression_reasons: reasons,
+        };
+
+        match bucket
+        {
+            FindingDisposition::Blocking => findings.blocking_findings.push(finding),
+            FindingDisposition::Calibrated => findings.calibrated_findings.push(finding),
+            FindingDisposition::Suppressed => findings.suppressed_findings.push(finding),
+            FindingDisposition::Baselined => findings.baselined_findings.push(finding),
+        }
+
+        return findings;
+    }
+
+    fn Compared(
+        before: (FindingDisposition, Option<SuppressionReason>),
+        after: (FindingDisposition, Option<SuppressionReason>),
+    ) -> super::GateCompareResult
+    {
+        return Compare_Gate_Runs(
+            &Result_With(Run_Id_Of(1), Findings_With(before.0, before.1)),
+            &Result_With(Run_Id_Of(2), Findings_With(after.0, after.1)),
+        );
+    }
+
+    /// A reason changing inside one bucket is a change.
+    ///
+    /// The transition this whole increment exists for. `FalsePositiveDisposition` says the
+    /// rule was wrong here; `FormalRiskAcceptance` says somebody owns the risk. The bucket is
+    /// `Suppressed` on both sides and the engineering claim is opposite, and before this the
+    /// comparison reported nothing at all.
+    #[test]
+    fn Test_A_Disposition_Change_Within_Suppressed_Should_Be_Reported()
+    {
+        let result = Compared(
+            (FindingDisposition::Suppressed, Some(Reason(SuppressionDisposition::FalsePositiveDisposition, SuppressionStatus::Active))),
+            (FindingDisposition::Suppressed, Some(Reason(SuppressionDisposition::FormalRiskAcceptance, SuppressionStatus::Active))),
+        );
+
+        let change = result.changed.first().expect("a reason change is a change");
+
+        assert_eq!(change.before, FindingDisposition::Suppressed, "the bucket did not move and must not appear to");
+        assert_eq!(change.after, FindingDisposition::Suppressed);
+        assert_eq!(change.before_reason.expect("a reason").disposition, SuppressionDisposition::FalsePositiveDisposition);
+        assert_eq!(change.after_reason.expect("a reason").disposition, SuppressionDisposition::FormalRiskAcceptance);
+    }
+
+    /// A waiver lapsing is a change, and the reason says so.
+    ///
+    /// Under `P103` an expired waiver does not suppress, so the finding leaves the bucket.
+    /// Without the recorded reason a reader would see only `Suppressed -> Blocking` and could
+    /// not tell a tolerance coming due from a suppression being withdrawn by hand.
+    #[test]
+    fn Test_A_Waiver_Lapsing_Should_Be_Reported_With_Its_Reason()
+    {
+        let result = Compared(
+            (FindingDisposition::Suppressed, Some(Reason(SuppressionDisposition::TemporaryWaiver, SuppressionStatus::Active))),
+            (FindingDisposition::Blocking, Some(Reason(SuppressionDisposition::TemporaryWaiver, SuppressionStatus::Expired))),
+        );
+
+        let change = result.changed.first().expect("a lapsed waiver is a change");
+
+        assert_eq!(change.before, FindingDisposition::Suppressed);
+        assert_eq!(change.after, FindingDisposition::Blocking);
+        assert_eq!(change.after_reason.expect("a reason").status, SuppressionStatus::Expired);
+    }
+
+    /// A bucket change with no suppression on either side still reports.
+    #[test]
+    fn Test_Baselined_Becoming_Blocking_Should_Be_Reported()
+    {
+        let result = Compared((FindingDisposition::Baselined, None), (FindingDisposition::Blocking, None));
+        let change = result.changed.first().expect("a bucket change is a change");
+
+        assert_eq!((change.before, change.after), (FindingDisposition::Baselined, FindingDisposition::Blocking));
+        assert!(change.before_reason.is_none() && change.after_reason.is_none());
+    }
+
+    /// Nothing moving reports nothing.
+    ///
+    /// The converse control. Without it a comparison that reported every finding every time
+    /// would satisfy all three above and tell a reader nothing, which is the failure mode the
+    /// added/removed/changed split exists to avoid.
+    #[test]
+    fn Test_An_Unchanged_Bucket_And_Reason_Should_Report_No_Change()
+    {
+        let reason = Some(Reason(SuppressionDisposition::InlineSuppression, SuppressionStatus::Active));
+        let result = Compared((FindingDisposition::Suppressed, reason), (FindingDisposition::Suppressed, reason));
+
+        assert!(
+            result.changed.is_empty(),
+            "a finding whose bucket and reason both held still reported as changed: {:?}",
+            result.changed
+        );
+        assert!(result.added.is_empty() && result.removed.is_empty());
     }
 }

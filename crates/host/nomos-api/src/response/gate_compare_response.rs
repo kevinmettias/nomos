@@ -24,7 +24,10 @@
 use crate::{composition, sources};
 use nomos_composer_std::{CLOCK, ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 use nomos_contracts::{Finding, RuleId, RunId, SubjectId};
-use nomos_gate_orchestration::{DispositionChange, FindingDisposition, GateCommand, GateCompareResult, GateRunResult};
+use nomos_gate_orchestration::{
+    DispositionChange, FindingDisposition, GateCommand, GateCompareResult, GateRunResult, SuppressionDisposition, SuppressionReason,
+    SuppressionStatus,
+};
 use nomos_platform::Clock;
 use serde::Serialize;
 
@@ -108,6 +111,72 @@ impl FindingBucket
     }
 }
 
+/// A serializable twin of [`nomos_gate_orchestration::SuppressionDisposition`].
+///
+/// A twin for the reason [`FindingBucket`] is one. Six variants in the same order, so a
+/// reordering or a dropped arm is a compile error in [`SuppressedBecause::From`] rather than
+/// the wrong word on a wire.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SuppressedBecause
+{
+    /// Suppressed at the finding's own site.
+    InlineSuppression,
+    /// Exempted by a repository-wide policy.
+    RepositoryPolicyException,
+    /// Accepted for a bounded period, and carrying an end date.
+    TemporaryWaiver,
+    /// Existing debt a baseline tolerates.
+    AcceptedBaselineDebt,
+    /// The finding does not hold.
+    FalsePositiveDisposition,
+    /// A deliberate, owned decision to accept the risk.
+    FormalRiskAcceptance,
+}
+
+impl SuppressedBecause
+{
+    fn From(disposition: SuppressionDisposition) -> Self
+    {
+        return match disposition
+        {
+            SuppressionDisposition::InlineSuppression => Self::InlineSuppression,
+            SuppressionDisposition::RepositoryPolicyException => Self::RepositoryPolicyException,
+            SuppressionDisposition::TemporaryWaiver => Self::TemporaryWaiver,
+            SuppressionDisposition::AcceptedBaselineDebt => Self::AcceptedBaselineDebt,
+            SuppressionDisposition::FalsePositiveDisposition => Self::FalsePositiveDisposition,
+            SuppressionDisposition::FormalRiskAcceptance => Self::FormalRiskAcceptance,
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_gate_orchestration::SuppressionStatus`].
+///
+/// Two variants because two is the whole population: a third, for a disposition stale by rule
+/// version, subject identity, evidence or scope, is named in that type's own documentation and
+/// deliberately not invented before something can construct it.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SuppressionStanding
+{
+    /// The disposition applied when the run was judged.
+    Active,
+    /// It named an end date and the run was at or past it.
+    Expired,
+}
+
+impl SuppressionStanding
+{
+    fn From(status: SuppressionStatus) -> Self
+    {
+        return match status
+        {
+            SuppressionStatus::Active => Self::Active,
+            SuppressionStatus::Expired => Self::Expired,
+        };
+    }
+}
+
 /// One finding present in both runs whose bucket moved.
 ///
 /// Carries both ends rather than a single "changed" flag: a finding that moved from blocking
@@ -126,6 +195,19 @@ pub struct BucketChange
     pub before: FindingBucket,
     /// Which bucket it falls into in the candidate run.
     pub after: FindingBucket,
+    /// Why it was in `before`'s bucket, when a disposition named it.
+    ///
+    /// Without this a headless caller sees a bucket that did not move and concludes nothing
+    /// changed, when a `false_positive_disposition` may have become a
+    /// `formal_risk_acceptance` -- the same treatment, an opposite engineering claim.
+    pub before_reason: Option<SuppressedBecause>,
+    /// Why it is in `after`'s bucket, when a disposition names it.
+    pub after_reason: Option<SuppressedBecause>,
+    /// Whether `before_reason` still applied when the baseline run was judged.
+    pub before_standing: Option<SuppressionStanding>,
+    /// Whether `after_reason` still applies. `expired` beside a `blocking` bucket is a
+    /// tolerance that came due rather than a violation that appeared.
+    pub after_standing: Option<SuppressionStanding>,
 }
 
 impl BucketChange
@@ -138,6 +220,10 @@ impl BucketChange
             subject_name: change.subject_name,
             before: FindingBucket::From(change.before),
             after: FindingBucket::From(change.after),
+            before_reason: change.before_reason.map(|reason| return SuppressedBecause::From(reason.disposition)),
+            after_reason: change.after_reason.map(|reason| return SuppressedBecause::From(reason.disposition)),
+            before_standing: change.before_reason.map(|reason| return SuppressionStanding::From(reason.status)),
+            after_standing: change.after_reason.map(|reason| return SuppressionStanding::From(reason.status)),
         };
     }
 }
@@ -250,12 +336,19 @@ mod tests
             subject_name: "src/lib.rs".to_string(),
             before: FindingBucket::Blocking,
             after: FindingBucket::Baselined,
+            before_reason: None,
+            after_reason: Some(SuppressedBecause::TemporaryWaiver),
+            before_standing: None,
+            after_standing: Some(SuppressionStanding::Expired),
         };
 
         let rendered = serde_json::to_string(&change).expect("a BucketChange serializes");
 
         assert!(
-            rendered.contains("\"before\":\"blocking\"") && rendered.contains("\"after\":\"baselined\""),
+            rendered.contains("\"before\":\"blocking\"")
+                && rendered.contains("\"after\":\"baselined\"")
+                && rendered.contains("\"after_reason\":\"temporary_waiver\"")
+                && rendered.contains("\"after_standing\":\"expired\""),
             "a bucket change must carry both ends in snake_case, and rendered as {rendered}"
         );
     }

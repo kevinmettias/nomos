@@ -46,8 +46,7 @@ mod tests
             blocking_findings: vec![],
             calibrated_findings: vec![],
             suppressed_findings: vec![],
-            baselined_findings: vec![],
-        };
+            baselined_findings: vec![], suppression_reasons: Default::default() };
 
         let response = GateFindings::From(findings);
 

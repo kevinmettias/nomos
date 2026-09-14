@@ -2,10 +2,12 @@
 
 mod suppression;
 mod suppression_policy;
+mod suppression_reason;
 mod suppression_status;
 
 pub use suppression::Suppression;
 pub use suppression_policy::SuppressionPolicy;
+pub use suppression_reason::SuppressionReason;
 pub use suppression_status::SuppressionStatus;
 
 /// The six dispositions `SUP-*` (the v14 corpus's `05.7-2-2 suppression and waiver

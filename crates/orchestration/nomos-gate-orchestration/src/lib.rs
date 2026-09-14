@@ -223,7 +223,7 @@ pub use gate_phase::{Evaluated_Phases, GatePhase, PhaseApproval, PhaseDispositio
 pub use gate_plan::{Disposition_Of_Findings, GateFindings, GateOutcome, GatePlan, GateRunOutcome, GateRunResult};
 pub use policy::{
     AdoptionPolicy, BaselineDebt, BaselinePolicy, CoveragePolicy, RuleCalibration, RuleSelector, ScopeSelector,
-    Suppression, SuppressionDisposition, SuppressionPolicy,
+    Suppression, SuppressionDisposition, SuppressionPolicy, SuppressionReason, SuppressionStatus,
 };
 pub use run::Run;
 pub use run_id::Fresh_Run_Id;

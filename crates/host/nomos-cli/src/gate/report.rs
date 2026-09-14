@@ -687,7 +687,6 @@ mod tests
             blocking_findings: Vec::new(),
             calibrated_findings: Vec::new(),
             suppressed_findings: Vec::new(),
-            baselined_findings: Vec::new(),
-        };
+            baselined_findings: Vec::new(), suppression_reasons: Default::default() };
     }
 }

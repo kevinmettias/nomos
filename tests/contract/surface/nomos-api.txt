@@ -234,7 +234,11 @@ pub struct field nomos_api::BaselineDebtResponse::subject: SubjectId
 pub struct field nomos_api::BlockedItem::cause: String
 pub struct field nomos_api::BlockedItem::item: LedgerItem
 pub struct field nomos_api::BucketChange::after: FindingBucket
+pub struct field nomos_api::BucketChange::after_reason: Option<SuppressedBecause>
+pub struct field nomos_api::BucketChange::after_standing: Option<SuppressionStanding>
 pub struct field nomos_api::BucketChange::before: FindingBucket
+pub struct field nomos_api::BucketChange::before_reason: Option<SuppressedBecause>
+pub struct field nomos_api::BucketChange::before_standing: Option<SuppressionStanding>
 pub struct field nomos_api::BucketChange::rule: RuleId
 pub struct field nomos_api::BucketChange::subject: SubjectId
 pub struct field nomos_api::BucketChange::subject_name: String

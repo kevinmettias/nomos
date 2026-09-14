@@ -18,4 +18,4 @@ pub(crate) use gate_policy_file::{Resolve_Gate_Policy, GatePolicyFile};
 pub use rule_calibration::{AdoptionPolicy, RuleCalibration};
 pub use rule_selector::RuleSelector;
 pub use scope_selector::ScopeSelector;
-pub use suppression_disposition::{Suppression, SuppressionDisposition, SuppressionPolicy};
+pub use suppression_disposition::{Suppression, SuppressionDisposition, SuppressionPolicy, SuppressionReason, SuppressionStatus};

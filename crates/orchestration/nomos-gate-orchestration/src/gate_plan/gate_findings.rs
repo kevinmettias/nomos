@@ -8,6 +8,14 @@ use nomos_contracts::Finding;
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct GateFindings
 {
+    /// Why each suppressed finding was suppressed, keyed by the `rule`/`subject` identity
+    /// every policy in this crate already matches by.
+    ///
+    /// Recorded by the run that decided it rather than re-derived by a reader, for the reason
+    /// [`crate::SuppressionReason`]'s own documentation gives: a later evaluation would answer
+    /// with today's policy about an earlier run. Exactly one entry per member of
+    /// `suppressed_findings`, in both directions.
+    pub suppression_reasons: std::collections::BTreeMap<(nomos_contracts::RuleId, nomos_contracts::SubjectId), crate::SuppressionReason>,
     /// Exactly the findings for which `Finding::Can_Fail_A_Build` is true and no
     /// calibration, `Suppression` or baseline debt matched. Empty whenever `disposition` is
     /// not [`super::GateRunOutcome::Failed`].
