@@ -74715,6 +74715,90 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P106-A-RUN-THAT-REACHES-NO-VERDICT-DISCARDS-THE-REASON-IT-HAS-ONE",
+      "title": "A run that reaches no verdict discards the reason it has one",
+      "why": "Resolve_Gate_Policy says exactly what is wrong with a nomos-gate.json. GatePolicyError is Unreadable or Malformed and carries the message, which for a malformed file is serde's own text naming the unknown field, or the syntax error and where it is. Run_Gate reads that result as declared.is_err() and keeps nothing else, so the message is computed and dropped at the one moment a person needs it.\n\nGateRunResult therefore has no field for why a judged run reached no verdict, and every consumer is equally blind. P106 proved that at the shell: the message it wrote can say there is no verdict, and can name the two mechanisms that produce one, and cannot say which of them happened here, because the result does not know. A repository whose policy file has one mis-spelled key is correctly sent to the policy file, and is not told that the key it wrote is basline and not baseline, which the tool worked out and threw away.\n\nThe coverage floor is the second mechanism and is different in kind: Reduced_With_Coverage turns a Passed into an Indeterminate by OD-GATE-016's design, on a run where nothing is broken at all. A reader of the result cannot tell that from a broken policy file, and the two call for opposite responses -- one is a repository doing what the record intended, the other is a typo.\n\nMeasured 2026-09-14. GateRunResult has five construction sites in this workspace: one in gate_environment.rs, one in gate_compare.rs and three in nomos-cli's own report tests, so a field costs a countable edit rather than a sweep. GatePolicyError is pub(crate) and Resolve_Gate_Policy is private to the policy module, so what reaches the public surface is this item's to decide.",
+      "done_when": "GateRunResult carries why this run reached no verdict, and Run_Gate fills it from both mechanisms that produce one rather than discarding either. A malformed or unreadable nomos-gate.json contributes the message GatePolicyError already carries, serde's naming of the offending key or position included. A coverage floor that downgraded an otherwise-passing run is distinguishable from it, because the two call for opposite responses.\n\nA run that reached a verdict carries nothing there, so every existing caller reads what it reads today.\n\nnomos-cli renders it. The message P106 wrote names both mechanisms and says the result does not record which; it is replaced by one that names the one that happened. Proved by re-running the built binary over the three probe trees P106 measured, each naming its own cause, the mis-spelled one quoting the key that was refused.\n\nWhether serde's text reaches the public surface as a String or as a variant of a type this crate owns is decided inside the item, by measuring what a caller would match on rather than by preference. The surface snapshot moves either way and is reserved.\n\nOut of scope: the headless response, which is its own item and is sequenced after this one; and any change to what a disposition means. Indeterminate stays exactly what it is.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_run_result.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P106-THE-HEADLESS-RUN-RESPONSE-CANNOT-SAY-WHY-A-RUN-GAVE-NO-CLEAN-VERDICT",
+      "title": "The headless run response cannot say why a run gave no clean verdict",
+      "why": "GateRunResponse is run, root, disposition and findings. GateRunResult is run, root, check_outcome, findings, disposition and unmatched_policy. Two fields are dropped at the wire, and nothing says why: response.rs's own module doc explains at length why each type is twinned rather than given a Serialize derive, and is silent on both omissions.\n\ncheck_outcome. Render_Run's own doc states the rule it is dropped against -- the exit code for every non-Judged variant is a property of why nothing was judged, which only check_outcome carries. At the shell, Unreadable, Contradictory, NoSource and NoFacts each get their own message and land on two different exit codes. Headlessly all four arrive as disposition indeterminate with four empty finding buckets, which is also how a judged run with a broken gate policy arrives. A caller cannot tell a repository that could not be walked from one whose analysis produced no facts from one whose policy file has a typo, and those call for three different actions.\n\nunmatched_policy. OD-GATE-024 exists because an author who writes a policy entry matching nothing gets no error, no warning and no effect, and cannot tell a mis-spelling from a finding that has since been fixed. nomos-cli reports it under a heading of its own, deliberately silent only when every entry matched. A headless caller is given nothing, which is precisely the state that record was filed to end, restored for the surface this product is meant to be run on.\n\nMeasured 2026-09-14 by reading every response type in the crate: the name unmatched_policy does not occur anywhere under crates/host/nomos-api, and neither the plan nor the explain response carries it, so there is no other headless route to it.",
+      "done_when": "GateRunResponse says why a run did not reach a clean verdict. A caller can tell the four non-judged causes apart from one another and from a judged run, in the terms Render_Run already distinguishes them by, without a second request. A caller is told which declared policy entries matched nothing, the same list nomos-cli prints, and the empty case stays quiet rather than serializing a header over nothing.\n\nThe reason a judged run reached no verdict, which P106-A-RUN-THAT-REACHES-NO-VERDICT-DISCARDS-THE-REASON-IT-HAS-ONE puts on GateRunResult, is carried too. This item is sequenced after that one on purpose, so the response shape is decided once rather than widened twice.\n\nA judged run with no unmatched entries serializes to what it serializes to today, plus whatever an absent cause is spelled as, so no existing consumer breaks.\n\nThe shape follows a measured precedent rather than a preference, and the item states which before it writes one: GatePlanResponse and GateExplainResponse are both tagged enums over an outcome, GateCompareResponse carries an optional uncomparable field, and this response is a flat struct, so the crate offers two precedents and they disagree.\n\nProved through Handle_Gate_Run over a real tree, not only over a constructed result, because that handler is what a transport actually calls. The surface snapshot is reserved and re-blessed.\n\nOut of scope: widening ServedMethod, and the run-history store OD-GATE-022-A defers. This item changes what one response can say, not what the product can do.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/response/gate_run_response.rs",
+          "crates/host/nomos-api/src/response.rs",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P106-A-RUN-THAT-REACHES-NO-VERDICT-DISCARDS-THE-REASON-IT-HAS-ONE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
