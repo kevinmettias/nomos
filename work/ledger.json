@@ -72655,7 +72655,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Framed too narrowly to be true of its own evidence. Its why and done_when both say corpus obligation, because the only instance when it was authored was a predicate naming nomos-spec-store while the live v14 corpus had diverged. A second instance on 2026-09-14 shows corpus is incidental: P103-THE-TASK-SKILL declared cargo test -p nomos-contract-tests, changed one markdown file, and could not finish because public_surface failed on a peer's unblessed snapshot while agent_harness -- the obligation that actually governs skill text, and the only one its done_when claimed -- was green. No corpus involved, same structural failure. Keeping the corpus wording would misdirect the next reader about what the defect is, and the item cannot be edited, so it is replaced rather than read as satisfied a fortiori. Re-authored as P103-A-LEDGER-PREDICATE-MUST-NOT-INHERIT-UNRELATED-CRATE-OBLIGATIONS carrying both incidents as the evidence that crossed the generalization threshold."
+        }
+      },
       "depends_on": [
         "P103-THE-REGISTER-FIGURES-THE-LINEAGE-REFRESH-MOVED-ARE-RE-MEASURED"
       ],
@@ -72674,7 +72678,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p103b",
+        "declined_at": 1789423410
+      }
     },
     {
       "id": "P104-COMPARE-COLLAPSES-EVERY-FINDING-A-RULE-MAKES-ABOUT-ONE-SUBJECT-INTO-ONE",
@@ -73825,6 +73832,39 @@
           "nomos-lsp"
         ],
         "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-A-LEDGER-PREDICATE-MUST-NOT-INHERIT-UNRELATED-CRATE-OBLIGATIONS",
+      "title": "A verification predicate scoped to a crate inherits every obligation that crate owns, and an item cannot finish though its own acceptance condition passes",
+      "why": "A work item's verification predicate must establish that item's done_when, not every independent obligation owned by the crate named in its command. Two real instances now demonstrate the failure and the second proves the first was not corpus-specific. FIRST, 2026-09-14: P99-THREE-RECORDS-REPEAT-A-BARE-CHECKED-ON-LINE declared cargo test -p nomos-spec-validate -p nomos-spec-store, and its acceptance criterion was one thing -- that Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously stops reporting a violation with the corpus present. Run with the corpus exported it failed on Test_The_Domain_Volumes_Should_Answer_282_258_And_234, which counts pipe lines in a directory outside this repository. The item finished corpus-unset with the real obligation discharged by hand, so the ledger's machine-recorded verification did not prove what the item claimed. SECOND, the same day: P103-THE-TASK-SKILL declared cargo test -p nomos-contract-tests and changed one markdown file. It could not finish because public_surface failed on a peer's unblessed nomos-gate-orchestration snapshot, while agent_harness -- the obligation that governs skill text and the only one the item claimed -- was green throughout. Nothing corpus-related, same shape. The invariant is about verification-predicate scope against work-item scope, and the first instance's corpus was incidental to it.",
+      "done_when": "The convention is decided and recorded where a ledger author reads it: a verification predicate establishes the item's own done_when, and does not inherit independent sibling obligations merely because they share a crate or package unless those obligations are themselves part of the item's acceptance criterion. It is stated as scope matching rather than as breadth minimising, and the record says so explicitly: cargo test -p <crate> stays correct for an item whose claim really is that the crate remains valid, and the rule to reject is verification scope wider than claimed obligation scope, not any particular command shape. Both incidents are carried as the evidence, including which obligation each item actually claimed and which unrelated one blocked it, so a later reader can check the generalization rather than trust it. The acceptance is behavioural on both sides: an item whose claim is narrow finishes when its own claimed obligation passes even while an unrelated sibling in the same crate is failing, and an item whose claim is whole-crate correctness still fails on any crate-wide failure. Whatever carries the convention -- a record, or a line in .claude/skills/nomos-task step 3 beside the territory rule it is a sibling of -- is chosen when the item is claimed rather than predetermined here. No mechanism is built: two instances justify a convention, not a predicate-scope validator, a scope algebra, or automatic dependency analysis, and the outcome says so rather than leaving the absence to read as an oversight. The shell-status hazard found alongside the second incident, where a pipeline's exit code belonged to head rather than cargo, is deliberately NOT part of this: that is observing a verdict wrongly, and this is a correct verdict about the wrong scope.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-039"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 1200
       },
       "verified": null,
       "abandoned": [],
