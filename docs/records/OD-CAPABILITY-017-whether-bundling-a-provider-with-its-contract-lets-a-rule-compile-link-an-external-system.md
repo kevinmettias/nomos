@@ -134,4 +134,4 @@ that the Rules edge does not compel it.
 Nor does it reopen `ARC-CONNECTOR-001`. A connector's evidence class, its read-only posture and
 its fixture obligations are that record's, and are untouched.
 
-Checked 2026-09-14.
+Checked 2026-09-14 against the bundled crates this adjudication reaches and `nomos-rules`' own edges onto them.

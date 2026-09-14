@@ -171,4 +171,4 @@ result measured that way has not been measured.
 override's own name would leave `config.toml` free to be recreated, which is the shape this
 amendment exists to remove.
 
-Checked 2026-09-14.
+Checked 2026-09-14 against the override's own header, `.gitignore`'s exclusion of the whole `/.cargo/` directory, and the lock-pinning guard this amendment leaves in place.

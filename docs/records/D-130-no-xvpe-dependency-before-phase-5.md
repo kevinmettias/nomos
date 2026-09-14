@@ -170,4 +170,4 @@ carries the alternative this record does not foreclose: if replacing them is ref
 measured reason, the refusal is adjudicated and this clause superseded explicitly, rather than
 left contradicted by a tree that outvoted it.
 
-Checked 2026-09-14.
+Checked 2026-09-14 against this workspace's own manifests: the sixteen path dependencies across eight members that the surviving clause refuses, and the sibling remote that makes replacing them available rather than theoretical.

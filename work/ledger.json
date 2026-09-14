@@ -70986,14 +70986,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p99-preservation",
-        "acquired_at": 1789409334,
-        "lease_expires_at": 1789420134
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -71006,7 +71002,30 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "ared_Identifier ... ok\ntest Test_An_Omitted_Block_Should_Satisfy_Preserve_002 ... ok\ntest Test_An_Undisposed_Block_Should_Violate_Preserve_002 ... ok\ntest Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules ... ok\ntest Test_An_Empty_Store_Should_Report_Vacuous_Rules ... ok\ntest Test_A_Traced_Statement_Should_Satisfy_Preserve_006 ... ok\ntest Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004 ... ok\ntest Test_Disposed_Blocks_Should_Satisfy_Preserve_002 ... ok\ntest Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006 ... ok\ntest Test_The_Registry_Should_Match_The_Manifest ... ok\ntest Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004 ... ok\ntest Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.97s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.53s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-2049d200876e17c5.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-664bcf5196b763d4.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-b77bfff260f58dcf.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-5768e840765d1bfc.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-55bd8f919d9bc0a0.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-acd7b674edff1f45.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-cc86bb37eb4785b6.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-c1582b858346687e.exe)\n   Doc-tests nomos_spec_store\n   Doc-tests nomos_spec_validate\n",
+        "verified_at": 1789409632,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "96cac0c91febe3d0f01ba26d0337145eff401cf6"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -71063,6 +71082,44 @@
         },
         "revision": "6d5a11bc71ad7d67cd0badfa57a9dfbfb6690073"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P102-NOTHING-PROVES-AN-UNCHANGED-SECOND-RUN-PRODUCES-NO-NEW-FACTS",
+      "title": "Nothing proves an unchanged second run through Run produces no new facts",
+      "why": "The reuse machinery is proved correct and never proved economical. incremental_equivalence.rs asserts through the real Run that a reused workspace and store reach the claim and findings a clean recomputation reaches, and its own documentation states why that is not the same property: recomputing everything and recomputing nothing both pass an unchanged comparison. So a regression that quietly re-materialized every fact on every run would leave every existing test green. The observable already exists and needs no new abstraction. MemoryFactStore::Materializations is public and counts actual store writes, incremented inside Materialize, and Already_Current short-circuits before that call so a reused subject does not increment it. Examined.facts is deliberately not that observable and must not be made into one: Materialize_Syntax counts a subject as covered whether it was reused or produced, and its own doc says so -- a caller reusing a store pays for a real parse only for a subject whose bytes moved but still counts that subject as covered either way. Asserting zero on Examined.facts would force the wrong semantics onto a counter that answers a different question.",
+      "done_when": "A test drives the real Run twice over an unchanged tree with the same store and workspace, and asserts three things: the first run produced facts, so the fixture is not vacuous and a store that materialized nothing at all cannot pass; the second run produced none, measured as the delta in MemoryFactStore::Materializations across it rather than by any count of subjects covered; and the second run's findings and claim equal the first's, so economy was not bought by answering a different question. Examined and its facts field are untouched and keep meaning subjects covered. The test is proved capable of failing rather than believed because it passes, by making the second run produce a fact and observing the assertion fire. cargo test -p nomos-check-orchestration -p nomos-contract-tests passes and the gate lint step is clean.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/tests/unchanged_run_economy.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p102",
+        "acquired_at": 1789409610,
+        "lease_expires_at": 1789420410
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null

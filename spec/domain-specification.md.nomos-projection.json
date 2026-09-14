@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:d546f678e29adf21361bf70e90b60a1768d1bb308db8864b4cfc81b38464c34c",
-  "inputs_digest": "sha256:1ebf1190b67dee8eb716ab16345eb69b89fb391feb592b13699aef39224e81a4",
+  "content_digest": "sha256:be02120639e3e1bdfe104331573365b99f993e051c52b595e7cdae615dd6b382",
+  "inputs_digest": "sha256:5eddbcf86da0577da87a8bd2c07d2542685cf00596548c2c91ecd9d17aae6686",
   "sections": [
     [
       "Documents",
@@ -73,7 +73,7 @@
     {
       "content": "documents",
       "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md@authored",
-      "hash": "sha256:db6d93162a245fc419ded05527c39e0fb6784e8ad5c2ef0123987517bbbaf010"
+      "hash": "sha256:f0a2b9f19e41e418d617aa412e47fd5d9239e448efa3ebe83b366aa70d8ec7c4"
     },
     {
       "content": "documents",
@@ -278,7 +278,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md@authored",
-      "hash": "sha256:97c5acd173aa0bbbb4f259069c31562327b5b73ea2530f000b7bc5c8ed789cec"
+      "hash": "sha256:8ba17cb0d7430c3eefb01799b45969f1782123108e58aa782f87beca01bd0e71"
     },
     {
       "content": "documents",
@@ -893,7 +893,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored",
-      "hash": "sha256:2fd2db422dee1fed715eb4ed122e75e8a620a37dfd82765f515b9fe04048d4bb"
+      "hash": "sha256:54dd8e341f63882f74fca31d11cc939e8bfec1033fe8ba3e6fcbf6a156689166"
     },
     {
       "content": "documents",
@@ -13153,7 +13153,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#36",
-      "hash": "sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17"
+      "hash": "sha256:47fa9631f7c0e0adf7863f53f53e0cd3fd24440ec973056fc1957bab6e6ec4a9"
     },
     {
       "content": "blocks",
@@ -18238,7 +18238,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#28",
-      "hash": "sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17"
+      "hash": "sha256:5e43a6d9b3f847894a0e7b4773ebb2752ff63e03e8cce3ed4feeb2f15009f2e0"
     },
     {
       "content": "blocks",
@@ -36478,7 +36478,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#40",
-      "hash": "sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17"
+      "hash": "sha256:400a20bb52cb9de5fa6e312b4b7633fce93182593c52b9dc5bc6b25821fd7762"
     },
     {
       "content": "blocks",

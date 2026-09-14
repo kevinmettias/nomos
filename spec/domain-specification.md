@@ -20,7 +20,7 @@ profile: domain-specification
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
 | docs/records/D-129-the-store-is-the-identity-substrate.md@authored | docs/records/D-129-the-store-is-the-identity-substrate.md | authored | 28 | 7 | sha256:c1f3eeec14e44a3f55d1f71522686a9f695f79060ac32e84aacdd0ff245d7778 |
-| docs/records/D-130-no-xvpe-dependency-before-phase-5.md@authored | docs/records/D-130-no-xvpe-dependency-before-phase-5.md | authored | 36 | 9 | sha256:db6d93162a245fc419ded05527c39e0fb6784e8ad5c2ef0123987517bbbaf010 |
+| docs/records/D-130-no-xvpe-dependency-before-phase-5.md@authored | docs/records/D-130-no-xvpe-dependency-before-phase-5.md | authored | 36 | 9 | sha256:f0a2b9f19e41e418d617aa412e47fd5d9239e448efa3ebe83b366aa70d8ec7c4 |
 | docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md@authored | docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md | authored | 18 | 6 | sha256:52ac14153a8e5741c1adf31bef3d15ecaaa5ae2548e5cff1b2714430c091c91c |
 | docs/records/D-132-the-plan-is-a-game-plan.md@authored | docs/records/D-132-the-plan-is-a-game-plan.md | authored | 18 | 5 | sha256:2792ff01e2e1a01aa2dec6f047ebc1bae3ceee8a124b2c1e31c53c190f4f8c2c |
 | docs/records/D-133-the-read-surface-assembles-its-store-and-names-what-is-missing.md@authored | docs/records/D-133-the-read-surface-assembles-its-store-and-names-what-is-missing.md | authored | 22 | 6 | sha256:c213c15cd3c026704b1c20907af9e1689b203b1e60d94e222cdcef97e02ea552 |
@@ -61,7 +61,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md@authored | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md | authored | 23 | 8 | sha256:33f282b8156d4f3dd172d5ee4c250a2cb2d4efb04987e2efcae89ba263371d43 |
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md | authored | 22 | 6 | sha256:c73b6568e987da09a2256a0e13c66b1d768911f443b0fa014c71ff319d11591f |
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md@authored | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md | authored | 27 | 7 | sha256:cae971023f2e38fc400fcb48c0f851cf958af99faf124d0caaba5d34226ee492 |
-| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md@authored | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md | authored | 28 | 7 | sha256:97c5acd173aa0bbbb4f259069c31562327b5b73ea2530f000b7bc5c8ed789cec |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md@authored | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md | authored | 28 | 7 | sha256:8ba17cb0d7430c3eefb01799b45969f1782123108e58aa782f87beca01bd0e71 |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ea548df7de6d318f3946ffc3c153f837e4289c5b25045352897d0221c1c1d3f7 |
@@ -184,7 +184,7 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 21 | 7 | sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc |
-| docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md | authored | 40 | 8 | sha256:2fd2db422dee1fed715eb4ed122e75e8a620a37dfd82765f515b9fe04048d4bb |
+| docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md | authored | 40 | 8 | sha256:54dd8e341f63882f74fca31d11cc939e8bfec1033fe8ba3e6fcbf6a156689166 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
@@ -5580,9 +5580,9 @@ left contradicted by a tree that outvoted it.
 
 ### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#36
 
-*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not / What the tree carries against the surviving clause · hash: sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17*
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Adapter Count Was Retired; The Path Clause And The Phase Gate Were Not / What the tree carries against the surviving clause · hash: sha256:47fa9631f7c0e0adf7863f53f53e0cd3fd24440ec973056fc1957bab6e6ec4a9*
 
-Checked 2026-09-14.
+Checked 2026-09-14 against this workspace's own manifests: the sixteen path dependencies across eight members that the surviving clause refuses, and the sibling remote that makes replacing them available rather than theoretical.
 
 ### docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md#1
 
@@ -15287,9 +15287,9 @@ its fixture obligations are that record's, and are untouched.
 
 ### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#28
 
-*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What This Does Not Decide · hash: sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17*
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What This Does Not Decide · hash: sha256:5e43a6d9b3f847894a0e7b4773ebb2752ff63e03e8cce3ed4feeb2f15009f2e0*
 
-Checked 2026-09-14.
+Checked 2026-09-14 against the bundled crates this adjudication reaches and `nomos-rules`' own edges onto them.
 
 ### docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1
 
@@ -48652,9 +48652,9 @@ amendment exists to remove.
 
 ### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#40
 
-*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Amendment: Activation Becomes A Request Rather Than A Default · hash: sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17*
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Amendment: Activation Becomes A Request Rather Than A Default · hash: sha256:400a20bb52cb9de5fa6e312b4b7633fce93182593c52b9dc5bc6b25821fd7762*
 
-Checked 2026-09-14.
+Checked 2026-09-14 against the override's own header, `.gitignore`'s exclusion of the whole `/.cargo/` directory, and the lock-pinning guard this amendment leaves in place.
 
 ### docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1
 
