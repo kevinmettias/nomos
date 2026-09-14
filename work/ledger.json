@@ -68610,6 +68610,99 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P96-A-GUARANTEE-DECLARATION-NAMING-ITS-EXERCISER-IS-RESOLVED-BY-A-RULE",
+      "title": "Nothing resolves a guarantee declaration to the test that exercises it",
+      "why": "OD-CAPABILITY-016 made the two-direction guarantee check a requirement -- a Declared_Guarantee names what exercises it, or states that it cannot be exercised and why -- and decided the naming is enforced the way a declared mirror already is, by resolving a name declared at a site against real parsed test functions. It also left this increment three things to decide: the rules identifier, its gate category, and whether a missing exerciser is blocking or advisory. Nothing is built. The convention has now been found stated and unheld twice, in the two module docs that carried it, which is why that record chose a mechanism over prose; 6e2e2541 corrected the three declaration sites it named and left fifteen still naming nothing. Prose naming is not resolvable: what 6e2e2541 wrote is readable and true and a resolver cannot find it, because there is no marker. The resolver this needs already exists one scale over -- universe_kind.rs Claimed_Mirror reads the marker Mirrored by followed by a backticked name, refuses a marker followed by prose so it cannot invent a name out of the next word, and facts.rs Check_Names_In already indexes every function whose name starts with Test_ across the whole source set, which is exactly the index a cross-file resolution needs.",
+      "done_when": "A rule in nomos-rules judges every Declared_Guarantee function the syntax payload carries, and reports one of three answers: it names an exerciser that resolves to a real test function in the source set, so nothing is reported; it names one that resolves to nothing, which is a finding; or it names nothing at all, which is also a finding. A declaration stating it cannot be exercised satisfies the rule, since OD-CAPABILITY-016 made that half of the requirement and not an escape from it. The marker vocabulary is decided here and stated in the rules own doc, reusing Claimed_Mirrors shape rather than inventing a second grammar, and a marker followed by prose rather than a name is refused the same way. The rule states its own Requirement floor rather than letting the composition root decide it. It is registered in DESCRIPTORS, which is now the single site both Composed_Rules and the gates own offering list derive from -- confirmed by reading both rather than from the skill, whose two-list instruction is stale -- and cites OD-CAPABILITY-016 at the version its front matter declares. The gate category is decided here and the doc says the reasoning, including what would change it. The finding count over this workspace is measured before composing and stated in the commit, so a rule that is clean for a bad reason is not mistaken for one that is clean. cargo test -p nomos-rules -p nomos-check-orchestration -p nomos-gate-orchestration -p nomos-contract-tests passes, and nomos gate run --root . still exits 0.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/guarantee_exerciser.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop",
+        "acquired_at": 1789348504,
+        "lease_expires_at": 1789359304
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P96-THE-CHECK-VERBS-HELP-NAMES-ONE-RULE-OF-SEVENTY-AND-CLAIMS-IT-RUNS-EVERY-ONE",
+      "title": "The check verb's printed help names one rule of seventy while claiming it runs every one, and six of eight groups' help text has no mirror at all",
+      "why": "Measured on a quiescent tree at 3c728d31, with a binary built at HEAD. crates/host/nomos-cli/src/check/parsing.rs line 5 holds USAGE, the text nomos check prints. It says Runs every rule over the tree and reports what they find, and then opens a rules: section naming exactly one rule, completeness-mirror, with a three-line gloss. DESCRIPTORS in crates/rules/nomos-rules/src/rule_descriptor.rs line 245 holds exactly 70 entries, nomos gate plan --root . prints rules: 70, and a full-root nomos check --root . run today emitted 217 findings from 8 distinct rules: lint-diagnostics 190, dependency-policy 12, completeness-mirror 6, function-naming-convention 5, and one each from unread-reaches-finding, single-letter-names, data-names-stay-lower-snake and abbreviations. So a sentence promising every rule sits directly above a list wrong by 69, and any real run falsifies the list without anyone having to count DESCRIPTORS.\n\nThe mechanism that would have caught it is in the same file, written twice. check/tests.rs Test_All_Should_Match_The_Documented_Exit_Codes splits USAGE on exit codes:, parses the integers out of the prose, sorts both sides and asserts set equality against ExitCode::All(), and refuses to pass on an empty parse -- no exit code was parsed out of the usage text, so this compared nothing. gate/tests.rs Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With is the same fifteen lines over Every_Exit_Code(). Its own doc comment states the general rule: USAGE is prose a person reads and ExitCode is what the process returns, the two were written separately, and a code added or renumbered in one of them and not the other is the failure that actually happens. That is exactly true of a rule added to DESCRIPTORS and not to the rules: section, and nothing checks that axis.\n\nEight groups print an exit-code list and each has its own ExitCode enum -- agent, check, correct, gate, request, spec, work, and workflow, whose enum and prose share workflow.rs. Two mirror it. The other six are correct today, verified variant by variant against each prose line (agent 0/2/5/6, correct 0/1/2/5/6, request 0/2/5/7/9, spec 0/1/2/5/6/7/8/9, work 0/1/2/3/4/5), so they are unguarded rather than wrong, which is worth saying rather than inflating. The same help text restates further compiled closed vocabularies with no mirror anywhere: work list's nine states, work add's five kinds and two origins, agent's six effort levels (its own text calls them MODEL-ROUTE-004's closed vocabulary), request's three kinds and two states.\n\nThe code side is already guarded, which is what isolates this. DESCRIPTORS is a declared universe in tests/contract/tests/completeness_universes/table.rs, Standing::Mirrored by Test_Every_Composed_Rule_Should_Have_A_Descriptor. Declared_Universes derives universes from pub const NAME: &[...] and Type::All(); USAGE is pub(super) const USAGE: &str, so an enumeration written as prose inside a string constant is structurally outside every completeness mechanism this repository has.\n\nOD-AGENT-004 governs this and its own third revisit trigger is this instance: a checked artifact going stale anyway, which would mean the checks are narrower than the facts they appear to cover. USAGE is a checked artifact whose check covers one of the two lists it carries. That record's general objection -- that a restated-fact detector would need to know which facts have mechanical authorities elsewhere, which is not derivable from text -- does not bind here: these restatements name closed compiled vocabularies whose authority is a const in the same workspace, and the two existing tests are the proof the comparison is derivable. P96-THE-GATE-WORKFLOW-TELLS-A-READER-IT-RUNS-ON-NIGHTLY closed the same defect class in gate.yml this week.",
+      "done_when": "The check verb stops printing a rule list it cannot keep true, and OD-AGENT-004 says what a printed help text may declare.\n\nOD-AGENT-004 is amended in place rather than answered by a second record, since it is the standing decision on restated prose. It records that its third trigger fired, names this instance -- one string constant carrying two declared lists, one mirrored and one wrong by 69 of 70 -- and extends its route-what-is-checked-elsewhere rule to the text a command prints, which its measured population (module docs, README.md, Cargo.toml) did not include. It states that rule as a condition a later author can apply rather than a judgement they must remake: a help text may enumerate a compiled vocabulary only where a test compares that enumeration against its authority, and otherwise routes to the verb that prints it.\n\ncheck's USAGE stops naming one rule of seventy. Which shape replaces it is the implementer's call and both are admissible: routing to nomos gate plan, which already prints the real 70 out of DESCRIPTORS, or an enumeration generated from DESCRIPTORS and mirrored by a test. Hand-pasting 70 names is refused, because it recreates the same unguarded list one drift later. The sentence claiming it runs every rule stays true of what the verb does and stops standing above a list contradicting it.\n\nThe exit-code mirror is extended to the six groups lacking it -- agent, correct, request, spec, work and workflow -- as the same comparison those two tests already make, each against its own group's enum, each carrying the empty-parse guard so a group whose prose section is renamed fails rather than silently comparing nothing. All six pass unchanged against today's text, which is the point: they are correct now, and this is what keeps them correct.\n\nEach new test is confirmed able to fail, by injecting a wrong code into that group's prose and observing red, not by reasoning that it would. A test that cannot fail is the defect this item is about.\n\nNot closed by correcting check's list alone and leaving the eight-group population unguarded: one corrected list is the instance and the missing mirror is the shape. Not closed by widening Declared_Universes to parse string constants -- a prose list inside a string is not a declared universe in OD-COMPLETENESS-001's sense, and making it one would put every sentence of the CLI's help under a completeness guard.\n\ndiagrams/relations.mmd and spec/domain-specification.md are both re-rendered from a tree holding exactly HEAD plus this item's amended record, per OD-GATE-005, and committed alongside.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/check/parsing.rs",
+          "crates/host/nomos-cli/src/check/tests.rs",
+          "crates/host/nomos-cli/src/agent/tests.rs",
+          "crates/host/nomos-cli/src/correct/tests.rs",
+          "crates/host/nomos-cli/src/request/tests.rs",
+          "crates/host/nomos-cli/src/spec/tests.rs",
+          "crates/host/nomos-cli/src/work/tests.rs",
+          "crates/host/nomos-cli/src/workflow.rs",
+          "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
