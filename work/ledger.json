@@ -71458,14 +71458,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Two defects, both measured while holding it, and both the same class this item's own predecessor P96 was declined for. FIRST, territory. It reserved the five files carrying the eight failures and none of the data those files read. family_counts/measurement.rs takes its expectations from crate::register::Register(), which is family_counts/register.rs, which is include_str! of tests/corpus/families/counts.json -- the file actually holding 282, 258 and 234 for those two tests, unreserved by this item and by every open item. The territory was authored by grepping the failing test files and not their inputs, which is the same under-reservation P96 was declined for, one level further in. SECOND, done_when. It asserts all eight tests go green together. Two cannot. restoration.rs moved 18 -> 16 violations and siblings.rs stayed at exactly 103, and the remainder in both is no_undeclared_filler_template firing on corpus-wide boilerplate -- the edition line, the suite title, the Word navigation note -- present in all ten domain volumes including the five cace351ac never touched. A block-lineage refresh cannot reach that; it is a separate rule-and-authority question that happened to share a test invocation. What the item did accomplish stands and is committed: the corpus lineage is refreshed at its source (Test_I1 reports 2535 blocks, 0 mismatches, down from 494), and the figures that moved are re-measured with provenance at bc7ec078 and c49b3252. Replaced by a narrow lineage/census item carrying the traced territory, and a separate filler-template item for the corpus-wide class."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p102",
-        "acquired_at": 1789410974,
-        "lease_expires_at": 1789425374
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -71479,9 +71479,18 @@
         "timeout_seconds": 1800
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-p102",
+          "reason": "Released for the decline that follows: measured while holding it, the item under-reserves its territory and its done_when bundles a class it cannot close.",
+          "abandoned_at": 1789414067
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p102",
+        "declined_at": 1789414067
+      }
     },
     {
       "id": "P102-A-LEDGER-PREDICATE-INHERITS-CORPUS-OBLIGATIONS-FROM-THE-CRATE-IT-NAMES",
@@ -71497,7 +71506,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Stranded by the decline of P102-THE-V14-BLOCK-LINEAGE-IS-REFRESHED-AT-ITS-SOURCE, which it named as a dependency. The dependency was right and only its name is stale: the question is still whether a whole-crate predicate inheriting unrelated corpus obligations is a structural defect or one stale invariant, and it still cannot be answered until the v14 divergence is fully closed. Re-authored as P103-A-LEDGER-PREDICATE-INHERITS-CORPUS-OBLIGATIONS-FROM-THE-CRATE-IT-NAMES depending on P103-THE-REGISTER-FIGURES-THE-LINEAGE-REFRESH-MOVED-ARE-RE-MEASURED instead, unchanged otherwise."
+        }
+      },
       "depends_on": [
         "P102-THE-V14-BLOCK-LINEAGE-IS-REFRESHED-AT-ITS-SOURCE-AND-THE-PINNED-FIGURES-ARE-RE-MEASURED"
       ],
@@ -71516,7 +71529,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p102",
+        "declined_at": 1789414317
+      }
     },
     {
       "id": "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-4",
@@ -72211,6 +72227,354 @@
         },
         "revision": "d4a2bb23fbb5ddc70d60fa695c734bb865bcd27e"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P99-THREE-GATE-MODULE-DOC-CLAIMS-DESCRIBE-A-CRATE-THAT-HAS-SINCE-BEEN-BUILT",
+      "title": "Three nomos-gate-orchestration module-doc claims describe a crate that has since been built",
+      "why": "work/census/forward-looking-state-claims.md censused every forward-looking implementation-state claim in module docs under crates/ and in docs/records/ -- 105 hits in scope across eleven phrases -- and found exactly three that implementation has superseded. All three are in nomos-gate-orchestration, and each was verified against the code it names. lib.rs line 189 says compare is not CLI-wired, that no flag or config file reaches it from a nomos gate invocation, and that the gate-command parser still refuses a compare subcommand outright: parsing.rs returns Invocation::Compare and lists --against, --from and --to among its recognized flags, and P101-GATE-COMPARE-IS-REACHABLE-ONLY-FROM-A-TERMINAL and P101-THE-HEADLESS-SURFACES-STILL-STOP-AT-THREE-GATE-VERBS are both Done. lib.rs line 13 says most of WF-001's list is still unbuilt, and the same module doc enumerates the increments that built coverage, the policy file, phases and approvals; the evidence under that sentence is scoped to this crate's own start and the sentence is not. composition.rs line 30 says the gate registry rows cannot be a shared derivation because a rule's contract citation is knowledge no export carries, and RuleDescriptor has carried contract_record and contract_record_version on the public DESCRIPTORS since OD-RULES-027 -- the record those neighbouring paragraphs already cite for the parity this file does derive. Boarded rather than fixed under the census item because that item reserves only the census file.",
+      "done_when": "Each of the three claims says what is true of the crate today. Each correction follows the pattern 67d66b8e established rather than deleting the reasoning: the original restraint is preserved and what eventually satisfied its trigger is stated beside it, because a decision held and then released on evidence is a stronger precedent than one still waiting and the reasoning is the part a reader cannot re-derive. composition.rs states that the citation is now carried on DESCRIPTORS and says whether the rows stay hand-authored for some other reason or the derivation is now owed as its own item -- it does not build that derivation here. No behaviour changes and no code outside a doc comment is touched. cargo test --no-fail-fast -p nomos-gate-orchestration passes and the gate lint step is clean.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-COMPARE-COLLAPSES-SIX-SUPPRESSION-REASONS-INTO-ONE-BUCKET",
+      "title": "Compare collapses six suppression reasons into one bucket, so a policy change reports as no change",
+      "why": "SuppressionDisposition has six variants and P103 gave a waiver a status besides, but GateFindings is four Vec<Finding> and Compare_Gate_Runs derives a FindingDisposition purely from which bucket a finding sits in. So a finding whose suppression reason changed compares equal to itself. A FalsePositiveDisposition becoming a FormalRiskAcceptance is a substantial engineering change -- the first says the rule was wrong here, the second says somebody owns the risk -- and compare reports nothing at all. The same is now true of expiry: a TemporaryWaiver that lapses between two runs stays in the suppressed bucket until something else moves it, so the visibility P103 just built into the run model is lost again in historical comparison, which is where a reader looks to find out what changed. The reason is discarded at partition time: Reduced_Findings asks only whether Suppressing returned something and keeps the finding, not what matched it. Compare cannot recover it, and should not learn to -- it would become a second place that understands suppression evaluation, which is how two readings of one relation drift, the shape P102 already removed once between descriptors and materialization.",
+      "done_when": "Two finding states compare equal only when both the gate treatment and the policy reason producing it are semantically equal. The run records why a suppressed finding is suppressed -- the disposition that matched and its status at the run's own moment -- so the reason travels in the run result rather than being re-derived; compare reads that value and names no suppression-evaluation type of its own. The four top-level buckets are unchanged, because they remain right for summary counts and multiplying them would make every count answer a different question. A bucket change still reports both ends, and a reason change within one bucket now reports as changed with both reasons. Four transitions are exercised: a disposition changing within Suppressed, a waiver going Active to Expired within Suppressed, an expired waiver leaving Suppressed for Blocking, and Baselined to Blocking. Both directions guarded: a finding whose bucket and reason are both unchanged still reports as unchanged, without which a comparison that reported everything would satisfy the first four and make compare useless. Every reason recorded corresponds to a suppressed finding and every suppressed finding has one, checked both ways so the two cannot drift. The predicate covers the crates whose behaviour this changes; affected public surface snapshots are re-blessed and the surface guard passes; workspace lint is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_findings.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_reason.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/host/nomos-api/src/response/gate_findings.rs",
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by -2, which reserves policy.rs so both the new type and the one P103 left unreachable are exported."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "fable-p103",
+          "reason": "Territory missing the export chain. policy and suppression_disposition are both private modules, so policy.rs is the only route by which a new public type reaches the crate root, and it is not reserved. The same file also carries a defect P103 left: Suppression::Status_At returns SuppressionStatus and that type is not re-exported, so the surface shows a signature naming a type a caller cannot write.",
+          "abandoned_at": 1789413363
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p103",
+        "declined_at": 1789413363
+      }
+    },
+    {
+      "id": "P103-COMPARE-COLLAPSES-SIX-SUPPRESSION-REASONS-INTO-ONE-BUCKET-2",
+      "title": "Compare collapses six suppression reasons into one bucket, so a policy change reports as no change",
+      "why": "SuppressionDisposition has six variants and P103 gave a waiver a status besides, but GateFindings is four Vec<Finding> and Compare_Gate_Runs derives a FindingDisposition purely from which bucket a finding sits in. So a finding whose suppression reason changed compares equal to itself. A FalsePositiveDisposition becoming a FormalRiskAcceptance is a substantial engineering change -- the first says the rule was wrong here, the second says somebody owns the risk -- and compare reports nothing. The same is now true of expiry: a TemporaryWaiver that lapses between two runs stays in the suppressed bucket, so the visibility P103 just built into the run model is lost again in historical comparison, which is where a reader looks to find out what changed. The reason is discarded at partition time, since Reduced_Findings asks only whether Suppressing returned something. Compare cannot recover it and should not learn to, because re-deriving would answer with today's policy about an earlier run, and because a second evaluator is a second reading of one relation -- the shape P102 removed once between descriptors and materialization. One further defect, in the same export chain and so in the same change: Suppression::Status_At returns SuppressionStatus and policy.rs does not re-export it, so the public surface shows a signature naming a type no caller can write.",
+      "done_when": "Two finding states compare equal only when both the gate treatment and the policy reason producing it are semantically equal. The run records why a suppressed finding is suppressed -- the disposition that matched and its status at the run's own moment -- so the reason travels in the run result rather than being re-derived, and compare reads that value while naming no suppression-evaluation type of its own. The four top-level buckets are unchanged, because they remain right for summary counts. A bucket change still reports both ends, and a reason change within one bucket now reports as changed with both reasons. Four transitions are exercised: a disposition changing within Suppressed, a waiver going Active to Expired within Suppressed, an expired waiver leaving Suppressed for Blocking, and Baselined to Blocking. Both directions guarded: a finding whose bucket and reason are both unchanged still reports unchanged, without which a comparison that reported everything would satisfy the first four and be useless. Every recorded reason corresponds to a suppressed finding and every suppressed finding has one, checked both ways so the two cannot drift. SuppressionStatus and the new reason type are both reachable from the crate root, so no public signature names a type a caller cannot write. The predicate covers the crates whose behaviour changes, both affected surface snapshots are re-blessed and the surface guard passes, and workspace lint is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_findings.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_reason.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/host/nomos-api/src/response/gate_findings.rs",
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by -3, same territory and work, with the recording invariant stated as it actually holds."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "fable-p103",
+          "reason": "One done_when clause is falsified by the implementation it asked for. It required that every recorded reason correspond to a suppressed finding. Recording only suppressing dispositions leaves a finding that blocks because a waiver lapsed indistinguishable from one that blocks because a violation appeared, which is the distinction P103 made visible in the run model and which comparison is where a reader looks for. So lapsed reasons are recorded too, the recorded set is deliberately not the suppressed set, and the clause must say the invariant that actually holds.",
+          "abandoned_at": 1789413770
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p103",
+        "declined_at": 1789413771
+      }
+    },
+    {
+      "id": "P99-THE-SELF-CHECK-IS-RED-ON-THREE-NESTING-DEPTH-FINDINGS-IN-ITS-OWN-BOUNDARY-TESTS",
+      "title": "The workspace self-check is red: three Blocking nesting-depth findings in tests/contract/tests/boundaries",
+      "why": "ACCEPTED_BLOCKING_FINDINGS is empty in both crates/host/nomos-cli/tests/check_command.rs and crates/host/nomos-cli/src/gate/tests.rs, and that emptiness is the assertion: this workspace's own tree carries no Blocking finding at all. It carries three. nesting-depth reports four levels of control flow at tests/contract/tests/boundaries/bundled_contract_half.rs:154, lock_pinning.rs:93 and manifest_bands.rs:143, which fails Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build, Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree and Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report. Every item whose predicate names nomos-cli is blocked by it, which is how it was found: a census item with a nomos-cli predicate could not finish. The three predate this session. bundled_contract_half.rs and lock_pinning.rs are byte-identical to 612bb7d1 and their nesting is a for inside an if inside a for inside a function body; manifest_bands.rs's site is the directory walk's target/.git skip inside its is_dir branch, whose structure P98-THE-BAND-GUARDS-FILE-WALK-COMPARES-AN-EXTENSION-CASE-SENSITIVELY did not touch -- that commit moved the reported line from 139 to 143 by adding a comment and changed no nesting level. The rule states the remedy in its own finding text: flatten with a guard clause and an early return, or extract the inner levels into a named helper.",
+      "done_when": "nomos check --root . reports no Blocking finding, which is what an empty ACCEPTED_BLOCKING_FINDINGS asserts, and cargo test --no-fail-fast -p nomos-cli passes including the three real-tree tests above. Each of the three sites is flattened by the remedy the rule itself names -- a guard clause and an early return, or an extracted named helper -- and not by raising a threshold, adding a suppression, or naming the findings in ACCEPTED_BLOCKING_FINDINGS, since that list being empty is the stronger assertion and weakening it would retire the guard rather than satisfy it. Each walk still finds the same population it found before, stated in the commit rather than assumed. No test's assertions change.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/boundaries/bundled_contract_half.rs",
+          "tests/contract/tests/boundaries/lock_pinning.rs",
+          "tests/contract/tests/boundaries/manifest_bands.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p99-nesting",
+        "acquired_at": 1789413389,
+        "lease_expires_at": 1789420589
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-COMPARE-COLLAPSES-SIX-SUPPRESSION-REASONS-INTO-ONE-BUCKET-3",
+      "title": "Compare collapses six suppression reasons into one bucket, so a policy change reports as no change",
+      "why": "SuppressionDisposition has six variants and P103 gave a waiver a status besides, but GateFindings is four Vec<Finding> and Compare_Gate_Runs derives a FindingDisposition purely from which bucket a finding sits in. So a finding whose suppression reason changed compares equal to itself. A FalsePositiveDisposition becoming a FormalRiskAcceptance is a substantial engineering change -- the first says the rule was wrong here, the second says somebody owns the risk -- and compare reports nothing. Expiry is now in the same position: under P103 a lapsed waiver stops suppressing and the finding falls through to blocking, so without the reason a reader sees only that a finding started blocking and cannot tell a tolerance coming due from a new violation. That is the visibility P103 built into the run model, lost again at exactly the place somebody looks for it. The reason is discarded at partition time, since Reduced_Findings asks only whether Suppressing returned something. Compare cannot recover it and should not learn to: re-deriving would answer with today's policy about an earlier run, and a second evaluator is a second reading of one relation, the shape P102 removed once between descriptors and materialization. One further defect sits in the same export chain and so in the same change: Suppression::Status_At returns SuppressionStatus and policy.rs does not re-export it, so the public surface shows a signature naming a type no caller can write.",
+      "done_when": "Two finding states compare equal only when both the gate treatment and the policy reason producing it are semantically equal. The run records why a disposition applied, at the moment it decided, and compare reads that value while naming no suppression-evaluation type of its own. The recorded set is deliberately not the suppressed set: an active disposition explains why a finding is suppressed, and a lapsed one explains why a finding is not, without which a lapsed waiver would be invisible in comparison. Three directions are guarded -- a suppressed finding carries an active reason, a lapsed waiver is recorded although it did not suppress, and a finding no disposition names carries none, without which a recorder attaching a reason to everything would satisfy the first two. The four top-level buckets are unchanged, because they remain right for summary counts. Four transitions are exercised: a disposition changing within Suppressed, a waiver lapsing out of Suppressed carrying its expired status, Baselined to Blocking with no reason on either side, and an unchanged bucket and reason reporting nothing, without which a comparison reporting everything would satisfy the other three. The headless surface carries the reason too, so an API caller sees a reason change rather than a bucket that did not move. SuppressionStatus and the reason type are both reachable from the crate root, so no public signature names a type a caller cannot write. The predicate covers the crates whose behaviour changes, both affected surface snapshots are re-blessed and the surface guard passes, and workspace lint is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_findings.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_reason.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/host/nomos-api/src/response/gate_findings.rs",
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p103",
+        "acquired_at": 1789413796,
+        "lease_expires_at": 1789424596
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-THE-REGISTER-FIGURES-THE-LINEAGE-REFRESH-MOVED-ARE-RE-MEASURED",
+      "title": "The family-count register still states figures measured over v14.36, and the live corpus has moved past them",
+      "why": "Replacement for P102, declined for under-reserving exactly this file. tests/corpus/families/counts.json holds 30 register entries, and family_counts/register.rs reaches it by include_str!, which is where family_counts/measurement.rs takes every expectation it checks. Two of its tests fail: table.pipe_lines says 282 and the live corpus says 286, and Test_The_Register_Should_Agree_With_The_Store_Census reports the same pair. The lineage refresh at bc7ec078 fixed the hash half at source and re-measured the figures that live in the two test files P102 did reserve; these are the figures that live in the data file it did not. Traced 2026-09-14 rather than guessed this time: the only repo-internal data file any of these tests read is counts.json, and every other input is the external corpus reached through NOMOS_V14_CORPUS and NOMOS_SPEC_ARCHIVES. One thing the trace found that changes the shape of the fix: all 30 entries declare corpus v14.36, and the live tree is no longer v14.36 -- it is the v14.36 content plus cace351ac plus the lineage refresh. So an entry whose number is updated while its corpus field still says v14.36 would be a register lying about its own provenance, which is the defect this register exists to prevent. The blast radius inside the file is also wider than the three census figures: cace351ac split one service heading into two and one subsystem table row into three in volume 02, so service.service_headings, service.subsystem_table_rows, service.leaf_headings, service.section_6_headings and the domain_model entries are all candidates, and roadmap entries are candidates from the volume 08 edit.",
+      "done_when": "Every register entry whose measurement the live corpus no longer reproduces is re-measured, and each one states what it was measured against and when rather than carrying a v14.36 label over a number taken from a different tree. Which entries those are is measured by running the register against the corpus rather than predicted from this item's own candidate list, and the list is reported in the commit. Entries the live corpus still reproduces are left untouched, including their v14.36 provenance, because a figure that did not move has not been re-measured. Test_Every_Registered_Count_Should_Reproduce_From_The_Corpus and Test_The_Register_Should_Agree_With_The_Store_Census both pass with the corpus set, and a corpus-unset run stays green because these are corpus-gated. crates/spec/nomos-spec-ingest/tests/restoration.rs reads the same register by id for nine entries including service.service_headings, domain_model.named_models and roadmap.milestones, and is NOT reserved here: its register-backed assertions are verified not to regress, and if re-pinning turns out to need an edit inside that file rather than inside counts.json, this item declines and re-authors with it rather than widening mid-claim, which is the failure P96 and P102 were both declined for. restoration.rs's own separate filler-template failure is out of scope and belongs to its own item.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/corpus/families/counts.json",
+          "crates/spec/nomos-spec-ingest/tests/family_counts/measurement.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "family_counts"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-THE-V14-VOLUMES-SHARE-BOILERPLATE-THE-FILLER-TEMPLATE-RULE-REFUSES",
+      "title": "All ten v14 volumes repeat the same front-matter, and the filler-template rule reads it as undeclared boilerplate",
+      "why": "Split out of P102, whose done_when wrongly bundled this with the block-lineage refresh because one test invocation exposes both. Measured 2026-09-14 after the refresh landed: restoration.rs reports 16 violations over 2,988 subjects and siblings.rs reports 103 over 18,873, and the rule firing in both is no_undeclared_filler_template. The subjects are not lineage at all -- they are the volumes' shared front-matter, each reported as 10 section(s) across 10 document(s): the edition line Domain-owned edition v14.19, 4 August 2026; the suite title Nomos Focused Product Design and User Story Specification; the volume-ownership sentence This volume owns the domain material collected here; and the Word navigation note. The evidence that this is pre-existing and corpus-wide rather than anything the refresh caused is direct: those strings appear in all ten domain volumes including the five cace351ac never touched, restoration.rs moved only 18 to 16 across the refresh, and siblings.rs stayed at exactly 103. This is the same rule class that was closed twice by hand on this repository's own records in two days -- P95 for a bare Measured line and P99 for a bare Checked line -- but the subject is different in a way that matters: there the repeated text was filler a author could rewrite per record, and here it is a deliberate, identical publication header that ten volumes of one suite are supposed to share. A header that every volume of a suite carries is not the defect OD-SPEC-004 describes.",
+      "done_when": "The question is decided and recorded: whether repeated publication front-matter across the volumes of one suite is an undeclared template the rule should refuse, or a declared shared header the corpus is entitled to carry and the rule should admit. The decision names which of the two it is for each of the four repeated strings the measurement found, since they are not obviously the same case -- an edition line and a Word navigation note may not deserve the same answer as a volume-ownership sentence. Whatever is decided, the mechanism follows from it rather than being chosen first: if the strings are legitimate the corpus declares them and the rule reads the declaration, and if they are filler the corpus rewrites them per volume the way P95 and P99 each did for three records. Nothing is re-pinned and no violation count is written into a test as an accepted number, because a count accepted without a decision is the suppression this rule exists to make visible. restoration.rs and siblings.rs are reserved because whichever way it goes their assertions are what proves it; the corpus-side act, if the decision calls for one, happens in code-standards and is recorded in that commit with the owner's review, the same division the lineage refresh used.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/tests/restoration.rs",
+          "crates/spec/nomos-spec-ingest/tests/siblings.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "restoration",
+          "--test",
+          "siblings"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-A-LEDGER-PREDICATE-INHERITS-CORPUS-OBLIGATIONS-FROM-THE-CRATE-IT-NAMES",
+      "title": "A whole-crate verification predicate inherits unrelated corpus-gated obligations, and one item was verified around that rather than by it",
+      "why": "Re-authored from P102-A-LEDGER-PREDICATE-INHERITS-CORPUS-OBLIGATIONS, stranded when its dependency was declined; only the dependency's name changed. P99-THREE-RECORDS-REPEAT-A-BARE-CHECKED-ON-LINE declared the predicate cargo test -p nomos-spec-validate -p nomos-spec-store, and its acceptance criterion was one thing: that Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously stops reporting a violation with the corpus present. Run with the corpus exported that predicate failed, on Test_The_Domain_Volumes_Should_Answer_282_258_And_234, which counts pipe lines in a directory outside this repository and read 286 against a pinned 282. Nothing in that commit could move it. So work finish ran corpus-unset where the predicate passes, and the corpus-set obligation was discharged by hand. Both halves were honest and the commit says so, but the ledger's machine-recorded verification does not itself prove the corpus-set run, and that gap is the defect worth naming: a predicate naming a crate inherits every conditional obligation living in it, including ones whose truth drifts for reasons the item never touches. The narrower rule this suggests is that a predicate should execute the smallest command directly proving its own done_when plus any specifically required regression check, rather than inheriting obligations by crate membership. It is deliberately NOT that a corpus-gated crate should always be addressed by --test: a whole-crate predicate is right when the item's claim really is that the crate remains valid, and the distinction is driven by done_when scope rather than by where a test happens to live.",
+      "done_when": "Decided after P103-THE-REGISTER-FIGURES-THE-LINEAGE-REFRESH-MOVED-ARE-RE-MEASURED finishes, not before, because that item is expected to make these whole-crate predicates clean again and the answer depends on what happens then. If another item's predicate fails for an unrelated corpus obligation after the v14 divergence is fully resolved, that is a second instance and enough evidence to state the narrower rule as a convention, naming where it belongs and what it says about items whose claim genuinely is whole-crate validity. If no second instance appears, this declines with that as its reason: one occurrence caused by a single outstanding corpus divergence is a stale invariant rather than a structural defect in how predicates are declared, and a convention written from one case would be the speculative surface this workspace refuses elsewhere. Either way the outcome is recorded, so the next session finds the measurement rather than re-deriving it from the same symptom.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-039"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P103-THE-REGISTER-FIGURES-THE-LINEAGE-REFRESH-MOVED-ARE-RE-MEASURED"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
