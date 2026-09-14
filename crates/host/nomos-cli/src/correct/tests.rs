@@ -2,6 +2,7 @@
 //! this repository's own tree, so a test run can never write a real correction into a file
 //! this session did not claim.
 
+use super::parsing::USAGE;
 use super::{CorrectCommand, ExitCode, Run};
 use std::path::PathBuf;
 
@@ -152,4 +153,46 @@ fn Test_Only_Ok_Should_Carry_The_Passing_Exit_Code()
     {
         assert_eq!(code.Value() == 0, *code == ExitCode::Ok, "{code:?}");
     }
+}
+
+/// A list of codes in ascending order, so that two of them can be compared as sets.
+fn Sorted(codes: impl Iterator<Item = i32>) -> Vec<i32>
+{
+    let mut sorted: Vec<i32> = codes.collect();
+    sorted.sort_unstable();
+
+    return sorted;
+}
+
+/// The codes this group's help text documents are the codes this group can exit with.
+///
+/// The same comparison `check` and `gate` have each carried for a while, against this
+/// group's own enum. Eight groups print an exit-code list and only those two mirrored it;
+/// the other six were correct rather than guarded, which is a different thing, and
+/// `OD-AGENT-004`'s amendment says a printed vocabulary is admissible only where a test
+/// compares it against its authority. [`USAGE`] is prose a person reads and [`ExitCode`]
+/// is what the process returns, the two were written separately, and a code added or
+/// renumbered in one of them and not the other is the failure that actually happens.
+#[test]
+fn Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With()
+{
+    assert!(
+        USAGE.starts_with("usage: nomos correct"),
+        "this compared some other group's help text: {USAGE}"
+    );
+
+    let (_, spelled) = USAGE
+        .split_once("exit codes:")
+        .expect("the usage text documents the exit codes");
+    let documented = Sorted(spelled.split_whitespace().filter_map(|word| return word.parse().ok()));
+    let implemented = Sorted(ExitCode::Every_Code().iter().map(|code| return code.Value()));
+
+    assert!(
+        !documented.is_empty(),
+        "no exit code was parsed out of the usage text, so this compared nothing: {spelled}"
+    );
+    assert_eq!(
+        documented, implemented,
+        "the usage text and ExitCode disagree about what this command can exit with"
+    );
 }

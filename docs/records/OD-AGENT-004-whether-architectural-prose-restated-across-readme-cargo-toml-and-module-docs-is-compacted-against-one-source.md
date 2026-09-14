@@ -3,7 +3,7 @@ id: OD-AGENT-004
 type: decision
 title: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - agent
@@ -111,7 +111,102 @@ exists for it.
 - **A mechanical way to detect a restated fact.** Would turn this from a writing rule into a
   checkable one, and is the increment worth wanting.
 - **A checked artifact going stale anyway**, which would mean the checks are narrower than the
-  facts they appear to cover.
+  facts they appear to cover. *(Fired. See the amendment below.)*
+
+## Amendment, Version 2: The Third Trigger Fired, On A Printed Help Text
+
+The third trigger above — a checked artifact going stale anyway, because the checks are
+narrower than the facts they appear to cover — fired on 2026-09-13, on an artifact version
+1's measured population did not contain.
+
+`crates/host/nomos-cli/src/check/parsing.rs`'s `USAGE`, the text `nomos check` prints,
+carried two declared lists inside one string constant:
+
+| the list | its authority | compared against it |
+|---|---|---|
+| the exit codes | `check::ExitCode::All()` | yes — `Test_All_Should_Match_The_Documented_Exit_Codes`, both directions, refusing to pass on an empty parse |
+| the rules | `nomos_rules::DESCRIPTORS` | nothing |
+
+The sentence directly above the second list promised the command "runs every rule over the
+tree". The list named one: `completeness-mirror`. `DESCRIPTORS` held **70 entries when the
+defect was filed at `3c728d31`, and 71 four commits later when it was corrected** — so the
+list was wrong by 69, and then by 70, having gone wronger while the item to fix it sat on
+the board. That is the property a hand-written enumeration has and a route does not.
+
+Nothing in this repository could have caught it. `Declared_Universes`
+(`tests/contract/src/universes.rs`) recognises a universe as `pub const NAME: &[...]` or as
+`Type::All()`, and `USAGE` is `pub(super) const USAGE: &str` — so an enumeration written as
+prose *inside* a string constant is structurally outside every completeness mechanism there
+is. `DESCRIPTORS` itself was never in doubt: it is `Standing::Mirrored` in
+`tests/contract/tests/completeness_universes/table.rs`, held by
+`Test_Every_Composed_Rule_Should_Have_A_Descriptor`. The copy of it in a sentence was.
+
+### Why this confirms version 1 rather than reopening it
+
+This does not fall on the volume axis. `USAGE` is thirteen lines. It is a *checked*
+artifact, and the half that went stale is the half nothing compared — which is version 1's
+own finding holding at a finer grain than version 1 measured it: **the unit that is checked
+or not is the fact, not the file.** A file can be half-checked and read as checked, and the
+checked half is what makes the unchecked half look safe.
+
+### The rule extends to the text a command prints
+
+Version 1's population was module doc comments, `README.md` and `Cargo.toml`. Help text is a
+fourth artifact and takes the same route-what-is-checked-elsewhere rule, stated as a
+condition a later author applies rather than a judgement they remake:
+
+> A help text may enumerate a compiled vocabulary only where a test compares that
+> enumeration against the vocabulary's own authority, in both directions, and refuses to
+> pass on an empty parse. Where no such test exists, the help text routes to the verb that
+> prints the vocabulary rather than naming any of it.
+
+The empty-parse guard belongs to the condition rather than to one implementation of it. A
+test that locates its list by splitting prose on a heading compares nothing at all once that
+heading is renamed, and reports the same as a test that compared everything — the defect
+this record is about, wearing the remedy's costume.
+
+**`check` routes.** Its `USAGE` now says `nomos gate plan --root <path>` names every rule,
+which that verb already prints out of `DESCRIPTORS` itself.
+`Test_The_Usage_Text_Should_Route_To_The_Rule_Set_Rather_Than_Name_Any_Of_It` asserts both
+halves — that the route is there, and that no identifier in `DESCRIPTORS` occurs anywhere in
+`USAGE` — so pasting the list back in is refused rather than merely discouraged.
+Hand-pasting seventy-one names was rejected for the obvious reason: it recreates the same
+unguarded copy one composed rule later.
+
+### What is compared after this amendment, and what is not
+
+Eight groups on this binary print an exit-code list, each with its own `ExitCode` enum:
+`agent`, `check`, `correct`, `gate`, `request`, `spec`, `work` and `workflow`. **Two
+compared it against the enum; six now do**, by
+`Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With`. The six were
+checked variant by variant against their own prose before the tests were written and all six
+were already correct — they were unguarded rather than wrong, which is worth saying rather
+than inflating. Each new test was confirmed able to fail by injecting a wrong code into that
+group's own prose and observing red, and the routing test by pasting a real rule identifier
+back into `USAGE`; none of the seven was assumed to work.
+
+The same help text restates four further compiled vocabularies that **nothing compares
+against anything**, measured across every `nomos-cli` test that reads a usage text:
+
+- `work list`'s nine states, against `nomos_ledger::item::State`;
+- `work add`'s five kinds and two origins, against `nomos_ledger::item::Kind` and
+  `nomos_ledger::item::Origin`;
+- `agent`'s six `--effort` spellings, against `nomos_model_package::EffortLevel` — all six
+  are exercised against the *parser*, and nothing compares them to the printed list;
+- `request`'s three submission kinds and two states.
+
+A fifth, `spec`'s nine command names, is compared — but against a hand-written array in the
+test file rather than against a compiled authority, which is a weaker claim than the
+condition above asks for.
+
+Those five are named here so the condition reads as not-yet-met rather than as satisfied.
+This amendment does not correct them; each is its own item.
+
+### What would decide this differently
+
+Version 1's three triggers stand, the third now having fired once. A fourth is added: **a
+group whose exit-code comparison passes while the text a user is shown is wrong**, which
+would mean the comparison is reading something other than that text.
 
 ## Status
 
@@ -119,3 +214,11 @@ Accepted. Decided on a natural experiment rather than on a principle: one port c
 2026-09-05, fifteen stale restatements the next day, all fifteen in unchecked module prose and
 none in the two artifacts the review called bloated. The remedy is routing what is checked
 elsewhere, not writing less.
+
+Amended to version 2 by
+`P96-THE-CHECK-VERBS-HELP-NAMES-ONE-RULE-OF-SEVENTY-AND-CLAIMS-IT-RUNS-EVERY-ONE`, on this
+record's own third revisit trigger firing: `nomos check`'s help text held two declared lists,
+one mirrored and one wrong by 69 of 70 rules, in a string constant no completeness mechanism
+can see into. The rule extends to the text a command prints, and is stated there as a
+condition — enumerate only where a test compares, otherwise route — with the five printed
+vocabularies that do not yet meet it named rather than left implied.

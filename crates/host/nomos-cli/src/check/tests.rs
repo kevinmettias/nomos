@@ -124,6 +124,47 @@ fn Test_All_Should_Match_The_Documented_Exit_Codes()
     );
 }
 
+/// The help text routes to the rule set rather than naming any of it.
+///
+/// [`USAGE`] used to promise "runs every rule" and then open a `rules:` section listing
+/// exactly one of them, `completeness-mirror`, while `DESCRIPTORS` held seventy. A prose
+/// list inside a string constant is outside every completeness mechanism this repository
+/// has -- `Declared_Universes` recognises `pub const NAME: &[...]`, not a sentence -- so
+/// nothing noticed for as long as it took to compose sixty-nine more rules.
+///
+/// `OD-AGENT-004`'s amendment states the condition this asserts: a help text may enumerate
+/// a compiled vocabulary only where a test compares that enumeration against its authority,
+/// and otherwise routes to the verb that prints it. `check` routes, so what is checkable
+/// here is that it still routes and still names nothing -- hand-pasting the list back would
+/// recreate the same unguarded copy one rule later, and this is what refuses it.
+#[test]
+fn Test_The_Usage_Text_Should_Route_To_The_Rule_Set_Rather_Than_Name_Any_Of_It()
+{
+    assert!(
+        USAGE.contains("nomos gate plan"),
+        "the usage text names no rule and must say where the rules are: {USAGE}"
+    );
+
+    let named: Vec<&str> = nomos_rules::DESCRIPTORS
+        .iter()
+        .map(|descriptor| return descriptor.id)
+        .filter(|identifier| return USAGE.contains(identifier))
+        .collect();
+
+    assert!(
+        !nomos_rules::DESCRIPTORS.is_empty(),
+        "no rule was described, so this compared nothing"
+    );
+    assert!(
+        named.is_empty(),
+        "the usage text names {} of the {} composed rules ({named:?}); a list written here \
+         is wrong the next time one is composed, which is how it came to be wrong by \
+         sixty-nine",
+        named.len(),
+        nomos_rules::DESCRIPTORS.len()
+    );
+}
+
 #[test]
 fn Test_A_Root_Should_Default_To_Here()
 {

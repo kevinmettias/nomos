@@ -3,11 +3,10 @@
 use super::{CheckCommand, Named_Value_From_String_Arguments, PathBuf};
 
 pub(super) const USAGE: &str = "usage: nomos check [--root <path>]\n\n\
-     Runs every rule over the tree and reports what they find.\n\n\
-     rules:\n  \
-     completeness-mirror   a declared universe must name a check that compares it\n\
-     \x20                     against the reality it enumerates, and that check must\n\
-     \x20                     exist. See OD-COMPLETENESS-001.\n\n\
+     Runs every rule over the tree and reports what they find. Which rules those are is \
+     deliberately not named here: `nomos gate plan --root <path>` names every one of them, \
+     read out of the rule set this binary composes, so the answer cannot be a rule behind \
+     the binary printing it. See `OD-AGENT-004`.\n\n\
      exit codes: 0 nothing blocking, 1 findings that can fail a build, 2 usage,\n\
      \x20           5 unreadable tree, 6 nothing was judged";
 
