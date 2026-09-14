@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:205c7947493a2678f41eb73dcbf84d82ce267334f3101f00388a9e3af7d0e612",
-  "inputs_digest": "sha256:d289cf130807684a8ffb940644e6eca7639df6081c0e48996ea9cd1a066f41d4",
+  "content_digest": "sha256:d546f678e29adf21361bf70e90b60a1768d1bb308db8864b4cfc81b38464c34c",
+  "inputs_digest": "sha256:1ebf1190b67dee8eb716ab16345eb69b89fb391feb592b13699aef39224e81a4",
   "sections": [
     [
       "Documents",
@@ -16,7 +16,7 @@
     ],
     [
       "Source blocks",
-      7036
+      7040
     ]
   ],
   "inputs": [
@@ -258,7 +258,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md@authored",
-      "hash": "sha256:8464e7bf3a1b75d087bbd7ed1b6608955c4c9bafb6ee1a2d2e8c55c66bf06460"
+      "hash": "sha256:925ff87f538edfd04c8dae42f8e09efe5660dbb2de173e864edff8a5573f69bd"
     },
     {
       "content": "documents",
@@ -3062,13 +3062,13 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#17",
-      "hash": "sha256:36f101816b333e31906b2951c276c6cd9d2b9ad114e553351367e24d9dc4c47f"
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#21",
+      "hash": "sha256:396a3a422b7a7086a4735886eb0877f70b2289826925ddf9d715c6e8096b0bc2"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#22",
-      "hash": "sha256:d2f3b859ce3987a7a638b43de6ce40f09d563d7365313f80445f9ec9cea49b36"
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#26",
+      "hash": "sha256:348e546d44272fe34d0dd4834c59769d36e35601839f088eacc568094e7c5acc"
     },
     {
       "content": "headings",
@@ -17688,36 +17688,56 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#17",
-      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+      "hash": "sha256:3f7c866648c6534887ebdadace4ef14f91dfbd4981e8a736785bd6a20957eec9"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#18",
-      "hash": "sha256:7b311751373d4b73127b5189f1ea6227f692f34df47838810120aa97cab49933"
+      "hash": "sha256:d2aba8d5ca71ec66b4291144fcc954d101bd2910f22ca598bf8ee5a726c2856e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#19",
-      "hash": "sha256:7ab0414cc6ebab390d69e9906c68db2f3611ed67803a8d0978a7e42b115e084c"
+      "hash": "sha256:765bd4d90f99f46b81398dfa5dfb50a9dc09d3123c0aed3d4e542a009ca00156"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#20",
-      "hash": "sha256:55cd29ea7f70245c7672df335b79b03543ca75e82ac40fc40158f7e053509460"
+      "hash": "sha256:baadc14c76124baf649682a95f384afef90d66cf37ea17d30e9b7b4e10399e6e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#21",
-      "hash": "sha256:1cb8dc47d716528c653ee81c01a1edba32fdd93a715322e855d9d70da97342cc"
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#22",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:6592eebfcca4cc2443d7ee5b126c21efb8d646262637b4db07336f8735d18bc6"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#23",
+      "hash": "sha256:7ab0414cc6ebab390d69e9906c68db2f3611ed67803a8d0978a7e42b115e084c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#24",
+      "hash": "sha256:55cd29ea7f70245c7672df335b79b03543ca75e82ac40fc40158f7e053509460"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#25",
+      "hash": "sha256:1cb8dc47d716528c653ee81c01a1edba32fdd93a715322e855d9d70da97342cc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#26",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#27",
       "hash": "sha256:1cb4df0e957639e3bef7e59ae32afbfd580b5aeea63951a47dcb16167d0d1baa"
     },
     {

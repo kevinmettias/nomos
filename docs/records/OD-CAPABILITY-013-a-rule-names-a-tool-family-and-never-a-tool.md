@@ -3,7 +3,7 @@ id: OD-CAPABILITY-013
 type: decision
 title: A rule names a tool family and never a tool
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - capability
@@ -126,15 +126,52 @@ backed provider, unchanged from `toolspec`'s own definition.
 item's own count from seven providers to eight and naming `nomos-lang-rust-compiler` as the
 instance built after this item was authored.
 
+**The classification is carried by a provider declaration in the registry, never by
+`ProviderOffer`** (amended at version 2, from the measurement below). `ProviderOffer` is
+keyed per *capability*: `crates/substrate/nomos-capability/src/provider_offer.rs` carries
+`provider`, `capability`, `version` and `guarantee`, and `Registry` holds `offers:
+BTreeMap<CapabilityId, Vec<ProviderOffer>>` with no provider-keyed structure beside it.
+Measured 2026-09-14: a provider identity exists nowhere in this workspace exactly once. It
+exists only as a field repeated across that provider's own offers, and `Provider_Offer` is
+constructed at **18 sites across 7 crates**, not the eight this record's own table states --
+`nomos-lang-rust` constructs three (`src/guarantee.rs`, `src/reachability/guarantee.rs`,
+`src/rollup/contract.rs`) and `nomos-repo-policy` constructs five. A `family`/`delivery`
+field on `ProviderOffer` would give one provider three to five independently writable copies
+of a fact this record says it has exactly one of, with nothing preventing them from
+disagreeing. Version 1 suggested `nomos-capability` "alongside `Registry` and
+`ProviderOffer`" as the natural home and was right about the crate and wrong about the
+neighbour.
+
+**What makes a disagreeing pair unrepresentable rather than merely discouraged**: a provider
+is declared once, carrying its family and delivery; an offer names a `ProviderId` and
+carries no classification field at all, so there is no second place to write one. This is
+the shape `Registry` already has one key over. A `CapabilityContract` is declared once
+through `Declare`, an offer references it by `CapabilityId`, and `Register_Offer`'s own
+`Refuse_Unofferable` refuses an offer against an undeclared capability with
+`OfferRefusal::ForUndeclared`. A declaration keyed by `ProviderId`, and an offer from an
+undeclared provider refused the same way, is that existing mechanism applied to the other
+key rather than a second one invented beside it. `Register_Offer` already holds the
+per-`(capability, provider)` uniqueness this sits above, refusing a provider's second offer
+against one capability as `OfferRefusal::Duplicate`.
+
+**The cardinality this must hold for is the measured one**, not the table's: `nomos-lang-
+rust` with three offers and `nomos-repo-policy` with five each have exactly one writable
+classification, and every one of their offers resolves back to it by `ProviderId`.
+
+This record names the carrier's *role and key*, not its type's spelling. Which type carries
+a provider declaration, and whether it arrives through a new registry verb or an extension
+of an existing one, is chosen by the implementation against the registration path it edits.
+
 ## What This Record Does Not Do
 
 **No provider or package moves here.** It does not add a `Family`/`Delivery` field to any
 real Rust type, and does not touch `PackageKind`, `ProviderOffer`, or any provider's own
 registration. That is real code, named precisely enough for a follow-up item: a `Family`
-enum and a `Delivery` enum in a shared location (`nomos-capability`, alongside `Registry`
-and `ProviderOffer`, is the natural home — both already sit above every provider and below
-every rule), plus one classification per real provider, the eight rows this record already
-states.
+enum, a `Delivery` enum, and the provider declaration that carries them, in
+`nomos-capability` beside `Registry` — which already sits above every provider and below
+every rule — plus one classification per real provider. Where that classification lives is
+decided above rather than left to that item, because version 1 left it underdetermined and
+the only shape version 1 gestured at is the one the measurement rules out.
 
 It does not decide `P54-A-REPOSITORY-CANNOT-CHOOSE-ITS-TOOLS`. That item is about
 `Selection` — a repository choosing among competing providers of one capability — which

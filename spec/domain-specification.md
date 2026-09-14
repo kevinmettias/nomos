@@ -57,7 +57,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md@authored | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md | authored | 23 | 6 | sha256:49347b91e13b7f953160008054dc9e028aef8b1893f14bafbc8e4121ee8b623c |
 | docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md@authored | docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md | authored | 21 | 8 | sha256:97fc27d295d43e88affe791ed4c4facc80e3328cf91125949ee80de1e1bff5c7 |
 | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md@authored | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md | authored | 20 | 6 | sha256:88d25ef06103ea7b630b4cf9e09748244421ae9d293d1030f63bed54f2be8850 |
-| docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md@authored | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md | authored | 23 | 6 | sha256:8464e7bf3a1b75d087bbd7ed1b6608955c4c9bafb6ee1a2d2e8c55c66bf06460 |
+| docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md@authored | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md | authored | 27 | 6 | sha256:925ff87f538edfd04c8dae42f8e09efe5660dbb2de173e864edff8a5573f69bd |
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md@authored | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md | authored | 23 | 8 | sha256:33f282b8156d4f3dd172d5ee4c250a2cb2d4efb04987e2efcae89ba263371d43 |
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md | authored | 22 | 6 | sha256:c73b6568e987da09a2256a0e13c66b1d768911f443b0fa014c71ff319d11591f |
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md@authored | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md | authored | 27 | 7 | sha256:cae971023f2e38fc400fcb48c0f851cf958af99faf124d0caaba5d34226ee492 |
@@ -623,8 +623,8 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#12 | authored | 2 | The Decision |
-| docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#17 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#22 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#21 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#26 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#1 | authored | 1 | An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions |
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#4 | authored | 2 | What was checked, not assumed |
@@ -14294,23 +14294,76 @@ instance built after this item was authored.
 
 ### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#17
 
+*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / The Decision · hash: sha256:3f7c866648c6534887ebdadace4ef14f91dfbd4981e8a736785bd6a20957eec9*
+
+**The classification is carried by a provider declaration in the registry, never by
+`ProviderOffer`** (amended at version 2, from the measurement below). `ProviderOffer` is
+keyed per *capability*: `crates/substrate/nomos-capability/src/provider_offer.rs` carries
+`provider`, `capability`, `version` and `guarantee`, and `Registry` holds `offers:
+BTreeMap<CapabilityId, Vec<ProviderOffer>>` with no provider-keyed structure beside it.
+Measured 2026-09-14: a provider identity exists nowhere in this workspace exactly once. It
+exists only as a field repeated across that provider's own offers, and `Provider_Offer` is
+constructed at **18 sites across 7 crates**, not the eight this record's own table states --
+`nomos-lang-rust` constructs three (`src/guarantee.rs`, `src/reachability/guarantee.rs`,
+`src/rollup/contract.rs`) and `nomos-repo-policy` constructs five. A `family`/`delivery`
+field on `ProviderOffer` would give one provider three to five independently writable copies
+of a fact this record says it has exactly one of, with nothing preventing them from
+disagreeing. Version 1 suggested `nomos-capability` "alongside `Registry` and
+`ProviderOffer`" as the natural home and was right about the crate and wrong about the
+neighbour.
+
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#18
+
+*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / The Decision · hash: sha256:d2aba8d5ca71ec66b4291144fcc954d101bd2910f22ca598bf8ee5a726c2856e*
+
+**What makes a disagreeing pair unrepresentable rather than merely discouraged**: a provider
+is declared once, carrying its family and delivery; an offer names a `ProviderId` and
+carries no classification field at all, so there is no second place to write one. This is
+the shape `Registry` already has one key over. A `CapabilityContract` is declared once
+through `Declare`, an offer references it by `CapabilityId`, and `Register_Offer`'s own
+`Refuse_Unofferable` refuses an offer against an undeclared capability with
+`OfferRefusal::ForUndeclared`. A declaration keyed by `ProviderId`, and an offer from an
+undeclared provider refused the same way, is that existing mechanism applied to the other
+key rather than a second one invented beside it. `Register_Offer` already holds the
+per-`(capability, provider)` uniqueness this sits above, refusing a provider's second offer
+against one capability as `OfferRefusal::Duplicate`.
+
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#19
+
+*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / The Decision · hash: sha256:765bd4d90f99f46b81398dfa5dfb50a9dc09d3123c0aed3d4e542a009ca00156*
+
+**The cardinality this must hold for is the measured one**, not the table's: `nomos-lang-
+rust` with three offers and `nomos-repo-policy` with five each have exactly one writable
+classification, and every one of their offers resolves back to it by `ProviderId`.
+
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#20
+
+*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / The Decision · hash: sha256:baadc14c76124baf649682a95f384afef90d66cf37ea17d30e9b7b4e10399e6e*
+
+This record names the carrier's *role and key*, not its type's spelling. Which type carries
+a provider declaration, and whether it arrives through a new registry verb or an extension
+of an existing one, is chosen by the implementation against the registration path it edits.
+
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#21
+
 *revision: authored · kind: heading · heading: A rule names a tool family and never a tool / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
 
 ## What This Record Does Not Do
 
-### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#18
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#22
 
-*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / What This Record Does Not Do · hash: sha256:7b311751373d4b73127b5189f1ea6227f692f34df47838810120aa97cab49933*
+*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / What This Record Does Not Do · hash: sha256:6592eebfcca4cc2443d7ee5b126c21efb8d646262637b4db07336f8735d18bc6*
 
 **No provider or package moves here.** It does not add a `Family`/`Delivery` field to any
 real Rust type, and does not touch `PackageKind`, `ProviderOffer`, or any provider's own
 registration. That is real code, named precisely enough for a follow-up item: a `Family`
-enum and a `Delivery` enum in a shared location (`nomos-capability`, alongside `Registry`
-and `ProviderOffer`, is the natural home — both already sit above every provider and below
-every rule), plus one classification per real provider, the eight rows this record already
-states.
+enum, a `Delivery` enum, and the provider declaration that carries them, in
+`nomos-capability` beside `Registry` — which already sits above every provider and below
+every rule — plus one classification per real provider. Where that classification lives is
+decided above rather than left to that item, because version 1 left it underdetermined and
+the only shape version 1 gestured at is the one the measurement rules out.
 
-### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#19
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#23
 
 *revision: authored · kind: prose · heading: A rule names a tool family and never a tool / What This Record Does Not Do · hash: sha256:7ab0414cc6ebab390d69e9906c68db2f3611ed67803a8d0978a7e42b115e084c*
 
@@ -14320,7 +14373,7 @@ does not exist yet because no capability has more than one admitted provider. Th
 own family/delivery classification is what a selection mechanism would need to exist first,
 not a substitute for building one.
 
-### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#20
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#24
 
 *revision: authored · kind: prose · heading: A rule names a tool family and never a tool / What This Record Does Not Do · hash: sha256:55cd29ea7f70245c7672df335b79b03543ca75e82ac40fc40158f7e053509460*
 
@@ -14330,7 +14383,7 @@ classification does not answer by itself, though a future manifest crate for `To
 would likely carry a provider's family the same way a `LanguagePackage` manifest carries a
 language.
 
-### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#21
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#25
 
 *revision: authored · kind: prose · heading: A rule names a tool family and never a tool / What This Record Does Not Do · hash: sha256:1cb8dc47d716528c653ee81c01a1edba32fdd93a715322e855d9d70da97342cc*
 
@@ -14340,13 +14393,13 @@ workspace's own population cannot fit is a decision for whenever such a provider
 proposed, the same "wait for a need, not a wish" discipline this workspace already applies
 elsewhere.
 
-### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#22
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#26
 
 *revision: authored · kind: heading · heading: A rule names a tool family and never a tool / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#23
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#27
 
 *revision: authored · kind: prose · heading: A rule names a tool family and never a tool / Status · hash: sha256:1cb4df0e957639e3bef7e59ae32afbfd580b5aeea63951a47dcb16167d0d1baa*
 
