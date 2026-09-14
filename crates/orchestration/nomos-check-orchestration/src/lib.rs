@@ -59,4 +59,4 @@ pub use examined::{Claim, Claim_Of, CheckOutcome, Examined};
 pub use package_conformance::{Check_Package_Conformance, DeclaredPackage, PACKAGE_CONFORMANCE};
 pub use rule_resolution::{Resolve_Rules, RuleResolution};
 pub use rule_resolution_error::RuleResolutionError;
-pub use run_context::{Composed_Rules, Run, RunContext};
+pub use run_context::{Composed_Rules, RuleReassessmentCache, Run, RunContext, Run_Reassessing};

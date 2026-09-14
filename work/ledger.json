@@ -73774,16 +73774,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P104-A-FINDING-HAS-NO-IDENTITY-OF-ITS-OWN-OCCURRENCE-2"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p104",
-        "acquired_at": 1789423289,
-        "lease_expires_at": 1789437689
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -73795,7 +73791,29 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api"
+        ],
+        "exit_code": 0,
+        "output_tail": " ok\ntest Test_Disposition_Of_Findings_Should_Fail_With_One_Blocking_Finding_Among_Many ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_When_Nothing_Can_Fail_A_Build ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_With_No_Findings ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\nwarning: unused import: `SuppressionReason`\n  --> crates\\host\\nomos-api\\src\\response\\gate_compare_response.rs:28:115\n   |\n28 |     DispositionChange, FindingDisposition, GateCommand, GateCompareResult, GateRunResult, SuppressionDisposition, SuppressionReason,\n   |                                                                                                                   ^^^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-api` (lib) generated 1 warning (run `cargo fix --lib -p nomos-api` to apply 1 suggestion)\nwarning: `nomos-api` (lib test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.58s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-c92991675f500aa9.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-bb2d2d3fc56dfa8b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-a71e917b2e4028f5.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-bd58adf0b6e7d466.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-10ca627467baeed0.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1789425323,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1301f8b334d94f960c478c4838c35443160751ee"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -73817,7 +73835,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Right work, two defects in how it was written. FIRST, its own predicate does not establish its own done_when. The done_when requires that the contract suite pass, because the item re-blesses tests/contract/surface/nomos-check-orchestration.txt, and the declared argv is cargo test -p nomos-check-orchestration -p nomos-lsp, which never runs it. Finishing on that would record verified over a claim the ledger never checked, which is the defect P103-A recorded one commit earlier at 1301f8b3. The fix is not to widen the argv either: Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot judges every crate's snapshot in a single test and cannot be narrowed to the one crate this item moves, so putting the contract suite in the predicate would inherit every peer's unblessed snapshot, which is the same defect in the other direction. The replacement states the exception explicitly instead of leaving a predicate that silently under-covers. SECOND, the acceptance is weaker than what is required. The done_when asks the LSP test to prove only that a provider instance survives repeated Diagnose calls with unchanged diagnostics, and defers every reuse proof to cbeb644d, so an implementation that retained a cache object which was never effective would satisfy it. Measured while inspecting: MemoryFactStore::Materializations is public and counts store writes, Already_Current short-circuits before it, and the provider's own test module is a child module that can read the private store -- so demonstrable reuse, selective invalidation and clean-recompute equivalence are all provable at the LSP boundary without exporting anything. Replaced by P105-THE-LSP-KEEPS-THE-REASSESSMENT-CACHE-AND-PROVES-THE-REUSE-AT-ITS-OWN-BOUNDARY, same territory, same export, carrying the three-step A-and-B proof and the seven acceptance criteria."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -73836,7 +73858,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p105",
+        "declined_at": 1789424707
+      }
     },
     {
       "id": "P103-A-LEDGER-PREDICATE-MUST-NOT-INHERIT-UNRELATED-CRATE-OBLIGATIONS",
@@ -73898,14 +73923,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p104",
-        "acquired_at": 1789423452,
-        "lease_expires_at": 1789437852
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -73917,7 +73938,29 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api"
+        ],
+        "exit_code": 0,
+        "output_tail": "esult: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.52s\n\n\nrunning 4 tests\ntest Test_Disposition_Of_Findings_Should_Fail_On_A_Blocking_Finding ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_With_No_Findings ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_When_Nothing_Can_Fail_A_Build ... ok\ntest Test_Disposition_Of_Findings_Should_Fail_With_One_Blocking_Finding_Among_Many ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: unused import: `SuppressionReason`\n  --> crates\\host\\nomos-api\\src\\response\\gate_compare_response.rs:28:115\n   |\n28 |     DispositionChange, FindingDisposition, GateCommand, GateCompareResult, GateRunResult, SuppressionDisposition, SuppressionReason,\n   |                                                                                                                   ^^^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-api` (lib) generated 1 warning (run `cargo fix --lib -p nomos-api` to apply 1 suggestion)\nwarning: `nomos-api` (lib test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.62s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-c92991675f500aa9.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-bb2d2d3fc56dfa8b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-a71e917b2e4028f5.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-bd58adf0b6e7d466.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-10ca627467baeed0.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1789425404,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1301f8b334d94f960c478c4838c35443160751ee"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -73936,14 +73979,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p104",
-        "acquired_at": 1789423786,
-        "lease_expires_at": 1789438186
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -73955,7 +73994,29 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-api-transport"
+        ],
+        "exit_code": 0,
+        "output_tail": ":Test_Every_Argument_Should_Reach_The_Command_Field_It_Names ... ok\ntest served_method::tests::Test_A_Repo_Tooling_Operation_Name_Should_Not_Resolve ... ok\ntest served_method::tests::Test_Every_Registered_Operation_Should_Be_Found_By_Its_Own_Name ... ok\ntest served_method::tests::Test_The_Canonical_Operation_Name_Should_Be_The_Wire_Name ... ok\ntest nomos_api_service::tests::Test_A_Plan_With_No_Arguments_Should_Reach_A_Real_Registry ... ok\ntest nomos_api_service::tests::Test_A_Correction_Run_Over_A_Clean_Tree_Should_Reach_A_Real_Clean_Answer ... ok\n\ntest result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: unused import: `SuppressionReason`\n  --> crates\\host\\nomos-api\\src\\response\\gate_compare_response.rs:28:115\n   |\n28 |     DispositionChange, FindingDisposition, GateCommand, GateCompareResult, GateRunResult, SuppressionDisposition, SuppressionReason,\n   |                                                                                                                   ^^^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-api` (lib) generated 1 warning (run `cargo fix --lib -p nomos-api` to apply 1 suggestion)\nwarning: `nomos-api` (lib test) generated 1 warning (1 duplicate)\n   Compiling nomos-api-transport v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api-transport)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.48s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-c92991675f500aa9.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-bb2d2d3fc56dfa8b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api_transport-624b51128da1f962.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_api_transport\n",
+        "verified_at": 1789425424,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1301f8b334d94f960c478c4838c35443160751ee"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -74013,6 +74074,67 @@
           "exit_code": 0
         },
         "revision": "c7684a56d91355268d7b5a6cb4368139f8b181ad"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P105-THE-LSP-KEEPS-THE-REASSESSMENT-CACHE-AND-PROVES-THE-REUSE-AT-ITS-OWN-BOUNDARY",
+      "title": "The reassessment path is trapped behind a private module, and the one caller that could use it re-runs every rule per keystroke",
+      "why": "Two responsibilities. FIRST, reachability. mod run_context at nomos-check-orchestration/src/lib.rs is private and the crate root re-exports Composed_Rules, Run and RunContext only. Run_Reassessing and RuleReassessmentCache are pub inside that private module, so no other crate can name them and neither appears in tests/contract/surface/nomos-check-orchestration.txt. cbeb644d proved the mechanism from inside the crate -- a rule recorded on run 1, skipped on an unchanged run 2, re-run after run 3 moves a family it reads, both assertions confirmed able to fail in both directions. What it could not do is make that mechanism available to anyone. SECOND, the caller. NomosDiagnosticProvider already holds workspace and store as private fields and threads them into every Diagnose, so fact reuse has a real long-lived consumer. It calls Run, which by its own doc always starts from an empty cache and drops it at the end of the call, so every composed rule re-runs on every didOpen and didSave even where nothing it reads has moved. It is the strongest available second consumer precisely because, unlike the CLI, keeping state across edits is what it is for. This replaces P105-THE-REASSESSMENT-PATH-BECOMES-REACHABLE-AND-THE-LSP-KEEPS-A-CACHE, whose predicate did not establish its own done_when and whose acceptance a never-effective cache would have satisfied. Measured while inspecting it: MemoryFactStore::Materializations is public and counts store writes, Already_Current short-circuits before that call so a reused subject does not increment it, and the provider's test module is a child module that reads the provider's private store already -- so reuse, selective invalidation and clean-recompute equivalence are provable at the LSP boundary with no new export and no test instrumentation made public.",
+      "done_when": "nomos-check-orchestration's lib.rs re-exports RuleReassessmentCache and Run_Reassessing alongside the three names it already exports, and nothing wider: no incremental-session type, no builder, no re-export of Record or Recorded, which stay pub(crate) and cfg(test). tests/contract/surface/nomos-check-orchestration.txt is re-blessed from a clean worktree for exactly those additions. NomosDiagnosticProvider then carries a private RuleReassessmentCache beside its workspace and store, initialised in New with no new public constructor parameter, and Diagnose calls Run_Reassessing threading all three. The LSP's own public surface does not change and tests/contract/surface/nomos-lsp.txt is not touched; if it must be, the territory was wrong and this declines rather than widens. SEVEN ACCEPTANCE CRITERIA, proven at the LSP boundary in the provider's own test module, which is a child module and can read the provider's private state without exporting any of it. ONE, reachability: Run_Reassessing has at least one real non-test caller and it is Diagnose. TWO, persistent state: one provider instance owns Workspace, MemoryFactStore and RuleReassessmentCache across Diagnose calls rather than reconstructing any of them per diagnostic publication. THREE, behavioural equivalence: first-run diagnostics are identical to what the clean Run path produces over the same tree, asserted against a direct Run call rather than assumed. FOUR, actual reuse: a second unchanged Diagnose performs strictly fewer materializations than the first, read from the provider's own store through the public Materializations counter, rather than an assertion that a cache object exists. FIVE, selective invalidation: editing one of two sources re-materializes that source and leaves the other's fact reused, measured as a materialization delta of one rather than two. SIX, clean-recompute equivalence: the diagnostics a reusing provider reports after the edit equal those a freshly constructed provider reports over the same resulting tree. SEVEN, no LSP-specific analysis semantics: nomos-lsp gains lifecycle and state retention only, with no judgment, ordering, invalidation policy or fact handling of its own, and nomos-check-orchestration remains the authority on analysis and reassessment. The three-step shape carries four, five and six together, because a two-run test cannot tell reuse from recomputation: run 1 over sources A and B cold, run 2 unchanged, run 3 with A alone modified. The LSP test does not count rule invocations. Recorded is cfg(test) and pub(crate) and stays that way, since making test instrumentation public so a downstream test could read it would export the wrong thing, and the rule-skip invocation proof is cbeb644d's, already done from inside the crate that owns it. The commit reports, either way, which of a skipped rule and a reused fact an external observer can actually distinguish and through what. VERIFICATION SCOPE. The predicate is the two crates whose behaviour this item claims. The re-blessed snapshot is judged by Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot, which judges every crate's snapshot in one test and cannot be narrowed to the one crate this item moves, so it is deliberately not in the predicate: including it would inherit every peer's unblessed snapshot, which is the defect recorded at 1301f8b3. It is run by hand and its outcome reported in the commit, and the exception is stated here rather than left implicit in an argv that silently under-covers. NOT IN SCOPE, and this item is not read as covering any of them: a daemon, a generalized incremental scheduler, a demand planner, a filesystem watcher, or any new cache abstraction. The demanded-family duplication between RuleDescriptor.requires and Materialize_Capabilities' hand-written Tracking calls is deliberately left alone. If retaining the three existing state objects exposes a real defect in their contracts, that concrete defect is fixed; otherwise this increment only makes already-built incremental behaviour reachable in a long-lived production surface.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/lib.rs",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "crates/host/nomos-lsp/src/nomos_diagnostic_provider.rs",
+          "crates/host/nomos-lsp/src/nomos_diagnostic_provider/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-lsp"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-lsp"
+        ],
+        "exit_code": 0,
+        "output_tail": "vider::tests::Test_Judging_An_Untouched_Tree_Twice_Should_Not_Advance_The_Generation_A_Second_Time ... ok\ntest nomos_diagnostic_provider::tests::Test_A_Cold_Judgement_Should_Equal_What_The_Unreassessed_Run_Path_Produces ... ok\ntest nomos_diagnostic_provider::tests::Test_A_Second_Judgement_Should_Re_Derive_A_Fact_Only_For_The_Source_That_Moved ... ok\ntest nomos_diagnostic_provider::tests::Test_A_Reusing_Provider_Should_Answer_What_A_Fresh_One_Answers_Over_The_Same_Tree ... ok\n\ntest result: ok. 37 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.44s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 1 test\ntest Test_Diagnostics_For_Should_Translate_A_Real_Run_Result ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.55s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-3cd86194c5db6417.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-4adb6204a7c8b21d.exe)\n     Running tests\\incremental_equivalence.rs (target\\debug\\deps\\incremental_equivalence-3b3dbc00e2b49f38.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-06e1f672cf348eb1.exe)\n     Running tests\\unchanged_run_economy.rs (target\\debug\\deps\\unchanged_run_economy-73a4ccf363d3982f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lsp-d33cf656352c45f7.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_lsp-12f3705af1828807.exe)\n     Running tests\\fixture_tree.rs (target\\debug\\deps\\fixture_tree-532cf9694e0394e9.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_lsp\n",
+        "verified_at": 1789425467,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4e0893eff6abc61a9f6cc84e94d7f83d2b2cfcdb"
       },
       "abandoned": [],
       "displaced": [],

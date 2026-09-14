@@ -19,7 +19,9 @@ pub fn nomos_check_orchestration::Declared_Rules() -> Vec<RulePackage>
 pub fn nomos_check_orchestration::Registered() -> Result<Registry, RegistryError>
 pub fn nomos_check_orchestration::Resolve_Rules(declared: &[RulePackage], registered: &[RuleId]) -> Result<RuleResolution, RuleResolutionError>
 pub fn nomos_check_orchestration::Resolved_Configuration(registry: &Registry) -> ConfigurationId
+pub fn nomos_check_orchestration::RuleReassessmentCache::New() -> Self
 pub fn nomos_check_orchestration::Run<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>( sources: &[SourceFile], context: RunContext<'_, Launcher, Fs, Env>, selected: &[RuleId], ) -> CheckOutcome
+pub fn nomos_check_orchestration::Run_Reassessing<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>( sources: &[SourceFile], context: RunContext<'_, Launcher, Fs, Env>, selected: &[RuleId], reassessment: &mut RuleReassessmentCache, ) -> CheckOutcome
 pub impl nomos_check_orchestration::Claim implements core::fmt::Display
 pub struct field nomos_check_orchestration::CheckCommand::root: PathBuf
 pub struct field nomos_check_orchestration::DeclaredPackage::manifest_path: &'a str
@@ -38,5 +40,6 @@ pub struct field nomos_check_orchestration::RunContext::workspace: &'a mut Optio
 pub struct nomos_check_orchestration::CheckCommand
 pub struct nomos_check_orchestration::DeclaredPackage<'a>
 pub struct nomos_check_orchestration::Examined
+pub struct nomos_check_orchestration::RuleReassessmentCache
 pub struct nomos_check_orchestration::RuleResolution
 pub struct nomos_check_orchestration::RunContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>

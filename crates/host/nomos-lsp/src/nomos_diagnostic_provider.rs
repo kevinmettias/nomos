@@ -1,4 +1,4 @@
-//! What this workspace judges when an editor asks -- and the two things it keeps between
+//! What this workspace judges when an editor asks -- and the three things it keeps between
 //! being asked twice.
 
 use crate::build_variant::Host_Variant;
@@ -20,20 +20,31 @@ use xvpe_primitives::{DeterminismStrength, ReproducibilityScope, Strategy, Trace
 /// every composed rule over it, and turning a `Finding` into something an editor can show.
 ///
 /// It owns no judgment of its own either way: every finding was produced by
-/// `nomos_check_orchestration::Run`, the identical seam `nomos-cli::check` and
-/// `nomos-correction-orchestration::run` already call.
+/// `nomos_check_orchestration::Run_Reassessing`, which is `Run`'s own pipeline given a
+/// cache to keep -- `Run` delegates to it with a cache built fresh per call. What this
+/// crate supplies is a longer-lived cache, never a different judgement, so the seam
+/// `nomos-cli::check` and `nomos-correction-orchestration::run` call is still the seam
+/// answering here.
 ///
 /// # What it keeps between calls
 ///
-/// `workspace` and `store`, reused across every judgement rather than rebuilt per call.
-/// `P14-ANALYSIS-009-STORE-WORKSPACE-REUSE-FIRST-INCREMENT` gave `Run` a caller-supplied
-/// pair for exactly this, and an editor session is this workspace's first caller with a
-/// process lifetime long enough to hold either across two calls: `OD-ANALYSIS-009`'s own
-/// second amendment names this crate as the concrete case its first trigger was written
-/// for.
+/// `workspace`, `store` and `reassessment`, reused across every judgement rather than
+/// rebuilt per call. `P14-ANALYSIS-009-STORE-WORKSPACE-REUSE-FIRST-INCREMENT` gave `Run` a
+/// caller-supplied workspace and store for exactly this, and an editor session is this
+/// workspace's first caller with a process lifetime long enough to hold any of them across
+/// two calls: `OD-ANALYSIS-009`'s own second amendment names this crate as the concrete
+/// case its first trigger was written for.
 ///
-/// Reused, not persisted -- both still end when this process does. Nothing here asks either
-/// to survive past that.
+/// The first two buy a fact that is not re-derived for a subject whose bytes did not move.
+/// The third buys the rule that reads that fact not running again either, which `Run`
+/// cannot do for any caller: its own doc says it builds a cache fresh for the call and
+/// drops it at the end, so every composed rule re-runs on every call by construction. A
+/// caller wanting the skip has to keep the cache itself, and an editor is the caller that
+/// can -- one process across many `didOpen` and `didSave` notifications, most of which move
+/// one file or none.
+///
+/// Reused, not persisted -- all three still end when this process does. Nothing here asks
+/// any of them to survive past that.
 ///
 /// # Why nothing is derived
 ///
@@ -44,6 +55,7 @@ pub struct NomosDiagnosticProvider
 {
     workspace: Option<Workspace>,
     store: MemoryFactStore,
+    reassessment: nomos_check_orchestration::RuleReassessmentCache,
 }
 
 impl NomosDiagnosticProvider
@@ -52,7 +64,11 @@ impl NomosDiagnosticProvider
     #[must_use]
     pub fn New() -> Self
     {
-        return Self { workspace: None, store: MemoryFactStore::New() };
+        return Self {
+            workspace: None,
+            store: MemoryFactStore::New(),
+            reassessment: nomos_check_orchestration::RuleReassessmentCache::New(),
+        };
     }
 }
 
@@ -82,7 +98,7 @@ impl DiagnosticProviderStrategy for NomosDiagnosticProvider
             return Vec::new();
         };
 
-        let outcome = nomos_check_orchestration::Run(
+        let outcome = nomos_check_orchestration::Run_Reassessing(
             &sources,
             nomos_check_orchestration::RunContext {
                 variant: Host_Variant(),
@@ -94,6 +110,7 @@ impl DiagnosticProviderStrategy for NomosDiagnosticProvider
                 store: &mut self.store,
             },
             &[],
+            &mut self.reassessment,
         );
 
         let nomos_check_orchestration::CheckOutcome::Judged { findings, .. } = outcome
