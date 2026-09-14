@@ -143,7 +143,15 @@ fn Finding_For_Violation(source: &SourceFile, violation: &PolicyViolation) -> Fi
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Advisory,
         summary: Summary_Of(violation),
-        locations: Vec::new(),
+        // The target is geometry, not prose. It goes here rather than into `summary` because
+        // identity must follow the semantic representation and not presentation text, and it
+        // goes here rather than into `subject` because `subject` is what `SuppressionPolicy`
+        // and `BaselinePolicy` address by -- moving it to the package would narrow every
+        // existing suppression from "this rule on this workspace" to "this rule on one
+        // package" as a side effect of a fix to comparison, which is a policy change nobody
+        // asked for. Empty when the tool named no target, which is a real answer: an
+        // unencountered license concerns no package.
+        locations: violation.target.iter().cloned().collect(),
     };
 }
 
@@ -196,8 +204,7 @@ mod tests
                 violations: vec![PolicyViolation {
                     severity: PolicySeverity::Warning,
                     code: "duplicate".to_owned(),
-                    message: "found 2 duplicate entries for crate 'syn'".to_owned(),
-                }],
+                    message: "found 2 duplicate entries for crate 'syn'".to_owned(), target: None }],
             },
         );
 
@@ -263,8 +270,8 @@ mod tests
             &offer,
             &PolicyPayload {
                 violations: vec![
-                    PolicyViolation { severity: PolicySeverity::Warning, code: "duplicate".to_owned(), message: "m1".to_owned() },
-                    PolicyViolation { severity: PolicySeverity::Error, code: "banned".to_owned(), message: "m2".to_owned() },
+                    PolicyViolation { severity: PolicySeverity::Warning, code: "duplicate".to_owned(), message: "m1".to_owned(), target: None },
+                    PolicyViolation { severity: PolicySeverity::Error, code: "banned".to_owned(), message: "m2".to_owned(), target: None },
                 ],
             },
         );

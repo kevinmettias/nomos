@@ -313,6 +313,29 @@ fn Violations_Of(stream: &str) -> Vec<PolicyViolation>
     return violations;
 }
 
+/// What a diagnostic is about, from `cargo deny`'s own `graphs` array.
+///
+/// Each entry is a dependency-graph root, and its `name` is the package the diagnostic
+/// concerns. The first is taken: a diagnostic naming several roots is reporting one
+/// violation reachable by several paths, not several violations, and the package is the
+/// same one at the top of each.
+///
+/// `None` when there is no graph, which is a real answer rather than a gap -- an
+/// unencountered license concerns no package. Read rather than invented: this was the field
+/// the parser dropped, and dropping it made twelve violations about twelve different crates
+/// into twelve byte-identical facts.
+fn Target_Of(fields: &serde_json::Value) -> Option<String>
+{
+    // `graphs[0].Krate.name`, not `graphs[0].name`. Every fixture in this file carries an
+    // empty `graphs`, so only real `cargo deny` output shows the nesting -- measured
+    // 2026-09-14 against cargo-deny 0.20.2, whose source-not-allowed diagnostics wrap each
+    // graph root in a `Krate` object.
+    let root = fields.get("graphs")?.as_array()?.first()?;
+    let name = root.get("Krate")?.get("name")?.as_str()?;
+
+    return (!name.is_empty()).then(|| return name.to_owned());
+}
+
 /// One violation out of `cargo deny`'s own `{"type": "diagnostic", "fields": {...}}`
 /// object. `None` for a diagnostic missing a severity, a code, or a message -- the three
 /// fields every real diagnostic this reader has observed carries unconditionally; a
@@ -323,8 +346,9 @@ fn Violation_Of(diagnostic: &serde_json::Value) -> Option<PolicyViolation>
     let severity = PolicySeverity::From_Label(fields.get("severity")?.as_str()?)?;
     let code = fields.get("code")?.as_str()?.to_owned();
     let message = fields.get("message")?.as_str()?.to_owned();
+    let target = Target_Of(fields);
 
-    return Some(PolicyViolation { severity, code, message });
+    return Some(PolicyViolation { severity, code, target, message });
 }
 
 #[cfg(test)]
@@ -669,9 +693,9 @@ mod tests
     fn Test_Canonical_Order_Should_Sort_By_Severity_Then_Code_Then_Message()
     {
         let violations = vec![
-            PolicyViolation { severity: PolicySeverity::Warning, code: "zzz".to_owned(), message: "m".to_owned() },
-            PolicyViolation { severity: PolicySeverity::Error, code: "aaa".to_owned(), message: "m".to_owned() },
-            PolicyViolation { severity: PolicySeverity::Warning, code: "aaa".to_owned(), message: "m".to_owned() },
+            PolicyViolation { severity: PolicySeverity::Warning, code: "zzz".to_owned(), message: "m".to_owned(), target: None },
+            PolicyViolation { severity: PolicySeverity::Error, code: "aaa".to_owned(), message: "m".to_owned(), target: None },
+            PolicyViolation { severity: PolicySeverity::Warning, code: "aaa".to_owned(), message: "m".to_owned(), target: None },
         ];
 
         let ordered = Canonical_Order(violations);

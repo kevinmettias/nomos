@@ -12,7 +12,7 @@ use refusal::Refusal;
 
 /// A violation line's own fields, in canonical order — a stand-in for the three-field
 /// tuple `Violation_Line`/`Parse_Violation_Line` would otherwise pass by position.
-const VIOLATION_FIELDS: usize = 3;
+const VIOLATION_FIELDS: usize = 4;
 
 /// Encodes a payload as tab-separated lines, the same shape `nomos-cap-lint` and
 /// `nomos-cap-dependency` both use and for the same two reasons: diffable by a person, and
@@ -39,6 +39,10 @@ pub fn Encode_Payload(payload: &PolicyPayload) -> Vec<u8>
         encoded.push_str(violation.severity.Label());
         encoded.push('\t');
         encoded.push_str(&violation.code);
+        encoded.push('\t');
+        // Before the message, because the message is the only free-text field and stays
+        // last so it needs no escaping. A package name carries no tab by construction.
+        encoded.push_str(violation.target.as_deref().unwrap_or_default());
         encoded.push('\t');
         encoded.push_str(&Single_Line(&violation.message));
         encoded.push('\n');
@@ -81,10 +85,13 @@ pub fn Parse_Payload(bytes: &[u8]) -> Result<PolicyPayload, Refusal>
 fn Violation_Line(line: &str) -> Result<PolicyViolation, Refusal>
 {
     let rest = Violation_Body(line)?;
-    let [severity, code, message] = Violation_Fields(line, rest)?;
+    let [severity, code, target, message] = Violation_Fields(line, rest)?;
     let severity = Parse_Severity(severity)?;
+    // An empty field is an absent target, not a package named "". The encoder writes one
+    // for `None`, and a round trip has to give `None` back.
+    let target = (!target.is_empty()).then(|| return target.to_owned());
 
-    return Ok(PolicyViolation { severity, code: code.to_owned(), message: message.to_owned() });
+    return Ok(PolicyViolation { severity, code: code.to_owned(), target, message: message.to_owned() });
 }
 
 /// `line` with its `"violation\t"` prefix stripped, or a refusal naming the line that was
@@ -107,7 +114,7 @@ fn Violation_Body(line: &str) -> Result<&str, Refusal>
 fn Violation_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; VIOLATION_FIELDS], Refusal>
 {
     let fields: Vec<&str> = rest.splitn(VIOLATION_FIELDS, '\t').collect();
-    let [severity, code, message] = fields.as_slice()
+    let [severity, code, target, message] = fields.as_slice()
     else
     {
         return Err(Refusal {
@@ -115,7 +122,7 @@ fn Violation_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; VIOLATION
         });
     };
 
-    return Ok([*severity, *code, *message]);
+    return Ok([*severity, *code, *target, *message]);
 }
 
 fn Parse_Severity(severity: &str) -> Result<PolicySeverity, Refusal>
@@ -153,8 +160,8 @@ mod tests
 
         assert_eq!(
             rendered,
-            "violation\twarning\tduplicate\tfound 2 duplicate entries for crate 'syn'\n\
-             violation\terror\tbanned\tcrate 'wgpu' is explicitly banned\n"
+            "violation\twarning\tduplicate\t\tfound 2 duplicate entries for crate 'syn'\n\
+             violation\terror\tbanned\twgpu\tcrate 'wgpu' is explicitly banned\n"
         );
         assert!(!rendered.contains('\r'), "line endings must not be local");
     }
@@ -166,8 +173,7 @@ mod tests
             violations: vec![PolicyViolation {
                 severity: PolicySeverity::Warning,
                 code: "license-not-encountered".to_owned(),
-                message: "first line.\nsecond line.".to_owned(),
-            }],
+                message: "first line.\nsecond line.".to_owned(), target: None }],
         };
 
         let encoded = Encode_Payload(&payload);
@@ -184,8 +190,7 @@ mod tests
             violations: vec![PolicyViolation {
                 severity: PolicySeverity::Warning,
                 code: "duplicate".to_owned(),
-                message: "found\ttab\tin\tmessage".to_owned(),
-            }],
+                message: "found\ttab\tin\tmessage".to_owned(), target: None }],
         };
 
         let encoded = Encode_Payload(&payload);
@@ -207,18 +212,20 @@ mod tests
         for bytes in Malformed_Violation_Lines()
         {
             let error =
-                Parse_Payload(bytes).expect_err("a violation line without three fields must be refused");
+                Parse_Payload(bytes).expect_err("a violation line without four fields must be refused");
             assert!(
-                error.reason.contains("does not have exactly 3 fields"),
+                error.reason.contains("does not have exactly 4 fields"),
                 "expected a field-count refusal for {bytes:?}, got: {}",
                 error.reason
             );
         }
     }
 
-    /// Each case here has fewer than the three tab-separated fields a violation line must
-    /// carry — `splitn` can never hand back more than three, so under-counting is the only
-    /// way to reach this refusal.
+    /// Each case here has fewer than the four tab-separated fields a violation line must
+    /// carry — `splitn` can never hand back more than four, so under-counting is the only
+    /// way to reach this refusal. The fourth arrived with the violation's own target: a
+    /// line written before it carried three, and is now malformed rather than silently
+    /// reinterpreted, which is what a schema version is for.
     fn Malformed_Violation_Lines() -> Vec<&'static [u8]>
     {
         return vec![
@@ -242,14 +249,16 @@ mod tests
         }
     }
 
-    /// Every case here has exactly three fields, so it reaches severity resolution and is
-    /// refused there specifically — not for a field count or a missing prefix.
+    /// Every case here has exactly four fields, so it reaches severity resolution and is
+    /// refused there specifically — not for a field count or a missing prefix. The fourth is
+    /// the violation's own target, empty here because what these cases exercise is the
+    /// severity in front of it.
     fn Unrecognized_Policy_Severities() -> Vec<&'static [u8]>
     {
         return vec![
-            b"violation\tcatastrophic\tsomecode\toops\n",
-            b"violation\tfyi\tsomecode\tjust so you know\n",
-            b"violation\t\tsomecode\tempty severity\n",
+            b"violation\tcatastrophic\tsomecode\t\toops\n",
+            b"violation\tfyi\tsomecode\t\tjust so you know\n",
+            b"violation\t\tsomecode\t\tempty severity\n",
         ];
     }
 
@@ -281,13 +290,11 @@ mod tests
                 PolicyViolation {
                     severity: PolicySeverity::Warning,
                     code: "duplicate".to_owned(),
-                    message: "found 2 duplicate entries for crate 'syn'".to_owned(),
-                },
+                    message: "found 2 duplicate entries for crate 'syn'".to_owned(), target: None },
                 PolicyViolation {
                     severity: PolicySeverity::Error,
                     code: "banned".to_owned(),
-                    message: "crate 'wgpu' is explicitly banned".to_owned(),
-                },
+                    message: "crate 'wgpu' is explicitly banned".to_owned(), target: Some("wgpu".to_owned()) },
             ],
         };
     }

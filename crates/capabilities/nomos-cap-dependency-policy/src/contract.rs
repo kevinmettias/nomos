@@ -19,10 +19,10 @@ pub const CAPABILITY: &str = "nomos.cap.dependency.policy";
 /// Versioned separately from the contract for the same reason `nomos-cap-lint` and
 /// `nomos-cap-dependency` both give: the shape of the bytes and the meaning of the
 /// question change for different reasons.
-pub const SCHEMA: &str = "nomos.dependency.policy.v1";
+pub const SCHEMA: &str = "nomos.dependency.policy.v2";
 
 /// The contract version. Not a crate version: a caller reads against the contract.
-pub const CONTRACT_VERSION: ContractVersion = ContractVersion::New(1, 0);
+pub const CONTRACT_VERSION: ContractVersion = ContractVersion::New(2, 0);
 
 /// The strongest anything may claim for this capability.
 ///

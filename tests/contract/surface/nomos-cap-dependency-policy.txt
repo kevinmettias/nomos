@@ -20,6 +20,7 @@ pub struct field nomos_cap_dependency_policy::PolicyPayload::violations: Vec<Pol
 pub struct field nomos_cap_dependency_policy::PolicyViolation::code: String
 pub struct field nomos_cap_dependency_policy::PolicyViolation::message: String
 pub struct field nomos_cap_dependency_policy::PolicyViolation::severity: PolicySeverity
+pub struct field nomos_cap_dependency_policy::PolicyViolation::target: Option<String>
 pub struct field nomos_cap_dependency_policy::Refusal::reason: String
 pub struct nomos_cap_dependency_policy::PolicyPayload
 pub struct nomos_cap_dependency_policy::PolicyViolation

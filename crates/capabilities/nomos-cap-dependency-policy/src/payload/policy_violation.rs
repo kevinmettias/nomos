@@ -28,4 +28,24 @@ pub struct PolicyViolation
     /// `nomos_cap_lint::LintDiagnostic::message` applies for the identical reason — one
     /// line, one record.
     pub message: String,
+    /// What this violation is about, when the tool named it.
+    ///
+    /// Spelled the way `nomos_cap_dependency::DependencyEdge::target` already spells the
+    /// crate an edge points at: a plain name, which is provider-neutral because a package
+    /// name is not a Cargo concept. Not a new vocabulary, and deliberately not this
+    /// capability's own subject -- the capability answers about a whole workspace's policy
+    /// result, while each violation concerns some governed dependency inside it.
+    ///
+    /// `None` when the tool reported no target and means it. An unencountered license
+    /// concerns no package; that is different from a package the provider failed to record,
+    /// and the two must not be spelled the same way.
+    ///
+    /// # Why the field exists at all
+    ///
+    /// Without it, twelve violations about twelve different crates normalized into twelve
+    /// byte-identical facts -- measured on this workspace, once per pinned `xvpe-` crate.
+    /// Once that distinction is gone from the fact, nothing downstream can recover it
+    /// without inventing identity, so the comparison layer would have had to collapse them
+    /// knowingly.
+    pub target: Option<String>,
 }

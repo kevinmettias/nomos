@@ -271,8 +271,7 @@ fn Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Publ
         violations: vec![nomos_cap_dependency_policy::PolicyViolation {
             severity: nomos_cap_dependency_policy::PolicySeverity::Warning,
             code: "duplicate".to_owned(),
-            message: "found 2 duplicate entries for crate 'syn'".to_owned(),
-        }],
+            message: "found 2 duplicate entries for crate 'syn'".to_owned(), target: None }],
     };
     Materialize(
         &mut store,
