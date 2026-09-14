@@ -29,6 +29,8 @@ pub enum ServedMethod
     /// One named finding, and whether it would keep a real run from passing.
     /// `nomos_api::Handle_Gate_Explain`.
     GateExplain,
+    /// What changed between two real runs. `nomos_api::Handle_Gate_Compare`.
+    GateCompare,
     /// A real correction run over a named tree, staging and, if asked, committing a fix.
     /// `nomos_api::Handle_Correction_Run`.
     Correction,
@@ -52,7 +54,8 @@ impl ServedMethod
     /// this enum and left out of the array: that leaves an operation nothing serves rather
     /// than a registry claiming more than it serves, and this list stays true of what is
     /// served either way.
-    pub const REGISTRY: [Self; 4] = [Self::GatePlan, Self::GateRun, Self::GateExplain, Self::Correction];
+    pub const REGISTRY: [Self; 5] =
+        [Self::GatePlan, Self::GateRun, Self::GateExplain, Self::GateCompare, Self::Correction];
 
     /// This operation's canonical name.
     ///
@@ -72,6 +75,7 @@ impl ServedMethod
             Self::GatePlan => "nomos.gate.plan",
             Self::GateRun => "nomos.gate.run",
             Self::GateExplain => "nomos.gate.explain",
+            Self::GateCompare => "nomos.gate.compare",
             Self::Correction => "nomos.correction.run",
         };
     }

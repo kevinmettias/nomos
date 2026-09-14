@@ -70679,6 +70679,107 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P101-THE-HEADLESS-SURFACES-STILL-STOP-AT-THREE-GATE-VERBS",
+      "title": "The headless surfaces still stop at three Gate verbs, so the compare service has no caller",
+      "why": "P101 gave gate compare a canonical application service: nomos_api::Handle_Gate_Compare composes two same-process walk-and-judge runs the way OD-GATE-022-A decided and returns a serializable projection carrying added, removed and changed. Nothing calls it. Measured after that commit: nomos-api-transport's ServedMethod names GatePlan, GateRun, GateExplain and Correction, its dispatch has no compare arm, and the ADMITTED allow-list in tests/contract/tests/boundaries/transport_registry.rs is a fixed array of four handler names that does not include it; nomos-mcp's ServedTool wraps the same four. So a headless deployment -- the surface a continuous-conformance product is actually driven through -- still cannot ask what changed between two runs, and constraint 5's four-verb Gate is complete only in a terminal. Widening this registry is deliberately not a small edit: OD-HOST-007 required the exclusion be structural rather than advisory, so a fifth verb costs a variant, a dispatch arm, an entry in an allow-list measured against nomos-api's own blessed surface, and a tool description and schema on the MCP side. Correction is the precedent that this is admissible for a real end-user seam rather than a repo-tooling handler.",
+      "done_when": "A headless caller can run gate compare. ServedMethod carries a fifth variant named for the method a caller spells, the dispatch reaches nomos_api::Handle_Gate_Compare, and the transport's allow-list admits that handler deliberately rather than by the registry widening alone. The wire shape carries two whole sides rather than one command and a second root, because OD-GATE-022-A's policy comparison varies the policy between them and its code comparison varies the tree, and one shape serves both. MCP publishes the tool with a sentence saying what it answers and a schema accepting that shape. The repo-tooling exclusion is untouched and still structural: no Handle_Work or Handle_Spec handler becomes reachable, and the test that measures the allow-list against nomos-api's blessed surface still refuses them. Both affected public-surface snapshots are updated in the same commit that widens the surfaces. cargo test -p nomos-api-transport -p nomos-mcp -p nomos-contract-tests passes and the gate lint step is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api-transport/src/served_method.rs",
+          "crates/host/nomos-api-transport/src/nomos_api_service.rs",
+          "crates/host/nomos-api-transport/src/compare_parameters.rs",
+          "crates/host/nomos-api-transport/src/lib.rs",
+          "crates/host/nomos-mcp/src/served_tool.rs",
+          "tests/contract/tests/boundaries/transport_registry.rs",
+          "tests/contract/surface/nomos-api-transport.txt",
+          "tests/contract/surface/nomos-mcp.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api-transport",
+          "-p",
+          "nomos-mcp",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api-transport",
+          "-p",
+          "nomos-mcp",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": " 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.61s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api_transport-1f07b362156739f0.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-016b9c52c615e3be.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-b81a92c677776ac2.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-c21b7099914af97a.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d13fca8cc24f6294.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-1f3c254037cac286.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-808f47ba3cc50d2a.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c8bda3c66ee34d68.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-1f343b0d6ea667ce.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-b6a72872a0a0cd54.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-e1a2430dc6b23454.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-ed5c218b805487d8.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-239ab1b0332629d6.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-903795045a822666.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-3dd687c5483585b0.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-7910cbd5133dd8a9.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_mcp-af4d3c6d4eb1af7b.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_mcp-e7af92066d69a7f9.exe)\n     Running tests\\stdio.rs (target\\debug\\deps\\stdio-ec16ab7bfe65d125.exe)\n   Doc-tests nomos_api_transport\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_mcp\n",
+        "verified_at": 1789408472,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "102fb1fbb7e4e3e9678aa3709474ca4635dd6f3c"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P101-A-TRANSPORT-TEST-IS-NAMED-FOR-A-COUNT-THAT-IS-NO-LONGER-FOUR",
+      "title": "A transport test is named for a count that is no longer four",
+      "why": "Test_The_Served_Registry_Should_Be_The_Four_Admitted_Verbs in nomos-api-transport's own tests compares the served list against ServedMethod::REGISTRY's length rather than against a literal, which is why it kept passing when P101 added a fifth verb for gate compare. Its name and its doc comment did not: both still say four, and the doc says the registry is the four verbs. The assertion is right and the label is wrong, which is the worse way round -- a reader checking whether the registry is what it claims reads the name first, and a name stating a number the code deliberately does not depend on is the printed-vocabulary drift P97 spent a whole phase removing from help text and README tables. The file sits outside the territory the item that added the fifth verb reserved, which is why this is separate rather than folded in.",
+      "done_when": "The test's name and its doc comment say what the assertion actually checks -- that the served list is exactly the admitted registry, whatever its length -- rather than naming a count the assertion deliberately does not hardcode. No record cites the old name, checked rather than assumed, so no citation declaration is owed; if one turns out to, it gains the declaration the citation guard requires. cargo test -p nomos-api-transport -p nomos-contract-tests passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api-transport/src/nomos_api_service/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api-transport",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

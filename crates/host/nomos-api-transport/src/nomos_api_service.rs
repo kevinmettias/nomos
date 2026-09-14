@@ -1,6 +1,6 @@
 //! The four verbs this workspace serves, and the arguments each one reads.
 
-use crate::{CorrectionParameters, FindingParameters, GateParameters, ServedMethod};
+use crate::{CompareParameters, CorrectionParameters, FindingParameters, GateParameters, ServedMethod};
 use serde::Serialize;
 use xvpe_primitives::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use xvpe_remote_call::{RemoteCallOutcome, RemoteCallRefusal, RemoteCallStrategy};
@@ -81,6 +81,14 @@ fn Answered(method: ServedMethod, parameters: &str) -> RemoteCallOutcome
             Ok(parameters) => Serialized(&nomos_api::Handle_Gate_Explain(
                 &parameters.Root(),
                 &parameters.Query(),
+            )),
+            Err(refusal) => RemoteCallOutcome::Refused(refusal),
+        },
+        ServedMethod::GateCompare => match Parsed::<CompareParameters>(parameters)
+        {
+            Ok(parameters) => Serialized(&nomos_api::Handle_Gate_Compare(
+                &parameters.Baseline(),
+                &parameters.Candidate(),
             )),
             Err(refusal) => RemoteCallOutcome::Refused(refusal),
         },

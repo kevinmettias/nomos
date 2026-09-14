@@ -57,7 +57,13 @@ const PROJECTED_SURFACE: &str = "tests/contract/surface/nomos-api.txt";
 /// how this repository is developed is a decision, and there is nothing in the source to
 /// infer it from. Changing this list is changing what that record decided, which is what a
 /// failure below is meant to make somebody notice.
-const ADMITTED: [&str; 4] = ["Handle_Gate_Plan", "Handle_Gate_Run", "Handle_Gate_Explain", "Handle_Correction_Run"];
+const ADMITTED: [&str; 5] = [
+    "Handle_Gate_Plan",
+    "Handle_Gate_Run",
+    "Handle_Gate_Explain",
+    "Handle_Gate_Compare",
+    "Handle_Correction_Run",
+];
 
 /// The transport calls no handler its registry does not admit.
 ///

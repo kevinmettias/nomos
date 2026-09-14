@@ -29,8 +29,13 @@ impl ServedTool
     /// A fifth `ServedMethod` variant added to that registry without a matching entry here
     /// would otherwise vanish silently: nothing else compares this array's length or order
     /// against the registry it claims to project.
-    pub const REGISTRY: [Self; 4] =
-        [Self(ServedMethod::GatePlan), Self(ServedMethod::GateRun), Self(ServedMethod::GateExplain), Self(ServedMethod::Correction)];
+    pub const REGISTRY: [Self; 5] = [
+        Self(ServedMethod::GatePlan),
+        Self(ServedMethod::GateRun),
+        Self(ServedMethod::GateExplain),
+        Self(ServedMethod::GateCompare),
+        Self(ServedMethod::Correction),
+    ];
 
     /// This tool's canonical name -- `nomos_contracts::OperationName`'s own identity,
     /// projected without renaming. That type's own doc states the rule directly: "an MCP tool
@@ -73,6 +78,9 @@ impl ServedTool
             ServedMethod::GatePlan => "Reports what this workspace's rule registry holds, without walking or judging any tree.",
             ServedMethod::GateRun => "Walks and judges a tree, and reports the findings and disposition of a real gate run over it.",
             ServedMethod::GateExplain => "Explains one named finding from a prior run: what it means and whether it would keep a run from passing.",
+            ServedMethod::GateCompare => {
+                "Judges two trees, or one tree under two policies, and reports what changed: findings that are new, findings that are gone, and findings that moved between blocking and suppressed, baselined or calibrated."
+            }
             ServedMethod::Correction => {
                 "Walks a tree, stages a fix for the first real blocking correction claim it finds (a stale doc mirror or trailing whitespace), and, only if asked, commits it."
             }
@@ -117,6 +125,62 @@ impl ServedTool
                         "type": "array",
                         "items": { "type": "string" },
                         "description": "Which rules' findings count toward the disposition. Empty selects every registered rule.",
+                    },
+                },
+                "additionalProperties": false,
+            }),
+            ServedMethod::GateCompare => json!({
+                "type": "object",
+                "properties": {
+                    "baseline": {
+                        "type": "object",
+                        "properties": {
+                            "root": {
+                                "type": "string",
+                                "description": "The tree this side judges. Absent, this server's own working directory.",
+                            },
+                            "include": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "description": "Which files under root this side judges. Empty selects everything.",
+                            },
+                            "exclude": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "description": "Which files under root this side does not judge, applied after include.",
+                            },
+                            "rules": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "description": "Which rules' findings count toward this side's disposition. Empty selects every registered rule.",
+                            },
+                        },
+                        "additionalProperties": false,
+                    },
+                    "candidate": {
+                        "type": "object",
+                        "properties": {
+                            "root": {
+                                "type": "string",
+                                "description": "The tree this side judges. Absent, this server's own working directory.",
+                            },
+                            "include": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "description": "Which files under root this side judges. Empty selects everything.",
+                            },
+                            "exclude": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "description": "Which files under root this side does not judge, applied after include.",
+                            },
+                            "rules": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "description": "Which rules' findings count toward this side's disposition. Empty selects every registered rule.",
+                            },
+                        },
+                        "additionalProperties": false,
                     },
                 },
                 "additionalProperties": false,

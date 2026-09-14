@@ -70,12 +70,14 @@
 //! and `OD-HOST-006` share "fires against the transport, not against
 //! `nomos-api`", so what this registry admits is a commitment made by this crate.
 
+mod compare_parameters;
 mod correction_parameters;
 mod finding_parameters;
 mod gate_parameters;
 mod nomos_api_service;
 mod served_method;
 
+pub use compare_parameters::CompareParameters;
 pub use correction_parameters::CorrectionParameters;
 pub use finding_parameters::FindingParameters;
 pub use gate_parameters::GateParameters;
