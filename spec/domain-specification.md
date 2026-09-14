@@ -61,6 +61,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md@authored | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md | authored | 23 | 8 | sha256:33f282b8156d4f3dd172d5ee4c250a2cb2d4efb04987e2efcae89ba263371d43 |
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md | authored | 22 | 6 | sha256:c73b6568e987da09a2256a0e13c66b1d768911f443b0fa014c71ff319d11591f |
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md@authored | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md | authored | 27 | 7 | sha256:cae971023f2e38fc400fcb48c0f851cf958af99faf124d0caaba5d34226ee492 |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md@authored | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md | authored | 28 | 7 | sha256:97c5acd173aa0bbbb4f259069c31562327b5b73ea2530f000b7bc5c8ed789cec |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ea548df7de6d318f3946ffc3c153f837e4289c5b25045352897d0221c1c1d3f7 |
@@ -643,6 +644,13 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#16 | authored | 2 | Decision |
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#21 | authored | 2 | What this record does not do |
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#26 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#1 | authored | 1 | A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#2 | authored | 2 | Question |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#7 | authored | 2 | What Was Measured |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#13 | authored | 2 | Decision |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#18 | authored | 2 | What A Future Bundled Contract Must Satisfy |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#22 | authored | 2 | What Is Owed |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#25 | authored | 2 | What This Does Not Decide |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1 | authored | 1 | A completeness guard is only as complete as the universe it quantifies over |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#2 | authored | 2 | Question |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#5 | authored | 2 | The Shape, Which Is Not The One The Item Assumed |
@@ -14985,6 +14993,234 @@ returns. Every one of those is load-bearing here exactly as it already stands.
 Accepted. The two-direction check is a requirement; a declared guarantee names what exercises
 it or states that it cannot be exercised; and the naming is enforced the way a declared mirror
 already is. No code moves here.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#1
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer · hash: sha256:73ab3ef7410790fb3d5e24cd1e6b9d0ffa868f57332eb9751aae0552afbea466*
+
+# A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#2
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#3
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Question · hash: sha256:531675a7086eda8109534a7e3d16ed23c42ddeea775377eb8f251834d30415ec*
+
+`nomos-rules` names `nomos-connector-coderabbit` and `nomos-cap-requirement-trace`. Each of
+those crates carries a real provider beside its contract: the first reaches GitHub through
+`gh api`, the second reads arbitrary files across the tree.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#4
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Question · hash: sha256:7812f320426285963f92eaacde48b541ab5152f93f097dddb46bebd00db8b754*
+
+The dependency model forbids Rules from naming Provider. Both crates are classified Capability
+Contract, so the edge is permitted — but the classification is of the *crate*, and the crate
+contains a provider. An external review put the worry plainly: the zone label is doing work the
+physical dependency does not justify, and `nomos-rules` acquires a compile-time link to
+external-system machinery while the declared edge still reads as a prohibition.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#5
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Question · hash: sha256:d2c336c00d8a47cb35beff584db6da3944def00dae7e13481f438c27257e7600*
+
+Two neighbouring questions are already settled and neither is this one. `OD-CAPABILITY-015`
+settles which zone such a crate belongs to, on the criterion that it declares a capability
+contract — and `README.md` states in terms that the classification is not made because
+`nomos-rules` needs to reach it, which would make the edge vacuous by relabelling whatever a
+rule turns out to need. `OD-CAPABILITY-002` settles when a contract earns its own crate, and its
+criterion is *provider contention*: the moment a second provider exists, because the first can
+change the ceiling, the version or the schema its peer is bound by in a file the peer cannot
+open. A second *consumer* is not that, so the argument that `nomos-rules` reading a contract is
+itself the second party forcing a split misreads that record, and no split is ordered here.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#6
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Question · hash: sha256:932e0edd086766351aef65e1fa94d457c8fc381572ab6df949a7c23964e7ca0b*
+
+What is open is narrower: does bundling let a rule reach past a boundary that is supposed to
+stop it?
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#7
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#8
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What Was Measured · hash: sha256:15e255786e9b4e79a1151ec2bc4a13d300835c33e646c7b7c2856c70246be43f*
+
+Four facts, checked 2026-09-14 rather than reasoned from the shape of the manifests.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#9
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What Was Measured · hash: sha256:cb7c3309577c5caae1761736734e25673e0a8c07402152ed0d5c01d3f163fcac*
+
+**`nomos-rules` calls no provider-side symbol of either crate.** Every use is contract half:
+`Capability`, `CONTRACT_VERSION`, `Ceiling`, `Payload_Schema`, `Parse_Payload`,
+`Capability_Contract`, and the payload types. `Discover_Workspace` and `Materialize_Workspace`
+appear in `checks/requirement_trace.rs` only inside documentation prose describing who produces
+the fact, never in code.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#10
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What Was Measured · hash: sha256:043e77e6989a3ee44cc6e3018d2ad3bca6d151ec68e2dd1775d543c594120a60*
+
+**The rule cannot execute anything either provider does.** Both bundled crates reach the outside
+world through `nomos_platform`, which is ports — traits, no implementations. From `nomos-rules`
+the number of reachable platform *implementations* is zero: no `nomos-platform-std`, no composer.
+A rule holding a trait and no implementor of it cannot launch a subprocess, so `gh api` is not
+something a rule could run even if it tried to call the code linked beside it.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#11
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What Was Measured · hash: sha256:99e36e16789aeac5686f9c52c0b88849245791e754880e955a193ff4bdd8a5d0*
+
+**The edge that carries them is independently legal.** `Permits` grants `Rules` exactly
+`Protocol | Substrate | CapabilityContract`. `nomos-platform` is Substrate, so a rule may name it
+outright; it arrives here transitively and `nomos-rules` does not name it directly, but nothing
+about that arrival is a permission the zone lacked.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#12
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What Was Measured · hash: sha256:d053148dcbb37ad78e34212bd39afb2f4718243ee035d920be4f2905ea228470*
+
+**So nothing crossed that the model did not already allow.** The provider's object code is linked
+into the rlib. No capability it needs is reachable, and no symbol of it is called.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#13
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#14
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Decision · hash: sha256:45722eb65fdb729bbc989dd770e97a69db7c77a0d4fa0dd298c21fa23f88ba40*
+
+**Bundling a provider with its contract does not defeat the Rules boundary, and neither crate is
+split by this record.**
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#15
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Decision · hash: sha256:80efa32bee5958f84482a02912dcd0b90c6525bb0e4c59cdff28f822ade9ed7c*
+
+The reasoning turns on what the prohibition is for. `Rules` may not name `Provider` so that a
+rule cannot **obtain its own answer** — so that judgment consumes facts resolved through the
+registry, from whichever provider the composition chose, rather than calling one provider
+directly and hard-wiring the answer's origin into the judgment. That is a property about how a
+verdict is *reached*. It is not a property about which object code shares an rlib.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#16
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Decision · hash: sha256:02a43660ba16541bf2e780ac1d7bdc18d7347336dc2b5e7de13d6e1265f2f450*
+
+Measured against that purpose, the property holds. Every answer both rules consume arrives as a
+`Fact` resolved through a capability, and the provider code sitting in the same crate is
+unreachable to them in the only sense that matters: they neither call it nor could run it.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#17
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Decision · hash: sha256:ef25cb673b0fab7d6c5d696ecfca1a273871db72cd8f6251c8c7cf5ffa5ff131*
+
+**A zone classification remains a statement about what a crate declares, not about what its worst
+half could do.** `OD-CAPABILITY-015` is unweakened. The alternative — classifying by the most
+dangerous thing inside a crate — would make the Capability Contract zone unavailable to any
+contract whose single provider happened to live beside it, which is the arrangement
+`OD-CAPABILITY-002` licenses on purpose while a capability has one provider.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#18
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What A Future Bundled Contract Must Satisfy · hash: sha256:0b5d1b073388ff2b85ce39e76c8b115681d91492e32797ffb6cc7b9a6227435a*
+
+## What A Future Bundled Contract Must Satisfy
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#19
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What A Future Bundled Contract Must Satisfy · hash: sha256:f8c201fc2dfeef347dbb9eae934e554d0022ba517a062603750061b1fde61f93*
+
+So that this does not have to be re-derived, and so that the permission is bounded rather than
+general. A crate carrying both a capability contract and a provider may be named by `Rules` when
+all three hold:
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#20
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What A Future Bundled Contract Must Satisfy · hash: sha256:2b3a5d03beadc98d0d23e48711c148f19101f21652574c1c41c6b6be4654a1ae*
+
+1. **The rule consumes the contract half only** — capability identity, contract version, ceiling,
+   schema, payload types and payload parsing. It calls nothing that produces a fact.
+2. **The provider half cannot act from where the rule sits.** Whatever it needs to reach an
+   external system — a launcher, a filesystem, a clock — is a port with no implementation
+   reachable from `Rules`. A provider that could act without one is not admissible under this
+   record, and bundling it would put real capability inside the Rules zone rather than beside it.
+3. **Its presence is licensed by `OD-CAPABILITY-002`**, meaning the capability still has exactly
+   one provider. A second provider makes the contract contended, and contention is that record's
+   own trigger to extract the contract into its own crate — at which point this question stops
+   being asked, because the rule would name a contract crate with no provider in it.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#21
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What A Future Bundled Contract Must Satisfy · hash: sha256:3248b92c006d6b5fd047cbac483af0229b83ccef257e06a47155cc40d39aadee*
+
+Failing any of the three, the answer is to split the contract out, not to reclassify the crate.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#22
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What Is Owed · hash: sha256:8d0b2cac62846f6cfd270497f33e721c0ea1c6c2e716ce4628fc7abe40d4a456*
+
+## What Is Owed
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#23
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What Is Owed · hash: sha256:8034f4dd7c13ae512f68ea48ed02244c1972fa461746d05f9dcb9b868142c379*
+
+**The first clause is the load-bearing one and nothing enforces it.** A future edit to
+`checks/review.rs` could call `nomos_connector_coderabbit`'s fetching or translation functions
+directly, and the compiler would accept it: the crate is linked, and the symbols are public.
+Today's answer rests on a measurement, and a measurement is a fact about one afternoon.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#24
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What Is Owed · hash: sha256:f25ae99e7f87c716692c7f366a26a8b8b6a1f5cbe7236b56ddb28f99187d5351*
+
+What would hold it is an assertion that `nomos-rules` names only contract-half symbols of a
+bundled crate. That is checkable — the contract half is a nameable set — and it is not written
+here, because this record's territory is the adjudication and not the guard. It is the same
+shape of debt `OD-PLATFORM-004` carried and had paid one item later, and the comparison is
+deliberate: a clause that fails silently, in the committed state, is worth a guard rather than a
+convention.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#25
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What This Does Not Decide · hash: sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569*
+
+## What This Does Not Decide
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#26
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What This Does Not Decide · hash: sha256:8fecae78b8e75f08773f277e5d6c5138813b873465c4f7b7834e74e2171a1505*
+
+Whether either crate would be better split anyway, for reasons of taste or of future shape,
+rather than because a boundary demands it. Nothing here forbids splitting them; it decides only
+that the Rules edge does not compel it.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#27
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What This Does Not Decide · hash: sha256:d86f4ff43cd55ebfb618ecdea2e94ce44845e5d1ed0fd741431f0e587964231d*
+
+Nor does it reopen `ARC-CONNECTOR-001`. A connector's evidence class, its read-only posture and
+its fixture obligations are that record's, and are untouched.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#28
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What This Does Not Decide · hash: sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17*
+
+Checked 2026-09-14.
 
 ### docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1
 

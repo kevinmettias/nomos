@@ -27,6 +27,7 @@ graph LR
     arc_connector_001 -->|"relates-to"| d_137["D-137"]
     arc_connector_001 -->|"relates-to"| od_analysis_001["OD-ANALYSIS-001"]
     arc_connector_001 -->|"relates-to"| od_capability_015["OD-CAPABILITY-015"]
+    arc_connector_001 -->|"relates-to"| od_capability_017["OD-CAPABILITY-017"]
     arc_connector_001 -->|"relates-to"| od_connector_001["OD-CONNECTOR-001"]
     arc_connector_001 -->|"relates-to"| od_connector_002["OD-CONNECTOR-002"]
     arc_connector_001 -->|"relates-to"| od_connector_004["OD-CONNECTOR-004"]
@@ -351,6 +352,7 @@ graph LR
     od_capability_002 -->|"relates-to"| od_capability_007
     od_capability_002 -->|"relates-to"| od_capability_010["OD-CAPABILITY-010"]
     od_capability_002 -->|"relates-to"| od_capability_015
+    od_capability_002 -->|"relates-to"| od_capability_017
     od_capability_002 -->|"relates-to"| od_package_012
     od_capability_002 -->|"relates-to"| od_rules_001
     od_capability_002 -->|"relates-to"| od_rules_003
@@ -420,11 +422,16 @@ graph LR
     od_capability_014 -->|"relates-to"| od_capability_016["OD-CAPABILITY-016"]
     od_capability_015 -->|"relates-to"| arc_connector_001
     od_capability_015 -->|"relates-to"| od_capability_002
+    od_capability_015 -->|"relates-to"| od_capability_017
     od_capability_015 -->|"relates-to"| od_rules_020
     od_capability_016 -->|"relates-to"| od_capability_014
     od_capability_016 -->|"relates-to"| od_completeness_001
     od_capability_016 -->|"relates-to"| od_rules_001
     od_capability_016 -->|"relates-to"| od_rules_031
+    od_capability_017 -->|"relates-to"| arc_connector_001
+    od_capability_017 -->|"relates-to"| od_capability_002
+    od_capability_017 -->|"relates-to"| od_capability_015
+    od_capability_017 -->|"relates-to"| od_rules_020
     od_completeness_001 -->|"affected_by"| d_134
     od_completeness_001 -->|"affected_by"| od_completeness_002
     od_completeness_001 -->|"affected_by"| od_completeness_004
@@ -1467,6 +1474,7 @@ graph LR
     od_rules_020 -->|"affected_by"| od_rules_028
     od_rules_020 -->|"relates-to"| arc_ecosystem_001
     od_rules_020 -->|"relates-to"| od_capability_015
+    od_rules_020 -->|"relates-to"| od_capability_017
     od_rules_020 -->|"relates-to"| od_gate_026
     od_rules_020 -->|"relates-to"| od_host_010
     od_rules_020 -->|"relates-to"| od_project_004
@@ -1756,6 +1764,7 @@ graph LR
     od_capability_014
     od_capability_015
     od_capability_016
+    od_capability_017
     od_completeness_001
     od_completeness_002
     od_completeness_004
