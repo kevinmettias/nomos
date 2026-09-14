@@ -67,6 +67,7 @@ profile: domain-specification
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:243cd01d0c3a76110de1cec5697fa03f185768f31467662081557f8ccca82386 |
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:a4d8c71e62610f704811e42757155af8725a195a9b7f6d47a5af13197be33516 |
 | docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md@authored | docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md | authored | 16 | 7 | sha256:e562395ece2dd83cfd803a27caa6ffb22c98ec857be770f9aec0219368107e2f |
+| docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md@authored | docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md | authored | 33 | 11 | sha256:87af77a8b11ac7d5ac8cc907f6ff2cbae96084a66c4de46ea65d00fbb8467c90 |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:15b5d49cfd110c5912afc3312550bed3193d467d2b5f619a78b9b8d9ed1efe01 |
 | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md | authored | 15 | 6 | sha256:ab9189d05ec02e249414c7a358c58dc965d46acbb87964ef26bd2fea4379fe87 |
@@ -690,6 +691,17 @@ profile: domain-specification
 | docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#11 | authored | 2 | Where it would live |
 | docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#13 | authored | 2 | Why comparing providers is not buildable yet regardless |
 | docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#15 | authored | 2 | Decision |
+| docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#1 | authored | 1 | A review assertion about the analyzed snapshot must resolve against it, and a historical one need not |
+| docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#2 | authored | 2 | Question |
+| docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#5 | authored | 2 | Why the obvious invariant is already refuted |
+| docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#8 | authored | 2 | The invariant |
+| docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#10 | authored | 2 | Three categories an assertion falls into |
+| docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#14 | authored | 2 | What is mechanically resolvable, and what is not |
+| docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#17 | authored | 2 | Severity, inherited rather than invented |
+| docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#20 | authored | 2 | Resolution does not promote |
+| docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#22 | authored | 2 | The precondition this invariant does not have |
+| docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#26 | authored | 2 | What this record does not do |
+| docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#32 | authored | 2 | Status |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1 | authored | 1 | Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#2 | authored | 2 | Question |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#5 | authored | 2 | What Was Measured |
@@ -16478,6 +16490,274 @@ belongs beside `nomos-corrections`' existing staged-lifecycle types, keyed on an
 that already exists (`Finding::subject` or `ReviewFindingId`, a later choice); it must not be
 folded into `EvidenceClass` or `Finding` itself; and a provider-comparison mechanism built on
 top of it is blocked on a second real review provider existing, not on this decision.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#1
+
+*revision: authored · kind: heading · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not · hash: sha256:40ad627ab62a56d6ce188c5734b4aba3b0cd08756181955b35a377fba4e2f87c*
+
+# A review assertion about the analyzed snapshot must resolve against it, and a historical one need not
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#2
+
+*revision: authored · kind: heading · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#3
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Question · hash: sha256:ca2715f2ea52205893f06c58929018be9c67b74e7ce213e234cd295ec5490c34*
+
+An external architectural review of this workspace named five analysis crates that do not
+exist -- a dataflow, complexity, concurrency, memory and security crate under an analysis
+directory -- and described a connector type and its four fields that are not the type or the
+fields in the tree. The only crate of that name is `crates/substrate/nomos-analysis`, which
+is the incremental fact store rather than a semantic analysis pipeline, and the rule modules
+`concurrency_text.rs` and `security_text.rs` are the nearest real things to two of the
+invented names.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#4
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Question · hash: sha256:92d9c9ba1874b887f7cf6c45e02a3c93a4351d2c4c0389a1291ae8a51c45d42b*
+
+What makes the case worth a record is that the review's structural conclusions were largely
+sound. The failure was not bad judgment; it was unresolved concrete reference, and the two
+are separable. Eight governing records already name an external review as the origin of the
+question they answer or as the input that caught the defect they correct -- `OD-RULES-009`
+is titled for one, and `OD-GATE-023` records eight rounds of the same one. External review
+is a recurring load-bearing input to this repository's decisions, not a hypothetical second
+consumer. Nothing states what claim Nomos may make about an assertion that arrives that way.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#5
+
+*revision: authored · kind: heading · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Why the obvious invariant is already refuted · hash: sha256:8c7b19bce637b9a8f1d03572614d132adeaa841950c12d345de0f1d94ad774dd*
+
+## Why the obvious invariant is already refuted
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#6
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Why the obvious invariant is already refuted · hash: sha256:373d36aa40a019caeddd0cc5c5c1fdfad1f07ece6daa50b56e2efe3356702e5c*
+
+The invariant this case first suggests -- every concrete repository entity a review cites
+must resolve -- is falsified by this repository's own census before it could be enforced.
+`OD-SPEC-017` measured that 80 of 253 paths cited inside governing records do not resolve,
+found every measured cause to be a legitimate change to the tree, and decided that holding
+them live would make every module reorganization a record-editing exercise.
+`tests/contract/tests/record_citation.rs` implements that decision by reading no path at all.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#7
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Why the obvious invariant is already refuted · hash: sha256:8748fa98719ceaf487590a2af5781063dece15ddba73164dbddf4c3f79b45327*
+
+So the distinguishing property is not citation. It is tense. A claim presented as true of
+the analyzed snapshot is checkable against that snapshot; a report of what was true earlier
+is not, and its failure to resolve is not a defect. `OD-SPEC-017` already had to draw this
+line grammatically for its own purpose -- present tense claims coverage, past tense reports
+history -- and this record scopes on the same axis rather than introducing a second one.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#8
+
+*revision: authored · kind: heading · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / The invariant · hash: sha256:7c0d59603b37f6d0cf1391322eec97467e46b833d4cfda2804622f2c5b2f0cdd*
+
+## The invariant
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#9
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / The invariant · hash: sha256:e67abea06b305c1643a1c407731afb4c5b00748fa616f3697d1056a34a75ce24*
+
+**An assertion presented as true of the analyzed snapshot must resolve against that
+snapshot.** An assertion whose provenance scopes it to an earlier revision, and an assertion
+explicitly stated as historical, are exempt and are not defects.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#10
+
+*revision: authored · kind: heading · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Three categories an assertion falls into · hash: sha256:04470cdd7311a23f4e87c7aeae962604ec4f59d92e7ab617e7a6b6237011291e*
+
+## Three categories an assertion falls into
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#11
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Three categories an assertion falls into · hash: sha256:a02183dbd08f4f57954fcf934726c088f7ff5289394298b407f12e7e25dfbe4e*
+
+**Resolvable.** A canonical fact or relation capable of establishing the assertion exists,
+and the assertion is presented as true of the analyzed snapshot. It is checkable, and this
+record's invariant applies to it.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#12
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Three categories an assertion falls into · hash: sha256:d7dc61dcf1d210b4cc5755f1c1be329f05ab7efd18b46c0818a7f45cefd61dda*
+
+**Historically scoped.** Provenance identifies an earlier revision or snapshot. Current
+resolution is not required and its absence is not a defect. This is `OD-SPEC-017`'s case,
+reached from the other side.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#13
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Three categories an assertion falls into · hash: sha256:b3bd84f745f355689b8f22183869f784183698d3a2d25d15d7fe658424c3c8f4*
+
+**Judgment.** Semantic interpretation not reducible to an existing canonical fact.
+Provenance and evidence class are retained; mechanical verification is not claimed for it.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#14
+
+*revision: authored · kind: heading · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / What is mechanically resolvable, and what is not · hash: sha256:281fd09f4937be93f0b264362d9d41a1008fa2e9b87c657c576663c58c77181b*
+
+## What is mechanically resolvable, and what is not
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#15
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / What is mechanically resolvable, and what is not · hash: sha256:7a57d8bb46b1e9662689f92d78d2dcf6630a4cc7aa37b6bfc5302b38809d4875*
+
+Resolvable against a snapshot today, each by a mechanism that already exists: a workspace
+member, a path, a symbol on a crate's published surface (`tests/contract/surface/`), a
+dependency edge and a declared band (`nomos.cap.dependency.edges`), a registered record, a
+rule identifier (`nomos_rules::DESCRIPTORS`), a capability identifier, a test name
+(`tests/contract/tests/record_citation.rs`), and a cited contract at the version its record
+declares (`tests/contract/tests/rule_contract_citation.rs`).
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#16
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / What is mechanically resolvable, and what is not · hash: sha256:7e46a48ea1a8a15eb2de2bab303cf27797b9b454e0c740d4f134640f019f2bbb*
+
+Not resolvable, and not to be claimed as such: an arbitrary natural-language proposition
+about behaviour -- that a function implements intended retry semantics, say -- unless a
+typed fact or contract already expresses that proposition. `OD-HOST-010` met the same wall
+from inside: reconstructing which fact backed one judgment is not something a caller outside
+that rule can do without duplicating the rule's own private requirement. An assertion of
+this kind is a judgment assertion and stays one.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#17
+
+*revision: authored · kind: heading · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Severity, inherited rather than invented · hash: sha256:853e8ed65e37fd1995abd861393496a9caa4a9f357288cd33f19fe3377a3f444*
+
+## Severity, inherited rather than invented
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#18
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Severity, inherited rather than invented · hash: sha256:dc74ae0536a715877977ac3040f5adccb48479d35da850649146921ac159f9b8*
+
+`D-134` already ranks this asymmetry and states it directly: a false claim of coverage
+blocks, an admitted gap does not. A universe naming a check that does not exist is
+`GateCategory::Blocking`; a universe naming nothing is `Advisory`.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#19
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Severity, inherited rather than invented · hash: sha256:13ec1c17161a77c36485c4fdce9b9347cd7df3fa72e60efa6a9e09616b0a60a9*
+
+The same ranking applies here. A present-tense assertion whose concrete reference does not
+resolve is the phantom, and outranks an honest inability to establish one. An inability to
+establish is not a weaker finding but a different thing entirely: it is an `Applicability`
+state -- `MissingCapability`, `ProviderUnavailable`, `AnalysisFailed`,
+`PartiallySupported` -- which that type already carries.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#20
+
+*revision: authored · kind: heading · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Resolution does not promote · hash: sha256:b669562c4741fd4168df23e687bb7e2bac92b2263b8329fda5c6e7ff1db74075*
+
+## Resolution does not promote
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#21
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Resolution does not promote · hash: sha256:ad7aec11c605d7d73ca8b332f0f71235c17bd4d6770530ba87b61cdba114ab57*
+
+`ARC-CONNECTOR-001` invariant 1 decided that a bears-on relation is independently
+evidence-bearing, and that its `EvidenceClass` is never inherited from the classes of what it
+joins. The same non-inheritance runs in the other direction, and stating it is this record's
+own addition: **mechanically resolving an assertion's concrete references establishes only
+that those references resolve.** It does not promote the assertion above the evidence class
+its origin permits. An external review's assertion enters as `Observed` under invariant 3,
+and a resolved reference does not make it `Verified`. Without this, a validation step would
+read as a verification step, which is the failure `EvidenceClass::AgentJudged` already exists
+to prevent one level down.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#22
+
+*revision: authored · kind: heading · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / The precondition this invariant does not have · hash: sha256:a2189f8b7b272a70b82fbd02f844ee28cb141e294e76d52e4ed1a39873240ffa*
+
+## The precondition this invariant does not have
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#23
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / The precondition this invariant does not have · hash: sha256:7b7c908071011b4041c2fe04070ee581d3ad1f4ec04a25cbb171c55a5d9104b5*
+
+`ARC-CONNECTOR-001` invariant 1 already decides the shape: an external artifact and the Nomos
+subject it concerns are distinct entities, and what the artifact bears on is a relation from
+one identity to the other, never folded into either endpoint. Its own "what it is waiting on"
+leaves the concrete representation to whichever real connector needs one first.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#24
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / The precondition this invariant does not have · hash: sha256:54fb4293727c1ebb0cac001411de42b8d9ac164435c0bdc4f6ac62859a4c0c98*
+
+Nothing has needed one yet. `nomos-connector-coderabbit` files every fact under the
+whole-workspace placeholder subject, and
+`crates/connectors/nomos-connector-coderabbit/src/provider.rs` states why in its own words: a
+connector's fact about a finding has no Nomos subject until a bears-on relation names a
+narrower one. A code finding at least carries a path in its payload. An architectural
+assertion -- that one product owns a responsibility rather than another, the subject
+`ARC-ECOSYSTEM-001` governs -- has no file subject at all.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#25
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / The precondition this invariant does not have · hash: sha256:99f327f6ab066b4bf9d66c13035858554eb0241090f57e7363d2215421ba102f*
+
+So this invariant is stated and not yet enforceable, and the gap is exactly one relation
+wide. This record does not decide that relation's representation, for the same reason
+`ARC-CONNECTOR-001` did not.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#26
+
+*revision: authored · kind: heading · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / What this record does not do · hash: sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4*
+
+## What this record does not do
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#27
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / What this record does not do · hash: sha256:c14656ae0096122e56eef5e3d191db607ac63627bbb409ef5689108dffbf807d*
+
+No code accompanies it. It defines no type, no enum, no rule and no capability, and it does
+not claim any part of the invariant is mechanically enforced today.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#28
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / What this record does not do · hash: sha256:b1c13faafd0e2aca11f2e4c31dc8d60ea11ab9d44656012f11dd926d2f242ba8*
+
+It does not amend `ARC-CONNECTOR-001`, `OD-SPEC-017` or `D-134`. Each already says what this
+record cites it for; this record adds the snapshot scoping, the three categories, the
+non-promotion statement, and the enumeration of what is resolvable.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#29
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / What this record does not do · hash: sha256:df865e76a842161d025b2bf81ab60bffc537ab43e79aa0cc463f27fb25166a48*
+
+It does not decide the bears-on relation, the assertion-extraction mechanism, or how a review
+artifact is admitted.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#30
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / What this record does not do · hash: sha256:824678b57e43420c1319093b919c85043997274c150aeb28e154bb2861b28761*
+
+It does not settle `OD-CONNECTOR-004`'s open question. A finding's disposition and an
+assertion's groundedness are different properties, and a provider comparison remains blocked
+on a second real review provider.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#31
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / What this record does not do · hash: sha256:1fd1cc93e7c2459de3d8a8b822ef1ee1f9780ed4a84832bd473fba99c7f48d06*
+
+It does not bundle the historical-regression rule, runtime fact production, or
+requirement-to-rule keying. Each is a separate consequence with its own cause.
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#32
+
+*revision: authored · kind: heading · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#33
+
+*revision: authored · kind: prose · heading: A review assertion about the analyzed snapshot must resolve against it, and a historical one need not / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
 
 ### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1
 

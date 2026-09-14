@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:42474d2a7d489430204240f07cb969be27bcf3724cb03811a1f77a3effb259a5",
-  "inputs_digest": "sha256:5dd7511f10955cc57c0808a34bb3e333c72614b1abf163f5fb1aa0b3d4a681d8",
+  "content_digest": "sha256:a0c11d8c53a09aa1124ce28af4798037709cc30356340b7e1ac246c7aeeaacb1",
+  "inputs_digest": "sha256:d99748af079f38cb9bf695d98adaebd6a6837bd1d3d78a981a91814a917692b6",
   "sections": [
     [
       "Relations",
-      1694
+      1702
     ],
     [
       "Decisions",
-      231
+      232
     ]
   ],
   "inputs": [
@@ -150,6 +150,11 @@
       "content": "relations",
       "identity": "ARC-CONNECTOR-001 relates-to OD-CONNECTOR-004",
       "hash": "sha256:d8d84c93649cebe20af8423b3703c3c121adfab4642b4df0163d5c26c9f6b2d9"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONNECTOR-001 relates-to OD-CONNECTOR-005",
+      "hash": "sha256:f883db7b7936255d0b3dde42a7b3485dd1930203b4efeb86e86c278afa585829"
     },
     {
       "content": "relations",
@@ -965,6 +970,11 @@
       "content": "relations",
       "identity": "D-134 relates-to ARC-SPECDB-001",
       "hash": "sha256:47193a3e69e187af34856e18c9265162e2c49a964209f6b477280995bf94d86d"
+    },
+    {
+      "content": "relations",
+      "identity": "D-134 relates-to OD-CONNECTOR-005",
+      "hash": "sha256:5e863853d0a2b99fdbf039595b4eec4663cf992989a667950459b740c9cba207"
     },
     {
       "content": "relations",
@@ -2353,8 +2363,33 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CONNECTOR-004 relates-to OD-CONNECTOR-005",
+      "hash": "sha256:8038d1bacdd8cf5838b418614e5a50abd49a520a2b3570ddefe6cf102781eade"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CONNECTOR-004 relates-to OD-EXECUTOR-006",
       "hash": "sha256:644667e1517cb83782ab139f940a7c9a0bcbf83e226a05cdd3d8759811de2da1"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONNECTOR-005 relates-to ARC-CONNECTOR-001",
+      "hash": "sha256:50ab1399b67674cd1ac4ebfe9591105bda6deb5e927ad7dada53b73abbf827ef"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONNECTOR-005 relates-to D-134",
+      "hash": "sha256:f4c7f117e4fd6a266efdcb9e30f43e8edb5f3de42d51abbed0472df57e08e19e"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONNECTOR-005 relates-to OD-CONNECTOR-004",
+      "hash": "sha256:023b009aace1283537f987180f98133bec9653fa65b209542ccf9aadd05701b8"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONNECTOR-005 relates-to OD-SPEC-017",
+      "hash": "sha256:2037b2406c5b8392ea3b81a3607a9d29b5d3630838acfe774693fff5f2d18193"
     },
     {
       "content": "relations",
@@ -8013,6 +8048,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-SPEC-017 relates-to OD-CONNECTOR-005",
+      "hash": "sha256:1afcfa8e5c94536d471a0d04ca277e7ed488eaa73c87dd3532f744e5f2ab14a4"
+    },
+    {
+      "content": "relations",
       "identity": "OD-STORE-001 affects D-129",
       "hash": "sha256:abfbedf117d375985acfa803edb19041c53a587c3ca79e399314250e2db7c3d3"
     },
@@ -8730,6 +8770,11 @@
       "content": "nodes",
       "identity": "OD-CONNECTOR-004",
       "hash": "sha256:e73e0648aacef802c6444aee29e83e15a85f82f32d1b3f9acc0a5c79e0e593c9"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-CONNECTOR-005",
+      "hash": "sha256:1311b83464a6717f6365890d5b9fafddc20eb6a03a54cac2dd7f99b321864246"
     },
     {
       "content": "nodes",

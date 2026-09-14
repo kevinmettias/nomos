@@ -30,6 +30,7 @@ graph LR
     arc_connector_001 -->|"relates-to"| od_connector_001["OD-CONNECTOR-001"]
     arc_connector_001 -->|"relates-to"| od_connector_002["OD-CONNECTOR-002"]
     arc_connector_001 -->|"relates-to"| od_connector_004["OD-CONNECTOR-004"]
+    arc_connector_001 -->|"relates-to"| od_connector_005["OD-CONNECTOR-005"]
     arc_connector_001 -->|"relates-to"| od_executor_001["OD-EXECUTOR-001"]
     arc_connector_001 -->|"relates-to"| od_executor_002["OD-EXECUTOR-002"]
     arc_connector_001 -->|"relates-to"| od_executor_006["OD-EXECUTOR-006"]
@@ -193,6 +194,7 @@ graph LR
     d_134 -->|"affected_by"| od_rules_001
     d_134 -->|"affects"| od_completeness_001["OD-COMPLETENESS-001"]
     d_134 -->|"relates-to"| arc_specdb_001
+    d_134 -->|"relates-to"| od_connector_005
     d_134 -->|"relates-to"| od_gate_001
     d_134 -->|"relates-to"| od_gate_004
     d_134 -->|"relates-to"| od_package_001
@@ -470,7 +472,12 @@ graph LR
     od_connector_002 -->|"relates-to"| od_gate_001
     od_connector_004 -->|"relates-to"| arc_connector_001
     od_connector_004 -->|"relates-to"| od_connector_002
+    od_connector_004 -->|"relates-to"| od_connector_005
     od_connector_004 -->|"relates-to"| od_executor_006
+    od_connector_005 -->|"relates-to"| arc_connector_001
+    od_connector_005 -->|"relates-to"| d_134
+    od_connector_005 -->|"relates-to"| od_connector_004
+    od_connector_005 -->|"relates-to"| od_spec_017
     od_contracts_001 -->|"relates-to"| arc_ecosystem_001
     od_contracts_001 -->|"relates-to"| od_agent_001
     od_contracts_001 -->|"relates-to"| od_analysis_004
@@ -1602,6 +1609,7 @@ graph LR
     od_spec_017 -->|"relates-to"| d_134
     od_spec_017 -->|"relates-to"| od_agent_001
     od_spec_017 -->|"relates-to"| od_completeness_002
+    od_spec_017 -->|"relates-to"| od_connector_005
     od_store_001 -->|"affects"| d_129
     od_store_001 -->|"relates-to"| od_capability_002
     od_store_001 -->|"relates-to"| od_capability_003
@@ -1748,6 +1756,7 @@ graph LR
     od_connector_001
     od_connector_002
     od_connector_004
+    od_connector_005
     od_contracts_001
     od_contracts_002
     od_contracts_003

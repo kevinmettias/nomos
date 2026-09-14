@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:a07616358b1e3043fe1fae62619733bb8009f9ffb86045a2371e8f9cc8856e28",
-  "inputs_digest": "sha256:e7c7ee83b42bdc70dee6b8b9bad69b3f78048af71e8bd27c4c38fe6290f17e21",
+  "content_digest": "sha256:46646be1b933187e79d4e4fcf1240ddabdd6bdf187059da0dfce5675c683b265",
+  "inputs_digest": "sha256:45dafaa5a7fb0b62e5aad935af76a87edbeb2e6825ee47d0a67b923207ac349e",
   "sections": [
     [
       "Documents",
-      239
+      240
     ],
     [
       "Sections",
-      1972
+      1983
     ],
     [
       "Source blocks",
-      6863
+      6896
     ]
   ],
   "inputs": [
@@ -304,6 +304,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md@authored",
       "hash": "sha256:e562395ece2dd83cfd803a27caa6ffb22c98ec857be770f9aec0219368107e2f"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md@authored",
+      "hash": "sha256:87af77a8b11ac7d5ac8cc907f6ff2cbae96084a66c4de46ea65d00fbb8467c90"
     },
     {
       "content": "documents",
@@ -3394,6 +3399,61 @@
       "content": "headings",
       "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#15",
       "hash": "sha256:7ad3457087f6c2f2cebd39f52ebd229b982dc93c358759f66a547d719bb32798"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#1",
+      "hash": "sha256:9a1e464642924e5311b4ba27cf8fb35684afc16b42ac892fe6d9df6acea469fa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#2",
+      "hash": "sha256:b2db43a27408e5079005472de43931f5d0dbfb9da3a4330bdace593995efa115"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#5",
+      "hash": "sha256:29e66c4e2a249260f6a60c1b424dfd1705aedd5408b4b0096196f023b65aef69"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#8",
+      "hash": "sha256:bd60bfbf14017841a9a51f3afed5d3ef4e23c3634267d7044d552fd3be911294"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#10",
+      "hash": "sha256:bf287223c1bfd7eb2d50c234be189ce72e5303c5935ae2bef81ceb8720bbc1aa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#14",
+      "hash": "sha256:f89aaf7c7542ff7bc20bbb0e301d60a6d7318045503d0f891fbf9d4f841562e0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#17",
+      "hash": "sha256:f058da7c8e5c35a7be69725c85f532f44f9f23489cd1d6a86a09e694b0a8f23d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#20",
+      "hash": "sha256:3e6c8bc116fec2b1fc376a5d035ac0307e51be870f749bf75a94e561e1954ed4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#22",
+      "hash": "sha256:f75a114c8cc917d8e1e512f7624591f034466e4f0d26e5b1c9b8c96f7055b430"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#26",
+      "hash": "sha256:6e001ae1855972b7a480aec21bf85a672029781226431f57abdc0edca86782e1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#32",
+      "hash": "sha256:a34e110a21a5b1a6552a709e53a0d517272ffcb753de7d1dd166ea8acd02fd3e"
     },
     {
       "content": "headings",
@@ -18639,6 +18699,171 @@
       "content": "blocks",
       "identity": "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#16",
       "hash": "sha256:2124030cefceaf26c00c55a0380c9ed959391bca4abee2b5f6aa0bcad829f8dd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#1",
+      "hash": "sha256:40ad627ab62a56d6ce188c5734b4aba3b0cd08756181955b35a377fba4e2f87c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#3",
+      "hash": "sha256:ca2715f2ea52205893f06c58929018be9c67b74e7ce213e234cd295ec5490c34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#4",
+      "hash": "sha256:92d9c9ba1874b887f7cf6c45e02a3c93a4351d2c4c0389a1291ae8a51c45d42b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#5",
+      "hash": "sha256:8c7b19bce637b9a8f1d03572614d132adeaa841950c12d345de0f1d94ad774dd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#6",
+      "hash": "sha256:373d36aa40a019caeddd0cc5c5c1fdfad1f07ece6daa50b56e2efe3356702e5c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#7",
+      "hash": "sha256:8748fa98719ceaf487590a2af5781063dece15ddba73164dbddf4c3f79b45327"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#8",
+      "hash": "sha256:7c0d59603b37f6d0cf1391322eec97467e46b833d4cfda2804622f2c5b2f0cdd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#9",
+      "hash": "sha256:e67abea06b305c1643a1c407731afb4c5b00748fa616f3697d1056a34a75ce24"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#10",
+      "hash": "sha256:04470cdd7311a23f4e87c7aeae962604ec4f59d92e7ab617e7a6b6237011291e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#11",
+      "hash": "sha256:a02183dbd08f4f57954fcf934726c088f7ff5289394298b407f12e7e25dfbe4e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#12",
+      "hash": "sha256:d7dc61dcf1d210b4cc5755f1c1be329f05ab7efd18b46c0818a7f45cefd61dda"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#13",
+      "hash": "sha256:b3bd84f745f355689b8f22183869f784183698d3a2d25d15d7fe658424c3c8f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#14",
+      "hash": "sha256:281fd09f4937be93f0b264362d9d41a1008fa2e9b87c657c576663c58c77181b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#15",
+      "hash": "sha256:7a57d8bb46b1e9662689f92d78d2dcf6630a4cc7aa37b6bfc5302b38809d4875"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#16",
+      "hash": "sha256:7e46a48ea1a8a15eb2de2bab303cf27797b9b454e0c740d4f134640f019f2bbb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#17",
+      "hash": "sha256:853e8ed65e37fd1995abd861393496a9caa4a9f357288cd33f19fe3377a3f444"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#18",
+      "hash": "sha256:dc74ae0536a715877977ac3040f5adccb48479d35da850649146921ac159f9b8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#19",
+      "hash": "sha256:13ec1c17161a77c36485c4fdce9b9347cd7df3fa72e60efa6a9e09616b0a60a9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#20",
+      "hash": "sha256:b669562c4741fd4168df23e687bb7e2bac92b2263b8329fda5c6e7ff1db74075"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#21",
+      "hash": "sha256:ad7aec11c605d7d73ca8b332f0f71235c17bd4d6770530ba87b61cdba114ab57"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#22",
+      "hash": "sha256:a2189f8b7b272a70b82fbd02f844ee28cb141e294e76d52e4ed1a39873240ffa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#23",
+      "hash": "sha256:7b7c908071011b4041c2fe04070ee581d3ad1f4ec04a25cbb171c55a5d9104b5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#24",
+      "hash": "sha256:54fb4293727c1ebb0cac001411de42b8d9ac164435c0bdc4f6ac62859a4c0c98"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#25",
+      "hash": "sha256:99f327f6ab066b4bf9d66c13035858554eb0241090f57e7363d2215421ba102f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#26",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#27",
+      "hash": "sha256:c14656ae0096122e56eef5e3d191db607ac63627bbb409ef5689108dffbf807d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#28",
+      "hash": "sha256:b1c13faafd0e2aca11f2e4c31dc8d60ea11ab9d44656012f11dd926d2f242ba8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#29",
+      "hash": "sha256:df865e76a842161d025b2bf81ab60bffc537ab43e79aa0cc463f27fb25166a48"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#30",
+      "hash": "sha256:824678b57e43420c1319093b919c85043997274c150aeb28e154bb2861b28761"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#31",
+      "hash": "sha256:1fd1cc93e7c2459de3d8a8b822ef1ee1f9780ed4a84832bd473fba99c7f48d06"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#32",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#33",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
     },
     {
       "content": "blocks",
