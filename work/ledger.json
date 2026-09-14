@@ -70056,6 +70056,38 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P98-NOTHING-HOLDS-A-RULE-TO-THE-CONTRACT-HALF-OF-A-BUNDLED-CRATE",
+      "title": "Nothing holds a rule to the contract half of a bundled crate",
+      "why": "OD-CAPABILITY-017 decided that bundling a provider with its contract does not defeat the Rules boundary, and the first of its three clauses is the load-bearing one: the rule consumes the contract half only. That clause rests on a measurement taken 2026-09-14 -- nomos-rules calls no provider-side symbol of nomos-connector-coderabbit or nomos-cap-requirement-trace, every use being capability, contract version, ceiling, schema and payload parsing. A measurement is a fact about one afternoon. Nothing prevents a later edit to checks/review.rs or checks/requirement_trace.rs from calling the fetching or translation functions directly: the crates are linked and the symbols are public, so the compiler would accept it and no test would notice. That failure is silent and lands in the committed state, which is the shape this repository already decided is worth a guard rather than a convention.",
+      "done_when": "A contract test resolves what nomos-rules names from each bundled capability-contract crate and refuses any symbol outside that crate's contract half, so a rule that starts calling a provider directly fails rather than compiling. The contract half is defined by something the crate itself states rather than by a list retyped in the test, or if it must be a list, the list is checked in both directions so it cannot go stale in either. The guard is proven by feeding it a call it must reject rather than by passing on a tree that already satisfies it. cargo test -p nomos-contract-tests passes and the gate lint step is clean.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/boundaries/bundled_contract_half.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
