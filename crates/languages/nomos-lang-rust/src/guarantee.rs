@@ -4,6 +4,16 @@
 //! than [`Capability_Contract`]'s ceiling permits — a provider does not get to grade its
 //! own work. Upward, `tests/guarantee.rs` asserts one property per axis against what the
 //! provider actually emits, so the declaration is not merely permitted but true.
+//!
+//! That pairing used to be a habit two crates had written down in their own module docs and
+//! no record carried. `OD-CAPABILITY-016` made it a requirement, on the measurement that two
+//! of eleven guarantee-declaring crates held it and one of the two *stating* it did not: a
+//! provider clears a rule's requirement floor on `Assurance::Sound` alone, and the downward
+//! direction establishes only that the claim is permitted, never that it is true. What that
+//! record requires is what this file already does — name the exerciser at the declaring site
+//! — or, where an axis cannot be exercised, say so there rather than leaving it silent.
+//! `tests/guarantee.rs` is this crate's name for the first half; it is the exemplar the
+//! record measured the other ten against.
 
 use nomos_cap_syntax::{Capability, CONTRACT_VERSION};
 use nomos_capability::ProviderOffer;

@@ -40,8 +40,21 @@ pub const LANGUAGE: &str = "rust";
 /// which is the definition of reading lines instead of parsing them.
 ///
 /// [`Assurance::Unsound`] for soundness, not `Unknown`. `Unknown` means nobody has
-/// established it either way; this is established, and it is false. `crate::Scan`'s own
-/// tests enumerate the cases where it reports a declaration that is not there.
+/// established it either way; this is established, and it is false.
+///
+/// `Test_The_Declared_Unsoundness_Should_Be_Demonstrable`, in `crate::scanned_item`'s own
+/// test module, is what establishes it — named here rather than gestured at, so that
+/// `OD-CAPABILITY-016`'s resolver can find it and fail if it ever resolves to nothing. It
+/// exhibits four real inputs: a declaration inside a block comment and one behind
+/// `#[cfg(never)]` are both reported though neither is there, which is the unsoundness; an
+/// item nested on one line and a declaration split across two lines are missed or
+/// mis-visibilitied, which is the incompleteness the next paragraph declares. One test
+/// carries both axes because the same line-oriented reading causes both.
+///
+/// The other two axes have no exerciser and this says so rather than leaving it silent.
+/// [`FactVariant::Approximate`] is exercised only as a value — what it does and does not
+/// satisfy as a requirement — never against emitted output; and nothing demonstrates that a
+/// reading carries nothing across file boundaries, which is what `File` granularity claims.
 ///
 /// Completeness stays [`Assurance::Unknown`]: it misses declarations written across two
 /// lines and every item nested on one, and nobody has bounded how many that is.

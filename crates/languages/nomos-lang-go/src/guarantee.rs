@@ -1,9 +1,33 @@
-//! What this provider promises, stated as a value and checked in two directions.
+//! What this provider promises, stated as a value — checked downward, and owed upward.
 //!
 //! Downward, [`nomos_capability::Registry`] refuses [`Provider_Offer`] if it claims more
-//! than the capability's ceiling permits. Upward, this crate's own tests assert what it
-//! actually emits against the claim — see `nomos-lang-rust`'s own `guarantee.rs` for why a
-//! declaration nobody exercises is a comment rather than a fact.
+//! than the capability's ceiling permits. `Test_Claiming_Resolution_Should_Be_Refused`
+//! below exercises that directly, offering a fabricated offer claiming
+//! `FactVariant::SemanticallyResolved` and asserting the registry turns it down.
+//!
+//! # The upward half is owed, and this doc used to say it was held
+//!
+//! It said "Upward, this crate's own tests assert what it actually emits against the claim".
+//! They do not, and `OD-CAPABILITY-016` measured it: of eleven guarantee-declaring crates,
+//! two hold that convention, and this crate — one of the two that *stated* it — is not among
+//! them. Recorded here rather than quietly deleted, because a doc that overstated for months
+//! is the evidence for why the record made the convention a requirement with a mechanism
+//! instead of leaving it as prose two files had agreed on.
+//!
+//! What this crate does have is real and is a different thing.
+//! `Test_Broken_Source_Should_Be_Unparseable_Rather_Than_Empty` (in `syntax/tests.rs`) holds
+//! that a file `tree-sitter` could not parse cleanly yields `Reading::Unparseable` rather
+//! than a `Parsed` carrying no items — refusal honesty, `OD-RULES-001`'s rule that an
+//! absence must not read as a clean answer. It is the same class `OD-CAPABILITY-016` carved
+//! out for `nomos-lang-rust-deny`, and it is not an axis of the guarantee below.
+//!
+//! So all four declared axes are unexercised against emitted output: no test asserts that
+//! every item reported occurs in the source (`Sound`), that no name is resolved
+//! (`Syntactic`), that the item boundary this crate declares is in fact fully covered
+//! (`Complete`), or that a reading carries nothing across file boundaries (`File`).
+//! `nomos-lang-rust`'s `tests/guarantee.rs` is the shape each would take, one property per
+//! axis. Naming them is what this crate owes under that record; writing them is a separate
+//! increment and no test is added here.
 
 use nomos_cap_syntax::{Capability, CONTRACT_VERSION};
 use nomos_capability::ProviderOffer;

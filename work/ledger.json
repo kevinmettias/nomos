@@ -68548,6 +68548,68 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P96-THREE-GUARANTEE-DECLARATIONS-STATE-WHAT-EXERCISES-THEM",
+      "title": "Three guarantee declarations name what exercises them, and one stops claiming a check it does not have",
+      "why": "OD-CAPABILITY-016 decided the two-direction guarantee check is a requirement, and that a Declared_Guarantee names in its own doc what exercises it or states that it cannot be exercised and why. It named the two module docs as the enforcing increments first job, one of them on accuracy grounds: nomos-lang-go/src/guarantee.rs asserts Upward, this crates own tests assert what it actually emits against the claim, and they do not. Re-checked before filing rather than trusted from the record: Test_Claiming_Resolution_Should_Be_Refused offers a fabricated offer to a registry and asserts refusal, which is the downward half; Test_Broken_Source_Should_Be_Unparseable_Rather_Than_Empty asserts a file that fails to parse yields Unparseable rather than an empty Parsed, which is OD-RULES-001 refusal honesty and the same class the record already carved out for nomos-lang-rust-deny, not an axis of this providers guarantee. Neither is an upward check. Separately nomos-lang-rust-scan holds the convention without stating it: its Declared_Guarantee doc says crate::Scan own tests enumerate the cases where it reports a declaration that is not there, and names none, so nothing resolves it. nomos-lang-rust already names tests/guarantee.rs truthfully and only needs to cite the record that now governs what it is doing.",
+      "done_when": "No module doc or Declared_Guarantee doc in these three crates asserts an upward check that does not exist. nomos-lang-go says plainly that the downward half holds and the upward half is owed, names what the crate does have and what class that belongs to, and says which axes have no exerciser, so the gap is declared rather than silent. nomos-lang-rust-scan names Test_The_Declared_Unsoundness_Should_Be_Demonstrable by its function name so a resolver can find it, and says which of its four declared axes that test reaches and which it does not. nomos-lang-rust cites OD-CAPABILITY-016 beside the naming it already carries. No guarantee value changes, no test is written, no provider behaviour moves, and cargo test -p nomos-lang-rust -p nomos-lang-go -p nomos-lang-rust-scan passes. The mechanical resolver that would make a named exerciser fail when it resolves to nothing is OD-CAPABILITY-016 own follow-up and is not this item.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust/src/guarantee.rs",
+          "crates/languages/nomos-lang-go/src/guarantee.rs",
+          "crates/languages/nomos-lang-rust-scan/src/guarantee.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-go",
+          "-p",
+          "nomos-lang-rust-scan"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-go",
+          "-p",
+          "nomos-lang-rust-scan"
+        ],
+        "exit_code": 0,
+        "output_tail": "e_The_Same_Subject ... ok\ntest Test_This_Crates_Payload_Should_Decode_Under_Nomos_Cap_Syntaxs_Own_Reader ... ok\ntest Test_A_Second_Declaration_Of_The_Same_Capability_Should_Be_Refused_By_The_Registry ... ok\ntest Test_This_Crates_Offer_Should_Be_Accepted_By_Nomos_Capabilitys_Own_Registry ... ok\ntest Test_A_Materialized_Fact_Should_Be_Accepted_And_Read_Back_By_Nomos_Analysiss_Own_Store ... ok\ntest Test_Two_Different_Subjects_Should_Be_Two_Independent_Entries_In_Nomos_Analysiss_Store ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-lang-go v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-go)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_go-0a1108bb867a81fb.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-c15fe11f868bf562.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-23b50e3a2e32639c.exe)\n     Running tests\\corpus\\main.rs (target\\debug\\deps\\corpus-c2720b79780b5f02.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-2cdba526d7fcc0bc.exe)\n     Running tests\\reachability_capability.rs (target\\debug\\deps\\reachability_capability-d29c195146664ce9.exe)\n     Running tests\\rollup.rs (target\\debug\\deps\\rollup-75d955981501455d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_scan-0ac8f03a58a32733.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-ad83106c024b1dca.exe)\n   Doc-tests nomos_lang_go\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_lang_rust_scan\n",
+        "verified_at": 1789348341,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3c728d31b9ed3ba0f1e47412c0e891757fd5f88b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
