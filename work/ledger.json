@@ -70551,6 +70551,42 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES",
+      "title": "The security rules decide what is test material from an eight-clause hardcoded path convention, so a repository that files fixtures elsewhere gets false credential findings",
+      "why": "Auditing all 42 SourceText rules for repository-specific criteria found exactly one family. Is_Test_Or_Fixture_Source in security_text.rs matches tests/, /tests/, /test/, /testdata/, /fixtures/, /examples/, _test.rs, _tests.rs and _test.go, and Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Secret_Does_Not_Travel_In_A_Url and Check_Certificate_Verification_Is_Not_Disabled all exempt a source on that basis; rust_text.rs carries the same notion in its unwrap-outside-tests-and-examples wording. Some of those clauses are toolchain-fixed and portable: Cargo owns tests/ and examples/, Go owns _test.go. testdata and fixtures are neither, they are a project convention. A repository filing its fixtures under resources or spec or samples is judged as if a fixture credential were a real one, and an exemption that is too narrow produces false positives rather than misses, which is the damaging direction for a security rule. Everything else in the 42 is language syntax, Rust module-system filenames or Go conventions; the only other repository-specific literals are five self-exemption paths naming the rule modules own source.",
+      "done_when": "What counts as test material reaches the security rules as a declared criterion rather than a path list compiled into security_text.rs, using whatever declaration path P100-2 establishes rather than inventing a second one. The toolchain-fixed clauses may remain as defaults, and a repository declaring nothing keeps today behaviour. A repository declaring its own fixture locations has them exempted, proved against a fixture whose test material sits under none of the nine current clauses. rust_text.rs stops carrying a second independent notion of the same thing.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/security_text.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
