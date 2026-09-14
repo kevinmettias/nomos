@@ -1,4 +1,4 @@
-//! Band 93 — host. What this workspace offers a model-facing client, and
+//! Zone: Host. What this workspace offers a model-facing client, and
 //! nothing about the protocol that carries it.
 //!
 //! `AGT-006` names this workspace's own commitment: "integration shall occur

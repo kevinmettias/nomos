@@ -10,13 +10,14 @@ publish.workspace = true
 [dependencies]
 # The rule crate, for recognising a declared universe in a file. Named here rather
 # than reimplemented: `nomos check` runs the same recognition, and two scanners for one
-# rule is how they come to disagree. Band 3 observed from band 100, which is the
+# rule is how they come to disagree. Rules observed from Verification, which is the
 # direction this crate exists to watch.
 nomos-rules = { workspace = true }
 # The syntax capability and the provider that answers it, to derive the universes this
 # crate quantifies over. `nomos-rules` stopped parsing under `P10-SYNTAX-V2` and reads a
 # `nomos.syntax.items.v2` payload instead, so the walk here has to produce one — through
-# the real provider, which is what a run does. Band 100 observing bands 23 and 25.
+# the real provider, which is what a run does. Verification observing Capability Contract
+# and Provider.
 nomos-cap-syntax = { workspace = true }
 nomos-lang-rust = { workspace = true }
 serde_json = { workspace = true }

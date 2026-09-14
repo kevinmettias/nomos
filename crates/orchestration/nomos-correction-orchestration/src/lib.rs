@@ -1,4 +1,4 @@
-//! Band 41 — the seam for correction planning and lifecycle both hosts call.
+//! Zone: Application Service — the seam for correction planning and lifecycle both hosts call.
 //!
 //! `OD-CORRECTIONS-001` found `nomos-corrections` real (a tested `Preview -> Stage ->
 //! Validate -> Commit -> Rollback` lifecycle over `nomos_workspace::Workspace`'s one door)
@@ -12,9 +12,12 @@
 //! `nomos-check-orchestration` judgment, and `nomos-corrections`' own lifecycle into a
 //! [`CorrectionOutcome`] a caller renders or serializes -- apart from choosing a platform,
 //! walking a tree, or rendering the answer, exactly the three things a composition root
-//! still has to assemble. Band 41, one band above `nomos-check-orchestration` (40) and
-//! `nomos-corrections` (35), the same reason `nomos-gate-orchestration` sits at 41 rather
-//! than beside either: a band may not depend on its own band.
+//! still has to assemble. Application Service zone, reaching `nomos-check-orchestration`
+//! through one of the named same-zone edges the dependency model declares, and
+//! `nomos-corrections` across a zone boundary `Permits` already grants. The same shape
+//! `nomos-gate-orchestration` has, and for the same reason: sharing a zone makes two
+//! crates peers, so an edge between them is an exception somebody wrote down rather than
+//! something membership confers.
 //!
 //! [`phantom_mirror`] is `nomos-cli`'s own former `correct/candidate.rs`, moved here
 //! unchanged in substance: turning one blocking Phantom finding from

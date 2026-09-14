@@ -8,8 +8,8 @@ license.workspace = true
 publish.workspace = true
 
 [dependencies]
-# The determinism vocabulary, for the one declaration in `src/bundle_serialization.rs`. Band 0,
-# and the crate every non-Rust peer reimplements — which is why the declaration lives
+# The determinism vocabulary, for the one declaration in `src/bundle_serialization.rs`. The
+# Protocol zone, and the crate every non-Rust peer reimplements — which is why the declaration lives
 # here and the machinery that checks it lives in `tests/integration`.
 nomos-contracts = { workspace = true }
 nomos-spec-model = { workspace = true }

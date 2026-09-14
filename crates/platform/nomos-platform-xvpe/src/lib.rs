@@ -1,4 +1,4 @@
-//! Band 1p — the XVPE implementation of the platform port.
+//! Zone: Substrate — the XVPE implementation of the platform port.
 //!
 //! Anticipated in the workspace manifest since the port was written, and absent
 //! until XVPE had the engine code to implement it against. It does now: the

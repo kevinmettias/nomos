@@ -1,4 +1,4 @@
-//! Band 25 — the one provider of `nomos.cap.dependency.policy` (`nomos-cap-dependency-policy`).
+//! Zone: Provider — the one provider of `nomos.cap.dependency.policy` (`nomos-cap-dependency-policy`).
 //!
 //! # Why this provider is a crate of its own, unlike a second offer inside another
 //!

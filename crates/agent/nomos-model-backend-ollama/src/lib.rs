@@ -1,4 +1,4 @@
-//! Band 37 — this workspace's locally hosted model backend.
+//! Zone: Agent — this workspace's locally hosted model backend.
 //!
 //! Not a second `AgentExecutor`: its real mechanism is a fixed model, one
 //! forwarded field, no tool-use loop and no configuration surface, which is a

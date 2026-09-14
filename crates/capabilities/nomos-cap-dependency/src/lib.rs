@@ -1,4 +1,4 @@
-//! Band 23 — the `nomos.cap.dependency.edges` contract, owned by neither its provider nor
+//! Zone: Capability Contract — the `nomos.cap.dependency.edges` contract, owned by neither its provider nor
 //! any rule that reads it.
 //!
 //! # Why this earned a crate immediately, unlike `nomos.cap.module.index`

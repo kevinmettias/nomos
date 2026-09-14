@@ -1,4 +1,4 @@
-//! Band 40 — running a `nomos work` verb, apart from choosing a platform or rendering the
+//! Zone: Repo Tooling — running a `nomos work` verb, apart from choosing a platform or rendering the
 //! answer.
 //!
 //! `OD-HOST-001` names the defect this crate answers: `nomos-cli`'s `work.rs` imported

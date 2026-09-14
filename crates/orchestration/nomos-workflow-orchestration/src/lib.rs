@@ -1,4 +1,4 @@
-//! Band 42 — the workflow tier's first real execution increment: an ordered sequence of
+//! Zone: Application Service — the workflow tier's first real execution increment: an ordered sequence of
 //! `WorkflowStep` declarations, each paired with a real dispatch to one of this
 //! workspace's five real dispatch targets.
 //!

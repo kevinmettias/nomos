@@ -1,4 +1,4 @@
-//! Band 23 — the `nomos.cap.syntax.items` contract, owned by neither provider of it.
+//! Zone: Capability Contract — the `nomos.cap.syntax.items` contract, owned by neither provider of it.
 //!
 //! # Why a contract has a home of its own
 //!

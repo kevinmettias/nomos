@@ -1,4 +1,4 @@
-//! Band 3 — rules that judge source.
+//! Zone: Rules — rules that judge source.
 //!
 //! The first thing in this workspace that judges code rather than judging the
 //! workspace's own paperwork. `P10-FIRST-CHECK` opened for that reason: four types in

@@ -1,4 +1,4 @@
-//! Band 23 — the `nomos.cap.words.policy` contract, owned by neither its provider nor any
+//! Zone: Capability Contract — the `nomos.cap.words.policy` contract, owned by neither its provider nor any
 //! rule that reads it.
 //!
 //! # Why this earned a crate immediately, unlike a capability with no second party yet

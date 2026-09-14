@@ -1,4 +1,4 @@
-//! Band 2 — the first thing in this workspace that reads somebody else's code.
+//! Zone: Provider — the first thing in this workspace that reads somebody else's code.
 //!
 //! Everything above this band has so far been machinery reasoning about facts it
 //! produced itself. This crate produces them from a corpus it did not write, which is

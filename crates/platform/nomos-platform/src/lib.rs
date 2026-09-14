@@ -1,4 +1,4 @@
-//! Band 1p — the platform port. Traits only, no implementations.
+//! Zone: Substrate — the platform port. Traits only, no implementations.
 //!
 //! Everything Nomos needs from the machine underneath it passes through here, so that
 //! swapping the implementation cannot recompile the bands above and so that exactly one

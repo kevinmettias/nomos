@@ -1,4 +1,4 @@
-//! Band 25 — this crate's two providers: `nomos.cap.rust.copy_clones` and
+//! Zone: Provider — this crate's two providers: `nomos.cap.rust.copy_clones` and
 //! `nomos.cap.rust.nested_locks`.
 //!
 //! # Why this is this workspace's first compiler-backed provider

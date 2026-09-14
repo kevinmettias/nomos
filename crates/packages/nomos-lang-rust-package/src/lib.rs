@@ -1,4 +1,4 @@
-//! Band 26 -- the first `LanguagePackage` manifest format, and the first consumer of
+//! Zone: Provider — the first `LanguagePackage` manifest format, and the first consumer of
 //! `nomos_contracts::PackageId` and `PackageKind` outside their own crate.
 //!
 //! # What this closes

@@ -1,4 +1,4 @@
-//! Band 26 -- the first `ModelBackendPackage`/`AgentExecutorPackage` manifest maturity,
+//! Zone: Provider — the first `ModelBackendPackage`/`AgentExecutorPackage` manifest maturity,
 //! and the first consumer of those two `PackageKind` variants anywhere in this workspace.
 //!
 //! `OD-PACKAGE-010` draws the boundary this crate builds inside: identity, `PackageKind`

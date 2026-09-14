@@ -30,11 +30,11 @@
 //! that caller too, because it would not be possible to *have* an `Ok` value without having
 //! gone through the construction that proves something was judged, however it was reached.
 //! `docs/records/OD-GATE-003` names that alternative and why this module does not become it:
-//! `nomos-contracts` is Band 0, read by peers that never compile this crate, and is admitted
-//! to only by `OD-CONTRACTS-001`'s test — would a peer that never compiles this crate be
-//! unable to agree with us without this type? An exit code this binary's own `main` produces
-//! is not part of that shared protocol; it is what happens at a process boundary this crate's
-//! other peers never cross.
+//! `nomos-contracts` is the Protocol zone, read by peers that never compile this crate, and
+//! is admitted to only by `OD-CONTRACTS-001`'s test — would a peer that never compiles this
+//! crate be unable to agree with us without this type? An exit code this binary's own `main`
+//! produces is not part of that shared protocol; it is what happens at a process boundary this
+//! crate's other peers never cross.
 //!
 //! Adding a [`Group`] variant when `main.rs` gains a dispatch arm is still on the next
 //! author to remember — nothing here makes that step itself compile-fail. What compiles or

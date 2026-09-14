@@ -1,4 +1,4 @@
-//! Band 100 — the vertical slice.
+//! Zone: Verification — the vertical slice.
 //!
 //! A peer of `nomos-contract-tests`, not a layer above or below it. That crate observes
 //! the workspace's shape through cargo metadata and compiles against almost nothing; this

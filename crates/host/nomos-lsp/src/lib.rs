@@ -1,4 +1,4 @@
-//! Band 94 — host. What this workspace tells an editor, and nothing about the protocol
+//! Zone: Host. What this workspace tells an editor, and nothing about the protocol
 //! that carries it.
 //!
 //! # What changed on 2026-09-10

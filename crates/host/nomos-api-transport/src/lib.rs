@@ -1,4 +1,4 @@
-//! Band 92 — host. What this workspace serves over a wire, and nothing about the
+//! Zone: Host. What this workspace serves over a wire, and nothing about the
 //! wire.
 //!
 //! `nomos-api`'s own module doc names the hole this crate fills, under the

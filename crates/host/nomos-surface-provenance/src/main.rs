@@ -1,4 +1,4 @@
-//! Band 91 — `nomos-surface-provenance`.
+//! Zone: Repo Tooling — `nomos-surface-provenance`.
 //!
 //! A report, run by a human on demand, over exactly the join `docs/records/
 //! OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-

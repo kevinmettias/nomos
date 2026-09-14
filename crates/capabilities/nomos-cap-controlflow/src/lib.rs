@@ -1,4 +1,4 @@
-//! Band 23 — the `nomos.cap.controlflow.reachability` contract, owned by neither its
+//! Zone: Capability Contract — the `nomos.cap.controlflow.reachability` contract, owned by neither its
 //! provider nor any rule that reads it.
 #![doc = include_str!("../docs/api/lib.md")]
 #![forbid(unsafe_code)]

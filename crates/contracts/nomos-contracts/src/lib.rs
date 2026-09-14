@@ -1,4 +1,4 @@
-//! Band 0 — the only authoritative statement of Nomos protocol semantics.
+//! Zone: Protocol — the only authoritative statement of Nomos protocol semantics.
 //!
 //! Every vocabulary a peer must share in order to speak to Nomos lives here, and
 //! nothing else does. No HTTP route, URL, verb, protobuf service, IPC frame, MCP tool

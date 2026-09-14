@@ -1,4 +1,4 @@
-//! Band 1 — the canonical model kernel.
+//! Zone: Substrate — the canonical model kernel.
 //!
 //! What a thing *is*, how it stays the same thing across time, and how two claims on
 //! overlapping things are compared.

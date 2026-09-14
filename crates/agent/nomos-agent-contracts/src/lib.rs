@@ -1,4 +1,4 @@
-//! Band 36 — the typed envelope an agent-assisted operation carries in, and the typed
+//! Zone: Agent — the typed envelope an agent-assisted operation carries in, and the typed
 //! result it carries out.
 //!
 //! `AGT-001` and `AGT-002` each name their own artifact (`TaskEnvelope`, `WorkResult`)

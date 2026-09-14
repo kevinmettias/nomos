@@ -1,4 +1,4 @@
-//! Band 1 — the specification content model.
+//! Zone: Specification — the specification content model.
 //!
 //! The single authority on what specification content hashes to. Every preservation
 //! rule downstream compares a hash computed here against one recorded by v14, so a

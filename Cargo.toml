@@ -1,15 +1,17 @@
 [workspace]
 members = [
-    # Band 0 — contracts. What earns a place here is OD-CONTRACTS-001 and the band table is
-    # README.md; neither is restated in this file, which nothing reads back.
+    # Zone: Protocol — contracts. What earns a place here is OD-CONTRACTS-001 and the zone
+    # table is README.md; neither is restated in this file, which nothing reads back.
     # Depends on serde and nothing else; `contracts_names_nothing` asserts it.
     "crates/contracts/nomos-contracts",
 
-    # Band 1 — kernel. Canonical identity and the content-addressed document store.
+    # Zone: Substrate — kernel. Canonical identity and the content-addressed document store.
     "crates/kernel/nomos-model",
     "crates/kernel/nomos-store",
 
-    # Band 1p — platform port. Traits in `nomos-platform`, implementations beside it.
+    # Platform port. Traits in `nomos-platform`, implementations beside it. Two zones, not
+    # one: the port is Substrate and `nomos-platform-std` is Backend, which is what lets
+    # `Permits` keep a host away from an implementation of every port (`OD-RULES-028`).
     # `nomos-platform-xvpe` arrived 2026-09-10, when the agent dispatch this
     # workspace had built moved down into XVPE: nomos is an application over that
     # engine, and a general capability sitting up here was unreachable by
@@ -18,39 +20,40 @@ members = [
     "crates/platform/nomos-platform-std",
     "crates/platform/nomos-platform-xvpe",
 
-    # Band 1c - composer. Which backend set a composition root runs on, named once so a
+    # Zone: Substrate - composer. Which backend set a composition root runs on, named once so a
     # host expresses a platform rather than an implementation of each port. Above the
     # platform tier because it selects from it; below every host because it decides
     # nothing a host has not asked for, and orchestrates nothing at all. `P88`.
     "crates/composer/nomos-composer-std",
 
-    # Band 19 — substrate. Territory and VerificationPredicate, the two ledger-agnostic
+    # Zone: Substrate — substrate. Territory and VerificationPredicate, the two ledger-agnostic
     # primitives `OD-LEDGER-037` found underneath nomos-agent-contracts' reuse of
     # nomos-ledger. Below the ledger and below nomos-agent-contracts, so both may depend
     # on it; nomos-ledger re-exports both, unchanged, for its own claim/overlap and
     # finish logic. `OD-LEDGER-037`.
     "crates/substrate/nomos-scope-verification",
 
-    # Band 2 — substrate. The work ledger and, later, capability and applicability.
+    # Substrate by directory, two zones by ownership: `nomos-ledger` is Repo Tooling, the
+    # other three are Substrate. `OD-PROJECT-004` is why the ledger is not a product crate.
     "crates/substrate/nomos-ledger",
     "crates/substrate/nomos-capability",
     "crates/substrate/nomos-workspace",
     "crates/substrate/nomos-analysis",
 
-    # Band 2 — capability contracts. What providers agree a question means, above the
+    # Zone: Capability Contract — capability contracts. What providers agree a question means, above the
     # registry that resolves it and below everything that offers against it. A contract
     # gets a home here once more than one party names it; until then it may live beside
     # its only provider.
     "crates/capabilities/nomos-cap-syntax",
 
-    # Band 2 — the language-agnostic manifest core. PackageId, PackageKind and PKG-007's
+    # Zone: Provider — the language-agnostic manifest core. PackageId, PackageKind and PKG-007's
     # four version domains, minus any typed version-domain abstraction or provider
     # allowlist a specific language would supply -- those are a language-specific
     # package crate's own job. Below the language providers: it names none of them.
     # `OD-PACKAGE-007`.
     "crates/packages/nomos-package",
 
-    # Band 2 — language providers. The first crates that read code this workspace did
+    # Zone: Provider — language providers. The first crates that read code this workspace did
     # not write. Each one offers a capability through the registry and is named by
     # nothing below it, so a language can be added or dropped without a recompile
     # anywhere else.
@@ -61,24 +64,24 @@ members = [
     # `syn`. `P14-LANG-GO-SYNTAX-PROVIDER`.
     "crates/languages/nomos-lang-go",
 
-    # Band 25 — nomos.cap.dependency.edges' one provider. Different shape from its two
+    # Zone: Provider — nomos.cap.dependency.edges' one provider. Different shape from its two
     # siblings above: it runs `cargo metadata` and reads the filesystem for itself, the
     # only I/O any provider in this workspace performs. `OD-RULES-003`.
     "crates/languages/nomos-lang-rust-cargo",
 
-    # Band 25 — nomos.cap.lint.diagnostics' one provider. The first real ToolProvider
+    # Zone: Provider — nomos.cap.lint.diagnostics' one provider. The first real ToolProvider
     # `OD-RULES-010` decided the shape of: runs `cargo clippy --message-format=json` and
     # reads the filesystem, the same shape as its `nomos-lang-rust-cargo` sibling above,
     # never naming it -- same band.
     "crates/languages/nomos-lang-rust-clippy",
 
-    # Band 25 — nomos.cap.dependency.policy's one provider. `OD-RULES-010`'s second real
+    # Zone: Provider — nomos.cap.dependency.policy's one provider. `OD-RULES-010`'s second real
     # ToolProvider: runs `cargo deny --format json check bans licenses sources` and reads
     # the filesystem, the same subprocess-backed shape as its siblings above, never naming
     # any of them -- same band.
     "crates/languages/nomos-lang-rust-deny",
 
-    # Band 25 — nomos.cap.rust.copy_clones's one provider, and this workspace's first
+    # Zone: Provider — nomos.cap.rust.copy_clones's one provider, and this workspace's first
     # provider backed by a real compiler semantic API rather than a syntax tree (its
     # siblings above) or another tool's own report (nomos-lang-rust-deny,
     # nomos-lang-rust-clippy). Loads a crate through `ra_ap_hir` -- the rust-analyzer
@@ -87,13 +90,13 @@ members = [
     # answer to. `P40-COMPILER-BACKED-PROVIDER`.
     "crates/languages/nomos-lang-rust-compiler",
 
-    # Band 25 — a second provider of nomos.cap.dependency.edges, for a Go workspace rather
+    # Zone: Provider — a second provider of nomos.cap.dependency.edges, for a Go workspace rather
     # than a Cargo one. Reads go.work/go.mod text directly rather than running a subprocess
     # -- its own module doc says why -- so it names neither of its three siblings above and
     # none of them may name it. `OD-CAPABILITY-009`.
     "crates/languages/nomos-lang-go-modules",
 
-    # Band 25 — the five nomos.cap.*.policy providers (naming, limits, scripting, words,
+    # Zone: Provider — the five nomos.cap.*.policy providers (naming, limits, scripting, words,
     # goals), consolidated from six crates into one after OD-PACKAGE-015 found none of them
     # earned an independent crate boundary: no independent versioning, no enforced
     # isolation, and their two real consumers (nomos-check-orchestration and
@@ -103,34 +106,34 @@ members = [
     # beneath them. `OD-RULES-011`, `OD-RULES-019`, `OD-PACKAGE-015`.
     "crates/repository/nomos-repo-policy",
 
-    # Band 23 — the nomos.cap.dependency.edges contract, alongside nomos-cap-syntax. Not
+    # Zone: Capability Contract — the nomos.cap.dependency.edges contract, alongside nomos-cap-syntax. Not
     # left beside its provider the way nomos.cap.module.index is: nomos-rules is a real
     # second party to it from the day it was written. `OD-CAPABILITY-002`.
     "crates/capabilities/nomos-cap-dependency",
 
-    # Band 23 — the nomos.cap.controlflow.reachability contract, alongside its two
+    # Zone: Capability Contract — the nomos.cap.controlflow.reachability contract, alongside its two
     # siblings above, for the same reason: nomos-rules is a real second party to it from
     # the day it was written. `OD-RULES-008`, `P13-CONTROLFLOW-REACHABILITY-CAPABILITY`.
     "crates/capabilities/nomos-cap-controlflow",
 
-    # Band 23 — the nomos.cap.lint.diagnostics contract, alongside its three siblings
+    # Zone: Capability Contract — the nomos.cap.lint.diagnostics contract, alongside its three siblings
     # above, for the same reason: nomos-rules is a real second party to it from the day
     # it was written. `OD-RULES-010`.
     "crates/capabilities/nomos-cap-lint",
 
-    # Band 23 — the nomos.cap.dependency.policy contract, alongside its four siblings
+    # Zone: Capability Contract — the nomos.cap.dependency.policy contract, alongside its four siblings
     # above, for the same reason: nomos-rules is a real second party to it from the day
     # it was written. OD-RULES-010's second real ToolProvider capability, over `cargo
     # deny check bans licenses sources` rather than `cargo clippy`.
     "crates/capabilities/nomos-cap-dependency-policy",
 
-    # Band 23 — the nomos.cap.naming.policy contract, alongside its five siblings above,
+    # Zone: Capability Contract — the nomos.cap.naming.policy contract, alongside its five siblings above,
     # for the same reason: nomos-rules' casing rules are a real second party to it from
     # the day it was written. OD-RULES-011's first capability: a repository's own
     # declared naming convention, read as data rather than compiled as a constant.
     "crates/capabilities/nomos-cap-naming-policy",
 
-    # Band 23 — the nomos.cap.limits.policy contract, alongside its six siblings above,
+    # Zone: Capability Contract — the nomos.cap.limits.policy contract, alongside its six siblings above,
     # for the same reason: nomos-rules' threshold rules (file-size triggers, parameter-
     # count caps) are a real second party to it from the day it was written. OD-RULES-011
     # named this threshold family as its own future instance of the naming decision; a
@@ -138,14 +141,14 @@ members = [
     # a constant.
     "crates/capabilities/nomos-cap-limits-policy",
 
-    # Band 23 — the nomos.cap.scripting.policy contract, alongside its seven siblings
+    # Zone: Capability Contract — the nomos.cap.scripting.policy contract, alongside its seven siblings
     # above, for the same reason: nomos-rules' declared-tooling-language-for-scripts rule
     # is a real second party to it from the day it was written. A third OD-RULES-011
     # instance: a repository's own declared tooling language and forbidden script
     # extensions, read as data rather than compiled as a constant.
     "crates/capabilities/nomos-cap-scripting-policy",
 
-    # Band 23 — the nomos.cap.words.policy contract, alongside its eight siblings above,
+    # Zone: Capability Contract — the nomos.cap.words.policy contract, alongside its eight siblings above,
     # for the same reason: nomos-rules' abbreviations rule is a real second party to it
     # from the day it was written. A fourth OD-RULES-011 instance: a repository's own
     # additions to code-standards' default approved-abbreviation vocabulary, read as data
@@ -153,7 +156,7 @@ members = [
     # vocabulary addition has no scope to qualify.
     "crates/capabilities/nomos-cap-words-policy",
 
-    # Band 23 — the nomos.cap.goals.policy contract, alongside its nine siblings above, for
+    # Zone: Capability Contract — the nomos.cap.goals.policy contract, alongside its nine siblings above, for
     # the same reason: the rule that holds a repository's declared purposes to its declared
     # parts is a real second party to it from the day it was written. A fifth OD-RULES-011
     # instance, and the clearest case for that decision yet: code-standards' own
@@ -183,7 +186,7 @@ members = [
     # parsing and comparison logic into a real, gate-composed rule. OD-TRACE-001.
     "crates/capabilities/nomos-cap-requirement-trace",
 
-    # Band 2 — package manifests. The Rust installable-unit manifest format: PackageId,
+    # Zone: Provider — package manifests. The Rust installable-unit manifest format: PackageId,
     # PackageKind and PKG-007's four version domains, given a real reader that refuses
     # what it cannot resolve. Wraps nomos-package's generic core with RustEdition
     # resolution and this workspace's two Rust providers. Above the language providers it
@@ -191,27 +194,27 @@ members = [
     # `OD-PACKAGE-001`, `OD-PACKAGE-007`.
     "crates/packages/nomos-lang-rust-package",
 
-    # Band 26 — package manifests. The first ModelBackendPackage/AgentExecutorPackage
+    # Zone: Provider — package manifests. The first ModelBackendPackage/AgentExecutorPackage
     # manifest maturity: identity, PackageKind, PKG-007's first two version domains
     # reused from nomos-package unchanged, and ModelSelection replacing the fourth. A
     # peer of nomos-lang-rust-package, not a dependent of it -- neither names the other.
     # `OD-PACKAGE-010`.
     "crates/packages/nomos-model-package",
 
-    # Band 26 — package manifests. The first RulePackage manifest maturity, measured
+    # Zone: Provider — package manifests. The first RulePackage manifest maturity, measured
     # field by field against four real shipped rules rather than invented. A third peer
     # of nomos-lang-rust-package and nomos-model-package -- none of the three names another.
     # `OD-PACKAGE-008`, `OD-ROADMAP-001`.
     "crates/packages/nomos-rule-package",
 
-    # Band 26 — package manifests. The first real second consumer of nomos-package's
+    # Zone: Provider — package manifests. The first real second consumer of nomos-package's
     # generic core: the Go LanguagePackage manifest format, wrapping it with GoVersion
     # resolution and nomos-lang-go's own syntax provider in place of RustEdition and
     # Rust's two. A fourth peer of the three above -- none of the four names another.
     # `OD-PACKAGE-006`, `OD-PACKAGE-007`.
     "crates/packages/nomos-lang-go-package",
 
-    # Band 26 — package manifests. The first ToolProvider manifest maturity: identity,
+    # Zone: Provider — package manifests. The first ToolProvider manifest maturity: identity,
     # PackageKind (restricted to ToolProvider), PKG-007's first two version domains reused
     # from nomos-package unchanged, and OD-CAPABILITY-013's closed twelve-name FAMILY
     # vocabulary in place of the fourth. Admits this workspace's two real ToolProviders,
@@ -220,18 +223,18 @@ members = [
     # `OD-CAPABILITY-013`, `P47-TOOLPROVIDER-HAS-NO-PACKAGE-2`.
     "crates/packages/nomos-tool-package",
 
-    # Band 3 — rules. The first thing here that judges code rather than paperwork. A
+    # Zone: Rules — rules. The first thing here that judges code rather than paperwork. A
     # rule is a pure function from source text to findings: it names no language
     # provider and opens no file, so the caller decides what tree is being judged and a
     # test can hand it code that no longer exists anywhere.
     "crates/rules/nomos-rules",
 
-    # Band 35 — corrections. The step that applies what a rule found. Above rules
+    # Zone: Agent — corrections. The step that applies what a rule found. Above rules
     # deliberately, with room between: a correction candidate may one day need to name
     # a finding a rule produced, and a band below rules would have forbidden that edge.
     "crates/corrections/nomos-corrections",
 
-    # Band 36 — agent contracts. AGT-001's TaskEnvelope and AGT-002's WorkResult, the
+    # Zone: Agent — agent contracts. AGT-001's TaskEnvelope and AGT-002's WorkResult, the
     # typed input and output shape an agent-assisted operation carries. Depends
     # downward on nomos-scope-verification, nomos-contracts and nomos-corrections; names
     # none of nomos-model-package, nomos-rule-package or nomos-lang-rust-package, which are
@@ -239,7 +242,7 @@ members = [
     # `OD-LEDGER-037`.
     "crates/agent/nomos-agent-contracts",
 
-    # Band 37. The Claude Code AgentExecutor adapter: dispatches a TaskEnvelope's goal to
+    # Zone: Agent. The Claude Code AgentExecutor adapter: dispatches a TaskEnvelope's goal to
     # Claude Code as a subprocess through nomos-platform's ProcessLauncher, bounded by
     # `OD-EXECUTOR-001`'s structural capability boundary. Above nomos-agent-contracts,
     # whose TaskEnvelope/WorkResult it depends on; does not assemble a WorkResult. Renamed
@@ -247,7 +250,7 @@ members = [
     # does not get to keep the name a class of them would need.
     "crates/agent/nomos-agent-executor-claude-code",
 
-    # Band 37. The first real ModelBackend adapter (OD-PACKAGE-013), not a second
+    # Zone: Agent. The first real ModelBackend adapter (OD-PACKAGE-013), not a second
     # AgentExecutor: dispatches a TaskEnvelope's goal to a local Ollama model as a subprocess
     # through nomos-platform's ProcessLauncher, bounded by `OD-EXECUTOR-004`'s structural
     # capability boundary -- measured against its own mechanism, not inherited from
@@ -255,23 +258,23 @@ members = [
     # may name the other, and there is no dispatch trait generic over both.
     "crates/agent/nomos-model-backend-ollama",
 
-    # Band 40 — orchestration. Running a `nomos work` verb against a caller-chosen
+    # Zone: Repo Tooling — orchestration. Running a `nomos work` verb against a caller-chosen
     # platform, apart from choosing that platform and apart from rendering the answer.
     # Above the ledger it dispatches to and the platform port it is generic over, below
     # every composition root that could call it. `OD-HOST-001`.
     "crates/orchestration/nomos-work-orchestration",
 
-    # Band 40 — orchestration. Composing the capability registry, ingesting
+    # Zone: Application Service — orchestration. Composing the capability registry, ingesting
     # already-walked source into facts and judging it, apart from choosing a platform,
     # walking a tree or rendering the answer. `OD-HOST-002`.
     "crates/orchestration/nomos-check-orchestration",
 
-    # Band 40 — orchestration. Assembling the specification store from the embedded
+    # Zone: Specification — orchestration. Assembling the specification store from the embedded
     # governing records and a caller-named corpus, and answering what it holds, apart
     # from choosing a platform or rendering the answer. `OD-HOST-002`.
     "crates/orchestration/nomos-spec-orchestration",
 
-    # Band 40 — orchestration. The seam for the first-class Gate object
+    # Zone: Application Service — orchestration. The seam for the first-class Gate object
     # `ARC-ROADMAP-001` names, starting with `Plan`: a real rule registry, reported
     # back whole, apart from selecting scope, choosing a platform or rendering the
     # answer.
@@ -283,21 +286,21 @@ members = [
     # own copy of the identical walk before this; `OD-HOST-008`.
     "crates/orchestration/nomos-workspace-discovery",
 
-    # Band 41 — orchestration. The seam for correction planning and lifecycle both hosts
+    # Zone: Application Service — orchestration. The seam for correction planning and lifecycle both hosts
     # call: Run_Correction composes nomos-check-orchestration and nomos-corrections into
     # a judged, staged, validated (and optionally committed) outcome, apart from choosing
-    # a platform, walking a tree or rendering the answer. One band above
-    # nomos-check-orchestration (40) and nomos-corrections (35), the same reason
-    # nomos-gate-orchestration sits at 41 rather than beside either.
+    # a platform, walking a tree or rendering the answer. Reaches nomos-check-orchestration
+    # through a named same-zone edge and nomos-corrections across a boundary Permits
+    # grants, the same shape nomos-gate-orchestration has.
     # `P40-CORRECTIONS-CANONICAL-SEAM`.
     "crates/orchestration/nomos-correction-orchestration",
 
-    # Band 42 — orchestration. The workflow tier's first real execution increment:
+    # Zone: Application Service — orchestration. The workflow tier's first real execution increment:
     # running an ordered sequence of `WorkflowStep` declarations, each dispatched to
     # one of this workspace's four real dispatch targets, apart from choosing a
-    # platform or rendering the answer. One band above nomos-check-orchestration (40)
-    # and nomos-correction-orchestration (41), the identical reason each of those
-    # already sits above the band it depends on. `OD-WORKFLOW-005`,
+    # platform or rendering the answer. Reaches nomos-check-orchestration and
+    # nomos-correction-orchestration through named same-zone edges, the identical reason
+    # each of those declares one for what it depends on. `OD-WORKFLOW-005`,
     # `P40-WORKFLOW-CHECK-BODY`, `P40-WORKFLOW-CORRECTION-BODY`.
     "crates/orchestration/nomos-workflow-orchestration",
 
@@ -308,7 +311,7 @@ members = [
     # `P43-AGENT-CANONICAL-SEAM-2`.
     "crates/orchestration/nomos-agent-orchestration",
 
-    # Band 1 — the specification system. Reaches the product only through a
+    # Zone: Specification — the specification system. Reaches the product only through a
     # KnowledgeCapability, never directly.
     "crates/spec/nomos-spec-model",
     "crates/spec/nomos-spec-store",
@@ -317,35 +320,35 @@ members = [
     "crates/spec/nomos-spec-validate",
     "crates/spec/nomos-spec-project",
 
-    # Band 10 — host. Composition roots and binaries.
+    # Zone: Host — host. Composition roots and binaries.
     "crates/host/nomos-cli",
 
-    # Band 90 — host. A second real caller of nomos_gate_orchestration::Run_Gate,
+    # Zone: Host — host. A second real caller of nomos_gate_orchestration::Run_Gate,
     # proving the seam P13-GATE-RUN-SEAM-CRATE built is reachable from a composition
     # root other than nomos-cli. A library crate, not a binary: Handle_Gate_Run walks a
     # tree and hands back a JSON-serializable response, with no transport (stdio, HTTP,
     # MCP framing) wired over it yet. `P13-GATE-API-ADAPTER-FIRST-INCREMENT`.
     "crates/host/nomos-api",
 
-    # Band 91. A report over this repository's own git history, run by a human on
+    # Zone: Repo Tooling. A report over this repository's own git history, run by a human on
     # demand and invoked from nowhere else in this workspace: OD-STORE-002's Worked
     # Case join between a crate's tests/contract/surface/ snapshot and docs/records/,
     # for a caller-given commit range. Bin-only, like nomos-cli.
     "crates/host/nomos-surface-provenance",
 
-    # Band 92 — host. The transport nomos-api deliberately does not wire: JSON-RPC 2.0
+    # Zone: Host — host. The transport nomos-api deliberately does not wire: JSON-RPC 2.0
     # over a TCP socket, one object per line. Above nomos-api because it depends on it,
     # and a crate may depend only on a crate in a strictly lower band. Serves the three
     # Gate verbs OD-HOST-007 admits and none of the twenty-one repo-tooling handlers that
     # record excludes. `P40-API-TRANSPORT-2`.
     "crates/host/nomos-api-transport",
 
-    # Band 93 — host. An MCP server over stdio, projecting nomos-api-transport's own
+    # Zone: Host — host. An MCP server over stdio, projecting nomos-api-transport's own
     # three Gate verbs as MCP tools through that crate's own dispatch rather than a
     # second one. Above nomos-api-transport because it depends on it. `P40-MCP-SURFACE-4`.
     "crates/host/nomos-mcp",
 
-    # Band 94 — host. A language server over stdio, projecting nomos-check-orchestration's
+    # Zone: Host — host. A language server over stdio, projecting nomos-check-orchestration's
     # own real `Run` as `textDocument/publishDiagnostics`: a thin translation from
     # `nomos_contracts::Finding` to `lsp_types::Diagnostic`, with no rule judgment of its
     # own. `P42-LSP-PROJECTION`.

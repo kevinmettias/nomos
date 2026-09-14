@@ -1,4 +1,4 @@
-//! Band 25 — a second provider of `nomos.cap.dependency.edges` (`nomos-cap-dependency`),
+//! Zone: Provider — a second provider of `nomos.cap.dependency.edges` (`nomos-cap-dependency`),
 //! for a Go workspace rather than a Cargo one.
 //!
 //! # Why this provider reads text rather than running a subprocess

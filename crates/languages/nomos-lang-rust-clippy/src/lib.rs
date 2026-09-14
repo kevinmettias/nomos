@@ -1,4 +1,4 @@
-//! Band 25 — the one provider of `nomos.cap.lint.diagnostics` (`nomos-cap-lint`).
+//! Zone: Provider — the one provider of `nomos.cap.lint.diagnostics` (`nomos-cap-lint`).
 //!
 //! # Why this provider is a crate of its own, unlike a second offer inside another
 //!

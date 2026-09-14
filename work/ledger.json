@@ -69477,7 +69477,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -69490,7 +69490,27 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "st Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.49s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-16521a1362e743b4.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4612ea488031f680.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-8e50c82cd1b18623.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-7c139115530dcaf9.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-930f1bbb112a171d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-6d055a686bd8bf95.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-9b9a906e2f2cb06a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-70a759c22f1ec589.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-b84e992768820a4a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-75a077603592d3ef.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-a235932dedeaff21.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-b4d692f665383346.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-c59e3651e67c8b16.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-7f3867088e2e3e4a.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789404536,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8a923e49dadebf444032409a5ce547cb78d76fbb"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -69976,6 +69996,43 @@
         },
         "revision": "8eeb90cf86065e071e1a121c6854d30f29826632"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P98-THE-CROSSING-ACCEPTANCE-CHECK-IS-WARM-AND-PROVES-NOTHING-ABOUT-THE-CROSSING",
+      "title": "The crossing acceptance check runs warm, so a zero exit is not evidence the crossing was exercised",
+      "why": "Measured 2026-09-14 while verifying the pinned crossing: cargo check --workspace --all-targets exited zero in twenty seconds having compiled no xvpe crate at all, because a concurrent session had already warmed the shared target directory. The same check re-run with an isolated CARGO_TARGET_DIR compiled ten xvpe crates from the git revision by name. Exit zero is therefore not evidence that the dependency crossing participated in the build; it is evidence that nothing in the workspace failed to typecheck against artifacts somebody else produced, possibly from different sources. Nothing in this repository currently distinguishes those two outcomes, and the claim that this workspace builds against a pinned XVPE is exactly the claim that needs the distinction. Making every build cold would waste a great deal of time and is not wanted. The dedicated acceptance check for this one crossing is what should be cold by construction. Note for whoever takes this: the gate has not executed a step since at least 2026-09-07 -- every run fails in seconds with a GitHub billing message and zero steps started -- so a gate step added here is correct placement but will not run until that is resolved.",
+      "done_when": "A dedicated acceptance check builds a crossing-dependent crate into a target directory it creates fresh, and asserts from the build output that the xvpe packages actually compiled from the pinned git revision rather than inferring it from an exit code. It fails if no xvpe crate appears in that output, so a warm or short-circuited run cannot report success. It does not run as part of an ordinary cargo test invocation, because a cold build is slow and every local run must not pay for it, and it is reachable by one bare command that the gate can name. The gate names it as its own step. The check is proven by observing it distinguish the two cases rather than by passing once.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/crossing_cold.rs",
+          ".github/workflows/gate.yml"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "crossing_cold",
+          "--",
+          "--ignored"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null

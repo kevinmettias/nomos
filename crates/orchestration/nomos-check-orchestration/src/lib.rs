@@ -1,4 +1,4 @@
-//! Band 40 — composing the capability registry, ingesting already-walked source into
+//! Zone: Application Service — composing the capability registry, ingesting already-walked source into
 //! facts, and judging it, apart from choosing a platform, walking a tree or rendering the
 //! answer.
 //!

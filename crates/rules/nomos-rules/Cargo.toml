@@ -98,8 +98,9 @@ nomos-cap-requirement-trace = { workspace = true }
 # capability and lets the registry choose, while a test needs bytes that a real provider
 # would actually have written. Hand-written fixtures were doing that job and drifted the
 # moment the schema gained a field — a payload nobody could have produced is a subject the
-# rule is not really being tested against. Band 25 observed from band 30, in dev only, so
-# `tests/contract`'s dependency bands see nothing and the shipped rule reaches no parser.
+# rule is not really being tested against. A Provider observed from Rules, in dev only, so
+# the dependency graph `tests/contract` reads sees nothing and the shipped rule reaches no
+# parser.
 nomos-lang-rust = { workspace = true }
 
 [lints]

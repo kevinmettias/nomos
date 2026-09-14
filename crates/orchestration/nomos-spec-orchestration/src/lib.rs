@@ -1,4 +1,4 @@
-//! Band 40 — running every `nomos spec` verb, and `nomos request submit`, apart from parsing
+//! Zone: Specification — running every `nomos spec` verb, and `nomos request submit`, apart from parsing
 //! arguments, choosing a corpus environment variable or rendering an answer.
 //!
 //! `OD-HOST-002` named family 9's `SpecCommand` half as the one remaining command group with

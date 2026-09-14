@@ -1,4 +1,4 @@
-//! Band 1 — ingest of the v14 corpus.
+//! Zone: Specification — ingest of the v14 corpus.
 //!
 //! I0 blobs, I1 source truth behind the manifest gate, I2 normative statements,
 //! I3 the node graph.

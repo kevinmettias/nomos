@@ -1,4 +1,4 @@
-//! Band 19 — the ledger-agnostic primitives `OD-LEDGER-037` found underneath
+//! Zone: Substrate — the ledger-agnostic primitives `OD-LEDGER-037` found underneath
 //! `nomos-agent-contracts`'s reuse of `nomos-ledger`.
 //!
 //! [`Territory`] is a set of path patterns with `Covers`/overlap logic; [`VerificationPredicate`]

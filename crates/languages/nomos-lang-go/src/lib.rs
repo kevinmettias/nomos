@@ -1,4 +1,4 @@
-//! Band 25 — the first real second party to `nomos.cap.syntax.items`, alongside
+//! Zone: Provider — the first real second party to `nomos.cap.syntax.items`, alongside
 //! `nomos-lang-rust` and `nomos-lang-rust-scan`. Same band, so none of the three may name
 //! either of the others.
 //!

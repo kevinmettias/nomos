@@ -1,4 +1,4 @@
-//! Band 26 -- the first Go `LanguagePackage` manifest format, and the first real second
+//! Zone: Provider — the first Go `LanguagePackage` manifest format, and the first real second
 //! consumer of `nomos-package`'s language-agnostic manifest core.
 //!
 //! # What this closes

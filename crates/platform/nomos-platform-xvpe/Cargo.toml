@@ -5,8 +5,10 @@ edition = "2024"
 publish = false
 description = "The platform port, bridged onto XVPE. Wraps any nomos ProcessLauncher as the launcher surface XVPE's own adapters take, so this workspace's agent dispatch is XVPE's engine code rather than a second copy of it -- without moving the 559 use-sites and 33 implementors that already depend on this workspace's own port."
 
-# Band 1p -- the XVPE implementation of the platform port, anticipated in the
-# workspace manifest since the port was written.
+# Zone: Substrate -- the XVPE implementation of the platform port, anticipated in
+# the workspace manifest since the port was written. Substrate rather than Backend
+# because it bridges the port onto another engine rather than implementing every
+# port against this machine; `nomos-platform-std` is the Backend one.
 #
 # A pinned cross-repository dependency: XVPE is not published to a registry, so
 # it is adopted by git reference and commit, which is the form D-130 names and

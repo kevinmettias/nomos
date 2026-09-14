@@ -1,4 +1,4 @@
-//! Band 2 — the work ledger.
+//! Zone: Repo Tooling — the work ledger.
 //!
 //! Territory-based mutual exclusion, so that several agents can work one repository
 //! without silently overwriting each other.

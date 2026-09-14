@@ -1,4 +1,4 @@
-//! Band 18 — what the workspace currently is.
+//! Zone: Substrate — what the workspace currently is.
 //!
 //! Above the document store, below everything that consumes a snapshot. It reads no
 //! files: content arrives through a change set, which is what keeps "what the workspace

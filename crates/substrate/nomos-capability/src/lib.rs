@@ -1,4 +1,4 @@
-//! Band 2 — capability contracts and the registry that resolves them.
+//! Zone: Substrate — capability contracts and the registry that resolves them.
 //!
 //! One contract and one registry, because the alternative measured in the prototype was
 //! a capability list, a compatibility matrix, a support table and a provider manifest

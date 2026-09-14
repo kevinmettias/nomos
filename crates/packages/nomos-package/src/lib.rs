@@ -1,4 +1,4 @@
-//! Band 24 -- the language-agnostic core of an installable-unit manifest.
+//! Zone: Provider — the language-agnostic core of an installable-unit manifest.
 //!
 //! `OD-PACKAGE-007` split this out of `nomos-lang-package`: everything `PKG-007`'s four
 //! version domains name that does not name a specific language. `PackageVersion`,

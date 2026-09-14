@@ -1,4 +1,4 @@
-//! Band 10 — the `nomos` binary.
+//! Zone: Host — the `nomos` binary.
 //!
 //! One binary with subcommands, not several binaries. A separate `nomos-work` would
 //! grow its own flags, its own output conventions and eventually its own idea of what a

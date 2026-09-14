@@ -1,4 +1,4 @@
-//! Band 37 — this workspace's Claude Code dispatch.
+//! Zone: Agent — this workspace's Claude Code dispatch.
 //!
 //! The dispatch itself is **XVPE's** as of 2026-09-10: an isolated working
 //! directory, an allow-list granting nothing real rather than a deny-list that is

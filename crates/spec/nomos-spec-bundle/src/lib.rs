@@ -1,4 +1,4 @@
-//! Band 1 — the portable specification bundle.
+//! Zone: Specification — the portable specification bundle.
 //!
 //! The database is the working authority; this is the authority committed to git. Both
 //! must say the same thing, which is why the round trip is a property and not a feature:

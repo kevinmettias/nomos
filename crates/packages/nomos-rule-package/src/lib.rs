@@ -1,4 +1,4 @@
-//! Band 26 -- the first `RulePackage` manifest maturity, and the first consumer of
+//! Zone: Provider — the first `RulePackage` manifest maturity, and the first consumer of
 //! `PackageKind::RulePackage` anywhere in this workspace.
 //!
 //! `OD-PACKAGE-008` measured every field of `ARCH-002`'s contents list against this

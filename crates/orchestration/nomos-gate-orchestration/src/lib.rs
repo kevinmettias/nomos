@@ -1,4 +1,4 @@
-//! Band 41 — the seam for the first-class Gate object `ARC-ROADMAP-001` names, starting with
+//! Zone: Application Service — the seam for the first-class Gate object `ARC-ROADMAP-001` names, starting with
 //! `Plan`.
 //!
 //! `ARC-ROADMAP-001` distinguishes `OD-GATE-004`'s CI step, which wires this repository's own

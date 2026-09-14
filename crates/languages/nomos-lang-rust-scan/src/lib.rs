@@ -1,4 +1,4 @@
-//! Band 25 — the second answer to `nomos.cap.syntax.items`.
+//! Zone: Provider — the second answer to `nomos.cap.syntax.items`.
 //!
 //! # Why a second provider of one capability exists
 //!

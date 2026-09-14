@@ -1,4 +1,4 @@
-//! Band 1p — the std implementation of the platform port.
+//! Zone: Backend — the std implementation of the platform port.
 //!
 //! Ordinary operating-system facilities, with two pieces that are worth reading rather
 //! than skimming: the atomic file replace, and the cross-process lock.

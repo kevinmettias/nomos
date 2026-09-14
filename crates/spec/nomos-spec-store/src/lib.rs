@@ -1,4 +1,4 @@
-//! Band 1 — the specification store.
+//! Zone: Specification — the specification store.
 //!
 //! Three identifiers, never conflated: `node_id` is identity and travels in a bundle,
 //! `uid` is a join surrogate and is never exported, `content_hash` is a content address.

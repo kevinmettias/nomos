@@ -1,4 +1,4 @@
-//! Band 90 — host. A second real caller of orchestration seams `nomos-cli` otherwise has
+//! Zone: Host. A second real caller of orchestration seams `nomos-cli` otherwise has
 //! to itself.
 //!
 //! `nomos-gate-orchestration`'s own module doc, since `P13-GATE-RUN-SEAM-CRATE`, states the
