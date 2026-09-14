@@ -213,7 +213,7 @@ mod run_id;
 mod tests;
 
 pub use rule_composition_error::RuleCompositionError;
-pub use admissibility::{Admissibility, Admits, DependedCrate, DependingCrate};
+pub use admissibility::{Admissibility, Admits, Admits_Under, DependedCrate, DependingCrate};
 pub use composition::Registered;
 pub use finding_query::{Explain_Gate, Explanation, FindingQuery, GateExplainResult};
 pub use gate_command::GateCommand;

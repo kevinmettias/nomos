@@ -17,6 +17,11 @@ nomos-contracts = { workspace = true }
 nomos-model = { workspace = true }
 nomos-model-package = { workspace = true }
 nomos-platform = { workspace = true }
+nomos-cap-architecture = { workspace = true }
+# nomos-repo-policy for the one provider of that contract: `admits` answers from the
+# repository's own declaration, and reading it is this crate's concern rather than every
+# host's. Application Service reaching Provider is an edge the declaration already permits.
+nomos-repo-policy = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-workspace = { workspace = true }
 # The policy file `P40-GATE-POLICY-AUTHORING-3` added is JSON, the format this workspace

@@ -1,14 +1,29 @@
-//! The zone declaration, and the walk two of the assertions need.
+//! This repository's own architecture declaration, and the walk two of the assertions need.
 //!
-//! `ZONES` is not declared here. `OD-RULES-020`'s own migration item made `nomos-rules`
-//! the one place this workspace's architecture is declared, read here through that
-//! crate's own public surface rather than kept as a second copy — a second copy is
-//! exactly what let the README and the dependency graph drift against each other before.
+//! The declaration is not written here and never has been. `OD-RULES-020`'s migration made
+//! `nomos-rules` the one place it lived; `OD-RULES-003`'s third prerequisite moved it out of
+//! any crate entirely, into `nomos-architecture.json` at the repository root, and these
+//! assertions read it through the one provider that reads it — never by parsing the file a
+//! second way. A second copy is exactly what let the README and the dependency graph drift
+//! against each other before, and a second *parser* would be the same defect wearing the
+//! shape of independence. What these tests are independent of is `cargo metadata`, which is
+//! the half the declaration cannot state about itself.
 
+use nomos_cap_architecture::ArchitecturePayload;
+use nomos_platform_std::StdFileSystem;
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
-pub(crate) use nomos_rules::{Permits, Zone, Zone_Of, SAME_ZONE_EDGES, WRITE_DOORS, ZONES, ZONE_LIST};
+/// This repository's own declared architecture, read from the root.
+///
+/// Panics rather than returning an error: every assertion below is about a declaration this
+/// repository is asserted elsewhere to have, so a declaration that cannot be read is a broken
+/// checkout and not a finding.
+pub(crate) fn Declared_Architecture() -> ArchitecturePayload
+{
+    return nomos_repo_policy::architecture::Discover_Workspace(&Repository_Root(), &StdFileSystem)
+        .expect("this repository's own nomos-architecture.json is committed and readable");
+}
 
 /// The workspace root, from this crate's manifest directory.
 pub(crate) fn Repository_Root() -> PathBuf

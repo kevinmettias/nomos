@@ -1,67 +1,61 @@
-//! Judging an already-decoded dependency payload against this workspace's declared write
-//! doors.
+//! Judging an already-decoded dependency payload against the repository's own declared write
+//! authorities.
 //!
-//! `OD-RULES-023` decided the mechanism: `nomos-store`'s own README row states "one write
-//! door per authority," measured true today (`nomos-workspace` is the only crate that
-//! depends on it) but unchecked by anything. [`WRITE_DOORS`] names, for each authority
-//! crate this workspace has declared a sole write door for, exactly which crates may depend
-//! on it directly -- the identical `Permits`-over-a-declared-table shape
-//! [`super::zones::Permits`] already applies to zone crossings, aimed at authority instead
-//! of direction. A pure function of an already-decoded payload, grouped apart from
-//! `reading.rs` for the same reason [`super::violations`] and [`super::completeness`] are:
-//! testable against hand-built fixtures, no registry, no store, no reader.
+//! `OD-RULES-023` decided the mechanism: `nomos-store`'s own README row states "one write door
+//! per authority," measured true but unchecked by anything. An authority names, for each crate
+//! a repository has declared a sole write door for, exactly which crates may depend on it
+//! directly -- the identical shape the component permissions apply to a crossing, aimed at
+//! authority instead of direction.
+//!
+//! What changed since that record is where the table lives. It was a `WRITE_DOORS` constant in
+//! this file, naming `nomos-store` and `nomos-workspace` as string literals, which made this
+//! rule structurally unable to fire for any repository but this one -- the same defect
+//! `OD-RULES-029` measured for the component table beside it, and it travels with that
+//! declaration for the same reason. Nothing about what `OD-RULES-023` decided is reopened: a
+//! declared allow-list over the existing `nomos.cap.dependency.edges` fact is still exactly
+//! what this is.
+//!
+//! A pure function of an already-decoded payload, grouped apart from `reading.rs` for the same
+//! reason [`super::violations`] and [`super::completeness`] are: testable against hand-built
+//! fixtures, no registry, no store, no reader.
 
 use crate::SourceFile;
+use nomos_cap_architecture::ArchitecturePayload;
 use nomos_cap_dependency::{DependencyEdge, DependencyKind, DependencyPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
-/// Every crate this workspace has declared the sole write door for, paired with the crates
-/// permitted to depend on it directly.
-///
-/// `OD-RULES-023` measured the only real case: `nomos-store`'s own design is a single write
-/// door, and exactly one crate -- `nomos-workspace` -- depends on it anywhere in this
-/// workspace today. A second authority earns a second row the same way a second same-zone
-/// edge earned one in [`super::zones::SAME_ZONE_EDGES`]: named here, not inferred from a
-/// crate compiling.
-///
-/// Mirrored by `Test_Every_Write_Door_Should_Be_A_Real_Dependency`, in
-/// `tests/contract/tests/boundaries/graph.rs`: every crate named here must be a real, direct
-/// `Cargo.toml` dependency of the authority it is paired with, or the exception permits an
-/// edge nobody's code draws.
-pub const WRITE_DOORS: &[(&str, &[&str])] = &[("nomos-store", &["nomos-workspace"])];
-
-/// Every edge in `payload` that reaches a [`WRITE_DOORS`] authority from a package not
-/// named as one of its doors, as findings.
+/// Every edge in `payload` that reaches a declared authority from a package the declaration
+/// does not name as one of its doors, as findings.
 #[must_use]
-pub(super) fn Violations_In(payload: &DependencyPayload, source: &SourceFile) -> Vec<Finding>
+pub(super) fn Violations_In(architecture: &ArchitecturePayload, payload: &DependencyPayload, source: &SourceFile) -> Vec<Finding>
 {
     return payload
         .edges
         .iter()
-        .filter_map(|edge| return Violation_For_Edge(source, &payload.package, edge))
+        .filter_map(|edge| return Violation_For_Edge(architecture, source, &payload.package, edge))
         .collect();
 }
 
-/// `edge`, judged against [`WRITE_DOORS`], as a finding -- or `None` when the edge is out
-/// of scope (a dev-dependency), its target names no declared authority, or `package` is one
-/// of that authority's own named doors.
-fn Violation_For_Edge(source: &SourceFile, package: &str, edge: &DependencyEdge) -> Option<Finding>
+/// `edge`, judged against the declared authorities, as a finding -- or `None` when the edge is
+/// out of scope (a dev-dependency), its target is no declared authority, or `package` is one of
+/// that authority's own named doors.
+fn Violation_For_Edge(architecture: &ArchitecturePayload, source: &SourceFile, package: &str, edge: &DependencyEdge) -> Option<Finding>
 {
     if edge.kind == DependencyKind::Dev
     {
         return None;
     }
 
-    let (authority, doors) = WRITE_DOORS.iter().find(|(authority, _)| return *authority == edge.target)?;
-    if doors.contains(&package)
+    let doors = architecture.Doors_Into(&edge.target)?;
+    if doors.iter().any(|door| return door == package)
     {
         return None;
     }
 
-    return Some(Violation_Finding(source, package, authority, doors));
+    return Some(Violation_Finding(source, package, &edge.target, doors));
 }
 
-fn Violation_Finding(source: &SourceFile, package: &str, authority: &str, doors: &[&str]) -> Finding
+fn Violation_Finding(source: &SourceFile, package: &str, authority: &str, doors: &[String]) -> Finding
 {
     return Finding {
         rule: RuleId::New(super::WRITE_AUTHORITY),
@@ -71,10 +65,10 @@ fn Violation_Finding(source: &SourceFile, package: &str, authority: &str, doors:
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Advisory,
         summary: format!(
-            "{package} depends on {authority}, an authority crate whose only declared \
-             write doors are {doors:?}. A second door into an authority this workspace \
-             built around a single one is the exact property `nomos-store`'s own design \
-             exists to prevent."
+            "{package} depends on {authority}, which this repository declares an authority \
+             whose only doors are {doors:?}. A second door into an authority a repository \
+             built around a single one is the exact property that declaration exists to \
+             prevent."
         ),
         locations: vec![source.path.clone()],
     };
@@ -84,36 +78,26 @@ fn Violation_Finding(source: &SourceFile, package: &str, authority: &str, doors:
 mod tests
 {
     use super::*;
+    use nomos_cap_architecture::Authority;
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
 
     fn Dependency_Edge(target: &str) -> DependencyEdge
     {
-        return DependencyEdge {
-            target: target.to_owned(),
-            kind: DependencyKind::Normal,
-            optional: false,
-        };
+        return DependencyEdge { target: target.to_owned(), kind: DependencyKind::Normal, optional: false };
     }
 
     fn Dev_Edge(target: &str) -> DependencyEdge
     {
-        return DependencyEdge {
-            target: target.to_owned(),
-            kind: DependencyKind::Dev,
-            optional: false,
-        };
+        return DependencyEdge { target: target.to_owned(), kind: DependencyKind::Dev, optional: false };
     }
 
     #[test]
     fn Test_A_Named_Door_Should_Produce_No_Finding()
     {
-        let payload = DependencyPayload {
-            package: "nomos-workspace".to_owned(),
-            edges: vec![Dependency_Edge("nomos-store")],
-        };
+        let payload = DependencyPayload { package: "billing".to_owned(), edges: vec![Dependency_Edge("ledger-store")] };
 
-        let findings = Violations_In(&payload, &Source_File("nomos-workspace"));
+        let findings = Violations_In(&Declaration(), &payload, &Source_File("billing"));
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -121,28 +105,38 @@ mod tests
     #[test]
     fn Test_An_Undeclared_Door_Should_Produce_One_Finding()
     {
-        let payload = DependencyPayload {
-            package: "nomos-cli".to_owned(),
-            edges: vec![Dependency_Edge("nomos-store")],
-        };
+        let payload = DependencyPayload { package: "http".to_owned(), edges: vec![Dependency_Edge("ledger-store")] };
 
-        let findings = Violations_In(&payload, &Source_File("nomos-cli"));
+        let findings = Violations_In(&Declaration(), &payload, &Source_File("http"));
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
-        assert_eq!(found.subject_name, "nomos-cli");
+        assert_eq!(found.subject_name, "http");
         assert_eq!(found.gate, GateCategory::Advisory);
+    }
+
+    /// An authority the repository declares with no doors at all is reachable by nobody, which
+    /// the encoding can express and the compiled table could not.
+    #[test]
+    fn Test_An_Authority_With_No_Doors_Should_Refuse_Every_Depender()
+    {
+        let sealed = ArchitecturePayload {
+            authorities: vec![Authority { package: "sealed".to_owned(), doors: Vec::new() }],
+            ..ArchitecturePayload::default()
+        };
+        let payload = DependencyPayload { package: "billing".to_owned(), edges: vec![Dependency_Edge("sealed")] };
+
+        let findings = Violations_In(&sealed, &payload, &Source_File("billing"));
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
     }
 
     #[test]
     fn Test_An_Edge_To_A_Non_Authority_Should_Produce_No_Finding()
     {
-        let payload = DependencyPayload {
-            package: "nomos-rules".to_owned(),
-            edges: vec![Dependency_Edge("nomos-cap-syntax")],
-        };
+        let payload = DependencyPayload { package: "http".to_owned(), edges: vec![Dependency_Edge("billing")] };
 
-        let findings = Violations_In(&payload, &Source_File("nomos-rules"));
+        let findings = Violations_In(&Declaration(), &payload, &Source_File("http"));
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -150,12 +144,9 @@ mod tests
     #[test]
     fn Test_A_Dev_Dependency_On_An_Authority_Should_Produce_No_Finding()
     {
-        let payload = DependencyPayload {
-            package: "nomos-cli".to_owned(),
-            edges: vec![Dev_Edge("nomos-store")],
-        };
+        let payload = DependencyPayload { package: "http".to_owned(), edges: vec![Dev_Edge("ledger-store")] };
 
-        let findings = Violations_In(&payload, &Source_File("nomos-cli"));
+        let findings = Violations_In(&Declaration(), &payload, &Source_File("http"));
 
         assert!(
             findings.is_empty(),
@@ -166,14 +157,31 @@ mod tests
     #[test]
     fn Test_A_Package_With_No_Edges_Should_Produce_No_Finding()
     {
-        let payload = DependencyPayload {
-            package: "nomos-contracts".to_owned(),
-            edges: Vec::new(),
-        };
+        let payload = DependencyPayload { package: "billing".to_owned(), edges: Vec::new() };
 
-        let findings = Violations_In(&payload, &Source_File("nomos-contracts"));
+        let findings = Violations_In(&Declaration(), &payload, &Source_File("billing"));
 
         assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// A repository declaring no authorities has nothing here to judge, which is how this rule
+    /// stops reporting against every repository that is not this one.
+    #[test]
+    fn Test_A_Repository_Declaring_No_Authorities_Should_Produce_No_Finding()
+    {
+        let payload = DependencyPayload { package: "http".to_owned(), edges: vec![Dependency_Edge("ledger-store")] };
+
+        let findings = Violations_In(&ArchitecturePayload::default(), &payload, &Source_File("http"));
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    fn Declaration() -> ArchitecturePayload
+    {
+        return ArchitecturePayload {
+            authorities: vec![Authority { package: "ledger-store".to_owned(), doors: vec!["billing".to_owned()] }],
+            ..ArchitecturePayload::default()
+        };
     }
 
     fn Source_File(package: &str) -> SourceFile

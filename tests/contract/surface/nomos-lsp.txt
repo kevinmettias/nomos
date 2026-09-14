@@ -1,13 +1,13 @@
 pub const nomos_lsp::NomosDiagnosticProvider::SCOPE: ReproducibilityScope
 pub const nomos_lsp::NomosDiagnosticProvider::STRENGTH: DeterminismStrength
 pub const nomos_lsp::NomosDiagnosticProvider::TRACE: TraceEquivalence
-pub fn nomos_lsp::Diagnostics_For(finding: &Finding) -> Vec<SourceDiagnostic>
+pub fn nomos_lsp::Diagnostics_For(architecture: &ArchitecturePayload, finding: &Finding) -> Vec<SourceDiagnostic>
 pub fn nomos_lsp::NomosDiagnosticProvider::Diagnose(&mut self, root: &Path) -> Vec<SourceDiagnostic>
 pub fn nomos_lsp::NomosDiagnosticProvider::New() -> Self
 pub impl nomos_lsp::NomosDiagnosticProvider implements DiagnosticProviderStrategy
 pub impl nomos_lsp::NomosDiagnosticProvider implements Strategy
+pub struct field nomos_lsp::ArchitecturalComponent::component: String
 pub struct field nomos_lsp::ArchitecturalComponent::crate_name: String
-pub struct field nomos_lsp::ArchitecturalComponent::zone: String
 pub struct field nomos_lsp::AvailableCorrection::family: String
 pub struct field nomos_lsp::GoverningRule::contract_record: &'static str
 pub struct field nomos_lsp::GoverningRule::contract_record_version: u32

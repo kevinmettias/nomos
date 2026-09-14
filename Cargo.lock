@@ -1038,6 +1038,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-cap-architecture"
+version = "0.1.0"
+dependencies = [
+ "nomos-capability",
+ "nomos-contracts",
+]
+
+[[package]]
 name = "nomos-cap-controlflow"
 version = "0.1.0"
 dependencies = [
@@ -1141,6 +1149,7 @@ name = "nomos-check-orchestration"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-architecture",
  "nomos-cap-controlflow",
  "nomos-cap-dependency",
  "nomos-cap-dependency-policy",
@@ -1232,6 +1241,7 @@ dependencies = [
 name = "nomos-contract-tests"
 version = "0.1.0"
 dependencies = [
+ "nomos-cap-architecture",
  "nomos-cap-requirement-trace",
  "nomos-cap-syntax",
  "nomos-check-orchestration",
@@ -1241,6 +1251,7 @@ dependencies = [
  "nomos-model",
  "nomos-platform",
  "nomos-platform-std",
+ "nomos-repo-policy",
  "nomos-rules",
  "serde_json",
  "xvpe-primitives",
@@ -1282,12 +1293,14 @@ name = "nomos-gate-orchestration"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-architecture",
  "nomos-check-orchestration",
  "nomos-contracts",
  "nomos-model",
  "nomos-model-package",
  "nomos-platform",
  "nomos-platform-std",
+ "nomos-repo-policy",
  "nomos-rules",
  "nomos-workspace",
  "serde",
@@ -1474,6 +1487,7 @@ name = "nomos-lsp"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-architecture",
  "nomos-capability",
  "nomos-check-orchestration",
  "nomos-composer-std",
@@ -1481,6 +1495,7 @@ dependencies = [
  "nomos-correction-orchestration",
  "nomos-model",
  "nomos-platform",
+ "nomos-repo-policy",
  "nomos-rules",
  "nomos-workspace",
  "nomos-workspace-discovery",
@@ -1577,6 +1592,7 @@ name = "nomos-repo-policy"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-architecture",
  "nomos-cap-goals-policy",
  "nomos-cap-limits-policy",
  "nomos-cap-naming-policy",
@@ -1604,6 +1620,7 @@ name = "nomos-rules"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-architecture",
  "nomos-cap-controlflow",
  "nomos-cap-dependency",
  "nomos-cap-dependency-policy",

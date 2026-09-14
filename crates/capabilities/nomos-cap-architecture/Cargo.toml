@@ -1,0 +1,20 @@
+[package]
+name = "nomos-cap-architecture"
+version = "0.1.0"
+description = "The nomos.cap.architecture.declaration contract: a repository's own architectural components, the dependency order over them, the named exceptions that order cannot express, and its declared write authorities -- read as data rather than compiled into whichever rule judges against them. OD-RULES-003, OD-RULES-029."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# nomos-rules is this capability's second real party from day one, the same
+# OD-CAPABILITY-002 contention criterion nomos-cap-naming-policy was extracted under. Two
+# more parties reach it outside a check run -- nomos-gate-orchestration's prospective
+# `admits` answer and nomos-lsp's architectural component -- which is three more than the
+# one a bundled contract is licensed for.
+[dependencies]
+nomos-capability = { workspace = true }
+nomos-contracts = { workspace = true }
+
+[lints]
+workspace = true

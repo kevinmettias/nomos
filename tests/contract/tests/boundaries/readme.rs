@@ -20,15 +20,16 @@
 //! functions private to a binary crate that exports no library, so no test outside it can read
 //! the set, and restating that set here would be the second authority the record refuses.
 
-use crate::bands::{Repository_Root, Zone, Zone_Of, ZONE_LIST};
+use crate::bands::{Declared_Architecture, Repository_Root};
+use nomos_cap_architecture::ArchitecturePayload;
 use nomos_ledger::{ItemKind, ItemOrigin};
 
-/// The zone table the README shows a reader, parsed back out of the file they edit.
+/// The component table the README shows a reader, parsed back out of the file they edit.
 ///
-/// A row is `| <zone> | `<crate>` | … |`. Anything else in the README is prose as far as
+/// A row is `| <component> | `<crate>` | … |`. Anything else in the README is prose as far as
 /// this is concerned, including the `D-128` table in `OD-PROJECT-001` and any table whose
-/// first cell does not name one of `nomos-rules`' own declared zones.
-fn Readme_Zones() -> Vec<(String, Zone)>
+/// first cell does not name one of the components this repository declares.
+fn Readme_Zones(architecture: &ArchitecturePayload) -> Vec<(String, String)>
 {
     let path = Repository_Root().join("README.md");
     let text = std::fs::read_to_string(&path)
@@ -40,7 +41,7 @@ fn Readme_Zones() -> Vec<(String, Zone)>
     let mut rows = Vec::new();
     for line in text.lines()
     {
-        let row = Zone_Row(line);
+        let row = Zone_Row(architecture, line);
 
         rows.extend(row);
     }
@@ -52,10 +53,10 @@ fn Readme_Zones() -> Vec<(String, Zone)>
 ///
 /// A table row opens with the delimiter, so the first cell is the empty string before it. A
 /// line that merely contains a pipe does not. The first cell must name one of
-/// [`ZONE_LIST`]'s own [`Zone::Display`] strings exactly, which is what tells a real zone
-/// row apart from a heading (`| Zone | Crate | Owns |`) or a Markdown separator
-/// (`|---|---|---|`) without a second, separately-maintained list of what counts as a row.
-fn Zone_Row(line: &str) -> Option<(String, Zone)>
+/// one of the declared components exactly, which is what tells a real row apart from a
+/// heading (`| Zone | Crate | Owns |`) or a Markdown separator (`|---|---|---|`) without a
+/// second, separately-maintained list of what counts as a row.
+fn Zone_Row(architecture: &ArchitecturePayload, line: &str) -> Option<(String, String)>
 {
     let mut cells = line.split('|').map(str::trim);
     if cells.next() != Some("")
@@ -68,10 +69,10 @@ fn Zone_Row(line: &str) -> Option<(String, Zone)>
     {
         return None;
     };
-    let zone = ZONE_LIST.into_iter().find(|zone| zone.to_string() == zone_text)?;
+    let component = architecture.components.iter().find(|component| return *component == zone_text)?;
     let name = name.strip_prefix('`').and_then(|rest| rest.strip_suffix('`'))?;
 
-    return Some((name.to_owned(), zone));
+    return Some((name.to_owned(), component.clone()));
 }
 
 /// The README describes this workspace, and nothing checked that it still did.
@@ -80,22 +81,23 @@ fn Zone_Row(line: &str) -> Option<(String, Zone)>
 /// `OD-PROJECT-001` records why this README is not one of them: no content kind in the
 /// projection system selects a crate's zone, so no profile can render this file. What
 /// that record gives up is freshness for the prose. What it does not give up is the
-/// table, because the table restates `nomos-rules`' own `ZONES` — the one declaration
-/// `OD-RULES-020`'s migration item made this workspace's architecture, read here through
-/// [`crate::bands`] rather than kept as a second copy — and a restatement can be compared.
+/// table, because the table restates this repository's own `nomos-architecture.json` — the one
+/// declaration, read here through [`crate::bands`] rather than kept as a second copy — and a
+/// restatement can be compared.
 ///
 /// It had already drifted when this check was first written: twenty-two members, eleven of
 /// them listed, and the missing eleven included `nomos-spec-project`, the crate that
 /// renders the projections `OD-PROJECT-001` is about.
 ///
-/// Compared against `ZONES` rather than against the member list, because
+/// Compared against the declaration rather than against the member list, because
 /// [`crate::graph::Test_Every_Member_Should_Declare_A_Band`] already ties those two
 /// together. Two checks reaching the same conclusion by different routes is how they come
 /// to disagree.
 #[test]
 fn Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band()
 {
-    let listed = Readme_Zones();
+    let architecture = Declared_Architecture();
+    let listed = Readme_Zones(&architecture);
 
     assert!(
         !listed.is_empty(),
@@ -105,12 +107,12 @@ fn Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band()
     );
 
     Assert_No_Crate_Is_Listed_Twice(&listed);
-    Assert_Every_Member_Is_Listed(&listed);
-    Assert_Every_Listing_Is_A_Member(&listed);
+    Assert_Every_Member_Is_Listed(&architecture, &listed);
+    Assert_Every_Listing_Is_A_Member(&architecture, &listed);
 }
 
 /// Two rows for one crate can disagree with each other, so there is only ever one.
-fn Assert_No_Crate_Is_Listed_Twice(listed: &[(String, Zone)])
+fn Assert_No_Crate_Is_Listed_Twice(listed: &[(String, String)])
 {
     use std::collections::BTreeSet;
 
@@ -124,15 +126,14 @@ fn Assert_No_Crate_Is_Listed_Twice(listed: &[(String, Zone)])
     }
 }
 
-/// Every crate `ZONES` declares appears in the table a reader is shown.
-fn Assert_Every_Member_Is_Listed(listed: &[(String, Zone)])
+/// Every crate the declaration places appears in the table a reader is shown.
+fn Assert_Every_Member_Is_Listed(architecture: &ArchitecturePayload, listed: &[(String, String)])
 {
-    use crate::bands::ZONES;
-
-    let missing: Vec<&str> = ZONES
+    let missing: Vec<&str> = architecture
+        .membership
         .iter()
-        .filter(|(name, _)| return !listed.iter().any(|(listed, _)| return listed == name))
-        .map(|(name, _)| return *name)
+        .filter(|placed| return !listed.iter().any(|(name, _)| return *name == placed.package))
+        .map(|placed| return placed.package.as_str())
         .collect();
 
     assert!(
@@ -145,20 +146,21 @@ fn Assert_Every_Member_Is_Listed(listed: &[(String, Zone)])
 }
 
 /// The other direction, in both halves: a row naming no crate, and a row naming the wrong
-/// zone for one that exists.
-fn Assert_Every_Listing_Is_A_Member(listed: &[(String, Zone)])
+/// component for one that exists.
+fn Assert_Every_Listing_Is_A_Member(architecture: &ArchitecturePayload, listed: &[(String, String)])
 {
-    let invented: Vec<&(String, Zone)> = listed
+    let invented: Vec<&(String, String)> = listed
         .iter()
-        .filter(|(name, _)| return Zone_Of(name).is_none())
+        .filter(|(name, _)| return architecture.Component_Of(name).is_none())
         .collect();
     let disagreeing: Vec<String> = listed
         .iter()
-        .filter_map(|(name, zone)| {
-            let declared = Zone_Of(name)?;
+        .filter_map(|(name, component)| {
+            let declared = architecture.Component_Of(name)?;
 
-            return (declared != *zone)
-                .then(|| return format!("{name}: README says {zone}, ZONES says {declared}"));
+            return (declared != component).then(|| {
+                return format!("{name}: README says {component}, nomos-architecture.json says {declared}");
+            });
         })
         .collect();
 

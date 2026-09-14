@@ -23,7 +23,7 @@ use crate::composition::{Recognized_Language, Recognized_Syntax_Provider, Regist
 use crate::facts::{
     Subprocess,
     DependencyMaterialization, Ingested_Workspace, LintMaterialization, Materialize_Dependencies, Materialize_Goals_Policy,
-    Materialize_Limits_Policy, Materialize_Lint, Materialize_Naming_Policy, Materialize_Policy, Materialize_Reachability,
+    Materialize_Architecture, Materialize_Limits_Policy, Materialize_Lint, Materialize_Naming_Policy, Materialize_Policy, Materialize_Reachability,
     Materialize_Requirement_Trace, Materialize_Review, Materialize_Scripting_Policy, Materialize_Syntax, Materialize_Words_Policy,
     PolicyMaterialization, ReviewMaterialization,
 };
@@ -282,6 +282,7 @@ fn Materialize_Capabilities<Launcher: ProcessLauncher, Fs: FileSystem, Env: Envi
     Tracking(env, changed, RequiredFact::Reachability, |env| Materialize_Reachability_Section(sources, env, demanded));
     Tracking(env, changed, RequiredFact::NamingPolicy, |env| Materialize_Naming_Policy_Section(env, demanded));
     Tracking(env, changed, RequiredFact::LimitsPolicy, |env| Materialize_Limits_Policy_Section(env, demanded));
+    Tracking(env, changed, RequiredFact::ArchitectureDeclaration, |env| Materialize_Architecture_Section(env, demanded));
     Tracking(env, changed, RequiredFact::ScriptingPolicy, |env| Materialize_Scripting_Policy_Section(env, demanded));
     Tracking(env, changed, RequiredFact::GoalsPolicy, |env| Materialize_Goals_Policy_Section(env, demanded));
     Tracking(env, changed, RequiredFact::WordsPolicy, |env| Materialize_Words_Policy_Section(env, demanded));
@@ -443,6 +444,23 @@ fn Materialize_Limits_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, 
     if demanded.contains(&RequiredFact::LimitsPolicy)
     {
         Materialize_Limits_Policy(env.root, env.context, env.store, env.filesystem);
+    }
+}
+
+/// The architecture section: [`Materialize_Architecture`] when a selected rule declares it.
+///
+/// Unlike every policy section beside it, an absent fact here is not a fallback to a built-in
+/// default. The three dependency rules have no default an architecture could have, so skipping
+/// this makes them report a declaration they could not read rather than judge against an
+/// assumption -- which is the honest answer and the one `OD-RULES-003` asks for.
+fn Materialize_Architecture_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
+    demanded: &[RequiredFact],
+)
+{
+    if demanded.contains(&RequiredFact::ArchitectureDeclaration)
+    {
+        Materialize_Architecture(env.root, env.context, env.store, env.filesystem);
     }
 }
 

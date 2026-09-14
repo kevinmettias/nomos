@@ -1,0 +1,256 @@
+{
+  "components": [
+    "Protocol",
+    "Substrate",
+    "Backend",
+    "Specification",
+    "Capability Contract",
+    "Provider",
+    "Rules",
+    "Agent",
+    "Application Service",
+    "Repo Tooling",
+    "Host",
+    "Verification"
+  ],
+  "members": {
+    "nomos-agent-contracts": "Agent",
+    "nomos-agent-executor-claude-code": "Agent",
+    "nomos-agent-orchestration": "Application Service",
+    "nomos-analysis": "Substrate",
+    "nomos-api": "Host",
+    "nomos-api-transport": "Host",
+    "nomos-cap-architecture": "Capability Contract",
+    "nomos-cap-controlflow": "Capability Contract",
+    "nomos-cap-dependency": "Capability Contract",
+    "nomos-cap-dependency-policy": "Capability Contract",
+    "nomos-cap-goals-policy": "Capability Contract",
+    "nomos-cap-limits-policy": "Capability Contract",
+    "nomos-cap-lint": "Capability Contract",
+    "nomos-cap-naming-policy": "Capability Contract",
+    "nomos-cap-requirement-trace": "Capability Contract",
+    "nomos-cap-scripting-policy": "Capability Contract",
+    "nomos-cap-syntax": "Capability Contract",
+    "nomos-cap-words-policy": "Capability Contract",
+    "nomos-capability": "Substrate",
+    "nomos-check-orchestration": "Application Service",
+    "nomos-cli": "Host",
+    "nomos-composer-std": "Substrate",
+    "nomos-connector-coderabbit": "Capability Contract",
+    "nomos-contract-tests": "Verification",
+    "nomos-contracts": "Protocol",
+    "nomos-correction-orchestration": "Application Service",
+    "nomos-corrections": "Agent",
+    "nomos-gate-orchestration": "Application Service",
+    "nomos-integration-tests": "Verification",
+    "nomos-lang-go": "Provider",
+    "nomos-lang-go-modules": "Provider",
+    "nomos-lang-go-package": "Provider",
+    "nomos-lang-rust": "Provider",
+    "nomos-lang-rust-cargo": "Provider",
+    "nomos-lang-rust-clippy": "Provider",
+    "nomos-lang-rust-compiler": "Provider",
+    "nomos-lang-rust-deny": "Provider",
+    "nomos-lang-rust-package": "Provider",
+    "nomos-lang-rust-scan": "Provider",
+    "nomos-ledger": "Repo Tooling",
+    "nomos-lsp": "Host",
+    "nomos-mcp": "Host",
+    "nomos-model": "Substrate",
+    "nomos-model-backend-ollama": "Agent",
+    "nomos-model-package": "Provider",
+    "nomos-package": "Provider",
+    "nomos-platform": "Substrate",
+    "nomos-platform-std": "Backend",
+    "nomos-platform-xvpe": "Substrate",
+    "nomos-repo-policy": "Provider",
+    "nomos-rule-package": "Provider",
+    "nomos-rules": "Rules",
+    "nomos-scope-verification": "Substrate",
+    "nomos-spec-bundle": "Specification",
+    "nomos-spec-ingest": "Specification",
+    "nomos-spec-model": "Specification",
+    "nomos-spec-orchestration": "Specification",
+    "nomos-spec-project": "Specification",
+    "nomos-spec-store": "Specification",
+    "nomos-spec-validate": "Specification",
+    "nomos-store": "Substrate",
+    "nomos-surface-provenance": "Repo Tooling",
+    "nomos-tool-package": "Provider",
+    "nomos-work-orchestration": "Repo Tooling",
+    "nomos-workflow-orchestration": "Application Service",
+    "nomos-workspace": "Substrate",
+    "nomos-workspace-discovery": "Application Service"
+  },
+  "permits": {
+    "Substrate": [
+      "Protocol",
+      "Backend"
+    ],
+    "Backend": [
+      "Protocol",
+      "Substrate"
+    ],
+    "Specification": [
+      "Protocol",
+      "Substrate"
+    ],
+    "Capability Contract": [
+      "Protocol",
+      "Substrate"
+    ],
+    "Provider": [
+      "Protocol",
+      "Substrate",
+      "Capability Contract"
+    ],
+    "Rules": [
+      "Protocol",
+      "Substrate",
+      "Capability Contract"
+    ],
+    "Agent": [
+      "Protocol",
+      "Substrate",
+      "Provider"
+    ],
+    "Application Service": [
+      "Protocol",
+      "Substrate",
+      "Capability Contract",
+      "Provider",
+      "Rules",
+      "Agent"
+    ],
+    "Repo Tooling": [
+      "Protocol",
+      "Substrate"
+    ],
+    "Host": [
+      "Protocol",
+      "Substrate",
+      "Specification",
+      "Capability Contract",
+      "Provider",
+      "Rules",
+      "Agent",
+      "Application Service",
+      "Repo Tooling"
+    ],
+    "Verification": [
+      "Protocol",
+      "Substrate",
+      "Backend",
+      "Specification",
+      "Capability Contract",
+      "Provider",
+      "Rules",
+      "Agent",
+      "Application Service",
+      "Repo Tooling",
+      "Host"
+    ]
+  },
+  "exceptions": {
+    "nomos-agent-contracts": [
+      "nomos-corrections"
+    ],
+    "nomos-agent-executor-claude-code": [
+      "nomos-agent-contracts"
+    ],
+    "nomos-analysis": [
+      "nomos-capability",
+      "nomos-model"
+    ],
+    "nomos-api-transport": [
+      "nomos-api"
+    ],
+    "nomos-composer-std": [
+      "nomos-platform"
+    ],
+    "nomos-correction-orchestration": [
+      "nomos-check-orchestration"
+    ],
+    "nomos-gate-orchestration": [
+      "nomos-check-orchestration"
+    ],
+    "nomos-lang-go-package": [
+      "nomos-lang-go",
+      "nomos-package"
+    ],
+    "nomos-lang-rust-package": [
+      "nomos-lang-rust",
+      "nomos-lang-rust-scan",
+      "nomos-package"
+    ],
+    "nomos-mcp": [
+      "nomos-api-transport"
+    ],
+    "nomos-model-backend-ollama": [
+      "nomos-agent-contracts"
+    ],
+    "nomos-model-package": [
+      "nomos-package"
+    ],
+    "nomos-platform-xvpe": [
+      "nomos-platform"
+    ],
+    "nomos-rule-package": [
+      "nomos-package"
+    ],
+    "nomos-scope-verification": [
+      "nomos-model"
+    ],
+    "nomos-spec-bundle": [
+      "nomos-spec-model",
+      "nomos-spec-store"
+    ],
+    "nomos-spec-ingest": [
+      "nomos-spec-model",
+      "nomos-spec-store"
+    ],
+    "nomos-spec-orchestration": [
+      "nomos-spec-ingest",
+      "nomos-spec-model",
+      "nomos-spec-project",
+      "nomos-spec-store"
+    ],
+    "nomos-spec-project": [
+      "nomos-spec-model",
+      "nomos-spec-store"
+    ],
+    "nomos-spec-store": [
+      "nomos-spec-model"
+    ],
+    "nomos-spec-validate": [
+      "nomos-spec-ingest",
+      "nomos-spec-model",
+      "nomos-spec-store"
+    ],
+    "nomos-store": [
+      "nomos-model"
+    ],
+    "nomos-tool-package": [
+      "nomos-lang-rust-clippy",
+      "nomos-lang-rust-deny",
+      "nomos-package"
+    ],
+    "nomos-work-orchestration": [
+      "nomos-ledger"
+    ],
+    "nomos-workflow-orchestration": [
+      "nomos-check-orchestration",
+      "nomos-correction-orchestration",
+      "nomos-gate-orchestration"
+    ],
+    "nomos-workspace": [
+      "nomos-model",
+      "nomos-store"
+    ]
+  },
+  "authorities": {
+    "nomos-store": [
+      "nomos-workspace"
+    ]
+  }
+}

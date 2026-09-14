@@ -42,7 +42,8 @@ pub enum variant nomos_gate_orchestration::SuppressionDisposition::RepositoryPol
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::TemporaryWaiver
 pub enum variant nomos_gate_orchestration::SuppressionStatus::Active
 pub enum variant nomos_gate_orchestration::SuppressionStatus::Expired
-pub fn nomos_gate_orchestration::Admits(depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
+pub fn nomos_gate_orchestration::Admits(architecture: &ArchitecturePayload, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
+pub fn nomos_gate_orchestration::Admits_Under<Fs: FileSystem>(root: &Path, filesystem: &Fs, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
 pub fn nomos_gate_orchestration::AdoptionPolicy::Calibrating<'a>(&'a self, finding: &Finding) -> Option<&'a RuleCalibration>
 pub fn nomos_gate_orchestration::BaselineDebt::Is_Applicable_To(&self, finding: &Finding) -> bool
 pub fn nomos_gate_orchestration::BaselinePolicy::Tolerating<'a>(&'a self, finding: &Finding) -> Option<&'a BaselineDebt>

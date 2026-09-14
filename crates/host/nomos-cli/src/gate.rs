@@ -113,9 +113,17 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
         Invocation::Admits { depending, depended } =>
         {
             // The one arm that walks nothing. `OD-GATE-026` decided the subject is a crate
-            // pair, so there is no root to read, no environment to compose and no source to
-            // gather -- which is the whole reason the answer is available before the edge is.
-            let answer = nomos_gate_orchestration::Admits(
+            // pair, so there is no environment to compose and no source to gather -- which is
+            // the whole reason the answer is available before the edge is. It does read one
+            // file now, because the architecture it answers from is the repository's own
+            // declaration rather than a table compiled into a rules crate. Reading it is
+            // `nomos-gate-orchestration`'s own, through the same `FileSystem` port it already
+            // resolves `nomos-gate.json` over: a declaration it cannot read is an empty one,
+            // and the answer is then `NotJudged` rather than a guess -- the same answer any
+            // crate a declaration does not place already gets.
+            let answer = nomos_gate_orchestration::Admits_Under(
+                Path::new("."),
+                &FILE_SYSTEM,
                 nomos_gate_orchestration::DependingCrate(depending),
                 nomos_gate_orchestration::DependedCrate(depended),
             );

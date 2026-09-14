@@ -86,6 +86,7 @@ pub enum RequiredFact
     WordsPolicy,
     ReviewFindings,
     RequirementTrace,
+    ArchitectureDeclaration,
 }
 
 impl RequiredFact
@@ -108,6 +109,7 @@ impl RequiredFact
             Self::WordsPolicy => nomos_cap_words_policy::Capability(),
             Self::ReviewFindings => nomos_connector_coderabbit::Capability(),
             Self::RequirementTrace => nomos_cap_requirement_trace::Capability(),
+            Self::ArchitectureDeclaration => nomos_cap_architecture::Capability(),
         };
     }
 }
@@ -245,9 +247,9 @@ const fn Described(id: &'static str, subject: SubjectKind, requires: &'static [R
 pub const DESCRIPTORS: &[RuleDescriptor] = &[
     Described(crate::COMPLETENESS_MIRROR, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_Completeness_Mirrors).Citing(crate::CONTRACT_RECORD, crate::CONTRACT_RECORD_VERSION),
     Described(crate::NAMING_CONVENTION, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy], crate::Check_Naming_Convention).Citing(WORKSPACE_CONVENTIONS, NO_VERSIONED_RECORD),
-    Described(crate::DEPENDENCY_DIRECTION, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges], crate::Check_Dependency_Direction).Citing(crate::DEPENDENCY_CONTRACT_RECORD, crate::DEPENDENCY_CONTRACT_RECORD_VERSION),
-    Described(crate::DEPENDENCY_COMPLETENESS, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges], crate::Check_Every_Member_Declares_A_Band).Citing(crate::DEPENDENCY_CONTRACT_RECORD, crate::DEPENDENCY_CONTRACT_RECORD_VERSION),
-    Described(crate::WRITE_AUTHORITY, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges], crate::Check_Write_Authority).Citing(crate::WRITE_AUTHORITY_CONTRACT_RECORD, crate::WRITE_AUTHORITY_CONTRACT_RECORD_VERSION),
+    Described(crate::DEPENDENCY_DIRECTION, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges, RequiredFact::ArchitectureDeclaration], crate::Check_Dependency_Direction).Citing(crate::DEPENDENCY_CONTRACT_RECORD, crate::DEPENDENCY_CONTRACT_RECORD_VERSION),
+    Described(crate::DEPENDENCY_COMPLETENESS, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges, RequiredFact::ArchitectureDeclaration], crate::Check_Every_Member_Declares_A_Band).Citing(crate::DEPENDENCY_CONTRACT_RECORD, crate::DEPENDENCY_CONTRACT_RECORD_VERSION),
+    Described(crate::WRITE_AUTHORITY, SubjectKind::SourceFacts, &[RequiredFact::DependencyEdges, RequiredFact::ArchitectureDeclaration], crate::Check_Write_Authority).Citing(crate::WRITE_AUTHORITY_CONTRACT_RECORD, crate::WRITE_AUTHORITY_CONTRACT_RECORD_VERSION),
     Described(crate::LINT_DIAGNOSTICS, SubjectKind::SourceFacts, &[RequiredFact::LintDiagnostics], crate::Check_Lint_Diagnostics).Citing(crate::LINT_CONTRACT_RECORD, crate::LINT_CONTRACT_RECORD_VERSION),
     Described(crate::DEPENDENCY_POLICY, SubjectKind::SourceFacts, &[RequiredFact::DependencyPolicy], crate::Check_Dependency_Policy).Citing(crate::DEPENDENCY_POLICY_CONTRACT_RECORD, crate::DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION),
     Described(crate::GUARANTEE_DECLARES_ITS_EXERCISER, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_Guarantee_Declares_Its_Exerciser).Citing(crate::GUARANTEE_EXERCISER_CONTRACT_RECORD, crate::GUARANTEE_EXERCISER_CONTRACT_RECORD_VERSION),

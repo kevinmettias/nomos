@@ -80,7 +80,7 @@ fn Test_Diagnostics_For_Should_Translate_A_Real_Run_Result()
     assert_eq!(findings.len(), 1, "one line carries trailing whitespace: {findings:?}");
 
     let only_finding = findings.first().expect("asserted len 1 above");
-    let diagnostics = nomos_lsp::Diagnostics_For(only_finding);
+    let diagnostics = nomos_lsp::Diagnostics_For(&nomos_cap_architecture::ArchitecturePayload::default(), only_finding);
     let only = diagnostics.first().expect("one location, one diagnostic");
 
     assert_eq!(only.path, "a.rs");

@@ -1,13 +1,19 @@
+pub const fn nomos_repo_policy::architecture::Declared_Guarantee() -> Guarantee
 pub const fn nomos_repo_policy::goals::Declared_Guarantee() -> Guarantee
 pub const fn nomos_repo_policy::limits::Declared_Guarantee() -> Guarantee
 pub const fn nomos_repo_policy::naming::Declared_Guarantee() -> Guarantee
 pub const fn nomos_repo_policy::scripting::Declared_Guarantee() -> Guarantee
 pub const fn nomos_repo_policy::words::Declared_Guarantee() -> Guarantee
+pub const nomos_repo_policy::architecture::ARCHITECTURE_JSON: &str
+pub const nomos_repo_policy::architecture::PROVIDER: &str
 pub const nomos_repo_policy::goals::PROVIDER: &str
 pub const nomos_repo_policy::limits::PROVIDER: &str
 pub const nomos_repo_policy::naming::PROVIDER: &str
 pub const nomos_repo_policy::scripting::PROVIDER: &str
 pub const nomos_repo_policy::words::PROVIDER: &str
+pub fn nomos_repo_policy::architecture::ArchitectureError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_repo_policy::architecture::Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<ArchitecturePayload, ArchitectureError>
+pub fn nomos_repo_policy::architecture::Provider_Offer() -> ProviderOffer
 pub fn nomos_repo_policy::goals::Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<GoalsPolicyPayload, GoalsPolicyError>
 pub fn nomos_repo_policy::goals::GoalsPolicyError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_repo_policy::goals::Provider_Offer() -> ProviderOffer
@@ -23,16 +29,19 @@ pub fn nomos_repo_policy::scripting::ScriptingPolicyError::fmt(&self, formatter:
 pub fn nomos_repo_policy::words::Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<WordsPolicyPayload, WordsPolicyError>
 pub fn nomos_repo_policy::words::Provider_Offer() -> ProviderOffer
 pub fn nomos_repo_policy::words::WordsPolicyError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub impl nomos_repo_policy::architecture::ArchitectureError implements core::fmt::Display
 pub impl nomos_repo_policy::goals::GoalsPolicyError implements core::fmt::Display
 pub impl nomos_repo_policy::limits::LimitsPolicyError implements core::fmt::Display
 pub impl nomos_repo_policy::naming::NamingPolicyError implements core::fmt::Display
 pub impl nomos_repo_policy::scripting::ScriptingPolicyError implements core::fmt::Display
 pub impl nomos_repo_policy::words::WordsPolicyError implements core::fmt::Display
+pub struct field nomos_repo_policy::architecture::ArchitectureError::reason: String
 pub struct field nomos_repo_policy::goals::GoalsPolicyError::reason: String
 pub struct field nomos_repo_policy::limits::LimitsPolicyError::reason: String
 pub struct field nomos_repo_policy::naming::NamingPolicyError::reason: String
 pub struct field nomos_repo_policy::scripting::ScriptingPolicyError::reason: String
 pub struct field nomos_repo_policy::words::WordsPolicyError::reason: String
+pub struct nomos_repo_policy::architecture::ArchitectureError
 pub struct nomos_repo_policy::goals::GoalsPolicyError
 pub struct nomos_repo_policy::limits::LimitsPolicyError
 pub struct nomos_repo_policy::naming::NamingPolicyError

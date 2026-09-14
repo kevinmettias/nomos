@@ -1,86 +1,60 @@
-//! A workspace member's own dependencies must run strictly downward, the same property
-//! `tests/contract/tests/boundaries/graph.rs`'s `Test_Dependencies_Should_Run_Strictly_
-//! Downward` already enforces for this repository by hand.
+//! A workspace member's own dependencies must run the way its repository says they may.
 //!
 //! # Composed into `nomos-check-orchestration::Run`
 //!
 //! `OD-RULES-003` designed this: a declared architecture is data, the observed dependency
 //! graph is a fact a capability provider establishes, and a rule composes the two into
-//! findings. This is that rule. `run.rs`'s `Run` calls [`Check_Dependency_Direction`]
-//! directly over the edges `Materialize_Dependencies` wrote, wired by
-//! `P13-DEPENDENCY-WIRE-1` the same way `nomos_lang_rust_cargo`'s own provider was wired in
-//! ahead of it — `nomos check` judges dependency direction as part of an ordinary run.
+//! findings. This is that rule. `run_context.rs`'s `Run` calls [`Check_Dependency_Direction`]
+//! directly over the edges `Materialize_Dependencies` wrote, wired by `P13-DEPENDENCY-WIRE-1`
+//! the same way `nomos_lang_rust_cargo`'s own provider was wired in ahead of it — `nomos check`
+//! judges dependency direction as part of an ordinary run.
 //!
-//! # `zones` is the one declaration, not a second copy
+//! # Both halves are now facts, and that is the change
 //!
-//! `OD-RULES-020` decided a total order over band numbers claims precedence between crates
-//! that have none, and `OD-RULES-020`'s own migration item made [`zones::ZONES`] this
-//! workspace's one declared architecture: `tests/contract/tests/boundaries/bands.rs` and
-//! `graph.rs` read it through this crate's own public surface rather than keeping their
-//! own copy, and `README.md`'s own table is checked against the identical declaration.
-//! What `OD-RULES-003` named as the expected interim state — one Rust-source table,
-//! generalizing the format only once a second repository wants this property — is
-//! unchanged by closing the copy; only the number of times that one table is typed out by
-//! hand changed, from three to one.
+//! `OD-RULES-003` named three prerequisites and left one unbuilt: "a place to author a declared
+//! architecture as data rather than a Rust `const` table." Until it existed, this module held
+//! that table — `ZONES`, a literal of sixty-six entries every one of which was a crate name of
+//! this workspace's, plus a `Zone` enum whose variants were this workspace's own architectural
+//! vocabulary and whose doc comments named this workspace's own crates. `OD-RULES-029` measured
+//! what that cost: on any other repository nothing resolved, so `Check_Dependency_Direction`
+//! silently judged nothing while `Check_Every_Member_Declares_A_Band` reported one finding per
+//! member saying it had declared nothing — a declaration that repository was never asked for.
+//!
+//! Both halves now arrive through the reader. `nomos.cap.architecture.declaration` carries the
+//! whole triple `OD-RULES-029` insisted travels together: the components a repository divides
+//! itself into, the order over them, and the named exceptions that order cannot express. No
+//! component name and no crate name of this workspace's remains here, and none of the three
+//! rules below could tell you what a zone is.
 //!
 //! # Scope
 //!
-//! First-party edges only — [`nomos_cap_dependency`]'s provider already filters to
-//! workspace members, so this rule never sees an external (registry) dependency to judge.
-//! `graph.rs`'s `CONTRACTS_ALLOWLIST` and `PLATFORM_ADAPTER` exceptions are not
-//! replicated: both are about reach *outside* this workspace's own zones, which this
-//! capability does not observe at all, so there is nothing here for them to except.
+//! First-party edges only — [`nomos_cap_dependency`]'s provider already filters to workspace
+//! members, so this rule never sees an external (registry) dependency to judge.
 //!
 //! # Split by responsibility
 //!
-//! [`zones`] holds this workspace's own declared architecture table and the lookup over
-//! it. [`reading`] requires and decodes one member's dependency fact. [`violations`]
-//! judges an already-decoded payload against the declared zones for *direction*;
-//! [`completeness`] judges the same payload for *coverage* — whether its own package has a
-//! declared zone at all; [`write_authority`] judges the same payload for *authority* —
-//! whether an edge into a declared write door crate comes from one of the doors named for
-//! it. This file keeps only what composes the pieces: the rules' own identifiers and
-//! [`Check_Dependency_Direction`]/[`Check_Every_Member_Declares_A_Band`]/
-//! [`Check_Write_Authority`] themselves, plus the end-to-end tests that exercise each
-//! through a real reader.
+//! [`reading`] requires and decodes both facts. [`violations`] judges an already-decoded
+//! payload against the declaration for *direction*; [`completeness`] judges the same payload
+//! for *coverage* — whether its own package is placed at all; [`write_authority`] judges it for
+//! *authority* — whether an edge into a declared authority comes from one of its named doors.
+//! This file keeps only what composes the pieces.
 //!
-//! # A second rule over the same fact
+//! # A second and third rule over the same two facts
 //!
-//! `violations.rs`'s own `Violations_In` has always silently produced no findings for a
-//! package with no declared zone, naming the gap as a different defect —
-//! `tests/contract/tests/boundaries/graph.rs`'s own `Test_Every_Member_Should_Declare_A_Band`
-//! already enforces it by hand, for this repository alone.
-//! [`Check_Every_Member_Declares_A_Band`] promotes that gap to a Finding-producing judgment
-//! reachable through an ordinary `nomos check` run, over whatever workspace supplies the
-//! fact — the same declared-architecture-vs-observed-fact shape `OD-RULES-003` designed for
-//! direction, applied to coverage instead. No new capability and no new provider: it reads
-//! the identical `nomos.cap.dependency.edges` fact and the identical [`zones::ZONES`] table
-//! [`Check_Dependency_Direction`] already reads.
-//!
-//! # A third rule over the same fact
-//!
-//! `OD-RULES-023` decided a third judgment belonged here rather than in a new capability:
-//! `nomos-store`'s own "one write door per authority" design was true but unchecked, and
-//! [`write_authority::WRITE_DOORS`] is an allow-list over the identical
-//! `nomos.cap.dependency.edges` fact, checked the same way [`zones::Permits`] already checks
-//! a crossing — named authority instead of named direction. [`Check_Write_Authority`] cites
-//! `OD-RULES-023` rather than `OD-RULES-003`: unlike coverage, this is new decision content,
-//! not the same design applied again.
+//! [`Check_Every_Member_Declares_A_Band`] promotes to a Finding what `violations` passes over:
+//! a member the declaration does not place. `OD-RULES-023` decided the third belonged here
+//! rather than in a new capability, and [`Check_Write_Authority`] cites that record rather than
+//! `OD-RULES-003` because it is new decision content, not the same design applied again.
 
 mod completeness;
 mod reading;
 mod violations;
 mod write_authority;
-mod zones;
 
 use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
-use reading::Payload_Of;
-use violations::Violations_In;
-
-pub use write_authority::WRITE_DOORS;
-pub use zones::{Permits, Zone, Zone_Of, ALL as ZONE_LIST, SAME_ZONE_EDGES, ZONES};
+use reading::{Architecture_Of, Payload_Of};
 
 /// This rule's own identifier.
 pub const DEPENDENCY_DIRECTION: &str = "dependency-direction";
@@ -101,16 +75,14 @@ pub const WRITE_AUTHORITY: &str = "dependency-write-authority";
 /// [`DEPENDENCY_CONTRACT_RECORD_VERSION`], so an amendment this implementation has not caught
 /// up to is a red test rather than silent drift.
 ///
-/// The name carries the rule's prefix where `mirror.rs`'s [`crate::CONTRACT_RECORD`] does
-/// not. That asymmetry is deliberate: the unprefixed pair was this crate's only citation when
-/// it was written and is published, and renaming a published constant for symmetry is churn
-/// with no defect behind it. A third cited rule is the point at which extracting a shared
-/// citation shape stops being a generalization from two.
+/// The name carries the rule's prefix where `mirror.rs`'s [`crate::CONTRACT_RECORD`] does not.
+/// That asymmetry is deliberate: the unprefixed pair was this crate's only citation when it was
+/// written and is published, and renaming a published constant for symmetry is churn with no
+/// defect behind it.
 ///
-/// [`Check_Every_Member_Declares_A_Band`] cites this same record rather than a record of its
-/// own: it is `OD-RULES-003`'s identical declared-architecture-vs-observed-fact design,
-/// judging coverage instead of direction, not a second design decision needing a second
-/// citation.
+/// [`Check_Every_Member_Declares_A_Band`] cites this same record rather than one of its own: it
+/// is `OD-RULES-003`'s identical declared-architecture-vs-observed-fact design, judging coverage
+/// instead of direction, not a second design decision needing a second citation.
 pub const DEPENDENCY_CONTRACT_RECORD: &str = "OD-RULES-003";
 
 /// The version of [`DEPENDENCY_CONTRACT_RECORD`] this implementation was written against.
@@ -119,240 +91,341 @@ pub const DEPENDENCY_CONTRACT_RECORD_VERSION: u32 = 1;
 /// The record [`Check_Write_Authority`]'s own contract is written in.
 ///
 /// A record of its own rather than a second citation of [`DEPENDENCY_CONTRACT_RECORD`]:
-/// `OD-RULES-023` is new decision content -- a declared allow-list checked against the
-/// existing dependency-edges fact -- not `OD-RULES-003`'s design applied again the way
-/// [`Check_Every_Member_Declares_A_Band`] is. `tests/contract/tests/rule_contract_
-/// citation.rs` reads `OD-RULES-023`'s own front matter on every run and compares it
-/// against [`WRITE_AUTHORITY_CONTRACT_RECORD_VERSION`].
+/// `OD-RULES-023` is new decision content -- a declared allow-list checked against the existing
+/// dependency-edges fact -- not `OD-RULES-003`'s design applied again the way
+/// [`Check_Every_Member_Declares_A_Band`] is. `tests/contract/tests/rule_contract_citation.rs`
+/// reads `OD-RULES-023`'s own front matter on every run and compares it against
+/// [`WRITE_AUTHORITY_CONTRACT_RECORD_VERSION`].
 pub const WRITE_AUTHORITY_CONTRACT_RECORD: &str = "OD-RULES-023";
 
-/// The version of [`WRITE_AUTHORITY_CONTRACT_RECORD`] this implementation was written
-/// against.
+/// The version of [`WRITE_AUTHORITY_CONTRACT_RECORD`] this implementation was written against.
 pub const WRITE_AUTHORITY_CONTRACT_RECORD_VERSION: u32 = 1;
 
-/// Judges every workspace member `sources` names against this workspace's own declared
-/// band ordering.
+/// Judges every workspace member `sources` names against the architecture its own repository
+/// declares.
 ///
-/// One fact per source, the same shape [`crate::Check_Naming_Convention`] reads. A source
-/// here is a workspace member, not a file — its `subject` is the member's own subject
-/// (the same [`nomos_model::Subject_Of_Path`] the provider keys its fact under), and its
-/// `text` is unread: this rule's whole judgment comes from the fact, never from
-/// `source.text`.
+/// One dependency fact per source, the same shape [`crate::Check_Naming_Convention`] reads, plus
+/// one whole-workspace declaration read once for the run. A source here is a workspace member,
+/// not a file — its `subject` is the member's own subject — and its `text` is unread: this
+/// rule's whole judgment comes from the two facts, never from `source.text`.
 #[must_use]
 pub fn Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    let mut findings = Vec::new();
-
-    for source in sources
+    let architecture = match Architecture_Of(sources, facts, DEPENDENCY_DIRECTION)
     {
-        match Payload_Of(source, facts, DEPENDENCY_DIRECTION)
-        {
-            Ok(payload) =>
-            {
-                let violations = Violations_In(&payload, source);
-                findings.extend(violations);
-            }
-            Err(finding) => findings.push(finding),
-        }
-    }
+        Ok(architecture) => architecture,
+        Err(unread) => return unread,
+    };
 
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
+    return Judged(sources, facts, DEPENDENCY_DIRECTION, &|payload, source| {
+        return violations::Violations_In(&architecture, payload, source);
+    });
 }
 
-/// Judges whether every workspace member `sources` names has declared where it sits in
-/// this workspace's own band ordering — the coverage half of architecture conformance,
-/// left to `tests/contract`'s own `Test_Every_Member_Should_Declare_A_Band` until now.
+/// Judges whether every workspace member `sources` names is placed by the architecture its own
+/// repository declares — the coverage half of architecture conformance.
 ///
-/// Reads the identical fact and requirement [`Check_Dependency_Direction`] does, through
-/// the same [`Payload_Of`], and files an unread subject under its own identifier rather
-/// than direction's.
+/// Reads the identical two facts [`Check_Dependency_Direction`] does, through the same readers,
+/// and files an unread subject under its own identifier rather than direction's.
 #[must_use]
 pub fn Check_Every_Member_Declares_A_Band(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    let mut findings = Vec::new();
-
-    // Decoded before any of them is judged, because the judgment for each member depends on
-    // the whole set: a package with no declared zone is a gap in a repository that declared
-    // an architecture, and is out of this rule's scope entirely in one that declared none.
-    // `OD-RULES-029` measured why that mattered -- with the zone table compiled into this
-    // crate, every member of any other repository looked like a gap. `completeness`'s own
-    // documentation carries the rest of the reason.
-    let mut decoded = Vec::new();
-    for source in sources
+    let architecture = match Architecture_Of(sources, facts, DEPENDENCY_COMPLETENESS)
     {
-        match Payload_Of(source, facts, DEPENDENCY_COMPLETENESS)
-        {
-            Ok(payload) => decoded.push((payload, source)),
-            Err(finding) => findings.push(finding),
-        }
-    }
+        Ok(architecture) => architecture,
+        Err(unread) => return unread,
+    };
 
-    let declares = completeness::DeclaresAnArchitecture(
-        decoded.iter().any(|(payload, _)| return zones::Zone_Of(&payload.package).is_some()),
-    );
-
-    for (payload, source) in &decoded
-    {
-        findings.extend(completeness::Violations_In(payload, source, declares));
-    }
-
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
+    return Judged(sources, facts, DEPENDENCY_COMPLETENESS, &|payload, source| {
+        return completeness::Violations_In(&architecture, payload, source);
+    });
 }
 
-/// Judges whether every workspace member `sources` names, that depends on a crate
-/// [`write_authority::WRITE_DOORS`] declares an authority, is one of the doors named for
-/// it -- the authority half of architecture conformance `OD-RULES-023` decided.
-///
-/// Reads the identical fact and requirement [`Check_Dependency_Direction`] does, through
-/// the same [`Payload_Of`], and files an unread subject under its own identifier rather
-/// than direction's.
+/// Judges whether every workspace member `sources` names that depends on a package its
+/// repository declares an authority is one of the doors named for it -- the authority half of
+/// architecture conformance `OD-RULES-023` decided.
 #[must_use]
 pub fn Check_Write_Authority(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+{
+    let architecture = match Architecture_Of(sources, facts, WRITE_AUTHORITY)
+    {
+        Ok(architecture) => architecture,
+        Err(unread) => return unread,
+    };
+
+    return Judged(sources, facts, WRITE_AUTHORITY, &|payload, source| {
+        return write_authority::Violations_In(&architecture, payload, source);
+    });
+}
+
+/// Every member's own dependency payload, judged by `judge`, with an unread one reported under
+/// `rule` — the shape all three rules above share once the declaration is in hand.
+fn Judged(
+    sources: &[SourceFile],
+    facts: &mut dyn FactReader,
+    rule: &'static str,
+    judge: &dyn Fn(&nomos_cap_dependency::DependencyPayload, &SourceFile) -> Vec<Finding>,
+) -> Vec<Finding>
 {
     let mut findings = Vec::new();
 
     for source in sources
     {
-        match Payload_Of(source, facts, WRITE_AUTHORITY)
+        match Payload_Of(source, facts, rule)
         {
-            Ok(payload) =>
-            {
-                let violations = write_authority::Violations_In(&payload, source);
-                findings.extend(violations);
-            }
+            Ok(payload) => findings.extend(judge(&payload, source)),
             Err(finding) => findings.push(finding),
         }
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+
     return findings;
 }
 
-/// [`Check_Dependency_Direction`], [`Check_Every_Member_Declares_A_Band`] and
-/// [`Check_Write_Authority`] themselves,
-/// through a real registry, store and reader — the half [`violations::tests`] and
-/// [`completeness::tests`] do not reach.
+
+/// The three rules themselves, through a real registry, store and reader — the half
+/// [`violations::tests`], [`completeness::tests`] and [`write_authority::tests`] do not reach.
+///
+/// Every fixture here declares an architecture in a vocabulary this workspace does not use.
+/// That is the point rather than a flourish: these assertions could not have been written this
+/// way while the components were an enum in this crate, and their reading naturally is the
+/// evidence that nothing here knows what a zone is.
 #[cfg(test)]
 mod tests
 {
     use super::*;
-    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use crate::checks::test_support::{self, Test_Context};
+    use nomos_cap_architecture::ArchitecturePayload;
     use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
+    use nomos_capability::{ProviderOffer, Registry};
+    use nomos_cap_architecture::{Authority, Membership, Permission};
     use nomos_cap_dependency::{DependencyEdge, DependencyKind, DependencyPayload};
-    use nomos_capability::ProviderOffer;
-    use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, RuleId, SubjectId};
+    use nomos_contracts::{ProviderId, RuleId, SubjectId};
     use nomos_model::Content_Digest;
 
-    const PROVIDER: &str = "nomos.test.dependency.resolves";
+    const DEPENDENCY_PROVIDER: &str = "nomos.test.dependency.resolves";
+    const ARCHITECTURE_PROVIDER: &str = "nomos.test.architecture.declares";
 
-    fn Dependency_Edge(target: &str) -> DependencyEdge
+    /// A registry declaring both capabilities these rules read, and a store to materialize into.
+    ///
+    /// `test_support::Offering` builds a registry around one contract, and these rules need two,
+    /// so the declare-then-offer pairing is spelled out here rather than that helper widened for
+    /// a single caller.
+    struct Fixture
     {
-        return DependencyEdge {
-            target: target.to_owned(),
-            kind: DependencyKind::Normal,
-            optional: false,
+        store: MemoryFactStore,
+        registry: Registry,
+        dependency: ProviderOffer,
+        architecture: ProviderOffer,
+    }
+
+    fn Fixture() -> Fixture
+    {
+        let mut registry = Registry::New();
+
+        let dependency = ProviderOffer {
+            provider: ProviderId::New(DEPENDENCY_PROVIDER),
+            capability: nomos_cap_dependency::Capability(),
+            version: nomos_cap_dependency::CONTRACT_VERSION,
+            guarantee: reading::Dependency_Requirement().minimum,
+        };
+        registry
+            .Declare_And_Offer(nomos_cap_dependency::Capability_Contract(), dependency.clone())
+            .expect("declared and offered within the ceiling");
+
+        let architecture = ProviderOffer {
+            provider: ProviderId::New(ARCHITECTURE_PROVIDER),
+            capability: nomos_cap_architecture::Capability(),
+            version: nomos_cap_architecture::CONTRACT_VERSION,
+            guarantee: nomos_cap_architecture::Ceiling(),
+        };
+        registry
+            .Declare_And_Offer(nomos_cap_architecture::Capability_Contract(), architecture.clone())
+            .expect("declared and offered within the ceiling");
+
+        return Fixture { store: MemoryFactStore::New(), registry, dependency, architecture };
+    }
+
+    impl Fixture
+    {
+        /// Files `declared` as the one whole-workspace architecture fact.
+        fn Declaring(&mut self, declared: &ArchitecturePayload)
+        {
+            let bytes = nomos_cap_architecture::Encode_Payload(declared);
+            test_support::Materialize(
+                &mut self.store,
+                nomos_model::Subject_Of_Path(""),
+                &self.architecture.clone(),
+                InputDigest::Of(&[]),
+                nomos_cap_architecture::Payload_Schema(),
+                bytes,
+            );
+        }
+
+        /// Files one member's own dependency edges.
+        fn Depending(&mut self, source: &SourceFile, payload: &DependencyPayload)
+        {
+            let bytes = nomos_cap_dependency::Encode_Payload(payload);
+            test_support::Materialize(
+                &mut self.store,
+                source.subject,
+                &self.dependency.clone(),
+                InputDigest::Of(&[]),
+                nomos_cap_dependency::Payload_Schema(),
+                bytes,
+            );
+        }
+    }
+
+    fn Source_File(package: &str) -> SourceFile
+    {
+        return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
+    }
+
+    fn Edge(target: &str) -> DependencyEdge
+    {
+        return DependencyEdge { target: target.to_owned(), kind: DependencyKind::Normal, optional: false };
+    }
+
+    /// A declaration whose components are none of this workspace's.
+    fn Declaration() -> ArchitecturePayload
+    {
+        return ArchitecturePayload {
+            components: vec!["Domain".to_owned(), "Api".to_owned()],
+            membership: vec![
+                Membership { package: "billing".to_owned(), component: "Domain".to_owned() },
+                Membership { package: "http".to_owned(), component: "Api".to_owned() },
+            ],
+            permissions: vec![Permission { from: "Api".to_owned(), to: "Domain".to_owned() }],
+            exceptions: Vec::new(),
+            authorities: vec![Authority { package: "ledger-store".to_owned(), doors: vec!["billing".to_owned()] }],
         };
     }
 
-    /// Also [`reading::Dependency_Requirement`]'s own shape: the registered guarantee is
-    /// built to exactly meet that floor, so a real fact only reaches this rule because the
-    /// floor admits it.
     #[test]
-    fn Test_Check_Dependency_Direction_Should_Read_And_Judge_A_Real_Fact_Whose_Guarantee_Meets_Dependency_Requirement()
+    fn Test_Check_Dependency_Direction_Should_Read_Both_Real_Facts_And_Judge_An_Inadmissible_Edge()
     {
-        let source = Source_File("nomos-cap-syntax");
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Dependency_Fact(
-            &mut store,
-            &source,
-            &offer,
-            &DependencyPayload {
-                package: "nomos-cap-syntax".to_owned(),
-                edges: vec![Dependency_Edge("nomos-rules")],
-            },
-        );
+        let source = Source_File("billing");
+        let mut fixture = Fixture();
+        fixture.Declaring(&Declaration());
+        fixture.Depending(&source, &DependencyPayload { package: "billing".to_owned(), edges: vec![Edge("http")] });
 
-        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let mut reader = Reader::On(&fixture.store, &fixture.registry, Test_Context());
         let findings = Check_Dependency_Direction(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
-        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "nomos-cap-syntax");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "billing");
     }
 
-    /// Also [`reading::Dependency_Requirement`]'s own shape: a provider is registered
-    /// against exactly that floor, so the subject is reported unread for want of a
-    /// materialized fact rather than for want of an admitted provider.
+    #[test]
+    fn Test_Check_Dependency_Direction_Should_Produce_No_Finding_For_An_Edge_The_Declaration_Admits()
+    {
+        let source = Source_File("http");
+        let mut fixture = Fixture();
+        fixture.Declaring(&Declaration());
+        fixture.Depending(&source, &DependencyPayload { package: "http".to_owned(), edges: vec![Edge("billing")] });
+
+        let mut reader = Reader::On(&fixture.store, &fixture.registry, Test_Context());
+        let findings = Check_Dependency_Direction(&[source], &mut reader);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// The property this whole migration is for, as one assertion: replace the repository's
+    /// architecture wholesale and the same rule, unchanged, enforces the new one. Here `Api` is
+    /// forbidden from reaching `Domain` instead of permitted, and the verdict flips.
+    #[test]
+    fn Test_The_Same_Rule_Should_Enforce_A_Different_Declaration_Over_The_Same_Edges()
+    {
+        let source = Source_File("http");
+        let mut fixture = Fixture();
+        let reversed = ArchitecturePayload {
+            permissions: vec![Permission { from: "Domain".to_owned(), to: "Api".to_owned() }],
+            ..Declaration()
+        };
+        fixture.Declaring(&reversed);
+        fixture.Depending(&source, &DependencyPayload { package: "http".to_owned(), edges: vec![Edge("billing")] });
+
+        let mut reader = Reader::On(&fixture.store, &fixture.registry, Test_Context());
+        let findings = Check_Dependency_Direction(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "the edge the previous declaration admitted is refused by this one: {findings:?}");
+    }
+
+    /// An unreadable declaration is reported once, not silently treated as "declares nothing"
+    /// and not reported per member. `OD-RULES-003` turns on telling those apart.
+    #[test]
+    fn Test_An_Unreadable_Declaration_Should_Report_One_Finding_Rather_Than_Judge_Nothing()
+    {
+        let source = Source_File("billing");
+        let mut fixture = Fixture();
+        fixture.Depending(&source, &DependencyPayload { package: "billing".to_owned(), edges: vec![Edge("http")] });
+
+        let mut reader = Reader::On(&fixture.store, &fixture.registry, Test_Context());
+        let findings = Check_Dependency_Direction(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        let found = findings.first().expect("asserted len 1 above");
+        assert_eq!(found.rule, RuleId::New(DEPENDENCY_DIRECTION));
+        assert!(found.summary.contains("declared architecture could not be read"), "{}", found.summary);
+    }
+
     #[test]
     fn Test_Dependency_Requirement_Should_Be_Registered_Yet_Report_A_Subject_With_No_Fact()
     {
-        let source = Source_File("nomos-cap-syntax");
-        let TestOffering { store, registry, .. } = Offering();
+        let source = Source_File("billing");
+        let mut fixture = Fixture();
+        fixture.Declaring(&Declaration());
 
-        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let mut reader = Reader::On(&fixture.store, &fixture.registry, Test_Context());
         let findings = Check_Dependency_Direction(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "an unread subject must not render as a clean one: {findings:?}");
     }
 
     #[test]
-    fn Test_Check_Every_Member_Declares_A_Band_Should_Produce_No_Finding_For_A_Declared_Package()
+    fn Test_Check_Every_Member_Declares_A_Band_Should_Produce_No_Finding_For_A_Placed_Member()
     {
-        let source = Source_File("nomos-cap-syntax");
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Dependency_Fact(
-            &mut store,
-            &source,
-            &offer,
-            &DependencyPayload {
-                package: "nomos-cap-syntax".to_owned(),
-                edges: Vec::new(),
-            },
-        );
+        let source = Source_File("billing");
+        let mut fixture = Fixture();
+        fixture.Declaring(&Declaration());
+        fixture.Depending(&source, &DependencyPayload { package: "billing".to_owned(), edges: Vec::new() });
 
-        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let mut reader = Reader::On(&fixture.store, &fixture.registry, Test_Context());
         let findings = Check_Every_Member_Declares_A_Band(&[source], &mut reader);
 
         assert!(findings.is_empty(), "{findings:?}");
     }
 
     #[test]
-    fn Test_An_Undeclared_Package_Should_Produce_One_Completeness_Finding()
+    fn Test_An_Unplaced_Member_Should_Produce_One_Completeness_Finding()
     {
-        let source = Source_File("not-in-bands");
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Dependency_Fact(
-            &mut store,
-            &source,
-            &offer,
-            &DependencyPayload {
-                package: "not-in-bands".to_owned(),
-                edges: Vec::new(),
-            },
-        );
+        let source = Source_File("unplaced");
+        let mut fixture = Fixture();
+        fixture.Declaring(&Declaration());
+        fixture.Depending(&source, &DependencyPayload { package: "unplaced".to_owned(), edges: Vec::new() });
 
-        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let mut reader = Reader::On(&fixture.store, &fixture.registry, Test_Context());
         let findings = Check_Every_Member_Declares_A_Band(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
-        let found = findings.first().expect("asserted len 1 above");
-        assert_eq!(found.rule, RuleId::New(DEPENDENCY_COMPLETENESS));
+        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(DEPENDENCY_COMPLETENESS));
     }
 
     #[test]
     fn Test_Payload_Of_Should_Report_An_Unread_Completeness_Subject_Under_Its_Own_Rule()
     {
-        let source = Source_File("nomos-cap-syntax");
-        let TestOffering { store, registry, .. } = Offering();
+        let source = Source_File("billing");
+        let mut fixture = Fixture();
+        fixture.Declaring(&Declaration());
 
-        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let mut reader = Reader::On(&fixture.store, &fixture.registry, Test_Context());
         let findings = Check_Every_Member_Declares_A_Band(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "an unread subject must not render as a clean one: {findings:?}");
-        let found = findings.first().expect("asserted len 1 above");
         assert_eq!(
-            found.rule,
+            findings.first().expect("asserted len 1 above").rule,
             RuleId::New(DEPENDENCY_COMPLETENESS),
             "an unread subject must be filed under whichever rule asked, not always direction's"
         );
@@ -361,19 +434,12 @@ mod tests
     #[test]
     fn Test_Check_Write_Authority_Should_Produce_No_Finding_For_A_Named_Door()
     {
-        let source = Source_File("nomos-workspace");
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Dependency_Fact(
-            &mut store,
-            &source,
-            &offer,
-            &DependencyPayload {
-                package: "nomos-workspace".to_owned(),
-                edges: vec![Dependency_Edge("nomos-store")],
-            },
-        );
+        let source = Source_File("billing");
+        let mut fixture = Fixture();
+        fixture.Declaring(&Declaration());
+        fixture.Depending(&source, &DependencyPayload { package: "billing".to_owned(), edges: vec![Edge("ledger-store")] });
 
-        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let mut reader = Reader::On(&fixture.store, &fixture.registry, Test_Context());
         let findings = Check_Write_Authority(&[source], &mut reader);
 
         assert!(findings.is_empty(), "{findings:?}");
@@ -382,73 +448,33 @@ mod tests
     #[test]
     fn Test_Check_Write_Authority_Should_Produce_One_Finding_For_An_Undeclared_Door()
     {
-        let source = Source_File("nomos-cli");
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Dependency_Fact(
-            &mut store,
-            &source,
-            &offer,
-            &DependencyPayload {
-                package: "nomos-cli".to_owned(),
-                edges: vec![Dependency_Edge("nomos-store")],
-            },
-        );
+        let source = Source_File("http");
+        let mut fixture = Fixture();
+        fixture.Declaring(&Declaration());
+        fixture.Depending(&source, &DependencyPayload { package: "http".to_owned(), edges: vec![Edge("ledger-store")] });
 
-        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let mut reader = Reader::On(&fixture.store, &fixture.registry, Test_Context());
         let findings = Check_Write_Authority(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
-        let found = findings.first().expect("asserted len 1 above");
-        assert_eq!(found.rule, RuleId::New(WRITE_AUTHORITY));
+        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(WRITE_AUTHORITY));
     }
 
     #[test]
     fn Test_Payload_Of_Should_Report_An_Unread_Write_Authority_Subject_Under_Its_Own_Rule()
     {
-        let source = Source_File("nomos-workspace");
-        let TestOffering { store, registry, .. } = Offering();
+        let source = Source_File("billing");
+        let mut fixture = Fixture();
+        fixture.Declaring(&Declaration());
 
-        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let mut reader = Reader::On(&fixture.store, &fixture.registry, Test_Context());
         let findings = Check_Write_Authority(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "an unread subject must not render as a clean one: {findings:?}");
-        let found = findings.first().expect("asserted len 1 above");
         assert_eq!(
-            found.rule,
+            findings.first().expect("asserted len 1 above").rule,
             RuleId::New(WRITE_AUTHORITY),
             "an unread subject must be filed under whichever rule asked, not always direction's"
         );
-    }
-
-    fn Source_File(package: &str) -> SourceFile
-    {
-        return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
-    }
-
-    fn Guarantee_At_Floor() -> Guarantee
-    {
-        return Guarantee::New(
-            FactVariant::SemanticallyResolved,
-            Assurance::Sound,
-            Assurance::Sound,
-            IncrementalGranularity::Project,
-        );
-    }
-
-    fn Offering() -> TestOffering
-    {
-        return test_support::Offering(
-            nomos_cap_dependency::Capability_Contract(),
-            nomos_cap_dependency::Capability(),
-            nomos_cap_dependency::CONTRACT_VERSION,
-            PROVIDER,
-            Guarantee_At_Floor(),
-        );
-    }
-
-    fn Materialize_Dependency_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DependencyPayload)
-    {
-        let bytes = nomos_cap_dependency::Encode_Payload(payload);
-        test_support::Materialize(store, source.subject, offer, InputDigest::Of(&[]), nomos_cap_dependency::Payload_Schema(), bytes);
     }
 }

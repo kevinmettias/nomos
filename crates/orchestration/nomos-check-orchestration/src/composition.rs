@@ -32,6 +32,7 @@ pub fn Registered() -> Result<Registry, RegistryError>
     Declare_Dependency_Policy_Capability(&mut registry)?;
     Declare_Naming_Policy_Capability(&mut registry)?;
     Declare_Limits_Policy_Capability(&mut registry)?;
+    Declare_Architecture_Capability(&mut registry)?;
     Declare_Scripting_Policy_Capability(&mut registry)?;
     Declare_Goals_Policy_Capability(&mut registry)?;
     Declare_Words_Policy_Capability(&mut registry)?;
@@ -208,6 +209,22 @@ fn Declare_Scripting_Policy_Capability(registry: &mut Registry) -> Result<(), Re
 /// fact, this is a fact that had no consumer. The words family is still absent for the same
 /// reason stated the other way round -- its rule cannot be composed yet, so materializing its
 /// fact would be wiring something nobody reads.
+/// The architecture declaration, and its one offer.
+///
+/// Not an `OD-RULES-011` family and composed here for a different reason than the five
+/// beside it: `OD-RULES-029` decided a declared architecture is the description the three
+/// dependency rules judge *against*, carrying the whole triple of components, order and named
+/// exceptions. Those three rules already ran and were starved of it -- they judged against a
+/// table compiled into `nomos-rules`, which is why they could never say anything true about a
+/// repository that is not this one.
+fn Declare_Architecture_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_architecture::Capability_Contract())?;
+    registry.Offer(nomos_repo_policy::architecture::Provider_Offer())?;
+
+    return Ok(());
+}
+
 fn Declare_Goals_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
 {
     registry.Declare(nomos_cap_goals_policy::Capability_Contract())?;
@@ -394,14 +411,15 @@ mod tests
 
     /// How many `Declare` calls [`Registered`]'s own body wires: syntax, dependency,
     /// controlflow, lint, dependency-policy, all five of `OD-RULES-011`'s families --
-    /// naming, limits, scripting, goals and words -- review, and requirement trace.
-    const DECLARED_CAPABILITY_COUNT: usize = 12;
+    /// naming, limits, scripting, goals and words -- review, requirement trace, and the
+    /// architecture declaration.
+    const DECLARED_CAPABILITY_COUNT: usize = 13;
 
     /// The composition this crate ships must not be self-contradictory, and it must
-    /// declare exactly the twelve capabilities [`Registered`]'s own body wires: syntax,
+    /// declare exactly the thirteen capabilities [`Registered`]'s own body wires: syntax,
     /// dependency, controlflow, lint, dependency-policy, all five of `OD-RULES-011`'s
-    /// families -- naming, limits, scripting, goals and words -- review, and requirement
-    /// trace.
+    /// families -- naming, limits, scripting, goals and words -- review, requirement trace,
+    /// and the architecture declaration.
     #[test]
     fn Test_Registered_Should_Declare_Every_Composed_Capability()
     {
@@ -410,7 +428,7 @@ mod tests
         assert_eq!(
             registry.Declared().count(),
             DECLARED_CAPABILITY_COUNT,
-            "Registered() wires ten Declare calls; a changed count here means the two drifted"
+            "Registered() wires one Declare call per capability; a changed count here means the two drifted"
         );
     }
 

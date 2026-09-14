@@ -1,4 +1,5 @@
-//! Requiring and decoding a workspace member's own dependency fact.
+//! Requiring and decoding the two facts these rules judge with: a workspace member's own
+//! dependency edges, and the repository's own declared architecture.
 //!
 //! Reading is kept apart from judging (`violations.rs`) for the same reason
 //! [`crate::naming::reading`] is: a pure function of an already-decoded payload is testable
@@ -17,6 +18,7 @@
 use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest, MaterializedFact};
 use nomos_capability::Requirement;
+use nomos_cap_architecture::ArchitecturePayload;
 use nomos_cap_dependency::DependencyPayload;
 use nomos_contracts::{
     Applicability, Assurance, EvidenceClass, FactVariant, Finding, GateCategory, Guarantee,
@@ -47,6 +49,83 @@ pub(crate) fn Dependency_Requirement() -> Requirement
         nomos_cap_dependency::CONTRACT_VERSION,
         guarantee,
     );
+}
+
+/// What these rules need from `nomos.cap.architecture.declaration` before they will believe an
+/// answer.
+///
+/// The ceiling itself, for the same reason [`Dependency_Requirement`] states it: there is one
+/// real provider today and no weaker answer these rules could honestly act on. A declaration
+/// read approximately is not a declaration -- a component this rule invented for a package the
+/// repository did not place would be the rule deciding the architecture, which is the whole
+/// thing `OD-RULES-029` moved out.
+#[must_use]
+pub(crate) fn Architecture_Requirement() -> Requirement
+{
+    return Requirement::New(
+        nomos_cap_architecture::Capability(),
+        nomos_cap_architecture::CONTRACT_VERSION,
+        nomos_cap_architecture::Ceiling(),
+    );
+}
+
+/// The repository's own declared architecture, or a finding reporting why it could not be
+/// read, filed under `rule`.
+///
+/// A declaration that is absent or refuses to parse is reported, never treated as "declares
+/// nothing": the two are different claims and `OD-RULES-003` turns on telling them apart. A
+/// declaration that parses and states no components *is* "declares nothing", and that is the
+/// payload's own answer rather than an error.
+///
+/// `sources` is what the finding is filed against when there is no member to blame. The
+/// declaration is a whole-workspace fact, so an unread one is not any one member's fault; it
+/// is reported once, against the first source the run handed these rules, rather than once per
+/// member.
+pub(super) fn Architecture_Of(sources: &[SourceFile], facts: &mut dyn FactReader, rule: &'static str) -> Result<ArchitecturePayload, Vec<Finding>>
+{
+    let subject = nomos_model::Subject_Of_Path("");
+    let need = Architecture_Requirement();
+    let capability = nomos_cap_architecture::Capability();
+
+    let fact = match facts.Require(&capability, &subject, InputDigest::Of(&[]), &need)
+    {
+        Ok(fact) => fact,
+        Err(applicability) => return Err(Unread_Declaration(sources, applicability, rule, &format!("no admitted provider answered for it ({})", applicability.Label()))),
+    };
+
+    if fact.payload.schema != nomos_cap_architecture::Payload_Schema()
+    {
+        let because = format!("the declaration carries payload schema `{}`, which this build does not read", fact.payload.schema);
+
+        return Err(Unread_Declaration(sources, Applicability::Unparseable, rule, &because));
+    }
+
+    return nomos_cap_architecture::Parse_Payload(&fact.payload.bytes)
+        .map_err(|refusal| return Unread_Declaration(sources, Applicability::Unparseable, rule, &refusal.reason));
+}
+
+/// The one finding an unreadable declaration produces, or none at all when the run handed
+/// these rules no source to file it against.
+fn Unread_Declaration(sources: &[SourceFile], applicability: Applicability, rule: &'static str, because: &str) -> Vec<Finding>
+{
+    let Some(source) = sources.first()
+    else
+    {
+        return Vec::new();
+    };
+
+    return vec![Finding {
+        rule: RuleId::New(rule),
+        subject: source.subject,
+        subject_name: source.path.clone(),
+        applicability,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Advisory,
+        summary: format!(
+            "this repository's declared architecture could not be read, so no member's              dependencies were judged against it: {because}"
+        ),
+        locations: vec![source.path.clone()],
+    }];
 }
 
 /// One member's decoded dependency payload, or a finding reporting why it could not be

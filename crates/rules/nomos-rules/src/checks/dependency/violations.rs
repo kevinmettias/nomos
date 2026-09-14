@@ -1,54 +1,63 @@
-//! Judging an already-decoded dependency payload against this workspace's declared zones.
+//! Judging an already-decoded dependency payload against the repository's own declared
+//! architecture.
 //!
 //! A pure function of an already-decoded payload, grouped apart from `reading.rs` so it
 //! stays testable against hand-built fixtures — no registry, no store, no reader — the
 //! same split [`crate::naming::violations`] draws for the same reason.
 
-use super::zones::{Permits, Zone, Zone_Of, SAME_ZONE_EDGES};
 use crate::SourceFile;
+use nomos_cap_architecture::ArchitecturePayload;
 use nomos_cap_dependency::{DependencyEdge, DependencyKind, DependencyPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
-/// Every edge `payload` declares that reaches a zone its own zone may not, or a same-zone
-/// peer with no named exception, as findings.
+/// Every edge `payload` declares that reaches a component its own component may not, or a
+/// peer in its own component with no named exception, as findings.
 #[must_use]
-pub(super) fn Violations_In(payload: &DependencyPayload, source: &SourceFile) -> Vec<Finding>
+pub(super) fn Violations_In(architecture: &ArchitecturePayload, payload: &DependencyPayload, source: &SourceFile) -> Vec<Finding>
 {
-    let Some(zone) = Zone_Of(&payload.package)
+    let Some(component) = architecture.Component_Of(&payload.package)
     else
     {
-        // Undeclared entirely — a different defect from a wrong-direction edge, judged by
+        // Unplaced entirely — a different defect from a wrong-direction edge, judged by
         // `super::completeness::Violations_In` instead. Judging direction from an unknown
-        // starting zone would be a guess this rule is not entitled to make.
+        // starting component would be a guess this rule is not entitled to make.
         return Vec::new();
     };
 
     return payload
         .edges
         .iter()
-        .filter_map(|edge| return Violation_For_Edge(source, &payload.package, zone, edge))
+        .filter_map(|edge| return Violation_For_Edge(architecture, source, Declaring { package: &payload.package, component }, edge))
         .collect();
 }
 
-/// `edge`, judged against its declaring member's own `zone`, as a finding — or `None`
-/// when the edge is out of scope (a dev-dependency), its target has no declared zone to
-/// compare against, or the edge is permitted.
-fn Violation_For_Edge(source: &SourceFile, package: &str, zone: Zone, edge: &DependencyEdge) -> Option<Finding>
+/// The member whose own edge is being judged, and the component it was declared in — grouped
+/// so [`Violation_For_Edge`] stays within this workspace's own parameter cap.
+struct Declaring<'a>
+{
+    package: &'a str,
+    component: &'a str,
+}
+
+/// `edge`, judged against its declaring member's own component, as a finding — or `None`
+/// when the edge is out of scope (a dev-dependency), its target is not placed by this
+/// declaration, or the edge is permitted.
+fn Violation_For_Edge(architecture: &ArchitecturePayload, source: &SourceFile, declaring: Declaring<'_>, edge: &DependencyEdge) -> Option<Finding>
 {
     if Is_Dev_Dependency(edge)
     {
         return None;
     }
 
-    let dependency_zone = Zone_Of(&edge.target)?;
+    let dependency_component = architecture.Component_Of(&edge.target)?;
     let violation = EdgeViolation {
-        package,
-        zone,
+        package: declaring.package,
+        component: declaring.component,
         edge,
-        dependency_zone,
+        dependency_component,
     };
 
-    return Violation_If_Wrong_Direction(source, &violation);
+    return Violation_If_Wrong_Direction(architecture, source, &violation);
 }
 
 /// Whether `edge` is out of scope for this judgment.
@@ -69,38 +78,30 @@ fn Is_Dev_Dependency(edge: &DependencyEdge) -> bool
 struct EdgeViolation<'a>
 {
     package: &'a str,
-    zone: Zone,
+    component: &'a str,
     edge: &'a DependencyEdge,
-    dependency_zone: Zone,
+    dependency_component: &'a str,
 }
 
-/// `violation` as a finding, unless its `dependency_zone` is one `violation.zone` may
-/// reach — by [`Permits`] when the two zones differ, or by a named
-/// [`SAME_ZONE_EDGES`] pair when they are the same zone.
-fn Violation_If_Wrong_Direction(source: &SourceFile, violation: &EdgeViolation<'_>) -> Option<Finding>
+/// `violation` as a finding, unless its `dependency_component` is one `violation.component`
+/// may reach — by the declaration's own permissions when the two components differ, or by a
+/// named exception when they are the same component.
+fn Violation_If_Wrong_Direction(architecture: &ArchitecturePayload, source: &SourceFile, violation: &EdgeViolation<'_>) -> Option<Finding>
 {
-    if violation.zone == violation.dependency_zone
+    if violation.component == violation.dependency_component
     {
-        if Same_Zone_Edge_Declared(violation.package, &violation.edge.target)
+        if architecture.Excepts(violation.package, &violation.edge.target)
         {
             return None;
         }
     }
-    else if Permits(violation.zone, violation.dependency_zone)
+    else if architecture.Permits(violation.component, violation.dependency_component)
     {
         return None;
     }
 
     let finding = Violation_Finding(source, violation);
     return Some(finding);
-}
-
-/// Whether `(package, target)` is one of the same-zone edges this workspace names.
-fn Same_Zone_Edge_Declared(package: &str, target: &str) -> bool
-{
-    return SAME_ZONE_EDGES
-        .iter()
-        .any(|(from, to)| *from == package && *to == target);
 }
 
 fn Violation_Finding(source: &SourceFile, violation: &EdgeViolation<'_>) -> Finding
@@ -113,10 +114,10 @@ fn Violation_Finding(source: &SourceFile, violation: &EdgeViolation<'_>) -> Find
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Advisory,
         summary: format!(
-            "{} ({}) depends on {} ({}), an edge no zone permission or named same-zone \
-             exception allows. A dependency graph nobody can reason about is what an \
-             unchecked edge like this one becomes.",
-            violation.package, violation.zone, violation.edge.target, violation.dependency_zone
+            "{} ({}) depends on {} ({}), an edge this repository's declared architecture \
+             admits by neither a component permission nor a named exception. A dependency \
+             graph nobody can reason about is what an unchecked edge like this one becomes.",
+            violation.package, violation.component, violation.edge.target, violation.dependency_component
         ),
         locations: vec![source.path.clone()],
     };
@@ -126,116 +127,96 @@ fn Violation_Finding(source: &SourceFile, violation: &EdgeViolation<'_>) -> Find
 mod tests
 {
     use super::*;
+    use nomos_cap_architecture::{Exception, Membership, Permission};
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
 
     fn Dependency_Edge(target: &str) -> DependencyEdge
     {
-        return DependencyEdge {
-            target: target.to_owned(),
-            kind: DependencyKind::Normal,
-            optional: false,
-        };
+        return DependencyEdge { target: target.to_owned(), kind: DependencyKind::Normal, optional: false };
     }
 
     fn Dev_Edge(target: &str) -> DependencyEdge
     {
-        return DependencyEdge {
-            target: target.to_owned(),
-            kind: DependencyKind::Dev,
-            optional: false,
-        };
+        return DependencyEdge { target: target.to_owned(), kind: DependencyKind::Dev, optional: false };
     }
 
     #[test]
-    fn Test_A_Strictly_Downward_Edge_Should_Produce_No_Finding()
+    fn Test_A_Permitted_Edge_Should_Produce_No_Finding()
     {
-        for (package, target) in Downward_Edges()
+        for (package, target) in Permitted_Edges()
         {
-            let payload = DependencyPayload {
-                package: package.to_owned(),
-                edges: vec![Dependency_Edge(target)],
-            };
+            let payload = DependencyPayload { package: package.to_owned(), edges: vec![Dependency_Edge(target)] };
 
-            let findings = Violations_In(&payload, &Source_File(package));
+            let findings = Violations_In(&Declaration(), &payload, &Source_File(package));
 
             assert!(findings.is_empty(), "{package} -> {target}: {findings:?}");
         }
     }
 
-    /// A member and a downward edge it declares, for [`Test_A_Strictly_Downward_Edge_Should_Produce_No_Finding`] —
-    /// named for the pairing rather than `Cases()`, since what varies is which real zone
-    /// pair the edge crosses.
-    fn Downward_Edges() -> Vec<(&'static str, &'static str)>
+    /// A member and an edge the declaration admits, for
+    /// [`Test_A_Permitted_Edge_Should_Produce_No_Finding`] — named for the pairing rather than
+    /// `Cases()`, since what varies is which declared component pair the edge crosses.
+    fn Permitted_Edges() -> Vec<(&'static str, &'static str)>
     {
-        return vec![
-            ("nomos-rules", "nomos-cap-syntax"),
-            ("nomos-check-orchestration", "nomos-rules"),
-            ("nomos-cli", "nomos-gate-orchestration"),
-        ];
+        return vec![("http", "billing"), ("postgres", "billing")];
     }
 
     #[test]
-    fn Test_Violations_In_Should_Produce_One_Finding_For_An_Upward_Edge()
+    fn Test_Violations_In_Should_Produce_One_Finding_For_An_Edge_The_Declaration_Does_Not_Admit()
     {
-        let payload = DependencyPayload {
-            package: "nomos-cap-syntax".to_owned(),
-            edges: vec![Dependency_Edge("nomos-rules")],
-        };
+        let payload = DependencyPayload { package: "billing".to_owned(), edges: vec![Dependency_Edge("http")] };
 
-        let findings = Violations_In(&payload, &Source_File("nomos-cap-syntax"));
+        let findings = Violations_In(&Declaration(), &payload, &Source_File("billing"));
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
-        assert_eq!(found.subject_name, "nomos-cap-syntax");
+        assert_eq!(found.subject_name, "billing");
         assert_eq!(found.gate, GateCategory::Advisory);
     }
 
+    /// The finding names the two components by the words the repository chose, which is the
+    /// whole property this migration is for: nothing in this crate supplied `Domain` or `Api`.
     #[test]
-    fn Test_A_Same_Zone_Edge_With_No_Named_Exception_Should_Produce_One_Finding()
+    fn Test_A_Finding_Should_Name_The_Components_The_Repository_Declared()
     {
-        let payload = DependencyPayload {
-            package: "nomos-lang-rust".to_owned(),
-            edges: vec![Dependency_Edge("nomos-lang-rust-scan")],
-        };
+        let payload = DependencyPayload { package: "billing".to_owned(), edges: vec![Dependency_Edge("http")] };
 
-        let findings = Violations_In(&payload, &Source_File("nomos-lang-rust"));
+        let findings = Violations_In(&Declaration(), &payload, &Source_File("billing"));
+        let found = findings.first().expect("one finding");
 
-        assert_eq!(
-            findings.len(),
-            1,
-            "two providers of one capability must not be able to name each other: {findings:?}"
-        );
+        assert!(found.summary.contains("billing (Domain)"), "{}", found.summary);
+        assert!(found.summary.contains("http (Api)"), "{}", found.summary);
     }
 
     #[test]
-    fn Test_A_Named_Same_Zone_Edge_Should_Produce_No_Finding()
+    fn Test_Two_Peers_In_One_Component_With_No_Named_Exception_Should_Produce_One_Finding()
     {
-        // The real case OD-RULES-020 measured: nomos-gate-orchestration depends on
-        // nomos-check-orchestration, both Application Service, and the edge is real and
-        // named in SAME_ZONE_EDGES rather than forbidden as an unnamed peer edge would be.
-        let payload = DependencyPayload {
-            package: "nomos-gate-orchestration".to_owned(),
-            edges: vec![Dependency_Edge("nomos-check-orchestration")],
-        };
+        let payload = DependencyPayload { package: "billing".to_owned(), edges: vec![Dependency_Edge("invoicing")] };
 
-        let findings = Violations_In(&payload, &Source_File("nomos-gate-orchestration"));
+        let findings = Violations_In(&Declaration(), &payload, &Source_File("billing"));
 
-        assert!(findings.is_empty(), "a named same-zone edge must not be judged a violation: {findings:?}");
+        assert_eq!(findings.len(), 1, "two peers of one component must not name each other: {findings:?}");
     }
 
     #[test]
-    fn Test_An_Unnamed_Reverse_Of_A_Same_Zone_Edge_Should_Still_Produce_One_Finding()
+    fn Test_A_Named_Exception_Should_Produce_No_Finding()
     {
-        // SAME_ZONE_EDGES names nomos-gate-orchestration -> nomos-check-orchestration, not
-        // the reverse; a same-zone edge is a directed fact about one real dependency, not
-        // a blanket exemption for the pair.
-        let payload = DependencyPayload {
-            package: "nomos-check-orchestration".to_owned(),
-            edges: vec![Dependency_Edge("nomos-gate-orchestration")],
-        };
+        let payload = DependencyPayload { package: "billing".to_owned(), edges: vec![Dependency_Edge("billing-core")] };
 
-        let findings = Violations_In(&payload, &Source_File("nomos-check-orchestration"));
+        let findings = Violations_In(&Declaration(), &payload, &Source_File("billing"));
+
+        assert!(findings.is_empty(), "a named exception must not be judged a violation: {findings:?}");
+    }
+
+    /// An exception is a directed fact about one real dependency, not a blanket exemption for
+    /// the pair.
+    #[test]
+    fn Test_An_Unnamed_Reverse_Of_An_Exception_Should_Still_Produce_One_Finding()
+    {
+        let payload = DependencyPayload { package: "billing-core".to_owned(), edges: vec![Dependency_Edge("billing")] };
+
+        let findings = Violations_In(&Declaration(), &payload, &Source_File("billing-core"));
 
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -243,75 +224,89 @@ mod tests
     #[test]
     fn Test_A_Dev_Dependency_Running_Upward_Should_Produce_No_Finding()
     {
-        // The real case this guards: nomos-spec-ingest dev-depends on nomos-spec-validate
-        // (both Specification) so its own test suite can run a preservation check, and
-        // `Cargo.toml`'s own comment there says exactly why this must not read as a
-        // violation even though the pair has no named SAME_ZONE_EDGES entry.
-        let payload = DependencyPayload {
-            package: "nomos-spec-ingest".to_owned(),
-            edges: vec![Dev_Edge("nomos-spec-validate")],
-        };
+        let payload = DependencyPayload { package: "billing".to_owned(), edges: vec![Dev_Edge("http")] };
 
-        let findings = Violations_In(&payload, &Source_File("nomos-spec-ingest"));
+        let findings = Violations_In(&Declaration(), &payload, &Source_File("billing"));
 
         assert!(
             findings.is_empty(),
-            "a dev-dependency does not ship and must not be judged as an architecture \
-             edge: {findings:?}"
+            "a dev-dependency does not ship and must not be judged as an architecture edge: {findings:?}"
         );
     }
 
     #[test]
-    fn Test_A_Package_With_No_Declared_Band_Should_Produce_No_Finding()
+    fn Test_A_Package_The_Declaration_Does_Not_Place_Should_Produce_No_Finding()
     {
-        let payload = DependencyPayload {
-            package: "not-in-bands".to_owned(),
-            edges: vec![Dependency_Edge("nomos-rules")],
-        };
+        let payload = DependencyPayload { package: "unplaced".to_owned(), edges: vec![Dependency_Edge("billing")] };
 
-        let findings = Violations_In(&payload, &Source_File("not-in-bands"));
+        let findings = Violations_In(&Declaration(), &payload, &Source_File("unplaced"));
 
-        assert!(
-            findings.is_empty(),
-            "an undeclared zone is a different defect, judged elsewhere: {findings:?}"
-        );
+        assert!(findings.is_empty(), "an unplaced package is a different defect, judged elsewhere: {findings:?}");
     }
 
     #[test]
-    fn Test_An_Edge_To_An_Undeclared_Target_Should_Produce_No_Finding()
+    fn Test_An_Edge_To_An_Unplaced_Target_Should_Produce_No_Finding()
     {
-        for target in Undeclared_Targets()
+        for target in Unplaced_Targets()
         {
-            let payload = DependencyPayload {
-                package: "nomos-rules".to_owned(),
-                edges: vec![Dependency_Edge(target)],
-            };
+            let payload = DependencyPayload { package: "http".to_owned(), edges: vec![Dependency_Edge(target)] };
 
-            let findings = Violations_In(&payload, &Source_File("nomos-rules"));
+            let findings = Violations_In(&Declaration(), &payload, &Source_File("http"));
 
             assert!(findings.is_empty(), "target {target}: {findings:?}");
         }
     }
 
-    /// Target names no `ZONES` entry declares, for
-    /// [`Test_An_Edge_To_An_Undeclared_Target_Should_Produce_No_Finding`] — an edge whose
-    /// target has no declared zone is out of scope for direction, whatever it is called.
-    fn Undeclared_Targets() -> Vec<&'static str>
+    /// Targets this declaration does not place — an edge whose target has no component to
+    /// compare against is out of scope for direction, whatever it is called.
+    fn Unplaced_Targets() -> Vec<&'static str>
     {
-        return vec!["not-in-bands", "totally-unknown-crate", "another-missing-crate"];
+        return vec!["unplaced", "serde_json", "another-missing-crate"];
+    }
+
+    /// A repository declaring nothing judges nothing here, whatever its edges are. The empty
+    /// declaration is the case `OD-RULES-029` measured the compiled table could not express.
+    #[test]
+    fn Test_A_Repository_That_Declared_Nothing_Should_Produce_No_Finding()
+    {
+        let payload = DependencyPayload { package: "billing".to_owned(), edges: vec![Dependency_Edge("http")] };
+
+        let findings = Violations_In(&ArchitecturePayload::default(), &payload, &Source_File("billing"));
+
+        assert!(findings.is_empty(), "{findings:?}");
     }
 
     #[test]
-    fn Test_New_Should_Build_A_Source_File_For_A_Package_With_No_Edges()
+    fn Test_A_Member_With_No_Edges_Should_Produce_No_Finding()
     {
-        let payload = DependencyPayload {
-            package: "nomos-contracts".to_owned(),
-            edges: Vec::new(),
-        };
+        let payload = DependencyPayload { package: "billing".to_owned(), edges: Vec::new() };
 
-        let findings = Violations_In(&payload, &Source_File("nomos-contracts"));
+        let findings = Violations_In(&Declaration(), &payload, &Source_File("billing"));
 
         assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// A declaration in a vocabulary this workspace does not use, which is the point: every
+    /// assertion above is about the mechanism, and none of them could be written this way if
+    /// the components were still an enum in this crate.
+    fn Declaration() -> ArchitecturePayload
+    {
+        return ArchitecturePayload {
+            components: vec!["Domain".to_owned(), "Infrastructure".to_owned(), "Api".to_owned()],
+            membership: vec![
+                Membership { package: "billing".to_owned(), component: "Domain".to_owned() },
+                Membership { package: "billing-core".to_owned(), component: "Domain".to_owned() },
+                Membership { package: "invoicing".to_owned(), component: "Domain".to_owned() },
+                Membership { package: "postgres".to_owned(), component: "Infrastructure".to_owned() },
+                Membership { package: "http".to_owned(), component: "Api".to_owned() },
+            ],
+            permissions: vec![
+                Permission { from: "Api".to_owned(), to: "Domain".to_owned() },
+                Permission { from: "Infrastructure".to_owned(), to: "Domain".to_owned() },
+            ],
+            exceptions: vec![Exception { from: "billing".to_owned(), to: "billing-core".to_owned() }],
+            authorities: Vec::new(),
+        };
     }
 
     fn Source_File(package: &str) -> SourceFile

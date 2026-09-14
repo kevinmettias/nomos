@@ -102,7 +102,14 @@ impl DiagnosticProviderStrategy for NomosDiagnosticProvider
             return Vec::new();
         };
 
-        return findings.iter().flat_map(Diagnostics_For).collect();
+        // Read once for the whole batch rather than per finding: it is one file, and the
+        // architectural component every diagnostic carries is resolved against it. A
+        // declaration this root does not have is an empty one, and every finding then simply
+        // carries no component -- the same answer `ArchitecturalComponent::Of` gives a path it
+        // cannot place, rather than a failure that would cost the reader its diagnostics.
+        let architecture = nomos_repo_policy::architecture::Discover_Workspace(root, &FILE_SYSTEM).unwrap_or_default();
+
+        return findings.iter().flat_map(|finding| return Diagnostics_For(&architecture, finding)).collect();
     }
 }
 

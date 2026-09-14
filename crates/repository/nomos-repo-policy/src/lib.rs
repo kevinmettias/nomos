@@ -21,11 +21,20 @@
 //! one of them repeated identically, distinct from what each provider's own `reading.rs`,
 //! `Declared_Guarantee` and `Encode_Payload` still decide independently -- see `scaffolding`'s
 //! own doc for the boundary and why it holds.
+//!
+//! `architecture` is a sixth provider beneath the same two shared modules and is deliberately
+//! not a sixth `OD-RULES-011` family: `OD-RULES-029` decided that a family is a repository's
+//! policy parameters and that a declared architecture is the description a rule judges
+//! against, a triple of components, an order over them and the named exceptions that order
+//! cannot express. What it shares with the five is the acquisition step and the fact-assembly
+//! plumbing, which is what `standards_document` and `scaffolding` are for; what it does not
+//! share is the thing that made them a family.
 
 #![forbid(unsafe_code)]
 
 mod scaffolding;
 mod standards_document;
+pub mod architecture;
 pub mod goals;
 pub mod limits;
 pub mod naming;

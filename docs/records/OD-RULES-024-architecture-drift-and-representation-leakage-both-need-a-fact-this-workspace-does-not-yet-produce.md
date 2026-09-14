@@ -3,7 +3,7 @@ id: OD-RULES-024
 type: decision
 title: Architecture drift and representation leakage both need a fact this workspace does not yet produce
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -114,10 +114,45 @@ write authority was ready and only ownership was not, this record found neither 
 buildable against an existing fact — the split there does not repeat here because there is
 nothing on this record's own side of it to build yet.
 
+## Amendment: One Of The Two Missing Facts Now Exists, And It Is A Declared Architecture
+
+Version 1 said both rules wait on "a real fact this workspace does not yet produce" and named
+what each would need. One of the two now exists (2026-09-14), and this record is entitled to
+say what it is rather than leave a reader to discover that its premise has half expired.
+
+**What was built.** `nomos.cap.architecture.declaration`, contract in
+`crates/capabilities/nomos-cap-architecture`, one provider in `nomos-repo-policy`'s
+`architecture` module reading `nomos-architecture.json` at the repository root. It carries what
+`OD-RULES-029` insisted travels together and calls a triple: the components a repository
+divides itself into, the order over them, the named package pairs that order cannot express,
+and `OD-RULES-023`'s write authorities with it. `Check_Dependency_Direction`,
+`Check_Every_Member_Declares_A_Band` and `Check_Write_Authority` read it through the same
+`FactReader` seam they already read `nomos.cap.dependency.edges` through, and no component name
+or crate name of this workspace's survives in `nomos-rules`.
+
+**Which of this record's two rules it is for, and which it is not.** Neither, directly, and
+that is worth being exact about. This is the *declared* half of `OD-RULES-003`'s
+declared-against-observed pair — the third prerequisite that record named and left unowned. It
+is what an architecture-drift rule would judge *against*; it is not the observed call-graph or
+data-flow fact such a rule needs, and this record's measurement of that gap is unchanged.
+Representation leakage is untouched: its missing fact is a widened syntax payload or a
+provider-naming fact, and neither was built here.
+
+**What it does change for architecture drift.** The half of that rule's input that would
+otherwise have had to be invented inside `architecture_drift.rs` now has a home, a schema and a
+provider, and a repository other than this one can author it. Version 1's warning that the
+materialization question is "not a detail to invent inside `architecture_drift.rs`" still
+stands for the observed half and is now answered for the declared half.
+
+**The representation-leakage baseline is unchanged and still zero**, which this amendment does
+not re-measure and does not claim to have.
+
 ## Status
 
-Accepted. Architecture drift and representation leakage are both real properties this
-workspace does not yet have a fact to check them against. A capability or fact decision is
-the next step for each, named here rather than improvised inside a rule's own
-implementation; representation leakage's clean baseline is recorded for whenever that
-decision lands.
+Accepted, version 2. Architecture drift and representation leakage are both real properties
+this workspace could not check when this record was written. The declared half of the first
+one's input now exists as `nomos.cap.architecture.declaration`, recorded in the amendment
+above; the observed call-graph or data-flow fact it would be judged against does not, and
+neither does representation leakage's. A capability or fact decision is still the next step for
+each of those, named here rather than improvised inside a rule's own implementation, and
+representation leakage's clean baseline is recorded for whenever that decision lands.

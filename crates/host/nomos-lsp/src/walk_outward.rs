@@ -22,6 +22,7 @@ pub use available_correction::AvailableCorrection;
 pub use governing_rule::GoverningRule;
 
 use nomos_contracts::Finding;
+use nomos_cap_architecture::ArchitecturePayload;
 use serde::Serialize;
 
 /// Everything about `finding` an editor can walk outward to, beyond the finding itself.
@@ -32,8 +33,8 @@ pub struct WalkOutward
     /// `None` only when this build's `nomos-rules` describes no such rule, which a finding
     /// from this same build's own `Run` never produces.
     pub governing_rule: Option<GoverningRule>,
-    /// Which crate and zone the finding's first location falls under, when it names one
-    /// under `crates/`.
+    /// Which crate and declared component the finding's first location falls under, when it
+    /// names one under `crates/`.
     pub architectural_component: Option<ArchitecturalComponent>,
     /// The correction family this finding's rule participates in, when
     /// `nomos-correction-orchestration` composes one today.
@@ -60,11 +61,14 @@ impl WalkOutward
     /// the same location [`crate::file_diagnostic::Diagnostics_For`]'s own primary
     /// diagnostic is built from.
     #[must_use]
-    pub(crate) fn Of(finding: &Finding) -> Self
+    pub(crate) fn Of(architecture: &ArchitecturePayload, finding: &Finding) -> Self
     {
         return Self {
             governing_rule: GoverningRule::Of(&finding.rule),
-            architectural_component: finding.locations.first().and_then(|location| return ArchitecturalComponent::Of(location)),
+            architectural_component: finding
+                .locations
+                .first()
+                .and_then(|location| return ArchitecturalComponent::Of(architecture, location)),
             available_correction: AvailableCorrection::Of(&finding.rule),
             evidence: finding.evidence.Label(),
             applicability: finding.applicability.Label(),
@@ -78,6 +82,21 @@ mod tests
 {
     use super::*;
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
+
+    /// A declaration placing the one crate these fixtures name, so a location under `crates/`
+    /// resolves to something. The component is this repository's own word because the finding
+    /// is this repository's own file; nothing in this module supplied it.
+    fn Declaring() -> ArchitecturePayload
+    {
+        return ArchitecturePayload {
+            components: vec!["Specification".to_owned()],
+            membership: vec![nomos_cap_architecture::Membership {
+                package: "nomos-spec-store".to_owned(),
+                component: "Specification".to_owned(),
+            }],
+            ..ArchitecturePayload::default()
+        };
+    }
 
     #[test]
     fn Test_Of_Should_Carry_Every_Real_Answer_For_A_Correctable_Rules_Zone_Finding()
@@ -93,7 +112,7 @@ mod tests
             locations: vec!["crates/spec/nomos-spec-store/src/store.rs:12".to_owned()],
         };
 
-        let walked = WalkOutward::Of(&finding);
+        let walked = WalkOutward::Of(&Declaring(), &finding);
 
         assert_eq!(walked.governing_rule.expect("completeness-mirror is described").rule, nomos_rules::COMPLETENESS_MIRROR);
         assert_eq!(walked.architectural_component.expect("under crates/").crate_name, "nomos-spec-store");
@@ -117,7 +136,7 @@ mod tests
             locations: vec!["nomos-rules".to_owned()],
         };
 
-        let walked = WalkOutward::Of(&finding);
+        let walked = WalkOutward::Of(&Declaring(), &finding);
 
         assert!(walked.governing_rule.is_some(), "dependency-direction is a real descriptor");
         assert!(walked.architectural_component.is_none(), "a bare package name is not a crates/ path");

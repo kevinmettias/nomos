@@ -26,6 +26,11 @@ nomos-contracts = { workspace = true }
 # family" is not answered from here: that is `nomos-correction-orchestration`'s own
 # `CorrectionFamily`, below. `COMPLETENESS_MIRROR` and `NO_TRAILING_WHITESPACE` appear in
 # this crate's tests as fixture rule ids and nowhere in what it compiles for a real run.
+nomos-cap-architecture = { workspace = true }
+# nomos-repo-policy for the one provider of that contract: the architectural component a
+# diagnostic carries is resolved against the repository's own declaration, so this host
+# reads it the same way it already composes a platform.
+nomos-repo-policy = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-platform = { workspace = true }
 nomos-composer-std = { workspace = true }

@@ -157,23 +157,31 @@ impl Drop for Fixture
 
 const WORKSPACE_MANIFEST: &str = "[workspace]\nmembers = [\"alpha\", \"beta\"]\nresolver = \"2\"\n";
 
-/// The workspace-derived fixture's own manifests, and why its two members are named after
-/// real crates of *this* workspace rather than `alpha` and `beta` like every other fixture
-/// in this file.
+/// The workspace-derived fixture's own manifests.
 ///
-/// `nomos_rules::checks::dependency::zones::ZONES` is a table compiled into `nomos-rules`,
-/// and `violations.rs`'s own `Violations_In` silently produces no findings for a package
-/// with no declared zone -- `OD-RULES-029` measured why it must, since otherwise every
-/// member of every other repository reads as a violation. A fixture whose packages are
-/// named `alpha` and `beta` therefore cannot produce a direction finding *at all*, in
-/// either generation, so an edge added or dropped between them changes nothing a caller can
-/// observe and the comparison below would assert nothing. `nomos-contracts` is declared
-/// `Zone::Protocol` and `nomos-cli` is declared `Zone::Host`, so an edge from the first to
-/// the second runs strictly upward and is exactly the violation this rule exists to name.
+/// `violations.rs`'s own `Violations_In` produces no findings for a package the declaration
+/// does not place -- `OD-RULES-029` measured why it must, since otherwise every member of
+/// every other repository reads as a violation. A fixture whose packages are placed by
+/// nothing therefore cannot produce a direction finding *at all*, in either generation, so an
+/// edge added or dropped between them changes nothing a caller can observe and the comparison
+/// below would assert nothing.
+///
+/// This used to be solved by naming the two members after real crates of *this* workspace, so
+/// that the table compiled into `nomos-rules` would resolve them. That table is gone: the
+/// declaration is now read from the root under check, so the fixture writes its own and the
+/// names go back to `alpha` and `beta` like every other fixture in this file. The fixture is
+/// better for it -- it no longer depends on which crates this repository happens to have.
 const DEPENDENT_MANIFEST_WITH_EDGE: &str =
-    "[package]\nname = \"nomos-contracts\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\nnomos-cli = { path = \"../beta\" }\n";
-const DEPENDENT_MANIFEST_WITHOUT_EDGE: &str = "[package]\nname = \"nomos-contracts\"\nversion = \"0.1.0\"\nedition = \"2021\"\n";
-const DEPENDED_MANIFEST: &str = "[package]\nname = \"nomos-cli\"\nversion = \"0.1.0\"\nedition = \"2021\"\n";
+    "[package]\nname = \"alpha\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\nbeta = { path = \"../beta\" }\n";
+const DEPENDENT_MANIFEST_WITHOUT_EDGE: &str = "[package]\nname = \"alpha\"\nversion = \"0.1.0\"\nedition = \"2021\"\n";
+const DEPENDED_MANIFEST: &str = "[package]\nname = \"beta\"\nversion = \"0.1.0\"\nedition = \"2021\"\n";
+
+/// The architecture the workspace-derived fixture declares about itself.
+///
+/// Two components and one permitted direction: `beta` may name `alpha` and not the reverse, so
+/// the edge `DEPENDENT_MANIFEST_WITH_EDGE` adds is exactly the violation the rule exists to
+/// name, and dropping it is exactly the change the comparison needs to observe.
+const FIXTURE_ARCHITECTURE: &str = "{\"components\":[\"Lower\",\"Upper\"],\"members\":{\"alpha\":\"Lower\",\"beta\":\"Upper\"},\"permits\":{\"Upper\":[\"Lower\"]}}\n";
 
 /// The source-derived class: the input is the text a caller hands `Run`, and the mutation is
 /// an edit to that text. This restates `run_context.rs`'s own internal proof from outside
@@ -209,6 +217,7 @@ fn Test_A_Workspace_Derived_Family_Reused_Across_A_Manifest_Edit_Should_Agree_Wi
 {
     let fixture = Fixture::New("workspace");
     fixture.Write("Cargo.toml", WORKSPACE_MANIFEST);
+    fixture.Write("nomos-architecture.json", FIXTURE_ARCHITECTURE);
     fixture.Write("alpha/Cargo.toml", DEPENDENT_MANIFEST_WITH_EDGE);
     fixture.Write("alpha/src/lib.rs", "pub fn Ok() {}\n");
     fixture.Write("beta/Cargo.toml", DEPENDED_MANIFEST);

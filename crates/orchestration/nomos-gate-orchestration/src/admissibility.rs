@@ -17,16 +17,24 @@
 //! out to be no: `nomos-workflow-orchestration` renumbered three times across two items in a
 //! single session.
 //!
-//! # Why the answer comes through `Zone_Of` and `Permits`
+//! # Where the answer comes from, now that the migration `OD-GATE-026` anticipated has landed
 //!
-//! And never by reaching around them into `nomos_rules::ZONES` directly. That is the one
-//! constraint `OD-GATE-026` puts on this module, and it exists because `OD-RULES-029` decided
-//! the layering declaration becomes data read from the repository under check rather than a
-//! table compiled into `nomos-rules`. The question this module asks is the same either way;
-//! what that migration changes is where those two functions get their answer. Reading the
-//! table would harden the half that is moving.
+//! That record put one constraint on this module: the answer comes through the lookups and
+//! never by reaching around them into a table, because `OD-RULES-029` had decided the layering
+//! declaration would become data read from the repository under check. It has. The question
+//! this module asks is unchanged and the lookups are unchanged; what moved is that they are
+//! now queries over a declaration a caller reads, so this function takes one.
+//!
+//! A caller is what reads it, and that is not a cost this module absorbed quietly.
+//! `OD-GATE-026` argued for this verb partly on being cheap -- "it reads no manifest, runs no
+//! subprocess, walks no tree and touches no store" -- and one file read is now part of
+//! answering it. The argument survives intact: what that record actually weighed was that the
+//! retrospective answer requires the edge to exist, so a developer asking "may I?" has to do
+//! the thing first. Reading one declaration does not reintroduce that.
 
-use nomos_rules::{Permits, SAME_ZONE_EDGES, Zone_Of};
+use nomos_cap_architecture::ArchitecturePayload;
+use nomos_platform::FileSystem;
+use std::path::Path;
 
 /// The crate that would do the naming.
 pub struct DependingCrate<'a>(pub &'a str);
@@ -37,9 +45,10 @@ pub struct DependedCrate<'a>(pub &'a str);
 /// What the architecture says about an edge that does not exist yet.
 ///
 /// Three outcomes rather than two, and the third is the one that makes this safe to consult.
-/// `Zone_Of` returns nothing for a crate with no declared zone, which is the normal state of
-/// every crate in every repository but this one, and `OD-RULES-003` already decided what that
-/// case is owed: a positive statement that no judgment was reached, never a judgment.
+/// A declaration places the crates its own repository has placed and no others, so a crate it
+/// says nothing about is the ordinary case rather than an error, and `OD-RULES-003` already
+/// decided what that case is owed: a positive statement that no judgment was reached, never a
+/// judgment.
 ///
 /// **There is deliberately no default of [`Admissibility::Permitted`].** A prospective check
 /// that answers "fine" about a crate it has never heard of is worse than no check at all,
@@ -48,11 +57,12 @@ pub struct DependedCrate<'a>(pub &'a str);
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Admissibility
 {
-    /// Both crates have a declared zone and the architecture admits the edge.
+    /// The declaration places both crates and admits the edge.
     Permitted,
-    /// Both crates have a declared zone and the architecture does not admit the edge.
+    /// The declaration places both crates and does not admit the edge.
     Refused,
-    /// At least one of the two has no declared zone, so there is nothing to judge against.
+    /// The declaration does not place at least one of the two, so there is nothing to judge
+    /// against.
     NotJudged,
 }
 
@@ -70,23 +80,22 @@ impl Admissibility
     }
 }
 
-/// Whether `depending` may name `depended`, judged against the declared architecture alone.
+/// Whether `depending` may name `depended`, judged against `architecture` alone.
 ///
-/// The same-zone case is asked separately because the zone lattice cannot express it:
-/// `Permits` refuses every zone against itself deliberately — two providers of one capability
-/// must not be able to name each other — and `SAME_ZONE_EDGES` is the named list of pairs for
-/// which that refusal is lifted. Asking `Permits` alone would refuse thirteen edges this
-/// workspace has already decided are correct.
+/// The same-component case is asked separately because a component order cannot express it: a
+/// declaration that admits no component against itself -- which is how a repository keeps two
+/// peers from naming each other -- would otherwise refuse every real edge inside one
+/// component, and the named exceptions are the list for which that refusal is lifted.
 ///
-/// A crate naming itself is not an edge and is refused rather than admitted by the same-zone
+/// A crate naming itself is not an edge and is refused rather than admitted by the exception
 /// list, which names pairs of two different crates.
 #[must_use]
-pub fn Admits(depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
+pub fn Admits(architecture: &ArchitecturePayload, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
 {
     let DependingCrate(depending) = depending;
     let DependedCrate(depended) = depended;
 
-    let (Some(from), Some(to)) = (Zone_Of(depending), Zone_Of(depended))
+    let (Some(from), Some(to)) = (architecture.Component_Of(depending), architecture.Component_Of(depended))
     else
     {
         return Admissibility::NotJudged;
@@ -94,10 +103,10 @@ pub fn Admits(depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Adm
 
     if from == to
     {
-        return Is_A_Declared_Peer(depending, depended);
+        return Is_A_Declared_Peer(architecture, depending, depended);
     }
 
-    if Permits(from, to)
+    if architecture.Permits(from, to)
     {
         return Admissibility::Permitted;
     }
@@ -105,114 +114,145 @@ pub fn Admits(depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Adm
     return Admissibility::Refused;
 }
 
-/// Whether two crates sharing a zone are one of the pairs `SAME_ZONE_EDGES` names.
+/// Whether two crates sharing a component are one of the pairs the declaration excepts.
 ///
-/// Directed, as the list is: that a composition root may name a provider does not mean the
-/// provider may name the composition root, and a list read in both directions would admit
-/// exactly the cycles a zone forbidding its own members exists to prevent.
-fn Is_A_Declared_Peer(depending: &str, depended: &str) -> Admissibility
+/// Directed, as the declaration is: that a composition root may name a provider does not mean
+/// the provider may name the composition root, and a list read in both directions would admit
+/// exactly the cycles a component forbidding its own members exists to prevent.
+fn Is_A_Declared_Peer(architecture: &ArchitecturePayload, depending: &str, depended: &str) -> Admissibility
 {
-    if SAME_ZONE_EDGES.iter().any(|(from, to)| return *from == depending && *to == depended)
+    if architecture.Excepts(depending, depended)
     {
         return Admissibility::Permitted;
     }
 
     return Admissibility::Refused;
+}
+
+/// [`Admits`], over the architecture `root` declares, read through `filesystem`.
+///
+/// The entry a composition root calls, so that reading the declaration is this crate's own
+/// concern rather than every host's. It is the same port and the same shape `Run_Gate` already
+/// resolves `nomos-gate.json` through.
+///
+/// A declaration that cannot be read is an empty one, and the answer is then
+/// [`Admissibility::NotJudged`] rather than a guess -- the same answer any crate a declaration
+/// does not place already gets. There is deliberately no louder failure: this verb exists to
+/// answer a question somebody has before the edge exists, and a repository that has not
+/// declared an architecture has not answered it, which is a true thing to say.
+#[must_use]
+pub fn Admits_Under<Fs: FileSystem>(root: &Path, filesystem: &Fs, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
+{
+    let architecture = nomos_repo_policy::architecture::Discover_Workspace(root, filesystem).unwrap_or_default();
+
+    return Admits(&architecture, depending, depended);
 }
 
 #[cfg(test)]
 mod tests
 {
     use super::*;
+    use nomos_cap_architecture::{Exception, Membership, Permission};
 
-    /// A real permitted edge from this workspace's own graph.
+    /// A declaration in a vocabulary this workspace does not use. Every assertion below is
+    /// about the mechanism, and none of them could be written this way while the components
+    /// were an enum compiled into `nomos-rules`.
+    fn Declaration() -> ArchitecturePayload
+    {
+        return ArchitecturePayload {
+            components: vec!["Domain".to_owned(), "Api".to_owned()],
+            membership: vec![
+                Membership { package: "billing".to_owned(), component: "Domain".to_owned() },
+                Membership { package: "billing-core".to_owned(), component: "Domain".to_owned() },
+                Membership { package: "invoicing".to_owned(), component: "Domain".to_owned() },
+                Membership { package: "http".to_owned(), component: "Api".to_owned() },
+            ],
+            permissions: vec![Permission { from: "Api".to_owned(), to: "Domain".to_owned() }],
+            exceptions: vec![Exception { from: "billing".to_owned(), to: "billing-core".to_owned() }],
+            authorities: Vec::new(),
+        };
+    }
+
+    fn Admits_In(declaration: &ArchitecturePayload, depending: &str, depended: &str) -> Admissibility
+    {
+        return Admits(declaration, DependingCrate(depending), DependedCrate(depended));
+    }
+
     #[test]
     fn Test_An_Edge_The_Architecture_Admits_Should_Be_Permitted()
     {
-        let answer = Admits(DependingCrate("nomos-rules"), DependedCrate("nomos-contracts"));
-
-        assert_eq!(answer, Admissibility::Permitted);
-        assert!(answer.Is_A_Judgment());
+        assert_eq!(Admits_In(&Declaration(), "http", "billing"), Admissibility::Permitted);
     }
 
-    /// The inverse of that edge, which the lattice refuses.
-    ///
-    /// `nomos-contracts` is `Protocol`, the zone `Permits` refuses every target from, so this
-    /// is the direction the rule exists to catch and the one a developer would most want
-    /// answered before writing it.
     #[test]
-    fn Test_An_Edge_The_Architecture_Refuses_Should_Be_Refused()
+    fn Test_An_Edge_The_Architecture_Does_Not_Admit_Should_Be_Refused()
     {
-        let answer = Admits(DependingCrate("nomos-contracts"), DependedCrate("nomos-rules"));
-
-        assert_eq!(answer, Admissibility::Refused);
-        assert!(answer.Is_A_Judgment());
+        assert_eq!(Admits_In(&Declaration(), "billing", "http"), Admissibility::Refused);
     }
 
-    /// A crate with no declared zone is not judged, and is emphatically not permitted.
-    ///
-    /// This is the assertion that keeps the verb honest. Every crate of every other
-    /// repository is in this state, and an answer of `Permitted` here would be a prospective
-    /// check telling its only kind of caller that anything is fine.
     #[test]
-    fn Test_A_Crate_With_No_Declared_Zone_Should_Not_Be_Judged()
+    fn Test_Two_Peers_In_One_Component_Should_Be_Refused_Without_A_Named_Exception()
     {
-        let unknown = Admits(DependingCrate("serde_json"), DependedCrate("nomos-contracts"));
-        let named = Admits(DependingCrate("nomos-rules"), DependedCrate("serde_json"));
-
-        assert_eq!(unknown, Admissibility::NotJudged);
-        assert_eq!(named, Admissibility::NotJudged);
-        assert!(!unknown.Is_A_Judgment() && !named.Is_A_Judgment());
+        assert_eq!(Admits_In(&Declaration(), "billing", "invoicing"), Admissibility::Refused);
     }
 
-    /// The same-zone exception is honoured, which `Permits` alone would refuse.
     #[test]
-    fn Test_A_Declared_Same_Zone_Peer_Should_Be_Permitted()
+    fn Test_A_Named_Exception_Should_Be_Permitted()
     {
-        let Some((depending, depended)) = SAME_ZONE_EDGES.first()
-        else
-        {
-            panic!("SAME_ZONE_EDGES is empty, so this test proved nothing about the exception");
-        };
-
-        let answer = Admits(DependingCrate(depending), DependedCrate(depended));
-
-        assert_eq!(answer, Admissibility::Permitted, "{depending} -> {depended}");
+        assert_eq!(Admits_In(&Declaration(), "billing", "billing-core"), Admissibility::Permitted);
     }
 
-    /// Two crates sharing a zone that are not a declared peer pair are refused.
-    ///
-    /// Named apart from the test above because the two together are what say the same-zone
-    /// list is read as a list rather than as "same zone is fine".
+    /// An exception is a directed statement about one real dependency.
     #[test]
-    fn Test_An_Undeclared_Same_Zone_Pair_Should_Be_Refused()
+    fn Test_The_Reverse_Of_A_Named_Exception_Should_Be_Refused()
     {
-        let answer = Admits(DependingCrate("nomos-model"), DependedCrate("nomos-store"));
-
-        assert_eq!(answer, Admissibility::Refused);
+        assert_eq!(Admits_In(&Declaration(), "billing-core", "billing"), Admissibility::Refused);
     }
 
-    /// The same-zone list is directed, and reading it in both directions would admit a cycle.
-    #[test]
-    fn Test_A_Declared_Peer_Pair_Should_Not_Be_Permitted_Backwards()
-    {
-        let Some((depending, depended)) = SAME_ZONE_EDGES.first()
-        else
-        {
-            panic!("SAME_ZONE_EDGES is empty, so this test proved nothing about direction");
-        };
-
-        let backwards = Admits(DependingCrate(depended), DependedCrate(depending));
-
-        assert_eq!(backwards, Admissibility::Refused, "{depended} -> {depending}");
-    }
-
-    /// A crate naming itself is not an edge.
+    /// A crate naming itself is not an edge, and the exception list names pairs of two
+    /// different crates, so it falls out as refused rather than admitted.
     #[test]
     fn Test_A_Crate_Naming_Itself_Should_Be_Refused()
     {
-        let answer = Admits(DependingCrate("nomos-rules"), DependedCrate("nomos-rules"));
+        assert_eq!(Admits_In(&Declaration(), "billing", "billing"), Admissibility::Refused);
+    }
 
-        assert_eq!(answer, Admissibility::Refused);
+    /// The third outcome, and the one that makes this safe to consult: a crate the declaration
+    /// does not place gets no judgment rather than a permissive default.
+    #[test]
+    fn Test_A_Crate_The_Declaration_Does_Not_Place_Should_Not_Be_Judged()
+    {
+        assert_eq!(Admits_In(&Declaration(), "unplaced", "billing"), Admissibility::NotJudged);
+        assert_eq!(Admits_In(&Declaration(), "billing", "unplaced"), Admissibility::NotJudged);
+    }
+
+    /// A repository that declared nothing is judged about nothing, which is the state every
+    /// repository but this one was in while the table was compiled into `nomos-rules`.
+    #[test]
+    fn Test_A_Repository_That_Declared_Nothing_Should_Not_Be_Judged()
+    {
+        assert_eq!(Admits_In(&ArchitecturePayload::default(), "http", "billing"), Admissibility::NotJudged);
+    }
+
+    /// Replace the declaration and the same function enforces the new one -- the property the
+    /// whole migration is for, asked of the prospective answer rather than the retrospective.
+    #[test]
+    fn Test_The_Same_Function_Should_Enforce_A_Different_Declaration()
+    {
+        let reversed = ArchitecturePayload {
+            permissions: vec![Permission { from: "Domain".to_owned(), to: "Api".to_owned() }],
+            ..Declaration()
+        };
+
+        assert_eq!(Admits_In(&reversed, "http", "billing"), Admissibility::Refused);
+        assert_eq!(Admits_In(&reversed, "billing", "http"), Admissibility::Permitted);
+    }
+
+    #[test]
+    fn Test_Is_A_Judgment_Should_Be_False_Only_For_Not_Judged()
+    {
+        assert!(Admissibility::Permitted.Is_A_Judgment());
+        assert!(Admissibility::Refused.Is_A_Judgment());
+        assert!(!Admissibility::NotJudged.Is_A_Judgment());
     }
 }

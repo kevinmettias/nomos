@@ -12,6 +12,13 @@ publish.workspace = true
 # than reimplemented: `nomos check` runs the same recognition, and two scanners for one
 # rule is how they come to disagree. Rules observed from Verification, which is the
 # direction this crate exists to watch.
+# The declaration these assertions judge the real workspace against, and the one provider
+# that reads it. Read through that provider rather than parsed here: the independence these
+# tests are for is asserting against `cargo metadata`, not parsing the declaration a second
+# way, and two readers of one format with different expectations is the defect this
+# declaration exists to remove rather than to repeat.
+nomos-cap-architecture = { workspace = true }
+nomos-repo-policy = { workspace = true }
 nomos-rules = { workspace = true }
 # The syntax capability and the provider that answers it, to derive the universes this
 # crate quantifies over. `nomos-rules` stopped parsing under `P10-SYNTAX-V2` and reads a

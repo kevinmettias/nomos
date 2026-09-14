@@ -79,10 +79,9 @@ pub use crosslang::{
     CROSS_LANGUAGE_CORRESPONDENCE,
 };
 pub use dependency::{
-    Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, Check_Write_Authority, Permits, Zone, Zone_Of,
+    Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, Check_Write_Authority,
     DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
-    SAME_ZONE_EDGES, WRITE_AUTHORITY, WRITE_AUTHORITY_CONTRACT_RECORD, WRITE_AUTHORITY_CONTRACT_RECORD_VERSION, WRITE_DOORS,
-    ZONES, ZONE_LIST,
+    WRITE_AUTHORITY, WRITE_AUTHORITY_CONTRACT_RECORD, WRITE_AUTHORITY_CONTRACT_RECORD_VERSION,
 };
 pub use domain_type_alias::{Check_Domain_Values_Are_Distinct_Types, DOMAIN_VALUES_ARE_DISTINCT_TYPES};
 pub use enum_shape::{Check_Named_Fields_Over_Positional_Variant_Payloads, NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS};

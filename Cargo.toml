@@ -165,6 +165,15 @@ members = [
     # graph rather than rows, a scalar or a list: goals, parts, and the edges between them.
     "crates/capabilities/nomos-cap-goals-policy",
 
+    # Zone: Capability Contract — the nomos.cap.architecture.declaration contract. Beside the
+    # five OD-RULES-011 families above it and deliberately not one of them: OD-RULES-029
+    # decided that a family is a repository's policy parameters and this is the description a
+    # rule judges against, a triple of components, an order over them and the named exceptions
+    # that order cannot express. Earns a crate on OD-CAPABILITY-002's contention criterion
+    # several times over -- nomos-rules' three dependency checks, nomos-gate-orchestration's
+    # prospective `admits` answer, and nomos-lsp's architectural component all read it.
+    "crates/capabilities/nomos-cap-architecture",
+
     # Capability Contract zone — nomos.cap.review.finding's contract, bundled with its one
     # provider in the same crate rather than split the way its nine nomos-cap-* siblings
     # above are: OD-CAPABILITY-002's own criterion is a second real party, and this
@@ -403,6 +412,7 @@ nomos-cap-limits-policy = { path = "crates/capabilities/nomos-cap-limits-policy"
 nomos-cap-scripting-policy = { path = "crates/capabilities/nomos-cap-scripting-policy" }
 nomos-cap-words-policy = { path = "crates/capabilities/nomos-cap-words-policy" }
 nomos-cap-goals-policy = { path = "crates/capabilities/nomos-cap-goals-policy" }
+nomos-cap-architecture = { path = "crates/capabilities/nomos-cap-architecture" }
 nomos-connector-coderabbit = { path = "crates/connectors/nomos-connector-coderabbit" }
 nomos-cap-requirement-trace = { path = "crates/capabilities/nomos-cap-requirement-trace" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }

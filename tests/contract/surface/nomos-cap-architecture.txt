@@ -1,0 +1,34 @@
+pub const fn nomos_cap_architecture::Ceiling() -> Guarantee
+pub const nomos_cap_architecture::CAPABILITY: &str
+pub const nomos_cap_architecture::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_architecture::SCHEMA: &str
+pub fn nomos_cap_architecture::ArchitecturePayload::Component_Of(&self, package: &str) -> Option<&str>
+pub fn nomos_cap_architecture::ArchitecturePayload::Declares_An_Architecture(&self) -> bool
+pub fn nomos_cap_architecture::ArchitecturePayload::Doors_Into(&self, package: &str) -> Option<&[String]>
+pub fn nomos_cap_architecture::ArchitecturePayload::Excepts(&self, from: &str, to: &str) -> bool
+pub fn nomos_cap_architecture::ArchitecturePayload::Permits(&self, from: &str, to: &str) -> bool
+pub fn nomos_cap_architecture::Capability() -> CapabilityId
+pub fn nomos_cap_architecture::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_architecture::Encode_Payload(payload: &ArchitecturePayload) -> Vec<u8>
+pub fn nomos_cap_architecture::Parse_Payload(bytes: &[u8]) -> Result<ArchitecturePayload, Refusal>
+pub fn nomos_cap_architecture::Payload_Schema() -> SchemaId
+pub struct field nomos_cap_architecture::ArchitecturePayload::authorities: Vec<Authority>
+pub struct field nomos_cap_architecture::ArchitecturePayload::components: Vec<String>
+pub struct field nomos_cap_architecture::ArchitecturePayload::exceptions: Vec<Exception>
+pub struct field nomos_cap_architecture::ArchitecturePayload::membership: Vec<Membership>
+pub struct field nomos_cap_architecture::ArchitecturePayload::permissions: Vec<Permission>
+pub struct field nomos_cap_architecture::Authority::doors: Vec<String>
+pub struct field nomos_cap_architecture::Authority::package: String
+pub struct field nomos_cap_architecture::Exception::from: String
+pub struct field nomos_cap_architecture::Exception::to: String
+pub struct field nomos_cap_architecture::Membership::component: String
+pub struct field nomos_cap_architecture::Membership::package: String
+pub struct field nomos_cap_architecture::Permission::from: String
+pub struct field nomos_cap_architecture::Permission::to: String
+pub struct field nomos_cap_architecture::Refusal::reason: String
+pub struct nomos_cap_architecture::ArchitecturePayload
+pub struct nomos_cap_architecture::Authority
+pub struct nomos_cap_architecture::Exception
+pub struct nomos_cap_architecture::Membership
+pub struct nomos_cap_architecture::Permission
+pub struct nomos_cap_architecture::Refusal

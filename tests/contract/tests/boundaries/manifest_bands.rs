@@ -1,11 +1,12 @@
 //! Nothing in this workspace states its own architecture by a numeric band any more.
 //!
 //! `OD-RULES-020` replaced numeric bands with named zones, and `P41-ZONES-MIGRATION-3`
-//! carried the migration through `README.md`, `nomos-rules`' own `ZONES` and the
-//! dependency-graph tests that read them. It never touched the places a band number also
-//! lived in prose, and a later item closed only the narrowest of them: a workspace member's
-//! own `Cargo.toml` `description`, which every crate had opened with a sentence like
-//! `"Band 40. ..."` since before zones existed.
+//! carried the migration through `README.md`, the zone table then compiled into `nomos-rules`
+//! -- since moved out of every crate into `nomos-architecture.json`, which is where the
+//! authority now is -- and the dependency-graph tests that read them. It never touched the
+//! places a band number also lived in prose, and a later item closed only the narrowest of
+//! them: a workspace member's own `Cargo.toml` `description`, which every crate had opened
+//! with a sentence like `"Band 40. ..."` since before zones existed.
 //!
 //! # Why the description check was not enough
 //!
@@ -24,7 +25,7 @@
 //!
 //! # What replaced them
 //!
-//! The zone the crate actually sits in, taken from `nomos-rules`' own `ZONES` rather than
+//! The zone the crate actually sits in, taken from `nomos-architecture.json` rather than
 //! retyped from memory. Two root-manifest comments turned out to describe groups spanning
 //! two zones and now say so instead of asserting one; a handful of cross-references that
 //! reasoned about bands as an ordering ("one band above", "a band may not depend on its own
@@ -258,7 +259,7 @@ fn Test_No_Source_Or_Manifest_Should_Carry_A_Numeric_Band()
          artificial. A band number left in a comment or a module doc states an architecture \
          this workspace stopped believing in, beside a zone table that contradicts it, and \
          a reader has no way to tell which one is current. Name the zone the crate actually \
-         sits in — `nomos-rules`' `ZONES` is the authority — or delete the reference if the \
+         sits in — nomos-architecture.json is the authority — or delete the reference if the \
          number was all it carried. If the file genuinely needs to discuss bands, add it to \
          DISCUSSES_BANDS with the reason.",
         offending.len(),

@@ -9,6 +9,7 @@
 use crate::location::Location;
 use crate::severity::Severity_Of;
 use crate::walk_outward::WalkOutward;
+use nomos_cap_architecture::ArchitecturePayload;
 use nomos_contracts::Finding;
 use xvpe_diagnostics::SourceDiagnostic;
 
@@ -24,13 +25,17 @@ const PRODUCER: &str = "nomos";
 /// own workspace-level rule among them) as an honest, structural limit rather than a bug
 /// this function could fix.
 #[must_use]
-pub fn Diagnostics_For(finding: &Finding) -> Vec<SourceDiagnostic>
+pub fn Diagnostics_For(architecture: &ArchitecturePayload, finding: &Finding) -> Vec<SourceDiagnostic>
 {
-    return finding.locations.iter().map(|raw| return Diagnostic_For_Location(finding, raw)).collect();
+    return finding
+        .locations
+        .iter()
+        .map(|raw| return Diagnostic_For_Location(architecture, finding, raw))
+        .collect();
 }
 
 /// One judgement for one of `finding`'s own locations.
-fn Diagnostic_For_Location(finding: &Finding, raw: &str) -> SourceDiagnostic
+fn Diagnostic_For_Location(architecture: &ArchitecturePayload, finding: &Finding, raw: &str) -> SourceDiagnostic
 {
     let location = Location::Parse(raw);
 
@@ -46,7 +51,7 @@ fn Diagnostic_For_Location(finding: &Finding, raw: &str) -> SourceDiagnostic
         None => judgement,
     };
 
-    return match serde_json::to_string(&WalkOutward::Of(finding))
+    return match serde_json::to_string(&WalkOutward::Of(architecture, finding))
     {
         Ok(walked) => judgement.Carrying(walked),
         // Not reachable over `WalkOutward`, which is a plain derived `Serialize` over owned
@@ -63,6 +68,21 @@ mod tests
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
     use xvpe_diagnostics::DiagnosticSeverity;
 
+    /// A declaration placing the one crate these fixtures name, so a location under `crates/`
+    /// resolves to something. The component is this repository's own word because the finding
+    /// is this repository's own file; nothing in this module supplied it.
+    fn Declaring() -> ArchitecturePayload
+    {
+        return ArchitecturePayload {
+            components: vec!["Specification".to_owned()],
+            membership: vec![nomos_cap_architecture::Membership {
+                package: "nomos-spec-store".to_owned(),
+                component: "Specification".to_owned(),
+            }],
+            ..ArchitecturePayload::default()
+        };
+    }
+
     #[test]
     fn Test_Diagnostics_For_Should_Produce_One_Diagnostic_Per_Location()
     {
@@ -77,7 +97,7 @@ mod tests
             locations: vec!["a.rs:3".to_owned(), "a.rs:9".to_owned()],
         };
 
-        let diagnostics = Diagnostics_For(&finding);
+        let diagnostics = Diagnostics_For(&Declaring(), &finding);
 
         assert_eq!(diagnostics.len(), 2, "{diagnostics:?}");
         let first = diagnostics.first().expect("asserted len 2 above");
@@ -103,7 +123,7 @@ mod tests
             locations: Vec::new(),
         };
 
-        assert!(Diagnostics_For(&finding).is_empty());
+        assert!(Diagnostics_For(&Declaring(), &finding).is_empty());
     }
 
     #[test]
@@ -120,7 +140,7 @@ mod tests
             locations: vec!["crates/spec/nomos-spec-store".to_owned()],
         };
 
-        let diagnostics = Diagnostics_For(&finding);
+        let diagnostics = Diagnostics_For(&Declaring(), &finding);
         let only = diagnostics.first().expect("one location, one diagnostic");
 
         assert_eq!(only.line, None, "a location with no line must not be given one");
@@ -141,7 +161,7 @@ mod tests
             locations: vec!["crates/spec/nomos-spec-store/src/store.rs:12".to_owned()],
         };
 
-        let diagnostics = Diagnostics_For(&finding);
+        let diagnostics = Diagnostics_For(&Declaring(), &finding);
         let only = diagnostics.first().expect("one location, one diagnostic");
 
         assert_eq!(only.path, "crates/spec/nomos-spec-store/src/store.rs");

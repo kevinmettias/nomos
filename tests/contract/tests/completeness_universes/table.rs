@@ -296,39 +296,20 @@ pub(crate) const UNIVERSES: &[Universe] = &[
             by: "Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry",
         },
     },
-    // ---- OD-RULES-020's dependency model, the one declaration this workspace's ----
-    // ---- architecture is now read from ----
-    Universe {
-        path: "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
-        name: "ZONES",
-        kind: UniverseKind::Constant,
-        standing: Standing::Mirrored {
-            by: "Test_Every_Member_Should_Declare_A_Band",
-        },
-    },
-    Universe {
-        path: "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
-        name: "SAME_ZONE_EDGES",
-        kind: UniverseKind::Constant,
-        standing: Standing::Mirrored {
-            by: "Test_Every_Same_Zone_Edge_Should_Be_A_Real_Dependency",
-        },
-    },
-    Universe {
-        path: "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
-        name: "ALL",
-        kind: UniverseKind::Constant,
-        standing: Standing::Mirrored {
-            by: "Test_Every_Zone_Should_Be_Matched_Exhaustively",
-        },
-    },
-    // ---- OD-RULES-023's write-authority table ----
-    Universe {
-        path: "crates/rules/nomos-rules/src/checks/dependency/write_authority.rs",
-        name: "WRITE_DOORS",
-        kind: UniverseKind::Constant,
-        standing: Standing::Mirrored {
-            by: "Test_Every_Write_Door_Should_Be_A_Real_Dependency",
-        },
-    },
+    // ---- OD-RULES-020's dependency model is no longer a constant of this workspace's ----
+    // ---- own, so it is no longer a declared universe here ----
+    //
+    // ZONES, SAME_ZONE_EDGES, ALL and WRITE_DOORS were four entries above this line. They were
+    // `const` tables in `nomos-rules`, and `OD-RULES-003`'s third prerequisite moved every one
+    // of them into `nomos-architecture.json`, which is data a repository authors rather than a
+    // list this workspace compiles. A universe is a closed set *this source* declares; a
+    // declaration another repository can replace wholesale is not one, and listing it here
+    // would claim a completeness obligation over content nobody here writes.
+    //
+    // The mirrors did not go with them. `Test_Every_Member_Should_Declare_A_Band`,
+    // `Test_Every_Same_Zone_Edge_Should_Be_A_Real_Dependency`,
+    // `Test_Every_Write_Door_Should_Be_A_Real_Dependency` and
+    // `Test_Same_Zone_Edges_Should_Each_Name_Two_Members_Of_The_Same_Zone` all still run, in
+    // `boundaries/graph.rs`, and still compare the declaration against what `cargo metadata`
+    // reports. What changed is which artifact they read, not whether anything checks it.
 ];

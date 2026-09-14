@@ -30,8 +30,8 @@
 //! item's own `done_when` named have a real, mechanical answer, carried there: which rule
 //! governs a finding ([`walk_outward::GoverningRule`], read straight off
 //! `nomos_rules::DESCRIPTORS`), which architectural component it belongs to
-//! ([`walk_outward::ArchitecturalComponent`], read off `nomos_rules::ZONES` when the
-//! location is a `crates/...` path), and which correction is available
+//! ([`walk_outward::ArchitecturalComponent`], read off the architecture the repository under
+//! check declares, when the location is a `crates/...` path), and which correction is available
 //! ([`walk_outward::AvailableCorrection`], the two rule ids `nomos-correction-orchestration`
 //! composes today). Evidence strength and applicability were already directly on
 //! [`nomos_contracts::Finding`] and are carried through unchanged.

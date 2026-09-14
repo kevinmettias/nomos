@@ -1,6 +1,6 @@
 //! What the dependency graph is allowed to do, and the vacuity guard in front of it.
 
-use crate::bands::{Permits, Zone_Of, SAME_ZONE_EDGES, WRITE_DOORS, ZONES};
+use crate::bands::Declared_Architecture;
 use nomos_contract_tests::Workspace;
 
 /// Everything `nomos-contracts` is permitted to reach, transitively.
@@ -36,12 +36,12 @@ fn Test_The_Workspace_Should_Not_Appear_Empty()
     let members = workspace.Members();
 
     assert!(
-        members.len() >= ZONES.len(),
+        members.len() >= Declared_Architecture().membership.len(),
         "found {} workspace members but {} zones are declared: {:?}.\n\
          Every other assertion in this suite iterates over these members, so an empty or \
          truncated set makes all of them pass having checked nothing.",
         members.len(),
-        ZONES.len(),
+        Declared_Architecture().membership.len(),
         members.iter().map(|member| &member.name).collect::<Vec<_>>()
     );
 
@@ -150,10 +150,11 @@ fn Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench()
 fn Test_Dependencies_Should_Run_Strictly_Downward()
 {
     let workspace = Workspace::Load();
+    let architecture = Declared_Architecture();
 
     for member in workspace.Members()
     {
-        let Some(zone) = Zone_Of(&member.name)
+        let Some(component) = architecture.Component_Of(&member.name)
         else
         {
             continue;
@@ -161,24 +162,24 @@ fn Test_Dependencies_Should_Run_Strictly_Downward()
 
         for dependency in &member.direct_dependencies
         {
-            let Some(dependency_zone) = Zone_Of(dependency)
+            let Some(dependency_component) = architecture.Component_Of(dependency)
             else
             {
                 continue;
             };
 
-            let permitted = if zone == dependency_zone
+            let permitted = if component == dependency_component
             {
-                SAME_ZONE_EDGES.contains(&(member.name.as_str(), dependency.as_str()))
+                architecture.Excepts(&member.name, dependency)
             }
             else
             {
-                Permits(zone, dependency_zone)
+                architecture.Permits(component, dependency_component)
             };
 
             assert!(
                 permitted,
-                "{} ({zone:?}) depends on {dependency} ({dependency_zone:?}).\n\
+                "{} ({component}) depends on {dependency} ({dependency_component}).\n\
                  This edge is neither a permitted zone crossing nor a named same-zone \
                  exception; an unchecked edge like this one is how a layered architecture \
                  becomes a graph nobody can reason about.",
@@ -196,8 +197,9 @@ fn Test_Every_Same_Zone_Edge_Should_Be_A_Real_Dependency()
 {
     let workspace = Workspace::Load();
 
-    for (from, to) in SAME_ZONE_EDGES
+    for exception in &Declared_Architecture().exceptions
     {
+        let (from, to) = (exception.from.as_str(), exception.to.as_str());
         let Some(member) = workspace.Get(from)
         else
         {
@@ -205,10 +207,41 @@ fn Test_Every_Same_Zone_Edge_Should_Be_A_Real_Dependency()
         };
 
         assert!(
-            member.direct_dependencies.contains(*to),
-            "SAME_ZONE_EDGES names {from} -> {to}, but {from}'s own Cargo.toml declares no \
+            member.direct_dependencies.contains(to),
+            "nomos-architecture.json excepts {from} -> {to}, but {from}'s own Cargo.toml declares no \
              such dependency. A named exception with nothing behind it permits an edge \
              nobody's code actually draws."
+        );
+    }
+}
+
+/// Every declared exception names two packages the declaration places in one component.
+///
+/// The name is the one `OD-RULES-028` cites, kept deliberately through the move out of
+/// `nomos-rules`: the property is unchanged and a citation that stopped resolving would be a
+/// worse thing to leave behind than a name that says "zone" where the declaration now says
+/// "component". An exception exists to lift the peer refusal *within* one component, so a pair
+/// straddling two components is not an exception to anything -- the declaration's own
+/// permissions already answer it -- and a pair naming a package the declaration does not place
+/// is an exception to a rule that never applied.
+#[test]
+fn Test_Same_Zone_Edges_Should_Each_Name_Two_Members_Of_The_Same_Zone()
+{
+    let architecture = Declared_Architecture();
+
+    for exception in &architecture.exceptions
+    {
+        let from = architecture
+            .Component_Of(&exception.from)
+            .unwrap_or_else(|| panic!("{} is excepted and placed in no component", exception.from));
+        let to = architecture
+            .Component_Of(&exception.to)
+            .unwrap_or_else(|| panic!("{} is excepted and placed in no component", exception.to));
+
+        assert_eq!(
+            from, to,
+            "{} -> {}: an exception must name two members of one component, and these are in {from} and {to}",
+            exception.from, exception.to
         );
     }
 }
@@ -219,10 +252,12 @@ fn Test_Every_Write_Door_Should_Be_A_Real_Dependency()
 {
     let workspace = Workspace::Load();
 
-    for (authority, doors) in WRITE_DOORS
+    for declared in &Declared_Architecture().authorities
     {
-        for door in *doors
+        let (authority, doors) = (declared.package.as_str(), declared.doors.as_slice());
+        for door in doors
         {
+            let door = door.as_str();
             let Some(member) = workspace.Get(door)
             else
             {
@@ -230,8 +265,8 @@ fn Test_Every_Write_Door_Should_Be_A_Real_Dependency()
             };
 
             assert!(
-                member.direct_dependencies.contains(*authority),
-                "WRITE_DOORS names {door} as a door into {authority}, but {door}'s own \
+                member.direct_dependencies.contains(authority),
+                "nomos-architecture.json names {door} as a door into {authority}, but {door}'s own \
                  Cargo.toml declares no such dependency. A named door with nothing behind \
                  it permits an edge nobody's code actually draws."
             );
@@ -244,18 +279,20 @@ fn Test_Every_Write_Door_Should_Be_A_Real_Dependency()
 fn Test_Every_Member_Should_Declare_A_Band()
 {
     let workspace = Workspace::Load();
+    let architecture = Declared_Architecture();
 
     let undeclared: Vec<&str> = workspace
         .Members()
         .iter()
         .map(|member| member.name.as_str())
-        .filter(|name| Zone_Of(name).is_none())
+        .filter(|name| architecture.Component_Of(name).is_none())
         .collect();
 
     assert!(
         undeclared.is_empty(),
         "these crates declare no zone: {undeclared:?}.\n\
-         Add them to nomos-rules' own ZONES. A crate outside the declared architecture is \
+         Place them in nomos-architecture.json's own members. A crate outside the declared \
+         architecture is \
          a crate the architecture does not constrain."
     );
 }
