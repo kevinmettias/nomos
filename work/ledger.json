@@ -69034,6 +69034,39 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P97-THE-WORK-VERB-LIST-IS-CHECKED-AGAINST-THE-TEXT-AND-THE-PARSER-BUT-NOT-AGAINST-THE-ENUM",
+      "title": "The work verb list is compared against the usage text and the parser, and against the enum that actually changes when a verb is added it is not",
+      "why": "Measured on a quiescent tree at 7c45e019. This is the last instance in the population OD-AGENT-004 version 2's condition covers, and it is the weakest of them, which is why it is filed separately rather than folded into the items that closed the other seven.\n\ncrates/host/nomos-cli/src/work/parse.rs line 522 holds Every_Verb, a hand-written list of eleven verb names, and Test_Usage_Text_Should_Name_Every_Verb_It_Accepts iterates it asserting two things per verb: the usage text names it, and the parser does not reject it as an unknown command. Both of those are real and neither is the direction that matters. The authority is nomos_work_orchestration::WorkCommand, a compiled enum with one variant per verb, and nothing compares the list to it -- so a verb added to the dispatch match in Work_Command_From_String_Arguments and not to Every_Verb is named by neither the test nor, necessarily, the usage text, and the suite stays green.\n\nIt is better than the two copies P97 has just closed, and that is worth saying rather than inflating the finding. It checks both the text and the parser, so it is two directions between those two artifacts. What it does not have is any tie to the enum, which is the thing that actually changes when a verb is added.\n\nThe comparison is buildable the way the seven already built are. The verb-to-variant mapping is not one-to-one in spelling -- claim, renew and takeover each parse to their own WorkCommand variant through a shared arm -- so the exhaustive match a census needs is over the enum and not over the strings, which is the same shape spec/tests.rs uses for SpecCommand.",
+      "done_when": "The verb list work prints is compared against nomos_work_orchestration::WorkCommand, both directions, replacing Every_Verb rather than sitting beside it.\n\nEvery verb name the usage text prints is driven through Work_Command_From_String_Arguments and the command it builds is named by a wildcard-free match over WorkCommand, so a variant added to that enum fails this file to compile rather than to pass. That is the same shape spec/tests.rs already uses, and following it is the point rather than inventing a second.\n\nThe two claims the existing test already makes are kept, not dropped: the usage text names each verb, and the parser accepts each. What is added is the direction neither of them covers -- that the set is the enum's set.\n\nA verb whose spelling differs from its variant name is handled by the match rather than by a second table. claim, renew and takeover share a parse arm and are three variants; nothing about that is a special case to write down twice.\n\nThe new comparison is confirmed able to fail by injecting a wrong verb into the usage text and observing red, not by reasoning that it would.\n\nNo record is amended. OD-AGENT-004 version 2 already states the condition this applies and its coverage section is about the copies it named, not about this one, so adding a line there would be a claim about scope the record never made. That is also why this item reserves no record and can run beside anything.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/work/parse.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
