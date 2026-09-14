@@ -9,7 +9,7 @@ use nomos_check_orchestration::RunContext;
 use nomos_contracts::RunId;
 use nomos_correction_orchestration::{CorrectionCommand, CorrectionEnvironment, Run_Correction};
 use nomos_gate_orchestration::{GateEnvironment, GateRunOutcome, Run_Gate};
-use nomos_platform::{Environment, FileSystem, ProcessLauncher};
+use nomos_platform::{Environment, FileSystem, ProcessLauncher, Timestamp};
 use nomos_workspace::BuildVariant;
 
 use crate::{Body, DispatchError, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
@@ -26,6 +26,13 @@ pub struct Platform<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environm
     /// Where a provider reads `CARGO` and the working directory from, rather than from this
     /// process's own ambient state. `OD-HOST-001`: the composition root chooses it.
     pub environment: &'a Env,
+    /// The moment a step is judged against.
+    ///
+    /// The same execution fact `GateEnvironment::now` carries, riding here for the same
+    /// reason: [`Dispatched_Gate`] is already at this workspace's four-parameter limit, and a
+    /// workflow's gate step must judge a waiver's expiry against the run's own moment rather
+    /// than a clock read inside policy logic.
+    pub now: Timestamp,
 }
 
 /// Dispatches `plan` in order through `platform`.
@@ -161,7 +168,8 @@ fn Dispatched_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     gate: &crate::GateBody, platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId,
 ) -> nomos_gate_orchestration::GateRunResult
 {
-    let environment = GateEnvironment { variant: variant.clone(), launcher: platform.launcher, filesystem: platform.filesystem, environment: platform.environment };
+    let environment =
+        GateEnvironment { variant: variant.clone(), launcher: platform.launcher, filesystem: platform.filesystem, environment: platform.environment, now: platform.now };
 
     return Run_Gate(Some(gate.sources.clone()), environment, &gate.command, run);
 }

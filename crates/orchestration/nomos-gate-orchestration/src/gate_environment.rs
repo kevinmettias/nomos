@@ -3,7 +3,7 @@
 
 use nomos_check_orchestration::{CheckOutcome, Claim, Claim_Of};
 use nomos_contracts::{Finding, RuleId, RunId};
-use nomos_platform::{Environment, FileSystem, ProcessLauncher};
+use nomos_platform::{Environment, FileSystem, ProcessLauncher, Timestamp};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::Path;
@@ -70,6 +70,14 @@ pub struct GateEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: E
     /// Where a provider reads `CARGO` and the working directory from, rather than from this
     /// process's own ambient state. `OD-HOST-001`: the composition root chooses it.
     pub environment: &'a Env,
+    /// The moment this run is judged against.
+    ///
+    /// Supplied by whoever composed the run rather than read from a clock inside policy
+    /// logic, so a replay of a past run answers as that run did instead of as today would.
+    /// It rides here for the reason `variant` does: the composing function is already at this
+    /// workspace's own parameter-count limit, and an execution fact belongs with the other
+    /// execution facts rather than in the caller-authored `GateCommand`, which is policy.
+    pub now: Timestamp,
 }
 
 /// What [`Judged_Sources`] judges a walked tree against, apart from the walk itself and the
@@ -112,7 +120,7 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     run: RunId,
 ) -> GateRunResult
 {
-    let GateEnvironment { variant, launcher, filesystem, environment } = environment;
+    let GateEnvironment { variant, launcher, filesystem, environment, now } = environment;
     let declared = Resolve_Gate_Policy(&command.root, filesystem);
     let effective = match &declared
     {
@@ -139,7 +147,7 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     let reduced = Reduced_Findings(
         &outcome,
         &command.rules,
-        DispositionPolicies { adoption: &effective.adoption, suppressions: &effective.suppressions, baseline: &effective.baseline },
+        DispositionPolicies { adoption: &effective.adoption, suppressions: &effective.suppressions, baseline: &effective.baseline, now },
         effective.coverage,
     );
 
@@ -307,7 +315,7 @@ fn Partitioned_Findings(selected: &[Finding], policies: DispositionPolicies<'_>)
     let (calibrated_findings, uncalibrated): (Vec<Finding>, Vec<Finding>) =
         blockable.into_iter().partition(|finding| return policies.adoption.Calibrating(finding).is_some());
     let (suppressed_findings, remaining): (Vec<Finding>, Vec<Finding>) =
-        uncalibrated.into_iter().partition(|finding| return policies.suppressions.Suppressing(finding).is_some());
+        uncalibrated.into_iter().partition(|finding| return policies.suppressions.Suppressing(finding, policies.now).is_some());
     let (baselined_findings, blocking_findings): (Vec<Finding>, Vec<Finding>) =
         remaining.into_iter().partition(|finding| return policies.baseline.Tolerating(finding).is_some());
 
@@ -323,6 +331,7 @@ struct DispositionPolicies<'a>
     adoption: &'a AdoptionPolicy,
     suppressions: &'a SuppressionPolicy,
     baseline: &'a BaselinePolicy,
+    now: Timestamp,
 }
 
 /// `outcome`, downgraded from [`GateRunOutcome::Passed`] to [`GateRunOutcome::Indeterminate`]
@@ -394,7 +403,7 @@ mod tests
         let run = RunId::From_Digest(Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]));
 
         let result =
-            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, run);
+            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, run);
 
         assert!(!result.findings.blocking_findings.is_empty());
     }
@@ -406,7 +415,7 @@ mod tests
         let unphased = GateCommand { root: root.clone(), ..Default::default() };
         let baseline = Run_Gate(
             Some(Blocking_Sources()),
-            super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment },
+            super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) },
             &unphased,
             RunId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH])),
         );
@@ -424,7 +433,7 @@ mod tests
         let run = RunId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH]));
 
         let result =
-            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, run);
+            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, run);
 
         assert!(!result.findings.blocking_findings.is_empty(), "the finding must still be real and reported, not hidden");
         assert!(matches!(result.disposition, GateRunOutcome::Passed), "an approved phase covering every blocking finding must pass the run");
@@ -439,7 +448,7 @@ mod tests
         let run = RunId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH]));
 
         let result =
-            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, run);
+            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, run);
 
         assert!(matches!(result.disposition, GateRunOutcome::Failed), "a phase policy must not let a finding outside its own scope silently stop blocking");
     }

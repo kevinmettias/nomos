@@ -54,6 +54,7 @@ mod tests
             disposition: SuppressionDisposition::FormalRiskAcceptance,
             rationale: "a real rationale".to_owned(),
             owner: "a real owner".to_owned(),
+            expiry: None
         };
 
         let response = SuppressionResponse::From(suppression.clone());

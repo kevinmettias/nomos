@@ -2,9 +2,11 @@
 
 mod suppression;
 mod suppression_policy;
+mod suppression_status;
 
 pub use suppression::Suppression;
 pub use suppression_policy::SuppressionPolicy;
+pub use suppression_status::SuppressionStatus;
 
 /// The six dispositions `SUP-*` (the v14 corpus's `05.7-2-2 suppression and waiver
 /// governance` section) names, not one generic "suppressed" bit -- a repository's reason
@@ -42,7 +44,7 @@ mod tests
     {
         let policy = SuppressionPolicy::default();
 
-        assert!(policy.Suppressing(&Finding_For("naming-convention", 1)).is_none());
+        assert!(policy.Suppressing(&Finding_For("naming-convention", 1), nomos_platform::Timestamp::From_Unix_Seconds(0)).is_none());
     }
 
     #[test]
@@ -55,10 +57,11 @@ mod tests
             disposition: SuppressionDisposition::FalsePositiveDisposition,
             rationale: "known false positive on generated code".to_owned(),
             owner: "author".to_owned(),
+            expiry: None
         };
         let policy = SuppressionPolicy { suppressions: vec![suppression.clone()] };
 
-        assert_eq!(policy.Suppressing(&finding), Some(&suppression));
+        assert_eq!(policy.Suppressing(&finding, nomos_platform::Timestamp::From_Unix_Seconds(0)), Some(&suppression));
     }
 
     #[test]
@@ -71,10 +74,11 @@ mod tests
             disposition: SuppressionDisposition::TemporaryWaiver,
             rationale: "different subject".to_owned(),
             owner: "author".to_owned(),
+            expiry: None
         };
         let policy = SuppressionPolicy { suppressions: vec![suppression] };
 
-        assert!(policy.Suppressing(&finding).is_none());
+        assert!(policy.Suppressing(&finding, nomos_platform::Timestamp::From_Unix_Seconds(0)).is_none());
     }
 
     #[test]
@@ -87,10 +91,11 @@ mod tests
             disposition: SuppressionDisposition::TemporaryWaiver,
             rationale: "different rule".to_owned(),
             owner: "author".to_owned(),
+            expiry: None
         };
         let policy = SuppressionPolicy { suppressions: vec![suppression] };
 
-        assert!(policy.Suppressing(&finding).is_none());
+        assert!(policy.Suppressing(&finding, nomos_platform::Timestamp::From_Unix_Seconds(0)).is_none());
     }
 
     fn Finding_For(rule: &str, subject_seed: u8) -> Finding

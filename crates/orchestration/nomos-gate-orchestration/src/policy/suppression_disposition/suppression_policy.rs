@@ -1,7 +1,8 @@
 //! Every disposition a run should honor.
 
-use super::Suppression;
+use super::{Suppression, SuppressionStatus};
 use nomos_contracts::Finding;
+use nomos_platform::Timestamp;
 
 /// Every disposition a run should honor.
 ///
@@ -25,9 +26,30 @@ impl SuppressionPolicy
     /// an authoring question this increment does not referee, the same "no invented rule
     /// nothing needs yet" discipline the rest of this crate already keeps.
     #[must_use]
-    pub fn Suppressing<'a>(&'a self, finding: &Finding) -> Option<&'a Suppression>
+    pub fn Suppressing<'a>(&'a self, finding: &Finding, now: Timestamp) -> Option<&'a Suppression>
     {
-        return self.suppressions.iter().find(|suppression| return suppression.Is_Applicable_To(finding));
+        return self
+            .suppressions
+            .iter()
+            .find(|suppression| return suppression.Is_Applicable_To(finding) && suppression.Status_At(now).Suppresses());
+    }
+
+    /// The dispositions that would have applied to `finding` but have expired.
+    ///
+    /// Without this a lapsed waiver is indistinguishable from never having been written: the
+    /// finding simply blocks, and nothing says a tolerance ran out. That is the difference
+    /// between a gate reporting a regression and a gate reporting that a decision somebody
+    /// made has come due, and only the second tells a reader what to do next.
+    #[must_use]
+    pub fn Lapsed<'a>(&'a self, finding: &Finding, now: Timestamp) -> Vec<&'a Suppression>
+    {
+        return self
+            .suppressions
+            .iter()
+            .filter(|suppression| {
+                return suppression.Is_Applicable_To(finding) && suppression.Status_At(now) == SuppressionStatus::Expired;
+            })
+            .collect();
     }
 }
 
@@ -48,10 +70,11 @@ mod tests
             disposition: SuppressionDisposition::FalsePositiveDisposition,
             rationale: "known false positive".to_owned(),
             owner: "author".to_owned(),
+            expiry: None
         };
         let policy = SuppressionPolicy { suppressions: vec![suppression.clone()] };
 
-        assert_eq!(policy.Suppressing(&finding), Some(&suppression));
+        assert_eq!(policy.Suppressing(&finding, nomos_platform::Timestamp::From_Unix_Seconds(0)), Some(&suppression));
     }
 
     fn Finding_For(rule: &str) -> Finding
@@ -73,6 +96,6 @@ mod tests
     {
         let policy = SuppressionPolicy::default();
 
-        assert!(policy.Suppressing(&Finding_For("naming-convention")).is_none());
+        assert!(policy.Suppressing(&Finding_For("naming-convention"), nomos_platform::Timestamp::From_Unix_Seconds(0)).is_none());
     }
 }

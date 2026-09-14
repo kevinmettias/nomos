@@ -33,6 +33,7 @@ pub struct field nomos_workflow_orchestration::GateBody::sources: Vec<SourceFile
 pub struct field nomos_workflow_orchestration::Platform::environment: &'a Env
 pub struct field nomos_workflow_orchestration::Platform::filesystem: &'a Fs
 pub struct field nomos_workflow_orchestration::Platform::launcher: &'a Launcher
+pub struct field nomos_workflow_orchestration::Platform::now: Timestamp
 pub struct field nomos_workflow_orchestration::WorkflowStepPlan::body: Body
 pub struct field nomos_workflow_orchestration::WorkflowStepPlan::declaration: WorkflowStep
 pub struct nomos_workflow_orchestration::CheckBody

@@ -53,6 +53,7 @@
 use nomos_contracts::RuleId;
 use nomos_model::Subject_Of_Path;
 use nomos_platform::{FileSystem, FileSystemError};
+use nomos_platform::Timestamp;
 use serde::Deserialize;
 use std::path::Path;
 
@@ -146,6 +147,11 @@ pub(crate) fn Resolve_Gate_Policy<Fs: FileSystem>(root: &Path, filesystem: &Fs) 
 
     let declared: DeclaredPolicy = serde_json::from_str(&text).map_err(|error| return GatePolicyError::Malformed(error.to_string()))?;
 
+    if let Some(problem) = declared.suppressions.iter().find_map(DeclaredSuppression::Problem)
+    {
+        return Err(GatePolicyError::Malformed(problem));
+    }
+
     return Ok(Some(declared.Resolved()));
 }
 
@@ -190,10 +196,54 @@ struct DeclaredSuppression
     disposition: DeclaredDisposition,
     rationale: String,
     owner: String,
+    /// When the disposition stops applying, as whole Unix seconds.
+    ///
+    /// Required for `temporary-waiver` and refused for every other spelling --
+    /// [`DeclaredSuppression::Problem`] is where that is said to the author, because an
+    /// author is who needs to hear it. A waiver with no end date is the contradiction this
+    /// field exists to remove: the disposition means bounded and, without one, it suppressed
+    /// forever.
+    ///
+    /// Whole seconds rather than a calendar date, matching how this workspace already writes
+    /// a `Timestamp` into `work/ledger.json`. A friendlier spelling would mean a date-parsing
+    /// dependency and a supply-chain decision nobody has asked for yet.
+    #[serde(default)]
+    expiry: Option<i64>,
 }
 
 impl DeclaredSuppression
 {
+    /// What is wrong with this entry, if anything.
+    ///
+    /// The one rule `serde` cannot state: which field is required depends on which
+    /// disposition was named. A `temporary-waiver` without an `expiry` is a waiver that never
+    /// ends, which is a `formal-risk-acceptance` wearing another name. Any other disposition
+    /// *with* one is carrying a date nothing reads, and saying so is better than accepting it
+    /// silently -- the same reason `deny_unknown_fields` refuses a misspelled key rather than
+    /// dropping it.
+    fn Problem(&self) -> Option<String>
+    {
+        let waiver = matches!(self.disposition, DeclaredDisposition::TemporaryWaiver);
+
+        if waiver && self.expiry.is_none()
+        {
+            return Some(format!(
+                "the temporary-waiver for rule '{}' on '{}' names no expiry. A temporary                  waiver without an end date never ends, which is a formal-risk-acceptance                  wearing another name: give it an expiry, or declare the disposition you                  actually mean.",
+                self.rule, self.path
+            ));
+        }
+
+        if !waiver && self.expiry.is_some()
+        {
+            return Some(format!(
+                "the suppression for rule '{}' on '{}' names an expiry, and only a                  temporary-waiver has one. Every other disposition applies until it is                  removed, so a date here would be read by nothing and would tell a later                  reader something untrue.",
+                self.rule, self.path
+            ));
+        }
+
+        return None;
+    }
+
     /// This entry as the domain type, with its subject computed from its path.
     fn Resolved(self) -> Suppression
     {
@@ -203,6 +253,7 @@ impl DeclaredSuppression
             disposition: self.disposition.Resolved(),
             rationale: self.rationale,
             owner: self.owner,
+            expiry: self.expiry.map(Timestamp::From_Unix_Seconds),
         };
     }
 }
@@ -397,6 +448,61 @@ mod tests
         let root = Root_With_Policy("malformed", "{ not json");
 
         assert!(matches!(Resolve_Gate_Policy(&root, &StdFileSystem), Err(GatePolicyError::Malformed(_))));
+    }
+
+    /// A temporary waiver naming an expiry is read, and the date reaches the domain type.
+    #[test]
+    fn Test_A_Temporary_Waiver_With_An_Expiry_Should_Resolve_To_That_Instant()
+    {
+        let root = Root_With_Policy(
+            "waiver-with-expiry",
+            r#"{ "suppressions": [ { "rule": "naming-convention", "path": "src/lib.rs", "disposition": "temporary-waiver", "rationale": "bounded", "owner": "someone", "expiry": 1000 } ] }"#,
+        );
+
+        let policy = Resolve_Gate_Policy(&root, &StdFileSystem).expect("reads").expect("present");
+
+        assert_eq!(
+            policy.suppressions.suppressions.first().expect("one entry").expiry,
+            Some(nomos_platform::Timestamp::From_Unix_Seconds(1000))
+        );
+    }
+
+    /// A temporary waiver with no expiry is refused rather than accepted as permanent.
+    ///
+    /// The whole point of the field. Accepting this entry would produce a waiver that never
+    /// ends, which is a formal-risk-acceptance the author did not declare and would not know
+    /// they had.
+    #[test]
+    fn Test_A_Temporary_Waiver_Without_An_Expiry_Should_Be_Refused()
+    {
+        let root = Root_With_Policy(
+            "waiver-without-expiry",
+            r#"{ "suppressions": [ { "rule": "naming-convention", "path": "src/lib.rs", "disposition": "temporary-waiver", "rationale": "bounded", "owner": "someone" } ] }"#,
+        );
+
+        assert!(
+            matches!(Resolve_Gate_Policy(&root, &StdFileSystem), Err(GatePolicyError::Malformed(_))),
+            "a temporary waiver with no end date was accepted, so it suppresses forever"
+        );
+    }
+
+    /// A disposition that is not a waiver is refused an expiry rather than ignoring it.
+    ///
+    /// The converse control. Without it the field could be accepted anywhere and read
+    /// nowhere, telling a later reader a date that governs nothing -- the same failure
+    /// `deny_unknown_fields` refuses for a misspelled key.
+    #[test]
+    fn Test_A_Non_Waiver_With_An_Expiry_Should_Be_Refused()
+    {
+        let root = Root_With_Policy(
+            "acceptance-with-expiry",
+            r#"{ "suppressions": [ { "rule": "naming-convention", "path": "src/lib.rs", "disposition": "formal-risk-acceptance", "rationale": "owned", "owner": "someone", "expiry": 1000 } ] }"#,
+        );
+
+        assert!(
+            matches!(Resolve_Gate_Policy(&root, &StdFileSystem), Err(GatePolicyError::Malformed(_))),
+            "a disposition with no end-date semantics accepted one, so the file now carries a              date nothing reads"
+        );
     }
 
     /// `deny_unknown_fields` is what makes a misspelled key a refusal instead of a silently

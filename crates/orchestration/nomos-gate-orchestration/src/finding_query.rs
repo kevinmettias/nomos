@@ -9,7 +9,7 @@ pub use gate_explain_result::GateExplainResult;
 
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{Finding, RuleId};
-use nomos_platform::{Environment, FileSystem, ProcessLauncher};
+use nomos_platform::{Environment, FileSystem, ProcessLauncher, Timestamp};
 use nomos_rules::SourceFile;
 
 use crate::gate_environment::{GateEnvironment, JudgeContext, Judged_Sources};
@@ -48,12 +48,12 @@ pub fn Explain_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
     query: &FindingQuery,
 ) -> GateExplainResult
 {
-    let GateEnvironment { variant, launcher, filesystem, environment } = environment;
+    let GateEnvironment { variant, launcher, filesystem, environment, now } = environment;
     let check_outcome = Judged_Sources(walked, JudgeContext { launcher, filesystem, environment, variant, root: &command.root, selected: &[] });
     let explanation = Explained_Query(
         &check_outcome,
         query,
-        DispositionPolicies { adoption: &command.adoption, suppressions: &command.suppressions, baseline: &command.baseline },
+        DispositionPolicies { adoption: &command.adoption, suppressions: &command.suppressions, baseline: &command.baseline, now },
     );
 
     return GateExplainResult { root: command.root.clone(), check_outcome, explanation };
@@ -69,6 +69,7 @@ struct DispositionPolicies<'a>
     adoption: &'a AdoptionPolicy,
     suppressions: &'a SuppressionPolicy,
     baseline: &'a BaselinePolicy,
+    now: Timestamp,
 }
 
 fn Explained_Query(outcome: &CheckOutcome, query: &FindingQuery, policies: DispositionPolicies<'_>) -> Explanation
@@ -80,7 +81,7 @@ fn Explained_Query(outcome: &CheckOutcome, query: &FindingQuery, policies: Dispo
     };
 
     return Named_Finding(findings, query)
-        .map_or(Explanation::NotFound, |finding| return Disposed_Finding(finding, policies.adoption, policies.suppressions, policies.baseline));
+        .map_or(Explanation::NotFound, |finding| return Disposed_Finding(finding, policies));
 }
 
 /// The one finding `query` names among `findings`, if any.
@@ -94,10 +95,11 @@ fn Named_Finding<'a>(findings: &'a [Finding], query: &FindingQuery) -> Option<&'
 /// `finding`, reduced to what a real run would do with it -- blocked, calibrated,
 /// suppressed, or baselined, checked in that order, the same order [`crate::Run_Gate`]
 /// reduces by.
-fn Disposed_Finding(finding: &Finding, adoption: &AdoptionPolicy, suppressions: &SuppressionPolicy, baseline: &BaselinePolicy) -> Explanation
+fn Disposed_Finding(finding: &Finding, policies: DispositionPolicies<'_>) -> Explanation
 {
+    let DispositionPolicies { adoption, suppressions, baseline, now } = policies;
     let calibrated_by = adoption.Calibrating(finding).cloned();
-    let suppressed_by = calibrated_by.is_none().then(|| suppressions.Suppressing(finding).cloned()).flatten();
+    let suppressed_by = calibrated_by.is_none().then(|| suppressions.Suppressing(finding, now).cloned()).flatten();
     let baselined_by = (calibrated_by.is_none() && suppressed_by.is_none())
         .then(|| baseline.Tolerating(finding).cloned())
         .flatten();
@@ -156,7 +158,7 @@ mod tests
         let query = FindingQuery { rule: nomos_contracts::RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
         let command = GateCommand { root: Repository_Root(), ..Default::default() };
 
-        let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, &query);
+        let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, &query);
 
         let Explanation::Found { would_block, .. } = result.explanation
         else

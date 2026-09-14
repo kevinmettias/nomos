@@ -177,7 +177,7 @@ mod tests
             ..GateCommand::default()
         };
 
-        return Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command, run);
+        return Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, run);
     }
 
     /// Two runs over a tree that gained one real blocking finding between them: the

@@ -56,7 +56,8 @@ pub fn Handle_Gate_Compare(baseline: &GateCommand, candidate: &GateCommand) -> G
 fn Judged(command: &GateCommand) -> GateRunResult
 {
     let walked = sources::Walked_Sources(&command.root);
-    let run = nomos_gate_orchestration::Fresh_Run_Id(CLOCK.Now());
+    let now = CLOCK.Now();
+    let run = nomos_gate_orchestration::Fresh_Run_Id(now);
 
     return nomos_gate_orchestration::Run_Gate(
         walked,
@@ -65,6 +66,7 @@ fn Judged(command: &GateCommand) -> GateRunResult
             launcher: &LAUNCHER,
             filesystem: &FILE_SYSTEM,
             environment: &ENVIRONMENT,
+            now,
         },
         command,
         run,

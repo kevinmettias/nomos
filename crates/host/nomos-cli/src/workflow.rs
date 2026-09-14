@@ -231,7 +231,7 @@ pub fn Run(command: &WorkflowCommand, stdout: &mut impl Write, stderr: &mut impl
     };
 
     let plan = [WorkflowStepPlan { declaration: Coherent_Declaration(), body }];
-    let platform = Platform { launcher: &LAUNCHER, filesystem: &FILE_SYSTEM, environment: &ENVIRONMENT };
+    let platform = Platform { launcher: &LAUNCHER, filesystem: &FILE_SYSTEM, environment: &ENVIRONMENT, now: CLOCK.Now() };
     let run = Fresh_Run_Id(CLOCK.Now());
     let outcome = nomos_workflow_orchestration::Run(&plan, &platform, &Workflow_Variant(), run);
 

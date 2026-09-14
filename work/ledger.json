@@ -70280,10 +70280,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p99-census",
+        "acquired_at": 1789412660,
+        "lease_expires_at": 1789423460
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -72060,14 +72064,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p103",
-        "acquired_at": 1789412406,
-        "lease_expires_at": 1789423206
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -72081,7 +72081,31 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-api"
+        ],
+        "exit_code": 0,
+        "output_tail": "\ntest tests::Test_A_Passing_Gate_Step_Completes_As_A_Step_Outcome ... ok\ntest tests::Test_A_Failed_Dispatch_Stops_The_Run ... ok\ntest tests::Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions ... ok\ntest tests::Test_A_Failure_Prevents_A_Later_Step_From_Running ... ok\ntest tests::Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes ... ok\ntest tests::Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes ... ok\ntest tests::Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonical_Seam ... ok\ntest tests::Test_A_Two_Step_Sequence_Completes_In_Order ... ok\ntest tests::Test_A_Correction_Step_Should_Refuse_An_Ambiguous_Claim_Without_Committing ... ok\ntest tests::Test_A_Correction_Step_Should_Commit_A_Real_Phantom_Claim ... ok\n\ntest result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.69s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-ef4f4d725df7d02d.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-55167436346b18b7.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-a5ce43e451d52012.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-b0d6f9e4752d125a.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-38a3a7db007fb88b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workflow_orchestration-99e73cca0cf8c466.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_gate_orchestration\n   Doc-tests nomos_workflow_orchestration\n",
+        "verified_at": 1789412699,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "24464f2cb7b8a3a21a4be2553b404c0ccc09dfcd"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

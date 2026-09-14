@@ -23,7 +23,8 @@ use super::{Disposition, GateFindings};
 pub fn Handle_Gate_Run(command: &GateCommand) -> GateRunResponse
 {
     let walked = sources::Walked_Sources(&command.root);
-    let run = nomos_gate_orchestration::Fresh_Run_Id(CLOCK.Now());
+    let now = CLOCK.Now();
+    let run = nomos_gate_orchestration::Fresh_Run_Id(now);
     let result = nomos_gate_orchestration::Run_Gate(
         walked,
         nomos_gate_orchestration::GateEnvironment {
@@ -31,6 +32,7 @@ pub fn Handle_Gate_Run(command: &GateCommand) -> GateRunResponse
             launcher: &LAUNCHER,
             filesystem: &FILE_SYSTEM,
             environment: &ENVIRONMENT,
+            now,
         },
         command,
         run,

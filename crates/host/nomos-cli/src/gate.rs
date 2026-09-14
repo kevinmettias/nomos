@@ -103,6 +103,7 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
                     launcher: &LAUNCHER,
                     filesystem: &FILE_SYSTEM,
                     environment: &ENVIRONMENT,
+                    now: CLOCK.Now(),
                 },
                 command,
                 query,
@@ -154,7 +155,8 @@ fn Compare_Verb(
 fn Judged(command: &GateCommand) -> nomos_gate_orchestration::GateRunResult
 {
     let walked = sources::Walked_Sources(&command.root);
-    let run = nomos_gate_orchestration::Fresh_Run_Id(CLOCK.Now());
+    let now = CLOCK.Now();
+    let run = nomos_gate_orchestration::Fresh_Run_Id(now);
 
     return nomos_gate_orchestration::Run_Gate(
         walked,
@@ -163,6 +165,7 @@ fn Judged(command: &GateCommand) -> nomos_gate_orchestration::GateRunResult
             launcher: &LAUNCHER,
             filesystem: &FILE_SYSTEM,
             environment: &ENVIRONMENT,
+            now,
         },
         command,
         run,
