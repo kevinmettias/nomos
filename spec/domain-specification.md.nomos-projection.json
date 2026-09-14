@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:8cc55db5240c50a5fb3974311b9b78ce230ad99592b61455af4e85d3b699183d",
-  "inputs_digest": "sha256:8fe6eb52f4df4d888bbfa7b400e43a4b6e6d005f4f85cc6e16afd12860dc5d8a",
+  "content_digest": "sha256:843f137f14cd0e463e9be0ed5efc3d4c61645d7c1f3bfc802dd32048760c2434",
+  "inputs_digest": "sha256:f752c60983a0f5749488967d9bf800699dc5715bcb2b0eb42d5fbc8f05c6fb2d",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2037
+      2038
     ],
     [
       "Source blocks",
-      7129
+      7137
     ]
   ],
   "inputs": [
@@ -588,7 +588,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md@authored",
-      "hash": "sha256:69f98af14b7a83532a14a4e3d604fdd9c7070616899302a48f5a09e1ec771a72"
+      "hash": "sha256:684ae923f81b5315a4a01ea0d7b9d57012008c870177eb0a197d61566d9824f7"
     },
     {
       "content": "documents",
@@ -5713,7 +5713,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#18",
-      "hash": "sha256:ea2695e0790c8588b289b6e80c33f797e69c276e3b0f32157efd607d13fdf0e7"
+      "hash": "sha256:985712735a342bd2383abc9882e941d26e956e4947fa7e3777920f004d3b52f9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#26",
+      "hash": "sha256:a87f23107461217b76f7a2561c9a6f4518cf4fbbdb29371475f921111aefe28e"
     },
     {
       "content": "headings",
@@ -26913,7 +26918,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#9",
-      "hash": "sha256:b1e7d7b6f6e9a0c5c425773a0371efca5ec576b9e2d4b508280566deda9ed646"
+      "hash": "sha256:581f08bd43f8a6890da211ca71b93a10083b0086ddb008b29d8abb01dbb1a1c6"
     },
     {
       "content": "blocks",
@@ -26958,12 +26963,52 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#18",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:c7fe027b66701858568302c7315928fca3946e287f49739f99c47b17e567cada"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#19",
-      "hash": "sha256:a1ff44fd445b6c67de374ba51874d95ed926a93356444ae5dcd6ca8221429743"
+      "hash": "sha256:e9e5dac81a4a304079cb90fb9a9728487b49d0135882082b11c89b05823ab449"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#20",
+      "hash": "sha256:1d59cc417b035dc630986c9890e1e36d5f63aeea27cd38204d2dcc2851c6b0e1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#21",
+      "hash": "sha256:b1b92eb5cf899dfdf7d6fac428a96c60b8ff777c9f2f8855ec5ddf2078a1319c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#22",
+      "hash": "sha256:bb259aa8e54d9455491a10a3d1cea3cf070530b5c3926c934c196de046856abd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#23",
+      "hash": "sha256:a96f1a09824aa6badcb5ace363593d2f45e2208c2e4924f917ef08cd8a1bca6e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#24",
+      "hash": "sha256:8ede05672d7dc07fb6fa2342ae638baba3a9c10ded0604933927201c98c306c9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#25",
+      "hash": "sha256:943271e0435e7e9b0f8acf5feb5a9661c4b405ff304e65934c410e49a25a9355"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#26",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#27",
+      "hash": "sha256:78587f3591d500db9e030ac91a5dcea05e10c914d3786ae4ad25f1ab1012d223"
     },
     {
       "content": "blocks",

@@ -3,7 +3,7 @@ id: OD-HOST-009
 type: decision
 title: A repository declares which tool answers a family, and may decline one
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - host
@@ -71,11 +71,14 @@ one.
 ## The Decision
 
 **A repository may declare, per language and per family (`OD-CAPABILITY-013`'s own twelve
-names), which tool answers it, or that none should run.** The declaration lives in
+names), which tool answers it, or that none should run.** ~~The declaration lives in
 `standards.json`, the same file the five existing policy families already read, under a new
 section keyed by language and family word — the identical shape `code-standards`'
 `tools.json` already proved, adapted to this workspace's one-file convention rather than a
-second configuration file.
+second configuration file.~~ **Superseded at version 2: that location cannot be built, and
+the declaration lives in a dedicated file at the repository root. See *The Location Was
+Unimplementable* below.** The shape — keyed by language and family word — is unchanged; only
+the file it is written in is.
 
 **It travels as a capability fact, the same way the five existing policy families do — a
 sixth `nomos.cap.tool.selection`-shaped capability, materialized from `standards.json`
@@ -120,11 +123,63 @@ provider for. A selection names which of the *admitted* offers for a family shou
 that none should — it cannot conjure a ninth provider, the same way `Registry::Resolve`
 cannot today.
 
+## The Location Was Unimplementable
+
+Added at version 2. The decision above stands in every part except where the declaration is
+written, which was named without measuring the one thing that decides it: `standards.json` is
+not this workspace's file.
+
+**Another tool reads it, and reads it strictly.** Measured 2026-09-14 against the live
+`code-standards` checkout. `decode_Limits` in `kernel/config/limits/config_loading.go` calls
+`decoder.DisallowUnknownFields()` at line 171 and decodes the whole normalized file into one
+`Limits` struct, and its own comment says why: *"DisallowUnknownFields turns a typo'd key into
+a loud error rather than a no-op."* This repository's `standards.json` carries thirteen
+top-level keys — `conformance_workers`, `data_format_contracts`, `dependency_budget`,
+`json_key_naming`, `languages`, `naming`, `projects`, `scripting`, `standard_flags`,
+`suppression`, `telemetry`, `tiers`, `words` — and every one is a field that struct names. A
+fourteenth key this repository owned outright would not be an addition to a shared file. It
+would make another tool fail to read a file it has read all along, loudly, by that tool's own
+design.
+
+**The five families are not a counterexample, and they are why the constraint was invisible.**
+Each reads a key `code-standards` already owns and already decodes — `naming`, `scripting`,
+`words`, and the rest. Nomos piggybacks on that tool's schema rather than extending it, so no
+policy family has ever needed a key of its own, and "the same file the five existing policy
+families already read" was true of the file and false of the act.
+
+**So the declaration lives in a dedicated, language-neutral file at the repository root.**
+That is not a new convention invented to escape the problem; this workspace has it twice
+already. `nomos-gate.json` carries a repository's declared gate policy, and
+`nomos-architecture.json` carries the architecture declaration `OD-RULES-024` records as
+built, read by `nomos-repo-policy`'s `architecture` module at the repository root. A tool
+selection is the same kind of thing: a declaration this repository owns outright, about
+itself, that no other tool parses.
+
+**Language-neutral matters for this record in particular.** The declaration is keyed *by
+language*, and a carrier only one ecosystem can express — a Cargo `workspace.metadata` table,
+say — would make the whole family Rust-only, which contradicts the thing being declared.
+
+**What this does not change.** Whether a repository may declare a tool preference or an
+exclusion at all, which is what this record is for and is untouched. That the declaration
+travels as a capability fact the way `OD-RULES-011`'s five families do — a provider reads a
+file and materializes a fact, and which file it reads was never the part that made that
+pattern work. That the gate is consulted before a provider's subprocess runs, and that the
+three cases resolve on existing `Applicability` vocabulary. And that **no mechanism is built
+here**: this corrects a location, and the follow-up item's territory named in *What This
+Record Does Not Do* is unchanged except that its new file is a repository-root declaration
+rather than a `standards.json` section.
+
+Separately, and not this record's to fix: the same measurement is why a sibling item's
+architecture declaration went to `nomos-architecture.json` rather than to a `standards.json`
+section. The constraint is a property of the shared file, not of either decision.
+
 ## Status
 
-Accepted. A repository may declare a tool preference or exclusion per language and family,
-written into `standards.json` and read as a capability fact the same way five existing
-policy families already are, checked before a provider's own subprocess runs. The three
+Accepted, at version 2. A repository may declare a tool preference or exclusion per language
+and family, written into a dedicated declaration file at the repository root — **not**
+`standards.json`, which another tool decodes with unknown fields disallowed — and read as a
+capability fact the same way five existing policy families already are, checked before a
+provider's own subprocess runs. The three
 cases a report must tell apart already have the vocabulary: `MissingCapability`/
 `ProviderUnavailable` for absent, `ConfigurationDisabled` for declined — its first real
 producer — and `Supported` for ran and clean. `OD-HOST-004`'s own composition-root question

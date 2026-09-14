@@ -123,7 +123,7 @@ profile: domain-specification
 | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md@authored | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md | authored | 19 | 6 | sha256:c4b59b0c06e3e68eee7656804c4cf4fe6685ba8cf63bc66976ccc67c481f2120 |
 | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md@authored | docs/records/OD-HOST-007-an-mcp-projection-fires-the-seam-exercise-trigger-and-reopens-what-nomos-api-may-project.md | authored | 25 | 6 | sha256:3e1ca21fa30a1ca546fe40667181bda7de5ca80622a019656889537e6a72d206 |
 | docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md@authored | docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md | authored | 17 | 6 | sha256:352695e42fc3c9e2e1d46f7552ad424db79b4ffe8c08efb7d9bf7696b68b6c81 |
-| docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md@authored | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md | authored | 19 | 6 | sha256:69f98af14b7a83532a14a4e3d604fdd9c7070616899302a48f5a09e1ec771a72 |
+| docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md@authored | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md | authored | 27 | 7 | sha256:684ae923f81b5315a4a01ea0d7b9d57012008c870177eb0a197d61566d9824f7 |
 | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md@authored | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md | authored | 23 | 7 | sha256:68d1d753054542c6d8e57a0ce6d40c300f5bc598959791a06ca99ec7514b97e8 |
 | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md@authored | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md | authored | 19 | 7 | sha256:361139ee1bbe26b54f84f93988dbf0ccf3488045465fa4f1558161c02d48ba8b |
 | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md@authored | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md | authored | 18 | 6 | sha256:1f5a1bfd574bfb0b43f9b1b360bd932f8c620d390cb1eb9a0931804fbc9d76db |
@@ -1153,7 +1153,8 @@ profile: domain-specification
 | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#8 | authored | 2 | The Decision |
 | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#13 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#18 | authored | 2 | Status |
+| docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#18 | authored | 2 | The Location Was Unimplementable |
+| docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#26 | authored | 2 | Status |
 | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#1 | authored | 1 | Three of a diagnostic's five walk-outward targets are real today; the other two are OD-HOST-003's same two gaps, unclosed |
 | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#2 | authored | 2 | Question |
 | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md#5 | authored | 2 | What was measured |
@@ -31384,14 +31385,17 @@ one.
 
 ### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#9
 
-*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / The Decision · hash: sha256:b1e7d7b6f6e9a0c5c425773a0371efca5ec576b9e2d4b508280566deda9ed646*
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / The Decision · hash: sha256:581f08bd43f8a6890da211ca71b93a10083b0086ddb008b29d8abb01dbb1a1c6*
 
 **A repository may declare, per language and per family (`OD-CAPABILITY-013`'s own twelve
-names), which tool answers it, or that none should run.** The declaration lives in
+names), which tool answers it, or that none should run.** ~~The declaration lives in
 `standards.json`, the same file the five existing policy families already read, under a new
 section keyed by language and family word — the identical shape `code-standards`'
 `tools.json` already proved, adapted to this workspace's one-file convention rather than a
-second configuration file.
+second configuration file.~~ **Superseded at version 2: that location cannot be built, and
+the declaration lives in a dedicated file at the repository root. See *The Location Was
+Unimplementable* below.** The shape — keyed by language and family word — is unchanged; only
+the file it is written in is.
 
 ### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#10
 
@@ -31470,17 +31474,101 @@ cannot today.
 
 ### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#18
 
+*revision: authored · kind: heading · heading: A repository declares which tool answers a family, and may decline one / The Location Was Unimplementable · hash: sha256:c7fe027b66701858568302c7315928fca3946e287f49739f99c47b17e567cada*
+
+## The Location Was Unimplementable
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#19
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / The Location Was Unimplementable · hash: sha256:e9e5dac81a4a304079cb90fb9a9728487b49d0135882082b11c89b05823ab449*
+
+Added at version 2. The decision above stands in every part except where the declaration is
+written, which was named without measuring the one thing that decides it: `standards.json` is
+not this workspace's file.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#20
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / The Location Was Unimplementable · hash: sha256:1d59cc417b035dc630986c9890e1e36d5f63aeea27cd38204d2dcc2851c6b0e1*
+
+**Another tool reads it, and reads it strictly.** Measured 2026-09-14 against the live
+`code-standards` checkout. `decode_Limits` in `kernel/config/limits/config_loading.go` calls
+`decoder.DisallowUnknownFields()` at line 171 and decodes the whole normalized file into one
+`Limits` struct, and its own comment says why: *"DisallowUnknownFields turns a typo'd key into
+a loud error rather than a no-op."* This repository's `standards.json` carries thirteen
+top-level keys — `conformance_workers`, `data_format_contracts`, `dependency_budget`,
+`json_key_naming`, `languages`, `naming`, `projects`, `scripting`, `standard_flags`,
+`suppression`, `telemetry`, `tiers`, `words` — and every one is a field that struct names. A
+fourteenth key this repository owned outright would not be an addition to a shared file. It
+would make another tool fail to read a file it has read all along, loudly, by that tool's own
+design.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#21
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / The Location Was Unimplementable · hash: sha256:b1b92eb5cf899dfdf7d6fac428a96c60b8ff777c9f2f8855ec5ddf2078a1319c*
+
+**The five families are not a counterexample, and they are why the constraint was invisible.**
+Each reads a key `code-standards` already owns and already decodes — `naming`, `scripting`,
+`words`, and the rest. Nomos piggybacks on that tool's schema rather than extending it, so no
+policy family has ever needed a key of its own, and "the same file the five existing policy
+families already read" was true of the file and false of the act.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#22
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / The Location Was Unimplementable · hash: sha256:bb259aa8e54d9455491a10a3d1cea3cf070530b5c3926c934c196de046856abd*
+
+**So the declaration lives in a dedicated, language-neutral file at the repository root.**
+That is not a new convention invented to escape the problem; this workspace has it twice
+already. `nomos-gate.json` carries a repository's declared gate policy, and
+`nomos-architecture.json` carries the architecture declaration `OD-RULES-024` records as
+built, read by `nomos-repo-policy`'s `architecture` module at the repository root. A tool
+selection is the same kind of thing: a declaration this repository owns outright, about
+itself, that no other tool parses.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#23
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / The Location Was Unimplementable · hash: sha256:a96f1a09824aa6badcb5ace363593d2f45e2208c2e4924f917ef08cd8a1bca6e*
+
+**Language-neutral matters for this record in particular.** The declaration is keyed *by
+language*, and a carrier only one ecosystem can express — a Cargo `workspace.metadata` table,
+say — would make the whole family Rust-only, which contradicts the thing being declared.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#24
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / The Location Was Unimplementable · hash: sha256:8ede05672d7dc07fb6fa2342ae638baba3a9c10ded0604933927201c98c306c9*
+
+**What this does not change.** Whether a repository may declare a tool preference or an
+exclusion at all, which is what this record is for and is untouched. That the declaration
+travels as a capability fact the way `OD-RULES-011`'s five families do — a provider reads a
+file and materializes a fact, and which file it reads was never the part that made that
+pattern work. That the gate is consulted before a provider's subprocess runs, and that the
+three cases resolve on existing `Applicability` vocabulary. And that **no mechanism is built
+here**: this corrects a location, and the follow-up item's territory named in *What This
+Record Does Not Do* is unchanged except that its new file is a repository-root declaration
+rather than a `standards.json` section.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#25
+
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / The Location Was Unimplementable · hash: sha256:943271e0435e7e9b0f8acf5feb5a9661c4b405ff304e65934c410e49a25a9355*
+
+Separately, and not this record's to fix: the same measurement is why a sibling item's
+architecture declaration went to `nomos-architecture.json` rather than to a `standards.json`
+section. The constraint is a property of the shared file, not of either decision.
+
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#26
+
 *revision: authored · kind: heading · heading: A repository declares which tool answers a family, and may decline one / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#19
+### docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md#27
 
-*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / Status · hash: sha256:a1ff44fd445b6c67de374ba51874d95ed926a93356444ae5dcd6ca8221429743*
+*revision: authored · kind: prose · heading: A repository declares which tool answers a family, and may decline one / Status · hash: sha256:78587f3591d500db9e030ac91a5dcea05e10c914d3786ae4ad25f1ab1012d223*
 
-Accepted. A repository may declare a tool preference or exclusion per language and family,
-written into `standards.json` and read as a capability fact the same way five existing
-policy families already are, checked before a provider's own subprocess runs. The three
+Accepted, at version 2. A repository may declare a tool preference or exclusion per language
+and family, written into a dedicated declaration file at the repository root — **not**
+`standards.json`, which another tool decodes with unknown fields disallowed — and read as a
+capability fact the same way five existing policy families already are, checked before a
+provider's own subprocess runs. The three
 cases a report must tell apart already have the vocabulary: `MissingCapability`/
 `ProviderUnavailable` for absent, `ConfigurationDisabled` for declined — its first real
 producer — and `Supported` for ran and clean. `OD-HOST-004`'s own composition-root question
