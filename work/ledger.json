@@ -69635,6 +69635,59 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P98-NOTHING-ASSERTS-THE-COMMITTED-LOCK-STILL-PINS-THE-XVPE-CROSSING",
+      "title": "Nothing asserts the committed lock still pins the XVPE crossing, and a local override silently un-pins it",
+      "why": "OD-PLATFORM-004 names this debt and deliberately does not pay it. Measured 2026-09-14: with a local patch override active, a single cargo metadata call rewrote the tracked Cargo.lock and deleted the git source line from all twelve xvpe- packages, reporting nothing. Cargo.lock is the artifact that makes the adopted revision a recorded fact rather than an ambient one, which is the whole content of D-130's surviving clause. It is tracked on purpose, so gitignore cannot protect it the way it protects the override file, and the scoped git add that AGENTS.md asks for everywhere else is exactly the gesture that would publish an un-pinned lock. Every other clause of OD-PLATFORM-004 fails safely, because a wrong override breaks a local build and its author finds out immediately. This one fails silently, in the committed state, in the direction the pinning exists to prevent, and no test in this workspace reads Cargo.lock at all.",
+      "done_when": "A contract test asserts that every package in Cargo.lock whose name begins with xvpe- carries a git source, and that the revision it names is the one the manifests name, so a lock rewritten by an active override fails the gate instead of being published. The failure message says what happened and how to restore, because the reader hitting it will usually be somebody who ran a build rather than somebody who edited a manifest. The guard is proven by injecting a lock that violates it and observing the failure, then restoring the file byte-identically, rather than being believed because it passes on a tree that already satisfies it. The boundaries module documentation, which already says eight properties while listing nine, is corrected to the real count rather than left one further behind. cargo test -p nomos-contract-tests passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/boundaries/lock_pinning.rs",
+          "tests/contract/tests/boundaries/main.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.00s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-16521a1362e743b4.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4612ea488031f680.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-8e50c82cd1b18623.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-7c139115530dcaf9.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-930f1bbb112a171d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-6d055a686bd8bf95.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-9b9a906e2f2cb06a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-70a759c22f1ec589.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-b84e992768820a4a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-75a077603592d3ef.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-a235932dedeaff21.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-b4d692f665383346.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-c59e3651e67c8b16.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-7f3867088e2e3e4a.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789373974,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1f05035a532a65c1d8da04bdaa581bfae2655be9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
