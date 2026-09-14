@@ -70969,6 +70969,43 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P99-THREE-RECORDS-REPEAT-A-BARE-CHECKED-ON-LINE-AND-THE-PRESERVATION-GUARD-IS-RED",
+      "title": "Three records repeat the bare line Checked 2026-09-14, the preservation guard refuses it, and P95 already fixed this class once",
+      "why": "Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously reports one violation over 9,056 subjects with the corpus set: three sections across three documents repeat an undeclared template, the bare line Checked 2026-09-14. The three are D-130, OD-CAPABILITY-017 and OD-PLATFORM-004, landed 2026-09-14 in be4ca011, 2d39b498 and 8a923e49. This is a recurrence of P95-THREE-RECORDS-REPEAT-A-BARE-MEASURED-ON-LINE, closed 2026-09-13, one phase earlier and one verb over: that item was three sections across three documents repeating the bare line Measured 2026-09-13, caught by the same rule, no_undeclared_filler_template. The rule is right and this is the wording it exists to catch. OD-SPEC-004 is the record about a filler blocklist missing the wording that hollowed v15, and a date with no object is exactly that -- it occupies the position where a reader expects to learn what was checked and against what, and says only when. The discriminator is visible in this very batch: a fourth record written the same day, ARC-ECOSYSTEM-001, carries Checked 2026-09-14, this workspace at 8503ddb3 and escapes the rule, because its object is on the same line. That is the same escape P95 measured for six records written on its own day. A red preservation guard contaminates confidence in every subsequent governing-record edit, which is why this is boarded ahead of ordinary forward work: the guard protecting the normative corpus is the thing currently failing, and a session amending a record while it is red cannot tell its own edit apart from the standing violation.",
+      "done_when": "Each of the three records states what was checked and against what, rather than a date alone, following P95-THREE-RECORDS-REPEAT-A-BARE-MEASURED-ON-LINE's own resolution and ARC-ECOSYSTEM-001's escape in the same batch as the two worked examples. The detector is NOT weakened and no template is declared as intentional: the rule is correct, the prose is what is wrong, and an exemption would reintroduce exactly the filler OD-SPEC-004 records the cost of. No decision changes and no version is bumped on any of the three, because none says anything different afterwards -- this is wording moving, which nomos spec preview reports as its own category and which the preview must confirm rather than reporting blocks added or removed. Followed through .claude/skills/nomos-spec-change: round trip read before editing each, preview read for each, and both projections re-rendered from a worktree holding exactly the records this commit publishes, with a binary built inside it, because three record bodies move. Verified with the corpus set, not merely with a green predicate: NOMOS_V14_CORPUS, NOMOS_SPEC_ARCHIVES and NOMOS_RUST_CORPUS are exported and Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously reports zero violations rather than one, over a subject count in the same order as the 9,056 it reported red, since a corpus-less run of that test passes vacuously and is not evidence. The recurrence itself is reported and not fixed here: this class has now been closed twice by hand in two days, and whether anything should stop a third is a decision item somebody else authors, not a mechanism invented inside a correction.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/D-130-no-xvpe-dependency-before-phase-5.md",
+          "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md",
+          "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
