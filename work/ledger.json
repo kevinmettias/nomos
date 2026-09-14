@@ -70661,10 +70661,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p99-carrier",
+        "acquired_at": 1789408587,
+        "lease_expires_at": 1789419387
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -70771,6 +70775,39 @@
           "test",
           "-p",
           "nomos-api-transport",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P101-A-NEW-PRODUCT-GATE-SHOULD-NOT-INHERIT-A-COMPATIBILITY-DEFAULT",
+      "title": "A newly authored product Gate should not inherit a compatibility default that lets partial coverage pass",
+      "why": "CoveragePolicy has two variants. Unset means coverage debt does not affect disposition, which is OD-COMPLETENESS-004's own default carried forward so that every construction site predating the type is unchanged in behaviour. RequireCompleteness turns a run that would otherwise report Passed into Indeterminate whenever recomputed coverage over the selected findings is incomplete. Default is Unset, and this repository declares no nomos-gate.json, so a gate whose rules could not be evaluated reports Passed today. The owner's decision is that the representation default and the product-authoring default are different questions and only the second should change: an absent field in an existing configuration still means Unset, so historical behaviour stays reproducible and no existing caller is migrated, while anything that authors a new product Gate -- scaffolding a nomos-gate.json, creating one through API or MCP -- emits require_completeness. A third variant, AllowPartial, makes wanting partial operation an explicit inspectable choice rather than the meaning of an omission, which is the principle at stake: partial coverage may pass should be a decision somebody made, not a consequence of a field nobody wrote.",
+      "done_when": "A governing record states the three-variant model and the distinction it rests on, between the default a representation takes when a field is absent and the default a newly authored Gate is given. It records that Unset keeps its present meaning and that no existing caller is migrated by this, why redefining Unset globally would turn a compatibility decision into a silent semantic migration, and that AllowPartial exists so a deliberate choice of partial operation is inspectable rather than inferred from an omission. It states that Unset is to become visibly non-ideal in authoring and inspection output -- named as a compatibility default, with its effective behaviour and a recommended migration shown -- and that it is deliberately not made invalid, because that would force an unrelated migration across existing callers to improve a default for future use. The record is registered, both projections are re-rendered from a tree publishing exactly it, and cargo test -p nomos-contract-tests passes. No code changes under this item; the variant and the authoring default are separate implementation work this record unblocks.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-029.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
           "-p",
           "nomos-contract-tests"
         ],
