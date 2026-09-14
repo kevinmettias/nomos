@@ -407,15 +407,20 @@ mod tests
         );
     }
 
+    /// The document is written here rather than read out of the seeded governing records.
+    /// What this test needs is a stored markdown document containing no table, and no
+    /// particular record is obliged to go on being an example of that: `D-130` was chosen
+    /// for the property, gained a table in `be4ca011`, and this test then failed for a
+    /// documentation edit that had nothing to do with the parser it checks.
     #[test]
     fn Test_A_Document_With_No_Table_Should_Return_No_Lines()
     {
-        let store = Seeded();
-
-        let (found, _) = store
-            .Documents_Named("D-130-no-xvpe-dependency-before-phase-5.md", None)
-            .expect("queries");
-        let uid = *found.first().expect("the record is seeded");
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let markdown = "# Volume\n\nprose, and not a table.\n";
+        let uid = store.Put_Source_Document("volume.md", "v14.36", markdown).expect("writes");
+        store
+            .Put_Source_Blocks(uid, &nomos_spec_model::Segment(markdown))
+            .expect("writes blocks");
 
         assert!(store.Table_Lines(uid, None, None).expect("queries").is_empty());
     }
