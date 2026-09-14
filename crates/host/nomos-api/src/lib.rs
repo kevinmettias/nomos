@@ -136,7 +136,11 @@
 //! It does not read argv, listen on a socket, or speak MCP's JSON-RPC framing. Building a
 //! transport ahead of a real second caller for it is exactly the premature-surface pattern
 //! this workspace has repeatedly declined to build ahead of evidence (`OD-PACKAGE-006`,
-//! `OD-PACKAGE-008`, and `nomos-cli`'s own `gate.rs` doc on why `compare` is not stubbed). A
+//! `OD-PACKAGE-008`, and `nomos-cli`'s own `gate.rs`, where `compare` was refused as usage
+//! under that same discipline until a real body arrived, and released when one did --
+//! that file's own closing lines say the discipline is unchanged and the body is what
+//! arrived, which makes it the stronger form of the precedent: one carried to its end
+//! rather than one still waiting). A
 //! follow-up increment wires a real transport over [`Handle_Gate_Run`] once one exists to
 //! design it against; this increment's job is only to prove the seam is reachable and
 //! projectable from a second composition root at all.

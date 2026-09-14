@@ -69688,6 +69688,167 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P99-THE-API-DOC-CITES-A-GATE-DOC-CLAIM-THAT-NO-LONGER-EXISTS",
+      "title": "nomos-api cites nomos-cli gate.rs on why compare is not stubbed, and that doc now describes the built compare verb",
+      "why": "crates/host/nomos-api/src/lib.rs:139 argues this crate should not build a transport ahead of a real second caller, and cites three precedents for the discipline: OD-PACKAGE-006, OD-PACKAGE-008, and nomos-cli's own gate.rs doc on why compare is not stubbed. The third no longer says that. Since P73-GATE-COMPARE-HAS-NO-CALLER, crates/host/nomos-cli/src/gate.rs carries a section headed compare, after P73-GATE-COMPARE-HAS-NO-CALLER describing the verb that was built: Invocation::Compare carrying two whole GateCommands, Compare_Verb walking and judging each, and Compare_Gate_Runs answering. P99 corrected the same stale claim in nomos-gate-orchestration's gate_command.rs at 67d66b8e and reported this second carrier rather than widening territory into another crate. What makes this worth its own item rather than a deletion is that the argument nomos-api is making is still sound and the cited doc still supports it -- gate.rs's own closing lines say the verb was refused as usage until a real body arrived, that the discipline is unchanged, and that the body is what arrived. So the precedent survives in that file in a stronger form: a case where the discipline was held and then released on evidence, rather than one still waiting. The citation points at a claim the authority has stopped making, which is exactly the navigational failure this repository treats module docs as authority to avoid.",
+      "done_when": "crates/host/nomos-api/src/lib.rs's citation names what nomos-cli's gate.rs doc says at HEAD rather than what it said before P73-GATE-COMPARE-HAS-NO-CALLER, and the precedent it draws from that file is the one actually there: compare was refused as usage under the no-invented-shape-ahead-of-a-real-body discipline, and was released when the body arrived. The argument nomos-api is making about its own transport is unchanged -- this item does not decide whether nomos-api should grow a transport, and does not touch OD-HOST-006's own revisit trigger. Documentation only: no signature, no behavior and no handler change. cargo test --no-fail-fast -p nomos-api stays green and the workspace self-check names this file in no finding.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api"
+        ],
+        "exit_code": 0,
+        "output_tail": "ce_A_Response_That_Round_Trips_As_Json ... ok\ntest spec::commit_response::tests::Test_From_Should_Round_Trip_As_Json ... ok\ntest response::gate_run_response::tests::Test_Handle_Gate_Run_And_Walked_Sources_Should_Reach_A_Judgment_Over_A_Real_Tree ... ok\n\ntest result: ok. 140 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.74s\n\n\nrunning 8 tests\ntest Test_Handle_Spec_Profiles_Should_List_Real_Nomos_Spec_Project_Profiles ... ok\ntest Test_Handle_Work_Claim_Should_Grant_A_Reservation_Whose_Expiry_Is_A_Real_System_Clock_Lease ... ok\ntest Test_Handle_Gate_Explain_Should_Find_A_Real_Blocking_Finding_Over_A_Real_Walked_Directory ... ok\ntest Test_Handle_Gate_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers ... ok\ntest Test_An_Incomplete_Submission_Should_Be_Refused ... ok\ntest Test_Handle_Spec_Submit_Should_Accept_A_Complete_Submission_With_Submitted_Origin ... ok\ntest Test_Handle_Spec_Record_Should_Resolve_The_Same_Document_On_Repeated_Real_Reads ... ok\ntest Test_This_Packages_Build_Variant_Should_Be_Well_Formed_For_A_Real_Gate_Run ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.91s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-spec-ingest v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-ingest)\n   Compiling nomos-spec-project v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-project)\n   Compiling nomos-spec-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-spec-orchestration)\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.42s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-ef4f4d725df7d02d.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-55167436346b18b7.exe)\n   Doc-tests nomos_api\n",
+        "verified_at": 1789403498,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e3d86344a2c5fd7ee0409ea4427514e4a849fdbe"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P99-A-PARSER-TEST-USES-A-LIVE-GOVERNING-RECORD-AS-ITS-TABLE-FREE-FIXTURE",
+      "title": "A parser test uses a live governing record as its table-free fixture, and dev is red because that record gained a table",
+      "why": "Test_A_Document_With_No_Table_Should_Return_No_Lines names D-130-no-xvpe-dependency-before-phase-5.md as its example of a document with no table. That record gained a seven-row table in be4ca011, and the test has been failing on dev ever since; measured at e3d86344, exit 101. The test's semantic input is a markdown document containing no table, which has nothing to do with any particular governing record, and the same test module already builds its own in-memory store with Put_Source_Document for exactly this reason. Depending on a live record means an entirely valid documentation edit breaks an unrelated parser test, which is what just happened.",
+      "done_when": "The table-free test constructs its own document rather than reading a governing record out of the seeded store. cargo test -p nomos-spec-store --no-fail-fast is green. No other test in the module gains a dependency on a live record, and the test still exercises Table_Lines returning empty for a real stored document rather than for an absent one.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/src/read.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p99b",
+        "acquired_at": 1789403410,
+        "lease_expires_at": 1789410610
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P98-THE-OVERRIDE-ACTIVATES-ITSELF-AND-SHOULD-HAVE-TO-BE-ASKED-FOR",
+      "title": "The local override activates itself on every command, and sibling development should have to be asked for",
+      "why": "OD-PLATFORM-004 permits a local substitution of the XVPE crossing and denies it any authority, and that decision is correct. Its activation semantics are not. The file it names is .cargo/config.toml, which Cargo discovers automatically, so every cargo command run anywhere in this tree opts into the substitution whether or not the person running it wanted sibling development -- including a concurrent session's commands, which never asked for it at all. The consequence is not hypothetical and was observed twice today: an ordinary command stripped the git source line from all twelve xvpe- packages in the tracked Cargo.lock, and at one point this working tree stood at zero of twelve pinned with the new guard failing. The guard is the right backstop and stays, but it catches the damage after the fact. The ergonomics are inverted: the reproducible form is what a build should fall into by default, and substituting a sibling checkout is the thing that should cost an explicit gesture. Cargo already supplies one, so this needs no new machinery: an extra configuration file passed by name is loaded only when it is named.",
+      "done_when": "Activation is explicit rather than automatic. The override no longer sits at a path Cargo discovers on its own, it is ignored by git under whatever name it does take, and an ordinary cargo command in this tree resolves the pinned crossing and leaves Cargo.lock untouched -- checked by running one and observing the lock unchanged, not assumed. OD-PLATFORM-004 carries an amendment recording that the substantive decision is unchanged, that local substitution is still permitted and still carries no authority, and that only activation moves from implicit to opt-in, together with the exact invocation that requests it and a statement that a build made that way is development-resolved rather than reproducible. The lock guard is untouched and still green. Both projections are re-rendered from a tree publishing exactly this record, and cargo test -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".gitignore",
+          "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p98-xvpe",
+        "acquired_at": 1789403450,
+        "lease_expires_at": 1789414250
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P99-THE-API-DOC-PROMISES-A-TRANSPORT-INCREMENT-THAT-ALREADY-LANDED",
+      "title": "nomos-api's doc says a follow-up increment wires a real transport over Handle_Gate_Run, and nomos-api-transport already does",
+      "why": "crates/host/nomos-api/src/lib.rs's What this crate deliberately does not do section ends with a future-tense promise: a follow-up increment wires a real transport over Handle_Gate_Run once one exists to design it against, and this increment's job is only to prove the seam is reachable and projectable from a second composition root at all. That increment landed. crates/host/nomos-api-transport exists at band 92, its nomos_api_service.rs dispatches to nomos_api::Handle_Gate_Run directly, its served_method.rs names that handler as a served method, and its own module doc quotes this exact sentence of nomos-api's as the hole it fills. The first half of the same paragraph is still true and must stay: nomos-api itself still does not read argv, listen on a socket, or speak JSON-RPC framing, and nomos-api-transport's own doc confirms the boundary is still exactly where that sentence puts it. Only the promise outlived what kept it. Found while correcting the compare citation two lines above it, and filed rather than folded in, because a neighbouring defect belongs on the board and not in whichever item happened to see it.",
+      "done_when": "crates/host/nomos-api/src/lib.rs no longer promises a transport increment in the future tense, and says instead what is true at HEAD: nomos-api holds the handlers and no wire, and nomos-api-transport serves them, naming that crate so a reader can follow it. The sentence about what this crate does not do -- argv, a socket, JSON-RPC framing -- is kept unchanged, because it is still true of nomos-api and nomos-api-transport's own module doc depends on it being the stated boundary. This item does not decide anything about OD-HOST-006's revisit trigger and adds no handler, no dependency and no behavior. cargo test --no-fail-fast -p nomos-api stays green, and so does cargo test --no-fail-fast -p nomos-api-transport, since its doc quotes the neighbouring sentence this item must not disturb.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
