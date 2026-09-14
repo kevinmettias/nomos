@@ -68788,6 +68788,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P96-COMPOSING-A-RULE-LEFT-THE-CALIBRATION-VERDICT-TABLE-SHORT-ONE-ENTRY",
+      "title": "The calibration verdict table is short the rule b8cc19d6 composed",
+      "why": "cargo test --workspace exits 101 with exactly one failure: Test_Table_Names_Exactly_The_Composed_Rule_Set, whose own message says a rule added to Composed_Rules must gain an entry in tests/integration/tests/calibration.rs verdict table. b8cc19d6 composed guarantee-declares-its-exerciser and added no entry. The guard is working exactly as designed and the defect is mine: that items predicate named nomos-rules, nomos-check-orchestration, nomos-gate-orchestration and nomos-contract-tests, and the declared list that went stale lives in nomos-integration-tests, so work finish ran green over a red workspace. This is the second time today a predicate too narrow to reach a declared list let a break land -- abae1225 was the first, and the memory written after it named the three nomos-cli tests and not this one.",
+      "done_when": "The verdict table names guarantee-declares-its-exerciser with a stated expectation and a reason, and cargo test -p nomos-integration-tests --test calibration passes. The expectation is argued rather than fitted to whatever the run currently produces: the hex fixture declares no provider guarantee, so the rule has no subject there, and the entry says which of the tables four expectation kinds that is and why -- the same judgement completeness-mirror already carries for a nomos-specific marker no third-party crate uses. cargo test --workspace --no-fail-fast exits 0.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration/tests/calibration.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "calibration"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "calibration"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 2 tests\ntest Test_Table_Names_Exactly_The_Composed_Rule_Set ... ok\ntest Test_Composed_Rules_Against_An_Idiomatic_Third_Party_Fixture ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.30s\n     Running tests\\calibration.rs (target\\debug\\deps\\calibration-3a2ce21be7e245e2.exe)\n",
+        "verified_at": 1789350035,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8bb269ff923c5e279731dcea8ba7824a4eadfb98"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
