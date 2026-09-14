@@ -68871,6 +68871,45 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P97-FIVE-PRINTED-VOCABULARIES-HAVE-NOTHING-COMPARING-THEM-AND-ONE-IS-ALREADY-SHORT",
+      "title": "Five vocabularies a help text prints have nothing comparing them to their authority, and work's state list is already short the spelling it accepts",
+      "why": "Measured on a quiescent tree at e16060cf, with a binary built there. OD-AGENT-004 version 2 states the condition: a help text may enumerate a compiled vocabulary only where a test compares that enumeration against the vocabulary's own authority, in both directions, refusing to pass on an empty parse; otherwise it routes to the verb that prints the vocabulary. That amendment closed the exit-code axis -- all eight groups on this binary now compare their printed exit codes against their own ExitCode enum -- and named five printed vocabularies that meet the condition in no way at all. This item is those five. They are named in the record so that they read as not-yet-met rather than as satisfied, and this is the item the record says each of them is.\n\nThe population, measured across every nomos-cli test that reads a usage text (the complete set is: the eight exit-code mirrors, spec's Test_Usage_Text_Should_Name_Every_Command, and work's negative assertion that the text does not advertise --territory-pattern):\n\n1. work list's states. VERBS in crates/host/nomos-cli/src/work/parse.rs line 378 prints --state ready|waiting|held|snagged|stranded|claimed|blocked|done|declined. Nine. The authority is not one enum: nomos_ledger::item::State declares five variants (Ready, Claimed, Blocked, Done, Declined) and the other four are derived, produced by the refusal-to-label match in crates/host/nomos-cli/src/work/report.rs around line 236. That match produces a tenth label the printed list omits: lapsed. It is not decorative. Listed_As in work/listing.rs filters by comparing the requested string case-insensitively against Listing_Label's output, so every label the match can produce is an accepted --state value, and nomos work list --state lapsed exits 0 today printing \"no items are lapsed\". So this list is not merely unguarded, it is already short by one, exactly the way check's rules section was -- found by measuring rather than by reasoning that it might be.\n\n2. work add's five kinds and two origins, against nomos_ledger::item::Kind (5 variants) and nomos_ledger::item::Origin (2). Both closed sets OD-LEDGER-024 decided, both restated in prose, nothing comparing them.\n\n3. agent's six --effort spellings, against nomos_model_package::EffortLevel. All six are exercised against the parser by EFFORT_SPELLINGS in agent/tests.rs and Test_An_Execute_Command_Parses_Every_Effort_Spelling, so the parser side is closed. Nothing compares that census to the list the help text prints, which is a different claim and the one the condition asks for.\n\n4. request's three submission kinds and two states.\n\n5. spec's nine command names. This one is compared, by Test_Usage_Text_Should_Name_Every_Command, but against Every_Spec_Command_Name, a hand-written array in the test file rather than a compiled authority -- and in one direction only, so a command the parser accepts and the text omits passes. The compiled vocabulary that would answer is nomos_spec_orchestration::SpecCommand.\n\nThe shape is settled and cheap: P96-THE-CHECK-VERBS-HELP-NAMES-ONE-RULE-OF-SEVENTY-AND-CLAIMS-IT-RUNS-EVERY-ONE built it six times in one sitting, and its commit e16060cf is the worked example for the census-in-the-test-file form, the empty-parse guard, the assertion that the test read its own group's text rather than a sibling's, and the injection that proves a new test can fail.",
+      "done_when": "Each of the five printed vocabularies either gains the comparison OD-AGENT-004 version 2 requires, or stops enumerating and routes. Which of the two is the implementer's call per vocabulary, and both are admissible; what is refused is leaving a list standing with nothing comparing it, since that is the state this item exists to end.\n\nEach comparison is both directions -- a spelling in the text and not in the authority fails, and a spelling in the authority and not in the text fails -- and each carries the empty-parse guard, so a test whose prose section is renamed fails rather than silently comparing nothing. One direction is not enough and is the specific reason spec's existing check does not already close case 5.\n\nwork's --state list gains lapsed, or the implementer establishes that lapsed must not be an accepted filter value and narrows what Listed_As matches instead. Either closes it; printing nine while accepting ten does not. The authority for this one is the set of labels Listing_Label can return, which is nomos_ledger::item::State's variants together with the derived labels work/report.rs produces, so the comparison is against that set and not against State alone. A test asserting the printed nine against State's five would be wrong in both directions and is not what this asks for.\n\nThe other four compare against their own compiled authority: nomos_ledger::item::Kind and Origin, nomos_model_package::EffortLevel, request's submission kind and state types, and nomos_spec_orchestration::SpecCommand. For case 3 the existing EFFORT_SPELLINGS census is reused rather than a second one written; for case 5 Every_Spec_Command_Name is replaced by SpecCommand rather than kept beside it, because a hand array beside a compiled vocabulary is the second authority this whole record is about.\n\nEach census that a test file has to carry, because the vocabulary's own declaration is not this item's territory, is paired with a wildcard-free match over that type, so a variant added to it fails this workspace to compile rather than to pass. The form is the one commit e16060cf uses in agent/tests.rs, request/tests.rs, spec/tests.rs and work/tests.rs; follow it rather than inventing a second.\n\nEach new test is confirmed able to fail by injecting a wrong spelling into that vocabulary's own prose and observing red, not by reasoning that it would. A test that cannot fail is the defect this item is about.\n\nOD-AGENT-004 needs no further amendment: its version 2 already states the condition and already names these five as not yet meeting it. Removing them from that list is part of the work, so the record stops describing a debt that has been paid -- that is an edit to the amendment's own What is compared section, and this item reserves the record for it.\n\nNot closed by doing one or two of the five and filing the rest: the five were measured together and named together, and a partial pass leaves the record's list wrong in the other direction. If one of them turns out to need a decision this item cannot make, decline it with that reason rather than silently leaving it.\n\nIf the record is edited, diagrams/relations.mmd and spec/domain-specification.md are both re-rendered from a tree holding exactly HEAD plus the amended record, per OD-GATE-005, and committed alongside.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/work/parse.rs",
+          "crates/host/nomos-cli/src/work/report.rs",
+          "crates/host/nomos-cli/src/work/tests.rs",
+          "crates/host/nomos-cli/src/agent/tests.rs",
+          "crates/host/nomos-cli/src/request/tests.rs",
+          "crates/host/nomos-cli/src/spec/tests.rs",
+          "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
