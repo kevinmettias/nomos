@@ -140,10 +140,16 @@
 //! under that same discipline until a real body arrived, and released when one did --
 //! that file's own closing lines say the discipline is unchanged and the body is what
 //! arrived, which makes it the stronger form of the precedent: one carried to its end
-//! rather than one still waiting). A
-//! follow-up increment wires a real transport over [`Handle_Gate_Run`] once one exists to
-//! design it against; this increment's job is only to prove the seam is reachable and
-//! projectable from a second composition root at all.
+//! rather than one still waiting). That trigger has since fired here too.
+//! `nomos-api-transport` is the real second caller this section once said a follow-up
+//! increment would wire "once one exists to design it against": it serves
+//! [`Handle_Gate_Run`] over a wire, dispatching to it directly from its own
+//! `nomos_api_service.rs`. The boundary above is unmoved by that, which is why it still
+//! stands word for word -- that crate's own module doc quotes this section's
+//! argv/socket/framing sentence as the hole it fills, and says `nomos-api` gains no socket,
+//! no protocol dependency and no new handler from it. Proving this seam reachable and
+//! projectable from a second composition root at all was this crate's own first job, and is
+//! what gave that transport something real to be designed against.
 
 mod agent;
 mod check;

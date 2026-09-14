@@ -69904,7 +69904,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -69918,7 +69918,28 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api"
+        ],
+        "exit_code": 0,
+        "output_tail": " ok\ntest spec::render_response::tests::Test_Handle_Spec_Render_Should_Place_Both_Files_On_Disk ... ok\ntest spec::render_response::tests::Test_From_Should_Round_Trip_As_Json ... ok\ntest spec::preview_response::tests::Test_From_Should_Round_Trip_As_Json ... ok\ntest spec::preview_response::tests::Test_Handle_Spec_Preview_Should_Report_Wording_Moved_For_A_Heading_Rename ... ok\ntest spec::committed_preview_response::tests::Test_From_Should_Carry_Wording_Moved_For_A_Real_Heading_Rename ... ok\ntest spec::commit_response::tests::Test_Handle_Spec_Commit_Should_Write_The_Record_And_Close_The_Round_Trip ... ok\ntest spec::commit_response::tests::Test_From_Should_Round_Trip_As_Json ... ok\n\ntest result: ok. 140 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.50s\n\n\nrunning 8 tests\ntest Test_Handle_Spec_Profiles_Should_List_Real_Nomos_Spec_Project_Profiles ... ok\ntest Test_Handle_Work_Claim_Should_Grant_A_Reservation_Whose_Expiry_Is_A_Real_System_Clock_Lease ... ok\ntest Test_Handle_Gate_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers ... ok\ntest Test_Handle_Gate_Explain_Should_Find_A_Real_Blocking_Finding_Over_A_Real_Walked_Directory ... ok\ntest Test_An_Incomplete_Submission_Should_Be_Refused ... ok\ntest Test_Handle_Spec_Submit_Should_Accept_A_Complete_Submission_With_Submitted_Origin ... ok\ntest Test_Handle_Spec_Record_Should_Resolve_The_Same_Document_On_Repeated_Real_Reads ... ok\ntest Test_This_Packages_Build_Variant_Should_Be_Well_Formed_For_A_Real_Gate_Run ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.03s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.60s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-ef4f4d725df7d02d.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-55167436346b18b7.exe)\n   Doc-tests nomos_api\n",
+        "verified_at": 1789406478,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0c10f9293b9ddc203c91357c98f35cc009e2d6f4"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -70083,6 +70104,113 @@
           "nomos-contract-tests"
         ],
         "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P98-A-RED-CHECK-ON-A-COMMIT-MEANS-THE-GATE-NEVER-RAN",
+      "title": "A red check on a commit means the gate never ran, and nothing says so",
+      "why": "OD-GATE-006 decided that a declaration of enforcement is incomplete until something executes it in every environment the claim needs. That condition is currently false and nothing records it. Measured 2026-09-14: gh run list shows every recent commit on dev completing as failure in two to seven seconds, the run annotation reads that the job was not started because recent account payments have failed or the spending limit needs increasing, and the jobs endpoint reports zero steps for both the ubuntu and windows runners. No gate step has executed since at least 2026-09-07. The consequence is a signal that reads as its own opposite: a red check on a nomos commit is being produced by a scheduling refusal, and a reader who sees it will conclude the gate ran and found something. The inverse error is just as bad and must be avoided in whatever is written: these commits are not unverified in any blanket sense, because each carries the local predicate its ledger item declared plus the lint step work finish runs. What they specifically lack is remote full-gate execution evidence, and that precision is the whole content of the statement. This workspace already has the vocabulary for exactly this distinction rather than needing a new one: Applicability separates MissingCapability and ProviderUnavailable from a clean result, and SynchronizationState::Unavailable already carries the note that unavailable is not agreement and is not divergence either.",
+      "done_when": "A governing record states the remote gate availability as unavailable, names the refusal as the cause and the date from which it holds, and is explicit in both directions about what that does and does not mean: no commit after that date carries remote full-gate execution evidence, and every commit still carries whatever its own declared predicate and the lint step actually established. It names what a red check currently signifies so a reader stops misreading it, states what recovery requires and what would have to be replayed if historical remote evidence turns out to matter, and routes to this workspace's existing unavailability vocabulary rather than declaring a parallel one. The record is registered rather than only written, both projections are re-rendered from a tree publishing exactly the records this commit publishes, and cargo test -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-027.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p98-xvpe",
+        "acquired_at": 1789406476,
+        "lease_expires_at": 1789417276
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P98-A-VERIFICATION-PREDICATE-CAN-REPAIR-OR-BYPASS-WHAT-IT-OBSERVES",
+      "title": "A verification predicate can repair or bypass the condition it is supposed to observe",
+      "why": "Three defects found in one session share a cause that none of them looks like individually, and the cause is not bad input. In each case the verification mechanism modified or bypassed the very condition it existed to observe, and reported success. First, a workspace check exited zero in twenty seconds having compiled no crate of the dependency crossing it was run to prove, because a concurrent session had warmed the shared target directory; the same check in an isolated target directory compiled ten of them. Second, a lock guard appeared to work only because an ambient auto-discovered Cargo configuration kept the violation alive during the test run, so making that configuration opt-in removed the single condition under which the guard could ever fail. Third, the same guard read Cargo.lock from the working tree, and cargo re-resolves and re-pins that file on its way to running any test, so the test setup repaired the violation before the test body could observe it. Every one of the three passed. Two of the three were found by checking a done_when clause rather than by anything going red, which is the point: a predicate in this state cannot go red. This workspace already writes records about a check that reports the same clean result whether it verified everything or nothing, and this is that failure arriving from the environment rather than from an empty subject.",
+      "done_when": "A governing record names the defect class, states the three measured instances as evidence rather than as illustrations, and states the obligation it puts on a predicate: that a predicate is not established until it has been observed to fail on a real violation, and that its relationship to the environment it runs in is part of what must be checked rather than assumed. It names the asymmetry that makes the class worth a record, which is that such a predicate cannot report the problem itself. It deliberately declines to build a general abstraction now and says why, and names where the class is expected to recur so a later reader recognises it rather than rediscovering it. The record is registered rather than only written, both projections are re-rendered from a tree publishing exactly the records this commit publishes, and cargo test -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-028.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p98-xvpe",
+        "acquired_at": 1789406476,
+        "lease_expires_at": 1789417276
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P99-FORWARD-LOOKING-STATE-CLAIMS-ARE-CENSUSED-BEFORE-ANY-RULE-IS-DESIGNED-FOR-THEM",
+      "title": "Census the forward-looking implementation-state claims in module docs and governing records, and correct only the ones implementation superseded",
+      "why": "Three stale forward-looking claims were found in two files in one session, each naming functionality that later landed correctly. gate_command.rs said compare was simply absent, not stubbed, while Compare_Gate_Runs was exported and nomos gate compare was a shipped verb (67d66b8e). nomos-api cited that same gate.rs claim as precedent after the claim had stopped existing (b42e3aa3). nomos-api then promised a follow-up increment wires a real transport over Handle_Gate_Run once one exists to design it against, while nomos-api-transport was already dispatching to it and quoting that very sentence as the hole it fills. The shape is identical each time and it is not prose drift: an increment lands, the prose that predicted it survives, and a module doc a reader is routed to as navigational authority becomes false about the state of the workspace. AGENTS.md routes every question to an authority, and OD-AGENT-001 records why an instruction file must route rather than restate; a routed-to authority asserting a state that is no longer true is the same defect one layer down. What is not yet known is the size of the population. Three instances found incidentally is evidence of a pattern and not a measurement of one, and this repository does not build a mechanism for a population it has not counted.",
+      "done_when": "A census exists reporting every forward-looking implementation-state claim found in module docs under crates/ and in docs/records/, searched for at minimum on the phrases: not yet, nothing calls, follow-up increment, once one exists, will wire, future provider, still unbuilt, not composed, not reachable, not CLI-wired, no caller. Each hit is classified into exactly one of four buckets: still true; superseded by implementation; intentionally deferred; historical context that is explicitly dated or scoped. Only the second bucket is corrected, and each correction follows the pattern 67d66b8e established rather than deleting the reasoning: the original restraint is preserved and what eventually satisfied its trigger is stated beside it, because a decision held and then released on evidence is a stronger precedent than one still waiting and the reasoning is the part a reader cannot re-derive. Historical reasoning is NOT rewritten merely because later work happened. The census reports its own counts per bucket, and whether the superseded bucket has enough repeated structure to be mechanically checkable, but designs no rule and composes none: that decision is a separate item, authored only if this census produces the evidence for it. A count of three -- the three already corrected -- closes this item as a manual cleanup that was sufficient, and that is a real outcome rather than a failure.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "work/census/forward-looking-state-claims.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 1800
       },
       "verified": null,
       "abandoned": [],
