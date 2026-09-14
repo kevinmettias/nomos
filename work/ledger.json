@@ -70280,14 +70280,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p99-census",
-        "acquired_at": 1789412660,
-        "lease_expires_at": 1789423460
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -70298,7 +70294,28 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "_seam.rs (F:/repos/render-p101-target\\debug\\deps\\gate_orchestration_seam-f26a05ba0256ab12.exe)\n     Running tests\\gate_step\\main.rs (F:/repos/render-p101-target\\debug\\deps\\gate_step-2b835ed086e68360.exe)\n     Running tests\\lang_go_seam.rs (F:/repos/render-p101-target\\debug\\deps\\lang_go_seam-375ebe81315ac623.exe)\n     Running tests\\lang_rust_seam.rs (F:/repos/render-p101-target\\debug\\deps\\lang_rust_seam-1f18d8db5cd4a73a.exe)\n     Running tests\\list_tells_the_truth.rs (F:/repos/render-p101-target\\debug\\deps\\list_tells_the_truth-58564e53b1018500.exe)\n     Running tests\\model_backend_ollama_seam.rs (F:/repos/render-p101-target\\debug\\deps\\model_backend_ollama_seam-1bdb6693e07d27e3.exe)\n     Running tests\\model_seam.rs (F:/repos/render-p101-target\\debug\\deps\\model_seam-27e8b9d8059ab156.exe)\n     Running tests\\platform_seam.rs (F:/repos/render-p101-target\\debug\\deps\\platform_seam-552822f70fe93ca0.exe)\n     Running tests\\read_surface.rs (F:/repos/render-p101-target\\debug\\deps\\read_surface-14d7cb0438548bd2.exe)\n     Running tests\\request_submit.rs (F:/repos/render-p101-target\\debug\\deps\\request_submit-f09addf787d25fc3.exe)\n     Running tests\\spec_model_seam.rs (F:/repos/render-p101-target\\debug\\deps\\spec_model_seam-74da2b9a22740b8d.exe)\n     Running tests\\spec_orchestration_seam.rs (F:/repos/render-p101-target\\debug\\deps\\spec_orchestration_seam-1451796e439e5095.exe)\n     Running tests\\spec_store_seam.rs (F:/repos/render-p101-target\\debug\\deps\\spec_store_seam-0504dd61aff9a8d9.exe)\n     Running tests\\stale_writer_is_refused.rs (F:/repos/render-p101-target\\debug\\deps\\stale_writer_is_refused-8e312505d4e3579c.exe)\n     Running tests\\takeover_is_recorded.rs (F:/repos/render-p101-target\\debug\\deps\\takeover_is_recorded-09db7e18a6dd6155.exe)\n     Running tests\\work_orchestration_seam.rs (F:/repos/render-p101-target\\debug\\deps\\work_orchestration_seam-7003e73ebd4da620.exe)\n     Running tests\\workspace_seam.rs (F:/repos/render-p101-target\\debug\\deps\\workspace_seam-dccbcb4487a7e995.exe)\n",
+        "verified_at": 1789417087,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
