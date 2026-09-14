@@ -69812,14 +69812,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p98-xvpe",
-        "acquired_at": 1789403450,
-        "lease_expires_at": 1789414250
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -69829,7 +69825,27 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "st Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.58s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-16521a1362e743b4.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4612ea488031f680.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-8e50c82cd1b18623.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-7c139115530dcaf9.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-930f1bbb112a171d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-6d055a686bd8bf95.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-9b9a906e2f2cb06a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-70a759c22f1ec589.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-b84e992768820a4a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-75a077603592d3ef.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-a235932dedeaff21.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-b4d692f665383346.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-c59e3651e67c8b16.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-7f3867088e2e3e4a.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789403883,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8eeb90cf86065e071e1a121c6854d30f29826632"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -69881,14 +69897,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P98-THE-LOCK-GUARD-JUDGES-A-FILE-CARGO-REPAIRS-BEFORE-IT-RUNS, which carries the stale restore message together with the correctness defect that made the message the smaller of the two problems in that file."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p98-xvpe",
-        "acquired_at": 1789403571,
-        "lease_expires_at": 1789414371
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -69899,6 +69915,67 @@
         "timeout_seconds": 2700
       },
       "verified": null,
+      "abandoned": [
+        {
+          "holder": "fable-p98-xvpe",
+          "reason": "Too narrow, and its done_when cannot be met as scoped. Checking the clause that the guard still fails on an un-pinned lock revealed that it does not: cargo re-resolves and re-pins the lock before the test body reads it, so the guard cannot fail in an ordinary run at all.",
+          "abandoned_at": 1789403713
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p98-xvpe",
+        "declined_at": 1789403713
+      }
+    },
+    {
+      "id": "P98-THE-LOCK-GUARD-JUDGES-A-FILE-CARGO-REPAIRS-BEFORE-IT-RUNS",
+      "title": "The lock guard judges a file cargo repairs before it runs, so it cannot fail in an ordinary run",
+      "why": "The guard landed in e3d86344 reads Cargo.lock from the working tree. Any cargo invocation re-resolves and re-pins that file when no patch configuration is active, including the very cargo test invocation that runs the guard. Measured 2026-09-14: an opt-in build left zero of twelve packages pinned, and one ordinary cargo metadata call restored all twelve. So by the time the test body opens the file, cargo has repaired the thing it exists to judge. It appeared to work when it was landed only because the override was auto-discovered at that moment, so cargo test itself kept the patch applied and the lock un-pinned; the same sequence run after activation became opt-in reports the lock at zero pinned and the guard passing. Making activation explicit therefore removed the only condition under which this guard could ever fail, which means it now cannot fail in an ordinary local run or in CI. The test is also named for the committed lock while reading the working tree, and those are different artifacts: only the first is the claim anybody cares about, because only the first is what a commit publishes. Separately, its failure message still tells the reader to park a file the opt-in refinement removed.",
+      "done_when": "The guard judges what a commit actually publishes rather than what cargo has just rewritten, reading the lock as committed rather than from the working tree, and refuses rather than passes if it cannot read that. The judging logic is a function taking lock text, so it can be exercised against a synthetic un-pinned lock as a negative control that proves the assertion can fail, rather than the guard being believed because it passes on a tree that satisfies it. Both the negative control and the real assertion over the committed lock are present and pass. The failure message names the situation that can actually produce it now that substitution is opt-in, and the command it gives works as written. The module documentation agrees with both. cargo test -p nomos-contract-tests passes and the gate lint step is clean.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/boundaries/lock_pinning.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "st Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-16521a1362e743b4.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4612ea488031f680.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-8e50c82cd1b18623.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-7c139115530dcaf9.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-930f1bbb112a171d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-6d055a686bd8bf95.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-9b9a906e2f2cb06a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-70a759c22f1ec589.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-b84e992768820a4a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-75a077603592d3ef.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-a235932dedeaff21.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-b4d692f665383346.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-c59e3651e67c8b16.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-7f3867088e2e3e4a.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789403891,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8eeb90cf86065e071e1a121c6854d30f29826632"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
