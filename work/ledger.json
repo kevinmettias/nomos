@@ -68931,6 +68931,86 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P97-THE-README-REPRINTS-FIVE-COMPILED-VOCABULARIES-AND-ONE-IS-ALREADY-STALE",
+      "title": "README.md reprints five compiled vocabularies with nothing comparing any of them, and its state list is stale against the help text P97 corrected",
+      "why": "Measured on a quiescent tree at c1776c0c. OD-AGENT-004 version 2 states the condition: a help text may enumerate a compiled vocabulary only where a test compares that enumeration against its authority, in both directions, refusing to pass on an empty parse; otherwise it routes. P97 closed that across nomos-cli's five printed vocabularies and, in doing so, surfaced a copy the population it measured could not see, because that population was every nomos-cli test that reads a usage text and this artifact is not one.\n\nREADME.md reproduces the work group's usage synopsis nearly verbatim and enumerates five compiled vocabularies inside it. Nothing compares any of them to anything:\n\n  line 141  --state, nine words, against the label universe nomos-cli's Listing_Label produces\n  line 144  --kind, five words, against nomos_ledger::item::Kind\n  line 145  --origin, two words, against nomos_ledger::item::Origin\n  line 174  --kind again, the same five words restated in prose two paragraphs below\n  line 267  request submit --kind, three words, against nomos_spec_model::submission::Kind\n\nThe first is already wrong. P97 added lapsed to the help text because Listing_Label produces it and Listed_As accepts it as a filter value, so nomos work list --state lapsed works; line 141 still prints nine and is now inconsistent with the command it documents.\n\nThis bears directly on OD-AGENT-004 version 1's central measurement, which is why it belongs in an item rather than in a passing note. That measurement found fifteen stale restatements the day after a port changed, every one in module prose and none in README.md, and concluded README.md stayed correct because tests/contract/tests/boundaries/readme.rs asserts its tables against the real workspace, both directions. That test parses table rows and nothing else, and it says so in its own doc. A pipe-joined vocabulary inside a fenced command block is not a table, so none of the five above has ever been in its scope. The README is not correct because it is the README; it is correct where it is checked, which is version 1's rule holding at a finer grain rather than an exception to it.\n\nWhat each case can be compared against differs, and the item should not pretend otherwise. nomos-ledger is already a dependency of tests/contract, so Kind and Origin are reachable from a contract test today. nomos_spec_model is not a dependency of that crate. The state label universe is not reachable at all: Listing_Label and Refusal_Label are private to the nomos-cli binary, which exports no library, so no external test can read the set P97's own test derives by running it.",
+      "done_when": "Every one of the five enumerations above either gains a comparison against its authority or stops enumerating and routes, and which one is decided per case by what is actually reachable rather than by preference:\n\nThe two ledger vocabularies, --kind and --origin, are compared against nomos_ledger::item::Kind and nomos_ledger::item::Origin from tests/contract/tests/boundaries/readme.rs, which already depends on that crate. Both directions, with the empty-parse guard, parsed back out of README.md the way Readme_Zones already parses the zone table out of it. The restatement at line 174 is the same vocabulary a third time in the same file and goes rather than gaining a second comparison, because two checked copies of one list is still two lists.\n\nThe state list at line 141 routes. It cannot be compared: Listing_Label and Refusal_Label are private to a binary crate that exports no library, so no external test can reach the set they produce, and duplicating that set in a contract test would be the second authority this whole record refuses. Routing means the synopsis names the flag without listing its values and points a reader at the command that prints them. Correcting the nine words to ten instead is refused: it leaves an unguarded list that is merely right today, which is the state line 141 has been in since lapsed was introduced.\n\nThe request submit --kind list at line 267 routes for the same reason unless the implementer establishes that adding nomos-spec-model to tests/contract is warranted on its own terms. That is a manifest change with a band assignment behind it, governed elsewhere and not reserved here, so an item that needs it declines and re-authors with the territory to do it rather than widening mid-claim.\n\nEach new comparison is confirmed able to fail by injecting a wrong word into README.md and observing red, not by reasoning that it would. Each routing case is confirmed by checking that the vocabulary it dropped is still reachable by a reader in one step, from the text that replaced it.\n\nNo figure moves anywhere else. This item does not touch the help text P97 already corrected, and README.md's zone table and every other table in it are outside what this changes.\n\nOD-AGENT-004's amendment names this README copy in its Two further copies section. That entry is updated to say it is closed, or narrowed to whatever remains, and the record is reserved for it. If the record is edited, diagrams/relations.mmd and spec/domain-specification.md are both re-rendered from a tree holding exactly HEAD plus the amended record, per OD-GATE-005, and committed alongside.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md",
+          "tests/contract/tests/boundaries/readme.rs",
+          "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P97-TWO-FURTHER-COPIES-OF-A-PRINTED-VOCABULARY-STAND-OUTSIDE-THE-POPULATION-THAT-WAS-MEASURED, which covers this README population and the spec/parsing.rs copy together. Both are the two entries OD-AGENT-004's amendment names, and both close with one edit to that record and one re-render; filed apart, the second could not reserve the record because the first already had it, and the record's own second bullet would have had no item able to clear it."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "session-p97-help-mirror",
+        "declined_at": 1789358810
+      }
+    },
+    {
+      "id": "P97-TWO-FURTHER-COPIES-OF-A-PRINTED-VOCABULARY-STAND-OUTSIDE-THE-POPULATION-THAT-WAS-MEASURED",
+      "title": "Two copies of a printed vocabulary stand outside the population P97 measured: README.md reprints five, and a spec test asserts a sixth by substring in one direction",
+      "why": "Measured on a quiescent tree at c1776c0c. OD-AGENT-004 version 2 states the condition: a help text may enumerate a compiled vocabulary only where a test compares that enumeration against its authority, in both directions, refusing to pass on an empty parse; otherwise it routes. P97 closed that across nomos-cli's five printed vocabularies and, in doing so, surfaced a copy the population it measured could not see, because that population was every nomos-cli test that reads a usage text and this artifact is not one.\n\nREADME.md reproduces the work group's usage synopsis nearly verbatim and enumerates five compiled vocabularies inside it. Nothing compares any of them to anything:\n\n  line 141  --state, nine words, against the label universe nomos-cli's Listing_Label produces\n  line 144  --kind, five words, against nomos_ledger::item::Kind\n  line 145  --origin, two words, against nomos_ledger::item::Origin\n  line 174  --kind again, the same five words restated in prose two paragraphs below\n  line 267  request submit --kind, three words, against nomos_spec_model::submission::Kind\n\nThe first is already wrong. P97 added lapsed to the help text because Listing_Label produces it and Listed_As accepts it as a filter value, so nomos work list --state lapsed works; line 141 still prints nine and is now inconsistent with the command it documents.\n\nThis bears directly on OD-AGENT-004 version 1's central measurement, which is why it belongs in an item rather than in a passing note. That measurement found fifteen stale restatements the day after a port changed, every one in module prose and none in README.md, and concluded README.md stayed correct because tests/contract/tests/boundaries/readme.rs asserts its tables against the real workspace, both directions. That test parses table rows and nothing else, and it says so in its own doc. A pipe-joined vocabulary inside a fenced command block is not a table, so none of the five above has ever been in its scope. The README is not correct because it is the README; it is correct where it is checked, which is version 1's rule holding at a finer grain rather than an exception to it.\n\nWhat each case can be compared against differs, and the item should not pretend otherwise. nomos-ledger is already a dependency of tests/contract, so Kind and Origin are reachable from a contract test today. nomos_spec_model is not a dependency of that crate. The state label universe is not reachable at all: Listing_Label and Refusal_Label are private to the nomos-cli binary, which exports no library, so no external test can read the set P97's own test derives by running it.\n\nThe second copy is in this workspace's own test suite. crates/host/nomos-cli/src/spec/parsing.rs line 213 holds Test_Usage_Text_Should_Name_Every_Command, nine assertions of the form usage.contains(\"record\"), one per spec verb -- a third copy of a vocabulary nomos_spec_orchestration::SpecCommand already declares, beside the enum and beside the list in spec/tests.rs that P97 has just replaced with a parser-driven comparison. It is weaker in two ways that compound: one direction, so a verb the parser accepts and the text omits passes; and substring rather than equality, so renaming the verb in the usage text to recordx leaves usage.contains(\"record\") true. That is how it was found. It was the one test that stayed green under P97's injection pass while all seven new comparisons went red as intended.\n\nTwo tests now share the name Test_Usage_Text_Should_Name_Every_Command and no longer make the same claim, which is how a reader comes to believe the weaker one is the stronger one.\n\nThese two are filed together because they are one population and one record edit. OD-AGENT-004's amendment names both in its Two further copies section, and that section is cleared once rather than twice; filed apart, only the first could reserve the record and the second entry would have had no item able to clear it.",
+      "done_when": "Every one of the five enumerations above either gains a comparison against its authority or stops enumerating and routes, and which one is decided per case by what is actually reachable rather than by preference:\n\nThe two ledger vocabularies, --kind and --origin, are compared against nomos_ledger::item::Kind and nomos_ledger::item::Origin from tests/contract/tests/boundaries/readme.rs, which already depends on that crate. Both directions, with the empty-parse guard, parsed back out of README.md the way Readme_Zones already parses the zone table out of it. The restatement at line 174 is the same vocabulary a third time in the same file and goes rather than gaining a second comparison, because two checked copies of one list is still two lists.\n\nThe state list at line 141 routes. It cannot be compared: Listing_Label and Refusal_Label are private to a binary crate that exports no library, so no external test can reach the set they produce, and duplicating that set in a contract test would be the second authority this whole record refuses. Routing means the synopsis names the flag without listing its values and points a reader at the command that prints them. Correcting the nine words to ten instead is refused: it leaves an unguarded list that is merely right today, which is the state line 141 has been in since lapsed was introduced.\n\nThe request submit --kind list at line 267 routes for the same reason unless the implementer establishes that adding nomos-spec-model to tests/contract is warranted on its own terms. That is a manifest change with a band assignment behind it, governed elsewhere and not reserved here, so an item that needs it declines and re-authors with the territory to do it rather than widening mid-claim.\n\nEach new comparison is confirmed able to fail by injecting a wrong word into README.md and observing red, not by reasoning that it would. Each routing case is confirmed by checking that the vocabulary it dropped is still reachable by a reader in one step, from the text that replaced it.\n\nNo figure moves anywhere else. This item does not touch the help text P97 already corrected, and README.md's zone table and every other table in it are outside what this changes.\n\nOD-AGENT-004's amendment names this README copy in its Two further copies section. That entry is updated to say it is closed, or narrowed to whatever remains, and the record is reserved for it. If the record is edited, diagrams/relations.mmd and spec/domain-specification.md are both re-rendered from a tree holding exactly HEAD plus the amended record, per OD-GATE-005, and committed alongside.\n\nThe third copy of the spec command vocabulary goes, and the name collision goes with it. Deleting it is admissible and so is narrowing it to something that is not a second copy of the vocabulary -- a usage text that names no command at all is a real defect and a test may say so without listing which commands. What is refused is leaving nine substring assertions standing, and equally refused is strengthening them into a second full comparison, because two comparisons of one vocabulary is the shape this is being removed for. Whatever remains does not share a name with the test in spec/tests.rs.\n\nThat deletion is confirmed by re-running P97's own injection: renaming the record verb in the usage text to recordx must leave spec/parsing.rs with nothing that passes where it should fail. This one has already been observed not failing, so reasoning that it now would is not evidence.\n\nIf any assertion in that block turns out to be about something other than the command vocabulary, it is kept rather than deleted, and the item says which.\n\nBoth entries in OD-AGENT-004's Two further copies section are updated together, or narrowed to whatever remains of each.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md",
+          "tests/contract/tests/boundaries/readme.rs",
+          "crates/host/nomos-cli/src/spec/parsing.rs",
+          "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
