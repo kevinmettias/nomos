@@ -774,10 +774,6 @@ pub(crate) fn Recognized_Sources(sources: &[SourceFile]) -> Vec<SourceFile>
         .collect();
 }
 
-
-/// Whether `rule` is one `selected` asks for -- every rule when `selected` is empty, the same
-/// "empty is everything" default `nomos_gate_orchestration::RuleSelector::include` already
-/// has.
 /// The fact families the selected rules declare they need.
 ///
 /// The union of [`nomos_rules::RuleDescriptor::requires`] over the selected rules, and
@@ -818,6 +814,9 @@ fn Demanded_Families(selected: &[RuleId]) -> Vec<RequiredFact>
     return demanded;
 }
 
+/// Whether `rule` is one `selected` asks for -- every rule when `selected` is empty, the same
+/// "empty is everything" default `nomos_gate_orchestration::RuleSelector::include` already
+/// has.
 fn Is_Rule_Selected(selected: &[RuleId], rule: &str) -> bool
 {
     return selected.is_empty() || selected.iter().any(|id| return id.As_Str() == rule);

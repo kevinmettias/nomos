@@ -71736,13 +71736,87 @@
         ],
         "patterns": []
       },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by -5, which adds the one remaining file."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "fable-p103",
+          "reason": "One file short: nomos-api's suppression_response.rs constructs a Suppression in its own tests and needs the new field. Enumerated across both affected types this time -- every file constructing Suppression or calling Suppressing, and every construction of both grouping values -- and this is the only one outside.",
+          "abandoned_at": 1789411207
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p103",
+        "declined_at": 1789411207
+      }
+    },
+    {
+      "id": "P103-A-TEMPORARY-WAIVER-CLAIMS-A-BOUNDED-PERIOD-AND-NEVER-ENDS-5",
+      "title": "A temporary waiver claims a bounded period and nothing can make it stop applying",
+      "why": "SuppressionDisposition::TemporaryWaiver documents itself as accepted for a bounded period and distinguishes itself from AcceptedBaselineDebt as the one which names an end date this does not. No end date exists: Suppression carries rule, subject, disposition, rationale and owner, and no file under policy/ reads a clock, a deadline or an expiry. So a TemporaryWaiver is behaviourally identical to a FormalRiskAcceptance and suppresses forever. That is worse than a missing feature, because the type name and its documentation promise a behaviour the engine does not implement, so a repository that tolerated something temporarily has tolerated it permanently and was told otherwise. The declared file refuses an expires key today under deny_unknown_fields, so an author reaching for one is told no rather than silently dropped, which is evidence the key has been wanted, and baseline_debt.rs already records the order to follow: the key appears on the declared entry first and the domain type grows a field to carry it. The evaluation moment must come from the caller rather than a clock inside policy logic, so replaying a past run answers as that run did; it rides in the two grouping values a run's execution context already travels in, GateEnvironment for a gate and Platform for a workflow step, because both composing functions are at this workspace's four-parameter limit and an execution fact does not belong in the caller-authored GateCommand. The population was enumerated across both affected types rather than sampled, after three earlier attempts were re-scoped -- the first from a search truncated by head.",
+      "done_when": "A TemporaryWaiver expires. Suppression carries an expiry, the declared entry accepts it, a waiver written without one is refused rather than accepted as permanent, and any other disposition carrying one is refused rather than silently ignoring it. Evaluation reads the moment the caller supplied and every construction site of both grouping values supplies one. A waiver before its expiry suppresses; at or after it does not; and the second is visible as a lapsed disposition rather than a suppression that quietly stopped matching, because a reader must be able to tell a finding blocking from an expired waiver from one never waived. The status is an enum in its own module, the file-name rule reporting a second public type in a file exporting no free function, and its documentation says what a third state would mean and why it is not invented before something produces it. Controls in both directions and at the boundary instant: before, exactly at, and after. cargo test -p nomos-gate-orchestration -p nomos-workflow-orchestration -p nomos-cli -p nomos-api -p nomos-contract-tests passes, both public surface snapshots are updated in the same commit, and the gate lint step is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/tests/check_orchestration_seam.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_status.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/workflow.rs",
+          "crates/host/nomos-api/src/response/gate_run_response.rs",
+          "crates/host/nomos-api/src/response/gate_explain_response.rs",
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "crates/host/nomos-api/src/response/suppression_response.rs",
+          "crates/host/nomos-api/src/workflow.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-workflow-orchestration.txt"
+        ],
+        "patterns": []
+      },
       "state": "Claimed",
       "depends_on": [],
       "blocked": null,
       "claim": {
         "holder": "fable-p103",
-        "acquired_at": 1789411009,
-        "lease_expires_at": 1789425409
+        "acquired_at": 1789411207,
+        "lease_expires_at": 1789425607
       },
       "verification": {
         "argv": [
@@ -71762,6 +71836,60 @@
         "timeout_seconds": 3600
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P102-A-DELETED-FUNCTIONS-DOC-COMMENT-LANDED-ON-ITS-NEIGHBOUR",
+      "title": "Is_Rule_Selected lost its doc comment to Demanded_Families, which now opens by describing a different function",
+      "why": "P102 inserted Demanded_Families above Is_Rule_Selected and left Is_Rule_Selected's own doc comment where it was, so the two blocks merged. Demanded_Families now opens with 'Whether rule is one selected asks for -- every rule when selected is empty, the same empty-is-everything default RuleSelector::include already has', which is true of Is_Rule_Selected and false of Demanded_Families, and then continues with its own correct three paragraphs. Is_Rule_Selected itself carries no doc at all. Rustdoc renders the merged text as one item's documentation, so the published surface documentation for the function that computes materialization demand opens with a sentence about rule selection. A stray double blank line sits above the merged block from the same insertion. Found while removing that commit's other residue under P102-THE-CONSOLIDATION-LEFT-FIFTEEN-RULE-NAMES-IMPORTED-AND-UNUSED, and boarded rather than folded into it because it is a different defect from an unused import and that item's done_when is about imports.",
+      "done_when": "Demanded_Families' doc comment describes Demanded_Families and nothing else, and Is_Rule_Selected carries the sentence that was written for it. The stray double blank line goes with the split. No prose is invented: the existing sentences are separated, not rewritten, except where separating them leaves a dangling connective. cargo test -p nomos-check-orchestration passes, and the gate lint step is clean.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_A_Source_Derived_Family_Reused_Across_An_Edit_Should_Agree_With_A_Clean_Recomputation ... ok\ntest Test_A_Repository_Derived_Family_Reused_Across_A_Corpus_Edit_Should_Agree_With_A_Clean_Recomputation ... ok\ntest Test_A_Workspace_Derived_Family_Reused_Across_A_Manifest_Edit_Should_Agree_With_A_Clean_Recomputation ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.53s\n\n\nrunning 4 tests\ntest Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List ... ok\ntest Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule ... ok\ntest Test_Run_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.20s\n\n\nrunning 2 tests\ntest Test_An_Unchanged_Second_Run_Should_Produce_No_New_Facts ... ok\ntest Test_A_Second_Run_Over_A_Changed_Source_Should_Produce_A_Fact ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.58s\n     Running unittests src\\lib.rs (F:/repos/render-p101-target\\debug\\deps\\nomos_check_orchestration-ef16bca5ed246376.exe)\n     Running tests\\capability_composition.rs (F:/repos/render-p101-target\\debug\\deps\\capability_composition-2369889bc621d818.exe)\n     Running tests\\incremental_equivalence.rs (F:/repos/render-p101-target\\debug\\deps\\incremental_equivalence-b21a1be68adabaac.exe)\n     Running tests\\run_seam.rs (F:/repos/render-p101-target\\debug\\deps\\run_seam-0146c978b6f22cd0.exe)\n     Running tests\\unchanged_run_economy.rs (F:/repos/render-p101-target\\debug\\deps\\unchanged_run_economy-7e24daf911fd5f25.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1789411288,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
