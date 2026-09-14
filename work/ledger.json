@@ -70587,6 +70587,80 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P101-GATE-COMPARE-IS-REACHABLE-ONLY-FROM-A-TERMINAL",
+      "title": "Gate compare is reachable only from a terminal, and the headless surfaces are the ones a deployment drives",
+      "why": "ARC-ROADMAP-001's constraint 5 describes the product Gate as exposed through plan, run, explain and compare over the same application-service boundary the CLI, API and MCP projections share, and IF-001 requires every user-visible query or action to have a canonical application service. Three of the four verbs have one. Measured 2026-09-14: nomos-cli serves all four, compare having been wired by P73-GATE-COMPARE-HAS-NO-CALLER; nomos-api exports Handle_Gate_Plan, Handle_Gate_Run and Handle_Gate_Explain and no compare handler at all; and nomos-api-transport's ServedMethod names GatePlan, GateRun, GateExplain and Correction. So the only way to ask what changed between two runs is a terminal, and the headless surfaces are precisely the ones a continuous-conformance deployment drives. What compare answers is the question a gate exists to answer over time rather than once: which findings are new, which are gone, and which changed bucket because a policy moved rather than because the code did. A deployment that cannot ask it can only ever see a pass or a fail, which is the linter-runner behaviour the roadmap separates a product from. The shape is already decided and needs no invention: OD-GATE-022-A settled that a compare caller re-derives both runs inside one process, builds no run-history store and serializes no GateRunResult, and left the per-host wiring to whichever item does it. Compare_Gate_Runs exists, and nomos-cli's own Compare_Verb already proves the composition.",
+      "done_when": "nomos-api exports a gate compare handler beside its own response type, in one file, the handler-beside-its-response locality every other endpoint in that crate keeps. It composes two same-process walk-and-judge runs the way OD-GATE-022-A decided and nomos-cli already does -- each side taking its own fresh RunId from the same clock -- and hands both real results to Compare_Gate_Runs. The response is a one-way serializable projection in the shape its siblings take, and neither GateRunResult nor GateCompareResult nor FindingDisposition nor DispositionChange gains a derive, which OD-GATE-022-A refuses. It carries added, removed and changed as three distinct things rather than collapsing them into a count or a boolean, and a changed entry carries which bucket the finding was in before and which it is in after, because a finding that moved from blocking to baselined and one that moved the other way are opposite facts. The crate documentation's own enumeration of its increments stays truthful rather than stopping at the increment before this one. The public surface snapshot for nomos-api is updated in the same commit that widens the surface. cargo test -p nomos-api -p nomos-contract-tests passes and the gate lint step is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "crates/host/nomos-api/src/response.rs",
+          "crates/host/nomos-api/src/lib.rs",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p101",
+        "acquired_at": 1789407816,
+        "lease_expires_at": 1789418616
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P99-OD-CAPABILITY-013-NAMES-THE-CARRIER-OF-A-PROVIDERS-FAMILY-AND-DELIVERY",
+      "title": "OD-CAPABILITY-013 decided a per-provider classification and left its carrier undecided, and ProviderOffer is per capability",
+      "why": "OD-CAPABILITY-013 is accepted and decides the vocabulary and the cardinality without ambiguity: a twelve-name FAMILY set and a two-value Delivery axis that classify a provider's own registration, never something a rule names, at one classification per real provider. Its What This Record Does Not Do section then names a follow-up item's territory as a Family enum and a Delivery enum in a shared location, suggesting nomos-capability alongside Registry and ProviderOffer as the natural home, plus one classification per real provider, the eight rows this record already states. Measured against the code on 2026-09-14, that shape does not fit and the record's own count is wrong. ProviderOffer is keyed per capability, not per provider: it carries provider, capability, version and guarantee, and Provider_Offer is constructed at 18 sites across 7 crates, not 8. nomos-lang-rust alone constructs three, from src/guarantee.rs, src/reachability/guarantee.rs and src/rollup/contract.rs, and nomos-repo-policy constructs five. A Family or Delivery field placed on ProviderOffer would therefore give one provider identity three to five independently writable copies of a fact the record says it has exactly one of, with nothing preventing them from disagreeing -- a second authority for a single fact, which is the shape this workspace refuses. The requirement is sound and the physical representation is underdetermined. OD-GATE-024 is the precedent for what happens when that is discovered inside an implementation claim instead of before one: P76-POLICY-ENTRIES-MATCH-BY-SUBJECT-NAME was implemented, measured against the real suite, found unsound as written, and reverted, and the record was amended with what implementing it measured. This item settles the representation from measured code first so the implementation claim that follows has one shape to build.",
+      "done_when": "OD-CAPABILITY-013 is amended to name the canonical carrier and the ownership of a provider's Family and Delivery, and to state how ProviderOffer refers to that classification without duplicating it. The amendment proves its cardinality against the real multi-offer providers rather than against the record's own eight-row count: nomos-lang-rust with three offers and nomos-repo-policy with five are the cases it must hold for, and the 18 construction sites are the measured population. The acceptance criterion is structural rather than nominal -- a provider with three offers has exactly one writable classification, all three of its offers resolve back to that one, and the amendment states what makes a disagreeing pair unrepresentable rather than merely discouraged. No specific type name is pre-committed here, including ProviderRegistration: which type carries it is what the amendment decides after reading the existing registration and resolution path in nomos-capability, and naming it in this item's own why would decide it before that reading. No production implementation is required by this item and none is performed: the Family and Delivery enums, any carrier type, and the per-provider classifications are the following implementation item's own territory, claimed separately against the amended record. The record's version is bumped, its registration under crates/spec/nomos-spec-store/records/ is updated, the binary is rebuilt because record content is compiled in, and both derived projections are re-rendered from a tree whose registered records are exactly the ones this commit publishes, because a commit touching docs/records/ leaves diagrams/relations.mmd and spec/domain-specification.md stale and the gate fails on each independently.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
