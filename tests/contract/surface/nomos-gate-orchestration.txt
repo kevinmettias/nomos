@@ -48,7 +48,7 @@ pub fn nomos_gate_orchestration::Admits_Under<Fs: FileSystem>(root: &Path, files
 pub fn nomos_gate_orchestration::AdoptionPolicy::Calibrating<'a>(&'a self, finding: &Finding) -> Option<&'a RuleCalibration>
 pub fn nomos_gate_orchestration::BaselineDebt::Is_Applicable_To(&self, finding: &Finding) -> bool
 pub fn nomos_gate_orchestration::BaselinePolicy::Tolerating<'a>(&'a self, finding: &Finding) -> Option<&'a BaselineDebt>
-pub fn nomos_gate_orchestration::Compare_Gate_Runs(baseline: &GateRunResult, candidate: &GateRunResult) -> GateCompareResult
+pub fn nomos_gate_orchestration::Compare_Gate_Runs( baseline: &GateRunResult, candidate: &GateRunResult, ) -> Result<GateCompareResult, CollidingOccurrences>
 pub fn nomos_gate_orchestration::Disposition_Of_Findings(findings: &[Finding]) -> GateRunOutcome
 pub fn nomos_gate_orchestration::Evaluated_Phases(phases: &[GatePhase], findings: &[Finding], approvals: &[PhaseApproval]) -> Vec<PhaseOutcome>
 pub fn nomos_gate_orchestration::Explain_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>( walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, Launcher, Fs, Env>, command: &GateCommand, query: &FindingQuery, ) -> GateExplainResult
@@ -73,10 +73,13 @@ pub struct field nomos_gate_orchestration::BaselineDebt::rationale: String
 pub struct field nomos_gate_orchestration::BaselineDebt::rule: RuleId
 pub struct field nomos_gate_orchestration::BaselineDebt::subject: SubjectId
 pub struct field nomos_gate_orchestration::BaselinePolicy::debt: Vec<BaselineDebt>
+pub struct field nomos_gate_orchestration::CollidingOccurrences::collisions: Vec<OccurrenceCollision>
+pub struct field nomos_gate_orchestration::CollidingOccurrences::run: RunId
 pub struct field nomos_gate_orchestration::DispositionChange::after: FindingDisposition
 pub struct field nomos_gate_orchestration::DispositionChange::after_reason: Option<SuppressionReason>
 pub struct field nomos_gate_orchestration::DispositionChange::before: FindingDisposition
 pub struct field nomos_gate_orchestration::DispositionChange::before_reason: Option<SuppressionReason>
+pub struct field nomos_gate_orchestration::DispositionChange::locations: Vec<String>
 pub struct field nomos_gate_orchestration::DispositionChange::rule: RuleId
 pub struct field nomos_gate_orchestration::DispositionChange::subject: SubjectId
 pub struct field nomos_gate_orchestration::DispositionChange::subject_name: String
@@ -144,6 +147,7 @@ pub struct field nomos_gate_orchestration::SuppressionReason::status: Suppressio
 pub struct nomos_gate_orchestration::AdoptionPolicy
 pub struct nomos_gate_orchestration::BaselineDebt
 pub struct nomos_gate_orchestration::BaselinePolicy
+pub struct nomos_gate_orchestration::CollidingOccurrences
 pub struct nomos_gate_orchestration::DependedCrate<'a>(pub &'a str)
 pub struct nomos_gate_orchestration::DependingCrate<'a>(pub &'a str)
 pub struct nomos_gate_orchestration::DispositionChange

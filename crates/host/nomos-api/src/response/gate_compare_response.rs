@@ -45,7 +45,11 @@ pub fn Handle_Gate_Compare(baseline: &GateCommand, candidate: &GateCommand) -> G
     let before = Judged(baseline);
     let after = Judged(candidate);
 
-    return GateCompareResponse::From(nomos_gate_orchestration::Compare_Gate_Runs(&before, &after));
+    return match nomos_gate_orchestration::Compare_Gate_Runs(&before, &after)
+    {
+        Ok(result) => GateCompareResponse::From(result),
+        Err(refused) => GateCompareResponse::Refused(before.run, after.run, refused.run),
+    };
 }
 
 /// One walk-and-judge of `command.root`, under a freshly minted `RunId`.
@@ -247,6 +251,24 @@ pub struct GateCompareResponse
     pub removed: Vec<Finding>,
     /// Present in both, in different buckets.
     pub changed: Vec<BucketChange>,
+    /// The run that could not be compared, when no comparison happened at all.
+    ///
+    /// `None` on every real comparison. `Some` means the three lists above are empty because
+    /// nothing was compared, **not** because the two runs agreed — and telling those two apart
+    /// is the whole reason this field exists. A run whose findings do not yield one occurrence
+    /// identity each cannot be indexed without dropping one, so the comparison refuses; the
+    /// library-level caller gets `nomos_gate_orchestration::CollidingOccurrences` naming both
+    /// findings of every colliding pair.
+    ///
+    /// # Why it carries a run and not the collisions
+    ///
+    /// Because no wire consumer reads them yet. The only caller of this handler is
+    /// `nomos-api-transport`'s dispatcher, which serializes whatever comes back, and a
+    /// serialized failure taxonomy authored ahead of something that reads one is the invented
+    /// shape this crate declines elsewhere by name. The run identifies which side to look at,
+    /// which is what a consumer needs to act; the pairing is one `nomos gate compare` away and
+    /// is already typed for a Rust caller.
+    pub uncomparable: Option<RunId>,
 }
 
 impl GateCompareResponse
@@ -259,6 +281,23 @@ impl GateCompareResponse
             added: result.added,
             removed: result.removed,
             changed: result.changed.into_iter().map(BucketChange::From).collect(),
+            uncomparable: None,
+        };
+    }
+
+    /// The response for two runs that were judged but could not be compared.
+    ///
+    /// Both identities are still reported, because both runs really happened and a consumer
+    /// asked about them; what is absent is any claim about the difference between them.
+    pub(crate) fn Refused(baseline: RunId, candidate: RunId, uncomparable: RunId) -> Self
+    {
+        return Self {
+            baseline,
+            candidate,
+            added: Vec::new(),
+            removed: Vec::new(),
+            changed: Vec::new(),
+            uncomparable: Some(uncomparable),
         };
     }
 }
@@ -294,6 +333,45 @@ mod tests
             response.added.len(),
             response.removed.len(),
             response.changed.len()
+        );
+    }
+
+    /// A real comparison reports no refusal.
+    ///
+    /// Half of the pair that makes `uncomparable` mean something. Without it the field could be
+    /// `Some` on every response and every other assertion here would still pass, because none of
+    /// them reads it.
+    #[test]
+    fn Test_A_Real_Comparison_Should_Report_No_Refusal()
+    {
+        let response = Handle_Gate_Compare(&Command_At("."), &Command_At("."));
+
+        assert_eq!(
+            response.uncomparable, None,
+            "a comparison that happened must not look like one that was refused"
+        );
+    }
+
+    /// A refused comparison carries no differences a reader could mistake for a result.
+    ///
+    /// The other half, and the reason the field exists at all. Three empty lists mean *the two
+    /// runs agreed* on every other response; on this one they mean *nothing was compared*, and
+    /// the only thing that separates those two readings is `uncomparable`. A refusal that also
+    /// carried differences would be claiming a difference it never computed.
+    #[test]
+    fn Test_A_Refused_Comparison_Should_Carry_No_Differences()
+    {
+        let baseline = RunId::From_Digest(nomos_contracts::Digest128::From_Bytes([1; 16]));
+        let candidate = RunId::From_Digest(nomos_contracts::Digest128::From_Bytes([2; 16]));
+
+        let response = GateCompareResponse::Refused(baseline, candidate, baseline);
+
+        assert_eq!(response.uncomparable, Some(baseline), "the refusal must name the side that could not be indexed");
+        assert_eq!(response.baseline, baseline, "both runs really happened and are still reported");
+        assert_eq!(response.candidate, candidate);
+        assert!(
+            response.added.is_empty() && response.removed.is_empty() && response.changed.is_empty(),
+            "a refused comparison computed no difference, so it must report none"
         );
     }
 

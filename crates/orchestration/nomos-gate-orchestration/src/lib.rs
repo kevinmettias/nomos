@@ -184,9 +184,12 @@
 //! # What no increment is
 //!
 //! `compare` is real as a library verb: [`Compare_Gate_Runs`] takes two already-produced
-//! [`GateRunResult`]s and reports each finding's [`FindingDisposition`] change as a
+//! [`GateRunResult`]s and reports each occurrence's [`FindingDisposition`] change as a
 //! [`DispositionChange`] in a [`GateCompareResult`] -- see [`crate::gate_compare`]'s own
-//! doc for why a disposition diff, not a raw finding diff. It is not CLI-wired: no flag or
+//! doc for why a disposition diff, not a raw finding diff. It can also refuse: a run whose
+//! findings do not yield one occurrence identity each is returned as
+//! [`CollidingOccurrences`] rather than compared, because the only alternatives to refusing
+//! are ways of dropping a finding quietly. It is not CLI-wired: no flag or
 //! config file reaches it from a `nomos gate` invocation, and `nomos-cli`'s own gate-command
 //! parser still refuses a `compare` subcommand outright, the same "no invented shape ahead
 //! of a real body" this crate's own [`command`] module documents for the wiring, if not the
@@ -217,7 +220,7 @@ pub use admissibility::{Admissibility, Admits, Admits_Under, DependedCrate, Depe
 pub use composition::Registered;
 pub use finding_query::{Explain_Gate, Explanation, FindingQuery, GateExplainResult};
 pub use gate_command::GateCommand;
-pub use gate_compare::{Compare_Gate_Runs, DispositionChange, FindingDisposition, GateCompareResult};
+pub use gate_compare::{CollidingOccurrences, Compare_Gate_Runs, DispositionChange, FindingDisposition, GateCompareResult};
 pub use gate_environment::{GateEnvironment, Run_Gate};
 pub use gate_phase::{Evaluated_Phases, GatePhase, PhaseApproval, PhaseDisposition, PhaseOutcome, PhaseThreshold, Phased_Disposition};
 pub use gate_plan::{Disposition_Of_Findings, GateFindings, GateOutcome, GatePlan, GateRunOutcome, GateRunResult};

@@ -281,6 +281,7 @@ pub struct field nomos_api::GateCompareResponse::baseline: RunId
 pub struct field nomos_api::GateCompareResponse::candidate: RunId
 pub struct field nomos_api::GateCompareResponse::changed: Vec<BucketChange>
 pub struct field nomos_api::GateCompareResponse::removed: Vec<Finding>
+pub struct field nomos_api::GateCompareResponse::uncomparable: Option<RunId>
 pub struct field nomos_api::GateRunResponse::disposition: Disposition
 pub struct field nomos_api::GateRunResponse::findings: GateFindings
 pub struct field nomos_api::GateRunResponse::root: PathBuf

@@ -187,7 +187,34 @@ pub(super) fn Render_Compare(
         return code;
     }
 
-    let compared = nomos_gate_orchestration::Compare_Gate_Runs(baseline, candidate);
+    let compared = match nomos_gate_orchestration::Compare_Gate_Runs(baseline, candidate)
+    {
+        Ok(compared) => compared,
+        Err(refused) =>
+        {
+            // Not `Violations`: nothing about the tree was judged badly, and nothing about the
+            // difference was judged at all. This is the analysis refusing to answer, which is
+            // the distinction `Unjudged` above already draws for a side that could not be read.
+            let _ = writeln!(
+                stderr,
+                "cannot compare: run {} produced {} finding(s) that share an occurrence identity \
+                 with another finding in the same run, so indexing them would silently drop one.\n\
+                 This is a defect in the identity material rather than something to work around: \
+                 two findings agreeing on rule, subject, summary and locations are one occurrence \
+                 to every consumer. The colliding findings are:",
+                refused.run,
+                refused.collisions.len().saturating_mul(2)
+            );
+
+            for collision in &refused.collisions
+            {
+                let _ = writeln!(stderr, "  {}", collision.first.Describe());
+                let _ = writeln!(stderr, "  {}", collision.second.Describe());
+            }
+
+            return ExitCode::Contradictory;
+        }
+    };
 
     let _ = writeln!(
         stdout,
@@ -208,10 +235,17 @@ pub(super) fn Render_Compare(
     }
     for change in &compared.changed
     {
+        // `locations` is appended because occurrence scope made the rule-and-subject pair
+        // non-unique: one subject can now contribute several changes, and without the geometry
+        // they would print as identical lines. Omitted when a finding carries none, rather than
+        // printing an empty bracket that says nothing.
+        let where_it_is =
+            if change.locations.is_empty() { String::new() } else { format!(" [{}]", change.locations.join(", ")) };
+
         let _ = writeln!(
             stdout,
-            "~ {} {}: {:?} -> {:?}",
-            change.rule, change.subject_name, change.before, change.after
+            "~ {} {}{}: {:?} -> {:?}",
+            change.rule, change.subject_name, where_it_is, change.before, change.after
         );
     }
 
