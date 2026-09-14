@@ -73651,7 +73651,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Impossible as authored, found by P105-THE-REASSESSMENT-CACHE-IS-EXPORTED-AND-HAS-NEVER-BEEN-EXECUTED while proving the mechanism. Its territory is the LSP provider and its tests, on the premise that Run_Reassessing and RuleReassessmentCache were callable from another crate. They are not. mod run_context at nomos-check-orchestration/src/lib.rs:50 is private, and line 62 re-exports only Composed_Rules, Run and RunContext from it. Both names are individually pub inside that private module, which makes them unreachable from every other crate and absent from tests/contract/surface/nomos-check-orchestration.txt entirely -- the LSP cannot name Run_Reassessing today. The authoring error is precise and worth recording: pub was read as reachable without checking the module's own visibility, which is the built-versus-reachable distinction this workspace had just finished writing down. Re-authored as P105-THE-REASSESSMENT-PATH-BECOMES-REACHABLE-AND-THE-LSP-KEEPS-A-CACHE, which owns the export and the surface snapshot alongside the LSP change, because the work is two responsibilities and not one: making the path reachable across a crate boundary, and wiring the first caller that survives across requests."
+        }
+      },
       "depends_on": [
         "P105-THE-REASSESSMENT-CACHE-IS-EXPORTED-AND-HAS-NEVER-BEEN-EXECUTED"
       ],
@@ -73670,7 +73674,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p105",
+        "declined_at": 1789421459
+      }
     },
     {
       "id": "P104-COMPARE-COLLAPSES-EVERY-FINDING-A-RULE-MAKES-ABOUT-ONE-SUBJECT-INTO-ONE-4",
@@ -73705,6 +73712,44 @@
           "nomos-api"
         ],
         "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P105-THE-REASSESSMENT-PATH-BECOMES-REACHABLE-AND-THE-LSP-KEEPS-A-CACHE",
+      "title": "The reassessment path is trapped behind a private module, and the one caller that could use it re-runs every rule per keystroke",
+      "why": "Two responsibilities, which is why this replaces an item that assumed one. FIRST, reachability. mod run_context at nomos-check-orchestration/src/lib.rs:50 is private and line 62 re-exports Composed_Rules, Run and RunContext only. Run_Reassessing and RuleReassessmentCache are pub inside that private module, so no other crate can name them and neither appears in tests/contract/surface/nomos-check-orchestration.txt. P105-THE-REASSESSMENT-CACHE-IS-EXPORTED-AND-HAS-NEVER-BEEN-EXECUTED proved the mechanism from inside the crate at cbeb644d -- a rule recorded on run 1, skipped on an unchanged run 2, re-run after run 3 moves a family it reads, both assertions confirmed able to fail in both directions. What it could not do is make that mechanism available to anyone. SECOND, the caller. NomosDiagnosticProvider already holds workspace and store as private fields and threads them into every Diagnose, so fact reuse has a real long-lived consumer. It calls Run, which by its own doc always starts from an empty cache and drops it at the end of the call, so every composed rule re-runs on every didOpen and didSave even where nothing it reads has moved. It is the strongest available second consumer precisely because, unlike the CLI, keeping state across edits is what it is for.",
+      "done_when": "nomos-check-orchestration's lib.rs re-exports RuleReassessmentCache and Run_Reassessing alongside the three names it already exports, and tests/contract/surface/nomos-check-orchestration.txt is re-blessed from a clean worktree for the two additions. The export is exactly those two and no wider: no incremental-session type, no builder, no re-export of Record or Recorded, which stay pub(crate) and cfg(test). NomosDiagnosticProvider then carries a private RuleReassessmentCache beside its workspace and store, initialised in New() with no new public constructor parameter, and Diagnose calls Run_Reassessing threading it. The LSP's own public surface does not change and tests/contract/surface/nomos-lsp.txt is not touched; if it must be, the territory was wrong and this declines rather than widens. The LSP test proves what that boundary actually permits: one provider instance survives repeated Diagnose calls, its diagnostics are unchanged across an unchanged tree, and they update after a real edit. It does NOT count rule invocations. Recorded is cfg(test) and pub(crate) to another crate and stays that way -- making test instrumentation public so a downstream test can read it would export the wrong thing, and the invocation proof is cbeb644d's, already done, from inside the crate that owns it. Whether any external observable can distinguish a skipped rule from a re-run one is reported in the commit as a finding either way, since that is evidence about the application-service API rather than a gap in this item. The demanded-family duplication between RuleDescriptor.requires and Materialize_Capabilities' hand-written Tracking calls is deliberately left alone. cargo test --no-fail-fast -p nomos-check-orchestration -p nomos-lsp passes, and so does the contract suite.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/lib.rs",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "crates/host/nomos-lsp/src/nomos_diagnostic_provider.rs",
+          "crates/host/nomos-lsp/src/nomos_diagnostic_provider/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-lsp"
+        ],
+        "timeout_seconds": 1800
       },
       "verified": null,
       "abandoned": [],
