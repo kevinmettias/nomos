@@ -40,7 +40,7 @@ fn Domain_Volumes(root: &Path) -> BTreeMap<String, String>
     let entries = std::fs::read_dir(&directory)
         // The gate is defined over every recorded block, so it cannot run against whatever
         // subset of volumes happened to list. An empty listing would bring `blocks_checked`
-        // in low against a manifest that still records 2533 and read as a hash mismatch.
+        // in low against a manifest that still records 2535 and read as a hash mismatch.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
 
     let mut documents = BTreeMap::new();
@@ -112,8 +112,17 @@ fn Test_I1_Should_Reproduce_Every_Recorded_Block()
          and not normalization: {}",
         report.Summary()
     );
-    assert_eq!(report.blocks_checked, 2533, "{}", report.Summary());
-    assert_eq!(report.discriminating_blocks, 30, "{}", report.Summary());
+    // Re-measured 2026-09-14 against the live corpus at code-standards `6e5eb14e2`,
+    // from 2533. `cace351ac` split one service heading and its prose into two of each in
+    // volume 02; `P102` refreshed `source-block-lineage.yaml` at its source before this
+    // number moved, and the v14.36 archive still answers 2533 (`revisions.rs`).
+    assert_eq!(report.blocks_checked, 2535, "{}", report.Summary());
+    // Re-measured 2026-09-14 from 30, alongside `blocks_checked` above and for the same
+    // reason: one of the two blocks `cace351ac` added to volume 02 normalizes to different
+    // bytes than it hashes, so it discriminates the normalizer where its predecessors did
+    // not. The count rising is what keeps this assertion meaningful -- a refresh that left
+    // it at 30 while adding blocks would be evidence the normalizer stopped being exercised.
+    assert_eq!(report.discriminating_blocks, 31, "{}", report.Summary());
 }
 
 /// I2 over the real statement file. Every recorded hash must match its recorded text,
@@ -170,10 +179,10 @@ fn Test_The_Whole_Corpus_Should_Ingest_Into_One_Store()
     // Every statement resolves to a node, so nothing was ingested orphaned.
     let orphans = Orphaned_Statements(&store);
 
-    assert_eq!(blocks, 2533);
+    assert_eq!(blocks, 2535);
     assert_eq!(report.nodes, 2619, "the catalog entity count changed");
     assert_eq!(store.Count(Table::SourceDocuments).expect("counts"), 10);
-    assert_eq!(store.Count(Table::SourceBlocks).expect("counts"), 2533);
+    assert_eq!(store.Count(Table::SourceBlocks).expect("counts"), 2535);
     assert_eq!(orphans, 0);
 }
 
@@ -229,7 +238,7 @@ fn Test_Re_Ingesting_The_Corpus_Should_Be_A_No_Op()
     }
 
     assert_eq!(store.Count(Table::SourceDocuments).expect("counts"), 10);
-    assert_eq!(store.Count(Table::SourceBlocks).expect("counts"), 2533);
+    assert_eq!(store.Count(Table::SourceBlocks).expect("counts"), 2535);
 }
 
 /// The five volumes `cace351ac` did not touch, and why that list is the one worth naming.

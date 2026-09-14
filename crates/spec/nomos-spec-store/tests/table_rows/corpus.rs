@@ -86,13 +86,22 @@ fn Store_Volume(store: &mut SpecificationStore, path: &Path) -> bool
 
 /// Each figure names what it counted, and the three of them add up.
 ///
-/// The plan's 282 is the pipe-line count; `OD-SPEC-002` records that. 258 is every authored
-/// line, header included. 234 is the data.
+/// The plan's 282 was the pipe-line count; `OD-SPEC-002` records that. 258 was every
+/// authored line, header included, and 234 the data.
+///
+/// **Re-measured 2026-09-14 against the live `NOMOS_V14_CORPUS` at code-standards
+/// `6e5eb14e2`, to 286 / 262 / 238.** The figures moved because `cace351ac` (2026-08-17)
+/// split one subsystem row of volume 02 into three and repartitioned one traceability row
+/// of volume 09 -- four authored rows more than the v14.36 archive the original numbers
+/// were taken over, and that archive still reproduces 282 / 258 / 234 (`revisions.rs`), so
+/// the pins did not drift, the corpus moved past them. `P102` is the item that resolved the
+/// divergence at its source before any figure here was touched, which is why this is a
+/// re-measurement rather than a constant edited to make a test pass.
 fn Assert_The_Census_Reconciles(census: &RowCensus)
 {
-    assert_eq!(census.lines, 282, "pipe lines over the ten domain volumes");
-    assert_eq!(census.non_separator, 258, "authored lines, header rows included");
-    assert_eq!(census.content, 234, "data rows");
+    assert_eq!(census.lines, 286, "pipe lines over the ten domain volumes");
+    assert_eq!(census.non_separator, 262, "authored lines, header rows included");
+    assert_eq!(census.content, 238, "data rows");
     assert_eq!(census.header, 24, "one header per table");
     assert_eq!(census.separator, 24, "one delimiter per table, so this is the table count");
     assert_eq!(
