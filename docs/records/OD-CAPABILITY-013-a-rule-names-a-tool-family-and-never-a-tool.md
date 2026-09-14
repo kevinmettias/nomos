@@ -3,7 +3,7 @@ id: OD-CAPABILITY-013
 type: decision
 title: A rule names a tool family and never a tool
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - capability
@@ -48,10 +48,16 @@ repository-level choice among competing providers — and this record is not the
 decides the second.** A capability contract is one fact shape; a family is a kind of
 answering tool. `nomos.cap.lint.diagnostics` is one shape; LINTER is a kind of tool that
 could answer several different shapes across languages. Nothing in this workspace names
-that kind today, and nothing lets a repository choose among competitors for one capability
-— because none exist yet: every capability in this workspace has exactly one admitted
-provider. `P54-A-REPOSITORY-CANNOT-CHOOSE-ITS-TOOLS` is the sibling item for that half;
-this record answers only the taxonomy question its own `done_when` asked for.
+that kind today, and nothing lets a repository choose among competitors for one capability.
+Version 1 gave a reason for that second half — "because none exist yet: every capability in
+this workspace has exactly one admitted provider" — and **that reason was false when it was
+written, contradicted by this record's own provider table three paragraphs below, which
+lists three offers against `nomos.cap.syntax.items`** (amended at version 3; the measurement
+and what it changes are under "What This Record Does Not Do"). Competitors do exist. What is
+absent is a repository's way of choosing between them, which is a different statement and
+the one this paragraph needed. `P54-A-REPOSITORY-CANNOT-CHOOSE-ITS-TOOLS` is the sibling
+item for that half — since closed by `OD-HOST-009` — and this record answers only the
+taxonomy question its own `done_when` asked for.
 
 **Applied to the real providers, `toolspec`'s LanguagePackage/ToolProvider split by
 delivery is confirmed as the axis that does not matter, on a live example rather than a
@@ -175,9 +181,55 @@ the only shape version 1 gestured at is the one the measurement rules out.
 
 It does not decide `P54-A-REPOSITORY-CANNOT-CHOOSE-ITS-TOOLS`. That item is about
 `Selection` — a repository choosing among competing providers of one capability — which
-does not exist yet because no capability has more than one admitted provider. This record's
-own family/delivery classification is what a selection mechanism would need to exist first,
-not a substitute for building one.
+this record does not build. This record's own family/delivery classification is what a
+selection mechanism would need to exist first, not a substitute for building one.
+
+**The reason version 1 gave for setting that aside was false when it was written, and the
+question it set aside has since been decided elsewhere** (amended at version 3). Version 1
+said `Selection` "does not exist yet because no capability has more than one admitted
+provider."
+
+**The count is wrong.** Measured 2026-09-14 against
+`crates/orchestration/nomos-check-orchestration/src/composition.rs`:
+`Declare_Syntax_Capability` declares `nomos.cap.syntax.items` and then offers three
+providers against it, and has offered more than one since `nomos-lang-rust-scan` was
+composed in. Each guarantee is read from its own declaring site rather than restated:
+
+| provider | declared at | `FactVariant` | soundness | completeness | granularity |
+|---|---|---|---|---|---|
+| `nomos.lang.rust.syn` | `crates/languages/nomos-lang-rust/src/guarantee.rs` | `Syntactic` | `Sound` | `Unknown` | `File` |
+| `nomos.lang.rust.scan` | `crates/languages/nomos-lang-rust-scan/src/guarantee.rs` | `Approximate` | `Unsound` | `Unknown` | `File` |
+| `nomos.lang.go.tree-sitter` | `crates/languages/nomos-lang-go/src/guarantee.rs` | `Syntactic` | `Sound` | `Sound` | `File` |
+
+`FactVariant::SemanticallyResolved` appears in the first of those files as what a future
+compiler-backed Rust provider *would* offer. No such provider is composed into the
+production registry, so nothing in this workspace offers this capability at that strength
+today.
+
+**The question is decided, and only the mechanism is unbuilt.**
+`P54-A-REPOSITORY-CANNOT-CHOOSE-ITS-TOOLS` is closed, and `OD-HOST-009` is what closed it —
+accepted, and citing this record for the twelve family names its declaration is keyed by. It
+decides that a repository may declare, per language and per family, which tool answers it or
+that none should run; that the declaration lives in `standards.json`; and that it travels as
+a capability fact the way the five existing policy families do. What `OD-HOST-009` did not
+do is build any of that. So the honest statement is that the selection mechanism is unbuilt,
+not that the question is open, and this record names no trigger for it because `OD-HOST-009`
+declares none.
+
+**Why the competition that does exist has never had to be resolved by a repository**, which
+is the observation the count was a poor proxy for. Two of the three offers are over the same
+Rust subjects, and no caller here has ever had both to choose between:
+`nomos_rules::Syntax_Requirement` states soundness `Assurance::Sound`, so
+`nomos.lang.rust.scan` is refused rather than ranked —
+`nomos_contracts::Guarantee::Satisfies` rejects the offer and `Registry::Resolve` reports
+`Unmet::BelowRequirement` — and that requirement's own documentation calls soundness "the
+axis that separates the two providers and the only one this rule cannot compromise on." The
+third offer does not compete at all: it partitions by subject, which `OD-CAPABILITY-009`
+decided and which the caller carries in through `Syntax_Requirement_For`'s `Preferring`
+rather than the registry inferring. Where a caller will accept nobody else,
+`Resolve_Requiring` refuses substitution and names who else was usable, which
+`OD-CAPABILITY-001` reserved to the caller deliberately. A floor, a caller-side narrowing
+and a required name are the ranking working, not cases it cannot express.
 
 It does not resolve `P47-TOOLPROVIDER-HAS-NO-PACKAGE-2`. That item's own gap — `ToolProvider`
 has no manifest crate — is a `PackageKind` question this record's family/delivery
@@ -200,3 +252,12 @@ a second explicit axis, `IN_PROCESS` read by consequence (no external tool to in
 rather than literal mechanism. Applied to today's real eight providers, naming
 `nomos-lang-rust-cargo` and `nomos-lang-go-modules` as the live instance of one family split
 wrongly across two `PackageKind`s by delivery alone. No code moves here.
+
+Amended at version 3 on one point, in two places that stated it: version 1's claim that
+every capability in this workspace has exactly one admitted provider was false when written,
+and the record's own provider table contradicted it. `nomos.cap.syntax.items` has three
+admitted offers, measured above. Nothing the record decided rests on the count — the
+taxonomy, the cardinality and the carrier are untouched — and the deferral that cited the
+count is replaced by what became of the question instead: `P54-A-REPOSITORY-CANNOT-CHOOSE-
+ITS-TOOLS` is closed, `OD-HOST-009` decided it, and the mechanism is unbuilt rather than the
+question open.

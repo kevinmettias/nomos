@@ -71046,7 +71046,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "The done_when requires three statements the tree contradicts. It says the deferral of P54-A-REPOSITORY-CANNOT-CHOOSE-ITS-TOOLS stands: that item is Done on this board, verified 2026-09-05, and its product is OD-HOST-009. It says OD-HOST-009's trigger stays unfired: that record declares no trigger, is accepted at version 1, and decides outright that a repository may declare per language and per family which tool answers it or that none should run, leaving only the mechanism unbuilt. It says competition existing does not by itself call for repository-authored preference: OD-HOST-009 decided that it does. Separately the why misreads a guarantee -- nomos-lang-rust declares FactVariant::Syntactic with soundness Sound and completeness Unknown, not SemanticallyResolved, which appears in that file as what a future compiler-backed provider would offer and is not composed into the production registry. The premise being corrected is genuinely false and the correction is genuinely owed, so this is re-authored as -2 on measurements taken from the declaring sites, before any claim, rather than written to a done_when that would put three new false statements into a governing record to remove one."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -71061,9 +71065,18 @@
         "timeout_seconds": 1800
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-p99-cap013",
+          "reason": "Claimed to implement, checked the item's own measurements against the tree before editing the record, and two of them are wrong in a way that makes the done_when unsatisfiable honestly. Abandoning so it can be declined and re-authored rather than implemented as written.",
+          "abandoned_at": 1789411950
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p99-cap013",
+        "declined_at": 1789411950
+      }
     },
     {
       "id": "P99-THREE-RECORDS-REPEAT-A-BARE-CHECKED-ON-LINE-AND-THE-PRESERVATION-GUARD-IS-RED",
@@ -71852,14 +71865,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by -6, same territory, predicate narrowed to the crates whose behaviour this item changes."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p103",
-        "acquired_at": 1789411207,
-        "lease_expires_at": 1789425607
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -71878,9 +71891,18 @@
         "timeout_seconds": 3600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-p103",
+          "reason": "Predicate over-broad, by the owner's direction. It named -p nomos-cli and -p nomos-contract-tests, which drag in real-tree population assertions and corpus-gate tables this item introduces no claim about and which are red at HEAD for pre-existing, peer-caused reasons. An item's predicate should prove the claims that item introduces; the repository-wide gate remains the separate stronger check and this item does not need to impersonate it.",
+          "abandoned_at": 1789412380
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p103",
+        "declined_at": 1789412380
+      }
     },
     {
       "id": "P102-A-DELETED-FUNCTIONS-DOC-COMMENT-LANDED-ON-ITS-NEIGHBOUR",
@@ -71932,6 +71954,121 @@
         },
         "revision": null
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P99-OD-CAPABILITY-013-STATES-NO-CAPABILITY-HAS-TWO-ADMITTED-PROVIDERS-AND-ONE-DOES-2",
+      "title": "OD-CAPABILITY-013 defers a closed item on a false count, and names a trigger the record it points at does not have",
+      "why": "OD-CAPABILITY-013's \"What This Record Does Not Do\" defers P54-A-REPOSITORY-CANNOT-CHOOSE-ITS-TOOLS on a factual premise: Selection \"does not exist yet because no capability has more than one admitted provider.\" Measured 2026-09-14 against the real tree, the paragraph is stale three times over, and version -1 of this item was declined because it carried two of the three staleness claims the wrong way round.\n\nFirst, the count is false, which is what -1 said and is right. Declare_Syntax_Capability in crates/orchestration/nomos-check-orchestration/src/composition.rs declares nomos.cap.syntax.items and then offers three providers against it: nomos.lang.rust.syn, nomos.lang.rust.scan and nomos.lang.go.tree-sitter. It has had more than one since nomos-lang-rust-scan was composed in.\n\nSecond, the guarantees are not what -1 stated. It said nomos-lang-rust declares FactVariant::SemanticallyResolved with completeness Assurance::Unknown. Read directly at crates/languages/nomos-lang-rust/src/guarantee.rs, it declares Syntactic, soundness Sound, completeness Unknown, IncrementalGranularity::File. SemanticallyResolved appears in that file as what a future compiler-backed provider would offer, and that provider is not composed into the production registry at all. nomos-lang-rust-scan declares Approximate, Unsound, Unknown, File.\n\nThird, and the reason -1 could not be implemented as written: P54-A-REPOSITORY-CANNOT-CHOOSE-ITS-TOOLS is Done on this board, verified 2026-09-05, and its product is OD-HOST-009, which cites OD-CAPABILITY-013 as a relation. OD-HOST-009 is accepted and decides in as many words that a repository may declare, per language and per family, which tool answers it or that none should run, living in standards.json and travelling as a capability fact. So the selection question is decided and only unbuilt. It has no trigger, unfired or otherwise. Version -1's done_when required this record to say that the deferral stands, that OD-HOST-009's trigger stays unfired, and that competition existing does not by itself call for repository-authored preference. The last of those contradicts an accepted record, and the first two describe a board and a record that do not exist, so implementing it would have written three false statements into a governing record to correct one.\n\nThere is a real observation -1 was reaching for and it survives all of this: two of the three offers are over the same Rust subjects and have never had to be chosen between, because nomos_rules::Syntax_Requirement demands soundness Assurance::Sound and nomos.lang.rust.scan declares Unsound, so Guarantee::Satisfies refuses it and Resolve reports Unmet::BelowRequirement for every rule in this workspace. That requirement's own documentation names soundness as \"the axis that separates the two providers\". The third offer partitions by subject rather than competing, which OD-CAPABILITY-009 already decided and Syntax_Requirement_For's Preferring already carries.",
+      "done_when": "OD-CAPABILITY-013 no longer asserts that no capability has more than one admitted provider, and no longer describes P54-A-REPOSITORY-CANNOT-CHOOSE-ITS-TOOLS as open. It states the measured facts instead: which composition offers which providers against nomos.cap.syntax.items, and each one's declared guarantee on all four axes, read from the declaring site rather than restated from memory.\n\nIt states what became of the question the false premise was supporting. P54 is closed and OD-HOST-009 decided it: a repository may declare, per language and per family, which tool answers it or that none should run, in standards.json and travelling as a capability fact. The record says that the mechanism is unbuilt rather than that the question is undecided, and does not claim any trigger, since OD-HOST-009 declares none.\n\nIt states why the competition that exists has never had to be resolved, which is the observation the premise was a wrong proxy for: nomos_rules::Syntax_Requirement demands soundness Assurance::Sound, so nomos.lang.rust.scan is refused for every rule here with Unmet::BelowRequirement rather than ranked against nomos.lang.rust.syn, and the Go offer partitions by subject under OD-CAPABILITY-009 rather than competing. That is the ranking and the caller-side narrowing working, not a case they cannot express, and Resolve_Requiring is what a caller uses when it will accept nobody else.\n\nThe record's own scope is unchanged: it still does not decide selection, and nothing here reopens OD-HOST-009, OD-CAPABILITY-001 or OD-CAPABILITY-009. Governing-record correction only: no standards.json section, no selection mechanism, no capability contract, no code.\n\nFollowed through .claude/skills/nomos-spec-change: the round trip is read before editing, the preview is read and reports no block removed and no relation changed, and both projections are re-rendered from a worktree holding exactly the records this commit publishes, with a binary built inside it, because spec/domain-specification.md carries the same sentence as a derived projection owned by nobody per OD-GATE-005 and is fixed by rendering rather than editing. Grepped before finishing to confirm no third copy of the premise exists outside the record and that projection. The record's version is bumped.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "orpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.78s\n     Running unittests src\\lib.rs (F:/repos/render-p101-target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/render-p101-target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/render-p101-target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (F:/repos/render-p101-target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/render-p101-target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789412419,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-A-TEMPORARY-WAIVER-CLAIMS-A-BOUNDED-PERIOD-AND-NEVER-ENDS-6",
+      "title": "A temporary waiver claims a bounded period and nothing can make it stop applying",
+      "why": "SuppressionDisposition::TemporaryWaiver documents itself as accepted for a bounded period and distinguishes itself from AcceptedBaselineDebt as the one which names an end date this does not. No end date exists: Suppression carries rule, subject, disposition, rationale and owner, and no file under policy/ reads a clock, a deadline or an expiry. So a TemporaryWaiver is behaviourally identical to a FormalRiskAcceptance and suppresses forever. That is worse than a missing feature, because the type name and its documentation promise a behaviour the engine does not implement, so a repository that tolerated something temporarily has tolerated it permanently and was told otherwise. The declared file refuses an expires key today under deny_unknown_fields, so an author reaching for one is told no rather than silently dropped, and baseline_debt.rs already records the order to follow: the key appears on the declared entry first and the domain type grows a field to carry it. The evaluation moment must come from the caller rather than a clock inside policy logic, so replaying a past run answers as that run did; it rides in the two grouping values a run's execution context already travels in, GateEnvironment for a gate and Platform for a workflow step, because both composing functions are at this workspace's four-parameter limit. The constructor and call-site population was enumerated in full across both affected types after earlier attempts were re-scoped, the first from output truncated by head.",
+      "done_when": "A TemporaryWaiver expires. Suppression carries an expiry, the declared entry accepts it, a waiver written without one is refused rather than accepted as permanent, and any other disposition carrying one is refused rather than silently ignoring it. Evaluation reads the moment the caller supplied and every construction site of both grouping values supplies one. A waiver before its expiry suppresses, at or after it does not, and the second is visible as a lapsed disposition rather than a suppression that quietly stopped matching. The status is an enum in its own module, since the file-name rule reports a second public type in a file exporting no free function, and carries only the two states something can construct -- a third, for a disposition stale by rule version, subject identity, evidence or scope, is named in its documentation and deliberately not invented before an invalidation mechanism exists. Controls in both directions and at the boundary instant: before, exactly at, and after. The predicate is cargo test over the three crates whose behaviour this changes, which is where every claim above lives. Two further facts are established outside it and stated in the finish evidence rather than smuggled into a green: both public surface snapshots are re-blessed and the public_surface guard passes, and nomos-cli is modified only at two construction sites, compiles, and passes its other tests -- two real-tree population assertions there are red at HEAD for pre-existing causes this item introduces no claim about, and the repository-wide gate remains the separate stronger check. Lint over the workspace is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/tests/check_orchestration_seam.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_status.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/workflow.rs",
+          "crates/host/nomos-api/src/response/gate_run_response.rs",
+          "crates/host/nomos-api/src/response/gate_explain_response.rs",
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "crates/host/nomos-api/src/response/suppression_response.rs",
+          "crates/host/nomos-api/src/workflow.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-workflow-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p103",
+        "acquired_at": 1789412406,
+        "lease_expires_at": 1789423206
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
