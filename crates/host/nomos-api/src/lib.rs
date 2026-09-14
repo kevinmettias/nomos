@@ -117,6 +117,15 @@
 //! that seam outside its own unit tests and `nomos-cli`. [`agent::AgentDispatchResponse`]
 //! is its own response type, not a reuse of [`workflow::AgentExecutionOutcomeResponse`]/
 //! [`workflow::OllamaExecutionOutcomeResponse`]: see `agent.rs`'s own module doc for why.
+//! Its twenty-sixth, [`Handle_Gate_Compare`], gives the Gate its fourth verb here and closes
+//! the set `ARC-ROADMAP-001`'s constraint 5 names -- plan, run, explain and compare -- which
+//! `nomos-cli` had served in full while this crate stopped at three, leaving the only way to
+//! ask what changed between two runs a terminal. It re-derives both runs in one process
+//! rather than looking either up, which is not a shortcut but `OD-GATE-022-A`'s own decision:
+//! a compare caller builds no run-history store and serializes no `GateRunResult`, because
+//! both cases the verb answers -- two trees under one policy, one tree under two -- are
+//! same-process cases. Comparing against a run an earlier invocation produced is real,
+//! deferred, and would need a persisted history keyed by `RunId` or a round-trippable twin.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `Invocation::Run` arm: it walks `command.root` for `.rs` sources
@@ -167,9 +176,9 @@ pub use agent::{AgentDispatchResponse, AgentJudgeRoleResponse, Handle_Agent_Exec
 pub use check::{CheckResponse, ClaimResponse, ExaminedResponse, Handle_Check_Run};
 pub use correction::{CorrectionResponse, Handle_Correction_Run};
 pub use response::{
-    BaselineDebtResponse, Disposition, GateExplainResponse, GatePlanResponse, GateRunResponse, Handle_Gate_Explain,
-    Handle_Gate_Plan, Handle_Gate_Run, RuleCalibrationResponse, RuleOfferResponse, SuppressionDispositionResponse,
-    SuppressionResponse,
+    BaselineDebtResponse, BucketChange, Disposition, FindingBucket, GateCompareResponse, GateExplainResponse,
+    GatePlanResponse, GateRunResponse, Handle_Gate_Compare, Handle_Gate_Explain, Handle_Gate_Plan, Handle_Gate_Run,
+    RuleCalibrationResponse, RuleOfferResponse, SuppressionDispositionResponse, SuppressionResponse,
 };
 pub use spec::{
     AbsenceResponse, BlockChangeResponse, CommitReportResponse, CommitResponse, CommittedPreviewResponse,

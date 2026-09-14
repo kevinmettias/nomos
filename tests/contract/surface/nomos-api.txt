@@ -12,6 +12,7 @@ pub enum nomos_api::CorrectionResponse
 pub enum nomos_api::DeclineResponse
 pub enum nomos_api::DispatchErrorResponse
 pub enum nomos_api::Disposition
+pub enum nomos_api::FindingBucket
 pub enum nomos_api::FinishResponse
 pub enum nomos_api::FreshnessResponse
 pub enum nomos_api::GateExplainResponse
@@ -92,6 +93,10 @@ pub enum variant nomos_api::DispatchErrorResponse::Ollama(OllamaExecutionErrorRe
 pub enum variant nomos_api::Disposition::Failed
 pub enum variant nomos_api::Disposition::Indeterminate
 pub enum variant nomos_api::Disposition::Passed
+pub enum variant nomos_api::FindingBucket::Baselined
+pub enum variant nomos_api::FindingBucket::Blocking
+pub enum variant nomos_api::FindingBucket::Calibrated
+pub enum variant nomos_api::FindingBucket::Suppressed
 pub enum variant nomos_api::FinishResponse::Finished { record: VerificationRecord, }
 pub enum variant nomos_api::FinishResponse::Refused { cause: String, judged: bool, }
 pub enum variant nomos_api::FreshnessResponse::Examined { examined: Vec<ProfileOutcomeResponse>, required: Vec<String>, }
@@ -187,6 +192,7 @@ pub fn nomos_api::Handle_Agent_Execute(goal: &str, config: DispatchConfig) -> Ag
 pub fn nomos_api::Handle_Agent_Judge_Role(root: &Path, crate_name: &str, config: DispatchConfig) -> AgentJudgeRoleResponse
 pub fn nomos_api::Handle_Check_Run(command: &CheckCommand) -> CheckResponse
 pub fn nomos_api::Handle_Correction_Run(command: &CorrectionCommand) -> CorrectionResponse
+pub fn nomos_api::Handle_Gate_Compare(baseline: &GateCommand, candidate: &GateCommand) -> GateCompareResponse
 pub fn nomos_api::Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse
 pub fn nomos_api::Handle_Gate_Plan() -> GatePlanResponse
 pub fn nomos_api::Handle_Gate_Run(command: &GateCommand) -> GateRunResponse
@@ -227,6 +233,11 @@ pub struct field nomos_api::BaselineDebtResponse::rule: RuleId
 pub struct field nomos_api::BaselineDebtResponse::subject: SubjectId
 pub struct field nomos_api::BlockedItem::cause: String
 pub struct field nomos_api::BlockedItem::item: LedgerItem
+pub struct field nomos_api::BucketChange::after: FindingBucket
+pub struct field nomos_api::BucketChange::before: FindingBucket
+pub struct field nomos_api::BucketChange::rule: RuleId
+pub struct field nomos_api::BucketChange::subject: SubjectId
+pub struct field nomos_api::BucketChange::subject_name: String
 pub struct field nomos_api::CommitReportResponse::blocks: usize
 pub struct field nomos_api::CommitReportResponse::blocks_removed: usize
 pub struct field nomos_api::CommitReportResponse::node_id: String
@@ -261,6 +272,11 @@ pub struct field nomos_api::FailureResponse::rule: String
 pub struct field nomos_api::FieldValueResponse::field: String
 pub struct field nomos_api::FieldValueResponse::origin: OriginResponse
 pub struct field nomos_api::FieldValueResponse::value: String
+pub struct field nomos_api::GateCompareResponse::added: Vec<Finding>
+pub struct field nomos_api::GateCompareResponse::baseline: RunId
+pub struct field nomos_api::GateCompareResponse::candidate: RunId
+pub struct field nomos_api::GateCompareResponse::changed: Vec<BucketChange>
+pub struct field nomos_api::GateCompareResponse::removed: Vec<Finding>
 pub struct field nomos_api::GateRunResponse::disposition: Disposition
 pub struct field nomos_api::GateRunResponse::findings: GateFindings
 pub struct field nomos_api::GateRunResponse::root: PathBuf
@@ -326,6 +342,7 @@ pub struct nomos_api::AbsenceResponse
 pub struct nomos_api::AgentExecutionOutcomeResponse
 pub struct nomos_api::BaselineDebtResponse
 pub struct nomos_api::BlockedItem
+pub struct nomos_api::BucketChange
 pub struct nomos_api::CommitReportResponse
 pub struct nomos_api::CommittedPreviewResponse
 pub struct nomos_api::DecisionGapResponse
@@ -333,6 +350,7 @@ pub struct nomos_api::DocumentSourceResponse
 pub struct nomos_api::ExaminedResponse
 pub struct nomos_api::FailureResponse
 pub struct nomos_api::FieldValueResponse
+pub struct nomos_api::GateCompareResponse
 pub struct nomos_api::GateRunResponse
 pub struct nomos_api::IdentityChangeResponse
 pub struct nomos_api::NodeSummaryResponse

@@ -19,6 +19,7 @@
 
 mod baseline_debt_response;
 mod disposition;
+mod gate_compare_response;
 mod gate_explain_response;
 mod gate_findings;
 mod gate_plan_response;
@@ -30,6 +31,7 @@ mod suppression_response;
 
 pub use baseline_debt_response::BaselineDebtResponse;
 pub use disposition::Disposition;
+pub use gate_compare_response::{BucketChange, FindingBucket, GateCompareResponse, Handle_Gate_Compare};
 pub use gate_explain_response::{GateExplainResponse, Handle_Gate_Explain};
 pub use gate_findings::GateFindings;
 pub use gate_plan_response::{GatePlanResponse, Handle_Gate_Plan};
