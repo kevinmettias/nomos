@@ -253,6 +253,26 @@ jobs:
       - name: Boundaries
         run: cargo test -p nomos-contract-tests
 
+      # The one check that must not reuse anything. Every other step here is free to
+      # benefit from an incremental build; this one is the claim that this workspace really
+      # compiles against the pinned XVPE revision, and an incremental build cannot establish
+      # it. Measured 2026-09-14: `cargo check --workspace --all-targets` exited zero in
+      # twenty seconds having compiled no xvpe crate at all, because another process had
+      # warmed the shared target directory. `OD-GATE-028` names that class -- the
+      # verification mechanism bypassing the condition it exists to observe -- and
+      # `tests/contract/tests/crossing_cold.rs` is the response for this crossing.
+      #
+      # The test creates its own empty CARGO_TARGET_DIR and asserts from the build's own
+      # output that xvpe crates were compiled, and that every one of them carries the
+      # revision the manifest names. It is `#[ignore]` so an ordinary `cargo test` does not
+      # pay for a cold build, which is why this step passes `--ignored`.
+      #
+      # Linux only. What it proves is about dependency resolution and not about a host, and
+      # a second cold build would double the cost to re-derive the same fact.
+      - name: XVPE crossing (cold by construction)
+        if: matrix.os == 'ubuntu-latest'
+        run: cargo test -p nomos-contract-tests --test crossing_cold -- --ignored
+
       # The projections this repository promises to ship, re-derived and compared against
       # what is committed. `--require` is what makes an absence fail: without it the
       # command reports on the outputs it happens to find, so deleting both halves of a

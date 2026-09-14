@@ -70056,14 +70056,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p98-xvpe",
-        "acquired_at": 1789407057,
-        "lease_expires_at": 1789417857
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -70077,7 +70073,31 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "crossing_cold",
+          "--",
+          "--ignored"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 1 test\ntest Test_The_Pinned_Crossing_Should_Really_Compile_From_A_Cold_Target_Directory ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 4.69s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.53s\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-4e60d939d3808124.exe)\n",
+        "verified_at": 1789407309,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b05805771dc491e5bf6d5333b8187013f8946bc6"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
