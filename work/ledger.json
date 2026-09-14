@@ -69088,6 +69088,390 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P98-THE-ORCHESTRATION-EQUIVALENCE-PROOF-COVERS-ONE-OF-TWELVE-FACT-FAMILIES",
+      "title": "The reuse-equals-recomputation proof through Run covers one rule over caller-supplied source bytes, and eleven other fact families materialize beside it",
+      "why": "Three tests in this workspace assert some form of incremental equivalence and none of them reaches the gap. crates/substrate/nomos-analysis/tests/recomputation_equivalence.rs proves it on a synthetic fixture built directly on MemoryFactStore's own Materialize/Invalidate/Current API, and its own module doc states it deliberately exercises store mechanics rather than any capability's business logic. crates/languages/nomos-lang-rust-cargo/tests/invalidation.rs proves an edited manifest's old edge fact does not survive the generation it was invalidated at, but never compares a reused run against a clean one through Run. Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomputation, at crates/orchestration/nomos-check-orchestration/src/tests.rs:535, is the only test that asserts the invariant through the real Run pipeline on both claim and findings, and it selects exactly one rule: NAMING_CONVENTION, feeding on SyntaxItems and NamingPolicy. Materialize_Capabilities in run_context.rs materializes twelve RequiredFact families. The three families differ in where the input lives and what mutates it, and that is the axis the current proof does not cross: a source-derived fact comes from bytes the caller hands in, a workspace-derived fact comes from a subprocess reading a manifest tree under root, and a repository-derived fact comes from files under root that no caller passes at all. Reuse-equals-recomputation is proved only along the first. An under-invalidating family in the second or third class serves a stale fact, which is a wrong answer rather than a missing one, and it is silent in exactly the conditions the suite runs under.",
+      "done_when": "crates/orchestration/nomos-check-orchestration/tests/incremental_equivalence.rs exists and proves the invariant for three rules spanning the three input classes named in the why: NAMING_CONVENTION for the source-derived class, DEPENDENCY_DIRECTION for the workspace-derived class (cargo metadata over a fixture tree whose manifest is rewritten between generations), and REQUIREMENT_TRACE_STALENESS for the repository-derived class (a file under root rewritten between generations). Each proof performs a G0 Run, mutates that family's own real input, performs a G1 Run reusing the same workspace and store, performs an independent G1 Run over a fresh workspace and store, and asserts the reused run equals the clean run on both claim and findings. Each of the three is separately confirmed able to fail by mutating the input and suppressing the invalidation, or by breaking the mutation, and observing red; the confirmation is stated in the commit message per rule, not as one blanket sentence. The item reports whether the three classes behaved identically. A family-by-family matrix over the remaining nine is NOT added by this item and is authored as a separate item only if this one measures a real difference in invalidation semantics between the classes; adding twelve copies without that measurement is explicitly out of scope.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/tests/incremental_equivalence.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Clippy_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_Every_Dependency_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Declare_Every_Capability_Crates_Own_Real_Contract ... ok\ntest Test_Registered_Should_Offer_The_Deny_Providers_Own_Real_Offer ... ok\ntest Test_Registered_Should_Offer_The_Reachability_Providers_Own_Real_Offer ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_A_Source_Derived_Family_Reused_Across_An_Edit_Should_Agree_With_A_Clean_Recomputation ... ok\ntest Test_A_Repository_Derived_Family_Reused_Across_A_Corpus_Edit_Should_Agree_With_A_Clean_Recomputation ... ok\ntest Test_A_Workspace_Derived_Family_Reused_Across_A_Manifest_Edit_Should_Agree_With_A_Clean_Recomputation ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s\n\n\nrunning 4 tests\ntest Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List ... ok\ntest Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule ... ok\ntest Test_Run_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.88s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-6364490387e7389b.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-7532928cf372cd2a.exe)\n     Running tests\\incremental_equivalence.rs (target\\debug\\deps\\incremental_equivalence-81ceb5826028e93f.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-68a6ceeee8beb600.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1789371751,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8503ddb3921bb24997a71fcb898c3eff231cbf77"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P98-TWO-ACCEPTED-RECORDS-STATE-A-SINGLE-ADAPTER-TOPOLOGY-THAT-WAS-RETIRED",
+      "title": "Two accepted records state a single-adapter topology that was retired, and neither says what survived it",
+      "why": "On 2026-09-10 the owner retired the boundary test that forbade any crate but one named adapter from reaching an xvpe- dependency. The tombstone in tests/contract/tests/boundaries/graph.rs gives the reason: nomos is built on top of XVPE, so a rule forbidding that dependency does not describe an architecture worth keeping. What that retired was the adapter-count restriction, that exactly one crate may name xvpe-. It did not retire D-130's separate clause that an XVPE dependency is never taken by path, and it did not retire D-130's Phase 5 adoption gate. Both records still describe the retired topology as current. D-130 is accepted at version 2 and its title still reads that nomos takes no XVPE dependency before Phase 5, and never by path. ARC-ECOSYSTEM-001 is accepted at version 4 and states twice that D-130 fixes the mechanical form of this crossing as a single named adapter and no path dependency, and that D-130 is untouched and unweakened. No record supersedes either: all eight relations pointing at D-130 are relates-to or affects. Measured 2026-09-14 at 8503ddb3: eight workspace crates and the contract test crate carry sixteen relative path dependencies into a sibling checkout, so both records assert a mechanical claim the tree falsifies.",
+      "done_when": "D-130 and ARC-ECOSYSTEM-001 each carry an amendment separating what was retired from what survives. The amendments record four things: that the sole-adapter restriction is retired; that the boundary against making nomos correctness or reproducibility depend on an unpinned sibling working tree is retained; that the Phase 5 adoption gate is retained unless separately superseded; and that each condition D-130's own 2026-08-18 amendment named is dispositioned individually against a measurement rather than lapsing with the adapter-count rule. Those dispositions are measured against the xvpe checkout and name its commit, covering at least whether xvpe has a storage crate, whether it has a package crate, whether xvpe-telemetry still names a desktop OS backend, and what nomos's real xvpe dependency closure contains. ARC-ECOSYSTEM-001's two statements about D-130 are corrected rather than left standing. If either amendment names the retired test, tests/contract/tests/record_citation.rs gains the matching declaration. Both projections are re-rendered from a tree publishing exactly these records, and cargo test -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/record_citation.rs",
+          "docs/records/D-130-no-xvpe-dependency-before-phase-5.md",
+          "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Malformed predicate: --timeout 30m was written after the -- separator, so it joined the predicate argv as cargo test -p nomos-contract-tests --timeout 30m, which is not a cargo flag, and timeout_seconds stayed at the 600s default. There is no work edit, so the item is re-added as -2 with the timeout declared before the separator. Nothing was implemented under this id."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--timeout",
+          "30m"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p98-xvpe",
+        "declined_at": 1789371481
+      }
+    },
+    {
+      "id": "P98-TWO-ACCEPTED-RECORDS-STATE-A-SINGLE-ADAPTER-TOPOLOGY-THAT-WAS-RETIRED-2",
+      "title": "Two accepted records state a single-adapter topology that was retired, and neither says what survived it",
+      "why": "On 2026-09-10 the owner retired the boundary test that forbade any crate but one named adapter from reaching an xvpe- dependency. The tombstone in tests/contract/tests/boundaries/graph.rs gives the reason: nomos is built on top of XVPE, so a rule forbidding that dependency does not describe an architecture worth keeping. What that retired was the adapter-count restriction, that exactly one crate may name xvpe-. It did not retire D-130's separate clause that an XVPE dependency is never taken by path, and it did not retire D-130's Phase 5 adoption gate. Both records still describe the retired topology as current. D-130 is accepted at version 2 and its title still reads that nomos takes no XVPE dependency before Phase 5, and never by path. ARC-ECOSYSTEM-001 is accepted at version 4 and states twice that D-130 fixes the mechanical form of this crossing as a single named adapter and no path dependency, and that D-130 is untouched and unweakened. No record supersedes either: all eight relations pointing at D-130 are relates-to or affects. Measured 2026-09-14 at 8503ddb3: eight workspace crates and the contract test crate carry sixteen relative path dependencies into a sibling checkout, so both records assert a mechanical claim the tree falsifies.",
+      "done_when": "D-130 and ARC-ECOSYSTEM-001 each carry an amendment separating what was retired from what survives. The amendments record four things: that the sole-adapter restriction is retired; that the boundary against making nomos correctness or reproducibility depend on an unpinned sibling working tree is retained; that the Phase 5 adoption gate is retained unless separately superseded; and that each condition D-130's own 2026-08-18 amendment named is dispositioned individually against a measurement rather than lapsing with the adapter-count rule. Those dispositions are measured against the xvpe checkout and name its commit, covering at least whether xvpe has a storage crate, whether it has a package crate, whether xvpe-telemetry still names a desktop OS backend, and what nomos's real xvpe dependency closure contains. ARC-ECOSYSTEM-001's two statements about D-130 are corrected rather than left standing. If either amendment names the retired test, tests/contract/tests/record_citation.rs gains the matching declaration. Both projections are re-rendered from a tree publishing exactly these records, and cargo test -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/record_citation.rs",
+          "docs/records/D-130-no-xvpe-dependency-before-phase-5.md",
+          "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Wrong count in the why. It reads eight workspace crates and the contract test crate, which is nine; the measured population is eight workspace members carrying sixteen path dependencies, and tests/contract is itself one of those members rather than a ninth thing beside them. The evidence sentence is the durable part of the item, so it is re-added as -3 with the corrected count. Nothing was implemented under this id."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p98-xvpe",
+        "declined_at": 1789371586
+      }
+    },
+    {
+      "id": "P98-TWO-ACCEPTED-RECORDS-STATE-A-SINGLE-ADAPTER-TOPOLOGY-THAT-WAS-RETIRED-3",
+      "title": "Two accepted records state a single-adapter topology that was retired, and neither says what survived it",
+      "why": "On 2026-09-10 the owner retired the boundary test that forbade any crate but one named adapter from reaching an xvpe- dependency. The tombstone in tests/contract/tests/boundaries/graph.rs gives the reason: nomos is built on top of XVPE, so a rule forbidding that dependency does not describe an architecture worth keeping. What that retired was the adapter-count restriction, that exactly one crate may name xvpe-. It did not retire D-130's separate clause that an XVPE dependency is never taken by path, and it did not retire D-130's Phase 5 adoption gate. Both records still describe the retired topology as current. D-130 is accepted at version 2 and its title still reads that nomos takes no XVPE dependency before Phase 5, and never by path. ARC-ECOSYSTEM-001 is accepted at version 4 and states twice that D-130 fixes the mechanical form of this crossing as a single named adapter and no path dependency, and that D-130 is untouched and unweakened. No record supersedes either: all eight relations pointing at D-130 are relates-to or affects. Measured 2026-09-14 at 8503ddb3: eight workspace members carry sixteen relative path dependencies into a sibling checkout, those members being seven crates under crates/ and the contract test crate, which is itself a member rather than a ninth thing beside them. Both records therefore assert a mechanical claim the tree falsifies.",
+      "done_when": "D-130 and ARC-ECOSYSTEM-001 each carry an amendment separating what was retired from what survives. The amendments record four things: that the sole-adapter restriction is retired; that the boundary against making nomos correctness or reproducibility depend on an unpinned sibling working tree is retained; that the Phase 5 adoption gate is retained unless separately superseded; and that each condition D-130's own 2026-08-18 amendment named is dispositioned individually against a measurement rather than lapsing with the adapter-count rule. Those dispositions are measured against the xvpe checkout and name its commit, covering at least whether xvpe has a storage crate, whether it has a package crate, whether xvpe-telemetry still names a desktop OS backend, and what nomos's real xvpe dependency closure contains. ARC-ECOSYSTEM-001's two statements about D-130 are corrected rather than left standing. If either amendment names the retired test, tests/contract/tests/record_citation.rs gains the matching declaration. Both projections are re-rendered from a tree publishing exactly these records, and cargo test -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/record_citation.rs",
+          "docs/records/D-130-no-xvpe-dependency-before-phase-5.md",
+          "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p98-xvpe",
+        "acquired_at": 1789371718,
+        "lease_expires_at": 1789386118
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P99-A-REVIEW-ASSERTION-ABOUT-THE-CURRENT-SNAPSHOT-MUST-RESOLVE-AND-A-HISTORICAL-ONE-NEED-NOT",
+      "title": "A review assertion presented as true of the analyzed snapshot must resolve against it, and a historical one need not",
+      "why": "An external architectural review of this workspace named five analysis crates that do not exist and invented a connector type and its four fields, while its structural conclusions were sound. A blanket every-citation-resolves invariant cannot be the answer: OD-SPEC-017 already measured that 80 of 253 paths cited inside governing records do not resolve, and decided that holding them live would make every module reorganization a record-editing exercise. The distinguishing property is tense rather than citation. A claim presented as true of the analyzed snapshot is mechanically checkable; a report of history is not, and is not a defect. Nothing here states what claim Nomos may make about an external review assertion, and eight governing records were already triggered by one.",
+      "done_when": "docs/records/OD-CONNECTOR-005 exists and is registered under crates/spec/nomos-spec-store/records. It states the snapshot-scoped invariant with historical and explicitly-historical claims exempt. It defines three assertion categories: resolvable, historically scoped, and judgment. It names the mechanically resolvable claim kinds and excludes semantic source verification beyond them. It inherits the D-134 ranking under which a false present-tense claim outranks an explicit inability to establish one. It names the ARC-CONNECTOR-001 bears-on relation as an unbuilt precondition, and states that external provenance does not confer authority over the entity an assertion concerns. Both required projections are re-rendered.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CONNECTOR-005",
+          "crates/spec/nomos-spec-store/records/OD-CONNECTOR-005.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p99",
+        "acquired_at": 1789371633,
+        "lease_expires_at": 1789382433
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P98-SIXTEEN-PATH-DEPENDENCIES-CROSSED-A-BOUNDARY-NO-DECISION-RETIRED",
+      "title": "Sixteen relative path dependencies crossed a boundary that no decision retired",
+      "why": "D-130's path clause and its Phase 5 adoption gate both survive the 2026-09-10 retirement, which reached only the adapter-count restriction. Against that surviving boundary the tree has diverged, and the divergence is an implementation defect rather than stale prose. Measured 2026-09-14 at 8503ddb3: eight workspace members carry sixteen dependencies spelled as a relative path climbing out of this repository into a sibling directory named xvpe, so whether this workspace builds is a function of another product's working tree at whatever revision that tree happens to be sitting at, with nothing recording which revision that was. Three facts bound the fix. First, replacing them is available rather than theoretical: the sibling checkout has a real remote at github.com/kevinmettias/xvpe.git, sits on dev at commit 82a3c8fccf4ef7f3759f36d3f320a91d0f96341c with a clean tree, so a git and rev dependency of the form D-130 already names is fetchable today. Second, the adoption is narrower than D-130 feared: the whole workspace's xvpe closure is twelve crates and contains no GPU, windowing or UI crate, so the concern that a path dependency selects a game engine's entire workspace is not what the current adoption actually did. Third, two of D-130's stated gate conditions are unchanged, since xvpe still has no storage crate and no package crate, so Phase 5 has not opened and this adoption preceded it.",
+      "done_when": "Either the sixteen relative path dependencies are gone, each replaced by a dependency that pins what it adopts by a git reference and an explicit commit in the form D-130 names, with Cargo.lock regenerated so the adopted revision is recorded rather than ambient; or, if replacing them is refused for a reason measured rather than assumed, a governing record adjudicates that refusal, states why a path dependency is the accepted form of this crossing, and supersedes D-130's surviving path clause explicitly instead of leaving it contradicted. Whichever branch is taken, no workspace member reaches a GPU, windowing or UI crate, and cargo check --workspace --all-targets passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-claude-code/Cargo.toml",
+          "crates/agent/nomos-model-backend-ollama/Cargo.toml",
+          "crates/host/nomos-api-transport/Cargo.toml",
+          "crates/host/nomos-lsp/Cargo.toml",
+          "crates/host/nomos-mcp/Cargo.toml",
+          "crates/platform/nomos-platform/Cargo.toml",
+          "crates/platform/nomos-platform-xvpe/Cargo.toml",
+          "tests/contract/Cargo.toml",
+          "Cargo.lock"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P98-TWO-ACCEPTED-RECORDS-STATE-A-SINGLE-ADAPTER-TOPOLOGY-THAT-WAS-RETIRED-3"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "check",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P98-THE-BAND-VOCABULARY-GUARD-STOPS-AT-A-MANIFEST-DESCRIPTION",
+      "title": "The numeric-band guard stops at a manifest description, and the vocabulary it retired survives in comments and module docs",
+      "why": "OD-RULES-020 replaced the numeric band table with named zones because the total ordering was artificial, and P41-ZONES-MIGRATION-3 carried that through README.md, nomos-rules' own ZONES and the dependency-graph tests. A later item added Test_No_Member_Manifest_Should_Open_Its_Description_With_A_Numeric_Band, which is currently satisfied: zero member manifests open a description with a band number. That test's own module documentation states its limit in terms, saying the migration never touched the one place a band number also lived, and the phrase check it performs looks only at a description line. The population outside that one line was never measured and is not small. Measured 2026-09-14 at 8503ddb3: fifty-two band references survive in Cargo.toml comments, forty-seven of them in the root workspace manifest alone, and sixty-one survive in Rust module documentation across fifty-seven files. AGENTS.md names stale architectural language as something a reader should not have to mentally translate, and a later agent reading a Band 41 comment beside a zone table has no way to tell which of the two the workspace believes.",
+      "done_when": "The guard no longer stops at a manifest description: it covers Cargo.toml comments and Rust module documentation as well, and the workspace is clean under the widened guard. The two contract tests that exist precisely to talk about bands, boundaries/band_zero.rs and boundaries/manifest_bands.rs, are exempt by a named exemption rather than by the guard failing to notice them, because a guard that cannot name its own subject is the vacuity this repository already writes records about. Every surviving reference is either replaced by the zone the crate actually sits in, read from nomos-rules' own ZONES rather than retyped, or removed where it carried no meaning beyond the number. cargo test -p nomos-contract-tests passes, and the run is checked against a quiescent tree rather than one a peer session is editing.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts/src/lib.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+          "crates/agent/nomos-model-backend-ollama/src/lib.rs",
+          "crates/capabilities/nomos-cap-controlflow/src/lib.rs",
+          "crates/capabilities/nomos-cap-dependency-policy/src/lib.rs",
+          "crates/capabilities/nomos-cap-dependency/src/lib.rs",
+          "crates/capabilities/nomos-cap-goals-policy/src/lib.rs",
+          "crates/capabilities/nomos-cap-limits-policy/src/lib.rs",
+          "crates/capabilities/nomos-cap-lint/src/lib.rs",
+          "crates/capabilities/nomos-cap-naming-policy/src/lib.rs",
+          "crates/capabilities/nomos-cap-scripting-policy/src/lib.rs",
+          "crates/capabilities/nomos-cap-syntax/src/lib.rs",
+          "crates/capabilities/nomos-cap-words-policy/src/lib.rs",
+          "crates/contracts/nomos-contracts/src/lib.rs",
+          "crates/host/nomos-api-transport/src/lib.rs",
+          "crates/host/nomos-api/src/lib.rs",
+          "crates/host/nomos-cli/src/main.rs",
+          "crates/host/nomos-cli/src/vacuity.rs",
+          "crates/host/nomos-lsp/src/lib.rs",
+          "crates/host/nomos-mcp/src/lib.rs",
+          "crates/host/nomos-surface-provenance/src/main.rs",
+          "crates/kernel/nomos-model/src/lib.rs",
+          "crates/languages/nomos-lang-go-modules/src/lib.rs",
+          "crates/languages/nomos-lang-go/src/lib.rs",
+          "crates/languages/nomos-lang-rust-cargo/src/lib.rs",
+          "crates/languages/nomos-lang-rust-clippy/src/lib.rs",
+          "crates/languages/nomos-lang-rust-compiler/src/lib.rs",
+          "crates/languages/nomos-lang-rust-deny/src/lib.rs",
+          "crates/languages/nomos-lang-rust-scan/src/lib.rs",
+          "crates/languages/nomos-lang-rust/src/lib.rs",
+          "crates/orchestration/nomos-check-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-work-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/lib.rs",
+          "crates/packages/nomos-lang-go-package/src/lib.rs",
+          "crates/packages/nomos-lang-rust-package/src/lib.rs",
+          "crates/packages/nomos-model-package/src/lib.rs",
+          "crates/packages/nomos-package/src/lib.rs",
+          "crates/packages/nomos-rule-package/src/lib.rs",
+          "crates/platform/nomos-platform-std/src/lib.rs",
+          "crates/platform/nomos-platform-xvpe/src/lib.rs",
+          "crates/platform/nomos-platform/src/lib.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/spec/nomos-spec-bundle/src/lib.rs",
+          "crates/spec/nomos-spec-ingest/src/lib.rs",
+          "crates/spec/nomos-spec-model/src/lib.rs",
+          "crates/spec/nomos-spec-store/src/lib.rs",
+          "crates/spec/nomos-spec-validate/src/lib.rs",
+          "crates/substrate/nomos-capability/src/lib.rs",
+          "crates/substrate/nomos-ledger/src/lib.rs",
+          "crates/substrate/nomos-scope-verification/src/lib.rs",
+          "crates/substrate/nomos-workspace/src/lib.rs",
+          "tests/contract/tests/boundaries/band_zero.rs",
+          "tests/contract/tests/boundaries/manifest_bands.rs",
+          "tests/integration/src/lib.rs",
+          "Cargo.toml",
+          "crates/platform/nomos-platform-xvpe/Cargo.toml",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/spec/nomos-spec-bundle/Cargo.toml",
+          "tests/contract/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P98-A-BUNDLED-PROVIDER-LETS-A-RULE-COMPILE-LINK-AN-EXTERNAL-SYSTEM",
+      "title": "Whether bundling a provider with its contract lets a rule compile-link an external system past the Rules-may-not-name-Provider edge",
+      "why": "nomos-rules names nomos-connector-coderabbit and nomos-cap-requirement-trace, and each of those crates carries a real provider beside its contract: the first has provider.rs, fetching.rs and translation.rs and reaches GitHub through gh api, the second has provider.rs and reads arbitrary files across the tree. Two questions about this are already settled and neither is the open one. OD-CAPABILITY-015 settles which zone such a crate belongs to, on the criterion that it declares a capability contract, and README.md states in terms that the classification is not made because nomos-rules needs to reach it, which would make the edge vacuous by relabelling whatever a rule turns out to need. OD-CAPABILITY-002 settles when a contract earns its own crate, and its criterion is provider contention: the moment a second provider exists, because the first can change the ceiling, the version or the schema its peer is bound by in a file the peer cannot open. A second consumer is not that, so the argument that nomos-rules reading a contract is itself the second party that forces a split misreads the record, and this item does not assume the split. What neither record reaches is narrower. The dependency model forbids Rules from naming Provider. Bundling puts a provider's implementation inside a crate the Rules zone may name, so nomos-rules acquires a compile-time link to external-system machinery while the declared edge still reads as a prohibition. Nothing has decided whether that is an accepted consequence of the bundling license or a backdoor the license did not intend to open.",
+      "done_when": "A governing record decides what the Rules-may-not-name-Provider edge means when a provider is bundled into a crate the Rules zone may name. It answers, rather than assumes, three things: whether a compile-time link from nomos-rules to external-system machinery is an accepted consequence of OD-CAPABILITY-002's bundling license or something the license did not intend; if it is not accepted, what the remedy is and on what trigger, distinguished from OD-CAPABILITY-002's provider-contention trigger which this is not; and what a future bundled capability contract must satisfy before the Rules zone may name it, stated so that a later reader can apply it without re-deriving this argument. The record is registered rather than only written, both projections are re-rendered from a tree publishing exactly it, and cargo test -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-017.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
