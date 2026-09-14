@@ -70410,6 +70410,38 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P98-THE-BAND-GUARDS-FILE-WALK-COMPARES-AN-EXTENSION-CASE-SENSITIVELY",
+      "title": "The band guard's file walk compares an extension case-sensitively",
+      "why": "Judged_Files in boundaries/manifest_bands.rs selects files with name.ends_with of a dotted extension, which clippy reports as case_sensitive_file_extension_comparisons. It is advisory rather than blocking, since OD-GATE-007 removed the flag that promoted warn-level lints to failures, and it is correct for this tree because every source file here is lowercase. It is still a warning this workspace did not have before P98 added that walk, and the idiomatic form reads the extension through Path rather than comparing a suffix, which states the intent instead of relying on a convention that happens to hold.",
+      "done_when": "The walk selects Rust files by asking the path for its extension rather than by comparing a string suffix, the guard still finds the same population, and cargo clippy over the workspace reports no warning for that line. The band references it guards are still zero outside the two named exemptions.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/boundaries/manifest_bands.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
