@@ -72161,6 +72161,59 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P103-A-BASELINE-ENTRY-IS-TREATED-AS-A-PERPETUAL-EXEMPTION",
+      "title": "A baseline entry is treated as a perpetual exemption for a rule and subject, and continuity is unprovable",
+      "why": "BaselinePolicy matches a finding by rule and subject against a declared list, and a match cannot fail the build. Fixing the finding does not remove the entry, so the same violation returning at the same subject re-matches and is tolerated again, silently. The crate says so itself: no new-code, diff or identity detection distinguishes tolerated debt from a reintroduced or genuinely new finding. That makes a baseline entry behave as a perpetual exemption for a rule and subject pair, when what a repository meant by adopting it was that this occurrence existed when the baseline was taken. Those are different claims and the second is the useful one. Measured 2026-09-14, and the measurement reshapes the work rather than confirming it: continuity cannot be proven with what exists. Finding carries rule, subject, subject_name, applicability, evidence, gate, summary and locations, and no occurrence or snapshot identity. No baseline entry records the snapshot it was taken at. Nothing anywhere keeps a run history, which OD-GATE-022-A deliberately deferred until a real caller needed one. So a single run can see that a finding matches a baseline entry and cannot see whether it persisted since the baseline or was fixed and returned. Building a heuristic over line or diff age would be guessing at exactly the point the product is supposed to be truthful, and the owner's direction is explicit: do not guess persistent debt, and an uncertain continuity state should remain explicit.",
+      "done_when": "A governing record decides what a baseline entry means and what a gate may claim about one. It states that an entry is evidence that an occurrence existed at a named snapshot rather than a standing exemption for a rule and subject pair, and that the two readings differ precisely when a finding is fixed and returns. It records the measurement that continuity is unprovable today -- no occurrence identity on a finding, no snapshot on an entry, no run history -- and decides what a run reports in that state: an explicitly undetermined continuity rather than a persistence claim nothing established, because reporting persistent debt for a finding that may have been reintroduced is the hiding failure a gate exists to prevent. It names what would make continuity provable, in the order the parts would arrive, and states that a line-age or diff heuristic is refused rather than unbuilt, with the reason. It decides nothing about scope by source geometry, which baseline_debt.rs already defers. The record is registered rather than only written, both projections are re-rendered from a tree publishing exactly it, and cargo test -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-030.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.71s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-16521a1362e743b4.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4612ea488031f680.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-8e50c82cd1b18623.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-7c139115530dcaf9.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-930f1bbb112a171d.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-4e60d939d3808124.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-6d055a686bd8bf95.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-9b9a906e2f2cb06a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-70a759c22f1ec589.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-b84e992768820a4a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-75a077603592d3ef.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-a235932dedeaff21.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-b4d692f665383346.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-c59e3651e67c8b16.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-7f3867088e2e3e4a.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789412914,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d4a2bb23fbb5ddc70d60fa695c734bb865bcd27e"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
