@@ -140,10 +140,7 @@ fn Judged_Files(root: &Path) -> Vec<(String, PathBuf)>
 
             if path.is_dir()
             {
-                if name != "target" && name != ".git"
-                {
-                    pending.push(path);
-                }
+                Descend_Into(path, &name, &mut pending);
                 continue;
             }
 
@@ -168,6 +165,24 @@ fn Judged_Files(root: &Path) -> Vec<(String, PathBuf)>
     found.sort();
 
     return found;
+}
+
+/// Queues `path` for the rest of the walk, unless it is one of the two directories the walk
+/// does not descend into.
+///
+/// Extracted from [`Judged_Files`]'s own loop rather than left inline: the skip test sat
+/// inside the directory branch inside the entry loop inside the pending loop, which
+/// `nesting-depth` reports at four levels, and this is the second remedy that rule's own
+/// finding names. `bands.rs`'s `Sort_One_Entry`, the sibling walk in this same directory,
+/// already draws the same boundary for the same loop.
+fn Descend_Into(path: PathBuf, name: &str, pending: &mut Vec<PathBuf>)
+{
+    if name == "target" || name == ".git"
+    {
+        return;
+    }
+
+    pending.push(path);
 }
 
 /// No manifest describes itself by a numeric band.

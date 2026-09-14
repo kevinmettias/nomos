@@ -88,12 +88,17 @@ fn Declared_Revisions() -> BTreeSet<String>
 
         for line in text.lines()
         {
-            if line.contains(XVPE_GIT_URL)
+            // A guard clause rather than a nested `if`: the two conditions one inside the
+            // other put this at four levels of control flow, which `nesting-depth` reports,
+            // and flattening with an early `continue` is the first remedy it names.
+            if !line.contains(XVPE_GIT_URL)
             {
-                if let Some(revision) = Revision_In(line)
-                {
-                    found.insert(revision);
-                }
+                continue;
+            }
+
+            if let Some(revision) = Revision_In(line)
+            {
+                found.insert(revision);
             }
         }
     }

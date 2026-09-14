@@ -33,6 +33,8 @@
 
 use crate::bands::Repository_Root;
 use std::collections::BTreeSet;
+use std::iter::Peekable;
+use std::str::Chars;
 
 /// A bundled crate, and how its own modules divide into the two halves.
 ///
@@ -138,36 +140,58 @@ fn Exports_By_Module(lib: &str) -> Vec<(String, String)>
 
         let module = head.trim().to_string();
 
-        if let Some(open) = tail.find('{')
+        for symbol in Symbols_In(tail)
         {
-            let Some(inner) = tail.get(open.saturating_add(1)..)
-            else
-            {
-                continue;
-            };
-
-            let inner = inner.strip_suffix('}').unwrap_or(inner);
-
-            for symbol in inner.split(',')
-            {
-                let symbol = symbol.trim();
-                if !symbol.is_empty()
-                {
-                    found.push((module.clone(), symbol.to_string()));
-                }
-            }
-        }
-        else
-        {
-            let symbol = tail.rsplit("::").next().unwrap_or(tail).trim();
-            if !symbol.is_empty()
-            {
-                found.push((module.clone(), symbol.to_string()));
-            }
+            found.push((module.clone(), symbol));
         }
     }
 
     return found;
+}
+
+/// Every symbol the tail of one `pub use module::…;` line names — the braces of
+/// `{A, B}` split apart, or the single trailing name of `inner::A`.
+///
+/// Extracted from [`Exports_By_Module`]'s own loop rather than left inline: the brace
+/// branch put a filter inside a loop inside a branch inside a loop, which `nesting-depth`
+/// reports at four levels, and this is the second remedy that rule's own finding names.
+/// Empty names are dropped here rather than at the call site for the same reason.
+fn Symbols_In(tail: &str) -> Vec<String>
+{
+    let Some(open) = tail.find('{')
+    else
+    {
+        let symbol = tail.rsplit("::").next().unwrap_or(tail).trim();
+
+        return Named(symbol);
+    };
+
+    let Some(inner) = tail.get(open.saturating_add(1)..)
+    else
+    {
+        return Vec::new();
+    };
+
+    let inner = inner.strip_suffix('}').unwrap_or(inner);
+
+    return inner
+        .split(',')
+        .map(str::trim)
+        .filter(|symbol| return !symbol.is_empty())
+        .map(str::to_owned)
+        .collect();
+}
+
+/// `symbol` as the one-element list a caller extends its own with, or an empty one when
+/// the name is blank — the single-name half of [`Symbols_In`]'s own answer.
+fn Named(symbol: &str) -> Vec<String>
+{
+    if symbol.is_empty()
+    {
+        return Vec::new();
+    }
+
+    return vec![symbol.to_owned()];
 }
 
 /// Every symbol `source` names through `prefix`, from `prefix::Symbol` and `use prefix::{A, B}`.
@@ -185,36 +209,50 @@ fn Symbols_Named_Through(source: &str, prefix: &str) -> BTreeSet<String>
             break;
         };
 
-        if let Some(tail) = after.strip_prefix('{')
-        {
-            if let Some(close) = tail.find('}')
-            {
-                if let Some(inner) = tail.get(..close)
-                {
-                    for symbol in inner.split(',')
-                    {
-                        let symbol = symbol.trim();
-                        if !symbol.is_empty()
-                        {
-                            found.insert(symbol.to_string());
-                        }
-                    }
-                }
-            }
-        }
-        else
-        {
-            let symbol: String = after.chars().take_while(|c| c.is_alphanumeric() || *c == '_').collect();
-            if !symbol.is_empty()
-            {
-                found.insert(symbol);
-            }
-        }
+        found.extend(Symbols_After(after));
 
         rest = after;
     }
 
     return found;
+}
+
+/// Every symbol named immediately after a `prefix::`, whether the text that follows opens a
+/// `{A, B}` group or is a single bare name.
+///
+/// Extracted from [`Symbols_Named_Through`]'s own loop rather than left inline: three
+/// `if let`s, a loop and a filter one inside another put the innermost line six levels deep,
+/// which `nesting-depth` reports, and this is the second remedy that rule's own finding
+/// names. Each failed match answers an empty list here, which is what the nested form said by
+/// falling out of every branch.
+fn Symbols_After(after: &str) -> Vec<String>
+{
+    let Some(tail) = after.strip_prefix('{')
+    else
+    {
+        let symbol: String = after.chars().take_while(|c| return c.is_alphanumeric() || *c == '_').collect();
+
+        return Named(&symbol);
+    };
+
+    let Some(close) = tail.find('}')
+    else
+    {
+        return Vec::new();
+    };
+
+    let Some(inner) = tail.get(..close)
+    else
+    {
+        return Vec::new();
+    };
+
+    return inner
+        .split(',')
+        .map(str::trim)
+        .filter(|symbol| return !symbol.is_empty())
+        .map(str::to_owned)
+        .collect();
 }
 
 /// `source` with comments removed, leaving string and character literals intact.
@@ -238,32 +276,13 @@ fn Code_Only(source: &str) -> String
     {
         if depth > 0
         {
-            if character == '*' && characters.peek() == Some(&'/')
-            {
-                let _ = characters.next();
-                depth = depth.saturating_sub(1);
-            }
-            else if character == '/' && characters.peek() == Some(&'*')
-            {
-                let _ = characters.next();
-                depth = depth.saturating_add(1);
-            }
+            depth = Nesting_After(character, &mut characters, depth);
             continue;
         }
 
         match character
         {
-            '/' if characters.peek() == Some(&'/') =>
-            {
-                for next in characters.by_ref()
-                {
-                    if next == '\n'
-                    {
-                        out.push('\n');
-                        break;
-                    }
-                }
-            }
+            '/' if characters.peek() == Some(&'/') => Skip_Line_Comment(&mut characters, &mut out),
             '/' if characters.peek() == Some(&'*') =>
             {
                 let _ = characters.next();
@@ -272,46 +291,93 @@ fn Code_Only(source: &str) -> String
             '"' =>
             {
                 out.push(character);
-                while let Some(next) = characters.next()
-                {
-                    out.push(next);
-                    if next == '\\'
-                    {
-                        if let Some(escaped) = characters.next()
-                        {
-                            out.push(escaped);
-                        }
-                    }
-                    else if next == '"'
-                    {
-                        break;
-                    }
-                }
+                Copy_Literal(&mut characters, &mut out, '"');
             }
             '\'' =>
             {
                 out.push(character);
-                while let Some(next) = characters.next()
-                {
-                    out.push(next);
-                    if next == '\\'
-                    {
-                        if let Some(escaped) = characters.next()
-                        {
-                            out.push(escaped);
-                        }
-                    }
-                    else if next == '\'' || next == '\n'
-                    {
-                        break;
-                    }
-                }
+                Copy_Literal(&mut characters, &mut out, '\'');
             }
             _ => out.push(character),
         }
     }
 
     return out;
+}
+
+/// The block-comment nesting depth after reading `character`, while already inside one.
+///
+/// Extracted from [`Code_Only`]'s own loop rather than left inline, the same remedy
+/// `nesting-depth` names for the two helpers below it: the open and close tests sat inside the
+/// depth branch inside the character loop, and every level here is one a reader had to hold to
+/// know whether the next line ran.
+fn Nesting_After(character: char, characters: &mut Peekable<Chars<'_>>, depth: usize) -> usize
+{
+    if character == '*' && characters.peek() == Some(&'/')
+    {
+        let _ = characters.next();
+
+        return depth.saturating_sub(1);
+    }
+
+    if character == '/' && characters.peek() == Some(&'*')
+    {
+        let _ = characters.next();
+
+        return depth.saturating_add(1);
+    }
+
+    return depth;
+}
+
+/// Consumes the rest of a line comment, keeping only the newline that ends it so line numbers
+/// downstream still line up.
+fn Skip_Line_Comment(characters: &mut Peekable<Chars<'_>>, out: &mut String)
+{
+    for next in characters.by_ref()
+    {
+        if next == '\n'
+        {
+            out.push('\n');
+            break;
+        }
+    }
+}
+
+/// Copies a string or character literal through unchanged, `terminator` being the quote that
+/// ends it.
+///
+/// One function for both, where the loop was written twice: the two differed only in which
+/// quote closes them and in the character literal also ending at a newline, which is the
+/// single-quote clause below. Copying rather than skipping is what this module's own doc
+/// calls the dangerous direction -- a `//` inside a string must not blind the scanner to the
+/// rest of that line.
+fn Copy_Literal(characters: &mut Peekable<Chars<'_>>, out: &mut String, terminator: char)
+{
+    while let Some(next) = characters.next()
+    {
+        out.push(next);
+
+        if next == '\\'
+        {
+            Copy_Escaped(characters, out);
+            continue;
+        }
+
+        if next == terminator || (terminator == '\'' && next == '\n')
+        {
+            break;
+        }
+    }
+}
+
+/// Copies the character an escape introduces, if the literal has one left to give.
+fn Copy_Escaped(characters: &mut Peekable<Chars<'_>>, out: &mut String)
+{
+    if let Some(escaped) = characters.next()
+    {
+        out.push(escaped);
+    }
 }
 
 /// The fact-producing symbols of `crate_` that `source` names in code.
@@ -358,13 +424,18 @@ fn Source_Under(root: &std::path::Path) -> String
                 continue;
             }
 
-            if path.extension().is_some_and(|extension| extension == "rs")
+            // A guard clause rather than a nested `if`: the extension test and the read one
+            // inside the other put this at four levels of control flow, which `nesting-depth`
+            // reports, and flattening with an early `continue` is the first remedy it names.
+            if !path.extension().is_some_and(|extension| return extension == "rs")
             {
-                if let Ok(content) = std::fs::read_to_string(&path)
-                {
-                    text.push_str(&content);
-                    text.push('\n');
-                }
+                continue;
+            }
+
+            if let Ok(content) = std::fs::read_to_string(&path)
+            {
+                text.push_str(&content);
+                text.push('\n');
             }
         }
     }
