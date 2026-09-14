@@ -70056,10 +70056,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p98-xvpe",
+        "acquired_at": 1789407057,
+        "lease_expires_at": 1789417857
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -70346,6 +70350,43 @@
         },
         "revision": "3a8f5e17a70a3bd1e7424d8008683688cf7761d3"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P99-A-RULE-THAT-JUDGED-AN-EMPTY-POPULATION-REPORTS-IT-AS-OD-ANALYSIS-012-DECIDED",
+      "title": "Build the per-rule empty-population report OD-ANALYSIS-012 accepted and deliberately left unbuilt",
+      "why": "OD-ANALYSIS-012 is accepted at version 1 and its Status section states the answer completely: an empty population is a per-rule fact reported in CheckOutcome::Judged itself, Advisory and Claim-flipping the same way ProviderUnavailable already is, computed from population sizes run_context.rs already holds. Its own What This Record Does Not Do section then says No code moves here, and names the new field, the count computed in run_context.rs and Claim_Of's extension precisely enough for a follow-up item's territory to be declared completely. That follow-up item does not exist. Grepped 2026-09-14: no ledger item names an empty population or OD-ANALYSIS-012, and nothing under crates/orchestration/nomos-check-orchestration names a population at all. So the decision is governing and the mechanism is absent, which is the gap between a record and a build rather than a question needing another record. The present instance is real and named by the record: the four rules P43-SCRIPT-RULES-CANNOT-FIRE measured all report an empty population in this tree today, and a reader cannot tell any of them apart from a rule that judged a real population and found it clean. Note what is already built and is NOT this: crates/host/nomos-cli/src/vacuity.rs satisfies OD-GATE-003 and guards the exit code main.rs produces when a whole group saw no subject at all. That is a per-run guarantee at the CLI boundary. This item is the per-rule fact inside a run that did see subjects, which vacuity.rs's own What this does not cover section puts outside itself.",
+      "done_when": "CheckOutcome::Judged carries the per-rule empty-population fact OD-ANALYSIS-012 names, computed in run_context.rs from population sizes it already holds, and Claim_Of reads it so an empty population flips the claim to Incomplete exactly as a coverage-debt finding already does. No variant is added to Claim and no host renderer changes: Claim is a two-variant Copy enum rendered through Display, so the flip reaches the CLI with no edit there, and any discovery that a host must change means the territory was wrong and the item is declined and re-authored rather than widened. Applicability is not touched and gains no variant, which the record forbids by name: every existing variant presupposes a subject this fact does not have. tests/contract/surface/nomos-check-orchestration.txt is re-blessed from a clean worktree for the changed public surface. A test drives a rule over a deliberately empty population and asserts it is reported apart from a rule that judged a real population clean, and is confirmed able to fail by giving that rule a real population and observing the two stop differing. The four rules P43-SCRIPT-RULES-CANNOT-FIRE measured are checked against the built mechanism and the resulting count is stated in the commit. cargo test --no-fail-fast -p nomos-check-orchestration passes, and so does the workspace self-check.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/examined/check_outcome.rs",
+          "crates/orchestration/nomos-check-orchestration/src/examined/claim.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
