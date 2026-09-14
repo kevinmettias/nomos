@@ -70986,10 +70986,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p99-preservation",
+        "acquired_at": 1789409334,
+        "lease_expires_at": 1789420134
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -71003,6 +71007,62 @@
         "timeout_seconds": 1800
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P102-MATERIALIZATION-RESTATES-THE-DEMAND-DESCRIPTORS-ALREADY-DECLARE",
+      "title": "Materialization restates the demand the descriptors already declare, and the two have drifted",
+      "why": "A rule declares the fact families it needs. RuleDescriptor.requires names one of twelve RequiredFact values per rule, and rule_reassessment_cache.rs and declared_rules.rs both read it as authoritative. Materialization does not. run_context.rs decides what to materialize through hand-written guards of the form Is_Rule_Selected(A) or Is_Rule_Selected(B), one per fact family, restating the same rule-to-fact relation in a second place. Two representations of one relation drift, and these have. Measured 2026-09-14 by parsing DESCRIPTORS and the guards and comparing them: six rules declare RequiredFact::LimitsPolicy -- PARAMETER_COUNT, GO_HELPERS_PACKAGE_FIVE_INPUTS, FILE_SIZE_JUSTIFICATION_TRIGGER, ONE_THOUSAND_LINE_HARD_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER and NESTING_DEPTH -- and the guard names five. NESTING_DEPTH appears in no guard in that file at all. A full run hides it, because the other five rules are selected and the fact is materialized anyway; a narrowed selection does not, and narrowing is exactly what RuleSelector and gate run --rule give an end user. What the rule then does is the part that matters: Check_Nesting_Depth calls Resolve_Limit with the absent fact and falls back to the built-in MAX_NESTING_DEPTH, so it silently judges against the default limit rather than the one the repository configured, reports no MissingCapability, and produces no finding saying so. This is the same duplicate-authority shape OD-GATE-020 measured going false silently twice between the gate registry and the composed rule list, which OD-RULES-027 closed by deriving one from the other rather than reconciling them by hand again.",
+      "done_when": "Materialization derives its demand from RuleDescriptor.requires rather than restating it. For a run, the fact families materialized are the union of the RequiredFact values the selected rules declare, and the hand-written per-family Is_Rule_Selected guards that encoded the same relation are gone rather than left beside the derivation as a second authority. Two controls in both directions: a run selecting a rule proves the family that rule declares is materialized, and a run selecting rules that declare a family proves a family none of them declares is not materialized. NESTING_DEPTH selected alone materializes the limits-policy fact, which is the drift this closes, and that case is a test rather than a claim. Nothing reads cache state, provider cost or whether a fact is already materialized in deciding what to materialize -- the derivation is a union over declarations and nothing else, which is what keeps it on the near side of the demand planner OD-RULES-009 has declined across eight rounds and which run_context.rs's own documentation draws the line at. Judged_Sources stays where it is, its own doc giving the reason a capability slice is an orchestration concept. cargo test -p nomos-check-orchestration -p nomos-contract-tests passes and the gate lint step is clean.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ized + debuginfo] target(s) in 1.89s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-bef4f2554f9d9a4d.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-c8f6c1cc59d9702b.exe)\n     Running tests\\incremental_equivalence.rs (target\\debug\\deps\\incremental_equivalence-d6ba972a7e400f40.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-35d4a2620f104edf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-16521a1362e743b4.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4612ea488031f680.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-8e50c82cd1b18623.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-7c139115530dcaf9.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-930f1bbb112a171d.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-4e60d939d3808124.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-6d055a686bd8bf95.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-9b9a906e2f2cb06a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-70a759c22f1ec589.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-b84e992768820a4a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-75a077603592d3ef.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-a235932dedeaff21.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-b4d692f665383346.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-c59e3651e67c8b16.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-7f3867088e2e3e4a.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789409567,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6d5a11bc71ad7d67cd0badfa57a9dfbfb6690073"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

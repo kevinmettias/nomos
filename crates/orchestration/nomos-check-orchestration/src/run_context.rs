@@ -277,17 +277,20 @@ fn Materialize_Capabilities<Launcher: ProcessLauncher, Fs: FileSystem, Env: Envi
     changed: &mut Vec<RequiredFact>,
 ) -> CapabilityMaterialization
 {
-    let dependencies = Tracking(env, changed, RequiredFact::DependencyEdges, |env| return Materialize_Dependency_Section(env, selected));
-    let lint = Tracking(env, changed, RequiredFact::LintDiagnostics, |env| return Materialize_Lint_Section(env, selected));
-    let policy = Tracking(env, changed, RequiredFact::DependencyPolicy, |env| return Materialize_Policy_Section(env, selected));
-    Tracking(env, changed, RequiredFact::Reachability, |env| Materialize_Reachability_Section(sources, env, selected));
-    Tracking(env, changed, RequiredFact::NamingPolicy, |env| Materialize_Naming_Policy_Section(env, selected));
-    Tracking(env, changed, RequiredFact::LimitsPolicy, |env| Materialize_Limits_Policy_Section(env, selected));
-    Tracking(env, changed, RequiredFact::ScriptingPolicy, |env| Materialize_Scripting_Policy_Section(env, selected));
-    Tracking(env, changed, RequiredFact::GoalsPolicy, |env| Materialize_Goals_Policy_Section(env, selected));
-    Tracking(env, changed, RequiredFact::WordsPolicy, |env| Materialize_Words_Policy_Section(env, selected));
-    Tracking(env, changed, RequiredFact::RequirementTrace, |env| Materialize_Requirement_Trace_Section(env, selected));
-    let review = Tracking(env, changed, RequiredFact::ReviewFindings, |_env| return Materialize_Review_Section(selected));
+    let demanded = Demanded_Families(selected);
+    let demanded = demanded.as_slice();
+
+    let dependencies = Tracking(env, changed, RequiredFact::DependencyEdges, |env| return Materialize_Dependency_Section(env, demanded));
+    let lint = Tracking(env, changed, RequiredFact::LintDiagnostics, |env| return Materialize_Lint_Section(env, demanded));
+    let policy = Tracking(env, changed, RequiredFact::DependencyPolicy, |env| return Materialize_Policy_Section(env, demanded));
+    Tracking(env, changed, RequiredFact::Reachability, |env| Materialize_Reachability_Section(sources, env, demanded));
+    Tracking(env, changed, RequiredFact::NamingPolicy, |env| Materialize_Naming_Policy_Section(env, demanded));
+    Tracking(env, changed, RequiredFact::LimitsPolicy, |env| Materialize_Limits_Policy_Section(env, demanded));
+    Tracking(env, changed, RequiredFact::ScriptingPolicy, |env| Materialize_Scripting_Policy_Section(env, demanded));
+    Tracking(env, changed, RequiredFact::GoalsPolicy, |env| Materialize_Goals_Policy_Section(env, demanded));
+    Tracking(env, changed, RequiredFact::WordsPolicy, |env| Materialize_Words_Policy_Section(env, demanded));
+    Tracking(env, changed, RequiredFact::RequirementTrace, |env| Materialize_Requirement_Trace_Section(env, demanded));
+    let review = Tracking(env, changed, RequiredFact::ReviewFindings, |_env| return Materialize_Review_Section(demanded));
 
     return Capability_Materialization_Of(dependencies, lint, policy, review);
 }
@@ -330,12 +333,10 @@ struct MaterializationEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem,
 /// an empty result otherwise.
 fn Materialize_Dependency_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    selected: &[RuleId],
+    demanded: &[RequiredFact],
 ) -> DependencyMaterialization
 {
-    if Is_Rule_Selected(selected, DEPENDENCY_DIRECTION)
-        || Is_Rule_Selected(selected, DEPENDENCY_COMPLETENESS)
-        || Is_Rule_Selected(selected, WRITE_AUTHORITY)
+    if demanded.contains(&RequiredFact::DependencyEdges)
     {
         return Materialize_Dependencies(env.root, env.context, env.store, Subprocess { launcher: env.launcher, environment: env.environment });
     }
@@ -347,10 +348,10 @@ fn Materialize_Dependency_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env
 /// result otherwise.
 fn Materialize_Lint_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    selected: &[RuleId],
+    demanded: &[RequiredFact],
 ) -> LintMaterialization
 {
-    if Is_Rule_Selected(selected, LINT_DIAGNOSTICS)
+    if demanded.contains(&RequiredFact::LintDiagnostics)
     {
         return Materialize_Lint(env.root, env.context, env.store, Subprocess { launcher: env.launcher, environment: env.environment });
     }
@@ -362,10 +363,10 @@ fn Materialize_Lint_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Envi
 /// empty result otherwise.
 fn Materialize_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    selected: &[RuleId],
+    demanded: &[RequiredFact],
 ) -> PolicyMaterialization
 {
-    if Is_Rule_Selected(selected, DEPENDENCY_POLICY)
+    if demanded.contains(&RequiredFact::DependencyPolicy)
     {
         return Materialize_Policy(env.root, env.context, env.store, Subprocess { launcher: env.launcher, environment: env.environment });
     }
@@ -385,9 +386,9 @@ fn Materialize_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: En
 /// calls this the identical way, through a closure that ignores the environment it is
 /// handed -- the same `|_reader|` idiom this crate's own text-only `ComposedRule` entries
 /// already use for the identical reason.
-fn Materialize_Review_Section(selected: &[RuleId]) -> ReviewMaterialization
+fn Materialize_Review_Section(demanded: &[RequiredFact]) -> ReviewMaterialization
 {
-    if Is_Rule_Selected(selected, REVIEW_FINDING)
+    if demanded.contains(&RequiredFact::ReviewFindings)
     {
         return Materialize_Review();
     }
@@ -401,10 +402,10 @@ fn Materialize_Review_Section(selected: &[RuleId]) -> ReviewMaterialization
 fn Materialize_Reachability_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     sources: &[SourceFile],
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    selected: &[RuleId],
+    demanded: &[RequiredFact],
 )
 {
-    if Is_Rule_Selected(selected, UNREAD_REACHES_FINDING)
+    if demanded.contains(&RequiredFact::Reachability)
     {
         Materialize_Reachability(sources, env.context, env.store);
     }
@@ -422,16 +423,10 @@ fn Materialize_Reachability_Section<Launcher: ProcessLauncher, Fs: FileSystem, E
 /// runs.
 fn Materialize_Naming_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    selected: &[RuleId],
+    demanded: &[RequiredFact],
 )
 {
-    let feeds_naming_policy = Is_Rule_Selected(selected, NAMING_CONVENTION)
-        || Is_Rule_Selected(selected, DATA_NAMES_STAY_LOWER_SNAKE)
-        || Is_Rule_Selected(selected, EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE)
-        || Is_Rule_Selected(selected, UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER)
-        || Is_Rule_Selected(selected, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE);
-
-    if feeds_naming_policy
+    if demanded.contains(&RequiredFact::NamingPolicy)
     {
         Materialize_Naming_Policy(env.root, env.context, env.store, env.filesystem);
     }
@@ -446,16 +441,10 @@ fn Materialize_Naming_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, 
 /// thresholds belong to.
 fn Materialize_Limits_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    selected: &[RuleId],
+    demanded: &[RequiredFact],
 )
 {
-    let feeds_limits_policy = Is_Rule_Selected(selected, FILE_SIZE_JUSTIFICATION_TRIGGER)
-        || Is_Rule_Selected(selected, ONE_THOUSAND_LINE_HARD_TRIGGER)
-        || Is_Rule_Selected(selected, FIVE_HUNDRED_LINE_REVIEW_TRIGGER)
-        || Is_Rule_Selected(selected, PARAMETER_COUNT)
-        || Is_Rule_Selected(selected, GO_HELPERS_PACKAGE_FIVE_INPUTS);
-
-    if feeds_limits_policy
+    if demanded.contains(&RequiredFact::LimitsPolicy)
     {
         Materialize_Limits_Policy(env.root, env.context, env.store, env.filesystem);
     }
@@ -470,10 +459,10 @@ fn Materialize_Limits_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, 
 /// never fire.
 fn Materialize_Scripting_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    selected: &[RuleId],
+    demanded: &[RequiredFact],
 )
 {
-    if Is_Rule_Selected(selected, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS)
+    if demanded.contains(&RequiredFact::ScriptingPolicy)
     {
         Materialize_Scripting_Policy(env.root, env.context, env.store, env.filesystem);
     }
@@ -486,10 +475,10 @@ fn Materialize_Scripting_Policy_Section<Launcher: ProcessLauncher, Fs: FileSyste
 /// here to gate on but the rule's own selection.
 fn Materialize_Goals_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    selected: &[RuleId],
+    demanded: &[RequiredFact],
 )
 {
-    if Is_Rule_Selected(selected, GOALS_AND_PARTS_LINE_UP)
+    if demanded.contains(&RequiredFact::GoalsPolicy)
     {
         Materialize_Goals_Policy(env.root, env.context, env.store, env.filesystem);
     }
@@ -501,10 +490,10 @@ fn Materialize_Goals_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, E
 /// shape [`Materialize_Goals_Policy_Section`] has one function above.
 fn Materialize_Words_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    selected: &[RuleId],
+    demanded: &[RequiredFact],
 )
 {
-    if Is_Rule_Selected(selected, ABBREVIATIONS)
+    if demanded.contains(&RequiredFact::WordsPolicy)
     {
         Materialize_Words_Policy(env.root, env.context, env.store, env.filesystem);
     }
@@ -518,10 +507,10 @@ fn Materialize_Words_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, E
 /// have one function above.
 fn Materialize_Requirement_Trace_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    selected: &[RuleId],
+    demanded: &[RequiredFact],
 )
 {
-    if Is_Rule_Selected(selected, REQUIREMENT_TRACE_STALENESS)
+    if demanded.contains(&RequiredFact::RequirementTrace)
     {
         Materialize_Requirement_Trace(env.root, env.context, env.store, env.filesystem);
     }
@@ -793,6 +782,46 @@ pub(crate) fn Recognized_Sources(sources: &[SourceFile]) -> Vec<SourceFile>
 /// Whether `rule` is one `selected` asks for -- every rule when `selected` is empty, the same
 /// "empty is everything" default `nomos_gate_orchestration::RuleSelector::include` already
 /// has.
+/// The fact families the selected rules declare they need.
+///
+/// The union of [`nomos_rules::RuleDescriptor::requires`] over the selected rules, and
+/// nothing else. This is the one place the rule-to-fact relation is read, rather than the
+/// second place it used to be written: each section above used to re-derive "is any rule
+/// that feeds on this family selected" from a hand-written list of rule identifiers, which
+/// is the same relation `DESCRIPTORS` already declares. Two statements of one relation
+/// drift, and these had -- six rules declare `RequiredFact::LimitsPolicy` and the guard
+/// named five, so `NESTING_DEPTH` selected without its five siblings ran against
+/// `MAX_NESTING_DEPTH`'s built-in default rather than the limit the repository configured,
+/// silently. `OD-RULES-027` closed the identical shape between the gate registry and the
+/// composed rule list by deriving one from the other; this is that move, one axis over.
+///
+/// It is a union over declarations and nothing more. It reads no cache state, no provider
+/// cost, no dependency structure between families, and never asks whether a fact is already
+/// materialized -- the line this file's own documentation draws, and the point past which
+/// it would become the demand planner `OD-RULES-009` has declined across eight rounds.
+fn Demanded_Families(selected: &[RuleId]) -> Vec<RequiredFact>
+{
+    let mut demanded: Vec<RequiredFact> = Vec::new();
+
+    for descriptor in DESCRIPTORS
+    {
+        if !Is_Rule_Selected(selected, descriptor.id)
+        {
+            continue;
+        }
+
+        for family in descriptor.requires
+        {
+            if !demanded.contains(family)
+            {
+                demanded.push(*family);
+            }
+        }
+    }
+
+    return demanded;
+}
+
 fn Is_Rule_Selected(selected: &[RuleId], rule: &str) -> bool
 {
     return selected.is_empty() || selected.iter().any(|id| return id.As_Str() == rule);
@@ -943,5 +972,114 @@ mod tests
         let recognized = Recognized_Sources(&sources);
 
         assert_eq!(recognized.first().expect("one source in, one source out").preferred_syntax_provider, None);
+    }
+}
+
+#[cfg(test)]
+mod demand_tests
+{
+    use super::Demanded_Families;
+    use nomos_contracts::RuleId;
+    use nomos_rules::{RequiredFact, DESCRIPTORS};
+
+    /// A rule's declared family is demanded when that rule is selected.
+    ///
+    /// `NESTING_DEPTH` is the case, not an example. Its descriptor declares
+    /// `RequiredFact::LimitsPolicy` and the hand-written guard this derivation replaced named
+    /// five rules that did not include it, so selecting it alone materialized no limits-policy
+    /// fact and `Check_Nesting_Depth` fell back to `MAX_NESTING_DEPTH`'s built-in default
+    /// instead of the limit the repository configured -- silently, with no finding and no
+    /// `MissingCapability`. A full run hid it, because its five siblings were selected too.
+    #[test]
+    fn Test_A_Rule_Selected_Alone_Should_Demand_The_Family_It_Declares()
+    {
+        let demanded = Demanded_Families(&[RuleId::New(nomos_rules::NESTING_DEPTH)]);
+
+        assert!(
+            demanded.contains(&RequiredFact::LimitsPolicy),
+            "NESTING_DEPTH declares RequiredFact::LimitsPolicy and selecting it alone demanded \
+             {demanded:?}. This is the drift the derivation exists to close: a rule that runs \
+             without the fact it declared judges against a built-in default and says nothing."
+        );
+    }
+
+    /// A family no selected rule declares is not demanded.
+    ///
+    /// The converse control. Without it the assertion above is satisfied by a derivation that
+    /// demands everything always, which would be correct and useless -- every run would pay
+    /// for every provider, and the selection `RuleSelector` exists to express would buy
+    /// nothing.
+    #[test]
+    fn Test_A_Family_No_Selected_Rule_Declares_Should_Not_Be_Demanded()
+    {
+        let demanded = Demanded_Families(&[RuleId::New(nomos_rules::NO_TRAILING_WHITESPACE)]);
+
+        assert!(
+            demanded.is_empty(),
+            "NO_TRAILING_WHITESPACE declares no required fact -- its descriptor's requires is \
+             empty -- and selecting it alone demanded {demanded:?}. A derivation that demands \
+             a family nobody asked for makes every narrowed run pay for every provider."
+        );
+    }
+
+    /// The demand is exactly the union over the selected rules' declarations.
+    ///
+    /// Checked against `DESCRIPTORS` itself rather than against a list written here, so a
+    /// rule whose declaration changes moves this with it and no second statement of the
+    /// relation can appear for the first one to drift against.
+    #[test]
+    fn Test_The_Demand_Should_Be_The_Union_Of_What_The_Selected_Rules_Declare()
+    {
+        for descriptor in DESCRIPTORS
+        {
+            let demanded = Demanded_Families(&[RuleId::New(descriptor.id)]);
+
+            for family in descriptor.requires
+            {
+                assert!(
+                    demanded.contains(family),
+                    "{} declares {family:?} and selecting it demanded {demanded:?}",
+                    descriptor.id
+                );
+            }
+
+            assert!(
+                demanded.len() == descriptor.requires.len(),
+                "{} declares {:?} and selecting it alone demanded {demanded:?} -- a family \
+                 nothing selected asked for",
+                descriptor.id,
+                descriptor.requires
+            );
+        }
+    }
+
+    /// Selecting everything demands every family any rule declares, once each.
+    #[test]
+    fn Test_Selecting_Everything_Should_Demand_Each_Family_Once()
+    {
+        let demanded = Demanded_Families(&[]);
+
+        for descriptor in DESCRIPTORS
+        {
+            for family in descriptor.requires
+            {
+                assert!(
+                    demanded.contains(family),
+                    "{} declares {family:?} and a run selecting everything demanded {demanded:?}",
+                    descriptor.id
+                );
+            }
+        }
+
+        let mut seen = Vec::new();
+        for family in &demanded
+        {
+            assert!(
+                !seen.contains(&family),
+                "{family:?} appears twice in {demanded:?}, so its section would be considered \
+                 more than once for one run"
+            );
+            seen.push(family);
+        }
     }
 }
