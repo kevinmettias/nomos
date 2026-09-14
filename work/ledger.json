@@ -74139,6 +74139,40 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P105-THE-SKIP-RATIO-UNDER-THE-PRODUCTION-SELECTION-IS-MEASURED-AND-UNASSERTED",
+      "title": "The one test of the reassessment cache runs a one-rule selection, so the skip every real caller gets is unasserted",
+      "why": "Measured at 0c3b1013 and recorded only in that commit message. Under the selection the LSP actually passes, the empty one meaning all 71 composed rules, a retained cache over two sources skips 52 of 71 rule evaluations on an unchanged second call: Recorded went 71, then plus 19, then plus 68 after one of the two sources was edited. Nothing asserts any of that. Test_A_Retained_Cache_Should_Skip_A_Rule_Whose_Families_Did_Not_Move, the only test of the cache, selects COMPLETENESS_MIRROR alone and its own doc says why -- a rule reading a policy family would prove less there, because those sections re-materialize every call. That is the right choice for the claim it makes and it leaves the production claim unmade. A regression that put SyntaxItems into changed unconditionally would take the skip from 52 to 0 and leave that test, the LSP suite, and every equivalence test in this workspace green, because skipping and re-running a deterministic rule produce identical findings. The figure is also the only evidence the cache is worth retaining at all: 0c3b1013 established that no observable outside the crate can distinguish a skipped rule from a re-run one, so if this number is not asserted inside the crate it is asserted nowhere.",
+      "done_when": "A test in nomos-check-orchestration's own test module runs a retained RuleReassessmentCache over the empty selection, which is what every composed rule means and what NomosDiagnosticProvider passes, across the same three calls the existing narrow test uses: cold, unchanged, then one of two sources edited. It asserts that the unchanged call runs strictly fewer rules than the cold one, read from Recorded, and that the edited call runs more than the unchanged one. It does not pin 71, 19 or 68: the composed table grows, and a test that fails when a rule is added fails for the wrong reason. Both assertions are observed failing on a real violation before the item finishes -- the honest mutation is making the cache unreachable from the call, since a cache threaded and never consulted is exactly the regression this guards, and the mutation is restored byte-identically. The existing narrow test stays as it is and is not generalized into this one: it proves a different thing, that a named rule with one required family skips, and merging them would leave neither claim legible. No mechanism is added beyond the test.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "--lib"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
