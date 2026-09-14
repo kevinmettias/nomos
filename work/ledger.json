@@ -70216,6 +70216,41 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P99-THE-SECOND-REVIEW-PROVIDER-CONDITION-DOES-NOT-SAY-WHAT-COUNTS-AS-A-PROVIDER",
+      "title": "OD-CONNECTOR-004 revisit condition does not distinguish a second provider from a second transport",
+      "why": "OD-CONNECTOR-004 declines a provider-comparison mechanism until a second real review provider exists, and does not say what counts as one. The unmerged track-c-external-kwb branch carries nomos-connector-github, whose own commit message calls it ARC-CONNECTOR-001s first real connector. A session finding that branch can satisfy the revisit condition for the wrong reason, because review artifacts flow through it. Acquiring or publishing review artifacts is a transport role; producing review judgments by independently analyzing a change under the canonical review capability is a provider role, and only the second establishes the plurality the declined mechanism needs. The ambiguity is one sentence wide and is cheaper to close than the wrong reopening it invites.",
+      "done_when": "OD-CONNECTOR-004 is amended to version 2 and states, for its revisit condition, that a second review provider means an independent analyzer capable of resolving the same canonical review capability, and that a connector, transport or artifact acquisition path does not constitute provider plurality merely because it carries review artifacts. Nothing else in the record changes, no mechanism is built, and both required projections are re-rendered from a tree holding exactly the amending commit record set.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
