@@ -72837,6 +72837,39 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P103-THE-TASK-SKILL-TELLS-AN-AUTHOR-TO-RESERVE-FILES-IT-WILL-EDIT-AND-NOT-FILES-THE-PREDICATE-READS",
+      "title": "The task skill's territory guidance names artifacts to reserve and not the rule that finds them, and two items were declined in one session for the gap",
+      "why": ".claude/skills/nomos-task/SKILL.md step 3 is the only place that tells an author how to choose territory. It lists four artifacts to reserve in addition to the code being edited -- a record identifier and its registration, a surface snapshot, and corpus_gates.rs -- and those four are right. What it does not state is the rule that would have found them, or found anything else. Measured 2026-09-14: two items were declined in one day for territory, one level apart. P96 reserved two files while its eight failures lived in five. P102, authored by the session that had just declined P96 for exactly this, reserved all five failing test files and none of the data they read -- family_counts/measurement.rs takes every expectation from crate::register, which is an include_str! of tests/corpus/families/counts.json, the file actually holding the numbers, unreserved by it and by every open item. Both authors grepped. The first grepped too few failure sites; the second grepped every failure site and stopped there. A skill that lists artifacts teaches the first author nothing about the second's mistake, because the missing file was not any of the four kinds it names. The rule that does find it is that territory follows the acceptance predicate's dependency cone rather than the observed failure sites: the predicate names a test, the test reads inputs, and any input whose modification may be required to satisfy the predicate is territory. A file that merely reads the same input is not -- P103 named restoration.rs as exactly that, verified it did not regress, and needed no widening.",
+      "done_when": "Step 3 of .claude/skills/nomos-task/SKILL.md states the dependency-cone rule alongside the four artifacts it already lists, and says what to grep for -- include_str!, include_bytes!, read_to_string, env::var, and any crate-local register or fixture module -- so an author can execute it rather than infer it. It keeps the existing four, which are instances of the same rule rather than a competing list. It distinguishes an input that may need modifying, which is territory, from a second consumer of that input, which is a non-regression check named in the done_when and grounds for declining rather than widening; P103's handling of restoration.rs is the worked example and P102's decline is what the rule costs when it is missed. It adds no mechanism and no automated dependency analysis: two instances justify stating a rule, not building one to enforce it, and the skill says that explicitly so the next author does not read the absence as an oversight. The skill's own contract test, if it has one, stays green, and the file is not lengthened past what one author reads before claiming -- a rule nobody finishes reading is the defect OD-AGENT-001 already records about instruction files.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-task/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
