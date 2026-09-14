@@ -124,6 +124,18 @@ that package was any part of its claim.
 No mechanism checks this, for the reason given above: two instances justify a rule and not a
 predicate-scope validator, a scope algebra, or automatic dependency analysis.
 
+Whether it has held since is the evidence for leaving it unenforced, so it is recorded rather
+than assumed. Items authored under this rule state the exclusion in the `done_when` itself --
+which obligations the predicate deliberately does not reach, and whose they are instead -- so
+the scope is declared where it can be disagreed with rather than discovered at `finish`. That
+is checkable on the board. What is deliberately not recorded beside it is a count of items
+declined for predicate scope: a decline is stored as a holder and a timestamp and the reason
+is not kept, so that number cannot be had from the board and a stated one would be a figure
+nobody could check -- which is the failure this whole step is about, one level up.
+
+The rule earns a mechanism the day an item declares a scope it then cannot honour. Until one
+does, a validator would be enforcing a discipline that is not being broken.
+
 ## 4. Claim it, and branch on the exit code
 
 **Exit 0 is the only thing that means you hold it.** The listing column is a snapshot and

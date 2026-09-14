@@ -74672,14 +74672,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p103scope",
-        "acquired_at": 1789430175,
-        "lease_expires_at": 1789437375
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -74692,7 +74688,30 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 14 tests\ntest Test_The_Contract_Should_Name_The_Selection_Authority_Rather_Than_Instruct_Picking ... ok\ntest checks::Test_The_Contract_Should_Name_Every_Authority_It_Routes_To ... ok\ntest checks::Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory ... ok\ntest checks::Test_The_Contract_Should_Stay_Inside_Its_Line_Budget ... ok\ntest checks::Test_The_Repository_Should_Have_An_Agent_Front_Door ... ok\ntest checks::Test_The_Adapter_Should_Import_The_Contract_Rather_Than_Repeat_It ... ok\ntest Test_A_Cited_Contract_Step_Should_Still_Say_What_Is_Quoted_From_It ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Ledger_Verb_Reference ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Gate_Command_List ... ok\ntest checks::Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard ... ok\ntest checks::Test_Every_Path_The_Harness_Names_Should_Exist ... ok\ntest controls::Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It ... ok\ntest checks::Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.58s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-cb6ddcb0c46d55b5.exe)\n",
+        "verified_at": 1789430214,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b316ffb0c87c4558b3d4d30f8c6a1bbfa9ecdfba"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
