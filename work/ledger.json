@@ -71262,7 +71262,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -71277,7 +71277,29 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": " Running tests\\unchanged_run_economy.rs (F:/repos/render-p101-target\\debug\\deps\\unchanged_run_economy-98dd2680e6d448c2.exe)\n     Running unittests src\\lib.rs (F:/repos/render-p101-target\\debug\\deps\\nomos_contract_tests-16521a1362e743b4.exe)\n     Running tests\\agent_harness.rs (F:/repos/render-p101-target\\debug\\deps\\agent_harness-4612ea488031f680.exe)\n     Running tests\\boundaries\\main.rs (F:/repos/render-p101-target\\debug\\deps\\boundaries-8e50c82cd1b18623.exe)\n     Running tests\\completeness_universes\\main.rs (F:/repos/render-p101-target\\debug\\deps\\completeness_universes-7c139115530dcaf9.exe)\n     Running tests\\corpus_gates.rs (F:/repos/render-p101-target\\debug\\deps\\corpus_gates-930f1bbb112a171d.exe)\n     Running tests\\crossing_cold.rs (F:/repos/render-p101-target\\debug\\deps\\crossing_cold-4e60d939d3808124.exe)\n     Running tests\\determinism_declarations.rs (F:/repos/render-p101-target\\debug\\deps\\determinism_declarations-6d055a686bd8bf95.exe)\n     Running tests\\determinism_vocabulary.rs (F:/repos/render-p101-target\\debug\\deps\\determinism_vocabulary-9b9a906e2f2cb06a.exe)\n     Running tests\\public_surface\\main.rs (F:/repos/render-p101-target\\debug\\deps\\public_surface-70a759c22f1ec589.exe)\n     Running tests\\record_citation.rs (F:/repos/render-p101-target\\debug\\deps\\record_citation-b84e992768820a4a.exe)\n     Running tests\\requirement_trace\\main.rs (F:/repos/render-p101-target\\debug\\deps\\requirement_trace-75a077603592d3ef.exe)\n     Running tests\\rule_composition.rs (F:/repos/render-p101-target\\debug\\deps\\rule_composition-a235932dedeaff21.exe)\n     Running tests\\rule_contract_citation.rs (F:/repos/render-p101-target\\debug\\deps\\rule_contract_citation-b4d692f665383346.exe)\n     Running tests\\rule_descriptors.rs (F:/repos/render-p101-target\\debug\\deps\\rule_descriptors-c59e3651e67c8b16.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/render-p101-target\\debug\\deps\\toolchain_floor-7f3867088e2e3e4a.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789411176,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -71364,10 +71386,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p102",
+        "acquired_at": 1789410974,
+        "lease_expires_at": 1789425374
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -71601,6 +71627,139 @@
           "--no-fail-fast"
         ],
         "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-A-TEMPORARY-WAIVER-CLAIMS-A-BOUNDED-PERIOD-AND-NEVER-ENDS-3",
+      "title": "A temporary waiver claims a bounded period and nothing can make it stop applying",
+      "why": "SuppressionDisposition::TemporaryWaiver documents itself as accepted for a bounded period, expected to be revisited, and distinguishes itself from AcceptedBaselineDebt as the one which names an end date this does not. No end date exists. Suppression carries rule, subject, disposition, rationale and owner and nothing else, and no file under policy/ reads a clock, a deadline or an expiry, so a TemporaryWaiver is behaviourally identical to a FormalRiskAcceptance: it suppresses forever. That is worse than a missing feature, because the type name and its documentation promise a behaviour the engine does not implement, so a repository that tolerated something temporarily has tolerated it permanently and was told otherwise. The declared file refuses an expires key today under deny_unknown_fields, so an author reaching for one is told no rather than silently dropped, which is honest and is evidence the key has been wanted. baseline_debt.rs already records the order this should follow: the key appears on the declared entry first, and the domain type grows a field to carry it. The evaluation moment must be supplied by the caller rather than read from a clock inside policy logic, so that replaying a past run answers as that run did; GateEnvironment is where it belongs, because Run_Gate is already at this workspace's four-parameter limit and an execution fact does not belong in the caller-authored GateCommand, which is policy.",
+      "done_when": "A TemporaryWaiver expires. Suppression carries an expiry, the declared entry in nomos-gate.json accepts it, a waiver written without one is refused rather than accepted as permanent, and any other disposition carrying one is refused rather than silently ignoring it. Evaluation reads the moment the caller supplied through GateEnvironment, and every construction site of that value in this workspace supplies one -- the full population rather than the six a truncated search showed, which is nine files across gate orchestration, workflow orchestration, both hosts and two test crates. A waiver before its expiry suppresses; at or after it does not; and the second case is visible as a lapsed disposition rather than as a suppression that quietly stopped matching, because a reader must be able to tell a finding blocking from an expired waiver from one never waived. The status is an enum in its own module, the file-name rule reporting a second public type in a file that exports no free function, and its documentation says what a third state would mean and why it is not invented before something produces it. Controls in both directions and at the boundary instant: before, exactly at, and after. cargo test -p nomos-gate-orchestration -p nomos-workflow-orchestration -p nomos-cli -p nomos-api -p nomos-contract-tests passes, the public surface snapshot is updated in the same commit, and the gate lint step is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/tests/check_orchestration_seam.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_status.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-api/src/response/gate_run_response.rs",
+          "crates/host/nomos-api/src/response/gate_explain_response.rs",
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by -4, reserving both grouping values, all twelve construction sites and both surface snapshots."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "fable-p103",
+          "reason": "Second ripple found: nomos-workflow-orchestration's Dispatched_Gate is already at this workspace's four-parameter limit, so the evaluation moment must ride in its Platform grouping the same way it rides in GateEnvironment. That adds three Platform construction sites and a second public-surface snapshot.",
+          "abandoned_at": 1789410978
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p103",
+        "declined_at": 1789410978
+      }
+    },
+    {
+      "id": "P103-A-TEMPORARY-WAIVER-CLAIMS-A-BOUNDED-PERIOD-AND-NEVER-ENDS-4",
+      "title": "A temporary waiver claims a bounded period and nothing can make it stop applying",
+      "why": "SuppressionDisposition::TemporaryWaiver documents itself as accepted for a bounded period, expected to be revisited, and distinguishes itself from AcceptedBaselineDebt as the one which names an end date this does not. No end date exists. Suppression carries rule, subject, disposition, rationale and owner and nothing else, and no file under policy/ reads a clock, a deadline or an expiry, so a TemporaryWaiver is behaviourally identical to a FormalRiskAcceptance: it suppresses forever. That is worse than a missing feature, because the type name and its documentation promise a behaviour the engine does not implement, so a repository that tolerated something temporarily has tolerated it permanently and was told otherwise. The declared file refuses an expires key today under deny_unknown_fields, so an author reaching for one is told no rather than silently dropped, which is evidence the key has been wanted. baseline_debt.rs already records the order to follow: the key appears on the declared entry first, and the domain type grows a field to carry it. The evaluation moment must come from the caller rather than a clock read inside policy logic, so replaying a past run answers as that run did. It rides in the two grouping values a run's execution context already travels in -- GateEnvironment for a gate, Platform for a workflow step -- because both composing functions are already at this workspace's four-parameter limit and an execution fact does not belong in the caller-authored GateCommand, which is policy. The construction sites were enumerated in full rather than sampled: twelve files across gate orchestration, workflow orchestration, both hosts and three test modules. Two earlier attempts at this item were re-scoped for exactly that reason, the first from a truncated search.",
+      "done_when": "A TemporaryWaiver expires. Suppression carries an expiry, the declared entry in nomos-gate.json accepts it, a waiver written without one is refused rather than accepted as permanent, and any other disposition carrying one is refused rather than silently ignoring it. Evaluation reads the moment the caller supplied, and every construction site of both grouping values supplies one. A waiver before its expiry suppresses; at or after it does not; and the second case is visible as a lapsed disposition rather than as a suppression that quietly stopped matching, because a reader must be able to tell a finding blocking from an expired waiver from one never waived. The status is an enum in its own module, since the file-name rule reports a second public type in a file exporting no free function, and its documentation says what a third state would mean and why it is not invented before something produces it. Controls in both directions and at the boundary instant: before, exactly at, and after. cargo test -p nomos-gate-orchestration -p nomos-workflow-orchestration -p nomos-cli -p nomos-api -p nomos-contract-tests passes, both public surface snapshots are updated in the same commit, and the gate lint step is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/tests/check_orchestration_seam.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_status.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/workflow.rs",
+          "crates/host/nomos-api/src/response/gate_run_response.rs",
+          "crates/host/nomos-api/src/response/gate_explain_response.rs",
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "crates/host/nomos-api/src/workflow.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-workflow-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p103",
+        "acquired_at": 1789411009,
+        "lease_expires_at": 1789425409
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
       },
       "verified": null,
       "abandoned": [],

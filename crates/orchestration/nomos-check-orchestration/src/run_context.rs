@@ -11,15 +11,10 @@ use nomos_rules::{
     // name for the sake of *running* a rule is now read off `DESCRIPTORS` at run time;
     // these six are the residue `OD-RULES-027` measured and licensed.
     DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, LINT_DIAGNOSTICS, REVIEW_FINDING, WRITE_AUTHORITY,
-    // A different axis, deliberately untouched: which rules feed a capability, and so which
-    // families a selection has to materialize before anything is judged. `OD-GATE-017`
-    // accepted that as a fixed hand-written mapping and `OD-RULES-027` says in as many words
-    // that it does not disturb it. The `Materialize_*_Section` predicates below are it.
-    ABBREVIATIONS, DATA_NAMES_STAY_LOWER_SNAKE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS,
-    EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_SIZE_JUSTIFICATION_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
-    GOALS_AND_PARTS_LINE_UP, GO_HELPERS_PACKAGE_FIVE_INPUTS, NAMING_CONVENTION, ONE_THOUSAND_LINE_HARD_TRIGGER,
-    PARAMETER_COUNT, REQUIREMENT_TRACE_STALENESS, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
-    UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, UNREAD_REACHES_FINDING,
+    // The other axis -- which rules feed a capability, and so which families a selection has
+    // to materialize -- named fifteen more identifiers here until `P102` derived it from
+    // `RuleDescriptor::requires` instead. `Demanded_Families` is that derivation and reads
+    // `DESCRIPTORS`, so production code in this module names no rule for that purpose at all.
 };
 use nomos_workspace::{BuildVariant, Workspace};
 use std::path::Path;
@@ -63,11 +58,14 @@ pub struct RunContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Enviro
 /// everything" default `nomos_gate_orchestration::RuleSelector::include` already has),
 /// materializes the fact that rule needs and runs it over the result.
 ///
-/// `selected` is a fixed, hand-written mapping from [`RuleId`] to the fact(s) it needs, per
-/// `OD-GATE-017`: the same "composition, not choice" shape a fourth unconditional rule already
-/// used (`OD-HOST-004`), extended to a second axis -- whether a rule's own materialization
-/// runs at all, not only whether its finding counts toward a disposition
-/// `nomos_gate_orchestration::RuleSelector` narrows after the fact.
+/// Which facts `selected` obliges this call to materialize is derived from the selection
+/// rather than mapped by hand: [`Demanded_Families`] unions `nomos_rules::RuleDescriptor::
+/// requires` over the selected rules. `OD-GATE-017` accepted the hand-written mapping this
+/// replaces, and `P102` measured what it cost -- the same "composition, not choice" shape a
+/// fourth unconditional rule already used (`OD-HOST-004`), still extended to the second axis
+/// that mapping named: whether a rule's own materialization runs at all, not only whether its
+/// finding counts toward a disposition `nomos_gate_orchestration::RuleSelector` narrows after
+/// the fact.
 ///
 /// `sources` is the walk, already done -- `nomos-cli::check::sources::Walked_Sources` stayed
 /// in the composition root, and its own doc carries the current reason:
@@ -252,16 +250,14 @@ fn Judged_Over<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(sour
 /// [`Materialize_Lint`], [`Materialize_Policy`], [`Materialize_Reachability`] and
 /// [`Materialize_Naming_Policy`] give.
 ///
-/// Each runs only when `selected` asks for a rule it feeds -- `DEPENDENCY_DIRECTION`,
-/// `DEPENDENCY_COMPLETENESS` or `WRITE_AUTHORITY` for the first (all three judge the same
-/// `dependencies.sources`), `LINT_DIAGNOSTICS` for the second, `DEPENDENCY_POLICY` for the
-/// third,
-/// `UNREAD_REACHES_FINDING` for the fourth, any of `NAMING_CONVENTION`, `DATA_NAMES_STAY_
-/// LOWER_SNAKE`, `EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE`, `UNEXPORTED_FUNCTIONS_
-/// LOWERCASE_ONLY_THE_FIRST_LETTER` or `TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE` for the
-/// fifth, per `OD-GATE-017`. Skipping `Materialize_Dependencies`, `Materialize_Lint`,
-/// `Materialize_Policy` or `Materialize_Naming_Policy` skips its own subprocess launch or
-/// filesystem read entirely, not merely its finding's place in a later disposition.
+/// Each runs only when a selected rule declares the family it writes, which
+/// [`Demanded_Families`] computes once as the union of `nomos_rules::RuleDescriptor::requires`
+/// over the selection. Which rules those are is not restated here and is not written down in
+/// this module at all: `DESCRIPTORS` is where a rule declares what it reads, and a second copy
+/// of that relation is what `P102` removed after the two had drifted. Skipping
+/// [`Materialize_Dependencies`], [`Materialize_Lint`], [`Materialize_Policy`] or
+/// [`Materialize_Naming_Policy`] skips its own subprocess launch or filesystem read entirely,
+/// not merely its finding's place in a later disposition.
 ///
 /// Each call also names, into `changed`, the family it just wrote to at all -- every one of
 /// them does, unconditionally, whenever `selected` triggers it at all: none of the ten has
@@ -834,9 +830,11 @@ mod tests
     use nomos_contracts::ProviderId;
     use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
     // Named here rather than beside the module's own imports: production code no longer
-    // names this rule, and putting it back up there to satisfy a test would undo exactly
-    // what `OD-RULES-027` removed.
-    use nomos_rules::COMPLETENESS_MIRROR;
+    // names either rule, and putting them back up there to satisfy a test would undo exactly
+    // what `OD-RULES-027` and `P102` each removed -- the second of them by deriving the
+    // rule-to-family relation from `DESCRIPTORS`, which is what left fifteen module-scope
+    // imports here naming nothing.
+    use nomos_rules::{COMPLETENESS_MIRROR, FILE_SIZE_JUSTIFICATION_TRIGGER};
 
     /// `root` is never read: `COMPLETENESS_MIRROR` alone selects none of the
     /// dependency-edges, lint-diagnostics or dependency-policy materializations, so this
