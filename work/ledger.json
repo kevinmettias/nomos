@@ -70936,6 +70936,39 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P99-OD-CAPABILITY-013-STATES-NO-CAPABILITY-HAS-TWO-ADMITTED-PROVIDERS-AND-ONE-DOES",
+      "title": "OD-CAPABILITY-013 defers selection on the premise that no capability has more than one admitted provider, and nomos.cap.syntax.items has two",
+      "why": "OD-CAPABILITY-013 declines to decide P54-A-REPOSITORY-CANNOT-CHOOSE-ITS-TOOLS on a factual premise: Selection does not exist yet because no capability has more than one admitted provider. Measured 2026-09-14, that is false and has been since nomos-lang-rust-scan was composed into the production registry. crates/orchestration/nomos-check-orchestration/src/composition.rs offers nomos_lang_rust::Provider_Offer() and nomos_lang_rust_scan::Provider_Offer() in the same real composition, both against nomos.cap.syntax.items, both over Rust sources, and their guarantees differ rather than making either inapplicable: nomos-lang-rust declares FactVariant::SemanticallyResolved with completeness Assurance::Unknown, nomos-lang-rust-scan declares FactVariant::Approximate with soundness Assurance::Unsound. Two admitted providers, one capability, the same subjects. This corrects a premise and must not disturb the conclusion it was supporting, which independently holds: provider choice stays caller-owned because the existing machinery already expresses the competing case truthfully. Registry::Resolve ranks by guarantee, and Resolve_Requiring lets a caller name a provider as required rather than preferred, refusing substitution and naming who else was usable, which OD-CAPABILITY-001 reserved to the caller deliberately. What remains absent is a repository-authored preference, and nothing has asked for one, so OD-HOST-009's trigger is still unfired and that record is untouched here. Boarded apart from P99-OD-CAPABILITY-013-NAMES-THE-CARRIER-OF-A-PROVIDERS-FAMILY-AND-DELIVERY, which amended the same record at a15ef947, because the two correct independently falsifiable claims for different reasons; the ledger refused them as concurrent reservations of one record, which is Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused holding.",
+      "done_when": "OD-CAPABILITY-013 no longer asserts that no capability has more than one admitted provider. It states the measured fact instead, naming the composition that offers both providers against nomos.cap.syntax.items and the differing guarantees that make them genuine alternatives rather than one being inapplicable, and it states why the deferral it was supporting survives the correction: the ranking and Resolve_Requiring already express a truthful choice, so competition existing does not by itself call for repository-authored preference. The deferral of P54-A-REPOSITORY-CANNOT-CHOOSE-ITS-TOOLS stands and OD-HOST-009's trigger stays unfired. Governing-record correction only: no standards.json section, no selection mechanism, no capability contract, no code, and selection policy is not reopened. Followed through .claude/skills/nomos-spec-change: the round trip is read before editing, the preview is read and reports no block removed and no relation changed, and both projections are re-rendered from a worktree holding exactly the records this commit publishes, with a binary built inside it, because spec/domain-specification.md carries the same sentence as a derived projection owned by nobody per OD-GATE-005 and is fixed by rendering rather than editing. Grepped before finishing to confirm no third copy of the premise exists outside the record and that projection. The record's version is bumped.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
