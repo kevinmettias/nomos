@@ -1042,3 +1042,107 @@ fn Test_An_Identifier_The_Export_Does_Not_Name_Should_Select_Nothing()
         "an unselected run table must report nothing: {findings:?}"
     );
 }
+
+/// A retained cache skips a rule whose families did not move, and stops skipping when one
+/// does.
+///
+/// `Run_Reassessing` and `run_context::RuleReassessmentCache` had no caller and no test anywhere
+/// when this was written -- grepped across every `.rs` under `crates/` and `tests/`, the only
+/// mentions outside `run_context.rs` were inside the cache's own file. The mechanism was
+/// implemented, exported, and had never been executed, so nothing stood behind its
+/// behavioural claim. This is that claim, run.
+///
+/// `COMPLETENESS_MIRROR` is the rule under test because `DESCRIPTORS` gives it exactly one
+/// required family, `RequiredFact::SyntaxItems`. A rule reading a policy family as well would
+/// prove less here: those sections re-materialize on every call, so their family would appear
+/// in `changed` every time and the skip could never be observed -- which is a real property
+/// of the current materialization worth knowing, and not this test's subject.
+///
+/// The count comes from `RuleReassessmentCache::Recorded` rather than from comparing
+/// findings, for the reason that method's own doc gives: a rule whose output does not change
+/// is indistinguishable from a skipped one by content alone.
+#[test]
+fn Test_A_Retained_Cache_Should_Skip_A_Rule_Whose_Families_Did_Not_Move()
+{
+    let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR)];
+    let unedited = [Source("a.rs", "pub fn Ok() {}\n")];
+    let edited = [Source("a.rs", "pub fn Ok() {}\npub fn Also_Ok() {}\n")];
+
+    let mut workspace = None;
+    let mut store = MemoryFactStore::New();
+    let mut reassessment = crate::run_context::RuleReassessmentCache::New();
+
+    let first = crate::run_context::Run_Reassessing(
+        &unedited,
+        RunContext {
+            variant: Test_Variant(),
+            root: &Repository_Root(),
+            launcher: &StdProcessLauncher,
+            filesystem: &StdFileSystem,
+            environment: &StdEnvironment,
+            workspace: &mut workspace,
+            store: &mut store,
+        },
+        &selected,
+        &mut reassessment,
+    );
+    assert!(matches!(first, CheckOutcome::Judged { .. }), "the first call over a readable tree must be judged");
+    assert_eq!(
+        reassessment.Recorded(),
+        1,
+        "the first call must run the rule for real and record what it found"
+    );
+
+    let second = crate::run_context::Run_Reassessing(
+        &unedited,
+        RunContext {
+            variant: Test_Variant(),
+            root: &Repository_Root(),
+            launcher: &StdProcessLauncher,
+            filesystem: &StdFileSystem,
+            environment: &StdEnvironment,
+            workspace: &mut workspace,
+            store: &mut store,
+        },
+        &selected,
+        &mut reassessment,
+    );
+    assert_eq!(
+        reassessment.Recorded(),
+        1,
+        "a second call over unmoved sources must reuse the recorded findings rather than run \
+         the rule again; a count of 2 means the cache was threaded and never consulted"
+    );
+
+    let third = crate::run_context::Run_Reassessing(
+        &edited,
+        RunContext {
+            variant: Test_Variant(),
+            root: &Repository_Root(),
+            launcher: &StdProcessLauncher,
+            filesystem: &StdFileSystem,
+            environment: &StdEnvironment,
+            workspace: &mut workspace,
+            store: &mut store,
+        },
+        &selected,
+        &mut reassessment,
+    );
+    assert_eq!(
+        reassessment.Recorded(),
+        2,
+        "editing the one source moves SyntaxItems, which COMPLETENESS_MIRROR reads, so the \
+         rule must run again rather than serve a stale finding"
+    );
+
+    let (CheckOutcome::Judged { findings: first_findings, .. }, CheckOutcome::Judged { findings: second_findings, .. }) = (first, second)
+    else
+    {
+        panic!("both calls over a readable tree must be judged");
+    };
+    assert_eq!(
+        first_findings, second_findings,
+        "a skipped rule must report what it reported when it last ran, not nothing"
+    );
+    assert!(matches!(third, CheckOutcome::Judged { .. }), "the edited call must still be judged");
+}

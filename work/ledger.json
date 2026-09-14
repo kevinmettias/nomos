@@ -73207,14 +73207,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "OD-GATE-026 made admits the one gate verb with no --root, because a crate pair needed no tree while the architecture was compiled into nomos-rules. Once the architecture is the repository's own declaration that premise is gone, and three unreserved files in nomos-cli state it as a present fact: invocation.rs, parsing.rs's own user-facing usage text, and tests.rs, which asserts it by chdir-ing to the platform temporary directory and requiring a permitted answer from a directory that is not a repository. Outside a repository there is no architecture to answer from and NotJudged is honest. Re-authored as -8 with those three. OD-GATE-026 needs no amendment, checked rather than assumed: that sentence is in its What Was Measured section, dated context by construction, and its Decision and Status say nothing about disk."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p100",
-        "acquired_at": 1789418886,
-        "lease_expires_at": 1789433286
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -73238,9 +73238,18 @@
         "timeout_seconds": 3600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-p100",
+          "reason": "Migration complete and the whole workspace green but for three nomos-cli files that assert a premise the migration invalidates. Abandoning to re-author with them.",
+          "abandoned_at": 1789420834
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p100",
+        "declined_at": 1789420834
+      }
     },
     {
       "id": "P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-6",
@@ -73299,7 +73308,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory overlaps a live claim on exactly one of its eight paths: tests/contract/surface/nomos-gate-orchestration.txt, held by P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-7 under fable-p100 until unix 1789433286. The other seven are free, measured against the whole board rather than read off the refusal text.\n\nThe overlap is load-bearing rather than incidental. Compare_Gate_Runs returns GateCompareResult by value, and neither it nor DispositionChange can carry the typed collision failure this item's own done_when requires without changing that crate's public surface. So dropping the snapshot path would drop the typed failure with it, which is the one clause the last revision added, and narrowing an acceptance criterion to fit an unavailable path is how a green finish stops meaning anything.\n\nSplit instead, with nothing removed. The identity half becomes P104-A-FINDING-HAS-NO-IDENTITY-OF-ITS-OWN-OCCURRENCE, whose five paths are all free and which is provable on its own: the derivation, its exclusions, and the collision detector are pure functions over a finding population and need no run. The comparison half is re-authored as -3, reserving the four paths that remain and depending on the identity half, so the board reports it waiting rather than ready until both the identity exists and the peer's lease has run. The real-population cardinality proof -- the number of findings entering comparison equals the number emitted, on this repository's own tree -- stays with -3, because that is where it can be measured."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -73309,6 +73322,383 @@
           "test",
           "-p",
           "nomos-model",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p104",
+        "declined_at": 1789420558
+      }
+    },
+    {
+      "id": "P104-A-FINDING-HAS-NO-IDENTITY-OF-ITS-OWN-OCCURRENCE",
+      "title": "A finding has no identity of its own occurrence, so two violations in one file are one thing to every consumer",
+      "why": "Measured 2026-09-14: a Finding is rule, subject, subject_name, applicability, evidence, gate, summary and locations, and nothing in it distinguishes one occurrence of a violation from another occurrence of the same violation at the same subject. A rule emits one finding per occurrence -- rules push inside per-line loops, each finding carrying a single location -- while the subject is the file, so five violations in one file are five findings that no consumer can tell apart. OD-GATE-030 already names this as the second of three things missing before a run may claim continuity, and names it as unbuilt.\n\nThree consumers are waiting on it rather than one. Comparison is the measured defect: 253 findings reduced to 150 distinct rule-and-subject pairs, 103 discarded before comparison began. Baseline continuity and the finding lifecycle are the other two, and both are governed by records that defer rather than decline. This item builds only the identity and its collision detector, because that is the part every one of the three needs and the part none of them should each derive separately.\n\nA correction to an earlier measurement of mine belongs here rather than in a later reader's re-derivation: the lifecycle vocabulary is not absent, it is spelled differently. nomos-model's identity module already declares IdentityTransitionKind with ExactContinuity, ProbableRename, ProbableMove, SignatureEvolution, SplitInto, MergedFrom, Recreated, GeneratedFrom and Unresolved, beside a CompositeIdentity carrying a StructuralFingerprint. All of it has zero consumers outside that crate, so it constrains nothing mechanically, but it is this repository's considered design and a second lifecycle vocabulary beside it would be the duplicated authority this repository files records about. The two are not the same thing and the documentation must say so: an occurrence identity names one concrete occurrence in one pinned result, a transition kind names a relation between identities across snapshots.",
+      "done_when": "A finding occurrence identity exists in nomos-model as a projection over a Finding rather than a field stored on one, so none of the roughly seventy construction sites changes.\n\nIt is derived from rule, subject, summary and locations -- what identifies which violation instance occurred -- through the length-framed Digest_Of_Parts this crate already owns, so part boundaries are significant and two identities cannot be made to collide by concatenation.\n\nNothing describing a finding's treatment enters the derivation. Applicability, evidence class and gate category are excluded by construction, and a test asserts that two findings differing only in gate category share one identity -- a finding moving between gate buckets is precisely the continuity a comparison depends on, so an identity that moved with the bucket would be useless for the one thing it is for.\n\nA collision over a population is reported as a typed value naming both colliding findings, not discovered by a map insert. The detector is a pure function over a slice of findings, so a negative control can make it report a collision with no run, no gate and no repository state involved. Both directions are exercised: a population with no duplicate reports none, and a population holding two findings identical in the four identity components reports exactly one collision naming both.\n\nThe derivation is pinned by a vector, so a later change to the identity material cannot pass silently the way an unpinned digest would.\n\nThe documentation states the injectivity claim narrowly: injective over the currently representable Finding model, and a future model change that lets two distinct occurrences share rule, subject, summary and locations must extend the identity material before publication. It names IdentityTransitionKind as where cross-snapshot continuity belongs and distinguishes the two, and it does not couple to CompositeIdentity, which addresses a symbol rather than a finding and whose components a finding does not have.\n\nnomos-model's surface snapshot is re-blessed and the public_surface contract test passes over it.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel/nomos-model/src/identity/finding_occurrence.rs",
+          "crates/kernel/nomos-model/src/identity/occurrence_collision.rs",
+          "crates/kernel/nomos-model/src/identity.rs",
+          "crates/kernel/nomos-model/src/lib.rs",
+          "tests/contract/surface/nomos-model.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory named the wrong stem for the type the item introduces, and the workspace self-check is the only thing in the loop that can say so.\n\nfile-name-matches-declared-type is a nomos rule, not a clippy lint. cargo test and cargo clippy both ran clean over the finished implementation -- 67 model tests green, no new warnings -- and nomos check --root . reported one blocking finding on the whole tree: FindingOccurrenceId is public but crates/kernel/nomos-model/src/identity/finding_occurrence.rs has stem finding_occurrence instead of finding_occurrence_id. OD-RULES-016 is what decides it: a module satisfies the rule when the snake case of any public type it declares equals the file stem, and finding_occurrence equals none of them.\n\nRenaming the type instead was considered and refused. FindingOccurrenceId is the name the requirement uses and it is the accurate one -- the value is an identity of an occurrence, not an occurrence -- and inventing a second public type so a stem would match is the sideways route to one-public-type-per-file that OD-RULES-016 exists to refuse.\n\nSo one reserved path changes stem, and nothing else moves. The replacement population was enumerated rather than patched: every reader of nomos-model's identity surface outside the crate was grepped, and the only ones are the public-surface snapshot, which is already reserved, and two records plus the rendered specification that cite composite_identity.rs by path -- a file this item does not touch. No declared list, contract table or manifest names a nomos-model type. The other four paths are unchanged and correct.\n\nRe-authored as -2 with the corrected stem, before writing to it. The implementation itself stands and is unaffected: the derivation, its exclusions, the collision detector, thirteen tests and the blessed snapshot are all done and green, and the rename is the only edit -2 carries that -1 had not already made."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-model",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "fable-p104",
+          "reason": "Territory named the wrong stem for the type the item introduces; re-authored as -2 before writing to the corrected path. See the decline reason on this item.",
+          "abandoned_at": 1789421081
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p104",
+        "declined_at": 1789421086
+      }
+    },
+    {
+      "id": "P104-COMPARE-COLLAPSES-EVERY-FINDING-A-RULE-MAKES-ABOUT-ONE-SUBJECT-INTO-ONE-3",
+      "title": "Compare collapses every finding a rule makes about one subject into one, losing 41 percent of them",
+      "why": "Compare_Gate_Runs indexes a run's findings into a BTreeMap keyed by rule and subject, with insert. A rule emits one finding per occurrence while the subject is the file, so a rule finding five violations in one file emits five findings sharing one key and the map keeps the last. Measured 2026-09-14 before P104a: 253 findings emitted, 150 distinct rule-and-subject pairs, 103 discarded before comparison began, thirty-seven keys holding more than one, the worst dependency-policy at twenty-four.\n\nThe consequences are false lifecycle claims in both directions: fixing four of five violations in a file leaves one finding before and one after and reports no change, and going from one to five reports no change either. Nothing acknowledged it -- the only disjointness gate_compare documents is that a finding cannot fall into two buckets, which is true and about something else.\n\nP104a closed the upstream information loss that would have forced this fix to ship with a known exception: a dependency-policy violation now says which crate it is about, and the tree measures 256 findings to 256 distinct fingerprints over rule, subject, summary and locations.\n\nThis is the second half of a split. P104-A-FINDING-HAS-NO-IDENTITY-OF-ITS-OWN-OCCURRENCE builds the identity and its collision detector in nomos-model; this item is the rewire that consumes them and the only place the real-population cardinality can be measured, because nomos-model cannot run a gate.",
+      "done_when": "Two findings a rule makes about one subject are two findings to compare.\n\nComparison keys by the occurrence identity nomos-model now derives: present in both compares standing and reason, present only before is removed, present only after is added, with no silent overwrite anywhere.\n\nThe cardinality is checked per run result before any comparison begins. A run whose findings do not yield as many distinct identities produces a typed failure naming both colliding findings, and BTreeMap::insert is never the mechanism that discovers a collision.\n\nMeasured on this repository's own tree, the number of findings entering comparison equals the number emitted, asserted rather than described.\n\nFour behaviours are exercised: some-but-not-all occurrences fixed reports removals, occurrences multiplying reports additions, an unchanged multi-occurrence subject reports no change, and a single-finding subject behaves as it does today.\n\nSuppression and baseline keep their rule-and-subject addressing, asserted so occurrence identity cannot narrow them by accident. The public protocol is not widened for an internal key: the identity is exposed only where a caller must already see it, and if it stays internal to compare and is not serialized, the headless response is left alone.\n\nThe predicate covers the crates whose behaviour changes, affected surface snapshots are re-blessed, and the gate lint step is clean.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Stranded by a stale edge, not by a change of mind. This item depended on P104-A-FINDING-HAS-NO-IDENTITY-OF-ITS-OWN-OCCURRENCE, which was declined and re-authored as -2 to correct one territory stem, so the dependency now names an item that will never finish and the board reported this stranded. The work, the territory and the acceptance criteria are unchanged; only the edge is wrong. Re-authored as -4 pointing at -2."
+        }
+      },
+      "depends_on": [
+        "P104-A-FINDING-HAS-NO-IDENTITY-OF-ITS-OWN-OCCURRENCE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p104",
+        "declined_at": 1789421120
+      }
+    },
+    {
+      "id": "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-8",
+      "title": "The architecture the dependency rules judge is 66 compiled-in nomos crate names, so the family cannot judge any other repository",
+      "why": "Five policy families already take their criterion from a declared fact under OD-RULES-011, and tests/integration/fixtures/third-party/hex-0.4.3/standards.json already declares its own naming policy for the same rules to judge. The architecture family is the exception. Check_Dependency_Direction, Check_Every_Member_Declares_A_Band and Check_Write_Authority resolve every package through Zone_Of, and ZONES is a literal of 66 entries every one of which is a nomos crate name. The dependency edges are provider-derived and generalize; the architecture they are judged against is source code in nomos-rules. In any other repository Zone_Of returns None and the family reports NotApplicable, which is honest and is also the whole family declining for every repository that is not this one. OD-RULES-024 named this as a fact this workspace does not yet produce; the missing fact is a declared architecture, not an inference engine.\n\nOD-RULES-029 already settled two things this item must not re-decide. The declaration is read from the repository under check, per OD-RULES-003. And it is not an OD-RULES-011 sixth family, because what travels is a triple -- a finite set of named components, an order over them, and named exceptions the order alone cannot express -- so a membership map shipped without its lattice and its vocabulary externalizes nothing. That record also settled where it is not authored: the tiers array in standards.json is another tool's declared input, which this repository holds and does not own.\n\nVersion -3 of this item was declined after its territory was measured rather than estimated. The readers of the surface being removed are fourteen files beyond what -3 reserved, and two of them are why this item cannot be scoped to the check run: admissibility.rs in nomos-gate-orchestration and walk_outward/architectural_component.rs in nomos-lsp both call Zone_Of and Permits with no FactReader anywhere between them. OD-GATE-026 anticipated exactly that, saying the question admissibility asks is the same either way and that what this migration changes is where those two functions get their answer -- which makes it a thing this item has to decide, not a consequence it can leave to fall out.\n\nVersion -4 was declined for the same class of mistake one indirection out. Its territory was measured by grepping every reader of the symbols being removed -- Zone, ZONES, ZONE_LIST, SAME_ZONE_EDGES, WRITE_DOORS, Zone_Of and Permits -- which found admissibility.rs and walk_outward/architectural_component.rs and stopped there. A signature change does not stop at the symbol: ArchitecturalComponent::Of gains the declaration, so WalkOutward::Of does, so file_diagnostic.rs's Diagnostics_For does, so nomos_diagnostic_provider.rs and nomos-lsp's own tests/fixture_tree.rs do. None of those three names a zone symbol anywhere, which is exactly why the first grep could not see them. Territory for a signature change follows the caller chain, not the symbol. Measured 2026-09-14: three files, and the chain ends there -- NomosDiagnosticProvider::New takes no arguments and the declaration is read inside the method that already holds root and a FileSystem, so the provider's own tests are untouched.\n\nVersion -5 was declined on the carrier rather than on territory. standards.json is shared, and code-standards decodes it into one Limits struct with decoder.DisallowUnknownFields at kernel/config/limits/config_loading.go line 171. Checked field by field against the live checkout on 2026-09-14: every one of this repository's thirteen top-level keys is a field that struct names, and architecture is not. The five OD-RULES-011 families do not contradict that -- each reads a key code-standards already owns and decodes, so nomos piggybacks on that tool's schema rather than extending it, and a declared architecture has no such key to piggyback on. Cargo.toml's workspace.metadata table is the idiomatic Rust extension point and is wrong for a different reason: nomos judges Go repositories, and a declaration only a Cargo workspace could carry would make this family Rust-only, which fails this item's own property harder than the collision it avoids. So the carrier is a dedicated language-neutral file at the repository root, nomos-architecture.json, by the convention nomos-gate.json already set.\n\nVersion -6 was declined on one manifest, found by compiling the whole workspace with all targets once the migration was otherwise complete rather than by another round of estimating. Every other crate builds against it -- nomos-cli, nomos-api, nomos-lsp, the integration tests -- and the single remaining error is the contract tests importing a surface that no longer exists. That crate depends on neither nomos-cap-architecture nor nomos-repo-policy. Parsing the declaration there with serde_json, which it already has, would avoid the manifest and is the wrong answer: it would make the contract tests a second reader of a format this item exists to give one reader. Their independence is in asserting against cargo metadata, not in parsing the declaration a second way.\n\nVersion -7 was declined on the last consequence of the migration, and it is a real one rather than another miscount. OD-GATE-026 made admits the one gate verb with no --root, on the measured ground that a crate pair needs no tree. That was true while the architecture was compiled into nomos-rules. It is not true once the architecture is the repository's own declaration, and three files in nomos-cli say so in as many words: invocation.rs calls admits the one verb carrying no GateCommand because it reads nothing from disk, parsing.rs tells a user in its own usage text that --root does not apply because it reads nothing from disk, and tests.rs asserts the premise directly by chdir-ing to the platform temporary directory and requiring a permitted answer from a directory that is not a repository at all. Outside a repository there is no architecture to answer from, and NotJudged is the honest answer rather than a regression. None of the three is reserved by -7. OD-GATE-026 itself needs no amendment, checked rather than assumed: the cheapness sentence lives in its What Was Measured section, which is dated context by construction, and its Decision and Status say nothing about disk at all.",
+      "done_when": "The acceptance test is the direction of dependency between rule mechanism and project description, not the representation chosen. Concretely: if the repository-specific description changes completely while the governing rule concept stays the same, the rules crate is unchanged. A relocated table whose schema and interpretation the rules crate still owns does not satisfy this even though it looks data-driven, and neither does moving the membership map while the category vocabulary stays a closed enum in nomos-rules: a repository dividing its architecture into Domain, Infrastructure and Api must not have to edit nomos-rules to say so. The declaration is authored in nomos-architecture.json at the repository root and read by one provider, and the same file is what the foreign fixture declares in. It is not authored in standards.json, which another tool decodes with unknown fields disallowed, and not in a Cargo manifest, which would make the family Rust-only. What the carrier holds is the whole triple OD-RULES-029 names, not one third of it: the components themselves, the order over them, and the named exceptions that order cannot express, plus OD-RULES-023's write authorities.\n\nThen: no nomos crate name and no nomos-specific architectural category remains compiled into nomos-rules, and deleting every such name does not reduce this workspace's ability to enforce its own architecture, because this workspace now declares what the ZONES table, the Zone enum, SAME_ZONE_EDGES, Permits and WRITE_DOORS between them encoded. A name that is in today's ZONES table, with its declaration removed, resolves to unresolved rather than to its legacy zone: that is the query where a correct implementation and a surviving compiled-in fallback must disagree, and confirming the cases that already pass is not evidence about it.\n\nThe same three rule implementations, unchanged in what they judge, enforce a foreign declaration with a different package vocabulary and different category names, proved against the hex-0.4.3 third-party fixture. The two consumers outside the check run each reach the declaration through the same seam the rules do rather than through a second copy: nomos gate admits answers from the declared architecture, and the LSP architectural component resolves from it, with no path anywhere still short-circuiting to a hardcoded classification. `nomos gate admits` keeps answering for the repository the caller is standing in, found by searching upward for the declaration the way cargo finds a manifest, so the verb works from a subdirectory; outside any repository it reports NotJudged, and the three places in nomos-cli that state the opposite as a present fact say what is true instead. Threading it to the LSP is a signature change and nothing more -- no renderer decides differently, no diagnostic gains or loses a field, and the declaration is read where a root and a FileSystem are already held rather than from ambient state, which OD-HOST-001 reserves to a composition root.\n\nA repository declaring no architecture still reports NotApplicable rather than passing clean, and an incomplete or unparseable declaration reports a refusal or an applicability state rather than silently dropping the checks. OD-RULES-024 is amended to say the fact now exists and what it is, and both projections are re-rendered from a tree publishing exactly that record.\n\nThis item does not design an ownership, required-mechanism or general engineering-model schema, and does not decide what a declared component with no observed implementation means.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-architecture",
+          "crates/repository/nomos-repo-policy",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/checks/dependency.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/zones.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/reading.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/completeness.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/violations.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/write_authority.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/tests/incremental_equivalence.rs",
+          "crates/orchestration/nomos-gate-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/admissibility.rs",
+          "crates/host/nomos-lsp/Cargo.toml",
+          "crates/host/nomos-lsp/src/lib.rs",
+          "crates/host/nomos-lsp/src/walk_outward.rs",
+          "crates/host/nomos-lsp/src/walk_outward/architectural_component.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate/invocation.rs",
+          "crates/host/nomos-cli/src/gate/parsing.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/tests/boundaries/graph.rs",
+          "tests/contract/tests/boundaries/readme.rs",
+          "tests/contract/tests/boundaries/manifest_bands.rs",
+          "tests/contract/tests/completeness_universes/table.rs",
+          "tests/contract/Cargo.toml",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-cap-architecture.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-lsp.txt",
+          "tests/contract/surface/nomos-repo-policy.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "crates/host/nomos-lsp/src/file_diagnostic.rs",
+          "crates/host/nomos-lsp/src/nomos_diagnostic_provider.rs",
+          "crates/host/nomos-lsp/tests/fixture_tree.rs",
+          "tests/integration/tests/calibration.rs",
+          "tests/integration/fixtures/third-party/hex-0.4.3/standards.json",
+          "standards.json",
+          "nomos-architecture.json",
+          "tests/integration/fixtures/third-party/hex-0.4.3/nomos-architecture.json",
+          "README.md",
+          "Cargo.toml",
+          "docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p100",
+        "acquired_at": 1789420834,
+        "lease_expires_at": 1789435234
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-architecture",
+          "-p",
+          "nomos-repo-policy",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P104-A-FINDING-HAS-NO-IDENTITY-OF-ITS-OWN-OCCURRENCE-2",
+      "title": "A finding has no identity of its own occurrence, so two violations in one file are one thing to every consumer",
+      "why": "Measured 2026-09-14: a Finding is rule, subject, subject_name, applicability, evidence, gate, summary and locations, and nothing in it distinguishes one occurrence of a violation from another occurrence of the same violation at the same subject. A rule emits one finding per occurrence -- rules push inside per-line loops, each finding carrying a single location -- while the subject is the file, so five violations in one file are five findings that no consumer can tell apart. OD-GATE-030 already names this as the second of three things missing before a run may claim continuity, and names it as unbuilt.\n\nThree consumers are waiting on it rather than one. Comparison is the measured defect: 253 findings reduced to 150 distinct rule-and-subject pairs, 103 discarded before comparison began. Baseline continuity and the finding lifecycle are the other two, and both are governed by records that defer rather than decline. This item builds only the identity and its collision detector, because that is the part every one of the three needs and the part none of them should each derive separately.\n\nA correction to an earlier measurement of mine belongs here rather than in a later reader's re-derivation: the lifecycle vocabulary is not absent, it is spelled differently. nomos-model's identity module already declares IdentityTransitionKind with ExactContinuity, ProbableRename, ProbableMove, SignatureEvolution, SplitInto, MergedFrom, Recreated, GeneratedFrom and Unresolved, beside a CompositeIdentity carrying a StructuralFingerprint. All of it has zero consumers outside that crate, so it constrains nothing mechanically, but it is this repository's considered design and a second lifecycle vocabulary beside it would be the duplicated authority this repository files records about. The two are not the same thing and the documentation must say so: an occurrence identity names one concrete occurrence in one pinned result, a transition kind names a relation between identities across snapshots.",
+      "done_when": "A finding occurrence identity exists in nomos-model as a projection over a Finding rather than a field stored on one, so none of the roughly seventy construction sites changes.\n\nIt is derived from rule, subject, summary and locations -- what identifies which violation instance occurred -- through the length-framed Digest_Of_Parts this crate already owns, so part boundaries are significant and two identities cannot be made to collide by concatenation.\n\nNothing describing a finding's treatment enters the derivation. Applicability, evidence class and gate category are excluded by construction, and a test asserts that two findings differing only in gate category share one identity -- a finding moving between gate buckets is precisely the continuity a comparison depends on, so an identity that moved with the bucket would be useless for the one thing it is for.\n\nA collision over a population is reported as a typed value naming both colliding findings, not discovered by a map insert. The detector is a pure function over a slice of findings, so a negative control can make it report a collision with no run, no gate and no repository state involved. Both directions are exercised: a population with no duplicate reports none, and a population holding two findings identical in the four identity components reports exactly one collision naming both.\n\nThe derivation is pinned by a vector, so a later change to the identity material cannot pass silently the way an unpinned digest would.\n\nThe documentation states the injectivity claim narrowly: injective over the currently representable Finding model, and a future model change that lets two distinct occurrences share rule, subject, summary and locations must extend the identity material before publication. It names IdentityTransitionKind as where cross-snapshot continuity belongs and distinguishes the two, and it does not couple to CompositeIdentity, which addresses a symbol rather than a finding and whose components a finding does not have.\n\nnomos-model's surface snapshot is re-blessed and the public_surface contract test passes over it.\n\nBoth new files satisfy file-name-matches-declared-type, measured by running the workspace self-check and reading its findings for these paths rather than by inspection -- that rule is a nomos rule and neither cargo test nor cargo clippy can see it. The self-check is deliberately not in the declared predicate: it judges the whole real tree, which peers redden and green independently of this item, and an item's predicate proves the claims that item introduces rather than repository-wide health.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel/nomos-model/src/identity/finding_occurrence_id.rs",
+          "crates/kernel/nomos-model/src/identity/occurrence_collision.rs",
+          "crates/kernel/nomos-model/src/identity.rs",
+          "crates/kernel/nomos-model/src/lib.rs",
+          "tests/contract/surface/nomos-model.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p104",
+        "acquired_at": 1789421086,
+        "lease_expires_at": 1789431886
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-model",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P105-THE-REASSESSMENT-CACHE-IS-EXPORTED-AND-HAS-NEVER-BEEN-EXECUTED",
+      "title": "Run_Reassessing and RuleReassessmentCache have no consumer and no test anywhere, so the skip they implement is unverified",
+      "why": "Measured 2026-09-14 by grepping every .rs under crates/ and tests/: the only mentions of Run_Reassessing or RuleReassessmentCache outside run_context.rs, which defines them, are inside rule_reassessment_cache.rs's own doc comment and its definition. No caller anywhere. No test anywhere, inside the crate or out, and no Test_ function in either reassessment module. The mechanism is implemented and exported and has never been executed. That makes the accurate description of this capability today: implemented and exported, currently unverified and unused. It should not be described as an implemented capability with behaviour until this item passes, because there is no execution evidence behind its behavioural claim. The API also decides where the proof can live. RuleReassessmentCache::New is public but Record and Recorded are pub(crate) and absent from the public surface snapshot, so a caller in another crate can construct and thread the cache but cannot observe whether anything was skipped. Proving the skip therefore belongs inside nomos-check-orchestration, where pub(crate) is visible -- and the alternative, widening Recorded to public so a test in another crate can read it, would be a test dictating the public surface.",
+      "done_when": "A test inside nomos-check-orchestration drives three runs against one retained Workspace, one retained MemoryFactStore and one retained RuleReassessmentCache, and asserts behaviour rather than construction: after run 1 an eligible rule is recorded; run 2 over unchanged sources does not run that rule again; run 3, after a change reaching a fact family the rule's own Effective_Requires names, runs it again. Which rules are eligible is read from Effective_Requires rather than assumed, since that function's own doc says the skip stops at exactly the rules where it is honest. The assertions use the pub(crate) Recorded counter from inside the crate; Recorded and Record stay pub(crate) and the public surface snapshot does not change. The test is confirmed able to fail by holding the cache across a change that should invalidate it and observing the rule wrongly skipped. If the three runs show the mechanism is incorrect rather than merely untested, that is the item's result and it is reported as a finding: this item does not redesign Run_Reassessing, and P105-THE-LSP-PERSISTS-THE-REASSESSMENT-CACHE does not start. cargo test --no-fail-fast -p nomos-check-orchestration passes.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "ld_Offer_The_Reachability_Providers_Own_Real_Offer ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_A_Source_Derived_Family_Reused_Across_An_Edit_Should_Agree_With_A_Clean_Recomputation ... ok\ntest Test_A_Repository_Derived_Family_Reused_Across_A_Corpus_Edit_Should_Agree_With_A_Clean_Recomputation ... ok\ntest Test_A_Workspace_Derived_Family_Reused_Across_A_Manifest_Edit_Should_Agree_With_A_Clean_Recomputation ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s\n\n\nrunning 4 tests\ntest Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List ... ok\ntest Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule ... ok\ntest Test_Run_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.91s\n\n\nrunning 2 tests\ntest Test_A_Second_Run_Over_A_Changed_Source_Should_Produce_A_Fact ... ok\ntest Test_An_Unchanged_Second_Run_Should_Produce_No_New_Facts ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-9a7e454eedeaf563.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-9c6ac3792cedd403.exe)\n     Running tests\\incremental_equivalence.rs (target\\debug\\deps\\incremental_equivalence-f6a084904b1434a7.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-7b6401296c66f2ba.exe)\n     Running tests\\unchanged_run_economy.rs (target\\debug\\deps\\unchanged_run_economy-a50b1ec473a1a0d7.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1789421268,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "95b368497d0a951c34eb8551b3c321d13ee378c6"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P105-THE-LSP-PERSISTS-THE-REASSESSMENT-CACHE",
+      "title": "NomosDiagnosticProvider retains Workspace and fact store across diagnoses but builds a fresh reassessment cache every call",
+      "why": "NomosDiagnosticProvider is this workspace's one long-lived caller of the check pipeline: it holds workspace: Option<Workspace> and store: MemoryFactStore as private fields and threads &mut self.workspace and &mut self.store into every Diagnose, so the reuse OD-ANALYSIS-009 built already has a real consumer. It calls nomos_check_orchestration::Run, which by that function's own doc always starts from an empty RuleReassessmentCache and drops it at the end of the call -- so every rule re-runs on every keystroke that reaches a didOpen or didSave, even where the facts it reads have not moved. Run_Reassessing is the identical pipeline handed a cache the caller keeps, and it has no caller anywhere. This is the first one it is waiting for. Traced before authoring rather than after: the fields are private and the public surface snapshot lists only New, Diagnose, three consts and two impls, so a private reassessment field changes no public surface and needs no constructor parameter -- tests/contract/surface/nomos-lsp.txt is deliberately NOT in this territory. All four construction sites, src/main.rs and three in the provider's own tests, go through New() and need no signature change.",
+      "done_when": "NomosDiagnosticProvider carries a private RuleReassessmentCache alongside its existing workspace and store, initialised in New() with no new public constructor parameter, and Diagnose calls Run_Reassessing threading &mut self.reassessment instead of calling Run. The test proves only what this crate owns: one provider instance survives repeated Diagnose calls over the same tree and retains its reassessment state across them, and the diagnostics it reports are unchanged by the switch. It does NOT assert the cache skipped anything -- Recorded is pub(crate) and unreachable from here, and the proof that the cache skips is P105-THE-REASSESSMENT-CACHE-IS-EXPORTED-AND-HAS-NEVER-BEEN-EXECUTED's own subject, which is why this item depends on it. No public surface changes and the snapshot is unchanged; if it turns out one must, the territory was wrong and this declines and re-authors rather than widening. The demanded-family duplication between RuleDescriptor.requires and Materialize_Capabilities' hand-written Tracking calls is visible from this work and is deliberately left alone: it is its own item, not a cleanup this one absorbs. cargo test --no-fail-fast -p nomos-lsp passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-lsp/src/nomos_diagnostic_provider.rs",
+          "crates/host/nomos-lsp/src/nomos_diagnostic_provider/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P105-THE-REASSESSMENT-CACHE-IS-EXPORTED-AND-HAS-NEVER-BEEN-EXECUTED"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lsp"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P104-COMPARE-COLLAPSES-EVERY-FINDING-A-RULE-MAKES-ABOUT-ONE-SUBJECT-INTO-ONE-4",
+      "title": "Compare collapses every finding a rule makes about one subject into one, losing 41 percent of them",
+      "why": "Compare_Gate_Runs indexes a run's findings into a BTreeMap keyed by rule and subject, with insert. A rule emits one finding per occurrence while the subject is the file, so a rule finding five violations in one file emits five findings sharing one key and the map keeps the last. Measured 2026-09-14 before P104a: 253 findings emitted, 150 distinct rule-and-subject pairs, 103 discarded before comparison began, thirty-seven keys holding more than one, the worst dependency-policy at twenty-four.\n\nThe consequences are false lifecycle claims in both directions: fixing four of five violations in a file leaves one finding before and one after and reports no change, and going from one to five reports no change either. Nothing acknowledged it -- the only disjointness gate_compare documents is that a finding cannot fall into two buckets, which is true and about something else.\n\nP104a closed the upstream information loss that would have forced this fix to ship with a known exception: a dependency-policy violation now says which crate it is about, and the tree measures 256 findings to 256 distinct fingerprints over rule, subject, summary and locations.\n\nThis is the second half of a split. P104-A-FINDING-HAS-NO-IDENTITY-OF-ITS-OWN-OCCURRENCE builds the identity and its collision detector in nomos-model; this item is the rewire that consumes them and the only place the real-population cardinality can be measured, because nomos-model cannot run a gate.",
+      "done_when": "Two findings a rule makes about one subject are two findings to compare.\n\nComparison keys by the occurrence identity nomos-model now derives: present in both compares standing and reason, present only before is removed, present only after is added, with no silent overwrite anywhere.\n\nThe cardinality is checked per run result before any comparison begins. A run whose findings do not yield as many distinct identities produces a typed failure naming both colliding findings, and BTreeMap::insert is never the mechanism that discovers a collision.\n\nMeasured on this repository's own tree, the number of findings entering comparison equals the number emitted, asserted rather than described.\n\nFour behaviours are exercised: some-but-not-all occurrences fixed reports removals, occurrences multiplying reports additions, an unchanged multi-occurrence subject reports no change, and a single-finding subject behaves as it does today.\n\nSuppression and baseline keep their rule-and-subject addressing, asserted so occurrence identity cannot narrow them by accident. The public protocol is not widened for an internal key: the identity is exposed only where a caller must already see it, and if it stays internal to compare and is not serialized, the headless response is left alone.\n\nThe predicate covers the crates whose behaviour changes, affected surface snapshots are re-blessed, and the gate lint step is clean.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P104-A-FINDING-HAS-NO-IDENTITY-OF-ITS-OWN-OCCURRENCE-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
           "-p",
           "nomos-gate-orchestration",
           "-p",
