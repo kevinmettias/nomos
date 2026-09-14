@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:a199dcf657aecef6835ad93f4b85fdb40473a13a19287c62447c710cd862ab49",
-  "inputs_digest": "sha256:462463332e24335722f6c6ac9dbac942524be303e829a5a3647255a7fc070a74",
+  "content_digest": "sha256:0ae4d8271307afb5047d068a9a693837c6b0ec0e47b15e3a64f0c477ac2d552b",
+  "inputs_digest": "sha256:94eefa71d940125eb47c96114242e609c365739944385bdceb5c97525c0de568",
   "sections": [
     [
       "Documents",
-      244
+      245
     ],
     [
       "Sections",
-      2020
+      2030
     ],
     [
       "Source blocks",
-      7062
+      7092
     ]
   ],
   "inputs": [
@@ -534,6 +534,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md@authored",
       "hash": "sha256:855d8b317af7d76c6c6f78e25c68675633d826d2abfbbca039b201bdc462f2db"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md@authored",
+      "hash": "sha256:06232c06f6b8a8ad4f60e2fe18f30876fd9ef9d49529207a7dd1531d7454963a"
     },
     {
       "content": "documents",
@@ -5344,6 +5349,56 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#30",
       "hash": "sha256:569686aa60a610fb21dce9f138d33e4ddcbb5f051c8e7e8717388f67aca95d4f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#1",
+      "hash": "sha256:18fde8f8229c1eab879bed836c156884ecbc79943a41ac38d8ff29125cddcb90"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#2",
+      "hash": "sha256:04e9d6f7231ccdf53a6d61411e183392cd68d93a437334adf5b907a63227d022"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#5",
+      "hash": "sha256:aed76c79b7072d037268177e8d4b271fdc420c351bd0e40ae88b859a00d848c7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#13",
+      "hash": "sha256:fea14b2fe9438f27176a5f89f03ff71821355ea129d61d4db43715ea9783dfe2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#15",
+      "hash": "sha256:bd86d6e2fdff1d1ab8e72fad3a9a8056ea0a1962624c453b0d7833237267966e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#18",
+      "hash": "sha256:c884e31699a62120318f943bb2502deebe4f485a004c14c8910f17aa1a406644"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#21",
+      "hash": "sha256:1e26123eb6fd99711368050b63155ddc7da9d1c7bc002dc0cd1ff98e47869946"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#24",
+      "hash": "sha256:9067482a37b628ad0b9936bf476fff439822cbb47930b7ad97c1c558705705e0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#27",
+      "hash": "sha256:91fa8366b450eb8da97954e062143dd32eba9653699a28186056974cedfda235"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#29",
+      "hash": "sha256:c0243f7767decdf1ad4f09ad026a10bb602ba16bb05de6fef76cb170160a1542"
     },
     {
       "content": "headings",
@@ -25584,6 +25639,156 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#36",
       "hash": "sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#1",
+      "hash": "sha256:0e86afff2c4fea88cf52959a24e6c97592285e444bf59785480635b174bbd3b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#3",
+      "hash": "sha256:087cf8b23000d26521e5ef0bd2628ea2ed4b60601ce48620b04dbc705fb8c24c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#4",
+      "hash": "sha256:4c96eee812117fe30332c69e2585ae2bdf81f7b5a1210c4873b6a0b8fc3e246f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#6",
+      "hash": "sha256:f7f58f9dc4560dd737295e81f025a9e8bc19b8216c9958edf597dc1bed449803"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#7",
+      "hash": "sha256:23ba1371993f4e7bf3571b0469757979930bec190b0dd0cbcb1e1d2eb692e98c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#8",
+      "hash": "sha256:b343d3dd961fe7c3778ad55d49bdb2ce7bba29671ae399da214b0f3a58ec0b89"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#9",
+      "hash": "sha256:abb42bbd7e3248184cdba19e7247951baf60f7e511d6ed629f6eb3a9cc4bf0f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#10",
+      "hash": "sha256:1f20bb4228ae663bf6603f7ccf094ea7ce0aa03d844c65579f6713de9b578fc9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#11",
+      "hash": "sha256:840e464cfd58f0a351e67d67746c349e18e2624ceee602a6605aa98ef53a86d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#12",
+      "hash": "sha256:e90d5648b04ad1ab23ba2bc87fca0af25099753407e9e4e4872c8d05454968f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#13",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#14",
+      "hash": "sha256:ed24bace4293f63e94ec2fc9614448f0e78e7b048514276e1958573947ad6ed6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#15",
+      "hash": "sha256:6c8771e34947b3f2f2a24f23a637f83a829d198e3259942b6b7d795a5bbe34f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#16",
+      "hash": "sha256:129e2b82432e089aef81fb3849864c262cf000be2306dfc9f59224a1008b3091"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#17",
+      "hash": "sha256:026c8ecf9a70d9bcf064c52db3e46202ba148c44e9e2499186539e7935c0fde9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#18",
+      "hash": "sha256:75d142d5d1c5cbfffab083b79d4c6598dd08f7c188760542f7bc0b5a2abe13b8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#19",
+      "hash": "sha256:54338ff19209100949166bf57cb777a9fe6fa4df6b0cd7eaef01c104e13e970d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#20",
+      "hash": "sha256:1f8eece109e34da93f4b9f49162cc4d6bdaa75e592b93c9706c265d112d8c647"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#21",
+      "hash": "sha256:8dc11ec46e99df6a1d892bf5bbe69548c7e1f23acba433ef3bb55ec718073f3c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#22",
+      "hash": "sha256:0f6ddde861a3f10595237a3c8f5d4cc0e6432d83a91ed1c81f9622299cceafb4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#23",
+      "hash": "sha256:e031ae78b4d957398d120f1f745bf1d39d16ea8b9c2a0279bdfc12ee9f152aae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#24",
+      "hash": "sha256:b3994b1dca62beb53c92604371258a6a8462db9d83367fe0a059769b185a5aba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#25",
+      "hash": "sha256:27e327e88f2faa5ae153a655551c7db11717330d7126ea4d2c20f386169eb404"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#26",
+      "hash": "sha256:9e6674e2314a16205228c0dfc4a2685659c5ea81d210c149e1c0f354f610d818"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#27",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#28",
+      "hash": "sha256:fb4153934ecd865acae65cf8c98425c29abd79082c6c8b6ab81251d64d0a124a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#29",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#30",
+      "hash": "sha256:56cecd3a376d68dafcb3ef5d119c61a0116df7547120134e808fac9ef9b31cf5"
     },
     {
       "content": "blocks",

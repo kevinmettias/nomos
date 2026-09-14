@@ -113,6 +113,7 @@ profile: domain-specification
 | docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md@authored | docs/records/OD-GATE-026-whether-this-workspace-answers-whether-a-dependency-would-be-permitted-before-the-edge-exists.md | authored | 39 | 11 | sha256:acbbd697996692163827ea080880c27e2aeb1a5a97947ce8eac52c8ae6f095d5 |
 | docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md@authored | docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md | authored | 25 | 7 | sha256:6e06898cbe0b96289a1aeb71c9910b523db4ff387c6fa72afcf1b8bb541605ee |
 | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md@authored | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md | authored | 36 | 9 | sha256:855d8b317af7d76c6c6f78e25c68675633d826d2abfbbca039b201bdc462f2db |
+| docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md@authored | docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md | authored | 30 | 10 | sha256:06232c06f6b8a8ad4f60e2fe18f30876fd9ef9d49529207a7dd1531d7454963a |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -1080,6 +1081,16 @@ profile: domain-specification
 | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#22 | authored | 2 | What This Does Not Do |
 | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#25 | authored | 2 | Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable |
 | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md#30 | authored | 3 | The Heuristic |
+| docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#1 | authored | 1 | A newly authored Gate is given require-completeness, and an absent field still means unset |
+| docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#13 | authored | 2 | The Decision |
+| docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#15 | authored | 3 | Unset keeps its present meaning, and no existing caller is migrated |
+| docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#18 | authored | 3 | AllowPartial exists so a deliberate choice is inspectable rather than inferred |
+| docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#21 | authored | 3 | A newly authored Gate is given require-completeness |
+| docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#24 | authored | 3 | Unset becomes visibly non-ideal, and is deliberately not made invalid |
+| docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#27 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#29 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -28882,6 +28893,265 @@ this record declines a general abstraction for the three instances above it.
 *revision: authored · kind: prose · heading: A verification predicate can repair or bypass the condition it exists to observe, and is not established until it has been seen to fail / Amendment: A Full Population Can Make A Narrowed Consumer's Dependence Unobservable / The Heuristic · hash: sha256:0a70d1908d203eb37eea9d60049dc8cad4a866ce1fc8255f9f88ea1becac0b17*
 
 Checked 2026-09-14.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#1
+
+*revision: authored · kind: heading · heading: A newly authored Gate is given require-completeness, and an absent field still means unset · hash: sha256:0e86afff2c4fea88cf52959a24e6c97592285e444bf59785480635b174bbd3b1*
+
+# A newly authored Gate is given require-completeness, and an absent field still means unset
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#2
+
+*revision: authored · kind: heading · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#3
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / Question · hash: sha256:087cf8b23000d26521e5ef0bd2628ea2ed4b60601ce48620b04dbc705fb8c24c*
+
+`OD-GATE-016` built `CoveragePolicy` as two variants and made `Unset` the default, so a gate
+run whose selected findings carry coverage debt reports `Passed`. That was the right call for
+the question that record asked, which was whether the policy should exist at all: every
+construction site predating the type had to keep behaving as it had, and
+`OD-COMPLETENESS-004` had already settled that coverage debt is reported rather than gated on.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#4
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / Question · hash: sha256:4c96eee812117fe30332c69e2585ae2bdf81f7b5a1210c4873b6a0b8fc3e246f*
+
+The question left over is different, and `OD-GATE-016`'s own acceptance names it as a new
+question for a new record: what a Gate that nobody has configured yet *should* be. Today a
+gate whose rules could not be evaluated at all reports `Passed`, and it does so because of a
+field nobody wrote. That is a defensible answer for a configuration written before the field
+existed. It is not a defensible answer for one authored after it.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#5
+
+*revision: authored · kind: heading · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#6
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / What Was Measured · hash: sha256:f7f58f9dc4560dd737295e81f025a9e8bc19b8216c9958edf597dc1bed449803*
+
+Checked 2026-09-14 against this workspace's own gate-orchestration sources, its CLI parsing,
+and the absence of a policy file at its own root.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#7
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / What Was Measured · hash: sha256:23ba1371993f4e7bf3571b0469757979930bec190b0dd0cbcb1e1d2eb692e98c*
+
+**The type, and what its default means.** `CoveragePolicy`
+(`crates/orchestration/nomos-gate-orchestration/src/policy/coverage_policy.rs`) has exactly two
+variants, `Unset` carrying `#[default]` and `RequireCompleteness`.
+`Test_Default_Should_Be_Unset` pins the default. `Reduced_With_Coverage`
+(`gate_environment.rs`) reads it once, after `Disposition_Of_Findings` has already reduced the
+blocking findings, and downgrades `Passed` to `Indeterminate` only under
+`RequireCompleteness`.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#8
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / What Was Measured · hash: sha256:b343d3dd961fe7c3778ad55d49bdb2ce7bba29671ae399da214b0f3a58ec0b89*
+
+**Nothing authors a non-default one.** `nomos-cli`'s own gate parsing constructs
+`CoveragePolicy::default()` and says so in a comment: no flag authors a non-default policy.
+Grepped across `crates/`, the only writer of a `nomos-gate.json` anywhere in this workspace is
+`nomos-gate-orchestration`'s own test module, which writes fixtures into scratch trees. There
+is no scaffolding verb, no API or MCP operation, and no template that produces one. This
+repository's own root carries no `nomos-gate.json` either, so CI's `gate run --root .` takes
+every default.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#9
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / What Was Measured · hash: sha256:abb42bbd7e3248184cdba19e7247951baf60f7e511d6ed629f6eb3a9cc4bf0f4*
+
+**`Unset` is carrying two jobs, and that is the measurable cost.** `Resolved_Over` on
+`GatePolicyFile` merges a caller's policies over a declared file with one rule: a field left
+at its default in the command takes the file's value. For coverage that rule is spelled
+`if command.coverage == CoveragePolicy::default() { self.coverage } else { command.coverage }`.
+So `Unset` is simultaneously a *meaning* — coverage debt does not affect disposition — and a
+*sentinel* — the caller stated nothing, defer to the file. `DeclaredCoverage` in
+`gate_policy_file.rs` has the same two variants with the same `#[default] Unset`, so a file
+that writes `"coverage": "unset"` and a file that omits the key are also indistinguishable.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#10
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / What Was Measured · hash: sha256:1f20bb4228ae663bf6603f7ccf094ea7ce0aa03d844c65579f6713de9b578fc9*
+
+Three things follow directly, and none of them is a matter of taste:
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#11
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / What Was Measured · hash: sha256:840e464cfd58f0a351e67d67746c349e18e2624ceee602a6605aa98ef53a86d7*
+
+- A caller cannot state partial operation and have it respected. Stating `Unset` over a file
+  declaring `RequireCompleteness` loses, because stating `Unset` is how a caller says nothing.
+- A file cannot state partial operation distinguishably from silence.
+- No inspection surface can report which of the two a run is in, because the run does not
+  hold the difference.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#12
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / What Was Measured · hash: sha256:e90d5648b04ad1ab23ba2bc87fca0af25099753407e9e4e4872c8d05454968f6*
+
+**The blast radius of redefining `Unset` instead.** 49 `GateCommand` constructions across 18
+files, of which exactly four state `RequireCompleteness` and all four are tests. Every other
+one inherits `Unset` through `Default`. Redefining `Unset` to require completeness would change
+the disposition of every one of them without a line of any of them being edited, and would
+also change what the sentinel above means at the same time.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#13
+
+*revision: authored · kind: heading · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#14
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision · hash: sha256:ed24bace4293f63e94ec2fc9614448f0e78e7b048514276e1958573947ad6ed6*
+
+**The representation default and the product-authoring default are two questions, and only the
+second changes. `CoveragePolicy` gains a third variant, `AllowPartial`. `Unset` keeps exactly
+the meaning it has. Anything that authors a new product Gate emits require-completeness.**
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#15
+
+*revision: authored · kind: heading · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision / Unset keeps its present meaning, and no existing caller is migrated · hash: sha256:6c8771e34947b3f2f2a24f23a637f83a829d198e3259942b6b7d795a5bbe34f6*
+
+### Unset keeps its present meaning, and no existing caller is migrated
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#16
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision / Unset keeps its present meaning, and no existing caller is migrated · hash: sha256:129e2b82432e089aef81fb3849864c262cf000be2306dfc9f59224a1008b3091*
+
+An absent `coverage` field in an existing configuration still resolves to `Unset`, and `Unset`
+still means coverage debt does not affect disposition. The 49 construction sites above are
+untouched, CI's own `gate run --root .` is untouched, and a historical run stays reproducible
+against the configuration it was run under.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#17
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision / Unset keeps its present meaning, and no existing caller is migrated · hash: sha256:026c8ecf9a70d9bcf064c52db3e46202ba148c44e9e2499186539e7935c0fde9*
+
+Redefining `Unset` globally would be a silent semantic migration wearing a default's clothes.
+Nothing would change in any caller's source, the field would still be absent everywhere it is
+absent today, and the disposition of every run in this workspace and every repository holding
+an existing `nomos-gate.json` would change underneath them. A compatibility decision made that
+way cannot be reviewed at any of the sites it affects, because none of them says anything.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#18
+
+*revision: authored · kind: heading · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision / AllowPartial exists so a deliberate choice is inspectable rather than inferred · hash: sha256:75d142d5d1c5cbfffab083b79d4c6598dd08f7c188760542f7bc0b5a2abe13b8*
+
+### AllowPartial exists so a deliberate choice is inspectable rather than inferred
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#19
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision / AllowPartial exists so a deliberate choice is inspectable rather than inferred · hash: sha256:54338ff19209100949166bf57cb777a9fe6fa4df6b0cd7eaef01c104e13e970d*
+
+`AllowPartial` means the same thing to the run that `Unset` means today: coverage debt does not
+affect disposition. What it adds is that somebody said so. It separates the meaning from the
+sentinel, which is what makes all three consequences measured above answerable: a caller can
+state partial operation and have it win over a declared file, a file can state it
+distinguishably from omission, and an inspection surface can report which one a run is in.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#20
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision / AllowPartial exists so a deliberate choice is inspectable rather than inferred · hash: sha256:1f8eece109e34da93f4b9f49162cc4d6bdaa75e592b93c9706c265d112d8c647*
+
+That is the principle this record actually rests on. **Partial coverage may pass should be a
+decision somebody made, not a consequence of a field nobody wrote.** The two-variant model can
+express the consequence and cannot express the decision.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#21
+
+*revision: authored · kind: heading · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision / A newly authored Gate is given require-completeness · hash: sha256:8dc11ec46e99df6a1d892bf5bbe69548c7e1f23acba433ef3bb55ec718073f3c*
+
+### A newly authored Gate is given require-completeness
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#22
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision / A newly authored Gate is given require-completeness · hash: sha256:0f6ddde861a3f10595237a3c8f5d4cc0e6432d83a91ed1c81f9622299cceafb4*
+
+Anything that authors a new product Gate — a verb that scaffolds a `nomos-gate.json`, a Gate
+created through `nomos-api` or MCP, a template — emits `require-completeness` explicitly, as a
+written field. None of those surfaces exists yet, which is why this record can decide their
+default before any of them has one to preserve: the cheapest moment to choose an authoring
+default is before there is a caller whose behaviour it would change.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#23
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision / A newly authored Gate is given require-completeness · hash: sha256:e031ae78b4d957398d120f1f745bf1d39d16ea8b9c2a0279bdfc12ee9f152aae*
+
+A Gate authored that way is strict by default and may be relaxed by editing a field that is
+already there and already visible. That is the opposite of today's arrangement, where it is
+lenient by default and can be made strict only by knowing a field exists.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#24
+
+*revision: authored · kind: heading · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision / Unset becomes visibly non-ideal, and is deliberately not made invalid · hash: sha256:b3994b1dca62beb53c92604371258a6a8462db9d83367fe0a059769b185a5aba*
+
+### Unset becomes visibly non-ideal, and is deliberately not made invalid
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#25
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision / Unset becomes visibly non-ideal, and is deliberately not made invalid · hash: sha256:27e327e88f2faa5ae153a655551c7db11717330d7126ea4d2c20f386169eb404*
+
+Wherever a policy is authored or inspected, `Unset` is named as a compatibility default rather
+than shown as one choice among equals: named as such, with its effective behaviour stated, and
+with `allow-partial` or `require-completeness` recommended in its place depending on what the
+repository actually intends. A reader who meets `Unset` should learn that they have inherited a
+decision rather than made one.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#26
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / The Decision / Unset becomes visibly non-ideal, and is deliberately not made invalid · hash: sha256:9e6674e2314a16205228c0dfc4a2685659c5ea81d210c149e1c0f354f610d818*
+
+It is not made invalid, and not deprecated to the point of refusal. Doing that would force a
+migration across every existing caller and every existing `nomos-gate.json` in order to improve
+a default for future use, which is a cost paid by people who are not the beneficiaries. The
+same reasoning `OD-GATE-016` used to make `Unset` the default in the first place applies to
+leaving it valid now; what changes is that it stops being what a new Gate silently inherits.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#27
+
+*revision: authored · kind: heading · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#28
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / What This Record Does Not Do · hash: sha256:fb4153934ecd865acae65cf8c98425c29abd79082c6c8b6ab81251d64d0a124a*
+
+- **It changes no code.** The third variant, the authoring surfaces that emit
+  `require-completeness`, and the inspection wording that names `Unset` as a compatibility
+  default are separate implementation work this record unblocks. Nothing here is built by
+  authoring it.
+- **It does not decide what `AllowPartial` and `Unset` render as** in any particular report,
+  beyond requiring that the two be distinguishable and that `Unset` read as inherited. The
+  wording belongs to the item that builds the surface.
+- **It does not widen `CoveragePolicy` past the three variants.** A
+  minimum-`Applicability` threshold or a per-rule coverage requirement is still what
+  `OD-GATE-016` left to real evidence, and this record does not supply that evidence.
+- **It does not change `nomos check`'s own exit code.** `OD-COMPLETENESS-004` settled that
+  surface, and this record is about the Gate layer alone, the same division `OD-GATE-016` drew.
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#29
+
+*revision: authored · kind: heading · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#30
+
+*revision: authored · kind: prose · heading: A newly authored Gate is given require-completeness, and an absent field still means unset / Status · hash: sha256:56cecd3a376d68dafcb3ef5d119c61a0116df7547120134e808fac9ef9b31cf5*
+
+Accepted. `CoveragePolicy` becomes a three-variant model; `Unset` keeps its meaning and its
+sentinel role and migrates nobody; `AllowPartial` makes partial operation a stated choice
+rather than an inferred one; a newly authored Gate is given `require-completeness`; and `Unset`
+is made visibly non-ideal in authoring and inspection output without being made invalid.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 
