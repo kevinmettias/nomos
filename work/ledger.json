@@ -69362,7 +69362,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P98-TWO-ACCEPTED-RECORDS-STATE-A-SINGLE-ADAPTER-TOPOLOGY-THAT-WAS-RETIRED-3"
       ],
@@ -69377,7 +69377,27 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "check",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": " String,\n   |         ^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: field `stderr` is never read\n  --> crates\\host\\nomos-cli\\tests\\support\\mod.rs:33:9\n   |\n29 | pub struct Ran\n   |            --- field in this struct\n...\n33 |     pub stderr: String,\n   |         ^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: method `With` is never used\n  --> crates\\host\\nomos-cli\\tests\\support\\mod.rs:72:12\n   |\n57 | impl Tree\n   | --------- method in this implementation\n...\n72 |     pub fn With(self, name: &str, text: &str) -> Self\n   |            ^^^^\n\nwarning: `nomos-cli` (test \"spec_orchestration_seam\") generated 3 warnings\nwarning: `nomos-cli` (test \"spec_store_seam\") generated 1 warning\nwarning: `nomos-cli` (test \"model_backend_ollama_seam\") generated 2 warnings (1 duplicate)\nwarning: `nomos-cli` (test \"contracts_seam\") generated 1 warning\nwarning: `nomos-cli` (test \"agent_contracts_seam\") generated 2 warnings (1 duplicate)\nwarning: `nomos-cli` (test \"model_seam\") generated 1 warning (1 duplicate)\nwarning: `nomos-cli` (test \"composer_std_seam\") generated 1 warning (1 duplicate)\nwarning: `nomos-cli` (test \"gate_orchestration_seam\") generated 2 warnings (2 duplicates)\nwarning: `nomos-cli` (test \"workspace_seam\") generated 1 warning (1 duplicate)\nwarning: `nomos-cli` (test \"lang_go_seam\") generated 1 warning (1 duplicate)\nwarning: `nomos-cli` (test \"agent_executor_claude_code_seam\") generated 2 warnings (2 duplicates)\nwarning: function `Run` is never used\n  --> crates\\host\\nomos-cli\\tests\\support\\mod.rs:37:8\n   |\n37 | pub fn Run(arguments: &[&str]) -> Ran\n   |        ^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: `nomos-cli` (test \"check_orchestration_seam\") generated 1 warning (1 duplicate)\nwarning: `nomos-cli` (test \"spec_model_seam\") generated 2 warnings (1 duplicate)\nwarning: `nomos-cli` (test \"lang_rust_seam\") generated 1 warning (1 duplicate)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 10.26s\n",
+        "verified_at": 1789373384,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "be4ca01179c7a913c4b169ff52820b5b52501eb5"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -69504,6 +69524,60 @@
         "timeout_seconds": 2700
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P99-THE-GATE-COMMAND-DOC-SAYS-COMPARE-HAS-NO-IMPLEMENTATION-AND-IT-IS-CLI-WIRED",
+      "title": "The GateCommand module doc says compare is absent, and compare is both a real library operation and a shipped CLI verb",
+      "why": "crates/orchestration/nomos-gate-orchestration/src/gate_command.rs opens by saying ARC-ROADMAP-001 names four eventual verbs, that Plan, Run_Gate and Explain_Gate all have real computations behind them now, and that compare is the one verb left with no real implementation -- that inventing an argument shape for it now would be exactly the kind of premature surface this workspace has repeatedly declined to build ahead of a second real case, so it is simply absent, not stubbed, until an increment gives it a real body. Every clause of that last sentence is false at HEAD. Compare_Gate_Runs is a real function in gate_compare.rs, exported from lib.rs, and gate_compare.rs's own module doc names this file as the doc that called it deliberately absent, so the increment that built compare never came back to correct the file it cited. Compare is also user-reachable, which makes the stale claim worse than an internal detail: nomos gate compare appears in the gate verb's own printed usage text with its own --against flag and its own exit-code paragraph, gate/parsing.rs recognizes the verb and refuses it without --against, gate.rs dispatches Invocation::Compare to Compare_Verb, and gate/report.rs renders the result through Render_Compare. A reader of this file is told that a shipped, documented, user-invocable verb does not exist.",
+      "done_when": "gate_command.rs's module doc describes what is at HEAD: all four verbs ARC-ROADMAP-001 names have real computations behind them, and compare is reachable both as the library operation Compare_Gate_Runs and as the CLI verb nomos gate compare. It names the files that make each true, so a later reader can check the claim rather than trust it. The reason this struct still carries no compare-specific field is kept rather than deleted, because it is still true and is the part a reader cannot re-derive from the code: compare takes two whole GateCommands rather than one carrying a second root, so the restraint this doc originally described was vindicated by the implementation rather than overturned by it. Documentation only. No signature, no behavior, no Gate semantics and no CLI wiring change, and no compare support is invented that does not already exist. If reading the file proves another doc or test carries the same stale claim, that is reported in the commit rather than fixed here, because this item reserves one file and widening territory mid-claim is the failure this repository has already had twice. cargo test --no-fail-fast -p nomos-gate-orchestration stays green.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_command.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "ies ... ok\ntest tests::Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed ... ok\ntest tests::Test_A_Baselined_Finding_Should_Not_Block ... ok\ntest tests::Test_Explain_Should_Report_A_Baseline_That_Applies ... ok\ntest tests::Test_A_Suppressed_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrated ... ok\ntest tests::Test_A_Narrowed_Run_And_A_Whole_Run_Should_Agree_About_A_Declared_Module ... ok\n\ntest result: ok. 102 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 53.67s\n\n\nrunning 4 tests\ntest Test_Run_Gate_Should_Report_An_Unreadable_Check_Outcome_As_Indeterminate ... ok\ntest Test_Run_Gate_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestration_Seam ... ok\ntest Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.37s\n\n\nrunning 4 tests\ntest Test_Disposition_Of_Findings_Should_Fail_On_A_Blocking_Finding ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_With_No_Findings ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_When_Nothing_Can_Fail_A_Build ... ok\ntest Test_Disposition_Of_Findings_Should_Fail_With_One_Blocking_Finding_Among_Many ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.59s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-0ac17531ba13be50.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-59d7342217b72e07.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-5c43c6f16d9df67e.exe)\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1789373394,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "be4ca01179c7a913c4b169ff52820b5b52501eb5"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

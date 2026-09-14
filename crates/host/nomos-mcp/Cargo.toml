@@ -14,9 +14,9 @@ path = "src/main.rs"
 [dependencies]
 # The engine's catalogue contract and the server that speaks the handshake over
 # it. This crate names no method of the protocol itself.
-xvpe-remote-call = { path = "../../../../xvpe/crates/mechanisms/xvpe-remote-call" }
-xvpe-remote-call-backend-json = { path = "../../../../xvpe/crates/backends/remote-call/xvpe-remote-call-backend-json" }
-xvpe-primitives = { path = "../../../../xvpe/crates/foundations/contracts/xvpe-primitives" }
+xvpe-remote-call = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-remote-call-backend-json = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-primitives = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
 
 nomos-api-transport = { workspace = true }
 serde = { workspace = true }

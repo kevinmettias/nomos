@@ -8,12 +8,15 @@ description = "The platform port, bridged onto XVPE. Wraps any nomos ProcessLaun
 # Band 1p -- the XVPE implementation of the platform port, anticipated in the
 # workspace manifest since the port was written.
 #
-# A path dependency across repositories: XVPE is not published, and both are
-# checked out side by side. This workspace no longer builds without it.
+# A pinned cross-repository dependency: XVPE is not published to a registry, so
+# it is adopted by git reference and commit, which is the form D-130 names and
+# still requires. The revision is recorded here rather than taken from whatever
+# a sibling checkout happens to be sitting at; see D-130's second amendment for
+# what the 2026-09-10 retirement did and did not reach.
 [dependencies]
 nomos-platform = { workspace = true }
-xvpe-subprocess-execution = { path = "../../../../xvpe/crates/mechanisms/xvpe-subprocess-execution" }
-xvpe-primitives = { path = "../../../../xvpe/crates/foundations/contracts/xvpe-primitives" }
+xvpe-subprocess-execution = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-primitives = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
 
 [lints]
 workspace = true

@@ -3350,6 +3350,7 @@ checksum = "3ad82d2a33cdc9674dc7465672f271e096168fcdbe0f799d9e6db8c5892679dc"
 [[package]]
 name = "xvpe-agent-backend-claude-code"
 version = "0.1.0"
+source = "git+https://github.com/kevinmettias/xvpe.git?rev=82a3c8fccf4ef7f3759f36d3f320a91d0f96341c#82a3c8fccf4ef7f3759f36d3f320a91d0f96341c"
 dependencies = [
  "serde_json",
  "xvpe-agent-execution",
@@ -3361,6 +3362,7 @@ dependencies = [
 [[package]]
 name = "xvpe-agent-backend-ollama"
 version = "0.1.0"
+source = "git+https://github.com/kevinmettias/xvpe.git?rev=82a3c8fccf4ef7f3759f36d3f320a91d0f96341c#82a3c8fccf4ef7f3759f36d3f320a91d0f96341c"
 dependencies = [
  "xvpe-agent-execution",
  "xvpe-ai-inference",
@@ -3371,6 +3373,7 @@ dependencies = [
 [[package]]
 name = "xvpe-agent-execution"
 version = "0.1.0"
+source = "git+https://github.com/kevinmettias/xvpe.git?rev=82a3c8fccf4ef7f3759f36d3f320a91d0f96341c#82a3c8fccf4ef7f3759f36d3f320a91d0f96341c"
 dependencies = [
  "xvpe-ai-inference",
  "xvpe-primitives",
@@ -3380,6 +3383,7 @@ dependencies = [
 [[package]]
 name = "xvpe-ai-inference"
 version = "0.1.0"
+source = "git+https://github.com/kevinmettias/xvpe.git?rev=82a3c8fccf4ef7f3759f36d3f320a91d0f96341c#82a3c8fccf4ef7f3759f36d3f320a91d0f96341c"
 dependencies = [
  "xvpe-json-text",
  "xvpe-primitives",
@@ -3388,6 +3392,7 @@ dependencies = [
 [[package]]
 name = "xvpe-clock"
 version = "0.1.0"
+source = "git+https://github.com/kevinmettias/xvpe.git?rev=82a3c8fccf4ef7f3759f36d3f320a91d0f96341c#82a3c8fccf4ef7f3759f36d3f320a91d0f96341c"
 dependencies = [
  "web-time",
  "xvpe-primitives",
@@ -3396,6 +3401,7 @@ dependencies = [
 [[package]]
 name = "xvpe-diagnostics"
 version = "0.1.0"
+source = "git+https://github.com/kevinmettias/xvpe.git?rev=82a3c8fccf4ef7f3759f36d3f320a91d0f96341c#82a3c8fccf4ef7f3759f36d3f320a91d0f96341c"
 dependencies = [
  "xvpe-primitives",
 ]
@@ -3403,10 +3409,12 @@ dependencies = [
 [[package]]
 name = "xvpe-json-text"
 version = "0.1.0"
+source = "git+https://github.com/kevinmettias/xvpe.git?rev=82a3c8fccf4ef7f3759f36d3f320a91d0f96341c#82a3c8fccf4ef7f3759f36d3f320a91d0f96341c"
 
 [[package]]
 name = "xvpe-language-server-backend-lsp"
 version = "0.1.0"
+source = "git+https://github.com/kevinmettias/xvpe.git?rev=82a3c8fccf4ef7f3759f36d3f320a91d0f96341c#82a3c8fccf4ef7f3759f36d3f320a91d0f96341c"
 dependencies = [
  "lsp-server",
  "lsp-types",
@@ -3418,10 +3426,12 @@ dependencies = [
 [[package]]
 name = "xvpe-primitives"
 version = "0.1.0"
+source = "git+https://github.com/kevinmettias/xvpe.git?rev=82a3c8fccf4ef7f3759f36d3f320a91d0f96341c#82a3c8fccf4ef7f3759f36d3f320a91d0f96341c"
 
 [[package]]
 name = "xvpe-remote-call"
 version = "0.1.0"
+source = "git+https://github.com/kevinmettias/xvpe.git?rev=82a3c8fccf4ef7f3759f36d3f320a91d0f96341c#82a3c8fccf4ef7f3759f36d3f320a91d0f96341c"
 dependencies = [
  "xvpe-primitives",
 ]
@@ -3429,6 +3439,7 @@ dependencies = [
 [[package]]
 name = "xvpe-remote-call-backend-json"
 version = "0.1.0"
+source = "git+https://github.com/kevinmettias/xvpe.git?rev=82a3c8fccf4ef7f3759f36d3f320a91d0f96341c#82a3c8fccf4ef7f3759f36d3f320a91d0f96341c"
 dependencies = [
  "serde",
  "serde_json",
@@ -3438,6 +3449,7 @@ dependencies = [
 [[package]]
 name = "xvpe-subprocess-execution"
 version = "0.1.0"
+source = "git+https://github.com/kevinmettias/xvpe.git?rev=82a3c8fccf4ef7f3759f36d3f320a91d0f96341c#82a3c8fccf4ef7f3759f36d3f320a91d0f96341c"
 dependencies = [
  "xvpe-primitives",
 ]
