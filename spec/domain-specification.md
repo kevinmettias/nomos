@@ -228,7 +228,7 @@ profile: domain-specification
 | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md@authored | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md | authored | 28 | 8 | sha256:93292451f2a6cee3903cec80729f1f4a648933089166dd3a055febcb80d71eba |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
-| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
+| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 52 | 13 | sha256:5e4290d3ee59d8a31ed54db9a8101edfe3af703650bf304bed6dff68755ced63 |
 | docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md@authored | docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md | authored | 23 | 7 | sha256:3dfa5c2c114fe21031fc4c337d8f4b4cf9179cf6b316899f97b79c86c8b9cb2f |
 | docs/records/OD-SPEC-006-docs-records-remains-the-authoring-substrate.md@authored | docs/records/OD-SPEC-006-docs-records-remains-the-authoring-substrate.md | authored | 23 | 7 | sha256:b6a159ab369e778c8c6123d527c1f9b0b4fc9e225aa50f8d2be62e00cbeb6a9a |
 | docs/records/OD-SPEC-007-a-record-is-registered-by-its-own-file-and-the-count-becomes-a-floor.md@authored | docs/records/OD-SPEC-007-a-record-is-registered-by-its-own-file-and-the-count-becomes-a-floor.md | authored | 48 | 9 | sha256:1e3f777ae3755f96c67fb37a80de3a4ac6e1fc5f5418bf2554da5f938cd19d71 |
@@ -2038,7 +2038,13 @@ profile: domain-specification
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#12 | authored | 2 | Why It Matters |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#15 | authored | 2 | What Would Close It |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#19 | authored | 2 | Resolution |
-| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#22 | authored | 2 | Status |
+| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#22 | authored | 2 | Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient |
+| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#24 | authored | 3 | What was measured, and how to re-run it |
+| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#29 | authored | 3 | One: the length floor |
+| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#38 | authored | 3 | Two: declared publication text |
+| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#44 | authored | 3 | Three: the parity note is a third case, and this record does not decide it |
+| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#48 | authored | 3 | What this amendment does not do |
+| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#50 | authored | 2 | Status |
 | docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md#1 | authored | 1 | Six governing records were never in the store, and the store's own validation had never seen them |
 | docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md#5 | authored | 2 | What Was Found |
@@ -60097,11 +60103,256 @@ items still measure different things and neither substitutes for the other.
 
 ### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#22
 
+*revision: authored · kind: heading · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient · hash: sha256:aaf54b876a68f2784420c2b0580375bbd216720fda5fac6a9e96a3bb0b78b92e*
+
+## Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#23
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient · hash: sha256:4ca79d337286bbb3be57dfdc723b80f91560feb45203d78737d7e2d762d975dc*
+
+Version 3. The resolution above stands for the corpus it was taken over, and this amendment
+extends it rather than correcting it. What changed is not that the census was wrong but that
+it has now been run over two corpora it was never calibrated against, and over both of them
+repetition alone selects things that are not filler.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#24
+
+*revision: authored · kind: heading · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / What was measured, and how to re-run it · hash: sha256:71d74e8d97a5c561c805243412ed83550a752c5799344234c0feed202a038c11*
+
+### What was measured, and how to re-run it
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#25
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / What was measured, and how to re-run it · hash: sha256:52071a83f5208c5ae92e2fd72d6d2bfb3a0110dc6f263db3e2b8465384d084a4*
+
+2026-09-14, at a clean tree, with both corpus variables exported:
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#26
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / What was measured, and how to re-run it · hash: sha256:c45eca8405991c33fab5dbb9bef02f1ff94814ffd0831ec6598b6db42080d5da*
+
+| Corpus | Test | Subjects | Violations |
+| --- | --- | --- | --- |
+| Ten v14.19 domain volumes | `crates/spec/nomos-spec-ingest/tests/restoration.rs` | 2,988 | 16 |
+| The sibling suites and both plans | `crates/spec/nomos-spec-ingest/tests/siblings.rs` | 18,873 | 103 |
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#27
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / What was measured, and how to re-run it · hash: sha256:e81055868676f1de432011e6d02a77dadc11cca30d164d5fa091ac4842aa6dd8*
+
+Both are `NSV-PRESERVE-004` reporting through the preservation run, and both are reproduced
+by `cargo test --no-fail-fast -p nomos-spec-ingest --test restoration --test siblings` with
+`NOMOS_V14_CORPUS` and `NOMOS_SPEC_ARCHIVES` both set. Set only the first and the sibling
+suite reports nine passed having read nothing, because `Ecosystem()` returns early without
+the second. That is the hazard `AGENTS.md` names, and it is why the 103 went unseen until
+now.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#28
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / What was measured, and how to re-run it · hash: sha256:c107f0ae66e599456bb5b47dc651f3cc76595d0c8526359ada2f95f3fb51975b*
+
+**The 13-of-482 calibration above was not re-run, and 16 is not a delta against it.** That
+figure was taken over the ten v14.36 domain volumes by the cross-revision regression report.
+The corpus on this machine is v14.19 -- 51 occurrences of that version string and none of
+v14.36 -- so the two numbers are two measurements of two editions by two code paths, and
+nothing here says the original was wrong. It says it cannot be checked from here.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#29
+
+*revision: authored · kind: heading · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / One: the length floor · hash: sha256:3f63cc7950f28f9bd5a2bce3405b01723f2eef6d4aac83dab92f4664d5407bb3*
+
+### One: the length floor
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#30
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / One: the length floor · hash: sha256:83aeb909edbdc708bf509d7fcafb98fdb3b922af8dfb15e7d9ff12ee540c57f8*
+
+**A body below a length floor is not eligible to be a template at all, and the floor is 36
+characters of the normalized block text.**
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#31
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / One: the length floor · hash: sha256:003fc98610f0339b6a065ae943ed4a05529cab2ac578bfe0c003f5ab61d65ce3*
+
+The floor is derived from the gap between three measured populations, not chosen to bound a
+count:
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#32
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / One: the length floor · hash: sha256:ea340e991ec9da84d952d13c72dfdf9994d4061e310172948442035327cf4b05*
+
+| Population | What it is | Length |
+| --- | --- | --- |
+| 102 of the 103 sibling violations | connectives, labels, a horizontal rule, a single arrow | 1 to **30** |
+| nothing observed | | 31 to 42 |
+| 16 domain violations, and the 103rd sibling one | edition line, suite title, abstracts, a status line | **43** and up |
+| The nine `FILLER_PATTERNS` entries | what this repository declares filler *is* | **50** and up |
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#33
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / One: the length floor · hash: sha256:809037c5e0c910ac7b48519ebc882bbcf5f28af30850e6125f31f8bea190c7a3*
+
+The longest thing that collided by accident is 30 characters. The shortest contentful body
+repeated by design is 43. Between them the distribution is empty in both corpora, and the
+floor is a number in that gap.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#34
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / One: the length floor · hash: sha256:4d3c2246cd73dbe61dd4c5e90d46ca07964ee1c8f979548735df5ca5fb1f16ce*
+
+Two boundaries fix it from opposite sides. It must exceed 30, or the collisions this
+amendment exists to stop stay in. It must not exceed 43, because the edition line is
+contentful text that a corpus ought to have to *declare*, and a floor above it would drop
+that line for being short -- the right answer for the wrong reason, and one that stops being
+right the first time a suite repeats a short line it meant to. So a floor at 50, which would
+look natural because it matches the declared vocabulary, is refused for that reason.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#35
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / One: the length floor · hash: sha256:810074bebff253b57c8fa9c89f20ed01e0f76c50411ffbf16f9493a2570d0afe*
+
+Within the band the two errors are not symmetric, and the record already says why: a floor
+set too low reports a fragment somebody files an item about, and a floor set too high hides
+a hollowing, which is the failure this whole record was written about -- the absence of a
+finding being indistinguishable from the absence of the problem. So the floor is taken from
+the lower half of the band. 36 clears every observed collision by six characters and leaves
+seven before the shortest body that must survive.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#36
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / One: the length floor · hash: sha256:10b8319856d78e1789d37ce821d2f3b3532d367d6c6443d4b66c8cde8efd1247*
+
+Two things this deliberately is not. It is not the observation that 102 of 103 violations
+are 40 characters or fewer; that is a consequence of the band and not evidence for any
+particular number in it. And it is not composed with the declaration below -- the floor
+decides eligibility before repetition is counted, and the declaration decides admissibility
+after. Whoever builds them should be able to build either one first.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#37
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / One: the length floor · hash: sha256:54156f260bfa9ecbd5f8c62271e50a693a83ee43b14c7f0d86d3a846a58574b2*
+
+Because the floor is derived rather than stipulated, it is re-derivable: when the corpora
+move, re-measure the longest accidental collision and the shortest deliberate repetition and
+check that 36 still lies between them.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#38
+
+*revision: authored · kind: heading · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / Two: declared publication text · hash: sha256:3d218b1bc9f5393bf2f8b40abb479525bacbb46957d4bf244afea378b0088b81*
+
+### Two: declared publication text
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#39
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / Two: declared publication text · hash: sha256:9187b576950b6f8624b0247f2a16b87211cc504312d9232aba47bdb89f50b969*
+
+**A corpus may declare the text its own layout repeats, the declaration is corpus-side data,
+and it names structural roles rather than strings.**
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#40
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / Two: declared publication text · hash: sha256:8dd4b997d50d326f43822bd16b60b25e4f607ec05c0fa2f44d4ed29d6f480147*
+
+Sixteen of the violations are one phenomenon. Four are suite-wide front-matter carried by ten
+sections across ten documents -- the edition line, the suite title, the volume-ownership
+sentence, the Word navigation note. Eleven are volume abstracts at three sections across two
+documents, which is the cover line, the `## Document purpose` section and the suite index
+entry: three canonical places, so a ten-volume suite crosses `SHARED_BY` by construction and
+would do so however well it was written. None of the sixteen is prose that says a section
+exists without saying what it says.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#41
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / Two: declared publication text · hash: sha256:563a45f985c3fcfbab165f1ace9a50c14559b220c51d98feec84e8561c6ab535*
+
+**Extending `FILLER_PATTERNS` is refused.** `Get_Filler_Pattern` returns *which* pattern
+matched so that a lineage row can name why a block was judged filler instead of asserting it,
+and that list is documented as prose that says a section exists without saying what it says.
+Putting a volume abstract in it would make a lineage row state something false about a block
+that does say what it says. The blocklist is a vocabulary of filler; an abstract is not
+filler, and the fix for a rule calling it filler is not to agree with the rule.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#42
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / Two: declared publication text · hash: sha256:79217651515a0e26dc94fa7a7593238d3c11dc7414d38f8a1563f8799c5ad957*
+
+**A second compiled-in list beside it is refused for the same reason this record already
+gave once.** A list in this repository's source is this repository's opinion about another
+corpus's layout, and it goes stale exactly the way the blocklist went stale when one
+adjective changed. The corpus knows what its own format prescribes; this crate does not.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#43
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / Two: declared publication text · hash: sha256:85291d866a301bfcfb4d91148b2df5ac83cdeb5b81a7ffdfefa9fce812bc52cc*
+
+So the declaration is corpus-side, and it declares *roles*, not text. A corpus says that a
+canonical block is intentionally projected into named structural positions -- cover, document
+purpose, suite index entry -- and the expected multiplicity follows from the declaration. A
+block appearing in the places its declaration names is admitted and is not filler. A fourth,
+undeclared occurrence of the same block is still a violation, and so is a repetition nothing
+declared at all. That is the difference between a declaration and a suppression list, and it
+is the whole reason this is not simply a wider blocklist: a suppression list answers *ignore
+this string*, and a declaration answers *this block belongs in these three places*, which is
+falsifiable.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#44
+
+*revision: authored · kind: heading · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / Three: the parity note is a third case, and this record does not decide it · hash: sha256:a17c3260eeb9498011c6e732a61b574d2444506039bd0003c725b343c546868c*
+
+### Three: the parity note is a third case, and this record does not decide it
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#45
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / Three: the parity note is a third case, and this record does not decide it · hash: sha256:4ee7180992762a21b995c6308ed0aa62bceb45708553e9b0dc8dc92ab0fc9c57*
+
+One violation is neither of the above: a parity note repeated ten times inside a single
+volume, once beneath each of ten capability tables, at ten sections across one document.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#46
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / Three: the parity note is a third case, and this record does not decide it · hash: sha256:38397ddeb67a73acdbd16f3c78b6b783f742cb2b660a489a1ef29e6d7d611e6a*
+
+It is not short -- it is past the floor by any reading. It is also not the projection case,
+because it never leaves its document, and cover-and-purpose-and-index has nothing to say
+about a block that appears ten times in one file. Admitting it as structural repetition
+because it resembles the sixteen would move the false positive rather than remove it, which
+is the mistake this amendment is trying not to make twice.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#47
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / Three: the parity note is a third case, and this record does not decide it · hash: sha256:905af6de701de5516b776bf73d1f8af40208d7aeb8773f2d48446bef9db33096*
+
+What would decide it is why the ten exist. If the ten tables are ten projections of one
+capability set, the note is one block with ten roles and question two already answers it. If
+they are ten independent statements that happen to share wording, then it is the case
+`NSV-PRESERVE-004` was built for and red is the correct answer. Nobody has established
+which, so this record admits it under neither heading and leaves the test red.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#48
+
+*revision: authored · kind: heading · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / What this amendment does not do · hash: sha256:518ff38ee5ad8785190cf84f0f9168d9561000936111c40d575718f1b8b17636*
+
+### What this amendment does not do
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#49
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Amendment (P103-REPETITION-IS-NOT-SUFFICIENT-EVIDENCE-OF-FILLER-AND-OD-SPEC-004-SAYS-IT-IS): repetition is necessary and not sufficient / What this amendment does not do · hash: sha256:9bbaec5e1122b134c6d0e8b7df90a3b5d2e163ca556c27c86211e9b52aa4b157*
+
+It builds no mechanism and pins no violation count into any test. Two items follow from it,
+one per defect, because the two defects need different mechanisms and the item that bundled
+them could not land. Until those land, `restoration.rs` and `siblings.rs` stay red. Quieting
+them with an accepted count would be precisely the suppression `NSV-PRESERVE-004` exists to
+make visible, and this record would have argued itself into the position it was written to
+refuse.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#50
+
 *revision: authored · kind: heading · heading: The filler blocklist misses the wording that hollowed 44 restored members / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#23
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#51
 
 *revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Status · hash: sha256:9ecdd7a08390abc69dd0016a72164b72d4b96a5c83cb6eb4c799b81ab432fe6c*
 
@@ -60110,6 +60361,17 @@ Accepted. `NSV-PRESERVE-004` joined `DECLARED_RULES`
 (`crates/spec/nomos-spec-validate/src/preserve.rs`) beside the other four preservation
 rules, so the class this record measured — a hollowing pattern nobody had written down yet
 — now fails a validation run rather than passing one silently.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#52
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Status · hash: sha256:eb3bbe1f2f082b167a35416873a4563d88bf851d866871923992ca533b7ee01a*
+
+Version 3 keeps that acceptance and narrows what repetition alone is allowed to
+conclude. Two mechanisms follow from the amendment above and neither is built here, so
+`crates/spec/nomos-spec-ingest/tests/restoration.rs` and
+`crates/spec/nomos-spec-ingest/tests/siblings.rs` are red at this commit and are meant
+to be. They go green when the floor and the declaration land, not when a count is
+written into them.
 
 ### docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md#1
 

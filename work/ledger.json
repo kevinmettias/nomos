@@ -74222,10 +74222,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p106",
+        "acquired_at": 1789429545,
+        "lease_expires_at": 1789440345
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -74362,7 +74366,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -74375,6 +74379,62 @@
           "nomos-spec-store"
         ],
         "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "ed out; finished in 0.13s\n\n\nrunning 15 tests\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Blocking waiting for file lock on build directory\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.65s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789429533,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d69e3ceca5d4f3972b54ea524620551fc7b2c6d2"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P106-A-JUDGED-GATE-RUN-THAT-REACHES-NO-VERDICT-PANICS-THE-BINARY",
+      "title": "A judged gate run that reaches no verdict panics the binary",
+      "why": "Exit_Code_For in crates/host/nomos-cli/src/gate/report.rs answers GateRunOutcome::Indeterminate with an unreachable arm, on the stated invariant that Run_Gate only assigns that disposition for a CheckOutcome which never reached Judged, and that this arm is Judged own. Two independent mechanisms in gate_environment.rs falsify it, and both are deliberate.\n\nRun_Gate assigns Indeterminate whenever Resolve_Gate_Policy returns an error, without regard to what the check outcome was; its own comment says the judging still happens and is reported after it so the answer stays as informative as it honestly can be. Separately, Reduced_With_Coverage turns a Passed into Indeterminate on a fully judged run when the declared coverage floor is require-completeness and the claim over the selected findings is Incomplete, which is OD-GATE-016 own decision.\n\nMeasured 2026-09-14 with the built binary against a three-file probe tree. Three reproductions, every one exit 101:\n- a nomos-gate.json with a mis-spelled top-level key, which DeclaredPolicy refuses under deny_unknown_fields\n- a nomos-gate.json that is not valid JSON\n- a valid nomos-gate.json declaring coverage require-completeness over a tree where the dependency-policy capability could not be materialized\n\nThe third is the one that matters most: nothing is wrong with the repository or with its configuration. It declared the coverage floor OD-GATE-016 built, the floor did exactly what that record decided, and the product aborted. The first two are the most likely operator error there is, in the one file a repository adopting this tool authors by hand, and every run after the typo aborts identically.\n\nEvery finding is written to stdout before the abort, so the panic replaces the verdict line and nothing else. A caller reading exit status gets 101, which is not in the table exit_code.rs declares; a caller reading stdout gets a complete report with no disposition. For a repository running this verb continuously and headlessly, that is the enforcement loop stopping on the operator error it is most likely to make.",
+      "done_when": "Exit_Code_For has no unreachable arm. A judged run whose disposition is Indeterminate reports to stderr that the run reached no verdict, and exits Contradictory, which is the code that file own doc already assigns to every Indeterminate a run produces and says run never carries further than. No exit code is minted and Every_Exit_Code does not change. ExitCode::Contradictory own doc names the two causes this item makes reachable beside the ones it already lists.\n\nProved by running the built binary against the same three probe trees the why measured: each exits 5 rather than 101, and stdout still carries the findings it carried before. Proved in the crate own predicate as well, by a test in report.rs that drives Render_Run over a GateRunResult which is Judged with an Indeterminate disposition and asserts both the exit code and the stderr line, so the arm is covered by cargo test rather than only by a manual run.\n\nOut of scope, and deliberately: saying which of the two causes produced the Indeterminate. GateRunResult carries neither the policy error nor the coverage floor, so naming a cause here would mean guessing one. Reporting that there is no verdict, without claiming to know why, is the honest answer this territory can give.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-cli/src/gate/exit_code.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P104-THE-GATE-EXIT-CODE-DOC-ENUMERATES-THREE-CAUSES-AND-COMPARE-ADDED-A-FOURTH"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
       },
       "verified": null,
       "abandoned": [],
