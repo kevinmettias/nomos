@@ -181,6 +181,7 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 21 | 7 | sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc |
+| docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md | authored | 29 | 7 | sha256:9e54154ce527e926eb19d703144feb76c89f996928661ed788c6921b59daa5d7 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
@@ -1662,6 +1663,13 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#15 | authored | 2 | Why The Test Was Deleted Rather Than Widened |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#18 | authored | 2 | What This Costs |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#20 | authored | 2 | Consequences |
+| docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1 | authored | 1 | A local patch override is a development convenience and never the governing form of the XVPE crossing |
+| docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#2 | authored | 2 | Question |
+| docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#6 | authored | 2 | Decision |
+| docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#14 | authored | 2 | What The Override Does To `Cargo.lock` |
+| docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#20 | authored | 2 | How To Tell Which Form Is In Effect |
+| docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#24 | authored | 2 | Why This Is Not Just A Convention |
+| docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#27 | authored | 2 | What This Does Not Decide |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1 | authored | 1 | The repository's README is not the suite's overview, and stays hand-authored |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#2 | authored | 2 | Question |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#6 | authored | 2 | Two Documents, One Name |
@@ -47629,6 +47637,228 @@ That is a real cost, accepted deliberately rather than discovered later.
   adapter, not a replacement** for `nomos-platform`'s port: adopting XVPE's launcher trait
   workspace-wide would mean touching 33 implementors and 559 use-sites for no behavioural
   change.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1
+
+*revision: authored · kind: heading · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing · hash: sha256:288502a603678c890ddc4fd3f236c936d24acd17e2abd9a3ed385dc894e54af9*
+
+# A local patch override is a development convenience and never the governing form of the XVPE crossing
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#2
+
+*revision: authored · kind: heading · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#3
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Question · hash: sha256:7c438c34684ba55c2d865c7a8d2e152a1def2e0c0b6a1eaeaed14bb4d4d46100*
+
+`D-130`'s surviving clause requires the XVPE crossing be adopted by git reference and commit,
+and the tree now takes that form: sixteen dependencies across eight workspace members name one
+repository at one revision, and `Cargo.lock` records it.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#4
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Question · hash: sha256:9c491247018c393b5dc453a8547807c80b575bbe28ccde76a868ffa4799def83*
+
+Pinning removed something real. An edit in the sibling checkout no longer reaches a build here
+without a commit, a push and a revision bump across eight manifests. A Cargo `[patch]` override
+in an uncommitted `.cargo/config.toml` restores that loop by redirecting those crates back to
+the checkout.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#5
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Question · hash: sha256:b0e0e87a1fdcfb13888a542e06b789d30b2294c82eb546aff2360d54cc668858*
+
+The override is useful. It is also the exact mechanism the pinning was adopted to remove,
+pointed the other way. What authority does it have, and how does a reader know one is active?
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#6
+
+*revision: authored · kind: heading · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#7
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Decision · hash: sha256:353b3f25b83ec26de3651f36b7a42b76cdddc08aa277e64206755096f25f4bf0*
+
+**The pinned dependency is the only governing form. An override carries no authority.**
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#8
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Decision · hash: sha256:7788d07f1c3f5befa24c436d50dc55c6483a80f1cf70e9191502ddc3299e44db*
+
+Four clauses, and the third is the one that matters.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#9
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Decision · hash: sha256:36f1e4569b45943635a0a9302298000c402891221d2913060b0f43e76cbc684b*
+
+**It may redirect a crate only to the same crate.** An override that changes which crates exist,
+or points a name at a different body of code, is not a convenience; it is a different workspace
+wearing this one's manifests.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#10
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Decision · hash: sha256:b32d065caa2dcde9946b1e07e9ed8de938125169775c81ec762c746fa14a35d9*
+
+**It is never committed.** `.gitignore` excludes it, so a scoped `git add` cannot sweep it up.
+That is mechanical rather than a matter of care, because this tree is shared with live sessions
+and an untracked file in it is one command away from being published as though it were the
+decided form.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#11
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Decision · hash: sha256:fb75648f3934aacf33777afc01befdfec00ab332aaf1f339284f307070942644*
+
+**A result measured under an active override has not been measured.** This is the whole reason
+the record exists. A build with the override active is a build against whatever the sibling
+checkout is sitting at, which is precisely the ambient state `D-130` refuses — so a green run,
+a benchmark, a corpus count or a gate result taken under it is evidence about a tree nobody
+else has, including CI. Before any claim rests on a number, move the file aside and rebuild.
+This is the same failure shape this repository already writes records about: an exit code of
+zero that answered a different question from the one asked.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#12
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Decision · hash: sha256:d3230c8427db255a0652768d940658aab80df8bd150745401824691d2b720bc9*
+
+**It explains itself where it sits.** The file opens with what it is and what it is not,
+because the reader most likely to be misled by it is the one who did not create it.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#13
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Decision · hash: sha256:63298877b57b2b70a23759f750bb6d82f47324bc65b2df3246a8935dde48ca09*
+
+**`Cargo.lock` is restored before any commit that carries it.** This clause is not a
+precaution; it is a measured consequence, and it is the sharpest edge on the whole mechanism.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#14
+
+*revision: authored · kind: heading · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / What The Override Does To `Cargo.lock` · hash: sha256:a7e15a73dfae054be448ecd45115a1fc5099a47a87b463d154d67608cc55d660*
+
+## What The Override Does To `Cargo.lock`
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#15
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / What The Override Does To `Cargo.lock` · hash: sha256:968beb492ccbb95abcfcb853ea8a22dd6052de684ff4eb79ad2a5b59556f0602*
+
+Cargo records a patch in the lock file. Measured directly on 2026-09-14: with the override
+active, a single `cargo metadata` call rewrote the tracked `Cargo.lock`, deleting the
+`source = "git+https://github.com/kevinmettias/xvpe.git?rev=..."` line from **all twelve**
+`xvpe-` packages. Nothing else in the file moved and no command reported anything.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#16
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / What The Override Does To `Cargo.lock` · hash: sha256:fd10222a4dcff6f2180bf74d34a6ad4685aa4b51a5eec6bff4c74ee498acb81a*
+
+So the lock, which is the artifact that makes the adopted revision a recorded fact rather than
+an ambient one, is turned back into the un-pinned form by the mere act of building. The result
+is a tracked file, so `.gitignore` cannot protect it the way it protects the override itself,
+and a scoped `git add Cargo.lock` — the exact discipline `AGENTS.md` asks for everywhere else
+— is what publishes the damage.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#17
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / What The Override Does To `Cargo.lock` · hash: sha256:f310232514de3fdb3ad9e8bc8beb87d32032d2e27b08ddd349cdb88e445fc8ce*
+
+Two consequences follow, and the second is the one that outlives this record.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#18
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / What The Override Does To `Cargo.lock` · hash: sha256:cf8b031e0131e3def53caf1161fab9ece0d30e7e56cd9fc6c2674ca428209afa*
+
+**Before committing, park the override and restore the lock.** Moving the file aside and
+running `git checkout -- Cargo.lock` returns all twelve sources. Doing this is also what makes
+the commit's own verification honest, since a predicate run under an active override is a
+predicate run against a tree nobody else has.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#19
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / What The Override Does To `Cargo.lock` · hash: sha256:69608bae6a4212d03fc10fc057f6e5522cf1b1997854cbe7dae694b976eab1dc*
+
+**A convention is not sufficient here and a guard is owed.** Every other clause in this record
+fails safely: a wrong override breaks a local build and the person who wrote it finds out. This
+one fails silently, in the committed state, in the direction of the thing `D-130` exists to
+prevent. The mechanical half — an assertion that every `xvpe-` package in `Cargo.lock` carries
+a git source — does not exist yet and is not written here, because this record's territory is
+the status of the override rather than the guard over the lock.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#20
+
+*revision: authored · kind: heading · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / How To Tell Which Form Is In Effect · hash: sha256:30925f6cb576cd329609d0572e4c5922ae6948d569a772224df0effff3849827*
+
+## How To Tell Which Form Is In Effect
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#21
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / How To Tell Which Form Is In Effect · hash: sha256:9d924c42b133e5575ac1e621afdf4e688882ea2d2bfb2e6850e7ffbcf4339400*
+
+Read the `source` of any `xvpe-` package. It is unambiguous in both directions, and checked
+both ways before being written here:
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#22
+
+*revision: authored · kind: code · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / How To Tell Which Form Is In Effect · hash: sha256:2686892972c413b42a7920c526e1f2cdfbb2170ed1c7727731e7266d89afb883*
+
+```
+cargo metadata --format-version 1 | python -c "import json,sys; print([p['source'] for p in json.load(sys.stdin)['packages'] if p['name']=='xvpe-primitives'])"
+```
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#23
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / How To Tell Which Form Is In Effect · hash: sha256:16b3e5b2fe46cd916eedd36edea4327b8fb75ad0d868ce6cca3733108ea54ff3*
+
+A `git+https://...?rev=...` string is the pinned form — what the repository publishes and what
+CI builds. `null` means an override is redirecting that crate to a local path, and no result
+from that build is evidence about the published tree.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#24
+
+*revision: authored · kind: heading · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Why This Is Not Just A Convention · hash: sha256:f03602255d38710ec749ae8bb4a44bb67b293dc4066b2665fb69760279d42d8f*
+
+## Why This Is Not Just A Convention
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#25
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Why This Is Not Just A Convention · hash: sha256:bc163025e9682a42382e575d1a6c159a27ebd520fc0d94a5dbd13ebd16867fb3*
+
+A convention would be enough if the override announced itself. It does not. It changes nothing
+a reader sees: the manifests still name a git revision, `Cargo.lock` still records it, and the
+build still succeeds. The divergence is visible only in resolved metadata, which nobody reads
+by habit.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#26
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / Why This Is Not Just A Convention · hash: sha256:6df8f1468cdf62afef114240c1ce682d37e5094af10f10e2f00480bfd7b72a42*
+
+It is worse in a shared tree. `OD-LEDGER-001` already records that territory is declared rather
+than enforced, and the same asymmetry applies here one level down: a file one session drops in
+silently changes what every other session in this working tree builds against, with nothing in
+any of their outputs saying so.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#27
+
+*revision: authored · kind: heading · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / What This Does Not Decide · hash: sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569*
+
+## What This Does Not Decide
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#28
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / What This Does Not Decide · hash: sha256:b96a0d477d0e00c7831362fc8756bc54e2fa3b4e2de5688e7e510e7e1c2eabf4*
+
+Whether the loop the override restores should be paid for some better way — a vendored
+checkout, a workspace-level source replacement, a scripted revision bump — is open. This record
+decides the status of the mechanism actually in use, not that it is the best one available.
+
+### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#29
+
+*revision: authored · kind: prose · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing / What This Does Not Decide · hash: sha256:00bc835fe72fbeb891e8f40f7041c88b5b17f47457c30e0fd471e51272cde730*
+
+It also does not reopen `D-130`. The pinned form is unchanged and unweakened, and nothing here
+licenses a path dependency in a manifest.
 
 ### docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1
 

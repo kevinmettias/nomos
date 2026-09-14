@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:971830ee647f5ad5e057f1ab9427580c5377fba848f7b1450e34b4de6b0a9fc9",
-  "inputs_digest": "sha256:4c134d8a4d24d5a7573387786976a213295a2f8c2762b2fc7fdc9c9503c0e168",
+  "content_digest": "sha256:59b69f346c1cf47ad281af08aedc29f6dc58759c0ccb1e8c007cf5c473c32e9d",
+  "inputs_digest": "sha256:c41c925ed0abe0f6c74951b80a01024e907cd7bd6f2a0dfa7b595a8fcdbee2ce",
   "sections": [
     [
       "Documents",
-      240
+      241
     ],
     [
       "Sections",
-      1987
+      1994
     ],
     [
       "Source blocks",
-      6919
+      6948
     ]
   ],
   "inputs": [
@@ -874,6 +874,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored",
       "hash": "sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored",
+      "hash": "sha256:9e54154ce527e926eb19d703144feb76c89f996928661ed788c6921b59daa5d7"
     },
     {
       "content": "documents",
@@ -8254,6 +8259,41 @@
       "content": "headings",
       "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#20",
       "hash": "sha256:af38d383b4c8b0b26e95bbb7d192fa44e916fcc52469fc4edb4ff47026dbf531"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1",
+      "hash": "sha256:d8193a6265ded5d3592a51ba1f740a57275f1aff62b638506079e88972b5a748"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#2",
+      "hash": "sha256:b359ea29a838465bfb2ca11e9e2b1bf91671ef467bc3feafb9657f78c11f907c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#6",
+      "hash": "sha256:a9273488faeadbd75d0ee4a0ea1e5ac8a2c056ba8f035cfddbcbae1c940a49a5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#14",
+      "hash": "sha256:c588064dbf7d45b00c71b8d5ac3cec596b569b187b0d9b9bdae73c70af310ae5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#20",
+      "hash": "sha256:6a8806d7364b8c45529cb81093c56f7e4e8c92973716367b3ffe08439486358c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#24",
+      "hash": "sha256:4581c5a3ec6f7e2cfb4432504accb735c309708ef7dbce45beaa895e2592d7d5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#27",
+      "hash": "sha256:f5264e3ec8507a42e79bf573ed2c9d8a892e93c81f3aecdbfc929d869ed887c5"
     },
     {
       "content": "headings",
@@ -35709,6 +35749,151 @@
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#21",
       "hash": "sha256:e98f99ea2475cc1541ee8bb8ed12af0d4e33b42f8137c0552a95e3478904375f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1",
+      "hash": "sha256:288502a603678c890ddc4fd3f236c936d24acd17e2abd9a3ed385dc894e54af9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#3",
+      "hash": "sha256:7c438c34684ba55c2d865c7a8d2e152a1def2e0c0b6a1eaeaed14bb4d4d46100"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#4",
+      "hash": "sha256:9c491247018c393b5dc453a8547807c80b575bbe28ccde76a868ffa4799def83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#5",
+      "hash": "sha256:b0e0e87a1fdcfb13888a542e06b789d30b2294c82eb546aff2360d54cc668858"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#6",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#7",
+      "hash": "sha256:353b3f25b83ec26de3651f36b7a42b76cdddc08aa277e64206755096f25f4bf0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#8",
+      "hash": "sha256:7788d07f1c3f5befa24c436d50dc55c6483a80f1cf70e9191502ddc3299e44db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#9",
+      "hash": "sha256:36f1e4569b45943635a0a9302298000c402891221d2913060b0f43e76cbc684b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#10",
+      "hash": "sha256:b32d065caa2dcde9946b1e07e9ed8de938125169775c81ec762c746fa14a35d9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#11",
+      "hash": "sha256:fb75648f3934aacf33777afc01befdfec00ab332aaf1f339284f307070942644"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#12",
+      "hash": "sha256:d3230c8427db255a0652768d940658aab80df8bd150745401824691d2b720bc9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#13",
+      "hash": "sha256:63298877b57b2b70a23759f750bb6d82f47324bc65b2df3246a8935dde48ca09"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#14",
+      "hash": "sha256:a7e15a73dfae054be448ecd45115a1fc5099a47a87b463d154d67608cc55d660"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#15",
+      "hash": "sha256:968beb492ccbb95abcfcb853ea8a22dd6052de684ff4eb79ad2a5b59556f0602"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#16",
+      "hash": "sha256:fd10222a4dcff6f2180bf74d34a6ad4685aa4b51a5eec6bff4c74ee498acb81a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#17",
+      "hash": "sha256:f310232514de3fdb3ad9e8bc8beb87d32032d2e27b08ddd349cdb88e445fc8ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#18",
+      "hash": "sha256:cf8b031e0131e3def53caf1161fab9ece0d30e7e56cd9fc6c2674ca428209afa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#19",
+      "hash": "sha256:69608bae6a4212d03fc10fc057f6e5522cf1b1997854cbe7dae694b976eab1dc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#20",
+      "hash": "sha256:30925f6cb576cd329609d0572e4c5922ae6948d569a772224df0effff3849827"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#21",
+      "hash": "sha256:9d924c42b133e5575ac1e621afdf4e688882ea2d2bfb2e6850e7ffbcf4339400"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#22",
+      "hash": "sha256:2686892972c413b42a7920c526e1f2cdfbb2170ed1c7727731e7266d89afb883"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#23",
+      "hash": "sha256:16b3e5b2fe46cd916eedd36edea4327b8fb75ad0d868ce6cca3733108ea54ff3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#24",
+      "hash": "sha256:f03602255d38710ec749ae8bb4a44bb67b293dc4066b2665fb69760279d42d8f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#25",
+      "hash": "sha256:bc163025e9682a42382e575d1a6c159a27ebd520fc0d94a5dbd13ebd16867fb3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#26",
+      "hash": "sha256:6df8f1468cdf62afef114240c1ce682d37e5094af10f10e2f00480bfd7b72a42"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#27",
+      "hash": "sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#28",
+      "hash": "sha256:b96a0d477d0e00c7831362fc8756bc54e2fa3b4e2de5688e7e510e7e1c2eabf4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#29",
+      "hash": "sha256:00bc835fe72fbeb891e8f40f7041c88b5b17f47457c30e0fd471e51272cde730"
     },
     {
       "content": "blocks",

@@ -69581,6 +69581,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P98-A-LOCAL-PATCH-OVERRIDE-NEEDS-A-STATUS-BEFORE-IT-LOOKS-LIKE-THE-GOVERNING-FORM",
+      "title": "A local patch override needs a recorded status before it reads as the governing form of the XVPE crossing",
+      "why": "The sixteen path dependencies are now pinned to a git reference and commit, which is the form D-130 requires, and the owner chose to keep the day-to-day loop by allowing an uncommitted local patch override redirecting those crates to the sibling checkout. That override is useful and it is also dangerous in a specific way. It makes every local build test something other than what the repository publishes, so a change that compiles here can fail in CI for a reason no local run can reproduce, which is the same class of silent divergence the pinning was adopted to end. Two mechanical facts sharpen it. There is no .cargo directory in this tree and nothing in .gitignore excludes one, so an override file would sit untracked in a working tree that AGENTS.md already warns is shared with live sessions, one git add away from being committed as though it were the governing form. And this tree is shared: an override appearing in it silently changes what every concurrent session builds against, with nothing telling a reader that their build is no longer using the pinned revision.",
+      "done_when": "A governing record states the status of a local patch override: that the pinned git dependency is the only governing form of this crossing, that an override is a development convenience carrying no authority, what it may do and what it must never do, and how a reader determines whether one is active in the tree they are sitting in. The record is registered rather than only written. .gitignore excludes the local cargo configuration so an untracked override cannot be swept into a commit by a scoped add, which is the mechanical half the record cannot supply. Both projections are re-rendered from a tree publishing exactly this record, and cargo test -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md",
+          "crates/spec/nomos-spec-store/records/OD-PLATFORM-004.record",
+          ".gitignore"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ppy v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-clippy)\n   Compiling nomos-ledger v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-ledger)\n   Compiling nomos-platform-std v0.1.0 (F:\\repos\\nomos\\crates\\platform\\nomos-platform-std)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.57s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-16521a1362e743b4.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4612ea488031f680.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-8e50c82cd1b18623.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-7c139115530dcaf9.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-930f1bbb112a171d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-6d055a686bd8bf95.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-9b9a906e2f2cb06a.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-70a759c22f1ec589.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-b84e992768820a4a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-75a077603592d3ef.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-a235932dedeaff21.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-b4d692f665383346.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-c59e3651e67c8b16.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-7f3867088e2e3e4a.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789373689,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "67d66b8eeb4d21be3848e15dca05b832755c6065"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

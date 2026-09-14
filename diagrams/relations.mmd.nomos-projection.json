@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:a0c11d8c53a09aa1124ce28af4798037709cc30356340b7e1ac246c7aeeaacb1",
-  "inputs_digest": "sha256:d99748af079f38cb9bf695d98adaebd6a6837bd1d3d78a981a91814a917692b6",
+  "content_digest": "sha256:43512eb0eb5ca79ec0cf6c3d6ace40f4caad0d31d7827d228364ef7e8489d804",
+  "inputs_digest": "sha256:a22578f778dfa2daaf770cd01ea8637fda5411e2eee17ae96e40907870351e25",
   "sections": [
     [
       "Relations",
-      1702
+      1708
     ],
     [
       "Decisions",
-      232
+      233
     ]
   ],
   "inputs": [
@@ -345,6 +345,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to OD-PACKAGE-015",
       "hash": "sha256:e0196e38e78e7493ffc3fe52e24c689f07b48a647263f4f0846b477b9e40208e"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to OD-PLATFORM-004",
+      "hash": "sha256:69821c7bc8cc3b94ee9c13e9a1163dcd91cb557633e33e3a06b6976985ad38ad"
     },
     {
       "content": "relations",
@@ -865,6 +870,11 @@
       "content": "relations",
       "identity": "D-130 relates-to OD-PLATFORM-001",
       "hash": "sha256:4ec9c0a647888b21f06c37b733afc7a9316dfeb185b07a3b54cdc226c55155e0"
+    },
+    {
+      "content": "relations",
+      "identity": "D-130 relates-to OD-PLATFORM-004",
+      "hash": "sha256:995bc2678b1f45f270562a88f61faa9a89fbddc5f67f992457bf3dcff5955143"
     },
     {
       "content": "relations",
@@ -6278,6 +6288,26 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PLATFORM-003 relates-to OD-PLATFORM-004",
+      "hash": "sha256:96d025fd94c03afea9388a0fd53febbf7907b34b61957bd04a13ca7c291fc47e"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PLATFORM-004 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:9c9456a9ec9788cf329ba8a76355f624b8f021234c9594cbbf2d7ecc69db37a2"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PLATFORM-004 relates-to D-130",
+      "hash": "sha256:e2faccf00d8a1dc88c2f79b10dd96e861fd15ce50a201378aa0e5483fb428a65"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PLATFORM-004 relates-to OD-PLATFORM-003",
+      "hash": "sha256:3dbe83f11c37d463a465bafa93862871b5d0a8e43e6c63e31847fb47d5d659e5"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PROJECT-001 relates-to D-128",
       "hash": "sha256:cacaaa51738e510743af874b83769f259f86bcb2a48a13e99939e8c30b9070fb"
     },
@@ -9340,6 +9370,11 @@
       "content": "nodes",
       "identity": "OD-PLATFORM-003",
       "hash": "sha256:077b2793bf02c7f47b1edae1ca82783c65f36ba771b6eeadab4f2a2e8bd3b7b3"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-PLATFORM-004",
+      "hash": "sha256:891d71090e3099b5402fe9338d813810491ddeda2c0a05da2ac6ef9adb44ee22"
     },
     {
       "content": "nodes",

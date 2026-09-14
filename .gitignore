@@ -25,3 +25,12 @@
 # its readability under `git diff` is load-bearing for the multi-agent workflow.
 /work/*.lock
 /work/*.tmp
+
+# A local Cargo patch override redirecting the pinned XVPE crossing back to a sibling
+# checkout. `OD-PLATFORM-004` records its status: the pinned git dependency in each
+# manifest is the only governing form, and this file carries no authority at all. It is
+# excluded mechanically rather than by care, because this working tree is shared with live
+# sessions and an untracked file in it is one scoped `git add` away from being published
+# as though it were the decided form. A build made with it active has not been measured
+# against what this repository publishes.
+/.cargo/config.toml
