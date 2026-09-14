@@ -68991,7 +68991,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -69007,7 +69007,30 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ug\\deps\\spec_orchestration_seam-94d7292345d520d6.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-813c14e0af29f347.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-edce0034430d69a3.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-1da870d5dcc7bd73.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-cb3e049ca967cf9a.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-586b71f69871fb5c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-36ff2a6b4d18531e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-747962317de7247f.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-e8b9d6c91d66b217.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-f96b0de4ae93b6f4.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-6abd5226784758b2.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6abc8869eb6c343.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-0f41acd66873efb0.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a86418785f1a0dff.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-9e9cab78ef7c6ac0.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-348ebe88bceeb3d1.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-a348c8fb1ef4c9c2.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-977ba5cc2ce77bdc.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-93bc41f4f6dce24b.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-33c245108cce189a.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789359223,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0d2264d49170910bbaa0d91d3461e8d030d7fce4"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

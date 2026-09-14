@@ -238,8 +238,37 @@ vocabularies that population could not see, and neither meets the condition:
   direction, and substring rather than equality — renaming the verb to `recordx` leaves it
   green, which is how it was found.
 
-Neither is corrected here; each is its own item. They are recorded so this section keeps saying
-what is true rather than what was true when the debt was first counted.
+**Both are closed** by
+`P97-TWO-FURTHER-COPIES-OF-A-PRINTED-VOCABULARY-STAND-OUTSIDE-THE-POPULATION-THAT-WAS-MEASURED`,
+filed as one item because they are one record edit — a record is reserved once, and the ledger
+refused the second item that tried to amend this one, which is the mechanism working.
+
+The README's five enumerations split on reachability rather than on preference, which is the
+condition's own shape:
+
+- **`--kind` and `--origin` are compared**, by
+  `Test_The_Readmes_Listed_Kinds_Should_Be_Every_Kind_An_Item_Can_Declare` and
+  `Test_The_Readmes_Listed_Origins_Should_Be_Every_Origin_An_Item_Can_Declare` in
+  `tests/contract/tests/boundaries/readme.rs`, against `nomos_ledger`'s own enums, which that
+  suite already depends on. The third copy — the same five kinds restated in prose two
+  paragraphs below the synopsis — was removed rather than given a second comparison.
+- **The `--state` list and `request submit --kind` route.** Neither can be compared from
+  outside `nomos-cli`: `Listing_Label` and `Refusal_Label` are private to a binary crate that
+  exports no library, and `nomos-spec-model` is not a dependency of the contract suite.
+  Restating either set in a test would be the second authority this record refuses, so the
+  synopsis names the flag and points at the command that prints its values.
+
+A removal is not self-sustaining the way a comparison is — nothing stops a later author pasting
+a routed list back, and it would read as an improvement — so
+`Test_The_Readme_Should_Not_Relist_A_Vocabulary_It_Routes_To` refuses exactly that.
+
+The `spec/parsing.rs` copy became a floor rather than a list:
+`Test_Usage_Text_Should_Name_Some_Command_At_All` asserts the usage text names some verb, which
+is the one claim `spec::tests`' comparison cannot make, because that comparison reads the text
+to find its own subjects and a text listing nothing would leave it passing having compared
+nothing. Its name no longer collides with the stronger test's.
+
+This section is kept current rather than left as the count taken when the debt was opened.
 
 ### What would decide this differently
 
@@ -265,6 +294,10 @@ vocabularies that do not yet meet it named rather than left implied.
 Those five were closed by
 `P97-FIVE-PRINTED-VOCABULARIES-HAVE-NOTHING-COMPARING-THEM-AND-ONE-IS-ALREADY-SHORT`, which
 found one of them already wrong rather than merely unguarded and two further copies the
-population it measured could not see. No version bump: the decision is untouched and the
-amendment's own coverage section is what moved, which is that section saying what is true
-rather than what was true when the debt was counted.
+population it measured could not see. Those two are closed in turn by
+`P97-TWO-FURTHER-COPIES-OF-A-PRINTED-VOCABULARY-STAND-OUTSIDE-THE-POPULATION-THAT-WAS-MEASURED`,
+which found that this record's version 1 conclusion about `README.md` holds at a finer grain
+than it was measured: that file is correct where it is checked, and its unchecked
+vocabularies had gone stale like any other unchecked prose. No version bump for either: the
+decision is untouched and the amendment's own coverage section is what moved, which is that
+section saying what is true rather than what was true when the debt was counted.

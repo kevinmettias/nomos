@@ -209,20 +209,33 @@ mod tests
         assert!(error.contains("frobnicate"), "{error}");
     }
 
+    /// The usage text names some command at all.
+    ///
+    /// This used to be nine `contains` assertions, one per verb -- a third copy of a
+    /// vocabulary `SpecCommand` declares, beside the enum and beside the list in
+    /// `spec::tests`. It was weaker than either in two ways that compound: one direction, so
+    /// a verb the parser accepts and the text omits passed, and substring rather than
+    /// equality, so renaming the verb to `recordx` left `contains("record")` true. It was the
+    /// one test that stayed green under the injection pass that caught seven others, which is
+    /// how it was found.
+    ///
+    /// `spec::tests::Test_Usage_Text_Should_Name_Every_Command` is the comparison now: it
+    /// drives every name the text prints through this parser and names the command each
+    /// builds by an exhaustive match, so it asserts strictly more than the nine lines did.
+    /// What is left here is the one claim that comparison cannot make, because it reads the
+    /// text to find its subjects -- a usage text that lists no verb at all would leave it with
+    /// nothing to compare and passing. `OD-AGENT-004` version 2 is why this is a floor rather
+    /// than a second list.
     #[test]
-    fn Test_Usage_Text_Should_Name_Every_Command()
+    fn Test_Usage_Text_Should_Name_Some_Command_At_All()
     {
         let usage = Usage_Text();
+        let (_, block) = usage.split_once("<command>\n").expect("the usage text has a verb block");
+        let named = block
+            .split_once("\ncommon:")
+            .map_or(0, |(verbs, _)| return verbs.lines().filter(|line| return !line.trim().is_empty()).count());
 
-        assert!(usage.contains("record"));
-        assert!(usage.contains("table"));
-        assert!(usage.contains("render"));
-        assert!(usage.contains("freshness"));
-        assert!(usage.contains("markdown"));
-        assert!(usage.contains("preview"));
-        assert!(usage.contains("commit"));
-        assert!(usage.contains("profiles"));
-        assert!(usage.contains("sources"));
+        assert!(named > 0, "the usage text names no command: {usage}");
     }
 
     #[test]

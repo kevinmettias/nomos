@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:1323082cd2cb91788cf4d0943a7784128b3ab24bbe343a7e4dfc3d54ab4965db",
-  "inputs_digest": "sha256:767e36c5987732be0981d4a94009b701ea864b4ee426e3557b714eae162772d0",
+  "content_digest": "sha256:a07616358b1e3043fe1fae62619733bb8009f9ffb86045a2371e8f9cc8856e28",
+  "inputs_digest": "sha256:e7c7ee83b42bdc70dee6b8b9bad69b3f78048af71e8bd27c4c38fe6290f17e21",
   "sections": [
     [
       "Documents",
@@ -16,7 +16,7 @@
     ],
     [
       "Source blocks",
-      6858
+      6863
     ]
   ],
   "inputs": [
@@ -133,7 +133,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md@authored",
-      "hash": "sha256:441f6cbedfa91d351e7eae5dcdcda43c7fc0052b050ea144fcb5d14f9acaa21d"
+      "hash": "sha256:3f44d73fb8b994899afca50dc1f5e3eee0026a5361028c469e34f023d42d59da"
     },
     {
       "content": "documents",
@@ -2052,13 +2052,13 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#44",
-      "hash": "sha256:8fdfa0a80ca7e54a074512ee7178538b83e8239a7cea90d33ca97c12071d36c9"
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#49",
+      "hash": "sha256:24c365280e5c77e165046398f3dd189dd63d4e4df361f366c22b6569225ac24e"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#46",
-      "hash": "sha256:87a71e7f8eed45d06d71fa0481da7103cd24d358afa17f96cbb8a8217fbec840"
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#51",
+      "hash": "sha256:fd1d7e052a61e8642a17a12351b5fea674ce864ffc7ce17af575db5bf323e5ce"
     },
     {
       "content": "headings",
@@ -14023,37 +14023,62 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#43",
-      "hash": "sha256:c6fc3ce8aec98fdd00e23288df1f536bb7238a65d78aeb6f167a69309332ea01"
+      "hash": "sha256:192ece3015ecd885f5e493a00df804037df383522b4cc9dd2511a3f5c289d207"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#44",
-      "hash": "sha256:74079d113a21192bf895a9922b56ea6d0e4b8e1ac6475821dd0ee5109aa25926"
+      "hash": "sha256:1d92f41fb0624c0c280f52d297f6e39518c6544671a8c0c572f37a40eaac6de9"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#45",
-      "hash": "sha256:6b9fc6b404ce81bc213264cd8e75aedca63bd0f9b38c66b9fecc384c707d23c2"
+      "hash": "sha256:e0b68d13f737f2008434430033988398d69fc1943db49be37c1a033e261353da"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#46",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:5194fed816412cb70166e0f35edd97dc469ad58f69275865f0f424a24772d273"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#47",
-      "hash": "sha256:c0ac4ea0ebfaa46a73db63d6b3359f0c7832218c78ef1b0435be71cfcd084192"
+      "hash": "sha256:95366fcb248c53c20e39cd584977720fa476a6a1f50c98b81c7bdcb9012103dc"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#48",
-      "hash": "sha256:386eea5124672cdf852bef91bff6e51524bddf682e865ef94678ef58e80dd9df"
+      "hash": "sha256:0a42ca95b4d19921e5f107d908f51cec3bd447158b4eb7b86649744aaa226c0e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#49",
-      "hash": "sha256:de3a574f0325ca232936ccbab364d1ba74d34441cfc8e5a09ef58ceaea470183"
+      "hash": "sha256:74079d113a21192bf895a9922b56ea6d0e4b8e1ac6475821dd0ee5109aa25926"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#50",
+      "hash": "sha256:6b9fc6b404ce81bc213264cd8e75aedca63bd0f9b38c66b9fecc384c707d23c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#51",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#52",
+      "hash": "sha256:c0ac4ea0ebfaa46a73db63d6b3359f0c7832218c78ef1b0435be71cfcd084192"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#53",
+      "hash": "sha256:386eea5124672cdf852bef91bff6e51524bddf682e865ef94678ef58e80dd9df"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#54",
+      "hash": "sha256:0313615064bc0f18ce07f71698cc887139e73b8eeb5671f180320c87cc0f2d92"
     },
     {
       "content": "blocks",

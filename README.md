@@ -138,7 +138,7 @@ territories are provably disjoint, and an unanswerable overlap question refuses 
 claim rather than granting it.
 
 ```
-nomos work list [--state ready|waiting|held|snagged|stranded|claimed|blocked|done|declined]
+nomos work list [--state <state>]          # `nomos work` names every state it can print
 nomos work show   --item <id>
 nomos work add     --item <id> --title <text> --why <text> --done-when <text>
                    --kind capability|decision|validation|correction|cleanup
@@ -171,8 +171,9 @@ item unclaimable by anyone including its author and refuses every other claim on
 with the code that means stop and fetch a person. `OD-LEDGER-013` records the trade.
 
 **`--kind` and `--origin` are required, and both are closed sets.** `--kind` says what sort
-of work the item is — `capability`, `decision`, `validation`, `correction` or `cleanup` —
-and `--origin` says whether a person required it or a session proposed it. An unrecognized
+of work the item is and `--origin` says whether a person required it or a session proposed
+it; the synopsis above lists both vocabularies, and it is the only place in this file that
+does. An unrecognized
 value is refused the same way an unrecognized JSON key already is, rather than stored and
 ignored. `OD-LEDGER-024` records why these five and not a free-form tag list, and how every
 item already on the board was given both when the fields were added.
@@ -264,8 +265,8 @@ the sidecar is how an edit stops being caught.
 ## Submitting a feature request, design spec or feature result
 
 ```
-nomos request submit --kind <feature-request|design-spec|feature-result> --id <node-id>
-                      --by <name> [--state draft|accepted] [--contract-version <n>]
+nomos request submit --kind <kind> --id <node-id>    # `nomos request` names every kind
+                      --by <name> [--state <state>] [--contract-version <n>]
                       --field <name>=<value> [--field <name>=<value> …]
                       [--gap <question>|<blocked-fields,comma-separated>|<blocking|non-blocking>[|<closed-by>]] …
                       [--into <directory>]
