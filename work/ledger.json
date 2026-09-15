@@ -75836,14 +75836,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-opus-5",
-        "acquired_at": 1789438896,
-        "lease_expires_at": 1789446096
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -75854,7 +75850,28 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "--lib"
+        ],
+        "exit_code": 0,
+        "output_tail": " seconds\ntest tests::Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrated has been running for over 60 seconds\ntest tests::Test_A_Declared_Entry_That_Matched_Should_Not_Be_Reported_As_Unmatched has been running for over 60 seconds\ntest tests::Test_A_Narrowed_Run_And_A_Whole_Run_Should_Agree_About_A_Declared_Module has been running for over 60 seconds\ntest tests::Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed has been running for over 60 seconds\ntest tests::Test_Explain_Should_Report_A_Baseline_That_Applies has been running for over 60 seconds\ntest tests::Test_Explain_Should_Report_A_Calibration_That_Applies has been running for over 60 seconds\ntest tests::Test_Explain_Should_Report_A_Suppression_That_Applies has been running for over 60 seconds\ntest gate_compare::occurrence_tests::Test_Every_Finding_Of_A_Real_Run_Should_Get_Its_Own_Identity ... ok\ntest tests::Test_Explain_Should_Report_A_Suppression_That_Applies ... ok\ntest tests::Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrated ... ok\ntest tests::Test_Explain_Should_Report_A_Calibration_That_Applies ... ok\ntest tests::Test_A_Calibrated_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Narrowed_Run_And_A_Whole_Run_Should_Agree_About_A_Declared_Module ... ok\ntest tests::Test_A_Declared_Entry_That_Matched_Should_Not_Be_Reported_As_Unmatched ... ok\ntest tests::Test_A_Baselined_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed ... ok\ntest gate_environment::tests::Test_Run_Gate_Should_Pass_When_A_Phase_Approval_Covers_Every_Blocking_Finding ... ok\ntest tests::Test_Explain_Should_Report_A_Baseline_That_Applies ... ok\n\ntest result: ok. 147 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 71.96s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.34s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-441acf4888ebc08b.exe)\n",
+        "verified_at": 1789439555,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "afb9390f71de04ac1ee1aa92738b5c2011d4d885"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
